@@ -171,3 +171,11 @@ export function setupViewButtons(viewer) {
     resetBtn.addEventListener('click', () => resetView(viewer));
   }
 }
+
+export function frameRegion(regionCamera, viewer) {
+  if (!viewer || !regionCamera) return Promise.resolve();
+  const { camera, controls } = viewer;
+  const targetPos = new THREE.Vector3(regionCamera.x, regionCamera.y, regionCamera.z);
+  const targetTarget = new THREE.Vector3(regionCamera.targetX, regionCamera.targetY, regionCamera.targetZ);
+  return animateCamera(camera, controls, targetPos, targetTarget);
+}

@@ -1,11 +1,17 @@
 // Selection - Raycasting, highlighting, and selection management
 import * as THREE from 'three';
-import { state, setSelectedPart, getStructureInfo, translate } from '../state/store.js';
+import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo } from '../state/store.js';
 import { getMeshRegistry, getPickTargets, getStructure } from './loadModel.js';
-import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart } from './visibility.js';
+import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart } from './visibility.js';
 import { focusOnMesh } from './camera.js';
 import { showCallout, hideCallout } from '../ui/callout.js';
 import { loadDefinitions } from '../data/anatomy.js';
+import { handleQuizClick } from '../ui/quiz.js';
+import { addToHistory } from '../state/bookmarks.js';
+import { getClinicalData } from '../data/clinicalInfo.js';
+import { openLesson, openVideo } from '../ui/sidebar.js';
+import { isMeasurementActive, handleMeasurementClick } from './measurement.js';
+import { getNote, saveNote } from '../state/notes.js';
 
 // Distinguishes a tap from the end of an orbit gesture.
 const TAP_MAX_MOVE_PX = 10;
@@ -120,9 +126,25 @@ function onClick(event) {
   if (gesture && gesture.type !== 'mouse') return;
   if (wasDrag(event, gesture)) return;
 
+  if (isMeasurementActive()) {
+    handleMeasurementClick(event, viewer);
+    return;
+  }
+
   const structure = pickAt(event, viewer);
   if (structure) {
-    selectPart(structure.userData.partId, viewer);
+    const partId = structure.userData.partId;
+    if (handleQuizClick(partId, viewer)) {
+      return;
+    }
+    if (state.dissectMode) {
+      pushUndo(partId);
+      hidePart(partId);
+      deselectPart();
+      viewer.render();
+      return;
+    }
+    selectPart(partId, viewer);
   } else {
     // Clicked on background - deselect
     deselectPart();
@@ -217,7 +239,22 @@ function onTouchEnd(event) {
 
   const structure = pickAt({ clientX: touch.clientX, clientY: touch.clientY }, viewer);
   if (structure) {
-    selectPart(structure.userData.partId, viewer);
+    if (isMeasurementActive()) {
+      handleMeasurementClick({ clientX: touch.clientX, clientY: touch.clientY }, viewer);
+      return;
+    }
+    const partId = structure.userData.partId;
+    if (handleQuizClick(partId, viewer)) {
+      return;
+    }
+    if (state.dissectMode) {
+      pushUndo(partId);
+      hidePart(partId);
+      deselectPart();
+      viewer.render();
+      return;
+    }
+    selectPart(partId, viewer);
   } else {
     deselectPart();
   }
@@ -281,6 +318,15 @@ export function selectPart(partId, viewer) {
   // Notify state change
   setSelectedPart(partData);
 
+  // Add to viewing history
+  addToHistory(partId, {
+    nameVi: partData.displayName,
+    nameLatin: info?.latinName,
+    system: partData.system
+  });
+
+  if (navigator.vibrate) navigator.vibrate(20);
+
   // Show info panel
   showInfoPanel(partData);
 
@@ -325,6 +371,69 @@ function showInfoPanel(partData) {
 
   const sideKey = info.side === 'left' ? 'side_left' : info.side === 'right' ? 'side_right' : null;
 
+  const clinical = getClinicalData(partData.id, info.baseName);
+  let clinicalMarkup = '';
+  if (clinical) {
+    const rel = clinical.relations || {};
+    clinicalMarkup = `
+      <div class="clinical-box">
+        <h4 class="clinical-heading">⚡ Chức năng & Vận động</h4>
+        <p class="clinical-desc">${escapeHtml(clinical.function)}</p>
+
+        <!-- 4-Way Anatomical Relations -->
+        <h4 class="clinical-heading" style="margin-top: 12px; color: #58a6ff;">🔗 Liên Quan Giải Phẫu Học</h4>
+        <div class="flashcard-relations" style="margin-top: 6px;">
+          <div class="relation-item">
+            <span class="relation-icon">🔴</span>
+            <div class="relation-body">
+              <strong>Cơ liên quan:</strong>
+              <p>${escapeHtml(rel.muscles || 'Liên kết nhóm cơ định hình và vận động.')}</p>
+            </div>
+          </div>
+          <div class="relation-item">
+            <span class="relation-icon">🦴</span>
+            <div class="relation-body">
+              <strong>Xương & Khớp:</strong>
+              <p>${escapeHtml(rel.bones || 'Tiếp khớp với các diện xương kế cận.')}</p>
+            </div>
+          </div>
+          <div class="relation-item">
+            <span class="relation-icon">⚡</span>
+            <div class="relation-body">
+              <strong>Thần kinh:</strong>
+              <p>${escapeHtml(rel.nerves || 'Chi phối bởi các nhánh thần kinh ngoại biên.')}</p>
+            </div>
+          </div>
+          <div class="relation-item">
+            <span class="relation-icon">🩸</span>
+            <div class="relation-body">
+              <strong>Mạch máu:</strong>
+              <p>${escapeHtml(rel.vessels || 'Cấp máu bởi các nhánh động mạch khu vực.')}</p>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="clinical-heading" style="margin-top: 12px; color: #ff7b72;">🩺 Ý nghĩa lâm sàng & Bệnh lý</h4>
+        <p class="clinical-desc">${escapeHtml(clinical.clinical)}</p>
+
+        <!-- Personal Study Note Area in Info Panel -->
+        <div class="info-note-area" style="margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <label style="font-size: 11px; font-weight: 700; color: #a371f7; display: block; margin-bottom: 4px;">📝 Ghi chú cá nhân:</label>
+          <textarea class="info-note-input" rows="2" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; color: #fff; padding: 6px; font-size: 11px;" placeholder="Ghi chú học tập cho cấu trúc này...">${escapeHtml(getNote(partData.id))}</textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <button type="button" class="btn-info-save-note" style="padding: 4px 10px; font-size: 11px; background: #8957e5; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Lưu ghi chú</button>
+            <span class="info-note-hint" style="display: none; font-size: 10px; color: #3fb950; font-weight: 600;">✓ Đã lưu</span>
+          </div>
+        </div>
+
+        <div class="clinical-actions" style="margin-top: 12px;">
+          ${clinical.lessonLink ? `<button type="button" class="btn-lesson-link" data-lesson-url="${escapeHtml(clinical.lessonLink)}" data-lesson-title="${escapeHtml(clinical.lessonTitle)}">📖 Học bài: ${escapeHtml(clinical.lessonTitle)}</button>` : ''}
+          ${clinical.videoId ? `<button type="button" class="btn-video-link" data-video-id="${escapeHtml(clinical.videoId)}" data-video-title="${escapeHtml(clinical.nameVi)}">▶️ Xem video bài giảng</button>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
   structureInfo.innerHTML = `
     <div class="structure-header">
       <div class="structure-title">
@@ -337,12 +446,40 @@ function showInfoPanel(partData) {
         </div>
       </div>
     </div>
+    ${clinicalMarkup}
     ${relationMarkup(partData.id, lang)}
     <div class="structure-description" data-definition>${escapeHtml(translate('loading_definition', lang))}</div>
   `;
 
   structureInfo.querySelectorAll('[data-relation]').forEach(link => {
     link.addEventListener('click', () => selectPartById(link.dataset.relation, state.viewer));
+  });
+
+  structureInfo.querySelectorAll('.btn-lesson-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openLesson(btn.dataset.lessonUrl, btn.dataset.lessonTitle);
+    });
+  });
+
+  structureInfo.querySelectorAll('.btn-video-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openVideo(btn.dataset.videoId, btn.dataset.videoTitle);
+    });
+  });
+
+  structureInfo.querySelector('.btn-info-save-note')?.addEventListener('click', () => {
+    const input = structureInfo.querySelector('.info-note-input');
+    const text = input?.value || '';
+    saveNote(partData.id, text, {
+      nameVi: name,
+      nameLatin: info.latinName,
+      system: info.system || partData.system
+    });
+    const hint = structureInfo.querySelector('.info-note-hint');
+    if (hint) {
+      hint.style.display = 'inline';
+      setTimeout(() => { hint.style.display = 'none'; }, 2000);
+    }
   });
 
   fillDefinition(partData, lang);
@@ -455,4 +592,14 @@ export function selectPartById(partId, viewer) {
     return true;
   }
   return false;
+}
+
+export function undoLastDissect() {
+  const partId = popUndo();
+  if (partId) {
+    showPart(partId);
+    state.viewer?.render();
+    return partId;
+  }
+  return null;
 }

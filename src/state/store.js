@@ -1,4 +1,5 @@
 // State Management - Single source of truth for application state
+import { translationsVi, translationsEn, translationsIt } from '../data/translations.js';
 
 export const state = {
   // Selected structure
@@ -20,13 +21,17 @@ export const state = {
   transparentParts: new Set(),
 
   // Current language
-  language: 'en',
+  language: 'vi',
+
+  // Dissect Mode (Visible Body scalpel mode)
+  dissectMode: false,
+  undoStack: [],
 
   // Loaded data
   partsData: null,
   systemsData: null,
   regionsData: null,
-  translations: { it: {}, en: {} },
+  translations: { vi: translationsVi, en: translationsEn, it: translationsIt },
 
   // Search index
   searchIndex: [],
@@ -153,8 +158,12 @@ export function setRegionsData(data) {
 }
 
 export function setTranslations(data) {
-  state.translations = data;
-  notify('translations', data);
+  state.translations = {
+    vi: { ...translationsVi, ...(data.vi || {}) },
+    en: { ...translationsEn, ...(data.en || {}) },
+    it: { ...translationsIt, ...(data.it || {}) }
+  };
+  notify('translations', state.translations);
 }
 
 export function setSearchIndex(index) {
@@ -212,8 +221,24 @@ export function getStructureInfo(partId) {
 }
 
 export function translate(key, lang = state.language) {
-  const dict = state.translations[lang] || state.translations.it;
+  const dict = state.translations[lang] || state.translations.vi || state.translations.en || state.translations.it || {};
   return dict[key] || key;
+}
+
+export function setDissectMode(enabled) {
+  state.dissectMode = enabled;
+  notify('dissectMode', enabled);
+}
+
+export function pushUndo(partId) {
+  state.undoStack.push(partId);
+  notify('undoStack', state.undoStack);
+}
+
+export function popUndo() {
+  const partId = state.undoStack.pop();
+  notify('undoStack', state.undoStack);
+  return partId;
 }
 
 export function getSystemParts(systemId) {

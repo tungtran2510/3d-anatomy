@@ -3,24 +3,34 @@ import { state, subscribe, getSystemParts, getStructureInfo, setLanguage, transl
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
 import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState } from '../viewer/visibility.js';
-import { selectPartById, deselectPart } from '../viewer/selection.js';
-import { setView, resetView } from '../viewer/camera.js';
+import { selectPartById, deselectPart, undoLastDissect } from '../viewer/selection.js';
+import { setView, resetView, frameRegion } from '../viewer/camera.js';
 import { loadAllData, searchStructures } from '../utils/dataLoader.js';
 import { initDepthSlider, resetDepthSlider } from './depthSlider.js';
 import { PRESETS, applyPreset } from '../data/presets.js';
 import { setInert, focusFirst, trapFocus, rovingList } from './focus.js';
+import { REGIONS_DATA } from '../data/regions.js';
+import { getBookmarks, isBookmarked, toggleBookmark, getHistory } from '../state/bookmarks.js';
+import { initLabels, toggleLabels, areLabelsVisible } from '../viewer/labels.js';
+import { setExplodeFactor } from '../viewer/explodedView.js';
+import { startQuiz, stopQuiz, isQuizRunning } from './quiz.js';
+import { getClinicalData } from '../data/clinicalInfo.js';
+import { initClipping, setClippingPlane, updateClippingOffset, toggleClippingFlip, disableClipping } from '../viewer/clipping.js';
+import { toggleMeasurementMode, isMeasurementActive, clearMeasurement } from '../viewer/measurement.js';
+import { openStudyModulePicker } from './studyMode.js';
+import { saveNote, getNote, getAllNotes, deleteNote } from '../state/notes.js';
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
 // digestive and urinary structures all live in the single "visceral" model.
 const SYSTEM_LABELS = {
-  it: {
-    skeletal: 'Sistema scheletrico',
-    muscular: 'Sistema muscolare',
-    joints: 'Articolazioni',
-    cardiovascular: 'Sistema cardiovascolare',
-    lymphatic: 'Organi linfatici',
-    nervous: 'Sistema nervoso e organi di senso',
-    visceral: 'Sistemi viscerali'
+  vi: {
+    skeletal: 'Hệ Xương',
+    muscular: 'Hệ Cơ bắp',
+    joints: 'Khớp & Dây chằng',
+    cardiovascular: 'Hệ Tim mạch',
+    lymphatic: 'Hệ Bạch huyết',
+    nervous: 'Hệ Thần kinh & Giác quan',
+    visceral: 'Hệ Nội tạng'
   },
   en: {
     skeletal: 'Skeletal system',
@@ -43,8 +53,8 @@ const SYSTEM_ICONS = {
   visceral: '🫁'
 };
 
-export function systemLabel(systemId, lang = state.language || 'it') {
-  return SYSTEM_LABELS[lang]?.[systemId] || SYSTEM_LABELS.it[systemId] || systemId;
+export function systemLabel(systemId, lang = state.language || 'vi') {
+  return SYSTEM_LABELS[lang]?.[systemId] || SYSTEM_LABELS.vi?.[systemId] || SYSTEM_LABELS.en?.[systemId] || systemId;
 }
 
 export function initSystemsSidebar() {
@@ -462,20 +472,602 @@ function toggleTransparencySelected() {
   }
 }
 
-// Footer actions
+export function showToast(message, duration = 2500) {
+  const toast = document.getElementById('appToast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove('hidden');
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.classList.add('hidden'), 300);
+  }, duration);
+}
+
+// Footer & Mobile Navigation actions
 export function initFooterActions(viewer) {
-  const buttons = {
-    footerIsolateBtn: () => isolateSelected(),
-    footerHideBtn: () => hideSelected(),
-    footerTransparentBtn: () => toggleTransparencySelected(),
-    // Restoring visibility must not throw away the angle the user just chose;
-    // the camera has its own Reset in the toolbar.
-    footerShowAllBtn: () => { restoreAllParts(); deselectPart(); }
+  // Legacy footer buttons if present
+  document.getElementById('footerIsolateBtn')?.addEventListener('click', isolateSelected);
+  document.getElementById('footerHideBtn')?.addEventListener('click', hideSelected);
+  document.getElementById('footerTransparentBtn')?.addEventListener('click', toggleTransparencySelected);
+  document.getElementById('footerShowAllBtn')?.addEventListener('click', () => { restoreAllParts(); deselectPart(); });
+
+  // Floating Selection Card buttons
+  document.getElementById('cardBookmarkBtn')?.addEventListener('click', () => {
+    if (!state.selectedPart) return;
+    const partId = state.selectedPart.id;
+    const info = state.selectedPart.info || {};
+    const saved = toggleBookmark(partId, {
+      nameVi: state.selectedPart.displayName,
+      nameLatin: info.latinName,
+      system: state.selectedPart.system
+    });
+    updateBookmarkButton(partId);
+    showToast(saved ? 'Đã lưu cấu trúc này vào mục Đã lưu ⭐' : 'Đã xóa khỏi mục Đã lưu');
+  });
+
+  document.getElementById('cardLessonBtn')?.addEventListener('click', () => {
+    if (!state.selectedPart) return;
+    const info = state.selectedPart.info || {};
+    const clinical = getClinicalData(state.selectedPart.id, info.baseName);
+    if (clinical?.lessonLink) {
+      openLesson(clinical.lessonLink, clinical.lessonTitle);
+    } else {
+      openLesson('/cot-song/tu-the-va-van-dong', 'Giải phẫu cơ thể học');
+    }
+  });
+
+  document.getElementById('cardIsolateBtn')?.addEventListener('click', () => {
+    isolateSelected();
+    showToast('Đã cô lập bộ phận này');
+  });
+
+  document.getElementById('cardHideBtn')?.addEventListener('click', () => {
+    hideSelected();
+    showToast('Đã bóc tách / ẩn bộ phận');
+  });
+
+  document.getElementById('cardGhostBtn')?.addEventListener('click', () => {
+    toggleTransparencySelected();
+    showToast('Đã đổi độ trong suốt');
+  });
+
+  document.getElementById('cardInfoBtn')?.addEventListener('click', () => {
+    document.getElementById('infoOpen')?.click();
+  });
+
+  // Card Note Button
+  document.getElementById('cardNoteBtn')?.addEventListener('click', () => {
+    const noteBox = document.getElementById('cardNoteBox');
+    if (!noteBox || !state.selectedPart) return;
+    const isHidden = noteBox.classList.toggle('hidden');
+    if (!isHidden) {
+      const input = document.getElementById('cardNoteInput');
+      if (input) {
+        input.value = getNote(state.selectedPart.id);
+        input.focus();
+      }
+    }
+  });
+
+  document.getElementById('btnCardSaveNote')?.addEventListener('click', () => {
+    if (!state.selectedPart) return;
+    const input = document.getElementById('cardNoteInput');
+    const text = input?.value || '';
+    saveNote(state.selectedPart.id, text, {
+      nameVi: state.selectedPart.displayName,
+      nameLatin: state.selectedPart.info?.latinName,
+      system: state.selectedPart.system
+    });
+    const hint = document.getElementById('cardNoteSavedHint');
+    if (hint) {
+      hint.classList.remove('hidden');
+      setTimeout(() => hint.classList.add('hidden'), 2000);
+    }
+    showToast('Đã lưu ghi chú học tập 📝');
+  });
+
+  document.getElementById('cardCloseBtn')?.addEventListener('click', () => {
+    deselectPart();
+    document.getElementById('cardNoteBox')?.classList.add('hidden');
+  });
+
+  // Mobile Bottom Bar Navigation
+  document.getElementById('btnNavSystems')?.addEventListener('click', () => {
+    document.getElementById('systemsOpen')?.click();
+  });
+
+  document.getElementById('btnNavSearch')?.addEventListener('click', () => {
+    document.getElementById('searchOpen')?.click();
+  });
+
+  const btnDissect = document.getElementById('btnNavDissect');
+  btnDissect?.addEventListener('click', () => {
+    state.dissectMode = !state.dissectMode;
+    btnDissect.classList.toggle('dissect-active', state.dissectMode);
+    if (state.dissectMode) {
+      showToast('Dao mổ BẬT: Chạm vào bất kỳ bộ phận nào để bóc tách');
+    } else {
+      showToast('Chế độ bóc tách: TẮT');
+    }
+  });
+
+  const btnUndo = document.getElementById('btnNavUndo');
+  btnUndo?.addEventListener('click', () => {
+    const restored = undoLastDissect();
+    if (restored) {
+      const info = getStructureInfo(restored);
+      const name = info?.name?.[state.language] || info?.name?.vi || restored;
+      showToast(`Đã phục hồi: ${name}`);
+    } else {
+      showToast('Không còn thao tác nào để hoàn tác');
+    }
+  });
+
+  document.getElementById('btnNavReset')?.addEventListener('click', () => {
+    restoreAllParts();
+    deselectPart();
+    showToast('Đã khôi phục toàn bộ giải phẫu');
+  });
+}
+
+// External Lesson / Video link handlers
+export function openLesson(lessonUrl, lessonTitle) {
+  if (!lessonUrl) return;
+  showToast(`Đang mở bài học: ${lessonTitle || ''}`);
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'NAVIGATE_LESSON', url: lessonUrl, title: lessonTitle }, '*');
+  } else {
+    window.open(lessonUrl, '_blank');
+  }
+}
+
+export function openVideo(videoId, videoTitle) {
+  if (!videoId) return;
+  const modal = document.getElementById('videoModal');
+  const title = document.getElementById('videoModalTitle');
+  const container = document.getElementById('videoFrameContainer');
+  if (!modal || !container) return;
+
+  if (title) title.textContent = videoTitle || 'Video Bài Giảng Giải Phẫu';
+  container.innerHTML = `
+    <iframe width="100%" height="100%"
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0"
+            title="${escapeHtml(videoTitle || 'Video')}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+    </iframe>
+  `;
+  modal.classList.remove('hidden');
+}
+
+export function closeVideo() {
+  const modal = document.getElementById('videoModal');
+  const container = document.getElementById('videoFrameContainer');
+  if (modal) modal.classList.add('hidden');
+  if (container) container.innerHTML = '';
+}
+
+export function initVideoModal() {
+  const closeBtn = document.getElementById('videoModalClose');
+  const overlay = document.getElementById('videoModalOverlay');
+
+  closeBtn?.addEventListener('click', closeVideo);
+  overlay?.addEventListener('click', closeVideo);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeVideo();
+  });
+}
+
+export function updateBookmarkButton(partId) {
+  const btn = document.getElementById('cardBookmarkBtn');
+  if (!btn) return;
+  const saved = isBookmarked(partId);
+  btn.classList.toggle('active', saved);
+  btn.innerHTML = saved
+    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ffdf5d" stroke="#ffdf5d" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Đã lưu`
+    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Lưu`;
+}
+
+// Drawer Tabs (Systems, Regions, Bookmarks, History)
+export function initDrawerTabs(viewer) {
+  const tabButtons = document.querySelectorAll('.sidebar-tab');
+  const panes = {
+    systems: document.getElementById('tabSystemsContent'),
+    regions: document.getElementById('tabRegionsContent'),
+    bookmarks: document.getElementById('tabBookmarksContent'),
+    notes: document.getElementById('tabNotesContent'),
+    history: document.getElementById('tabHistoryContent')
   };
 
-  Object.entries(buttons).forEach(([id, handler]) => {
-    const btn = document.getElementById(id);
-    if (btn) btn.addEventListener('click', handler);
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      tabButtons.forEach(b => b.classList.toggle('active', b === btn));
+      Object.entries(panes).forEach(([key, pane]) => {
+        if (!pane) return;
+        if (key === target) {
+          pane.classList.remove('hidden');
+          pane.classList.add('active');
+        } else {
+          pane.classList.add('hidden');
+          pane.classList.remove('active');
+        }
+      });
+
+      if (target === 'regions') renderRegionsList(viewer);
+      if (target === 'bookmarks') renderBookmarksList(viewer);
+      if (target === 'notes') renderNotesList(viewer);
+      if (target === 'history') renderHistoryList(viewer);
+    });
+  });
+
+  window.addEventListener('anatomy-notes-updated', () => {
+    if (document.querySelector('.sidebar-tab[data-tab="notes"]')?.classList.contains('active')) {
+      renderNotesList(viewer);
+    }
+  });
+}
+
+export function renderNotesList(viewer) {
+  const container = document.getElementById('notesList');
+  if (!container) return;
+
+  const notes = getAllNotes();
+  if (!notes || notes.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 24px 16px; text-align: center; color: #8b949e;">
+        <div style="font-size: 32px; margin-bottom: 8px;">📝</div>
+        <p style="font-weight: 600; color: #c9d1d9; font-size: 13px;">Chưa có ghi chú nào</p>
+        <p style="font-size: 11px; margin-top: 4px;">Hãy chọn cấu trúc bất kỳ trên mô hình 3D và viết ghi chú học tập.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = notes.map(n => `
+    <div class="note-card-item" data-part="${escapeHtml(n.partId)}">
+      <div class="note-card-header">
+        <span class="note-card-title">${escapeHtml(n.nameVi || n.partId)}</span>
+        <span class="note-card-date">${new Date(n.updatedAt).toLocaleDateString('vi-VN')}</span>
+      </div>
+      <p class="note-card-text">${escapeHtml(n.text)}</p>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+        <button type="button" class="btn-review-focus btn-note-goto" data-part="${escapeHtml(n.partId)}">Xem 3D</button>
+        <button type="button" class="btn-review-focus btn-note-del" data-part="${escapeHtml(n.partId)}" style="color: #f85149; border-color: rgba(248,81,73,0.3);">Xóa</button>
+      </div>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.btn-note-goto').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectPartById(btn.dataset.part, viewer);
+    });
+  });
+
+  container.querySelectorAll('.btn-note-del').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteNote(btn.dataset.part);
+      renderNotesList(viewer);
+      showToast('Đã xóa ghi chú');
+    });
+  });
+
+  container.querySelectorAll('.note-card-item').forEach(item => {
+    item.addEventListener('click', () => {
+      selectPartById(item.dataset.part, viewer);
+    });
+  });
+}
+
+export function renderRegionsList(viewer) {
+  const container = document.getElementById('regionsList');
+  if (!container) return;
+
+  container.innerHTML = REGIONS_DATA.map(region => `
+    <div class="region-card" data-region-id="${region.id}">
+      <span class="region-icon">${region.icon}</span>
+      <div class="region-info">
+        <h4 class="region-title">${escapeHtml(region.labelVi)}</h4>
+        <span class="region-sub">${escapeHtml(region.labelEn)}</span>
+      </div>
+      <button class="region-go-btn" aria-label="Đến vùng ${region.labelVi}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.region-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const region = REGIONS_DATA.find(r => r.id === card.dataset.regionId);
+      if (region && viewer) {
+        frameRegion(region.camera, viewer);
+        showToast(`Chuyển đến: ${region.labelVi}`);
+        if (window.innerWidth <= 1024) {
+          document.getElementById('systemsToggle')?.click();
+        }
+      }
+    });
+  });
+}
+
+export function renderBookmarksList(viewer) {
+  const container = document.getElementById('bookmarksList');
+  if (!container) return;
+
+  const bookmarks = getBookmarks();
+  if (bookmarks.length === 0) {
+    container.innerHTML = `
+      <div class="list-empty-state">
+        <span class="empty-icon">⭐</span>
+        <p>Chưa có cấu trúc nào được lưu</p>
+        <span class="hint">Chạm vào cấu trúc 3D và nhấn nút "Lưu" để thêm vào đây</span>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = bookmarks.map(item => `
+    <div class="bookmark-item" data-part="${escapeHtml(item.id)}">
+      <div class="bookmark-info">
+        <h4 class="bookmark-name">${escapeHtml(item.nameVi || item.id)}</h4>
+        ${item.nameLatin ? `<span class="bookmark-latin">${escapeHtml(item.nameLatin)}</span>` : ''}
+      </div>
+      <button class="bookmark-remove-btn" data-remove="${escapeHtml(item.id)}" title="Xóa khỏi lưu trữ">&times;</button>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.bookmark-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.bookmark-remove-btn')) return;
+      selectPartById(item.dataset.part, viewer);
+      if (window.innerWidth <= 1024) {
+        document.getElementById('systemsToggle')?.click();
+      }
+    });
+  });
+
+  container.querySelectorAll('.bookmark-remove-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleBookmark(btn.dataset.remove);
+      renderBookmarksList(viewer);
+      showToast('Đã xóa khỏi danh sách đã lưu');
+    });
+  });
+}
+
+function formatRelativeTime(ts) {
+  if (!ts) return '';
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Vừa xong';
+  if (mins < 60) return `${mins}p trước`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h trước`;
+  return `${Math.floor(hours / 24)}d trước`;
+}
+
+export function renderHistoryList(viewer) {
+  const container = document.getElementById('historyList');
+  if (!container) return;
+
+  const history = getHistory();
+  if (history.length === 0) {
+    container.innerHTML = `
+      <div class="list-empty-state">
+        <span class="empty-icon">🕒</span>
+        <p>Chưa có lịch sử quan sát</p>
+        <span class="hint">Các bộ phận bạn vừa xem sẽ hiển thị tại đây</span>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = history.slice(0, 30).map(item => `
+    <div class="history-item" data-part="${escapeHtml(item.id)}">
+      <div class="history-info">
+        <h4 class="history-name">${escapeHtml(item.nameVi || item.id)}</h4>
+        ${item.nameLatin ? `<span class="history-latin">${escapeHtml(item.nameLatin)}</span>` : ''}
+      </div>
+      <span class="history-time">${formatRelativeTime(item.time)}</span>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.history-item').forEach(item => {
+    item.addEventListener('click', () => {
+      selectPartById(item.dataset.part, viewer);
+      if (window.innerWidth <= 1024) {
+        document.getElementById('systemsToggle')?.click();
+      }
+    });
+  });
+}
+
+// Floating Tools Bar (Visible Body Style: Explode, Labels, Clipping, Measurement, Study, Quiz)
+export function initFloatingTools(viewer) {
+  const btnExplode = document.getElementById('btnToolExplode');
+  const explodePopover = document.getElementById('explodePopover');
+  const explodeSlider = document.getElementById('explodeSlider');
+  const explodeValue = document.getElementById('explodeValue');
+  const explodeClose = document.getElementById('explodeCloseBtn');
+
+  btnExplode?.addEventListener('click', () => {
+    const isHidden = explodePopover.classList.toggle('hidden');
+    btnExplode.classList.toggle('active', !isHidden);
+  });
+
+  explodeClose?.addEventListener('click', () => {
+    explodePopover.classList.add('hidden');
+    btnExplode?.classList.remove('active');
+  });
+
+  explodeSlider?.addEventListener('input', (e) => {
+    const val = parseInt(e.target.value, 10) || 0;
+    if (explodeValue) explodeValue.textContent = `${val}%`;
+    setExplodeFactor(val / 100, viewer);
+  });
+
+  const btnLabels = document.getElementById('btnToolLabels');
+  btnLabels?.addEventListener('click', () => {
+    const visible = toggleLabels(viewer);
+    btnLabels.classList.toggle('active', visible);
+    showToast(visible ? 'Đã BẬT nhãn mốc giải phẫu 3D' : 'Đã TẮT nhãn 3D');
+  });
+
+  // 3D Clipping Planes
+  const btnClipping = document.getElementById('btnToolClipping');
+  const clippingPopover = document.getElementById('clippingPopover');
+  const clippingClose = document.getElementById('clippingCloseBtn');
+  const planeButtons = document.querySelectorAll('.clipping-plane-select .plane-btn');
+  const clippingSlider = document.getElementById('clippingSlider');
+  const clippingValue = document.getElementById('clippingValue');
+  const clipFlipBtn = document.getElementById('clipFlipBtn');
+  const clipResetBtn = document.getElementById('clipResetBtn');
+
+  btnClipping?.addEventListener('click', () => {
+    const isHidden = clippingPopover.classList.toggle('hidden');
+    btnClipping.classList.toggle('active', !isHidden);
+    if (!isHidden) {
+      const activeBtn = document.querySelector('.clipping-plane-select .plane-btn.active');
+      const plane = activeBtn?.dataset.plane || 'sagittal';
+      setClippingPlane(plane, viewer);
+      showToast(`Mặt cắt ${plane === 'sagittal' ? 'Đứng dọc' : plane === 'coronal' ? 'Đứng ngang' : 'Ngang'} BẬT`);
+    }
+  });
+
+  clippingClose?.addEventListener('click', () => {
+    clippingPopover.classList.add('hidden');
+    btnClipping?.classList.remove('active');
+  });
+
+  planeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      planeButtons.forEach(b => b.classList.toggle('active', b === btn));
+      const plane = btn.dataset.plane;
+      setClippingPlane(plane, viewer);
+      if (clippingSlider) {
+        clippingSlider.value = 0;
+        if (clippingValue) clippingValue.textContent = '0.0 cm';
+      }
+      showToast(`Mặt cắt: ${btn.textContent.trim()}`);
+    });
+  });
+
+  clippingSlider?.addEventListener('input', (e) => {
+    const offset = parseFloat(e.target.value) || 0;
+    updateClippingOffset(offset);
+    if (clippingValue) clippingValue.textContent = `${(offset * 100).toFixed(1)} cm`;
+  });
+
+  clipFlipBtn?.addEventListener('click', () => {
+    toggleClippingFlip();
+    showToast('Đã đảo chiều mặt cắt');
+  });
+
+  clipResetBtn?.addEventListener('click', () => {
+    disableClipping(viewer);
+    clippingPopover.classList.add('hidden');
+    btnClipping?.classList.remove('active');
+    showToast('Đã tắt mặt cắt 3D');
+  });
+
+  // 3D Measurement Caliper
+  const btnMeasure = document.getElementById('btnToolMeasure');
+  const measurePopover = document.getElementById('measurePopover');
+  const measureClose = document.getElementById('measureCloseBtn');
+  const measureBody = document.getElementById('measureBody');
+  const measureClearBtn = document.getElementById('measureClearBtn');
+  const measureSaveNoteBtn = document.getElementById('measureSaveNoteBtn');
+  let currentMeasureResult = null;
+
+  btnMeasure?.addEventListener('click', () => {
+    const active = toggleMeasurementMode(viewer, (data) => {
+      currentMeasureResult = data;
+      if (!measureBody) return;
+      if (data.status === 'point1_set' || data.state === 'point1') {
+        measureBody.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">📍</span>
+            <span style="color:#58a6ff; font-weight:600; font-size:12px;">Đã chọn Điểm A. Chạm Điểm B trên mô hình 3D...</span>
+          </div>
+        `;
+      } else if (data.status === 'completed' || data.state === 'point2') {
+        const cm = typeof data.distanceCm === 'number' ? data.distanceCm.toFixed(1) : data.distanceCm;
+        const mm = typeof data.distanceMm === 'number' ? data.distanceMm.toFixed(0) : data.distanceMm;
+        measureBody.innerHTML = `
+          <div style="background: rgba(35,134,54,0.15); border: 1px solid rgba(46,160,67,0.4); border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 20px; font-weight: 700; color: #3fb950; letter-spacing: 0.5px;">${cm} cm</div>
+            <div style="font-size: 11px; color: #8b949e; margin-top: 2px;">Khoảng cách 3D thực (${mm} mm)</div>
+          </div>
+        `;
+      } else {
+        measureBody.innerHTML = `<p class="measure-status">Chạm vào điểm thứ nhất trên mô hình 3D...</p>`;
+      }
+    });
+
+    btnMeasure.classList.toggle('active', active);
+    measurePopover.classList.toggle('hidden', !active);
+    if (active) {
+      showToast('Thước đo 3D BẬT: Chạm 2 điểm trên cơ thể để đo');
+    } else {
+      showToast('Đã tắt thước đo 3D');
+    }
+  });
+
+  measureClose?.addEventListener('click', () => {
+    if (isMeasurementActive()) {
+      toggleMeasurementMode(viewer);
+      btnMeasure?.classList.remove('active');
+    }
+    measurePopover.classList.add('hidden');
+  });
+
+  measureClearBtn?.addEventListener('click', () => {
+    clearMeasurement();
+    currentMeasureResult = null;
+    if (measureBody) {
+      measureBody.innerHTML = `<p class="measure-status">Đã xóa. Chạm vào điểm thứ nhất trên mô hình 3D...</p>`;
+    }
+  });
+
+  measureSaveNoteBtn?.addEventListener('click', () => {
+    if (!currentMeasureResult || (currentMeasureResult.status !== 'completed' && currentMeasureResult.state !== 'point2')) {
+      showToast('Cần đo đủ 2 điểm trước khi lưu');
+      return;
+    }
+    const cm = typeof currentMeasureResult.distanceCm === 'number' ? currentMeasureResult.distanceCm.toFixed(1) : currentMeasureResult.distanceCm;
+    const mm = typeof currentMeasureResult.distanceMm === 'number' ? currentMeasureResult.distanceMm.toFixed(0) : currentMeasureResult.distanceMm;
+    const noteText = `[Đo kích thước 3D]: ${cm} cm (${mm} mm)`;
+    const partId = state.selectedPart?.id || 'measurement_note_' + Date.now();
+    saveNote(partId, noteText, {
+      nameVi: state.selectedPart?.displayName ? `${state.selectedPart.displayName} (Kích thước)` : 'Số đo giải phẫu 3D',
+      nameLatin: state.selectedPart?.info?.latinName,
+      system: state.selectedPart?.system || 'skeletal'
+    });
+    showToast('Đã lưu số đo vào mục Ghi chú 📝');
+  });
+
+  // Guided Study Mode
+  const btnStudy = document.getElementById('btnToolStudy');
+  btnStudy?.addEventListener('click', () => {
+    openStudyModulePicker(viewer);
+  });
+
+  // Medical Exam Mode
+  const btnQuiz = document.getElementById('btnToolQuiz');
+  btnQuiz?.addEventListener('click', () => {
+    if (isQuizRunning()) {
+      stopQuiz();
+      btnQuiz.classList.remove('active');
+    } else {
+      startQuiz(viewer);
+      btnQuiz.classList.add('active');
+    }
   });
 }
 
@@ -568,6 +1160,8 @@ export function initSearch() {
         input.value = '';
         results.innerHTML = '';
         results.classList.remove('show');
+        document.querySelector('.header')?.classList.remove('search-open');
+        document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
         input.blur();
         await selectStructureAnywhere(partId);
       };
@@ -684,12 +1278,30 @@ function onSelectionChange(part) {
     el.classList.remove('selected');
   });
 
+  const card = document.getElementById('selectionCard');
+
   if (part) {
     const item = document.querySelector(`.structure-item[data-part="${part.id}"]`);
     if (item) item.classList.add('selected');
 
+    if (card) {
+      card.classList.remove('hidden');
+      const title = document.getElementById('cardTitle');
+      const subtitle = document.getElementById('cardSubtitle');
+      const lang = state.language || 'vi';
+      const info = part.info || {};
+      const name = info.name?.[lang] || info.name?.vi || part.displayName;
+      if (title) title.textContent = name;
+      const sysName = systemLabel(info.system || part.system, lang);
+      if (subtitle) {
+        subtitle.textContent = info.latinName ? `${info.latinName} • ${sysName}` : sysName;
+      }
+    }
+
+    updateBookmarkButton(part.id);
     updateFooterButtons(part);
   } else {
+    if (card) card.classList.add('hidden');
     document.getElementById('footerBar')?.style.setProperty('display', 'none');
   }
 }
@@ -806,8 +1418,13 @@ export async function initUI(viewer) {
   // The markup is written in English; anything else comes from the dictionaries.
   updateUIText(state.language);
   initSystemsSidebar();
+  initDrawerTabs(viewer);
   initToolbar(viewer);
+  initFloatingTools(viewer);
   initFooterActions(viewer);
+  initVideoModal();
+  initLabels(viewer);
+  initClipping(viewer);
   initHelpModal();
   initLanguageSelector();
   initSearch();

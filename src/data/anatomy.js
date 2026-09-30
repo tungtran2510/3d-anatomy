@@ -7,12 +7,14 @@
 // which system, and every label is derived from the mesh name at runtime.
 
 import { asset } from '../utils/paths.js';
+import { getVietnameseName } from './vietnamese.js';
 
 const SIDE_SUFFIX = { '.l': 'left', '.r': 'right' };
 
 const SIDE_LABEL = {
-  it: { left: 'sinistro', right: 'destro' },
-  en: { left: 'left', right: 'right' }
+  vi: { left: 'trái', right: 'phải' },
+  en: { left: 'left', right: 'right' },
+  it: { left: 'sinistro', right: 'destro' }
 };
 
 export const SYSTEM_IDS = [
@@ -37,11 +39,19 @@ export function splitSide(meshName) {
     : { base: meshName, side: null };
 }
 
-export function formatPartName(meshName, lang = 'it') {
+export function formatPartName(meshName, lang = 'vi') {
   const { base, side } = splitSide(meshName);
 
   // Z-Anatomy wraps structures outside the official terminology in parentheses.
   const clean = base.replace(/^\((.*)\)$/, '$1').trim();
+
+  if (lang === 'vi') {
+    const vnName = getVietnameseName(clean);
+    if (!side) return vnName;
+    const sideVn = side === 'left' ? 'trái' : 'phải';
+    return `${vnName} (${sideVn})`;
+  }
+
   if (!side) return clean;
 
   const label = (SIDE_LABEL[lang] || SIDE_LABEL.en)[side];
@@ -94,8 +104,9 @@ export function buildPartsData(systemsData, lexicon = {}) {
         id: meshName,
         meshName,
         name: {
-          it: formatPartName(meshName, 'it'),
-          en: formatPartName(meshName, 'en')
+          vi: formatPartName(meshName, 'vi'),
+          en: formatPartName(meshName, 'en'),
+          it: formatPartName(meshName, 'it')
         },
         baseName: base,
         side,

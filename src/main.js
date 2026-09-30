@@ -4,24 +4,37 @@ import { createScene } from './viewer/createScene.js';
 import { loadSystems } from './viewer/loadModel.js';
 import { initSelection } from './viewer/selection.js';
 import { initUI } from './ui/sidebar.js';
-import { setViewer, setPartsData, setSystemsData, setTranslations, setSearchIndex, subscribe } from './state/store.js';
+import { state, setViewer, setPartsData, setSystemsData, setTranslations, setSearchIndex, subscribe } from './state/store.js';
 import { readState, storedState, applyState, scheduleStateWrite } from './state/urlState.js';
 import { loadModel } from './viewer/loadModel.js';
 import { selectPartById } from './viewer/selection.js';
 import { showPart, hidePart, setPartTransparency, isolatePart } from './viewer/visibility.js';
 import { loadSystemsData, loadLexicon, loadDefinitions, buildPartsData, DEFAULT_SYSTEM } from './data/anatomy.js';
-import { translationsIt, translationsEn } from './data/translations.js';
+import { translationsVi, translationsEn, translationsIt } from './data/translations.js';
+import { getVietnameseSynonyms } from './data/vietnamese.js';
 
-setTranslations({ it: translationsIt, en: translationsEn });
+setTranslations({ vi: translationsVi, en: translationsEn, it: translationsIt });
 
 function buildSearchIndex(parts) {
   const index = [];
   Object.entries(parts).forEach(([partId, info]) => {
     const terms = [partId.toLowerCase()];
-    if (info.name?.it) terms.push(info.name.it.toLowerCase());
+    if (info.name?.vi) terms.push(info.name.vi.toLowerCase());
     if (info.name?.en) terms.push(info.name.en.toLowerCase());
+    if (info.name?.it) terms.push(info.name.it.toLowerCase());
     if (info.baseName) terms.push(info.baseName.toLowerCase());
-    index.push({ partId, name: info.name?.it || info.name?.en || partId, system: info.system || 'unknown', terms: [...new Set(terms)] });
+    if (info.latinName) terms.push(info.latinName.toLowerCase());
+
+    const vnSyns = getVietnameseSynonyms(info.baseName);
+    vnSyns.forEach(s => terms.push(s.toLowerCase()));
+
+    index.push({
+      partId,
+      name: info.name?.[state.language] || info.name?.vi || info.name?.en || partId,
+      latinName: info.latinName || '',
+      system: info.system || 'unknown',
+      terms: [...new Set(terms)]
+    });
   });
   return index;
 }

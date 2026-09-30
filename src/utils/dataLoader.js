@@ -1,25 +1,25 @@
 // Data loading from JSON files
 import { state, setTranslations, setSearchIndex, notify } from '../state/store.js';
 import { asset } from './paths.js';
+import { getVietnameseSynonyms } from '../data/vietnamese.js';
 
 // Parts and systems are set up in main.js from systems.json (see data/anatomy.js);
 // this only loads the UI translations and refreshes the search index.
 export async function loadAllData() {
   try {
-    // Load translations
-    const [itResponse, enResponse] = await Promise.all([
-      fetch(asset('data/translations/it.json')),
-      fetch(asset('data/translations/en.json'))
+    // Load translations (VI, EN, IT)
+    const [viResponse, enResponse, itResponse] = await Promise.all([
+      fetch(asset('data/translations/vi.json')).catch(() => ({ ok: false })),
+      fetch(asset('data/translations/en.json')).catch(() => ({ ok: false })),
+      fetch(asset('data/translations/it.json')).catch(() => ({ ok: false }))
     ]);
 
-    if (itResponse.ok && enResponse.ok) {
-      const it = await itResponse.json();
-      const en = await enResponse.json();
-      setTranslations({ it, en });
-    }
+    const vi = viResponse.ok ? await viResponse.json() : {};
+    const en = enResponse.ok ? await enResponse.json() : {};
+    const it = itResponse.ok ? await itResponse.json() : {};
+    setTranslations({ vi, en, it });
 
-    // Italian names for the structures people actually search for; the index is
-    // built after them so they are searchable from the first keystroke.
+    // Italian & Vietnamese names for structures
     await loadSynonyms();
     buildSearchIndex();
 
@@ -30,12 +30,13 @@ export async function loadAllData() {
   }
 }
 
-// "femore" must find "Femur", so queries and terms are compared with accents
-// folded away and case removed.
+// "femore" must find "Femur", "xuong dui" must find "Xương đùi"
 export function normalise(text) {
+  if (!text) return '';
   return text
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[đĐ]/g, 'd')
     .toLowerCase()
     .trim();
 }
@@ -96,16 +97,29 @@ function buildSearchIndex() {
 
     let row = rows.get(key);
     if (!row) {
+      const viName = info.name?.vi || '';
+      const viSyns = getVietnameseSynonyms(base);
+      const latin = info.latinName || '';
       const italian = italianTermsFor(normalise(base));
+
+      const terms = [
+        normalise(base),
+        normalise(viName),
+        normalise(latin),
+        ...viSyns.map(normalise),
+        ...italian.map(normalise)
+      ].filter(Boolean);
+
       row = {
         key,
         base,
-        label: base.replace(/^\((.*)\)$/, '$1'),
+        label: viName || base.replace(/^\((.*)\)$/, '$1'),
+        latin,
         system,
         sides: {},
         partIds: [],
         italian,
-        terms: [normalise(base), ...italian.map(normalise)]
+        terms: [...new Set(terms)]
       };
       rows.set(key, row);
     }
