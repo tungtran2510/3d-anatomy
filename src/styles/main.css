@@ -1644,9 +1644,9 @@ body.theme-dark .control-btn {
     position: fixed;
     top: var(--header-height);
     bottom: 0;
-    width: 78vw;
-    max-width: 290px;
-    min-width: 250px;
+    width: 66vw;
+    max-width: 270px;
+    min-width: 230px;
     z-index: 200;
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
@@ -9799,6 +9799,457 @@ body.theme-dark .structure-card-badge,
   background: rgba(56, 189, 248, 0.16);
   color: #38bdf8;
 }
+
+/* =========================================================================
+   VISIBLE BODY ATLAS 2027 STANDARD: QUICK NAV, SCOUT BOX, HIERARCHY & TAGS
+   ========================================================================= */
+
+/* 1. Two-Way Selection History Navigation (< >) */
+.selection-card-nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.btn-selection-nav {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: #f8fafc;
+  color: #0284c7;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.btn-selection-nav:hover:not(.disabled):not(:disabled) {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #38bdf8;
+  transform: scale(1.05);
+}
+
+.btn-selection-nav.disabled,
+.btn-selection-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .btn-selection-nav,
+body.theme-dark .btn-selection-nav {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(51, 65, 85, 0.8);
+  color: #38bdf8;
+}
+
+/* 2. Selection Card Header Center Dropdown */
+.selection-card-header-center {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 6px;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.selection-card-header-center:hover {
+  background: rgba(241, 245, 249, 0.85);
+}
+
+[data-theme="dark"] .selection-card-header-center:hover,
+body.theme-dark .selection-card-header-center:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.info-header-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  letter-spacing: 0.2px;
+}
+
+[data-theme="dark"] .info-header-label,
+body.theme-dark .info-header-label {
+  color: #cbd5e1;
+}
+
+.info-header-arrow {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+
+.selection-card-body.collapsed-dropdown {
+  display: none !important;
+}
+
+/* 3. Prominent Medical Anatomy Title Header */
+.structure-title-section {
+  background: linear-gradient(135deg, rgba(240, 253, 250, 0.85), rgba(240, 249, 255, 0.95));
+  border: 1px solid rgba(204, 251, 241, 0.9);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .structure-title-section,
+body.theme-dark .structure-title-section {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(19, 78, 74, 0.3));
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.selection-structure-names-prominent .names-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#cardTitle.primary-medical-title {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #0d9488;
+  letter-spacing: -0.2px;
+  margin: 0;
+  line-height: 1.25;
+}
+
+[data-theme="dark"] #cardTitle.primary-medical-title,
+body.theme-dark #cardTitle.primary-medical-title {
+  color: #2dd4bf;
+}
+
+.latin-nomenclature-row {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 600;
+  color: #0284c7;
+  margin-top: 3px;
+}
+
+[data-theme="dark"] .latin-nomenclature-row,
+body.theme-dark .latin-nomenclature-row {
+  color: #38bdf8;
+}
+
+/* 4. Interactive Anatomical Hierarchy Tree (Photo 5) */
+.anatomical-hierarchy-tree {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .anatomical-hierarchy-tree,
+body.theme-dark .anatomical-hierarchy-tree {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(51, 65, 85, 0.6);
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tree-node:hover:not(.active) {
+  background: #e2e8f0;
+}
+
+[data-theme="dark"] .tree-node:hover:not(.active),
+body.theme-dark .tree-node:hover:not(.active) {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.tree-node.active {
+  background: #0d9488;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: default;
+}
+
+.tree-connector {
+  color: #94a3b8;
+  font-family: monospace;
+  font-weight: 700;
+  user-select: none;
+}
+
+.tree-label.highlight-teal {
+  color: #ffffff;
+}
+
+.tree-branch {
+  margin-left: 12px;
+}
+
+/* 5. 3D Structure Tagging Buttons (Add Tag / Clear Tags) */
+.tag-actions-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-tag-action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn-tag-action.add-tag {
+  background: #f0fdfa;
+  color: #0d9488;
+  border-color: #99f6e4;
+}
+
+.btn-tag-action.add-tag:hover {
+  background: #0d9488;
+  color: #ffffff;
+}
+
+.btn-tag-action.clear-tags {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: #fecaca;
+}
+
+.btn-tag-action.clear-tags:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-tag-action.add-tag,
+body.theme-dark .btn-tag-action.add-tag {
+  background: rgba(13, 148, 136, 0.15);
+  color: #2dd4bf;
+  border-color: rgba(45, 212, 191, 0.3);
+}
+
+[data-theme="dark"] .btn-tag-action.clear-tags,
+body.theme-dark .btn-tag-action.clear-tags {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+/* 6. Floating Views Quick Nav (<| Views |> Capsule) */
+.floating-views-quick-nav {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 85;
+  display: flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  padding: 3px 5px;
+  gap: 2px;
+  user-select: none;
+}
+
+.btn-quick-nav-arrow {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #38bdf8;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.btn-quick-nav-arrow:hover {
+  background: rgba(56, 189, 248, 0.2);
+  color: #ffffff;
+}
+
+.btn-quick-nav-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: all 0.15s ease;
+}
+
+.btn-quick-nav-title:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #38bdf8;
+}
+
+/* 7. Floating Radiological CT/MRI Scout Box (Photo 3) */
+.radiological-scout-box {
+  position: absolute;
+  bottom: 84px;
+  left: 14px;
+  z-index: 92;
+  width: 92px;
+  height: 92px;
+  border-radius: 10px;
+  background: #050b14;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.radiological-scout-box:hover {
+  transform: scale(1.08);
+  border-color: #38bdf8;
+}
+
+.radiological-scout-box.hidden {
+  display: none !important;
+}
+
+.scout-preview-frame {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scout-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #38bdf8;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+.scout-level-pill {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #f8fafc;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+  z-index: 2;
+}
+
+.scout-img-wrapper canvas {
+  display: block;
+  width: 88px;
+  height: 88px;
+}
+
+/* 8. Floating AR Pill Button (Visible Body Standard: Photo 5) */
+.floating-ar-btn {
+  position: absolute;
+  bottom: 84px;
+  left: 116px;
+  z-index: 92;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+}
+
+.floating-ar-btn:hover {
+  background: #0284c7;
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+/* 9. Mobile Responsive Refinements */
+@media (max-width: 768px) {
+  .selection-card:not(.compact-mode) {
+    width: min(72vw, 340px) !important;
+    max-width: 72vw !important;
+    right: 10px !important;
+    left: auto !important;
+    transform: none !important;
+    bottom: 60px !important;
+    max-height: 60vh !important;
+    z-index: 120 !important;
+  }
+
+  .floating-views-quick-nav {
+    top: 10px;
+    left: 10px;
+    padding: 2px 4px;
+  }
+
+  .radiological-scout-box {
+    bottom: 68px;
+    left: 10px;
+    width: 78px;
+    height: 78px;
+  }
+
+  .radiological-scout-box canvas {
+    width: 74px !important;
+    height: 74px !important;
+  }
+
+  .floating-ar-btn {
+    bottom: 68px;
+    left: 96px;
+    padding: 6px 11px;
+    font-size: 12px;
+  }
+}
+
 
 
 

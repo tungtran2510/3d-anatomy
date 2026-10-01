@@ -111,7 +111,7 @@ function updatePinPositions(viewer) {
 
   const tempVec = new THREE.Vector3();
 
-  LANDMARKS.forEach((item) => {
+    LANDMARKS.forEach((item) => {
     const el = pinElements.get(item.id);
     if (!el) return;
 
@@ -133,6 +133,77 @@ function updatePinPositions(viewer) {
       el.style.display = 'none';
     }
   });
+
+  // Project custom user-pinned tags
+  customTags.forEach((item) => {
+    tempVec.set(item.pos[0], item.pos[1], item.pos[2]);
+    tempVec.project(camera);
+
+    const isFront = tempVec.z < 1.0 && tempVec.z > -1.0;
+    const isInsideScreen = tempVec.x >= -1.1 && tempVec.x <= 1.1 && tempVec.y >= -1.1 && tempVec.y <= 1.1;
+
+    if (isFront && isInsideScreen) {
+      const x = (tempVec.x * 0.5 + 0.5) * width;
+      const y = (-tempVec.y * 0.5 + 0.5) * height;
+
+      item.el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      item.el.style.display = 'flex';
+      item.el.style.opacity = Math.max(0.2, 1.0 - tempVec.z * 0.5);
+    } else {
+      item.el.style.display = 'none';
+    }
+  });
+}
+
+const customTags = new Map();
+
+export function addCustomTag(partId, name, viewer) {
+  if (!viewer) return;
+  if (!labelsContainer) initLabels(viewer);
+
+  let pos = new THREE.Vector3(0, 1.2, 0);
+  const mesh = viewer.scene.getObjectByName(partId);
+  if (mesh) {
+    const box = new THREE.Box3().setFromObject(mesh);
+    if (!box.isEmpty()) {
+      box.getCenter(pos);
+    }
+  }
+
+  // Remove existing tag for this part if any
+  if (customTags.has(partId)) {
+    customTags.get(partId).el.remove();
+  }
+
+  const badge = document.createElement('div');
+  badge.className = 'landmark-pin custom-tag-pin';
+  badge.style.borderColor = '#0d9488';
+  badge.style.background = 'rgba(13, 148, 136, 0.9)';
+  badge.style.color = '#fff';
+  badge.innerHTML = `
+    <span class="pin-dot" style="background:#2dd4bf;"></span>
+    <span class="pin-text">${name}</span>
+  `;
+  badge.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectPartById(partId, viewer);
+  });
+
+  labelsContainer.appendChild(badge);
+  customTags.set(partId, { el: badge, pos: [pos.x, pos.y, pos.z] });
+
+  setLabelsVisible(true, viewer);
+  updatePinPositions(viewer);
+  return customTags.size;
+}
+
+export function clearCustomTags(viewer) {
+  customTags.forEach(tag => tag.el.remove());
+  customTags.clear();
+  if (viewer) {
+    updatePinPositions(viewer);
+    viewer.render();
+  }
 }
 
 export function setLabelsVisible(show, viewer) {

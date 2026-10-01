@@ -273,7 +273,62 @@ function findParentMesh(object) {
   return null;
 }
 
+// Two-way Selection History Stack (Visible Body Standard: <- and -> buttons)
+const selectionHistoryStack = [];
+let historyPointer = -1;
+let isNavigatingHistory = false;
+
+export function canGoBackSelection() {
+  return historyPointer > 0;
+}
+
+export function canGoForwardSelection() {
+  return historyPointer >= 0 && historyPointer < selectionHistoryStack.length - 1;
+}
+
+export function navigateSelectionHistory(delta, viewer) {
+  if (selectionHistoryStack.length === 0) return;
+  const newIdx = historyPointer + delta;
+  if (newIdx < 0 || newIdx >= selectionHistoryStack.length) return;
+
+  historyPointer = newIdx;
+  const partId = selectionHistoryStack[historyPointer];
+  isNavigatingHistory = true;
+  selectPart(partId, viewer, true);
+  isNavigatingHistory = false;
+  notifySelectionHistoryChanged();
+}
+
+function recordSelectionHistory(partId) {
+  if (isNavigatingHistory) return;
+  if (selectionHistoryStack[historyPointer] === partId) return;
+
+  // Truncate forward history if user made a new selection
+  selectionHistoryStack.splice(historyPointer + 1);
+  selectionHistoryStack.push(partId);
+  historyPointer = selectionHistoryStack.length - 1;
+  notifySelectionHistoryChanged();
+}
+
+export function notifySelectionHistoryChanged() {
+  const backBtn = document.getElementById('btnSelectionHistoryBack');
+  const fwdBtn = document.getElementById('btnSelectionHistoryForward');
+  if (backBtn) {
+    backBtn.disabled = !canGoBackSelection();
+    backBtn.classList.toggle('disabled', !canGoBackSelection());
+  }
+  if (fwdBtn) {
+    fwdBtn.disabled = !canGoForwardSelection();
+    fwdBtn.classList.toggle('disabled', !canGoForwardSelection());
+  }
+}
+
 export function selectPart(partId, viewer, skipHistory = false) {
+  // Record selection history stack
+  if (!skipHistory) {
+    recordSelectionHistory(partId);
+  }
+
   // Record selection undo history
   if (!skipHistory && (!state.selectedPart || state.selectedPart.id !== partId)) {
     pushUndo({
@@ -390,6 +445,7 @@ export function deselectPart(skipHistory = false) {
   setSelectedPart(null);
   hideInfoPanel();
   hideFooterActions();
+  notifySelectionHistoryChanged();
 }
 
 function showInfoPanel(partData) {

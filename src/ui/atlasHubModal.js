@@ -6,18 +6,22 @@ import { showSystem, hideSystem } from '../viewer/visibility.js';
 import { selectPartById, deselectPart } from '../viewer/selection.js';
 import { setView } from '../viewer/camera.js';
 import { showToast, openVideoModal, selectStructureAnywhere, systemLabel } from './sidebar.js';
-import { openMotionPanel } from './motionPanel.js';
+import { openMotionPanel, closeMotionPanel } from './motionPanel.js';
 import { ICONS } from './icons.js';
 import {
   ATLAS_SYSTEMS_CATEGORIES,
   ATLAS_REGIONS_CATEGORIES,
   ATLAS_QUIZZES_DATA,
-  ATLAS_LAB_CATEGORIES
+  ATLAS_LAB_CATEGORIES,
+  ATLAS_CROSS_SECTIONS_CATEGORIES,
+  ATLAS_MICROANATOMY_CATEGORIES,
+  ATLAS_MUSCLE_ACTIONS_CATEGORIES
 } from '../data/atlasViewsData.js';
 import { getAtlasMediaCategories } from '../data/atlasMediaManager.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
 import { toggleAppTheme, updateThemeButtons, isDarkTheme } from '../utils/themeManager.js';
 import { setModelOrientation } from '../viewer/orientationManager.js';
+import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
 import { normalise, searchStructures } from '../utils/dataLoader.js';
 
 function escapeHtml(text) {
@@ -37,12 +41,14 @@ let searchQuery = '';
 export function initAtlasHub(viewer) {
   if (hubModalEl) return;
 
-  const container = document.getElementById('app') || document.body;
+  hubModalEl = document.getElementById('atlasHubModal');
+  if (!hubModalEl) {
+    const container = document.getElementById('app') || document.body;
 
-  hubModalEl = document.createElement('div');
-  hubModalEl.id = 'atlasHubModal';
-  hubModalEl.className = 'atlas-hub-modal hidden';
-  hubModalEl.innerHTML = `
+    hubModalEl = document.createElement('div');
+    hubModalEl.id = 'atlasHubModal';
+    hubModalEl.className = 'atlas-hub-modal hidden';
+    hubModalEl.innerHTML = `
     <div class="atlas-hub-backdrop" id="atlasHubBackdrop"></div>
     <div class="atlas-hub-panel" role="dialog" aria-modal="true" aria-label="Trung tâm góc nhìn và hoạt ảnh Atlas">
       
@@ -106,6 +112,9 @@ export function initAtlasHub(viewer) {
               <button type="button" class="subchip" data-sub="systems">Hệ cơ quan</button>
               <button type="button" class="subchip" data-sub="regions">Phân vùng</button>
               <button type="button" class="subchip" data-sub="lab">Bàn mổ (Lab)</button>
+              <button type="button" class="subchip" data-sub="cross_sections">Cắt lớp (Cross Sections)</button>
+              <button type="button" class="subchip" data-sub="microanatomy">Vi thể & Da (Microanatomy)</button>
+              <button type="button" class="subchip" data-sub="muscle_actions">Chuyển động (Muscle Actions)</button>
             </div>
           </div>
         </div>
@@ -119,7 +128,8 @@ export function initAtlasHub(viewer) {
     </div>
   `;
 
-  container.appendChild(hubModalEl);
+    container.appendChild(hubModalEl);
+  }
 
   setupHubEvents(viewer);
   renderHubContent(viewer);
@@ -330,6 +340,39 @@ function renderViewsTab(container, viewer) {
     (c.desc && normalise(c.desc).includes(normQuery))
   );
 
+  const filteredCrossSections = ATLAS_CROSS_SECTIONS_CATEGORIES.map(group => {
+    const matchedCards = group.cards.filter(c =>
+      !normQuery ||
+      normalise(c.title).includes(normQuery) ||
+      normalise(c.subtitle).includes(normQuery) ||
+      (c.desc && normalise(c.desc).includes(normQuery)) ||
+      normalise(group.titleVi).includes(normQuery)
+    );
+    return { ...group, cards: matchedCards };
+  }).filter(group => group.cards.length > 0);
+
+  const filteredMicroanatomy = ATLAS_MICROANATOMY_CATEGORIES.map(group => {
+    const matchedCards = group.cards.filter(c =>
+      !normQuery ||
+      normalise(c.title).includes(normQuery) ||
+      normalise(c.subtitle).includes(normQuery) ||
+      (c.desc && normalise(c.desc).includes(normQuery)) ||
+      normalise(group.titleVi).includes(normQuery)
+    );
+    return { ...group, cards: matchedCards };
+  }).filter(group => group.cards.length > 0);
+
+  const filteredMuscleActions = ATLAS_MUSCLE_ACTIONS_CATEGORIES.map(group => {
+    const matchedCards = group.cards.filter(c =>
+      !normQuery ||
+      normalise(c.title).includes(normQuery) ||
+      normalise(c.subtitle).includes(normQuery) ||
+      (c.desc && normalise(c.desc).includes(normQuery)) ||
+      normalise(group.titleVi).includes(normQuery)
+    );
+    return { ...group, cards: matchedCards };
+  }).filter(group => group.cards.length > 0);
+
   // Render Systems if selected
   if (currentSubFilter === 'all' || currentSubFilter === 'systems') {
     filteredSystems.forEach(cat => {
@@ -348,6 +391,99 @@ function renderViewsTab(container, viewer) {
                 <div class="card-thumb-banner">
                   <img class="card-thumb-img" src="${card.image || '/3d/images/atlas/skel_full.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
                   <div class="thumb-badge">${card.badge}</div>
+                </div>
+                <div class="card-info">
+                  <h4 class="card-title">${card.title}</h4>
+                  <p class="card-subtitle">${card.subtitle}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // Render Cross Sections if selected (Image 4 Visible Body standard)
+  if ((currentSubFilter === 'all' || currentSubFilter === 'cross_sections') && filteredCrossSections.length > 0) {
+    filteredCrossSections.forEach(group => {
+      html += `
+        <div class="atlas-view-section">
+          <div class="atlas-view-section-header">
+            <div class="section-title-wrap">
+              <span class="system-icon-mini">${ICONS.crossSection || '📐'}</span>
+              <h3 class="section-heading">${group.titleVi}</h3>
+            </div>
+            <span class="section-count">${group.cards.length} lát cắt</span>
+          </div>
+          <div class="atlas-cards-grid">
+            ${group.cards.map(card => `
+              <div class="atlas-view-card cross-section-card" data-view-id="${card.id}">
+                <div class="card-thumb-banner cross-thumb">
+                  <img class="card-thumb-img" src="${card.image || '/3d/images/atlas/nerv_brain.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
+                  <div class="thumb-badge cross-badge">${card.badge}</div>
+                </div>
+                <div class="card-info">
+                  <h4 class="card-title">${card.title}</h4>
+                  <p class="card-subtitle">${card.subtitle}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // Render Microanatomy & Skin Layers if selected (Image 1 Visible Body standard)
+  if ((currentSubFilter === 'all' || currentSubFilter === 'microanatomy') && filteredMicroanatomy.length > 0) {
+    filteredMicroanatomy.forEach(group => {
+      html += `
+        <div class="atlas-view-section">
+          <div class="atlas-view-section-header">
+            <div class="section-title-wrap">
+              <span class="system-icon-mini">${ICONS.microanatomy || '🔬'}</span>
+              <h3 class="section-heading">${group.titleVi}</h3>
+            </div>
+            <span class="section-count">${group.cards.length} vi thể</span>
+          </div>
+          <div class="atlas-cards-grid">
+            ${group.cards.map(card => `
+              <div class="atlas-view-card micro-card" data-view-id="${card.id}">
+                <div class="card-thumb-banner micro-thumb">
+                  <img class="card-thumb-img" src="${card.image || '/3d/images/atlas/med_skin.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
+                  <div class="thumb-badge micro-badge">${card.badge}</div>
+                </div>
+                <div class="card-info">
+                  <h4 class="card-title">${card.title}</h4>
+                  <p class="card-subtitle">${card.subtitle}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // Render Muscle Actions if selected (Image 2 & 3 Visible Body standard)
+  if ((currentSubFilter === 'all' || currentSubFilter === 'muscle_actions') && filteredMuscleActions.length > 0) {
+    filteredMuscleActions.forEach(group => {
+      html += `
+        <div class="atlas-view-section">
+          <div class="atlas-view-section-header">
+            <div class="section-title-wrap">
+              <span class="system-icon-mini">${ICONS.muscleAction || '💪'}</span>
+              <h3 class="section-heading">${group.titleVi}</h3>
+            </div>
+            <span class="section-count">${group.cards.length} chuyển động</span>
+          </div>
+          <div class="atlas-cards-grid">
+            ${group.cards.map(card => `
+              <div class="atlas-view-card action-card" data-view-id="${card.id}">
+                <div class="card-thumb-banner action-thumb">
+                  <img class="card-thumb-img" src="${card.image || '/3d/images/atlas/musc_torso.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
+                  <div class="thumb-badge action-badge">${card.badge}</div>
                 </div>
                 <div class="card-info">
                   <h4 class="card-title">${card.title}</h4>
@@ -456,6 +592,24 @@ function renderViewsTab(container, viewer) {
         }
         if (!targetCard) {
           targetCard = ATLAS_LAB_CATEGORIES.find(c => c.id === viewId);
+        }
+        if (!targetCard) {
+          for (const g of ATLAS_CROSS_SECTIONS_CATEGORIES) {
+            const found = g.cards.find(c => c.id === viewId);
+            if (found) { targetCard = found; break; }
+          }
+        }
+        if (!targetCard) {
+          for (const g of ATLAS_MICROANATOMY_CATEGORIES) {
+            const found = g.cards.find(c => c.id === viewId);
+            if (found) { targetCard = found; break; }
+          }
+        }
+        if (!targetCard) {
+          for (const g of ATLAS_MUSCLE_ACTIONS_CATEGORIES) {
+            const found = g.cards.find(c => c.id === viewId);
+            if (found) { targetCard = found; break; }
+          }
         }
         if (targetCard) applyAtlasView(targetCard, viewer);
       } else if (regId) {
@@ -639,7 +793,65 @@ async function applyAtlasView(card, viewer) {
     // 2. Set Model Orientation & Dissection Table
     setModelOrientation(card.orientation || 'standing', activeViewer, { showTable: !!card.showTable });
 
-    // 3. Animate camera
+    // 3. Handle Cross-Section Clipping vs Kinematic Muscle Action vs Normal View
+    if (card.plane) {
+      closeMotionPanel();
+      setClippingPlane(card.plane, card.offset !== undefined ? card.offset : 0, false, activeViewer, true);
+      document.getElementById('btnToolClipping')?.classList.add('active');
+      const popover = document.getElementById('clippingPopover');
+      if (popover) {
+        popover.classList.remove('hidden');
+        const planeBtns = popover.querySelectorAll('.clipping-plane-select .plane-btn');
+        planeBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.plane === card.plane);
+        });
+        const slider = document.getElementById('clippingSlider');
+        const valLabel = document.getElementById('clippingValue');
+        if (slider) {
+          if (card.plane === 'axial') {
+            slider.min = '0.0';
+            slider.max = '1.8';
+            slider.step = '0.01';
+          } else if (card.plane === 'coronal') {
+            slider.min = '-0.3';
+            slider.max = '0.3';
+            slider.step = '0.01';
+          } else {
+            slider.min = '-0.4';
+            slider.max = '0.4';
+            slider.step = '0.01';
+          }
+          slider.value = card.offset !== undefined ? card.offset : 0;
+        }
+        if (valLabel) {
+          const off = card.offset !== undefined ? card.offset : 0;
+          valLabel.textContent = `${(off * 100).toFixed(1)} cm`;
+        }
+      }
+      import('./radiologicalScout.js').then(({ showScoutView }) => {
+        showScoutView(card, card.plane, card.offset);
+      });
+    } else if (card.motionId) {
+      import('./radiologicalScout.js').then(({ hideScoutView }) => {
+        hideScoutView();
+      });
+      disableClipping(activeViewer);
+      const popover = document.getElementById('clippingPopover');
+      if (popover) popover.classList.add('hidden');
+      document.getElementById('btnToolClipping')?.classList.remove('active');
+      openMotionPanel(activeViewer, card.motionId);
+    } else {
+      import('./radiologicalScout.js').then(({ hideScoutView }) => {
+        hideScoutView();
+      });
+      disableClipping(activeViewer);
+      const popover = document.getElementById('clippingPopover');
+      if (popover) popover.classList.add('hidden');
+      document.getElementById('btnToolClipping')?.classList.remove('active');
+      closeMotionPanel();
+    }
+
+    // 4. Animate camera
     if (card.camera) {
       const cam = card.camera;
       const { camera, controls } = activeViewer;
@@ -649,7 +861,7 @@ async function applyAtlasView(card, viewer) {
       animateCameraTo(camera, controls, targetPos, targetLook);
     }
 
-    // 3. Highlight specific part if present, or deselect
+    // 5. Highlight specific part if present, or deselect
     if (card.highlight) {
       setTimeout(() => selectPartById(card.highlight, activeViewer), 400);
     } else {
@@ -663,6 +875,10 @@ async function applyAtlasView(card, viewer) {
   }
 }
 
+export async function applyAtlasViewDirect(card, viewer) {
+  return applyAtlasView(card, viewer);
+}
+
 let currentActiveRegionId = null;
 
 // ACTION: Apply Region
@@ -671,6 +887,11 @@ async function applyAtlasRegion(reg, viewer) {
 
   const activeViewer = viewer || state.viewer || window.viewer;
   if (!activeViewer) return;
+
+  disableClipping(activeViewer);
+  const popover = document.getElementById('clippingPopover');
+  if (popover) popover.classList.add('hidden');
+  closeMotionPanel();
 
   if (currentActiveRegionId === reg.id) {
     // Toggle OFF: revert to front whole body view!
@@ -705,10 +926,15 @@ async function applyAtlasRegion(reg, viewer) {
 function applyAtlasMedia(media, viewer) {
   closeAtlasHub();
 
+  const activeViewer = viewer || state.viewer || window.viewer;
   if (media.type === 'motion') {
+    disableClipping(activeViewer);
+    const popover = document.getElementById('clippingPopover');
+    if (popover) popover.classList.add('hidden');
     showToast(`▶️ Đang khởi chạy mô phỏng 3D: ${media.title}`);
-    openMotionPanel(viewer, media.motionType);
+    openMotionPanel(activeViewer, media.motionType);
   } else if (media.type === 'video') {
+    closeMotionPanel();
     showToast(`🎬 Đang phát video y khoa: ${media.title}`);
     openVideoModal(media.videoUrl, media.title);
   }

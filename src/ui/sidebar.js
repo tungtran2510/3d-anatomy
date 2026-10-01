@@ -30,6 +30,8 @@ import { initFullscreenController } from './fullscreenController.js';
 import { initAtlasHub, openAtlasHub } from './atlasHubModal.js';
 import { parseVideoUrl } from '../data/atlasMediaManager.js';
 import { initInfoPanel, updateInfoPanelContent } from './infoPanel.js';
+import { initViewsQuickNav } from './viewsQuickNav.js';
+import { initRadiologicalScout } from './radiologicalScout.js';
 
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
@@ -2008,6 +2010,8 @@ export async function initUI(viewer) {
   initFullscreenController(viewer);
   initAtlasHub(viewer);
   initInfoPanel(viewer);
+  initViewsQuickNav(viewer);
+  initRadiologicalScout(viewer);
 }
 
 // Under 1024px the search field is hidden; this button is the only way to it.

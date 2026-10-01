@@ -61,12 +61,14 @@ export function openMotionPanel(viewer, defaultMotion = MOTIONS.CARDIAC) {
   popoverEl.classList.remove('minimized');
   document.getElementById('btnToolMotion')?.classList.add('active');
 
-  // If no motion is selected, launch default
-  const state = dynamicAnatomy.getState();
-  if (!state.motionId) {
+  // If a motion is requested, switch to it, otherwise keep current or launch default
+  const curState = dynamicAnatomy.getState();
+  if (defaultMotion && defaultMotion !== curState.motionId) {
     dynamicAnatomy.setMotion(defaultMotion);
+  } else if (!curState.motionId) {
+    dynamicAnatomy.setMotion(defaultMotion || MOTIONS.CARDIAC);
   } else {
-    updateMotionUI(state);
+    updateMotionUI(curState);
   }
 }
 
