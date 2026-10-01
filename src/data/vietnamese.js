@@ -170,16 +170,42 @@ const EXACT_DICTIONARY = {
   'Small intestine': 'Ruột non',
   'Large intestine': 'Ruột già (Đại tràng)',
   'Appendix': 'Ruột thừa',
-  'Spleen': 'Lách',
+  'Vermiform appendix': 'Ruột thừa',
+  'Spleen': 'Lá lách',
   'Pancreas': 'Tụy',
+  'Pancreatic duct': 'Ống tụy',
+  'Accessory pancreatic duct': 'Ống tụy phụ',
+  'Gallbladder': 'Túi mật',
+  'Bile duct': 'Ống mật',
+  'Common bile duct': 'Ống mật chủ',
+  'Cystic duct': 'Ống túi mật',
   'Kidney': 'Thận',
   'Left kidney': 'Thận trái',
   'Right kidney': 'Thận phải',
   'Urinary bladder': 'Bàng quang',
+  'Ureter': 'Niệu quản',
+  'Urethra': 'Niệu đạo',
+  'Prostate': 'Tuyến tiền liệt',
+  'Testis': 'Tinh hoàn',
+  'Epididymis': 'Mào tinh',
   'Trachea': 'Khí quản',
   'Esophagus': 'Thực quản',
+  'Oesophagus': 'Thực quản',
   'Thyroid gland': 'Tuyến giáp',
-  'Gallbladder': 'Túi mật',
+  'Parathyroid gland': 'Tuyến cận giáp',
+  'Suprarenal gland': 'Tuyến thượng thận',
+  'Adrenal gland': 'Tuyến thượng thận',
+  'Thoracic duct': 'Ống ngực (Bạch huyết)',
+  'Jejunum': 'Hỗng tràng',
+  'Ileum': 'Hồi tràng',
+  'Ascending colon': 'Đại tràng lên',
+  'Transverse colon': 'Đại tràng ngang',
+  'Descending colon': 'Đại tràng xuống',
+  'Sigmoid colon': 'Đại tràng xích-ma',
+  'Greater omentum': 'Mạc nối lớn',
+  'Lesser omentum': 'Mạc nối nhỏ',
+  'Mesentery': 'Mạc treo ruột',
+  'Mesocolon': 'Mạc treo đại tràng',
 
   // --- CARDIOVASCULAR ---
   'Aorta': 'Động mạch chủ',
@@ -289,15 +315,61 @@ export function getVietnameseSynonyms(englishBaseName) {
 
   const synonyms = [vn];
   const lower = vn.toLowerCase();
+  const enLower = (englishBaseName || '').toLowerCase();
 
-  if (lower.includes('xương đùi')) synonyms.push('đùi', 'bắp đùi');
+  // Visceral & Lymphatic Organs
+  if (lower.includes('lách') || enLower.includes('spleen')) {
+    synonyms.push('lá lách', 'lách', 'tỳ', 'lách tỳ', 'la lach', 'ty', 'spleen');
+  }
+  if (lower.includes('tụy') || enLower.includes('pancreas')) {
+    synonyms.push('tụy', 'tuyến tụy', 'tụy tạng', 'tuy', 'tuyen tuy', 'pancreas');
+  }
+  if (lower.includes('túi mật') || lower.includes('mật') || enLower.includes('gallbladder')) {
+    synonyms.push('mật', 'túi mật', 'bọng mật', 'tui mat', 'mat', 'gallbladder');
+  }
+  if (lower.includes('ống mật') || enLower.includes('bile duct')) {
+    synonyms.push('ống dẫn mật', 'đường mật', 'ong mat', 'ong dan mat', 'duong mat', 'bile');
+  }
+  if (lower.includes('ống tụy') || enLower.includes('pancreatic duct')) {
+    synonyms.push('ống tụy chính', 'ống wirsung', 'ong tuy');
+  }
+  if (lower.includes('gan') || enLower.includes('liver')) {
+    synonyms.push('lá gan', 'gan mật', 'la gan', 'hepar', 'liver');
+  }
+  if (lower.includes('thận') || enLower.includes('kidney')) {
+    synonyms.push('quả thận', 'hai quả thận', 'qua than', 'than', 'kidney');
+  }
+  if (lower.includes('dạ dày') || enLower.includes('stomach')) {
+    synonyms.push('bao tử', 'da day', 'bao tu', 'stomach');
+  }
+  if (lower.includes('ruột thừa') || enLower.includes('appendix')) {
+    synonyms.push('manh tràng', 'dau ruot thua', 'ruot thua', 'appendix');
+  }
+  if (lower.includes('tá tràng') || enLower.includes('duodenum')) {
+    synonyms.push('ruột non', 'ta trang', 'duodenum');
+  }
+  if (lower.includes('phổi') || enLower.includes('lung')) {
+    synonyms.push('lá phổi', 'hai lá phổi', 'la phoi', 'phoi', 'lung');
+  }
+  if (lower.includes('quả tim') || lower.includes('tim') || enLower.includes('heart')) {
+    synonyms.push('tim', 'trai tim', 'qua tim', 'heart');
+  }
+  if (lower.includes('não') || enLower.includes('brain')) {
+    synonyms.push('bộ não', 'nao bo', 'nao', 'brain');
+  }
+  if (lower.includes('bạch huyết') || enLower.includes('lymph')) {
+    synonyms.push('hệ bạch huyết', 'hạch bạch huyết', 'bach huyet', 'hach');
+  }
+
+  // Bones & Muscles
+  if (lower.includes('xương đùi')) synonyms.push('đùi', 'bắp đùi', 'xuong dui', 'dui');
   if (lower.includes('xương đòn')) synonyms.push('xương quai xanh', 'quai xanh');
   if (lower.includes('cơ delta')) synonyms.push('cơ vai', 'bắp vai');
   if (lower.includes('cơ nhị đầu')) synonyms.push('chuột trước', 'bắp tay trước');
   if (lower.includes('cơ tam đầu')) synonyms.push('chuột sau', 'bắp tay sau');
-  if (lower.includes('đốt sống')) synonyms.push('cột sống', 'xương sống');
+  if (lower.includes('đốt sống')) synonyms.push('cột sống', 'xương sống', 'dot song', 'cot song');
   if (lower.includes('thần kinh tọa')) synonyms.push('thần kinh ngồi', 'đau dây tọa');
-  if (lower.includes('quả tim')) synonyms.push('tim');
 
-  return synonyms;
+  return [...new Set(synonyms)];
 }
+

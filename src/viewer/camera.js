@@ -6,8 +6,8 @@ import { restoreAllParts } from './visibility.js';
 const VIEWS = {
   front: { position: new THREE.Vector3(0, 0, 1), target: new THREE.Vector3(0, 0, 0) },
   back: { position: new THREE.Vector3(0, 0, -1), target: new THREE.Vector3(0, 0, 0) },
-  left: { position: new THREE.Vector3(-1, 0, 0), target: new THREE.Vector3(0, 0, 0) },
-  right: { position: new THREE.Vector3(1, 0, 0), target: new THREE.Vector3(0, 0, 0) },
+  left: { position: new THREE.Vector3(-0.72, 0.12, 0.68).normalize(), target: new THREE.Vector3(0, 0, 0) },
+  right: { position: new THREE.Vector3(0.72, 0.12, 0.68).normalize(), target: new THREE.Vector3(0, 0, 0) }, // Anterolateral 3/4 Perspective (Góc nhìn nghiêng 3/4 chuẩn Visible Body)
   top: { position: new THREE.Vector3(0, 1, 0), target: new THREE.Vector3(0, 0, 0) },
   bottom: { position: new THREE.Vector3(0, -1, 0), target: new THREE.Vector3(0, 0, 0) },
   full: { position: new THREE.Vector3(0, 0, 1), target: new THREE.Vector3(0, 0, 0) }
@@ -24,18 +24,19 @@ export function setView(viewName, viewer, animate = true) {
 
   if (!model) return Promise.resolve();
 
-  // Frame the model where it actually is; it is not centred on the origin.
-  const distance = model.maxDim * 1.5;
+  // Frame the model where it actually is; adapted for 35° telephoto medical lens
+  const distance = model.maxDim * 1.8;
   const targetTarget = model.center.clone();
   const targetPos = view.position.clone().multiplyScalar(distance).add(targetTarget);
 
   if (animate) {
-    return animateCamera(camera, controls, targetPos, targetTarget);
+    return animateCamera(camera, controls, targetPos, targetTarget, viewer);
   } else {
     camera.position.copy(targetPos);
     controls.target.copy(targetTarget);
     controls.update();
     setCurrentView(viewName);
+    viewer?.render();
     return Promise.resolve();
   }
 }
@@ -60,12 +61,14 @@ function getModelBounds(scene) {
   return { box, size, center, maxDim };
 }
 
-function animateCamera(camera, controls, targetPosition, targetTarget) {
+function animateCamera(camera, controls, targetPosition, targetTarget, viewer) {
+  const activeViewer = viewer || state.viewer || window.viewer;
   // A full-viewport camera flight is exactly what reduced-motion is about.
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
     camera.position.copy(targetPosition);
     controls.target.copy(targetTarget);
     controls.update();
+    activeViewer?.render();
     return Promise.resolve();
   }
 
@@ -86,11 +89,13 @@ function animateCamera(camera, controls, targetPosition, targetTarget) {
       camera.position.lerpVectors(startPosition, targetPosition, eased);
       controls.target.lerpVectors(startTarget, targetTarget, eased);
       controls.update();
+      activeViewer?.render();
 
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
         setAnimating(false);
+        activeViewer?.render();
         resolve();
       }
     }
@@ -107,22 +112,26 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5) {
   const box = new THREE.Box3().setFromObject(mesh);
   const center = box.getCenter(new THREE.Vector3());
   const size = box.getSize(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z);
+  const maxDim = Math.max(size.x, size.y, size.z, 0.05);
 
-  // A small bone would otherwise pull the camera inside neighbouring geometry.
-  const currentDistance = camera.position.distanceTo(controls.target);
-  const distance = Math.min(Math.max(maxDim * spread, maxDim * 1.2), currentDistance);
+  // A small organ would otherwise pull the camera inside neighbouring geometry.
+  // Ensure a minimum comfortable viewing distance (0.38m) so surrounding anatomical context is clear.
+  const distance = Math.max(0.38, maxDim * Math.max(spread, 2.8));
 
-  // Calculate direction from current camera to target
-  const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+  // Calculate direction from current camera to target, biasing towards front view for visibility
+  let direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+  if (direction.lengthSq() < 0.001 || direction.z < 0.2) {
+    direction.set(direction.x * 0.4, 0.15, 0.85).normalize();
+  }
   const targetPosition = center.clone().add(direction.multiplyScalar(distance));
 
   if (animate) {
-    return animateCamera(camera, controls, targetPosition, center);
+    return animateCamera(camera, controls, targetPosition, center, viewer);
   } else {
     camera.position.copy(targetPosition);
     controls.target.copy(center);
     controls.update();
+    viewer?.render();
     return Promise.resolve();
   }
 }
@@ -132,6 +141,7 @@ export function resetView(viewer, animate = true) {
     // Show all parts
     showAllParts();
     notify('viewReset', true);
+    viewer?.render();
   });
 }
 
@@ -177,5 +187,5 @@ export function frameRegion(regionCamera, viewer) {
   const { camera, controls } = viewer;
   const targetPos = new THREE.Vector3(regionCamera.x, regionCamera.y, regionCamera.z);
   const targetTarget = new THREE.Vector3(regionCamera.targetX, regionCamera.targetY, regionCamera.targetZ);
-  return animateCamera(camera, controls, targetPos, targetTarget);
+  return animateCamera(camera, controls, targetPos, targetTarget, viewer);
 }

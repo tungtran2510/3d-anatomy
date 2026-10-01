@@ -5,6 +5,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
 import { state, setLoadingSystem } from '../state/store.js';
 import { asset } from '../utils/paths.js';
+import { getAnatomyRoot } from './orientationManager.js';
 
 // Without an acceleration structure, picking cost grows with the triangle
 // count: 10.4M triangles tested per pointer event across seven systems.
@@ -137,7 +138,8 @@ async function loadModelOnce(systemId, viewer, options = {}) {
     }
   }
 
-  scene.add(model);
+  const anatomyRoot = getAnatomyRoot(scene);
+  anatomyRoot.add(model);
   modelRoots.set(systemId, model);
 
   state.loadedSystems.push(systemId);
@@ -220,15 +222,389 @@ function findAncestorPartId(node) {
   return null;
 }
 
+// Procedural organic micro-bump texture cache to simulate living cellular surface
+let organicBumpMap = null;
+function getOrganicBumpMap() {
+  if (organicBumpMap) return organicBumpMap;
+  if (typeof document === 'undefined') return null;
+
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const imgData = ctx.createImageData(256, 256);
+    const data = imgData.data;
+
+    for (let y = 0; y < 256; y++) {
+      for (let x = 0; x < 256; x++) {
+        const idx = (y * 256 + x) * 4;
+        const nx = x / 28;
+        const ny = y / 28;
+        const v1 = Math.sin(nx * 2.3 + Math.cos(ny * 1.9)) * 0.5 + 0.5;
+        const v2 = Math.sin(nx * 5.7 - ny * 4.6) * 0.25 + 0.25;
+        const v3 = (Math.random() - 0.5) * 0.15;
+        const val = Math.min(255, Math.max(0, Math.floor((v1 * 0.65 + v2 * 0.35 + v3) * 255)));
+
+        data[idx] = val;
+        data[idx + 1] = val;
+        data[idx + 2] = val;
+        data[idx + 3] = 255;
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    organicBumpMap = new THREE.CanvasTexture(canvas);
+    organicBumpMap.wrapS = THREE.RepeatWrapping;
+    organicBumpMap.wrapT = THREE.RepeatWrapping;
+    organicBumpMap.repeat.set(10, 10);
+    return organicBumpMap;
+  } catch (err) {
+    console.warn('[loadModel] Could not generate organic bump map:', err);
+    return null;
+  }
+}
+
+function applyCustomProps(mesh, props) {
+  if (!mesh.material) return;
+  const current = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+  if (!current || !current.isMeshStandardMaterial) return;
+
+  const m = current.clone();
+  if (props.color !== undefined) m.color.set(props.color);
+  if (props.roughness !== undefined) m.roughness = props.roughness;
+  if (props.metalness !== undefined) m.metalness = props.metalness;
+  if (props.transparent !== undefined) m.transparent = props.transparent;
+  if (props.opacity !== undefined) m.opacity = props.opacity;
+  if (props.depthWrite !== undefined) m.depthWrite = props.depthWrite;
+  if (props.bumpMap !== undefined) m.bumpMap = props.bumpMap;
+  if (props.bumpScale !== undefined) m.bumpScale = props.bumpScale;
+  if (props.name) m.name = props.name;
+
+  mesh.material = m;
+  if (props.renderOrder) mesh.renderOrder = props.renderOrder;
+}
+
+function enhanceMaterialForOrgan(mesh, systemId) {
+  if (!mesh || !mesh.material) return;
+
+  const partName = (mesh.userData?.partId || mesh.userData?.za_name || mesh.name || '').toLowerCase();
+  const matName = (mesh.material?.name || '').toLowerCase();
+  const bump = getOrganicBumpMap();
+
+  if (systemId === 'visceral') {
+    if (partName.includes('greater omentum') || partName.includes('lesser omentum') || partName.includes('mạc nối')) {
+      // Greater / Lesser Omentum: Delicate semi-translucent adipose veil
+      applyCustomProps(mesh, {
+        name: 'PBR_Omentum',
+        color: 0xF3E7C4,
+        roughness: 0.32,
+        metalness: 0.02,
+        transparent: true,
+        opacity: 0.35,
+        depthWrite: false,
+        bumpMap: bump,
+        bumpScale: 0.0012,
+        renderOrder: 10
+      });
+    } else if (partName.includes('mesocolon') || partName.includes('meso-appendix') || matName.includes('peritoneum')) {
+      // Peritoneum & Mesentery
+      applyCustomProps(mesh, {
+        name: 'PBR_Peritoneum',
+        color: 0xE5DAC0,
+        roughness: 0.38,
+        metalness: 0.01,
+        transparent: true,
+        opacity: 0.50,
+        depthWrite: false,
+        renderOrder: 8
+      });
+    } else if (partName.includes('liver') || partName.includes('gan')) {
+      // Liver & hepatic segments: deep rich mahogany red-brown parenchymal tissue
+      applyCustomProps(mesh, {
+        name: 'PBR_Liver',
+        color: 0x5A1A18,
+        roughness: 0.22,
+        metalness: 0.05,
+        bumpMap: bump,
+        bumpScale: 0.0008
+      });
+    } else if (partName.includes('gallbladder') || partName.includes('bile duct') || matName.includes('gallbladder')) {
+      // Gallbladder & bile ducts: wet emerald green
+      applyCustomProps(mesh, {
+        name: 'PBR_Gallbladder',
+        color: 0x1B4E28,
+        roughness: 0.14,
+        metalness: 0.08
+      });
+    } else if (partName.includes('stomach') || partName.includes('dạ dày')) {
+      // Stomach: thick muscular mucosal wall
+      applyCustomProps(mesh, {
+        name: 'PBR_Stomach',
+        color: 0xBA5A4E,
+        roughness: 0.25,
+        metalness: 0.03,
+        bumpMap: bump,
+        bumpScale: 0.0012
+      });
+    } else if (partName.includes('duodenum') || partName.includes('jejunum') || partName.includes('ileum')) {
+      // Small intestine: living warm coral-pink loops
+      applyCustomProps(mesh, {
+        name: 'PBR_SmallIntestine',
+        color: 0xCF6D62,
+        roughness: 0.22,
+        metalness: 0.04,
+        bumpMap: bump,
+        bumpScale: 0.0010
+      });
+    } else if (partName.includes('taenia')) {
+      // Taenia coli: silvery-ivory longitudinal smooth muscle bands
+      applyCustomProps(mesh, {
+        name: 'PBR_TaeniaColi',
+        color: 0xE4DEC8,
+        roughness: 0.40,
+        metalness: 0.02
+      });
+    } else if (partName.includes('colon') || partName.includes('caecum') || partName.includes('rectum') || partName.includes('appendix')) {
+      // Large intestine / Colon haustra
+      applyCustomProps(mesh, {
+        name: 'PBR_Colon',
+        color: 0xA65850,
+        roughness: 0.25,
+        metalness: 0.03,
+        bumpMap: bump,
+        bumpScale: 0.0012
+      });
+    } else if (partName.includes('kidney') || partName.includes('thận')) {
+      // Kidneys: reddish-brown renal cortex
+      applyCustomProps(mesh, {
+        name: 'PBR_Kidney',
+        color: 0x722624,
+        roughness: 0.24,
+        metalness: 0.04
+      });
+    } else if (partName.includes('bladder') || partName.includes('ureter') || partName.includes('bàng quang')) {
+      // Bladder & ureter
+      applyCustomProps(mesh, {
+        name: 'PBR_Bladder',
+        color: 0xB87068,
+        roughness: 0.30,
+        metalness: 0.02
+      });
+    } else if (partName.includes('spleen') || partName.includes('lá lách')) {
+      // Spleen: vascular lymphoid purplish-crimson
+      applyCustomProps(mesh, {
+        name: 'PBR_Spleen',
+        color: 0x662434,
+        roughness: 0.25,
+        metalness: 0.03
+      });
+    } else if (partName.includes('pancreas') || partName.includes('tụy')) {
+      // Pancreas: lobular glandular warm yellowish-pink
+      applyCustomProps(mesh, {
+        name: 'PBR_Pancreas',
+        color: 0xD4A284,
+        roughness: 0.45,
+        bumpMap: bump,
+        bumpScale: 0.0020
+      });
+    } else if (partName.includes('lung') || matName.includes('lung') || partName.includes('phổi')) {
+      // Lungs: living soft aerated roseate-lavender tissue
+      applyCustomProps(mesh, {
+        name: 'PBR_Lung',
+        color: 0xB87B88,
+        roughness: 0.38,
+        metalness: 0.02,
+        bumpMap: bump,
+        bumpScale: 0.0015
+      });
+    } else if (partName.includes('trachea') || partName.includes('bronch') || matName.includes('bronchi')) {
+      // Trachea & Bronchi: pearly bluish-ivory cartilaginous rings
+      applyCustomProps(mesh, {
+        name: 'PBR_Trachea',
+        color: 0xCBD7DC,
+        roughness: 0.30,
+        metalness: 0.02
+      });
+    }
+  } else if (systemId === 'muscular') {
+    if (partName.includes('tendon') || matName.includes('tendon') || partName.includes('gân')) {
+      // Tendons: glistening silvery-white
+      applyCustomProps(mesh, {
+        name: 'PBR_Tendon',
+        color: 0xF5F0E6,
+        roughness: 0.24,
+        metalness: 0.04
+      });
+    } else if (partName.includes('fascia') || partName.includes('retinaculum') || matName.includes('fascia')) {
+      // Fascia & retinacula: ultra-delicate glistening collagenous sheath
+      // Subtle opacity so vibrant underlying crimson muscle is clearly visible
+      applyCustomProps(mesh, {
+        name: 'PBR_Fascia',
+        color: 0xF4EFE6,
+        roughness: 0.30,
+        metalness: 0.02,
+        transparent: true,
+        opacity: 0.20,
+        depthWrite: false,
+        renderOrder: 5
+      });
+    } else if (
+      partName.includes('frontalis') ||
+      partName.includes('orbicularis') ||
+      partName.includes('zygomaticus') ||
+      partName.includes('buccinator') ||
+      partName.includes('nasalis') ||
+      partName.includes('mentalis') ||
+      partName.includes('levator') ||
+      partName.includes('depressor') ||
+      partName.includes('procerus') ||
+      partName.includes('corrugator')
+    ) {
+      // Facial mimic muscles: authentic striated red muscle tissue
+      applyCustomProps(mesh, {
+        name: 'PBR_FacialMimic',
+        color: 0xB42820,
+        roughness: 0.32,
+        metalness: 0.03,
+        transparent: false,
+        opacity: 1.0,
+        depthWrite: true
+      });
+    } else if (partName.includes('masseter') || partName.includes('temporalis')) {
+      // Masticatory muscles (Masseter, Temporalis): distinct striated living muscle
+      applyCustomProps(mesh, {
+        name: 'PBR_Masticatory',
+        color: 0xB0241C,
+        roughness: 0.28,
+        metalness: 0.03,
+        transparent: false,
+        opacity: 1.0,
+        depthWrite: true,
+        bumpMap: bump,
+        bumpScale: 0.0012
+      });
+    } else if (partName.includes('platysma') || partName.includes('sternocleidomastoid')) {
+      // Functional neck muscles: prominent striated fiber sheen
+      applyCustomProps(mesh, {
+        name: 'PBR_NeckMuscle',
+        color: 0xB0241C,
+        roughness: 0.28,
+        metalness: 0.03,
+        transparent: false,
+        opacity: 1.0,
+        depthWrite: true,
+        bumpMap: bump,
+        bumpScale: 0.0014
+      });
+    } else {
+      // Living skeletal muscle tissue: rich physiological crimson with fascicle sheen (màu cơ vân chuẩn y khoa)
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      mats.forEach(m => {
+        if (m && m.isMeshStandardMaterial) {
+          m.roughness = 0.30;
+          m.metalness = 0.03;
+          m.color.set(0xB2241C);
+          m.transparent = false;
+          m.opacity = 1.0;
+          m.depthWrite = true;
+          if (bump) {
+            m.bumpMap = bump;
+            m.bumpScale = 0.0012;
+          }
+        }
+      });
+    }
+  } else if (systemId === 'skeletal') {
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach(m => {
+      if (m && m.isMeshStandardMaterial) {
+        const mName = m.name || '';
+        if (mName.includes('Cartilage') || partName.includes('cartilage') || partName.includes('sụn')) {
+          // Costal, articular, and nasal cartilage: authentic semi-translucent bluish-ivory
+          m.roughness = 0.28;
+          m.metalness = 0.01;
+          m.transparent = true;
+          m.opacity = 0.88;
+          m.color.set(0xB6C8CE);
+        } else if (mName.includes('Suture')) {
+          // Cranial suture seams (khớp vành, khớp dọc, khớp vảy sọ)
+          m.roughness = 0.80;
+          m.metalness = 0.01;
+          m.color.set(0x8A7660);
+        } else if (mName.includes('Teeth-roots')) {
+          m.roughness = 0.45;
+          m.metalness = 0.01;
+          m.color.set(0xD6C298);
+        } else if (mName.includes('Teeth')) {
+          // Bright natural pearlescent enamel
+          m.roughness = 0.15;
+          m.metalness = 0.02;
+          m.color.set(0xFBF8EE);
+        } else {
+          // Refined authentic warm ivory bone tone (màu trắng ngà ánh vàng ấm chuẩn Complete Anatomy)
+          m.roughness = 0.50;
+          m.metalness = 0.01;
+          m.color.set(0xE8DFCA);
+          if (bump) {
+            m.bumpMap = bump;
+            m.bumpScale = 0.0006;
+          }
+        }
+      }
+    });
+  } else if (systemId === 'cardiovascular') {
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach(m => {
+      if (m && m.isMeshStandardMaterial) {
+        const mName = m.name || '';
+        if (mName.includes('Artery') || partName.includes('artery') || partName.includes('aorta')) {
+          m.roughness = 0.24;
+          m.metalness = 0.03;
+          m.color.set(0xB81E1E);
+        } else if (mName.includes('Vein') || partName.includes('vein')) {
+          m.roughness = 0.24;
+          m.metalness = 0.03;
+          m.color.set(0x224C8C);
+        } else if (mName.includes('Trapezius') || partName.includes('heart') || partName.includes('myocard')) {
+          m.roughness = 0.25;
+          m.metalness = 0.04;
+          m.color.set(0x7D1E1C);
+        }
+      }
+    });
+  } else if (systemId === 'nervous') {
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach(m => {
+      if (m && m.isMeshStandardMaterial) {
+        const mName = m.name || '';
+        if (mName.includes('Brain') || mName.includes('Frontal') || mName.includes('Cerebell')) {
+          m.roughness = 0.32;
+          m.metalness = 0.02;
+          m.color.set(0xDFB8A2);
+          if (bump) {
+            m.bumpMap = bump;
+            m.bumpScale = 0.0018;
+          }
+        } else if (mName.includes('Nerve') || partName.includes('nerve')) {
+          m.roughness = 0.35;
+          m.metalness = 0.02;
+          m.color.set(0xEAC63E);
+        }
+      }
+    });
+  }
+}
+
 function setupMesh(mesh, systemId, viewer) {
   // Idempotent: a mesh must not be set up twice.
   if (mesh.userData.baseMaterial) return;
 
-  // The GLB ships 65 materials shared across thousands of meshes. Cloning one
-  // per mesh used to produce 3499 distinct materials, which defeats three.js
-  // render-state sorting. Keep the shared reference and clone only when a mesh
-  // is actually modified — see viewer/visibility.js.
   if (mesh.material) {
+    // Enhance mesh materials with medical PBR realism
+    enhanceMaterialForOrgan(mesh, systemId);
     mesh.userData.baseMaterial = mesh.material;
   }
 
@@ -312,8 +688,8 @@ function centerCamera(viewer) {
   const size = box.getSize(new THREE.Vector3());
   const maxDim = Math.max(size.x, size.y, size.z);
 
-  // Position camera
-  const distance = maxDim * 1.5;
+  // Position camera adapted for 35° telephoto medical lens
+  const distance = maxDim * 1.8;
   const direction = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
   camera.position.copy(center).add(direction.multiplyScalar(distance));
   controls.target.copy(center);

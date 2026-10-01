@@ -41,6 +41,8 @@ export const STUDY_MODULES = [
 let activeModule = null;
 let currentIndex = 0;
 let modalEl = null;
+let isStudyCollapsed = false;
+let showStudyDetails = false;
 
 export function initStudyModeUI(viewer) {
   if (modalEl) return;
@@ -58,6 +60,10 @@ export function initStudyModeUI(viewer) {
 
 export function openStudyModulePicker(viewer) {
   if (!modalEl) initStudyModeUI(viewer);
+
+  // Hide selectionCard to avoid overlap
+  const selCard = document.getElementById('selectionCard');
+  if (selCard) selCard.classList.add('hidden');
 
   modalEl.classList.remove('hidden');
   modalEl.innerHTML = `
@@ -103,6 +109,8 @@ export function openStudyModulePicker(viewer) {
 export function startStudyModule(module, viewer) {
   activeModule = module;
   currentIndex = 0;
+  isStudyCollapsed = false;
+  showStudyDetails = false;
   renderStudyStep(viewer);
 }
 
@@ -115,90 +123,110 @@ function renderStudyStep(viewer) {
   // Focus and select structure in 3D
   selectPartById(partId, viewer);
 
-  modalEl.innerHTML = `
-    <div class="study-step-container">
-      <!-- Step Header Bar -->
-      <div class="study-step-header">
-        <div class="step-module-title">
-          <span>📚 ${activeModule.title}</span>
-          <span class="step-counter">${currentIndex + 1} / ${activeModule.items.length}</span>
-        </div>
-        <button type="button" class="dialog-close-btn" id="studyExitBtn" title="Thoát chế độ học">&times;</button>
-      </div>
+  // Hide selectionCard to avoid overlap with flashcard navigation
+  const selCard = document.getElementById('selectionCard');
+  if (selCard) selCard.classList.add('hidden');
 
-      <!-- Flashcard Content Area -->
-      <div class="study-flashcard">
-        <div class="flashcard-title-row">
-          <div>
-            <h3>${clinical.nameVi}</h3>
-            <span class="flashcard-latin">${clinical.nameLatin} (${clinical.nameEn || ''})</span>
+  if (isStudyCollapsed) {
+    modalEl.innerHTML = `
+      <div class="study-step-container study-step-collapsed animate-in">
+        <div class="study-collapsed-content">
+          <div class="study-collapsed-info">
+            <span class="step-counter">📚 ${currentIndex + 1}/${activeModule.items.length}</span>
+            <span class="study-name-mini">${clinical.nameVi}</span>
+            <span class="study-latin-mini">(${clinical.nameLatin})</span>
           </div>
-          <span class="flashcard-tag">${clinical.systemVi}</span>
-        </div>
-
-        <!-- 4-Way Anatomical Relations -->
-        <div class="flashcard-relations">
-          <div class="relation-item">
-            <span class="relation-icon">🔴</span>
-            <div class="relation-body">
-              <strong>Cơ liên quan:</strong>
-              <p>${clinical.relations?.muscles || 'Liên kết nhóm cơ định hình và vận động.'}</p>
-            </div>
+          <div class="study-collapsed-actions">
+            <button type="button" class="btn-study-mini-nav" id="studyPrevBtn" ${currentIndex === 0 ? 'disabled' : ''} title="Cấu trúc trước">◀</button>
+            <button type="button" class="btn-study-mini-nav" id="studyNextBtn" title="Cấu trúc sau">▶</button>
+            <button type="button" class="btn-study-mini-toggle" id="studyToggleExpandBtn" title="Mở rộng chi tiết">📖 Mở</button>
+            <button type="button" class="btn-study-mini-close" id="studyExitBtn" title="Thoát">&times;</button>
           </div>
-
-          <div class="relation-item">
-            <span class="relation-icon">🦴</span>
-            <div class="relation-body">
-              <strong>Xương & Khớp:</strong>
-              <p>${clinical.relations?.bones || 'Tiếp khớp với các diện xương kế cận.'}</p>
-            </div>
-          </div>
-
-          <div class="relation-item">
-            <span class="relation-icon">⚡</span>
-            <div class="relation-body">
-              <strong>Thần kinh:</strong>
-              <p>${clinical.relations?.nerves || 'Chi phối bởi các nhánh thần kinh ngoại biên.'}</p>
-            </div>
-          </div>
-
-          <div class="relation-item">
-            <span class="relation-icon">🩸</span>
-            <div class="relation-body">
-              <strong>Mạch máu:</strong>
-              <p>${clinical.relations?.vessels || 'Cấp máu bởi các nhánh động mạch khu vực.'}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Clinical Takeaway -->
-        <div class="flashcard-clinical">
-          <strong>🩺 Ý nghĩa lâm sàng & Bệnh lý:</strong>
-          <p>${clinical.clinical}</p>
-        </div>
-
-        <!-- Direct Actions -->
-        <div class="flashcard-actions">
-          ${clinical.lessonLink ? `<button type="button" class="btn-study-lesson" id="studyLessonBtn">📖 Học bài: ${clinical.lessonTitle}</button>` : ''}
-          ${clinical.videoId ? `<button type="button" class="btn-study-video" id="studyVideoBtn">▶️ Xem video bài giảng</button>` : ''}
-          <button type="button" class="btn-study-quiz" id="studyQuickQuizBtn">🎯 Thử thách chạm 3D</button>
         </div>
       </div>
+    `;
+  } else {
+    modalEl.innerHTML = `
+      <div class="study-step-container animate-in">
+        <!-- Step Header Bar -->
+        <div class="study-step-header">
+          <div class="step-module-title">
+            <span>📚 ${activeModule.title}</span>
+            <span class="step-counter">${currentIndex + 1} / ${activeModule.items.length}</span>
+          </div>
+          <div class="study-header-actions">
+            <button type="button" class="btn-study-toggle" id="studyToggleCollapseBtn" title="Thu gọn xem toàn màn hình 3D">▲ Thu gọn</button>
+            <button type="button" class="dialog-close-btn" id="studyExitBtn" title="Thoát chế độ học">&times;</button>
+          </div>
+        </div>
 
-      <!-- Bottom Step Navigation -->
-      <div class="study-step-footer">
-        <button type="button" class="step-nav-btn prev" id="studyPrevBtn" ${currentIndex === 0 ? 'disabled' : ''}>
-          ◀ Trước
-        </button>
-        <button type="button" class="step-nav-btn next" id="studyNextBtn">
-          ${currentIndex === activeModule.items.length - 1 ? 'Hoàn thành 🎉' : 'Tiếp theo ▶'}
-        </button>
+        <!-- Flashcard Content Area -->
+        <div class="study-flashcard">
+          <div class="flashcard-title-row">
+            <div class="flashcard-name-wrap">
+              <h3 class="flashcard-name">${clinical.nameVi}</h3>
+              <span class="flashcard-latin">${clinical.nameLatin} (${clinical.nameEn || ''})</span>
+            </div>
+            <span class="flashcard-tag">${clinical.systemVi}</span>
+          </div>
+
+          <!-- Quick Action Buttons Row -->
+          <div class="flashcard-quick-actions">
+            <button type="button" class="btn-study-action primary" id="studyQuickQuizBtn">🎯 Thử thách 3D</button>
+            ${clinical.lessonLink ? `<button type="button" class="btn-study-action secondary" id="studyLessonBtn">📖 Bài học</button>` : ''}
+            <button type="button" class="btn-study-action toggle-details" id="studyDetailsToggleBtn">
+              ${showStudyDetails ? '▲ Ẩn bớt' : '💡 Chi tiết liên quan'}
+            </button>
+          </div>
+
+          <!-- Collapsible Anatomical Relations & Clinical Note -->
+          ${showStudyDetails ? `
+            <div class="flashcard-details-box animate-in">
+              <div class="relation-compact-grid">
+                <div class="relation-chip"><strong>🔴 Cơ:</strong> <span>${clinical.relations?.muscles || 'Liên kết cơ vận động.'}</span></div>
+                <div class="relation-chip"><strong>🦴 Khớp:</strong> <span>${clinical.relations?.bones || 'Tiếp khớp xương lân cận.'}</span></div>
+                <div class="relation-chip"><strong>⚡ Thần kinh:</strong> <span>${clinical.relations?.nerves || 'Chi phối thần kinh ngoại biên.'}</span></div>
+                <div class="relation-chip"><strong>🩸 Mạch máu:</strong> <span>${clinical.relations?.vessels || 'Cấp máu bởi động mạch vùng.'}</span></div>
+              </div>
+              ${clinical.clinical ? `
+                <div class="flashcard-clinical-compact">
+                  <strong>🩺 Lâm sàng:</strong> <span>${clinical.clinical}</span>
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Bottom Step Navigation -->
+        <div class="study-step-footer">
+          <button type="button" class="step-nav-btn prev" id="studyPrevBtn" ${currentIndex === 0 ? 'disabled' : ''}>
+            ◀ Trước
+          </button>
+          <button type="button" class="step-nav-btn next" id="studyNextBtn">
+            ${currentIndex === activeModule.items.length - 1 ? 'Hoàn thành 🎉' : 'Tiếp theo ▶'}
+          </button>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 
   // Wire buttons
   document.getElementById('studyExitBtn')?.addEventListener('click', () => closeStudyMode(viewer));
+
+  document.getElementById('studyToggleCollapseBtn')?.addEventListener('click', () => {
+    isStudyCollapsed = true;
+    renderStudyStep(viewer);
+  });
+
+  document.getElementById('studyToggleExpandBtn')?.addEventListener('click', () => {
+    isStudyCollapsed = false;
+    renderStudyStep(viewer);
+  });
+
+  document.getElementById('studyDetailsToggleBtn')?.addEventListener('click', () => {
+    showStudyDetails = !showStudyDetails;
+    renderStudyStep(viewer);
+  });
 
   document.getElementById('studyPrevBtn')?.addEventListener('click', () => {
     if (currentIndex > 0) {
@@ -261,5 +289,8 @@ export function closeStudyMode(viewer) {
     modalEl.classList.add('hidden');
     modalEl.innerHTML = '';
   }
+  document.getElementById('btnNavStudy')?.classList.remove('active');
+  document.getElementById('btnQuickStudy')?.classList.remove('active');
+  document.getElementById('btnToolStudy')?.classList.remove('active');
   deselectPart();
 }

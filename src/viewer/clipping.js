@@ -35,6 +35,8 @@ const PLANE_DEFAULTS = {
   }
 };
 
+let showPlaneHelper = false;
+
 /**
  * Initializes clipping plane system with Three.js renderer
  */
@@ -47,11 +49,19 @@ export function initClipping(viewer) {
 /**
  * Sets active clipping plane
  * @param {'sagittal' | 'coronal' | 'axial' | null} type 
- * @param {number} offset 
+ * @param {number|object} offset 
  * @param {boolean} flipped 
  * @param {object} viewer 
+ * @param {boolean} withHelper
  */
-export function setClippingPlane(type, offset, flipped = false, viewer) {
+export function setClippingPlane(type, offset, flipped = false, viewer, withHelper = false) {
+  // Support flexible signature setClippingPlane(type, viewer)
+  if (offset && typeof offset === 'object' && offset.renderer) {
+    viewer = offset;
+    offset = undefined;
+    flipped = false;
+  }
+
   if (!viewer || !viewer.renderer) return;
 
   if (!type || !PLANE_DEFAULTS[type]) {
@@ -61,8 +71,9 @@ export function setClippingPlane(type, offset, flipped = false, viewer) {
 
   activePlaneType = type;
   isFlipped = flipped;
+  showPlaneHelper = withHelper;
   const config = PLANE_DEFAULTS[type];
-  currentOffset = (offset !== undefined) ? offset : config.defaultVal;
+  currentOffset = (typeof offset === 'number') ? offset : config.defaultVal;
 
   const normal = config.normal.clone();
   if (isFlipped) {
@@ -75,7 +86,7 @@ export function setClippingPlane(type, offset, flipped = false, viewer) {
   clipPlane = new THREE.Plane(normal, constant);
   viewer.renderer.clippingPlanes = [clipPlane];
 
-  // Optional visual plane helper
+  // Visual plane helper if requested
   updatePlaneHelper(viewer);
 
   viewer.render();
@@ -100,7 +111,7 @@ export function updateClippingOffset(offset, viewer) {
  */
 export function toggleClippingFlip(viewer) {
   if (!activePlaneType || !viewer) return isFlipped;
-  setClippingPlane(activePlaneType, currentOffset, !isFlipped, viewer);
+  setClippingPlane(activePlaneType, currentOffset, !isFlipped, viewer, showPlaneHelper);
   return isFlipped;
 }
 
@@ -110,6 +121,7 @@ export function toggleClippingFlip(viewer) {
 export function disableClipping(viewer) {
   activePlaneType = null;
   clipPlane = null;
+  showPlaneHelper = false;
 
   if (viewer && viewer.renderer) {
     viewer.renderer.clippingPlanes = [];
@@ -122,14 +134,44 @@ export function disableClipping(viewer) {
   }
 }
 
+/**
+ * Toggles Half-Body Hemisection (Bật/Tắt nửa người)
+ * Slices the body along the sagittal plane (midline, x = 0)
+ * @param {object} viewer
+ * @returns {boolean} true if half-body is now active, false if disabled
+ */
+export function toggleHalfBody(viewer) {
+  if (activePlaneType === 'sagittal') {
+    disableClipping(viewer);
+    return false;
+  } else {
+    // Sagittal cut at x = 0.0 with clean cut
+    setClippingPlane('sagittal', 0.0, false, viewer, false);
+    return true;
+  }
+}
+
+export function isHalfBodyActive() {
+  return activePlaneType === 'sagittal';
+}
+
+export function flipHalfBody(viewer) {
+  if (activePlaneType === 'sagittal') {
+    return toggleClippingFlip(viewer);
+  }
+  return false;
+}
+
 function updatePlaneHelper(viewer) {
-  if (!clipPlane || !viewer || !viewer.scene) return;
+  if (!viewer || !viewer.scene) return;
 
   if (planeHelper) {
     viewer.scene.remove(planeHelper);
     planeHelper.dispose();
     planeHelper = null;
   }
+
+  if (!clipPlane || !showPlaneHelper) return;
 
   // Soft translucent green-cyan helper disc
   planeHelper = new THREE.PlaneHelper(clipPlane, 0.8, 0x00f0ff);

@@ -1,7 +1,7 @@
-// Dynamic Anatomy & Physiological / Biomechanical Motion Engine
-// Supports: Cardiac Cycle, Respiratory Mechanics, Elbow Flexion/Extension,
-// Knee Flexion/Extension, Spine Flexion/Extension, Hip Abduction.
-// Features: Timeline Scrubbing, Variable Speed, Play/Pause, Isolated Motion, Zero Idle Overhead.
+// Dynamic Anatomy & Physiological Motion Engine
+// Dedicated Physiological Cycles: Cardiac Cycle (Nhịp Tim) & Respiratory Mechanics (Hô Hấp).
+// Features: Centroid-Anchored Scaling, Synchronized Thoracic Mechanics, Living Organ Translucency,
+// Timeline Scrubbing, Variable Playback Speed, Zero Idle Overhead, Zero Glitch.
 
 import * as THREE from 'three';
 import { getMeshRegistry, ownMeshesOf, loadModel } from './loadModel.js';
@@ -9,21 +9,18 @@ import { state } from '../state/store.js';
 
 export const MOTIONS = {
   CARDIAC: 'cardiac',
-  RESPIRATORY: 'respiratory',
-  ELBOW_FLEXION: 'elbow_flexion',
-  KNEE_FLEXION: 'knee_flexion',
-  SPINE_FLEXION: 'spine_flexion',
-  HIP_ABDUCTION: 'hip_abduction'
+  RESPIRATORY: 'respiratory'
 };
 
 export const MOTION_METADATA = {
   [MOTIONS.CARDIAC]: {
     id: MOTIONS.CARDIAC,
-    titleVi: '🫀 Nhịp Tim & Chu kỳ Tim (Cardiac Cycle)',
+    titleVi: 'Nhịp Tim & Chu kỳ Tim (Cardiac Cycle)',
     titleEn: 'Cardiac Cycle',
     systemRequired: 'cardiovascular',
-    defaultDuration: 0.8, // seconds (~75 bpm)
-    camera: { x: 0, y: 1.25, z: 0.8, targetX: 0, targetY: 1.25, targetZ: 0 },
+    secondarySystem: 'skeletal',
+    defaultDuration: 0.85, // seconds (~72 bpm)
+    camera: { x: 0.05, y: 1.28, z: 0.65, targetX: 0.02, targetY: 1.28, targetZ: 0.03 },
     phases: [
       { from: 0.0, to: 0.38, name: 'Tâm thu (Systole) — Tâm thất co bóp tống máu vào ĐM chủ & ĐM phổi' },
       { from: 0.38, to: 0.85, name: 'Tâm trương (Diastole) — Các buồng tim giãn ra, máu đổ đầy tâm thất' },
@@ -38,12 +35,12 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.RESPIRATORY]: {
     id: MOTIONS.RESPIRATORY,
-    titleVi: '🫁 Cơ Chế Hô Hấp (Respiratory Mechanics)',
+    titleVi: 'Cơ Chế Hô Hấp (Respiratory Mechanics)',
     titleEn: 'Respiratory Cycle',
     systemRequired: 'visceral',
     secondarySystem: 'skeletal',
-    defaultDuration: 3.75, // seconds (~16 breaths/min)
-    camera: { x: 0, y: 1.25, z: 1.1, targetX: 0, targetY: 1.25, targetZ: 0 },
+    defaultDuration: 3.6, // seconds (~16 breaths/min)
+    camera: { x: 0, y: 1.28, z: 0.95, targetX: 0, targetY: 1.28, targetZ: 0.01 },
     phases: [
       { from: 0.0, to: 0.45, name: 'Hít vào (Inspiration) — Lồng ngực dãn nở, xương sườn nâng lên, phổi nở rộng' },
       { from: 0.45, to: 1.0, name: 'Thở ra (Expiration) — Lồng ngực hạ xuống xẹp lại, phổi co hồi thụ động' }
@@ -53,78 +50,6 @@ export const MOTION_METADATA = {
       { id: 'ribcage', nameVi: 'Khung xương sườn & Xương ức' },
       { id: 'left_lung', nameVi: 'Phổi trái (2 thùy)' },
       { id: 'right_lung', nameVi: 'Phổi phải (3 thùy)' }
-    ]
-  },
-  [MOTIONS.ELBOW_FLEXION]: {
-    id: MOTIONS.ELBOW_FLEXION,
-    titleVi: '💪 Gập Duỗi Khớp Khuỷu (Elbow Kinematics)',
-    titleEn: 'Elbow Flexion & Extension',
-    systemRequired: 'skeletal',
-    secondarySystem: 'muscular',
-    defaultDuration: 2.2, // seconds
-    camera: { x: 0.5, y: 1.05, z: 0.7, targetX: 0.3, targetY: 1.0, targetZ: 0 },
-    phases: [
-      { from: 0.0, to: 0.5, name: 'Gập khuỷu (Flexion 0° → 135°) — Cơ nhị đầu co đồng tâm, cơ tam đầu dãn dài' },
-      { from: 0.5, to: 1.0, name: 'Duỗi khuỷu (Extension 135° → 0°) — Cơ tam đầu co duỗi cẳng tay thẳng lại' }
-    ],
-    keyParts: [
-      { id: 'forearm_bones', nameVi: 'Xương cẳng tay (Quay & Trụ)' },
-      { id: 'biceps', nameVi: 'Cơ nhị đầu cánh tay (Biceps brachii)' },
-      { id: 'triceps', nameVi: 'Cơ tam đầu cánh tay (Triceps brachii)' },
-      { id: 'humerus', nameVi: 'Xương cánh tay (Humerus)' }
-    ]
-  },
-  [MOTIONS.KNEE_FLEXION]: {
-    id: MOTIONS.KNEE_FLEXION,
-    titleVi: '🦵 Gập Duỗi Khớp Gối (Knee Kinematics)',
-    titleEn: 'Knee Flexion & Extension',
-    systemRequired: 'skeletal',
-    secondarySystem: 'muscular',
-    defaultDuration: 2.5, // seconds
-    camera: { x: 0.25, y: 0.45, z: 0.8, targetX: 0.12, targetY: 0.45, targetZ: 0 },
-    phases: [
-      { from: 0.0, to: 0.5, name: 'Gập gối (Flexion 0° → 120°) — Xương bánh chè trượt dọc rãnh lồi cầu đùi' },
-      { from: 0.5, to: 1.0, name: 'Duỗi gối (Extension 120° → 0°) — Cơ tứ đầu đùi co, kéo thẳng cẳng chân' }
-    ],
-    keyParts: [
-      { id: 'patella', nameVi: 'Xương bánh chè (Patella)' },
-      { id: 'shank_bones', nameVi: 'Xương cẳng chân (Chày & Mác)' },
-      { id: 'quadriceps', nameVi: 'Cơ tứ đầu đùi (Quadriceps)' },
-      { id: 'femur', nameVi: 'Xương đùi (Femur)' }
-    ]
-  },
-  [MOTIONS.SPINE_FLEXION]: {
-    id: MOTIONS.SPINE_FLEXION,
-    titleVi: '🦴 Cúi Ngửa Cột Sống (Spine Articulation)',
-    titleEn: 'Spine Flexion & Extension',
-    systemRequired: 'skeletal',
-    defaultDuration: 3.0,
-    camera: { x: 0.9, y: 1.1, z: 0, targetX: 0, targetY: 1.1, targetZ: 0 },
-    phases: [
-      { from: 0.0, to: 0.5, name: 'Cúi thân trước (Flexion 35°) — Các đốt sống uốn cong dồn nén đĩa đệm phía trước' },
-      { from: 0.5, to: 1.0, name: 'Ngửa thân sau (Extension 15°) — Cột sống ưỡn ngửa sinh lý' }
-    ],
-    keyParts: [
-      { id: 'lumbar', nameVi: 'Các đốt sống thắt lưng (L1 - L5)' },
-      { id: 'thoracic', nameVi: 'Các đốt sống ngực (T1 - T12)' },
-      { id: 'cervical', nameVi: 'Các đốt sống cổ (C1 - C7)' }
-    ]
-  },
-  [MOTIONS.HIP_ABDUCTION]: {
-    id: MOTIONS.HIP_ABDUCTION,
-    titleVi: '🤸 Dạng Khép Khớp Háng (Hip Abduction)',
-    titleEn: 'Hip Abduction & Adduction',
-    systemRequired: 'skeletal',
-    secondarySystem: 'muscular',
-    defaultDuration: 2.2,
-    camera: { x: 0, y: 0.75, z: 1.2, targetX: 0, targetY: 0.7, targetZ: 0 },
-    phases: [
-      { from: 0.0, to: 0.5, name: 'Dạng khớp háng (Abduction 0° → 40°) — Chỏm đùi xoay trong ổ cối' },
-      { from: 0.5, to: 1.0, name: 'Khép khớp háng (Adduction 40° → 0°) — Cơ mông & cơ khép phối hợp' }
-    ],
-    keyParts: [
-      { id: 'femur_hip', nameVi: 'Khớp háng & Xương đùi phải' },
-      { id: 'gluteal', nameVi: 'Nhóm cơ mông (Gluteus medius)' }
     ]
   }
 };
@@ -145,6 +70,9 @@ class DynamicAnatomyEngine {
     this.modifiedNodes = new Set();
     this.listeners = new Set();
     this.lastTimestamp = performance.now();
+    this._savedMeshStates = new Map();
+    this._cachedMotionNodes = null;
+    this._lastUiUpdate = 0;
   }
 
   init(viewer) {
@@ -191,8 +119,10 @@ class DynamicAnatomyEngine {
       return;
     }
 
-    // Reset previous motion pose cleanly
+    // Reset previous motion pose and system visibility cleanly
     this.resetPose();
+    this.restoreSystemVisibility();
+    this._cachedMotionNodes = null;
 
     const meta = MOTION_METADATA[motionId];
     this.currentMotion = motionId;
@@ -215,18 +145,70 @@ class DynamicAnatomyEngine {
       }
     }
 
-    // Capture resting base transforms for all relevant nodes
+    // Capture resting base transforms and accurate centroids
     this.cacheBaseTransforms();
+
+    // Build fast pre-filtered node cache (reduces loop iterations from 2800 to 20!)
+    this.buildMotionNodesCache(motionId);
+
+    // Apply clean system isolation for optimal medical pedagogical view
+    this.applyMotionIsolation(motionId);
 
     this.play();
     this.notifyStateChange();
+  }
+
+  buildMotionNodesCache(motionId) {
+    const registry = getMeshRegistry();
+    this._cachedMotionNodes = [];
+
+    if (motionId === MOTIONS.CARDIAC) {
+      registry.forEach((node, partId) => {
+        const lower = partId.toLowerCase();
+        const isVentricle = lower.includes('ventricle') || lower.includes('papillary') || lower.includes('interventricular');
+        const isAtrium = lower.includes('atrium') || lower.includes('auricle');
+        const isAorta = lower.includes('aorta') || lower.includes('pulmonary trunk');
+        const isHeart = lower.includes('heart') || lower.includes('coronary') || lower.includes('valve') || isVentricle || isAtrium || isAorta;
+
+        if (isHeart) {
+          const baseRot = node.userData._baseRotation || node.rotation.clone();
+          this._cachedMotionNodes.push({
+            node,
+            partId,
+            subType: isVentricle ? 'ventricle' : (isAtrium ? 'atrium' : (isAorta ? 'aorta' : 'other')),
+            baseRot
+          });
+          this.modifiedNodes.add(node);
+        }
+      });
+    } else if (motionId === MOTIONS.RESPIRATORY) {
+      registry.forEach((node, partId) => {
+        const lower = partId.toLowerCase();
+        const isLung = lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch');
+        const isRib = lower.includes('rib') || lower.includes('costa') || lower.includes('cartilage');
+        const isSternum = lower.includes('sternum') || lower.includes('xiphoid') || lower.includes('manubrium');
+        const isDiaphragm = lower.includes('diaphragm');
+
+        if (isLung || isRib || isSternum || isDiaphragm) {
+          const isLeft = lower.endsWith('.l') || lower.includes('left');
+          const basePos = node.userData._basePosition || node.position.clone();
+          this._cachedMotionNodes.push({
+            node,
+            partId,
+            subType: isLung ? 'lung' : (isSternum ? 'sternum' : (isRib ? 'rib' : 'diaphragm')),
+            isLeft,
+            basePos
+          });
+          this.modifiedNodes.add(node);
+        }
+      });
+    }
   }
 
   frameCamera(cam) {
     if (!this.viewer || !this.viewer.camera || !this.viewer.controls) return;
     const { camera, controls } = this.viewer;
     
-    // Smooth camera transition
     const startPos = camera.position.clone();
     const targetPos = new THREE.Vector3(cam.x, cam.y, cam.z);
     const startTarget = controls.target.clone();
@@ -254,12 +236,26 @@ class DynamicAnatomyEngine {
 
   cacheBaseTransforms() {
     const registry = getMeshRegistry();
+    const box = new THREE.Box3();
+    const center = new THREE.Vector3();
+
     registry.forEach((node) => {
       if (!node.userData._basePosition) {
         node.userData._basePosition = node.position.clone();
         node.userData._baseRotation = node.rotation.clone();
         node.userData._baseScale = node.scale.clone();
       }
+
+      if (!node.userData._centroid) {
+        box.setFromObject(node);
+        if (!box.isEmpty()) {
+          box.getCenter(center);
+          node.userData._centroid = center.clone();
+        } else {
+          node.userData._centroid = node.position.clone();
+        }
+      }
+
       node.traverse((child) => {
         if (child.isMesh && !child.userData._basePosition) {
           child.userData._basePosition = child.position.clone();
@@ -268,6 +264,102 @@ class DynamicAnatomyEngine {
         }
       });
     });
+  }
+
+  // Scales a node strictly around its own centroid or custom pivot point
+  scaleAroundCentroid(node, sx, sy, sz, pivotOverride = null) {
+    const basePos = node.userData._basePosition || node.position;
+    const baseScale = node.userData._baseScale || new THREE.Vector3(1, 1, 1);
+    const C = pivotOverride || node.userData._centroid || basePos;
+
+    node.scale.set(baseScale.x * sx, baseScale.y * sy, baseScale.z * sz);
+
+    node.position.set(
+      C.x - (sx * baseScale.x) * (C.x - basePos.x),
+      C.y - (sy * baseScale.y) * (C.y - basePos.y),
+      C.z - (sz * baseScale.z) * (C.z - basePos.z)
+    );
+  }
+
+  applyMotionIsolation(motionId) {
+    this.restoreSystemVisibility();
+
+    const registry = getMeshRegistry();
+
+    if (motionId === MOTIONS.CARDIAC) {
+      // In cardiac: ghost thoracic bones (ribs/sternum) so heart is clearly visible; hide digestive organs & limbs
+      registry.forEach((node, partId) => {
+        const lower = partId.toLowerCase();
+        const isThoraxBone = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle');
+        const isHeart = lower.includes('heart') || lower.includes('ventricle') || lower.includes('atrium') || lower.includes('aorta') || lower.includes('pulmonary');
+        
+        const meshes = ownMeshesOf(partId);
+        meshes.forEach(mesh => {
+          if (!this._savedMeshStates.has(mesh)) {
+            this._savedMeshStates.set(mesh, {
+              visible: mesh.visible,
+              opacity: mesh.material?.opacity ?? 1,
+              transparent: mesh.material?.transparent ?? false,
+              depthWrite: mesh.material?.depthWrite ?? true
+            });
+          }
+
+          if (isHeart) {
+            mesh.visible = true;
+          } else if (isThoraxBone) {
+            mesh.visible = true;
+            if (mesh.material) {
+              mesh.material.transparent = true;
+              mesh.material.opacity = 0.20;
+              mesh.material.depthWrite = false;
+            }
+          } else {
+            mesh.visible = false;
+          }
+        });
+      });
+    } else if (motionId === MOTIONS.RESPIRATORY) {
+      // In respiratory: show lungs, bronchi, ribcage; hide digestive organs (stomach, liver, intestines, etc.) and muscles
+      registry.forEach((node, partId) => {
+        const lower = partId.toLowerCase();
+        const isResp = lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch') || lower.includes('trachea') || lower.includes('diaphragm');
+        const isRibcage = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle') || lower.includes('vertebra');
+        const isDigestive = lower.includes('stomach') || lower.includes('liver') || lower.includes('intestine') || lower.includes('colon') || lower.includes('pancreas') || lower.includes('gallbladder') || lower.includes('kidney') || lower.includes('bladder') || lower.includes('spleen');
+        const isLimbOrSkull = lower.includes('femur') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('phalang') || lower.includes('tars') || lower.includes('patella') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('carpal') || lower.includes('metacarp') || lower.includes('cranium') || lower.includes('skull') || lower.includes('mandible') || lower.includes('maxilla') || lower.includes('pelvis') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('pubis') || lower.includes('sacrum');
+
+        const meshes = ownMeshesOf(partId);
+        meshes.forEach(mesh => {
+          if (!this._savedMeshStates.has(mesh)) {
+            this._savedMeshStates.set(mesh, {
+              visible: mesh.visible,
+              opacity: mesh.material?.opacity ?? 1,
+              transparent: mesh.material?.transparent ?? false,
+              depthWrite: mesh.material?.depthWrite ?? true
+            });
+          }
+
+          if (isResp || isRibcage) {
+            mesh.visible = true;
+          } else if (isDigestive || isLimbOrSkull) {
+            mesh.visible = false;
+          }
+        });
+      });
+    }
+  }
+
+  restoreSystemVisibility() {
+    if (this._savedMeshStates && this._savedMeshStates.size > 0) {
+      this._savedMeshStates.forEach((saved, mesh) => {
+        mesh.visible = saved.visible;
+        if (mesh.material) {
+          mesh.material.opacity = saved.opacity;
+          mesh.material.transparent = saved.transparent;
+          mesh.material.depthWrite = saved.depthWrite;
+        }
+      });
+      this._savedMeshStates.clear();
+    }
   }
 
   play() {
@@ -339,7 +431,12 @@ class DynamicAnatomyEngine {
       } else if (typeof this.viewer?.render === 'function') {
         this.viewer.render();
       }
-      this.notifyStateChange();
+
+      // Throttle UI listener updates to ~12 FPS (every 80ms) to eliminate DOM layout thrashing
+      if (now - this._lastUiUpdate > 80) {
+        this._lastUiUpdate = now;
+        this.notifyStateChange();
+      }
     };
 
     if (typeof this.viewer.onFrame === 'function') {
@@ -355,7 +452,6 @@ class DynamicAnatomyEngine {
     this.registeredFrameCallback = null;
   }
 
-  // Applies biomechanical transformation according to active motion and normalized progress (0..1)
   applyMotionFrame(p) {
     if (!this.currentMotion) return;
 
@@ -365,18 +461,6 @@ class DynamicAnatomyEngine {
         break;
       case MOTIONS.RESPIRATORY:
         this.animateRespiratory(p);
-        break;
-      case MOTIONS.ELBOW_FLEXION:
-        this.animateElbow(p);
-        break;
-      case MOTIONS.KNEE_FLEXION:
-        this.animateKnee(p);
-        break;
-      case MOTIONS.SPINE_FLEXION:
-        this.animateSpine(p);
-        break;
-      case MOTIONS.HIP_ABDUCTION:
-        this.animateHip(p);
         break;
       default:
         break;
@@ -397,306 +481,115 @@ class DynamicAnatomyEngine {
     let aortaDilation;
 
     if (p < 0.38) {
-      // Systole: t goes 0 -> 1
       const t = p / 0.38;
       const sinT = Math.sin(t * Math.PI);
-      // Ventricles contract down to 88%
-      ventScale = 1.0 - 0.12 * Math.sin(t * Math.PI * 0.5);
-      // Apical wringing twist ~4°
-      ventTwist = 0.07 * Math.sin(t * Math.PI);
-      // Atria relax / fill with blood
-      atrialScale = 1.0 + 0.05 * sinT;
-      // Pulsatile expansion of ascending aorta
-      aortaDilation = 1.0 + 0.06 * Math.sin(t * Math.PI);
+      ventScale = 1.0 - 0.09 * Math.sin(t * Math.PI * 0.5);
+      ventTwist = 0.05 * Math.sin(t * Math.PI);
+      atrialScale = 1.0 + 0.04 * sinT;
+      aortaDilation = 1.0 + 0.05 * Math.sin(t * Math.PI);
     } else if (p < 0.85) {
-      // Diastole: ventricles relax back out to 104%
       const t = (p - 0.38) / (0.85 - 0.38);
       const ease = Math.sin(t * Math.PI * 0.5);
-      ventScale = 0.88 + 0.16 * ease;
-      ventTwist = 0.07 * (1.0 - ease);
-      atrialScale = 1.05 - 0.03 * ease;
-      aortaDilation = 1.06 - 0.06 * ease;
+      ventScale = 0.91 + 0.12 * ease;
+      ventTwist = 0.05 * (1.0 - ease);
+      atrialScale = 1.04 - 0.02 * ease;
+      aortaDilation = 1.05 - 0.05 * ease;
     } else {
-      // Atrial Kick: 0.85 - 1.0
       const t = (p - 0.85) / 0.15;
       const kick = Math.sin(t * Math.PI);
-      ventScale = 1.04;
+      ventScale = 1.03;
       ventTwist = 0;
-      atrialScale = 1.02 - 0.10 * kick;
+      atrialScale = 1.02 - 0.07 * kick;
       aortaDilation = 1.0;
     }
 
-    registry.forEach((node, partId) => {
-      const lower = partId.toLowerCase();
-      const isVentricle = lower.includes('ventricle') || lower.includes('papillary') || lower.includes('interventricular');
-      const isAtrium = lower.includes('atrium') || lower.includes('auricle');
-      const isAorta = lower.includes('aorta') || lower.includes('pulmonary trunk');
-      const isHeart = lower.includes('heart') || lower.includes('coronary') || lower.includes('valve') || isVentricle || isAtrium || isAorta;
+    const heartPivot = new THREE.Vector3(0.018, 1.288, 0.028);
 
-      if (!isHeart) return;
+    if (!this._cachedMotionNodes || this._cachedMotionNodes.length === 0) {
+      this.buildMotionNodesCache(MOTIONS.CARDIAC);
+    }
 
-      this.modifiedNodes.add(node);
-      const baseScale = node.userData._baseScale || new THREE.Vector3(1, 1, 1);
-      const baseRot = node.userData._baseRotation || new THREE.Euler();
+    const nodes = this._cachedMotionNodes;
+    for (let i = 0; i < nodes.length; i++) {
+      const item = nodes[i];
+      const node = item.node;
+      const subType = item.subType;
+      const baseRot = item.baseRot;
 
-      if (isVentricle) {
-        node.scale.set(baseScale.x * ventScale, baseScale.y * (1.0 - (1.0 - ventScale) * 0.5), baseScale.z * ventScale);
+      if (subType === 'ventricle') {
+        this.scaleAroundCentroid(node, ventScale, 1.0 - (1.0 - ventScale) * 0.5, ventScale, heartPivot);
         node.rotation.y = baseRot.y + ventTwist;
-      } else if (isAtrium) {
-        node.scale.set(baseScale.x * atrialScale, baseScale.y * atrialScale, baseScale.z * atrialScale);
-      } else if (isAorta) {
-        node.scale.set(baseScale.x * aortaDilation, baseScale.y, baseScale.z * aortaDilation);
+      } else if (subType === 'atrium') {
+        this.scaleAroundCentroid(node, atrialScale, atrialScale, atrialScale, heartPivot);
+      } else if (subType === 'aorta') {
+        this.scaleAroundCentroid(node, aortaDilation, 1.0, aortaDilation, heartPivot);
       } else {
-        // Generalized myocardium pulsating
-        node.scale.set(baseScale.x * ventScale, baseScale.y * ventScale, baseScale.z * ventScale);
+        this.scaleAroundCentroid(node, ventScale, ventScale, ventScale, heartPivot);
       }
-    });
+    }
   }
 
   // --- 2. RESPIRATORY MECHANICS ANIMATION ---
   animateRespiratory(p) {
     const registry = getMeshRegistry();
 
-    // Respiratory curve:
-    // Inhalation: p = 0 -> 0.45 (Active expansion)
-    // Exhalation: p = 0.45 -> 1.0 (Passive relaxation)
+    // Physiological tidal breathing curve:
+    // Inhalation: 0 -> 0.45 (Active smooth expansion)
+    // Exhalation: 0.45 -> 1.0 (Passive smooth relaxation)
     let expansion;
     if (p < 0.45) {
       const t = p / 0.45;
-      expansion = 0.5 - Math.cos(t * Math.PI) / 2; // Smooth 0 -> 1
+      expansion = 0.5 - Math.cos(t * Math.PI) / 2;
     } else {
       const t = (p - 0.45) / 0.55;
-      expansion = 0.5 + Math.cos(t * Math.PI) / 2; // Smooth 1 -> 0
+      expansion = 0.5 + Math.cos(t * Math.PI) / 2;
     }
 
-    registry.forEach((node, partId) => {
-      const lower = partId.toLowerCase();
-      const isLung = lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch');
-      const isRib = lower.includes('rib') || lower.includes('costa') || lower.includes('cartilage');
-      const isSternum = lower.includes('sternum') || lower.includes('xiphoid') || lower.includes('manubrium');
-      const isDiaphragm = lower.includes('diaphragm');
+    // Centroids measured directly from resting Z-Anatomy geometry
+    const leftLungPivot = new THREE.Vector3(0.071, 1.295, 0.010);
+    const rightLungPivot = new THREE.Vector3(-0.065, 1.297, 0.013);
 
-      if (!isLung && !isRib && !isSternum && !isDiaphragm) return;
+    if (!this._cachedMotionNodes || this._cachedMotionNodes.length === 0) {
+      this.buildMotionNodesCache(MOTIONS.RESPIRATORY);
+    }
 
-      this.modifiedNodes.add(node);
-      const basePos = node.userData._basePosition || node.position.clone();
-      const baseScale = node.userData._baseScale || new THREE.Vector3(1, 1, 1);
+    const nodes = this._cachedMotionNodes;
+    for (let i = 0; i < nodes.length; i++) {
+      const item = nodes[i];
+      const node = item.node;
+      const subType = item.subType;
+      const isLeft = item.isLeft;
+      const basePos = item.basePos;
 
-      if (isLung) {
-        // Lungs expand multidirectionally
-        node.scale.set(
-          baseScale.x * (1.0 + 0.16 * expansion),
-          baseScale.y * (1.0 + 0.09 * expansion),
-          baseScale.z * (1.0 + 0.18 * expansion)
-        );
-      } else if (isSternum) {
-        // Pump-handle motion: Sternum moves anteriorly and slightly superiorly
+      if (subType === 'lung') {
+        const pivot = isLeft ? leftLungPivot : rightLungPivot;
+
+        // Subtle, realistic volumetric tidal expansion anchored strictly at the lung's centroid
+        const sx = 1.0 + 0.07 * expansion;
+        const sy = 1.0 + 0.04 * expansion;
+        const sz = 1.0 + 0.07 * expansion;
+
+        this.scaleAroundCentroid(node, sx, sy, sz, pivot);
+      } else if (subType === 'sternum') {
+        // Pump-handle motion: anterior and slight superior elevation
         node.position.set(
           basePos.x,
-          basePos.y + 0.014 * expansion,
-          basePos.z + 0.022 * expansion
+          basePos.y + 0.006 * expansion,
+          basePos.z + 0.010 * expansion
         );
-      } else if (isRib) {
-        // Bucket-handle motion: Ribs elevate and expand laterally
-        const isLeft = lower.endsWith('.l') || lower.includes('left');
-        const lateralDir = isLeft ? -1 : 1;
+      } else if (subType === 'rib') {
+        // Bucket-handle motion: lateral and superior elevation
+        const lateralDir = isLeft ? 1 : -1;
         node.position.set(
-          basePos.x + lateralDir * 0.018 * expansion,
-          basePos.y + 0.012 * expansion,
-          basePos.z + 0.015 * expansion
+          basePos.x + lateralDir * 0.006 * expansion,
+          basePos.y + 0.005 * expansion,
+          basePos.z + 0.006 * expansion
         );
-      } else if (isDiaphragm) {
-        // Diaphragm descends during inhalation
-        node.position.set(basePos.x, basePos.y - 0.025 * expansion, basePos.z);
+      } else if (subType === 'diaphragm') {
+        // Diaphragm dome descends during inhalation
+        node.position.set(basePos.x, basePos.y - 0.012 * expansion, basePos.z);
       }
-    });
-  }
-
-  // --- 3. ELBOW FLEXION & EXTENSION ANIMATION ---
-  animateElbow(p) {
-    const registry = getMeshRegistry();
-
-    // Cycle: 0 -> 0.5 (Flexion 0° -> 135°), 0.5 -> 1.0 (Extension 135° -> 0°)
-    let flexFactor;
-    if (p < 0.5) {
-      const t = p / 0.5;
-      flexFactor = 0.5 - Math.cos(t * Math.PI) / 2;
-    } else {
-      const t = (p - 0.5) / 0.5;
-      flexFactor = 0.5 + Math.cos(t * Math.PI) / 2;
     }
-
-    const maxAngleRad = 135 * (Math.PI / 180); // ~2.35 rad
-    const currentAngle = maxAngleRad * flexFactor;
-
-    // Approximate elbow joint pivot for right arm (Humeroradial / Humeroulnar joint)
-    const elbowPivot = new THREE.Vector3(0.28, 1.02, -0.02);
-
-    registry.forEach((node, partId) => {
-      const lower = partId.toLowerCase();
-      const isRightForearm = (lower.includes('radius.r') || lower.includes('ulna.r') || lower.includes('carpal.r') || lower.includes('metacarpal.r') || lower.includes('phalanx') && lower.includes('.r') || lower.includes('hand.r'));
-      const isBiceps = lower.includes('biceps') && lower.includes('brachii') && lower.includes('.r');
-      const isTriceps = lower.includes('triceps') && lower.includes('brachii') && lower.includes('.r');
-
-      if (!isRightForearm && !isBiceps && !isTriceps) return;
-
-      this.modifiedNodes.add(node);
-      const basePos = node.userData._basePosition || node.position.clone();
-      const baseRot = node.userData._baseRotation || node.rotation.clone();
-      const baseScale = node.userData._baseScale || new THREE.Vector3(1, 1, 1);
-
-      if (isRightForearm) {
-        // Rotate forearm forward and up around transverse X axis
-        const offset = basePos.clone().sub(elbowPivot);
-        const rotMatrix = new THREE.Matrix4().makeRotationX(currentAngle);
-        offset.applyMatrix4(rotMatrix);
-        node.position.copy(elbowPivot).add(offset);
-        node.rotation.x = baseRot.x + currentAngle;
-      } else if (isBiceps) {
-        // Concentric contraction: belly bulges outward (scale X,Z) and shortens along Y
-        const bulge = 1.0 + 0.32 * flexFactor;
-        const shorten = 1.0 - 0.20 * flexFactor;
-        node.scale.set(baseScale.x * bulge, baseScale.y * shorten, baseScale.z * bulge);
-        node.position.set(basePos.x, basePos.y + 0.015 * flexFactor, basePos.z + 0.012 * flexFactor);
-      } else if (isTriceps) {
-        // Antagonist stretch: lengthens and flattens
-        const flatten = 1.0 - 0.12 * flexFactor;
-        const lengthen = 1.0 + 0.15 * flexFactor;
-        node.scale.set(baseScale.x * flatten, baseScale.y * lengthen, baseScale.z * flatten);
-      }
-    });
-  }
-
-  // --- 4. KNEE FLEXION & EXTENSION ANIMATION ---
-  animateKnee(p) {
-    const registry = getMeshRegistry();
-
-    // 0 -> 0.5 (Flexion 0° -> 120° backwards), 0.5 -> 1.0 (Extension 120° -> 0°)
-    let flexFactor;
-    if (p < 0.5) {
-      const t = p / 0.5;
-      flexFactor = 0.5 - Math.cos(t * Math.PI) / 2;
-    } else {
-      const t = (p - 0.5) / 0.5;
-      flexFactor = 0.5 + Math.cos(t * Math.PI) / 2;
-    }
-
-    const maxAngleRad = 120 * (Math.PI / 180);
-    const currentAngle = -maxAngleRad * flexFactor; // Backwards flexion
-
-    // Knee pivot right leg
-    const kneePivot = new THREE.Vector3(0.12, 0.48, -0.01);
-
-    registry.forEach((node, partId) => {
-      const lower = partId.toLowerCase();
-      const isRightShank = (lower.includes('tibia.r') || lower.includes('fibula.r') || lower.includes('talus.r') || lower.includes('calcaneus.r') || lower.includes('foot.r') || lower.includes('metatarsal') && lower.includes('.r'));
-      const isPatella = lower.includes('patella.r');
-      const isQuad = (lower.includes('rectus femoris.r') || lower.includes('vastus') && lower.includes('.r') || lower.includes('quadriceps.r'));
-
-      if (!isRightShank && !isPatella && !isQuad) return;
-
-      this.modifiedNodes.add(node);
-      const basePos = node.userData._basePosition || node.position.clone();
-      const baseRot = node.userData._baseRotation || node.rotation.clone();
-      const baseScale = node.userData._baseScale || new THREE.Vector3(1, 1, 1);
-
-      if (isRightShank) {
-        const offset = basePos.clone().sub(kneePivot);
-        const rotMatrix = new THREE.Matrix4().makeRotationX(currentAngle);
-        offset.applyMatrix4(rotMatrix);
-        node.position.copy(kneePivot).add(offset);
-        node.rotation.x = baseRot.x + currentAngle;
-      } else if (isPatella) {
-        // Patellar tracking: glides downwards and posteriorly along the femoral condyles
-        node.position.set(
-          basePos.x,
-          basePos.y - 0.042 * flexFactor,
-          basePos.z - 0.024 * flexFactor
-        );
-      } else if (isQuad) {
-        // Quadriceps stretches during flexion
-        node.scale.set(baseScale.x * (1 - 0.08 * flexFactor), baseScale.y * (1 + 0.12 * flexFactor), baseScale.z * (1 - 0.08 * flexFactor));
-      }
-    });
-  }
-
-  // --- 5. SPINE FLEXION & EXTENSION ANIMATION ---
-  animateSpine(p) {
-    const registry = getMeshRegistry();
-
-    // 0 -> 0.5 (Flexion 35° forward), 0.5 -> 1.0 (Extension 15° backward)
-    let flexAngleRad;
-    if (p < 0.5) {
-      const t = p / 0.5;
-      flexAngleRad = 0.61 * Math.sin(t * Math.PI); // Forward flex ~35°
-    } else {
-      const t = (p - 0.5) / 0.5;
-      flexAngleRad = -0.26 * Math.sin(t * Math.PI); // Backward extend ~15°
-    }
-
-    registry.forEach((node, partId) => {
-      const lower = partId.toLowerCase();
-      if (!lower.includes('vertebra') && !lower.includes('sacrum') && !lower.includes('spine')) return;
-
-      this.modifiedNodes.add(node);
-      const basePos = node.userData._basePosition || node.position.clone();
-      const baseRot = node.userData._baseRotation || node.rotation.clone();
-
-      // Cumulative bend based on vertical height
-      const heightFactor = Math.max(0, (basePos.y - 0.9) / 0.6); // 0 at sacrum, 1 at cervical
-      const nodeAngle = flexAngleRad * heightFactor;
-
-      node.rotation.x = baseRot.x + nodeAngle;
-      node.position.set(
-        basePos.x,
-        basePos.y - 0.025 * Math.abs(flexAngleRad) * heightFactor,
-        basePos.z + 0.045 * flexAngleRad * heightFactor
-      );
-    });
-  }
-
-  // --- 6. HIP ABDUCTION ANIMATION ---
-  animateHip(p) {
-    const registry = getMeshRegistry();
-
-    // 0 -> 0.5 (Abduction 40° outward), 0.5 -> 1.0 (Adduction 40° -> 0°)
-    let abductFactor;
-    if (p < 0.5) {
-      const t = p / 0.5;
-      abductFactor = 0.5 - Math.cos(t * Math.PI) / 2;
-    } else {
-      const t = (p - 0.5) / 0.5;
-      abductFactor = 0.5 + Math.cos(t * Math.PI) / 2;
-    }
-
-    const maxAbductRad = 40 * (Math.PI / 180);
-    const angle = maxAbductRad * abductFactor;
-    const hipPivot = new THREE.Vector3(0.14, 0.88, 0.0);
-
-    registry.forEach((node, partId) => {
-      const lower = partId.toLowerCase();
-      const isRightLowerLimb = (lower.includes('femur.r') || lower.includes('tibia.r') || lower.includes('fibula.r') || lower.includes('patella.r') || lower.includes('foot.r') || lower.includes('calcaneus.r'));
-      const isGluteus = lower.includes('gluteus') && lower.includes('.r');
-
-      if (!isRightLowerLimb && !isGluteus) return;
-
-      this.modifiedNodes.add(node);
-      const basePos = node.userData._basePosition || node.position.clone();
-      const baseRot = node.userData._baseRotation || node.rotation.clone();
-      const baseScale = node.userData._baseScale || new THREE.Vector3(1, 1, 1);
-
-      if (isRightLowerLimb) {
-        // Rotate outward around anterior-posterior Z axis (Coronal plane)
-        const offset = basePos.clone().sub(hipPivot);
-        const rotMatrix = new THREE.Matrix4().makeRotationZ(angle);
-        offset.applyMatrix4(rotMatrix);
-        node.position.copy(hipPivot).add(offset);
-        node.rotation.z = baseRot.z + angle;
-      } else if (isGluteus) {
-        // Gluteus medius contracts
-        node.scale.set(baseScale.x * (1 + 0.25 * abductFactor), baseScale.y * (1 - 0.15 * abductFactor), baseScale.z * (1 + 0.25 * abductFactor));
-      }
-    });
   }
 
   // --- ISOLATION IN MOTION ---
@@ -727,28 +620,6 @@ class DynamicAnatomyEngine {
         match = lower.includes('left lung');
       } else if (partId === 'right_lung') {
         match = lower.includes('right lung');
-      } else if (partId === 'forearm_bones') {
-        match = lower.includes('radius.r') || lower.includes('ulna.r');
-      } else if (partId === 'biceps') {
-        match = lower.includes('biceps') && lower.includes('.r');
-      } else if (partId === 'triceps') {
-        match = lower.includes('triceps') && lower.includes('.r');
-      } else if (partId === 'humerus') {
-        match = lower.includes('humerus.r');
-      } else if (partId === 'patella') {
-        match = lower.includes('patella.r');
-      } else if (partId === 'shank_bones') {
-        match = lower.includes('tibia.r') || lower.includes('fibula.r');
-      } else if (partId === 'quadriceps') {
-        match = lower.includes('rectus femoris.r') || lower.includes('vastus') && lower.includes('.r');
-      } else if (partId === 'femur') {
-        match = lower.includes('femur.r');
-      } else if (partId === 'lumbar') {
-        match = lower.includes('lumbar');
-      } else if (partId === 'thoracic') {
-        match = lower.includes('thoracic');
-      } else if (partId === 'cervical') {
-        match = lower.includes('cervical') || lower.includes('atlas') || lower.includes('axis');
       } else {
         match = (id === partId || lower.includes(partId.toLowerCase()));
       }
@@ -803,7 +674,6 @@ class DynamicAnatomyEngine {
     this.notifyStateChange();
   }
 
-  // Resets all transformed nodes back to initial resting anatomical pose
   resetPose() {
     this.modifiedNodes.forEach(node => {
       if (node.userData._basePosition) {
@@ -826,6 +696,7 @@ class DynamicAnatomyEngine {
   dispose() {
     this.pause();
     this.resetPose();
+    this.restoreSystemVisibility();
     this.restoreAllVisibility();
     this.currentMotion = null;
     this.listeners.clear();

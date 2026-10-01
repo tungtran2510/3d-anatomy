@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo } from '../state/store.js';
 import { getMeshRegistry, getPickTargets, getStructure } from './loadModel.js';
-import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart } from './visibility.js';
+import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart, restoreAllParts, setPartTransparency } from './visibility.js';
 import { focusOnMesh } from './camera.js';
 import { showCallout, hideCallout } from '../ui/callout.js';
 import { loadDefinitions } from '../data/anatomy.js';
@@ -273,7 +273,16 @@ function findParentMesh(object) {
   return null;
 }
 
-export function selectPart(partId, viewer) {
+export function selectPart(partId, viewer, skipHistory = false) {
+  // Record selection undo history
+  if (!skipHistory && (!state.selectedPart || state.selectedPart.id !== partId)) {
+    pushUndo({
+      type: 'select',
+      prevId: state.selectedPart ? state.selectedPart.id : null,
+      newId: partId
+    });
+  }
+
   // Clear previous selection highlight
   if (lastSelectedMesh) {
     clearHighlight(lastSelectedMesh.userData.partId);
@@ -297,13 +306,34 @@ export function selectPart(partId, viewer) {
   highlightMesh(partId, 0xffdf5d, 0.8);
   lastSelectedMesh = mesh;
 
+  // Smoothly jump/focus camera onto the selected structure
+  if (viewer) {
+    focusOnMesh(mesh, viewer, true, 2.2);
+  }
+
   // Everything else drops to a ghost, so an occluded structure is still
   // readable, and the camera eases in to answer "where is it".
   ghostAllExcept(partId);
 
   showCallout(partId, partData.displayName, {
-    isolate: id => isolatePart(id),
-    hide: id => { hidePart(id); deselectPart(); },
+    isolate: id => {
+      pushUndo({
+        type: 'isolate',
+        partId: id,
+        prevIsolated: state.isolatedPart || null
+      });
+      isolatePart(id);
+      viewer?.render();
+    },
+    hide: id => {
+      pushUndo({
+        type: 'hide',
+        partId: id
+      });
+      hidePart(id);
+      deselectPart();
+      viewer?.render();
+    },
     close: () => deselectPart()
   });
 
@@ -334,7 +364,15 @@ export function selectPart(partId, viewer) {
   showFooterActions();
 }
 
-export function deselectPart() {
+export function deselectPart(skipHistory = false) {
+  if (!skipHistory && state.selectedPart) {
+    pushUndo({
+      type: 'select',
+      prevId: state.selectedPart.id,
+      newId: null
+    });
+  }
+
   if (lastSelectedMesh) {
     clearHighlight(lastSelectedMesh.userData.partId);
     lastSelectedMesh = null;
@@ -343,13 +381,11 @@ export function deselectPart() {
   clearGhost();
   hideCallout();
 
-  // Clear selection state
-  getMeshRegistry().forEach((m, id) => {
-    const partState = state.partStates.get(id);
-    if (partState) {
-      partState.selected = false;
-    }
-  });
+  // Fast O(1) clear selection state
+  if (state.selectedPart) {
+    const partState = state.partStates.get(state.selectedPart.id);
+    if (partState) partState.selected = false;
+  }
 
   setSelectedPart(null);
   hideInfoPanel();
@@ -585,21 +621,110 @@ export function getSelectedPart() {
   return state.selectedPart;
 }
 
-export function selectPartById(partId, viewer) {
-  const mesh = getMeshRegistry().get(partId);
+export function selectPartById(partId, viewer, skipHistory = false) {
+  if (!partId) return false;
+  const targetViewer = viewer || state.viewer || window.viewer;
+  const registry = getMeshRegistry();
+
+  // 1. Direct match
+  let mesh = registry.get(partId);
+  let resolvedId = partId;
+
+  // 2. Case-insensitive match
+  if (!mesh) {
+    const lower = partId.toLowerCase();
+    for (const [id, m] of registry.entries()) {
+      if (id.toLowerCase() === lower) {
+        mesh = m;
+        resolvedId = id;
+        break;
+      }
+    }
+  }
+
+  // 3. Prefix match (e.g. "Hip bone" -> "Hip bone.l", "Femur" -> "Femur.l")
+  if (!mesh) {
+    const lower = partId.toLowerCase();
+    for (const [id, m] of registry.entries()) {
+      if (id.toLowerCase().startsWith(lower)) {
+        mesh = m;
+        resolvedId = id;
+        break;
+      }
+    }
+  }
+
   if (mesh) {
-    selectPart(partId, viewer);
+    selectPart(resolvedId, targetViewer, skipHistory);
     return true;
   }
   return false;
 }
 
-export function undoLastDissect() {
-  const partId = popUndo();
-  if (partId) {
+export function executeUndo(viewer = state.viewer) {
+  const action = popUndo();
+  if (!action) return null;
+
+  const targetViewer = viewer || state.viewer || window.viewer;
+
+  // 1. Handle simple string or dissect action
+  if (typeof action === 'string' || action.type === 'dissect') {
+    const partId = typeof action === 'string' ? action : action.partId;
     showPart(partId);
-    state.viewer?.render();
-    return partId;
+    targetViewer?.render();
+    const info = getStructureInfo(partId);
+    const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || partId;
+    return `Đã phục hồi: ${name}`;
   }
-  return null;
+
+  // 2. Handle hide action
+  if (action.type === 'hide') {
+    showPart(action.partId);
+    targetViewer?.render();
+    const info = getStructureInfo(action.partId);
+    const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || action.partId;
+    return `Đã phục hồi: ${name}`;
+  }
+
+  // 3. Handle isolate action
+  if (action.type === 'isolate') {
+    restoreAllParts();
+    if (action.prevIsolated) {
+      isolatePart(action.prevIsolated);
+    }
+    const isolateBtn = document.getElementById('cardIsolateBtn');
+    if (isolateBtn) {
+      isolateBtn.classList.toggle('active', !!action.prevIsolated);
+    }
+    targetViewer?.render();
+    return 'Đã hoàn tác: Khôi phục giải phẫu';
+  }
+
+  // 4. Handle selection step action
+  if (action.type === 'select') {
+    if (action.prevId) {
+      selectPart(action.prevId, targetViewer, true);
+      const info = getStructureInfo(action.prevId);
+      const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || action.prevId;
+      targetViewer?.render();
+      return `Đã quay lại bước trước: ${name}`;
+    } else {
+      deselectPart(true);
+      targetViewer?.render();
+      return 'Đã bỏ chọn bộ phận';
+    }
+  }
+
+  // 5. Handle transparency action
+  if (action.type === 'ghost') {
+    setPartTransparency(action.partId, action.prevOpacity ?? 1);
+    targetViewer?.render();
+    return 'Đã hoàn tác độ trong suốt';
+  }
+
+  return 'Đã hoàn tác thao tác';
+}
+
+export function undoLastDissect(viewer) {
+  return executeUndo(viewer);
 }

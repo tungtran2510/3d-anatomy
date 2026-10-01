@@ -2,6 +2,7 @@
 // Standardized in Vietnamese, Latin (TA2), English
 // Features: Anatomical Description, Biomechanical Function, Clinical Pathology,
 // and 4-way Anatomical Relations (Cơ - Xương - Thần kinh - Mạch máu)
+import { getVietnameseName } from './vietnamese.js';
 
 export const CLINICAL_DATABASE = {
   // === CỘT SỐNG & THÂN MÌNH (SPINE & TRUNK) ===
@@ -447,6 +448,167 @@ export const CLINICAL_DATABASE = {
     lessonLink: '/cot-song/dot-song-co',
     lessonTitle: 'Khớp Thái Dương Hàm & Cơ Nhai',
     videoId: 'fGjG7V3A2sQ'
+  },
+
+  // === HỆ TIÊU HÓA, GAN MẬT, TỤY & NỘI TẠNG ===
+  'Gallbladder': {
+    nameVi: 'Túi mật',
+    nameLatin: 'Vesica biliaris (TA2: 2988)',
+    nameEn: 'Gallbladder',
+    regionVi: 'Bụng trên (Hạ sườn phải)',
+    systemVi: 'Hệ Tiêu Hóa (Gan Mật)',
+    description: 'Túi hình quả lê nằm ở mặt dưới thùy phải của gan, trong hố túi mật. Dài khoảng 7-10 cm, dung tích 30-50 ml, gồm đáy, thân, phễu và cổ tiếp nối với ống túi mật.',
+    function: 'Dự trữ và cô đặc mật do gan tiết ra (tới 5-10 lần). Khi thức ăn chứa chất béo vào tá tràng, hormone Cholecystokinin (CCK) kích thích túi mật co bóp tống mật qua ống mật chủ vào tá tràng để nhũ hóa mỡ.',
+    clinical: 'Sỏi túi mật (Cholelithiasis), viêm túi mật cấp (Acute cholecystitis) với nghiệm pháp Murphy (+), polyp túi mật. Phẫu thuật cắt túi mật nội soi là can thiệp ngoại khoa phổ biến hàng đầu.',
+    relations: {
+      muscles: 'Nằm sau thành bụng trước tại điểm giao nhau giữa bờ ngoài cơ thẳng bụng phải và sụn sườn 9 (Điểm đau Murphy).',
+      bones: 'Đối chiếu lên thành ngực tương ứng đầu sụn sườn 9 bên phải.',
+      nerves: 'Chi phối bởi đám rối tạng (Celiac plexus), thần kinh X và thần kinh hoành phải (gây phản xạ đau nhói lên mỏm vai phải).',
+      vessels: 'Động mạch túi mật (Cystic artery) xuất phát từ nhánh phải động mạch gan riêng (chạy trong tam giác Calot).'
+    },
+    lessonLink: '/tieu-hoa/gan-mat-tuy',
+    lessonTitle: 'Túi Mật: Sinh Lý Bài Tiết & Bệnh Lý Sỏi Mật',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Pancreas': {
+    nameVi: 'Tuyến tụy (Tụy tạng)',
+    nameLatin: 'Pancreas (TA2: 3000)',
+    nameEn: 'Pancreas',
+    regionVi: 'Sau phúc mạc tầng trên ổ bụng',
+    systemVi: 'Hệ Tiêu Hóa & Nội Tiết',
+    description: 'Tuyến hỗn hợp mềm màu xám hồng dài 12-15 cm vắt ngang thành bụng sau từ quai tá tràng đến rốn lách. Gồm 4 phần: đầu tụy (ôm bởi tá tràng), cổ, thân và đuôi tụy chạm rốn lách.',
+    function: 'Ngoại tiết: Tiết 1.5 - 2 lít dịch tụy mỗi ngày chứa men phân giải thức ăn (Amylase, Lipase, Trypsin). Nội tiết: Các tiểu đảo Langerhans tiết Insulin (hạ đường huyết) và Glucagon (tăng đường huyết).',
+    clinical: 'Viêm tụy cấp do rượu hoặc sỏi kẹt bóng Vater (đau bụng dữ dội xuyên ra sau lưng, amylase/lipase máu tăng cao); đái tháo đường; ung thư đầu tụy gây tắc mật vàng da tiến triển (dấu hiệu Courvoisier).',
+    relations: {
+      muscles: 'Áp sát cơ hoành và cơ thắt lưng chậu (Psoas) trái ở thành bụng sau.',
+      bones: 'Nằm vắt ngang trước cột sống ngang mức đốt sống thắt lưng L1 - L2.',
+      nerves: 'Đám rối thần kinh tạng (Celiac plexus) chi phối đường dẫn truyền đau tạng hướng tâm ra lưng.',
+      vessels: 'Mạng mạch phong phú từ động mạch thân tạng và động mạch mạc treo tràng trên (các động mạch tá tụy trên và dưới).'
+    },
+    lessonLink: '/tieu-hoa/gan-mat-tuy',
+    lessonTitle: 'Tuyến Tụy: Giải Phẫu & Chức Năng Nội / Ngoại Tiết',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Spleen': {
+    nameVi: 'Lá lách (Tỳ)',
+    nameLatin: 'Splen / Lien (TA2: 3880)',
+    nameEn: 'Spleen',
+    regionVi: 'Hạ sườn trái (Sau dạ dày)',
+    systemVi: 'Hệ Bạch Huyết & Miễn Dịch',
+    description: 'Cơ quan lympho lớn nhất cơ thể, hình hạt cà phê mềm màu đỏ tím nằm sâu trong ô dưới hoành trái, dài ~12 cm, nặng 150-200g, có mặt hoành lồi và rốn lách ở mặt tạng.',
+    function: 'Miễn dịch học: Sản xuất kháng thể, nhận diện và tiêu diệt vi khuẩn, kháng nguyên lạ qua tủy trắng. Lọc máu: Tủy đỏ phá hủy hồng cầu già vỡ, tái chế sắt và dự trữ tiểu cầu dự phòng.',
+    clinical: 'Chấn thương vỡ lách do va đập kín hạ sườn trái gây mất máu cấp ổ bụng nguy kịch; cường lách (Splenomegaly) gây giảm tiểu cầu và bạch cầu máu ngoại vi.',
+    relations: {
+      muscles: 'Nằm sát mặt dưới vòm hoành trái, ngăn cách với đáy phổi và màng phổi trái.',
+      bones: 'Được bảo vệ bởi xương sườn 9, 10, 11 bên trái; trục dài của lách song song với xương sườn 10.',
+      nerves: 'Đám rối lách (Splenic plexus) từ đám rối thân tạng.',
+      vessels: 'Động mạch lách (Splenic artery) uốn lượn ngoằn ngoèo trên bờ trên tụy; tĩnh mạch lách đổ về tĩnh mạch cửa.'
+    },
+    lessonLink: '/bach-huyet/la-lach-mien-dich',
+    lessonTitle: 'Lá Lách: Cơ Quan Miễn Dịch & Bộ Lọc Máu Cơ Thể',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Liver': {
+    nameVi: 'Gan',
+    nameLatin: 'Hepar (TA2: 2940)',
+    nameEn: 'Liver',
+    regionVi: 'Hạ sườn phải & Thượng vị',
+    systemVi: 'Hệ Tiêu Hóa (Gan Mật)',
+    description: 'Tạng đặc lớn nhất cơ thể (1.4 - 1.8 kg), hình nêm nằm dưới vòm hoành phải, gồm 2 thùy lớn (phải, trái) chia thành 8 phân thùy Couinaud độc lập về mạch máu và đường mật.',
+    function: 'Nhà máy chuyển hóa hóa sinh: Sản xuất dịch mật tiêu hóa lipid, tổng hợp albumin và yếu tố đông máu, khử độc thuốc, dự trữ glycogen, sắt và các vitamin A, D, B12.',
+    clinical: 'Viêm gan virus B/C, gan nhiễm mỡ (NAFLD/NASH), xơ gan tăng áp lực tĩnh mạch cửa (gây cổ trướng, giãn vỡ tĩnh mạch thực quản), ung thư biểu mô tế bào gan (HCC).',
+    relations: {
+      muscles: 'Mặt hoành áp sát vòm cơ hoành phải; mặt tạng tựa lên dạ dày, tá tràng và thận phải.',
+      bones: 'Được lồng ngực bảo vệ từ xương sườn 5 đến bờ sườn phải sườn 10.',
+      nerves: 'Đám rối gan (Hepatic plexus) từ thân tạng và các nhánh thần kinh phế vị.',
+      vessels: 'Hệ mạch máu kép: 75% máu từ tĩnh mạch cửa (giàu chất dinh dưỡng) và 25% từ động mạch gan riêng (giàu oxy).'
+    },
+    lessonLink: '/tieu-hoa/gan-mat-tuy',
+    lessonTitle: 'Lá Gan: Nhà Máy Chuyển Hóa & Khử Độc Sinh Học',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Kidney': {
+    nameVi: 'Thận',
+    nameLatin: 'Ren (TA2: 3040)',
+    nameEn: 'Kidney',
+    regionVi: 'Sau phúc mạc hai bên cột sống thắt lưng',
+    systemVi: 'Hệ Tiết Niệu',
+    description: 'Hai cơ quan hình hạt đậu màu nâu đỏ (thận phải thấp hơn thận trái ~1.5 cm do gan đè lên), kích thước 12 x 6 x 3 cm, có bờ ngoài lồi và bờ trong lõm nơi có rốn thận.',
+    function: 'Lọc 180 lít huyết tương mỗi ngày tạo 1.5 - 2 lít nước tiểu; đào thải ure, creatinin; cân bằng nước - điện giải - toan kiềm; tiết Renin điều hòa huyết áp và Erythropoietin kích thích tủy xương tạo hồng cầu.',
+    clinical: 'Cơn đau quặn thận do sỏi thận/niệu quản; viêm cầu thận; suy thận cấp và suy thận mạn giai đoạn cuối.',
+    relations: {
+      muscles: 'Tựa lên cơ thắt lưng chậu (Psoas) và cơ vuông thắt lưng ở thành bụng sau.',
+      bones: 'Cực trên thận trái ngang xương sườn 11, cực trên thận phải ngang xương sườn 12.',
+      nerves: 'Đám rối thần kinh thận từ hạch tạng.',
+      vessels: 'Động mạch thận xuất phát trực tiếp từ động mạch chủ bụng; tĩnh mạch thận đổ vào tĩnh mạch chủ dưới.'
+    },
+    lessonLink: '/tiet-nieu/than-va-loc-mau',
+    lessonTitle: 'Hệ Tiết Niệu: Giải Phẫu Quả Thận & Cơ Chế Lọc Nước Tiểu',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Duodenum': {
+    nameVi: 'Tá tràng',
+    nameLatin: 'Duodenum (TA2: 2920)',
+    nameEn: 'Duodenum',
+    regionVi: 'Thượng vị & Quanh rốn',
+    systemVi: 'Hệ Tiêu Hóa',
+    description: 'Đoạn đầu ruột non dài 25 cm uốn hình chữ C ôm trọn đầu tụy, gồm 4 phần: trên (hành tá tràng), xuống, ngang và lên. Phần xuống có bóng Vater nơi dịch mật và dịch tụy cùng đổ vào.',
+    function: 'Tiếp nhận dưỡng trấp từ dạ dày, trung hòa axit vị toan nhờ dịch kiềm từ tụy và dịch mật; tiêu hóa thức ăn bằng enzyme tụy và ruột non.',
+    clinical: 'Loét hành tá tràng do vi khuẩn Helicobacter pylori (đau đói, đau về đêm); hẹp môn vị tá tràng; thủng ổ loét tá tràng.',
+    relations: {
+      muscles: 'Nằm áp sát thành bụng sau trên cơ thắt lưng chậu phải.',
+      bones: 'Vắt ngang các đốt sống thắt lưng L1, L2, L3.',
+      nerves: 'Đám rối thân tạng và đám rối mạc treo tràng trên.',
+      vessels: 'Cấp máu bởi các nhánh động mạch tá tụy trên và dưới.'
+    },
+    lessonLink: '/tieu-hoa/duong-ruot',
+    lessonTitle: 'Tá Tràng: Cửa Ngõ Tiêu Hóa Thức Ăn',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Bile duct': {
+    nameVi: 'Ống mật (Đường dẫn mật)',
+    nameLatin: 'Ductus choledochus (TA2: 2995)',
+    nameEn: 'Bile duct',
+    regionVi: 'Cuống gan & Sau tá tràng',
+    systemVi: 'Hệ Tiêu Hóa (Gan Mật)',
+    description: 'Ống dẫn mật chính dài 7-8 cm hợp thành từ ống gan chung và ống túi mật, chạy xuống sau tá tràng và đầu tụy trước khi đổ vào nhú tá lớn.',
+    function: 'Dẫn lưu mật từ gan và túi mật xuống tá tràng liên tục phục vụ quá trình tiêu hóa chất béo.',
+    clinical: 'Sỏi ống mật chủ gây tam chứng Charcot (Đau - Sốt - Vàng da); viêm đường mật cấp tính; u đường mật Klatskin.',
+    relations: {
+      muscles: 'Nằm trong dây chằng gan - tá tràng (bờ tự do mạc nối nhỏ).',
+      bones: 'Đối chiếu vùng thượng vị và hạ sườn phải.',
+      nerves: 'Đám rối thần kinh gan.',
+      vessels: 'Chạy song song cùng động mạch gan riêng và tĩnh mạch cửa (bộ ba cuống gan).'
+    },
+    lessonLink: '/tieu-hoa/gan-mat-tuy',
+    lessonTitle: 'Đường Dẫn Mật & Sỏi Mật',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Stomach': {
+    nameVi: 'Dạ dày (Bao tử)',
+    nameLatin: 'Gaster / Ventriculus (TA2: 2890)',
+    nameEn: 'Stomach',
+    regionVi: 'Thượng vị & Hạ sườn trái',
+    systemVi: 'Hệ Tiêu Hóa',
+    description: 'Đoạn phình to nhất của ống tiêu hóa hình chữ J, dung tích 1 - 1.5 lít, gồm tâm vị, phình vị lớn (đáy vị), thân vị, hang môn vị và môn vị.',
+    function: 'Tiếp nhận, nhào trộn thức ăn bằng 3 lớp cơ trơn (dọc, vòng, chéo); tiết axit HCl và enzyme Pepsin phân cắt protein.',
+    clinical: 'Viêm loét dạ dày (Gastritis), trào ngược dạ dày thực quản (GERD), xuất huyết tiêu hóa do vỡ ổ loét hoặc giãn tĩnh mạch, ung thư dạ dày.',
+    relations: {
+      muscles: 'Thành dạ dày có 3 lớp cơ trơn dày; áp sát vòm cơ hoành trái.',
+      bones: 'Nằm sau khung sườn sụn trái từ sườn 5 đến sườn 9.',
+      nerves: 'Dây thần kinh phế vị (Thần kinh X) trước và sau.',
+      vessels: 'Vòng mạch bờ cong nhỏ (ĐM vị trái & phải) và vòng mạch bờ cong lớn (ĐM vị mạc nối trái & phải).'
+    },
+    lessonLink: '/tieu-hoa/da-day-va-ruot',
+    lessonTitle: 'Dạ Dày: Cấu Trúc Cơ Học & Chức Năng Tiêu Hóa',
+    videoId: '3ZfVjV7VqJ8'
   }
 };
 
@@ -475,11 +637,12 @@ export function getClinicalData(partId, baseName) {
 
 function generateFallbackAcademicData(partId, baseName) {
   const name = baseName || partId || 'Cấu trúc giải phẫu';
+  const nameVi = getVietnameseName(name) || name;
   const lower = name.toLowerCase();
 
   let regionVi = 'Thân mình & Chi';
   let systemVi = 'Hệ Giải Phẫu';
-  let desc = `Cấu trúc giải phẫu ${name}, định danh trong hệ thống Terminologia Anatomica 2.`;
+  let desc = `Cấu trúc giải phẫu ${nameVi} (${name}), định danh trong hệ thống Terminologia Anatomica 2.`;
   let func = 'Đóng vai trò quan trọng trong việc nâng đỡ, vận động và định hình giải phẫu học cơ thể.';
   let clin = 'Cần được bảo vệ và tập luyện duy trì biên độ chuyển động tự nhiên; tránh chấn thương do sai tư thế kéo dài.';
   let lessonLink = '/cot-song/tu-the-va-van-dong';
@@ -512,10 +675,15 @@ function generateFallbackAcademicData(partId, baseName) {
     desc = 'Ống dẫn máu có thành đàn hồi vận chuyển oxy và dưỡng chất đi nuôi mô bào.';
     func = 'Đảm bảo tưới máu liên tục cho các cơ quan và hồi lưu máu về tim.';
     clin = 'Xơ vữa động mạch, huyết khối tĩnh mạch sâu, suy giãn tĩnh mạch.';
+  } else if (lower.includes('liver') || lower.includes('gall') || lower.includes('pancrea') || lower.includes('digest')) {
+    systemVi = 'Hệ Tiêu Hóa & Gan Mật';
+    desc = 'Cơ quan tiêu hóa và chuyển hóa trong ổ bụng, tiết dịch và hấp thu dưỡng chất.';
+    func = 'Chuyển hóa dinh dưỡng, tiêu hóa mỡ thức ăn và duy trì năng lượng cơ thể.';
+    clin = 'Dễ bị viêm nhiễm cấp tính, sỏi hoặc rối loạn chức năng tiêu hóa nếu ăn uống mất cân bằng.';
   }
 
   return {
-    nameVi: name,
+    nameVi: nameVi,
     nameLatin: `${name} (Terminologia Anatomica)`,
     nameEn: name,
     regionVi,

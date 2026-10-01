@@ -28,6 +28,9 @@ import { initSystemsLayerController } from './systemsLayerController.js';
 import { initFloatingAIButton } from './floatingAIButton.js';
 import { initFullscreenController } from './fullscreenController.js';
 import { initAtlasHub, openAtlasHub } from './atlasHubModal.js';
+import { parseVideoUrl } from '../data/atlasMediaManager.js';
+import { initInfoPanel, updateInfoPanelContent } from './infoPanel.js';
+
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
 // digestive and urinary structures all live in the single "visceral" model.
@@ -597,6 +600,47 @@ function escapeHtml(text) {
 
 // Initialize toolbar buttons
 export function initToolbar(viewer) {
+  const viewerControls = document.getElementById('viewerControls');
+  const btnToggleControls = document.getElementById('btnToggleControls');
+
+  // Default to collapsed on mobile/tablets to keep the 3D model view 100% clean and unobstructed
+  if (window.innerWidth <= 1024 && viewerControls) {
+    viewerControls.classList.add('collapsed');
+  } else if (window.innerWidth > 1024 && viewerControls) {
+    viewerControls.classList.remove('collapsed');
+  }
+
+  const updateControlsToggleIcon = () => {
+    const isCollapsed = viewerControls?.classList.contains('collapsed');
+    const icon = btnToggleControls?.querySelector('.ctrl-collapse-icon');
+    if (icon) {
+      icon.innerHTML = isCollapsed
+        ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`
+        : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+    }
+    if (btnToggleControls) {
+      btnToggleControls.title = isCollapsed ? 'Mở thanh góc nhìn 3D' : 'Thu gọn thanh góc nhìn 3D';
+    }
+  };
+  updateControlsToggleIcon();
+
+  btnToggleControls?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    viewerControls?.classList.toggle('collapsed');
+    updateControlsToggleIcon();
+  });
+
+  // Touch/click outside on canvas auto-collapses controls on mobile
+  const canvas = document.getElementById('threeCanvas');
+  const autoCollapseControls = () => {
+    if (window.innerWidth <= 1024 && viewerControls && !viewerControls.classList.contains('collapsed')) {
+      viewerControls.classList.add('collapsed');
+      updateControlsToggleIcon();
+    }
+  };
+  canvas?.addEventListener('click', autoCollapseControls);
+  canvas?.addEventListener('pointerdown', autoCollapseControls);
+
   // Isolate / hide / transparency are on the callout and the action bar; the
   // toolbar only carries camera presets.
   const buttons = {
@@ -886,6 +930,31 @@ export function initFooterActions(viewer) {
     }
   });
 
+  // Study Mode quick triggers (mobile bottom bar & quick toolbar)
+  const btnNavStudy = document.getElementById('btnNavStudy');
+  btnNavStudy?.addEventListener('click', () => {
+    const modal = document.getElementById('studyModeModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      closeStudyMode(viewer);
+      btnNavStudy.classList.remove('active');
+    } else {
+      openStudyModulePicker(viewer);
+      btnNavStudy.classList.add('active');
+    }
+  });
+
+  const btnQuickStudy = document.getElementById('btnQuickStudy');
+  btnQuickStudy?.addEventListener('click', () => {
+    const modal = document.getElementById('studyModeModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      closeStudyMode(viewer);
+      btnQuickStudy.classList.remove('active');
+    } else {
+      openStudyModulePicker(viewer);
+      btnQuickStudy.classList.add('active');
+    }
+  });
+
   const btnUndo = document.getElementById('btnNavUndo');
   btnUndo?.addEventListener('click', () => {
     const msg = executeUndo(viewer);
@@ -937,25 +1006,29 @@ export function openVideo(videoIdOrUrl, videoTitle) {
   const container = document.getElementById('videoFrameContainer');
   if (!modal || !container) return;
 
-  let embedUrl = videoIdOrUrl;
-  if (!videoIdOrUrl.startsWith('http')) {
-    embedUrl = `https://www.youtube.com/embed/${videoIdOrUrl}?autoplay=1&rel=0`;
-  } else if (!videoIdOrUrl.includes('autoplay=1')) {
-    embedUrl += (videoIdOrUrl.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
-  }
-
+  const parsed = parseVideoUrl(videoIdOrUrl);
   if (title) title.textContent = videoTitle || 'Video Bài Giảng Giải Phẫu';
-  container.innerHTML = `
-    <iframe width="100%" height="100%"
-            src="${embedUrl}"
-            title="${escapeHtml(videoTitle || 'Video')}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-    </iframe>
-  `;
+
+  if (parsed.type === 'video') {
+    container.innerHTML = `
+      <video src="${parsed.url}" controls autoplay playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;background:#000;">
+        Trình duyệt không hỗ trợ thẻ video HTML5.
+      </video>
+    `;
+  } else {
+    container.innerHTML = `
+      <iframe width="100%" height="100%"
+              src="${parsed.url}"
+              title="${escapeHtml(videoTitle || 'Video')}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+      </iframe>
+    `;
+  }
   modal.classList.remove('hidden');
 }
+
 
 export const openVideoModal = openVideo;
 
@@ -1757,16 +1830,7 @@ function onSelectionChange(part) {
 
     if (card) {
       card.classList.remove('hidden');
-      const title = document.getElementById('cardTitle');
-      const subtitle = document.getElementById('cardSubtitle');
-      const lang = state.language || 'vi';
-      const info = part.info || {};
-      const name = info.name?.[lang] || info.name?.vi || part.displayName;
-      if (title) title.textContent = name;
-      const sysName = systemLabel(info.system || part.system, lang);
-      if (subtitle) {
-        subtitle.textContent = info.latinName ? `${info.latinName} • ${sysName}` : sysName;
-      }
+      updateInfoPanelContent(part, state.viewer);
     }
 
     updateBookmarkButton(part.id);
@@ -1792,19 +1856,48 @@ function onLanguageChange(lang) {
   }
 }
 
-function onPartStatesChange(partStates) {
-  // Update checkboxes in sidebar
-  partStates.forEach((partState, partId) => {
-    const checkbox = document.querySelector(`[data-part-checkbox="${partId}"]`);
+let sidebarNeedsSync = false;
+let partStatesRaf = null;
+
+export function syncSidebarPartStates(partStates = state.partStates) {
+  const container = document.getElementById('systemsList');
+  if (!container) return;
+
+  const items = container.querySelectorAll('.structure-item[data-part]');
+  if (!items || items.length === 0) return;
+
+  items.forEach(item => {
+    const partId = item.dataset.part;
+    if (!partId) return;
+    const partState = partStates?.get(partId);
+    if (!partState) return;
+
+    const checkbox = item.querySelector('input[type="checkbox"]');
     if (checkbox) {
       checkbox.checked = partState.visible !== false;
     }
+    item.classList.toggle('hidden', partState.visible === false);
+    item.style.opacity = partState.opacity < 1 ? '0.5' : '1';
+  });
+}
 
-    const item = document.querySelector(`.structure-item[data-part="${partId}"]`);
-    if (item) {
-      item.classList.toggle('hidden', partState.visible === false);
-      item.style.opacity = partState.opacity < 1 ? '0.5' : '1';
-    }
+function onPartStatesChange(partStates) {
+  // CRITICAL MOBILE PERFORMANCE OPTIMIZATION:
+  // If sidebar is off-screen (drawer closed on mobile/tablet or hidden), DO NOT run
+  // thousands of DOM queries! Just mark dirty and sync when opened.
+  const isMobileDrawer = window.innerWidth <= 1024;
+  const isDrawerOpen = document.getElementById('app')?.classList.contains('systems-open');
+  const isVisible = isMobileDrawer ? isDrawerOpen : (document.getElementById('systemsSidebar')?.offsetParent !== null);
+
+  if (!isVisible) {
+    sidebarNeedsSync = true;
+    return;
+  }
+
+  if (partStatesRaf) return;
+  partStatesRaf = requestAnimationFrame(() => {
+    partStatesRaf = null;
+    syncSidebarPartStates(partStates);
   });
 }
 
@@ -1914,6 +2007,7 @@ export async function initUI(viewer) {
   initFloatingAIButton(viewer);
   initFullscreenController(viewer);
   initAtlasHub(viewer);
+  initInfoPanel(viewer);
 }
 
 // Under 1024px the search field is hidden; this button is the only way to it.
@@ -1957,6 +2051,11 @@ function initDrawers() {
     if (!panel.el) return;
 
     app?.classList.toggle(panel.flag, open);
+
+    if (name === 'systems' && open && sidebarNeedsSync) {
+      sidebarNeedsSync = false;
+      syncSidebarPartStates(state.partStates);
+    }
 
     if (drawerQuery.matches) {
       panel.el.style.transform = open ? 'translateX(0)' : `translateX(${panel.closed})`;

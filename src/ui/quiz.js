@@ -152,6 +152,7 @@ let missedQuestions = [];
 let timerInterval = null;
 let timeLeft = 30;
 let quizOverlay = null;
+let isQuizCollapsed = false;
 
 export function isQuizRunning() {
   return isQuizActive;
@@ -160,11 +161,16 @@ export function isQuizRunning() {
 export function startQuiz(viewer) {
   isQuizActive = true;
   isAdaptiveMode = false;
+  isQuizCollapsed = false;
   score = 0;
   streak = 0;
   maxStreak = 0;
   currentIndex = 0;
   missedQuestions = [];
+
+  // Ẩn selection card phía dưới để tránh che màn hình
+  document.getElementById('selectionCard')?.classList.add('hidden');
+  document.body.classList.add('quiz-active');
 
   // Pick 5 random questions
   currentQuestions = [...EXAM_QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 5);
@@ -178,11 +184,16 @@ export function startAdaptiveQuiz(viewer) {
   const weakList = getWeakStructures().filter(w => !w.mastered);
   isQuizActive = true;
   isAdaptiveMode = true;
+  isQuizCollapsed = false;
   score = 0;
   streak = 0;
   maxStreak = 0;
   currentIndex = 0;
   missedQuestions = [];
+
+  // Ẩn selection card phía dưới để tránh che màn hình
+  document.getElementById('selectionCard')?.classList.add('hidden');
+  document.body.classList.add('quiz-active');
 
   if (weakList.length > 0) {
     const weakPartIds = weakList.map(w => w.partId);
@@ -202,11 +213,14 @@ export function startAdaptiveQuiz(viewer) {
 export function stopQuiz() {
   isQuizActive = false;
   isAdaptiveMode = false;
+  isQuizCollapsed = false;
+  document.body.classList.remove('quiz-active');
   clearInterval(timerInterval);
   if (quizOverlay) {
     quizOverlay.remove();
     quizOverlay = null;
   }
+  document.getElementById('selectionCard')?.classList.add('hidden');
   showToast('Đã thoát chế độ kiểm tra');
 }
 
@@ -282,43 +296,81 @@ function renderQuizUI(viewer) {
 
   startTimer(viewer);
 
-  quizOverlay.innerHTML = `
-    <div class="quiz-card animate-in">
-      <div class="quiz-card-header">
-        <div class="quiz-badge">
-          <span>🎯 Câu ${currentIndex + 1}/${currentQuestions.length}</span>
-          ${isAdaptiveMode ? '<span class="streak-badge" style="background:#8957e5;">⚡ Thích ứng</span>' : ''}
-          ${streak > 1 ? `<span class="streak-badge">🔥 x${streak}</span>` : ''}
+  // Tự động ẩn selection card phía dưới để giải phóng tối đa diện tích quan sát 3D
+  document.getElementById('selectionCard')?.classList.add('hidden');
+
+  if (isQuizCollapsed) {
+    quizOverlay.innerHTML = `
+      <div class="quiz-card quiz-card-collapsed animate-in">
+        <div class="quiz-collapsed-content">
+          <div class="quiz-collapsed-info">
+            <span class="quiz-badge-mini">🎯 ${currentIndex + 1}/${currentQuestions.length}</span>
+            <span class="quiz-target-name-mini" title="${q.title}">${q.title}</span>
+            <span class="quiz-latin-mini">(${q.latin})</span>
+          </div>
+          <div class="quiz-collapsed-actions">
+            <span class="quiz-timer-mini" id="quizTimerText">${timeLeft}s</span>
+            <button type="button" class="btn-quiz-mini-toggle" id="btnQuizToggle" title="Mở rộng chi tiết & gợi ý">💡 Mở</button>
+            <button type="button" class="btn-quiz-mini-close" id="btnQuizClose" title="Dừng bài kiểm tra">&times;</button>
+          </div>
         </div>
-        <div class="quiz-timer">
-          <span id="quizTimerText">30s</span>
-          <button class="quiz-close-btn" id="btnQuizClose" aria-label="Thoát">&times;</button>
+        <div class="quiz-timer-track mini">
+          <div class="quiz-timer-bar" id="quizTimerBar" style="width: ${(timeLeft / 30) * 100}%;"></div>
         </div>
       </div>
+    `;
+  } else {
+    quizOverlay.innerHTML = `
+      <div class="quiz-card animate-in">
+        <div class="quiz-card-header">
+          <div class="quiz-badge-group">
+            <span class="quiz-badge-pill">🎯 Câu ${currentIndex + 1}/${currentQuestions.length}</span>
+            <span class="quiz-score-pill">⭐ ${score}</span>
+            ${isAdaptiveMode ? '<span class="quiz-adaptive-pill">⚡ Thích ứng</span>' : ''}
+            ${streak > 1 ? `<span class="streak-badge">🔥 x${streak}</span>` : ''}
+          </div>
+          <div class="quiz-header-right">
+            <span class="quiz-timer-pill" id="quizTimerText">⏱️ ${timeLeft}s</span>
+            <button type="button" class="btn-quiz-hud-toggle" id="btnQuizToggle" title="Thu gọn xem toàn màn hình 3D">▲ Thu gọn</button>
+            <button type="button" class="btn-quiz-hud-close" id="btnQuizClose" aria-label="Thoát">&times;</button>
+          </div>
+        </div>
 
-      <div class="quiz-timer-track">
-        <div class="quiz-timer-bar" id="quizTimerBar" style="width: 100%;"></div>
-      </div>
+        <div class="quiz-timer-track">
+          <div class="quiz-timer-bar" id="quizTimerBar" style="width: ${(timeLeft / 30) * 100}%;"></div>
+        </div>
 
-      <div class="quiz-prompt">
-        <span class="quiz-target-label">Hãy chạm vào trên mô hình 3D:</span>
-        <h3 class="quiz-target-name">${q.title}</h3>
-        <span class="quiz-target-latin">${q.latin}</span>
-      </div>
+        <div class="quiz-card-body">
+          <div class="quiz-target-row">
+            <span class="quiz-target-lead">CHẠM TRÊN 3D:</span>
+            <h3 class="quiz-target-name">${q.title}</h3>
+            <span class="quiz-target-latin">(${q.latin})</span>
+            ${q.hint ? `<button type="button" class="btn-quiz-hint-pill" id="btnQuizHintPill" title="Xem gợi ý">💡 Gợi ý</button>` : ''}
+          </div>
 
-      <div class="quiz-hint-box">
-        💡 <strong>Gợi ý:</strong> ${q.hint}
+          ${q.hint ? `
+            <div class="quiz-hint-box hidden" id="quizHintBox">
+              <span>💡 <strong>Gợi ý:</strong> ${q.hint}</span>
+            </div>
+          ` : ''}
+        </div>
       </div>
-
-      <div class="quiz-footer-status">
-        <span>Điểm hiện tại: <strong>${score}</strong></span>
-        <span class="quiz-hint-tap">Chạm trực tiếp vào xương/cơ trên màn hình</span>
-      </div>
-    </div>
-  `;
+    `;
+  }
 
   document.getElementById('btnQuizClose')?.addEventListener('click', stopQuiz);
+  document.getElementById('btnQuizToggle')?.addEventListener('click', () => {
+    isQuizCollapsed = !isQuizCollapsed;
+    renderQuizUI(viewer);
+  });
+  document.getElementById('btnQuizHintPill')?.addEventListener('click', () => {
+    const hintBox = document.getElementById('quizHintBox');
+    if (hintBox) {
+      hintBox.classList.toggle('hidden');
+    }
+  });
 }
+
 
 export function handleQuizClick(partId, viewer) {
   if (!isQuizActive) return false;
@@ -383,12 +435,12 @@ function renderScoreCard(viewer) {
   const correctCount = total - missedQuestions.length;
   const pct = Math.round((correctCount / total) * 100);
 
-  let rankTitle = 'Bác sĩ tương lai (Xuất sắc)';
+  let rankTitle = 'Xuất sắc - Nắm vững cấu trúc';
   let rankColor = '#10b981';
   let rankIcon = '🏆';
 
   if (pct < 60) {
-    rankTitle = 'Cần rèn luyện thêm';
+    rankTitle = 'Cần ôn luyện thêm';
     rankColor = '#ef4444';
     rankIcon = '📖';
   } else if (pct < 80) {
@@ -399,9 +451,13 @@ function renderScoreCard(viewer) {
 
   quizOverlay.innerHTML = `
     <div class="quiz-card score-card animate-in">
-      <div style="font-size: 40px; margin-bottom: 6px;">${rankIcon}</div>
-      <h2 style="color: ${rankColor}; font-size: 20px; font-weight: 800; margin-bottom: 4px;">${rankTitle}</h2>
-      <p style="color: #c9d1d9; font-size: 13px; margin-bottom: 12px;">Đúng <strong>${correctCount}/${total}</strong> câu (${pct}%) • Điểm số: <strong>${score}</strong></p>
+      <div class="score-card-header">
+        <span class="score-card-icon">${rankIcon}</span>
+        <div class="score-card-title-group">
+          <h2 class="score-card-title" style="color: ${rankColor};">${rankTitle}</h2>
+          <p class="score-card-sub">Đúng <strong>${correctCount}/${total}</strong> câu (${pct}%) • Điểm số: <strong>${score}</strong></p>
+        </div>
+      </div>
 
       ${missedQuestions.length > 0 ? `
         <div class="missed-review-box">
@@ -409,13 +465,13 @@ function renderScoreCard(viewer) {
           <div class="missed-list">
             ${missedQuestions.map(m => `
               <div class="missed-item" data-part="${m.targetIds[0]}">
-                <span>📍 ${m.title}</span>
+                <span class="missed-item-name">📍 ${m.title} <em class="missed-item-latin">(${m.latin})</em></span>
                 <button type="button" class="btn-review-focus" data-focus="${m.targetIds[0]}">Xem lại 3D</button>
               </div>
             `).join('')}
           </div>
         </div>
-      ` : '<p style="color: #10b981; font-weight: 600; font-size: 13px; margin-bottom: 12px;">Tuyệt vời! Bạn không sai câu nào!</p>'}
+      ` : '<div class="quiz-perfect-notice">🎉 Tuyệt vời! Bạn không sai câu nào!</div>'}
 
       <div class="score-card-actions">
         <button type="button" class="quiz-btn primary" id="btnQuizRestart">🔄 Kiểm tra lại</button>

@@ -62,11 +62,33 @@ function ghostVariantOf(material) {
   return ghost;
 }
 
+// High-performance shared opacity variant cache for whole systems.
+// Prevents cloning thousands of materials when fading entire systems (e.g. muscular/skeletal).
+const systemOpacityVariants = new WeakMap();
+
+function systemOpacityVariantOf(material, opacity) {
+  let cache = systemOpacityVariants.get(material);
+  if (!cache) {
+    cache = new Map();
+    systemOpacityVariants.set(material, cache);
+  }
+  const key = Math.round(opacity * 100);
+  let variant = cache.get(key);
+  if (!variant) {
+    variant = material.clone();
+    variant.transparent = opacity < 0.99;
+    variant.opacity = opacity;
+    variant.depthWrite = opacity >= 0.95;
+    cache.set(key, variant);
+  }
+  return variant;
+}
+
 // Visibility is applied to the meshes a structure owns, never to its node:
 // three.js propagates `visible` down the subtree, and 868 of the 2827
 // structures sit inside another one, so touching the node would take unrelated
 // structures with it.
-function setStructureVisible(partId, visible) {
+export function setStructureVisible(partId, visible) {
   ownMeshesOf(partId).forEach(mesh => { mesh.visible = visible; });
 
   const partState = getPartState(partId);
@@ -220,16 +242,42 @@ export function showSystem(systemId) {
 
 export function setSystemTransparency(systemId, opacity) {
   opacity = THREE.MathUtils.clamp(opacity, 0, 1);
+  const isSolid = opacity >= 0.99;
 
   batchPartStates(() => {
     getMeshesBySystem(systemId).forEach(node => {
       const partId = node.userData.partId;
-      // Clone-on-write, exactly as for a single structure: this used to write
-      // straight into the materials that came out of the GLB, which thousands
-      // of meshes share, so one sweep of the depth slider faded structures
-      // nobody asked about and nothing could put them back — releaseMaterial
-      // hands the mesh to the same object the fade had already spoiled.
-      if (partId) applyTransparency(partId, opacity);
+      if (!partId) return;
+
+      ownMeshesOf(partId).forEach(mesh => {
+        const base = mesh.userData.baseMaterial;
+        if (!base) return;
+
+        if (isSolid) {
+          if (mesh.userData.ownsMaterial) {
+            materialsOf(mesh).forEach(mat => mat.dispose());
+            mesh.userData.ownsMaterial = false;
+          }
+          mesh.material = base;
+        } else {
+          // Re-use shared opacity variant - ultra fast 60fps!
+          if (Array.isArray(base)) {
+            mesh.material = base.map(mat => systemOpacityVariantOf(mat, opacity));
+          } else {
+            mesh.material = systemOpacityVariantOf(base, opacity);
+          }
+        }
+      });
+
+      const partState = getPartState(partId);
+      if (partState) partState.opacity = opacity;
+      setPartState(partId, { opacity });
+
+      if (isSolid) {
+        state.transparentParts.delete(partId);
+      } else {
+        state.transparentParts.add(partId);
+      }
     });
   });
 

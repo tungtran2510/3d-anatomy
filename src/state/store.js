@@ -230,15 +230,19 @@ export function setDissectMode(enabled) {
   notify('dissectMode', enabled);
 }
 
-export function pushUndo(partId) {
-  state.undoStack.push(partId);
+export function pushUndo(action) {
+  if (!action) return;
+  state.undoStack.push(action);
+  if (state.undoStack.length > 50) {
+    state.undoStack.shift();
+  }
   notify('undoStack', state.undoStack);
 }
 
 export function popUndo() {
-  const partId = state.undoStack.pop();
+  const action = state.undoStack.pop();
   notify('undoStack', state.undoStack);
-  return partId;
+  return action;
 }
 
 export function getSystemParts(systemId) {

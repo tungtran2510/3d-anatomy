@@ -4,6 +4,16 @@
 
 import { dynamicAnatomy, MOTIONS, MOTION_METADATA } from '../viewer/dynamicAnatomy.js';
 
+const SVG_PLAY = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+const SVG_PAUSE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+const SVG_REWIND = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 19 2 12 11 5 11 19"/><polygon points="22 19 13 12 22 5 22 19"/></svg>`;
+const SVG_LOOP = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`;
+const SVG_EYE = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const SVG_CLOSE = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+const SVG_SETTINGS = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+const SVG_FILM = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>`;
+const SVG_TARGET = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>`;
+
 let popoverEl = null;
 let isDraggingScrubber = false;
 let canvasListenerAttached = false;
@@ -22,14 +32,18 @@ export function initMotionPanel(viewer) {
   renderMotionPanelContent();
   setupEventListeners();
 
-  // Clicking on canvas automatically minimizes the frame so the user can interact with & watch the 3D model
+  // Clicking or touching outside popover / on 3D canvas automatically minimizes the frame
   if (!canvasListenerAttached) {
-    const canvas = document.getElementById('threeCanvas');
-    canvas?.addEventListener('click', () => {
+    const viewerContainer = document.getElementById('viewerContainer');
+    const dismissToMini = (e) => {
       if (popoverEl && !popoverEl.classList.contains('hidden') && !popoverEl.classList.contains('minimized')) {
-        minimizeMotionPanel();
+        if (!popoverEl.contains(e.target) && !document.getElementById('btnToolMotion')?.contains(e.target)) {
+          minimizeMotionPanel();
+        }
       }
-    });
+    };
+    viewerContainer?.addEventListener('pointerdown', dismissToMini);
+    viewerContainer?.addEventListener('touchstart', dismissToMini, { passive: true });
     canvasListenerAttached = true;
   }
 
@@ -77,6 +91,7 @@ export function closeMotionPanel() {
   document.getElementById('btnToolMotion')?.classList.remove('active');
   dynamicAnatomy.pause();
   dynamicAnatomy.resetPose();
+  dynamicAnatomy.restoreSystemVisibility();
   dynamicAnatomy.restoreAllVisibility();
 }
 
@@ -109,13 +124,13 @@ function renderMotionPanelContent() {
 
       <div class="motion-header">
         <div class="motion-title-row">
-          <span class="motion-badge">🎬 GIẢI PHẪU ĐỘNG</span>
+          <span class="motion-badge">${SVG_FILM} GIẢI PHẪU ĐỘNG</span>
           <div class="motion-head-actions">
             <button type="button" class="btn-motion-view-3d" id="motionView3dBtn" title="Thu nhỏ để xem trọn vẹn mô hình 3D">
-              👁️ Xem 3D
+              ${SVG_EYE} Xem 3D
             </button>
             <button type="button" class="btn-motion-exit" id="motionCloseBtn" title="Tắt chuyển động & đóng khung">
-              ✕ Tắt
+              ${SVG_CLOSE} Tắt
             </button>
           </div>
         </div>
@@ -128,7 +143,7 @@ function renderMotionPanelContent() {
 
       <!-- Quick watch full screen button -->
       <button type="button" class="btn-motion-watch-full" id="btnMotionWatchFull" title="Chạy ngay và thu gọn thanh công cụ để ngắm mô hình 3D">
-        ▶ Bắt đầu & Xem 3D Toàn Màn Hình
+        Bắt đầu & Xem 3D Toàn Màn Hình
       </button>
 
       <!-- Live Phase & Physiology Banner -->
@@ -149,9 +164,9 @@ function renderMotionPanelContent() {
 
       <!-- Playback Controls -->
       <div class="motion-controls-row">
-        <button type="button" class="btn-motion-ctrl" id="btnMotionRewind" title="Tua về đầu">⏮</button>
-        <button type="button" class="btn-motion-ctrl btn-play-large" id="btnMotionPlayPause" title="Chạy / Tạm dừng">⏸</button>
-        <button type="button" class="btn-motion-ctrl" id="btnMotionLoop" title="Lặp lại chu kỳ">🔁</button>
+        <button type="button" class="btn-motion-ctrl" id="btnMotionRewind" title="Tua về đầu">${SVG_REWIND}</button>
+        <button type="button" class="btn-motion-ctrl btn-play-large" id="btnMotionPlayPause" title="Chạy / Tạm dừng">${SVG_PAUSE}</button>
+        <button type="button" class="btn-motion-ctrl" id="btnMotionLoop" title="Lặp lại chu kỳ">${SVG_LOOP}</button>
         
         <!-- Speed Selector Chips -->
         <div class="motion-speed-chips">
@@ -165,11 +180,11 @@ function renderMotionPanelContent() {
       <!-- Isolation in Motion Section -->
       <div class="motion-isolation-section">
         <div class="isolation-header">
-          <span>🎯 Cô lập cấu trúc khi chuyển động:</span>
+          <span>${SVG_TARGET} Cô lập cấu trúc khi chuyển động:</span>
         </div>
         <div class="isolation-row">
           <select id="motionPartSelect" class="motion-part-select">
-            <option value="all">👁️ Xem toàn bộ</option>
+            <option value="all">Xem toàn bộ</option>
           </select>
           <button type="button" class="btn-isolate-action primary" id="btnMotionIsolateCurrent" title="Chỉ quan sát cấu trúc đã chọn">
             Cô lập
@@ -186,13 +201,13 @@ function renderMotionPanelContent() {
 
     <!-- Mini Player Bar (shown when minimized so user can watch 3D model without obstruction) -->
     <div class="motion-mini-bar">
-      <button type="button" class="btn-mini-play" id="btnMiniPlayPause" title="Chạy / Tạm dừng">⏸</button>
+      <button type="button" class="btn-mini-play" id="btnMiniPlayPause" title="Chạy / Tạm dừng">${SVG_PAUSE}</button>
       <div class="mini-info" id="miniMotionInfo" title="Bấm để mở bảng điều khiển chi tiết">
-        <span class="mini-title" id="miniMotionTitle">🎬 Nhịp Tim</span>
+        <span class="mini-title" id="miniMotionTitle">Nhịp Tim</span>
         <span class="mini-phase" id="miniMotionPhase">Tâm thu (0.4s)</span>
       </div>
-      <button type="button" class="btn-mini-action" id="btnMiniExpand" title="Mở bảng điều khiển chi tiết">⚙️ Cài đặt</button>
-      <button type="button" class="btn-mini-action danger" id="btnMiniClose" title="Dừng chuyển động & thoát">✕ Tắt</button>
+      <button type="button" class="btn-mini-action" id="btnMiniExpand" title="Mở bảng điều khiển chi tiết">${SVG_SETTINGS} Cài đặt</button>
+      <button type="button" class="btn-mini-action danger" id="btnMiniClose" title="Dừng chuyển động & thoát">${SVG_CLOSE} Tắt</button>
     </div>
   `;
 }
@@ -373,12 +388,12 @@ function updateMotionUI(state) {
   // Update Play/Pause buttons (both full and mini)
   const btnPlay = popoverEl.querySelector('#btnMotionPlayPause');
   if (btnPlay) {
-    btnPlay.textContent = state.isPlaying ? '⏸' : '▶';
+    btnPlay.innerHTML = state.isPlaying ? SVG_PAUSE : SVG_PLAY;
     btnPlay.title = state.isPlaying ? 'Tạm dừng' : 'Chạy tiếp';
   }
   const miniPlay = popoverEl.querySelector('#btnMiniPlayPause');
   if (miniPlay) {
-    miniPlay.textContent = state.isPlaying ? '⏸' : '▶';
+    miniPlay.innerHTML = state.isPlaying ? SVG_PAUSE : SVG_PLAY;
     miniPlay.title = state.isPlaying ? 'Tạm dừng' : 'Chạy tiếp';
   }
 
@@ -386,7 +401,7 @@ function updateMotionUI(state) {
   const partSelect = popoverEl.querySelector('#motionPartSelect');
   if (partSelect && state.keyParts && partSelect.dataset.motionId !== state.motionId) {
     partSelect.dataset.motionId = state.motionId;
-    let opts = '<option value="all">👁️ Xem toàn bộ</option>';
+    let opts = '<option value="all">Xem toàn bộ</option>';
     state.keyParts.forEach(kp => {
       opts += `<option value="${kp.id}">${kp.nameVi}</option>`;
     });

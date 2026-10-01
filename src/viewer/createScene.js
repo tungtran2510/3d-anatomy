@@ -7,7 +7,8 @@ console.log('[createScene] Module loaded');
 export function createScene() {
   // Scene
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0d1117);
+  const isDark = typeof localStorage !== 'undefined' && localStorage.getItem('giao_dien') === 'dark';
+  scene.background = new THREE.Color(isDark ? 0x0d1117 : 0xf8fafc);
 
   // Renderer
   const canvas = document.getElementById('threeCanvas');
@@ -35,8 +36,9 @@ export function createScene() {
     alpha: true,
     powerPreference: 'high-performance'
   });
-  console.log('[createScene] Renderer created');
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (typeof window !== 'undefined' && window.innerWidth <= 768);
+  const basePixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.25) : Math.min(window.devicePixelRatio, 1.75);
+  renderer.setPixelRatio(basePixelRatio);
   // updateStyle = false: only the drawing buffer, the stylesheet owns the box.
   renderer.setSize(Math.max(initialSize.width, 1), Math.max(initialSize.height, 1), false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -47,13 +49,15 @@ export function createScene() {
   // Camera
   // The Z-Anatomy models are built to real scale: a body is roughly 1.7 units
   // (metres) tall, so near/far and the camera distance are in the same order.
+  // Medical telephoto portrait lens (FOV 35): eliminates wide-angle distortion,
+  // preventing skulls and faces from looking vertically stretched or unnatural ("hơi dài / dại").
   const camera = new THREE.PerspectiveCamera(
-    50, // FOV
+    35, // FOV: 35 degrees matches clinical photography and 85mm-100mm medical lenses
     Math.max(initialSize.width, 1) / Math.max(initialSize.height, 1), // aspect
     0.01, // near
     100 // far
   );
-  camera.position.set(0, 0, 3);
+  camera.position.set(0, 0, 3.6);
 
   // Controls
   const controls = new OrbitControls(camera, canvas);
@@ -228,27 +232,32 @@ export function createScene() {
 function createLights(scene) {
   const lights = {};
 
-  // Ambient light - soft overall illumination
-  lights.ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  // Medical Studio Ambient Light - controlled intensity for authentic anatomical cavity depth
+  lights.ambient = new THREE.AmbientLight(0xfff6ec, 0.38);
   scene.add(lights.ambient);
 
-  // Main directional light - key light
-  lights.key = new THREE.DirectionalLight(0xffffff, 1.0);
-  lights.key.position.set(50, 100, 50);
+  // Key directional light - warm ivory studio light from upper front-right
+  lights.key = new THREE.DirectionalLight(0xfff7ee, 1.35);
+  lights.key.position.set(28, 65, 45);
   scene.add(lights.key);
 
-  // Fill light - softer, from opposite side
-  lights.fill = new THREE.DirectionalLight(0x88aaff, 0.4);
-  lights.fill.position.set(-50, 50, -50);
+  // Fill light - soft cool-neutral fill to preserve tissue contrast
+  lights.fill = new THREE.DirectionalLight(0xebf2fa, 0.38);
+  lights.fill.position.set(-30, 25, -25);
   scene.add(lights.fill);
 
-  // Rim light - defines edges
-  lights.rim = new THREE.DirectionalLight(0xffffee, 0.3);
-  lights.rim.position.set(0, -50, -100);
+  // Rim light - crisp back-light highlighting organ boundaries and bone silhouettes
+  lights.rim = new THREE.DirectionalLight(0xfff0db, 0.75);
+  lights.rim.position.set(10, -25, -65);
   scene.add(lights.rim);
 
-  // Hemisphere light for subtle ambient variation
-  lights.hemi = new THREE.HemisphereLight(0x88ccff, 0x332211, 0.3);
+  // Front camera light for crisp anatomical definition
+  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.25);
+  lights.front.position.set(0, 5, 65);
+  scene.add(lights.front);
+
+  // Hemisphere light for ground-to-sky subtle bounce
+  lights.hemi = new THREE.HemisphereLight(0xfff8ee, 0xd5cfc0, 0.22);
   scene.add(lights.hemi);
 
   return lights;
@@ -257,10 +266,11 @@ function createLights(scene) {
 export function updateLightsForSystem(lights, system) {
   // Adjust lighting based on visible system
   const configs = {
-    muscular: { key: 1.0, fill: 0.4, ambient: 0.5 },
-    skeletal: { key: 1.2, fill: 0.5, ambient: 0.6 },
-    nervous: { key: 0.8, fill: 0.6, ambient: 0.5 },
-    default: { key: 1.0, fill: 0.4, ambient: 0.6 }
+    muscular: { key: 1.30, fill: 0.35, ambient: 0.35 },
+    skeletal: { key: 1.35, fill: 0.38, ambient: 0.38 },
+    nervous: { key: 1.20, fill: 0.40, ambient: 0.38 },
+    visceral: { key: 1.35, fill: 0.35, ambient: 0.35 },
+    default: { key: 1.30, fill: 0.38, ambient: 0.36 }
   };
 
   const config = configs[system] || configs.default;

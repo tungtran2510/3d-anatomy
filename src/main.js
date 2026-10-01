@@ -1,7 +1,7 @@
 import '@fontsource-variable/inter';
 import './styles/main.css';
 import { createScene } from './viewer/createScene.js';
-import { loadSystems } from './viewer/loadModel.js';
+import { loadSystems, getMeshRegistry } from './viewer/loadModel.js';
 import { initSelection } from './viewer/selection.js';
 import { initUI } from './ui/sidebar.js';
 import { state, setViewer, setPartsData, setSystemsData, setTranslations, setSearchIndex, subscribe } from './state/store.js';
@@ -11,7 +11,9 @@ import { selectPartById } from './viewer/selection.js';
 import { showPart, hidePart, setPartTransparency, isolatePart } from './viewer/visibility.js';
 import { loadSystemsData, loadLexicon, loadDefinitions, buildPartsData, DEFAULT_SYSTEM } from './data/anatomy.js';
 import { translationsVi, translationsEn, translationsIt } from './data/translations.js';
+import { dynamicAnatomy } from './viewer/dynamicAnatomy.js';
 import { getVietnameseSynonyms } from './data/vietnamese.js';
+import { initTheme, toggleAppTheme } from './utils/themeManager.js';
 
 setTranslations({ vi: translationsVi, en: translationsEn, it: translationsIt });
 
@@ -96,6 +98,10 @@ async function init() {
       setTimeout(() => { loadingOverlay.style.display = 'none'; }, 300);
     }
     if (viewer) {
+      initTheme(viewer);
+      document.getElementById('mainThemeToggleBtn')?.addEventListener('click', () => {
+        toggleAppTheme(viewer);
+      });
       await initUI(viewer);
       initSelection(viewer);
       trackViewState(viewer);
@@ -113,6 +119,11 @@ async function init() {
             .catch((err) => console.warn('[SW] Registration failed:', err.message));
         });
       }
+
+      // Offline download recommendation prompt (LỆNH #10)
+      import('./ui/offlinePrompt.js').then(({ initOfflinePrompt }) => {
+        initOfflinePrompt(viewer);
+      });
 
       // Cross-platform Desktop Keyboard Shortcuts
       initDesktopShortcuts(viewer);
@@ -165,4 +176,6 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) { viewer.stopRenderLoop(); } else { viewer.startRenderLoop(); }
 });
 
-window.ZAnatomy = { viewer, loadSystems };
+window.selectPartById = (id) => selectPartById(id, viewer);
+window.getLoadedPartIds = () => Array.from(getMeshRegistry().keys());
+window.ZAnatomy = { viewer, loadSystems, selectPartById: (id) => selectPartById(id, viewer), getLoadedPartIds: () => Array.from(getMeshRegistry().keys()), dynamicAnatomy };
