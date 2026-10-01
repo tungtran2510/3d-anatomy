@@ -393,6 +393,38 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         roughness: 0.30,
         metalness: 0.02
       });
+    } else if (partName.includes('renal pelvis') || partName.includes('bể thận')) {
+      // Renal pelvis: pearly mucosal funnel
+      applyCustomProps(mesh, {
+        name: 'PBR_RenalPelvis',
+        color: 0xDCD5C6,
+        roughness: 0.30,
+        metalness: 0.02
+      });
+    } else if (partName.includes('penis') || partName.includes('cavernosum') || partName.includes('spongiosum')) {
+      // Penis erectile tissue
+      applyCustomProps(mesh, {
+        name: 'PBR_Penis',
+        color: partName.includes('glans') ? 0xC87B82 : 0x7E323E,
+        roughness: 0.28,
+        metalness: 0.04
+      });
+    } else if (partName.includes('testis') || partName.includes('tinh hoàn')) {
+      // Testis: smooth pale lilac-grey parenchymal oval
+      applyCustomProps(mesh, {
+        name: 'PBR_Testis',
+        color: 0x9E9BB0,
+        roughness: 0.22,
+        metalness: 0.02
+      });
+    } else if (partName.includes('epididymis') || partName.includes('deferens') || partName.includes('prostate') || partName.includes('seminal')) {
+      // Epididymis, ductus deferens & prostate: glistening smooth ivory-amber cords
+      applyCustomProps(mesh, {
+        name: 'PBR_GenitalDucts',
+        color: 0xD6C6B2,
+        roughness: 0.32,
+        metalness: 0.02
+      });
     } else if (partName.includes('spleen') || partName.includes('lá lách')) {
       // Spleen: vascular lymphoid purplish-crimson
       applyCustomProps(mesh, {

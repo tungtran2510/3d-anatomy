@@ -221,10 +221,11 @@ export function getVisceralSubType(partIdLower) {
       partIdLower.includes('taenia') || partIdLower.includes('meso')) {
     return 'digestive';
   }
-  if (partIdLower.includes('kidney') || partIdLower.includes('bladder') || partIdLower.includes('ureter') || 
-      partIdLower.includes('urethra') || partIdLower.includes('renal') || partIdLower.includes('penis') || 
-      partIdLower.includes('prostate') || partIdLower.includes('testis') || partIdLower.includes('seminal') || 
-      partIdLower.includes('deferens') || partIdLower.includes('epididymis') || partIdLower.includes('ejaculatory')) {
+  if ((partIdLower.includes('kidney') || partIdLower.includes('bladder') || partIdLower.includes('ureter') || 
+       partIdLower.includes('urethra') || partIdLower.includes('renal') || partIdLower.includes('penis') || 
+       partIdLower.includes('prostate') || partIdLower.includes('testis') || partIdLower.includes('seminal') || 
+       partIdLower.includes('deferens') || partIdLower.includes('epididymis') || partIdLower.includes('ejaculatory')) &&
+      !partIdLower.includes('gallbladder') && !partIdLower.includes('suprarenal')) {
     return 'urinary_genital';
   }
   if (partIdLower.includes('thyroid') || partIdLower.includes('suprarenal') || partIdLower.includes('hypophysis') || 
@@ -273,6 +274,46 @@ export function isDigestiveVisibleAtLevel(partIdLower, level) {
   }
 
   // 5. Trục tiêu hóa trung tâm cốt lõi: Thực quản, Dạ dày, Tá tràng, Tụy & Khoang miệng: Level >= 0.5
+  return level >= 0.5;
+}
+
+// -----------------------------------------------------------------------------
+// URINARY & GENITAL DISSECTION LAYERS (8 nấc bóc tách từ 0.5 đến 4.0)
+// Chuẩn Y khoa đối chiếu trực tiếp từ Visible Body Atlas:
+// Level 4.0 (■■■■): Thận + Bàng quang + Cơ quan sinh dục ngoài đầy đủ (Dương vật, Bao quy đầu, Bìu) (Ảnh 3)
+// Level 3.0 (■■■_): Bóc tách lớp da ngoài; lộ thể hang, thể xốp, quy đầu, tinh hoàn, mào tinh (Ảnh 4)
+// Level 2.0 (■■__): Bóc toàn bộ thân dương vật; lộ Tinh hoàn treo, Mào tinh, Ống dẫn tinh, Tuyến tiền liệt (Ảnh 2)
+// Level 1.0 (■___): Bóc sạch toàn bộ cơ quan sinh dục; chỉ còn Hệ Tiết niệu: Thận, Bể thận, Niệu quản, Bàng quang (Ảnh 1)
+// Level 0.5: Bóc nhu mô thận, chỉ còn Bể thận (Renal pelvis), Niệu quản & Bàng quang
+// Level 0.0 (____): Ẩn hoàn toàn hệ tiết niệu & sinh dục
+// -----------------------------------------------------------------------------
+export function isUrinaryGenitalVisibleAtLevel(partIdLower, level) {
+  if (level <= 0) return false;
+
+  // 1. Thân dương vật & cấu trúc cương (Corpus cavernosum, spongiosum, glans penis): Level >= 2.5 (Level 3.0 & 4.0 - Ảnh 3 & 4)
+  const isErectilePenis = partIdLower.includes('cavernosum') || partIdLower.includes('spongiosum') || 
+                         partIdLower.includes('glans penis') || (partIdLower.includes('penis') && !partIdLower.includes('bulb'));
+  if (isErectilePenis) {
+    return level >= 2.5;
+  }
+
+  // 2. Cơ quan sinh dục trong: Tinh hoàn, Mào tinh, Ống dẫn tinh, Túi tinh, Tuyến tiền liệt: Level >= 1.5 (Level 2.0 - Ảnh 2)
+  const isInternalGenital = partIdLower.includes('testis') || partIdLower.includes('epididymis') || 
+                           partIdLower.includes('deferens') || partIdLower.includes('seminal') || 
+                           partIdLower.includes('prostate') || partIdLower.includes('ejaculatory') ||
+                           partIdLower.includes('tinh hoàn') || partIdLower.includes('mào tinh') || 
+                           partIdLower.includes('tiền liệt');
+  if (isInternalGenital) {
+    return level >= 1.5;
+  }
+
+  // 3. Vỏ nhu mô thận (Kidney parenchyma): Level >= 1.0 (Ảnh 1)
+  const isKidneyCortex = (partIdLower.includes('kidney') || partIdLower.includes('thận')) && !partIdLower.includes('pelvis');
+  if (isKidneyCortex) {
+    return level >= 1.0;
+  }
+
+  // 4. Hệ tiết niệu cốt lõi: Bể thận (Renal pelvis), Niệu quản (Ureter), Bàng quang (Bladder), Niệu đạo (Urethra)
   return level >= 0.5;
 }
 
@@ -742,7 +783,7 @@ async function applySystemLevel(systemId, level, viewer) {
           } else if (subType === 'digestive') {
             setStructureVisible(partId, isDigestiveVisibleAtLevel(lower, digLvl));
           } else if (subType === 'urinary_genital') {
-            setStructureVisible(partId, uriLvl > 0);
+            setStructureVisible(partId, isUrinaryGenitalVisibleAtLevel(lower, uriLvl));
           } else if (subType === 'endocrine') {
             setStructureVisible(partId, endLvl > 0);
           }
