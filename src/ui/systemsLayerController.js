@@ -235,6 +235,48 @@ export function getVisceralSubType(partIdLower) {
 }
 
 // -----------------------------------------------------------------------------
+// DIGESTIVE SYSTEM DISSECTION LAYERS (8 nấc bóc tách từ 0.5 đến 4.0)
+// Chuẩn Y khoa đối chiếu trực tiếp từ Visible Body Atlas:
+// Level 4.0 (■■■■): Mạc nối lớn (Greater Omentum) phủ kín toàn bộ ổ bụng (Ảnh 1)
+// Level 3.0 (■■■_): Bóc mạc nối, lộ toàn bộ Gan, Túi mật, Dạ dày, Khung Đại tràng, Ruột non (Ảnh 2)
+// Level 2.0 (■■__): Bóc toàn bộ Gan & Túi mật; bộc lộ trọn vẹn Dạ dày, Tụy, Khung Đại tràng, Ruột non (Ảnh 3)
+// Level 1.0 (■___): Bóc toàn bộ Khung Đại tràng; chỉ còn Dạ dày, Tá tràng, Ruột non trung tâm & Thực quản (Ảnh 4)
+// Level 0.5: Bóc Ruột non (Jejunum), chỉ giữ lại trục Dạ dày - Tá tràng - Tụy & Thực quản
+// Level 0.0 (____): Ẩn hoàn toàn hệ tiêu hóa
+// -----------------------------------------------------------------------------
+export function isDigestiveVisibleAtLevel(partIdLower, level) {
+  if (level <= 0) return false;
+
+  // 1. Mạc nối lớn & mạc treo (Greater / Lesser Omentum, Mesentery): Level 3.5 - 4.0 (Ảnh 1)
+  if (partIdLower.includes('omentum') || partIdLower.includes('meso')) {
+    return level >= 3.5;
+  }
+
+  // 2. Gan, Túi mật, Đường mật (Liver, Gallbladder, Bile duct): Level 2.5 - 4.0 (Bóc tách sạch ở Level 2.0 - Ảnh 3)
+  const isBiliaryLiver = partIdLower.includes('liver') || partIdLower.includes('gallbladder') || 
+                        partIdLower.includes('bile') || partIdLower.includes('gan') || partIdLower.includes('mật');
+  if (isBiliaryLiver) {
+    return level >= 2.5;
+  }
+
+  // 3. Khung Đại tràng & Ruột thừa & Dải cơ (Colon, Appendix, Taeniae): Level 1.5 - 4.0 (Bóc tách sạch ở Level 1.0 - Ảnh 4)
+  const isColon = partIdLower.includes('colon') || partIdLower.includes('appendix') || 
+                  partIdLower.includes('taenia') || partIdLower.includes('đại tràng') || 
+                  partIdLower.includes('ruột già') || partIdLower.includes('ruột thừa');
+  if (isColon) {
+    return level >= 1.5;
+  }
+
+  // 4. Ruột non hỗng tràng (Jejunum loops): Level 1.0 - 4.0 (Ảnh 4)
+  if (partIdLower.includes('jejunum') || partIdLower.includes('hỗng tràng')) {
+    return level >= 1.0;
+  }
+
+  // 5. Trục tiêu hóa trung tâm cốt lõi: Thực quản, Dạ dày, Tá tràng, Tụy & Khoang miệng: Level >= 0.5
+  return level >= 0.5;
+}
+
+// -----------------------------------------------------------------------------
 // MUSCULAR 3-TIER + SUB-STEP DISSECTION (8 nấc bóc tách từ 0.5 đến 4.0)
 // -----------------------------------------------------------------------------
 const SUPERFICIAL_PATTERNS = [
@@ -698,7 +740,7 @@ async function applySystemLevel(systemId, level, viewer) {
           if (subType === 'respiratory') {
             setStructureVisible(partId, isRespiratoryVisibleAtLevel(lower, respLvl));
           } else if (subType === 'digestive') {
-            setStructureVisible(partId, digLvl > 0);
+            setStructureVisible(partId, isDigestiveVisibleAtLevel(lower, digLvl));
           } else if (subType === 'urinary_genital') {
             setStructureVisible(partId, uriLvl > 0);
           } else if (subType === 'endocrine') {

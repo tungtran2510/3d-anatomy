@@ -296,15 +296,15 @@ function enhanceMaterialForOrgan(mesh, systemId) {
 
   if (systemId === 'visceral') {
     if (partName.includes('greater omentum') || partName.includes('lesser omentum') || partName.includes('mạc nối')) {
-      // Greater / Lesser Omentum: Delicate semi-translucent adipose veil
+      // Greater / Lesser Omentum: Physiological adipose apron (chuẩn Visible Body Photo 1)
       applyCustomProps(mesh, {
         name: 'PBR_Omentum',
-        color: 0xF3E7C4,
-        roughness: 0.32,
+        color: 0xBA867E,
+        roughness: 0.35,
         metalness: 0.02,
         transparent: true,
-        opacity: 0.35,
-        depthWrite: false,
+        opacity: 0.90,
+        depthWrite: true,
         bumpMap: bump,
         bumpScale: 0.0012,
         renderOrder: 10
