@@ -1,63 +1,28 @@
 // Depth control: Medical-grade Anatomical Layer Dissection (Bóc tách giải phẫu chuẩn Y khoa)
 // Peels away structures layer by layer from superficial to deep with 100% crisp solid opacity:
-// Layer 0: Full superficial view (Toàn bộ cấu trúc nguyên bản)
-// Layer 1: Dissect superficial fasciae & large superficial muscles (Bóc màng cân & cơ nông)
-// Layer 2: Dissect entire muscular system (Bóc toàn bộ hệ cơ bắp)
-// Layer 3: Dissect neurovascular bundles & lymphatic (Bóc mạch máu, thần kinh & bạch huyết)
-// Layer 4: Dissect thoracic & abdominal viscera (Bóc nội tạng)
-// Layer 5: Deepest skeleton framework (Khung xương cốt lõi)
+// Layer 0: Full superficial view (Toàn bộ cấu trúc - Cơ tầng nông)
+// Layer 1: Peels superficial muscles (Lớp 1: Cơ tầng giữa)
+// Layer 2: Peels intermediate muscles (Lớp 2: Cơ tầng sâu)
+// Layer 3: Dissects entire muscular system (Lớp 3: Bóc sạch cơ - Lộ mạch máu, thần kinh & tạng)
+// Layer 4: Dissects neurovascular bundles & viscera (Lớp 4: Khớp & Xương)
+// Layer 5: Deepest skeleton framework (Lớp 5: Khung xương cốt lõi)
 
 import { state, translate, batchPartStates } from '../state/store.js';
 import { showSystem, hideSystem, setStructureVisible } from '../viewer/visibility.js';
-import { getMeshesBySystem } from '../viewer/loadModel.js';
-
-const SUPERFICIAL_KEYWORDS = [
-  'fascia', 'retinaculum', 'mạc', 'cân',
-  'pectoralis major', 'ngực lớn',
-  'deltoid', 'cơ delta',
-  'rectus abdominis', 'thẳng bụng',
-  'external oblique', 'chéo bụng ngoài',
-  'trapezius', 'cơ thang',
-  'latissimus', 'lưng rộng',
-  'gluteus maximus', 'mông lớn',
-  'biceps brachii', 'nhị đầu cánh tay',
-  'gastrocnemius', 'bụng chân',
-  'platysma', 'cơ bám da cổ',
-  'tensor fasciae',
-  'sartorius', 'cơ may'
-];
+import { getMuscleLayers, systemLevels, updateItemUI } from './systemsLayerController.js';
 
 export const DISSECTION_STAGES = [
-  { level: 0, title: 'Toàn bộ cấu trúc', short: 'Lớp 0: Đầy đủ' },
-  { level: 1, title: 'Bóc cơ nông & cân mạc', short: 'Lớp 1: Cơ nông' },
-  { level: 2, title: 'Bóc toàn bộ hệ cơ', short: 'Lớp 2: Hệ cơ' },
-  { level: 3, title: 'Bóc mạch & thần kinh', short: 'Lớp 3: Mạch & TK' },
-  { level: 4, title: 'Bóc nội tạng', short: 'Lớp 4: Nội tạng' },
+  { level: 0, title: 'Toàn bộ cấu trúc (Cơ tầng nông)', short: 'Lớp 0: Đầy đủ' },
+  { level: 1, title: 'Bóc cơ nông & mạc (Cơ tầng giữa)', short: 'Lớp 1: Cơ giữa' },
+  { level: 2, title: 'Bóc cơ giữa (Chỉ còn cơ sâu)', short: 'Lớp 2: Cơ sâu' },
+  { level: 3, title: 'Bóc toàn bộ hệ cơ (Lộ mạch, TK, tạng)', short: 'Lớp 3: Bóc cơ' },
+  { level: 4, title: 'Bóc mạch, thần kinh & nội tạng', short: 'Lớp 4: Khớp & Xương' },
   { level: 5, title: 'Khung xương cốt lõi', short: 'Lớp 5: Xương' }
 ];
 
 let slider = null;
 let hintEl = null;
 let currentStage = 0;
-let superficialPartsCache = null;
-
-function getSuperficialParts() {
-  if (superficialPartsCache && superficialPartsCache.length > 0) {
-    return superficialPartsCache;
-  }
-  const nodes = getMeshesBySystem('muscular') || [];
-  const partSet = new Set();
-  nodes.forEach(node => {
-    const partId = node.userData?.partId;
-    if (!partId) return;
-    const lower = partId.toLowerCase();
-    if (SUPERFICIAL_KEYWORDS.some(kw => lower.includes(kw))) {
-      partSet.add(partId);
-    }
-  });
-  superficialPartsCache = Array.from(partSet);
-  return superficialPartsCache;
-}
 
 export function applyDepth(stage) {
   stage = Math.max(0, Math.min(5, Math.round(Number(stage) || 0)));
@@ -66,13 +31,17 @@ export function applyDepth(stage) {
   // Single atomic batch: ZERO intermediate main-thread stalls
   batchPartStates(() => {
     const loaded = state.loadedSystems || [];
-    const superficialParts = getSuperficialParts();
+    const { superficial, intermediate, deep } = getMuscleLayers();
 
-    // STAGE 0: All active systems fully opaque and visible
+    // STAGE 0: All active systems fully visible (Muscular Level 3)
     if (stage === 0) {
       if (loaded.includes('muscular')) {
         showSystem('muscular');
-        superficialParts.forEach(id => setStructureVisible(id, true));
+        superficial.forEach(id => setStructureVisible(id, true));
+        intermediate.forEach(id => setStructureVisible(id, true));
+        deep.forEach(id => setStructureVisible(id, true));
+        systemLevels.muscular = 3;
+        updateItemUI('muscular');
       }
       if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
       if (loaded.includes('nervous')) showSystem('nervous');
@@ -82,11 +51,15 @@ export function applyDepth(stage) {
       if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
-    // STAGE 1: Dissect fascia & superficial muscles, reveal deep musculature & neurovasculature
+    // STAGE 1: Dissect superficial muscles & fascia, reveal intermediate & deep musculature (Muscular Level 2)
     else if (stage === 1) {
       if (loaded.includes('muscular')) {
         showSystem('muscular');
-        superficialParts.forEach(id => setStructureVisible(id, false));
+        superficial.forEach(id => setStructureVisible(id, false));
+        intermediate.forEach(id => setStructureVisible(id, true));
+        deep.forEach(id => setStructureVisible(id, true));
+        systemLevels.muscular = 2;
+        updateItemUI('muscular');
       }
       if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
       if (loaded.includes('nervous')) showSystem('nervous');
@@ -96,9 +69,16 @@ export function applyDepth(stage) {
       if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
-    // STAGE 2: Dissect entire muscular system, reveal neurovascular, lymphatic & viscera
+    // STAGE 2: Dissect intermediate muscles, reveal deep layer only (Muscular Level 1)
     else if (stage === 2) {
-      if (loaded.includes('muscular')) hideSystem('muscular');
+      if (loaded.includes('muscular')) {
+        showSystem('muscular');
+        superficial.forEach(id => setStructureVisible(id, false));
+        intermediate.forEach(id => setStructureVisible(id, false));
+        deep.forEach(id => setStructureVisible(id, true));
+        systemLevels.muscular = 1;
+        updateItemUI('muscular');
+      }
       if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
       if (loaded.includes('nervous')) showSystem('nervous');
       if (loaded.includes('lymphatic')) showSystem('lymphatic');
@@ -107,20 +87,28 @@ export function applyDepth(stage) {
       if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
-    // STAGE 3: Dissect cardiovascular, nervous, lymphatic, reveal viscera & core skeleton
+    // STAGE 3: Dissect entire muscular system, reveal neurovascular, lymphatic & viscera
     else if (stage === 3) {
-      if (loaded.includes('muscular')) hideSystem('muscular');
-      if (loaded.includes('cardiovascular')) hideSystem('cardiovascular');
-      if (loaded.includes('nervous')) hideSystem('nervous');
-      if (loaded.includes('lymphatic')) hideSystem('lymphatic');
+      if (loaded.includes('muscular')) {
+        hideSystem('muscular');
+        systemLevels.muscular = 0;
+        updateItemUI('muscular');
+      }
+      if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
+      if (loaded.includes('nervous')) showSystem('nervous');
+      if (loaded.includes('lymphatic')) showSystem('lymphatic');
       if (loaded.includes('visceral')) showSystem('visceral');
       if (loaded.includes('joints')) showSystem('joints');
       if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
-    // STAGE 4: Dissect thoracic/abdominal viscera, reveal skeletal framework & joints
+    // STAGE 4: Dissect neurovascular, lymphatic & viscera, reveal skeletal framework & joints
     else if (stage === 4) {
-      if (loaded.includes('muscular')) hideSystem('muscular');
+      if (loaded.includes('muscular')) {
+        hideSystem('muscular');
+        systemLevels.muscular = 0;
+        updateItemUI('muscular');
+      }
       if (loaded.includes('cardiovascular')) hideSystem('cardiovascular');
       if (loaded.includes('nervous')) hideSystem('nervous');
       if (loaded.includes('lymphatic')) hideSystem('lymphatic');
@@ -131,7 +119,11 @@ export function applyDepth(stage) {
 
     // STAGE 5: Dissect articular joints, reveal pristine core skeleton
     else if (stage === 5) {
-      if (loaded.includes('muscular')) hideSystem('muscular');
+      if (loaded.includes('muscular')) {
+        hideSystem('muscular');
+        systemLevels.muscular = 0;
+        updateItemUI('muscular');
+      }
       if (loaded.includes('cardiovascular')) hideSystem('cardiovascular');
       if (loaded.includes('nervous')) hideSystem('nervous');
       if (loaded.includes('lymphatic')) hideSystem('lymphatic');
@@ -174,7 +166,6 @@ export function initDepthSlider() {
   let depthRaf = null;
   slider.addEventListener('input', event => {
     const val = Number(event.target.value);
-    // 0ms immediate visual hint feedback
     if (hintEl) {
       hintEl.textContent = DISSECTION_STAGES[val]?.short || `Lớp ${val}`;
     }

@@ -6230,7 +6230,7 @@ body.theme-dark .btn-mini-action:hover {
    SYSTEMS +/- LAYER STEPPER CONTROLLER (Complete Anatomy / Visible Body Style)
    ========================================================================== */
 
-/* 1. Pull Tab on Left Edge */
+/* 1. Pull Tab on Left Edge (Visible Body style) */
 .systems-pull-tab {
   position: absolute;
   top: 45%;
@@ -6242,12 +6242,12 @@ body.theme-dark .btn-mini-action:hover {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(203, 213, 225, 0.85);
   border-left: none;
-  border-radius: 0 14px 14px 0;
-  padding: 8px 4px;
+  border-radius: 0 12px 12px 0;
+  padding: 8px 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
@@ -6258,7 +6258,7 @@ body.theme-dark .btn-mini-action:hover {
   box-shadow: 3px 6px 20px rgba(0, 0, 0, 0.12);
 }
 .systems-pull-tab.drawer-open {
-  transform: translateY(-50%) translateX(112px);
+  transform: translateY(-50%) translateX(126px);
 }
 .tab-body-icon {
   font-size: 15px;
@@ -6276,31 +6276,31 @@ body.theme-dark .btn-mini-action:hover {
 .tab-vertical-text {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   color: #334155;
   letter-spacing: 0.5px;
   white-space: nowrap;
 }
 
-/* 2. Sliding Systems Stepper Panel - Slim Medical Sidebar (Width 112px = 2/3 previous width) */
+/* 2. Sliding Systems Stepper Panel - Slim Medical Sidebar (Width 126px) */
 .systems-stepper-drawer {
   position: absolute;
   top: 48px;
   left: 0;
   bottom: 60px;
-  width: 112px;
-  max-width: 38vw;
+  width: 126px;
+  max-width: 42vw;
   z-index: 1200;
   background: rgba(255, 255, 255, 0.96) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.08);
-  padding: 5px 3px;
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.08);
+  padding: 8px 6px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   overflow-y: auto;
   overflow-x: hidden;
   transform: translateX(-100%);
@@ -6316,8 +6316,8 @@ body.theme-dark .btn-mini-action:hover {
 .stepper-drawer-header {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding-bottom: 3px;
+  gap: 4px;
+  padding-bottom: 5px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.85);
 }
 .stepper-header-title {
@@ -6326,12 +6326,31 @@ body.theme-dark .btn-mini-action:hover {
   justify-content: space-between;
   width: 100%;
 }
-.region-label {
-  font-size: 9px;
+.stepper-views-title {
+  font-size: 11px;
   font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.3px;
+}
+.btn-stepper-nav {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
   color: #475569;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+.btn-stepper-nav:hover {
+  background: #e2e8f0;
+  color: #0f172a;
 }
 .btn-stepper-close {
   width: 18px;
@@ -6352,41 +6371,96 @@ body.theme-dark .btn-mini-action:hover {
   background: #e2e8f0;
   color: #0f172a;
 }
+.stepper-region-label {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  text-align: center;
+  margin-top: 1px;
+}
 .stepper-regions-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2px;
+  gap: 3px;
 }
-.btn-region-chip {
+.btn-region-silhouette {
   flex: 1;
-  height: 22px;
-  border-radius: 4px;
+  height: 30px;
+  border-radius: 5px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
+  color: #64748b;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  transition: background 0.15s, border-color 0.15s;
+  transition: all 0.15s ease;
 }
-.btn-region-chip svg {
-  width: 13px;
-  height: 13px;
-  stroke: #64748b;
-  stroke-width: 1.8px;
+.btn-region-silhouette svg {
   display: block;
 }
-.btn-region-chip.active {
-  background: rgba(14, 165, 233, 0.15);
+.btn-region-silhouette.active {
+  background: rgba(14, 165, 233, 0.14);
   border-color: #0284c7;
+  color: #0284c7;
 }
-.btn-region-chip.active svg {
-  stroke: #0284c7;
+.region-dropdown-wrap {
+  position: relative;
+}
+.btn-region-more {
+  width: 26px;
+  height: 30px;
+  border-radius: 5px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+.btn-region-more:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.region-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  min-width: 120px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+.region-menu-item {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.region-menu-item:hover {
+  background: #f0f9ff;
+  color: #0284c7;
 }
 
-/* 3. System Stepper Item Rows with Clear Vietnamese Labels */
+/* 3. System Stepper Item Rows */
 .stepper-systems-list {
   display: flex;
   flex-direction: column;
@@ -6434,8 +6508,8 @@ body.theme-dark .btn-mini-action:hover {
 }
 .btn-stepper-dec,
 .btn-stepper-inc {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 5px;
   background: #f8fafc;
   border: 1px solid #cbd5e1;
@@ -6463,9 +6537,9 @@ body.theme-dark .btn-mini-action:hover {
   background: #e0f2fe;
 }
 .btn-stepper-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   display: flex;
@@ -6505,18 +6579,52 @@ body.theme-dark .btn-mini-action:hover {
   display: flex;
   gap: 2px;
   width: 100%;
-  padding: 0 2px;
+  padding: 0 3px;
   margin-top: 1px;
 }
 .level-segment {
   flex: 1;
   height: 2.5px;
   border-radius: 1.5px;
-  background: #e2e8f0;
+  background: #cbd5e1;
   transition: background 0.15s;
 }
 .level-segment.filled {
   background: #0284c7;
+}
+
+/* 4. Bottom Footer Tools (Pelvis & Gender) */
+.stepper-drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(226, 232, 240, 0.85);
+}
+.btn-drawer-tool {
+  flex: 1;
+  height: 32px;
+  border-radius: 6px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+.btn-drawer-tool:hover {
+  background: #e2e8f0;
+  color: #0284c7;
+}
+.drawer-tool-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 /* ==========================================================================

@@ -318,5 +318,53 @@ export const ICONS = {
       <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
       <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
     </svg>
+  `,
+
+  silhouetteAnterior: `
+    <svg width="18" height="24" viewBox="0 0 24 30" fill="currentColor">
+      <circle cx="12" cy="3.5" r="2.8"/>
+      <path d="M8.5 8h7c.9 0 1.6.8 1.6 1.7v6.8c0 .7-.5 1.2-1.2 1.2h-.4v10c0 .9-.8 1.6-1.7 1.6h-.8c-.9 0-1.6-.7-1.6-1.6v-9h-.8v9c0 .9-.7 1.6-1.6 1.6h-.8c-.9 0-1.7-.7-1.7-1.6v-10h-.4c-.7 0-1.2-.5-1.2-1.2V9.7C6.9 8.8 7.6 8 8.5 8z"/>
+    </svg>
+  `,
+
+  silhouettePosterior: `
+    <svg width="18" height="24" viewBox="0 0 24 30" fill="currentColor">
+      <circle cx="12" cy="3.5" r="2.8"/>
+      <path d="M8.5 8h7c.9 0 1.6.8 1.6 1.7v6.8c0 .7-.5 1.2-1.2 1.2h-.4v10c0 .9-.8 1.6-1.7 1.6h-.8c-.9 0-1.6-.7-1.6-1.6v-9h-.8v9c0 .9-.7 1.6-1.6 1.6h-.8c-.9 0-1.7-.7-1.7-1.6v-10h-.4c-.7 0-1.2-.5-1.2-1.2V9.7C6.9 8.8 7.6 8 8.5 8z"/>
+      <line x1="12" y1="8.5" x2="12" y2="17.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+  `,
+
+  moreDots: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <circle cx="5" cy="12" r="2.5"/>
+      <circle cx="12" cy="12" r="2.5"/>
+      <circle cx="19" cy="12" r="2.5"/>
+    </svg>
+  `,
+
+  pelvisBox: `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 6c2-2 6-3 8-3s6 1 8 3c0 4-2 7-4 9-2 2-3 4-4 6-1-2-2-4-4-6-2-2-4-5-4-9z"/>
+      <circle cx="12" cy="11" r="2.5"/>
+      <path d="M8 12c1 1.5 2.5 2 4 2s3-.5 4-2"/>
+    </svg>
+  `,
+
+  genderToggle: `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="8" r="3.5"/>
+      <path d="M10.5 5.5l4-3M14.5 2.5h-3M14.5 2.5v3"/>
+      <circle cx="15" cy="15" r="3.5"/>
+      <path d="M15 18.5v4M13 20.5h4"/>
+    </svg>
+  `,
+
+  humanAnatomyWithPlus: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="10" cy="4" r="2.2"/>
+      <path d="M7 8h6l1 6h-1.5v6.5h-3v-6.5h-1v6.5h-3V14H4L7 8z"/>
+      <path d="M19 10v6M16 13h6" stroke-width="2.2"/>
+    </svg>
   `
 };
