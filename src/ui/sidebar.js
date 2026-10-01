@@ -544,6 +544,19 @@ export function initFooterActions(viewer) {
     openAIAssistant(viewer);
   });
 
+  document.getElementById('cardShareBtn')?.addEventListener('click', () => {
+    if (!state.selectedPart) return;
+    const partId = state.selectedPart.id;
+    const sys = state.selectedPart.system || 'skeletal';
+    const currentUrl = `${window.location.origin}/giai-phau-3d#sys=${sys}&sel=${partId}&iso=${partId}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(currentUrl);
+      showToast(`Đã sao chép liên kết góc nhìn 3D của "${state.selectedPart.displayName}"! Có thể gửi cho lớp học 🔗`);
+    } else {
+      prompt('Sao chép liên kết chia sẻ góc nhìn 3D này:', currentUrl);
+    }
+  });
+
   // Card Note Button
   document.getElementById('cardNoteBtn')?.addEventListener('click', () => {
     const noteBox = document.getElementById('cardNoteBox');
