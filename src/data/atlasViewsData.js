@@ -240,6 +240,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/3d/images/atlas/dig_peritoneum.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: -0.15, y: 1.1, z: 0.95, targetX: 0, targetY: 1.1, targetZ: 0 },
+        highlight: 'Gallbladder',
         desc: 'Nhà máy chuyển hóa chất, khử độc và tiết enzym tiêu hóa thức ăn.'
       }
     ]
@@ -257,6 +258,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/3d/images/atlas/circ_full.png',
         systems: ['lymphatic', 'skeletal', 'visceral'],
         camera: { x: -0.25, y: 1.15, z: 0.85, targetX: -0.05, targetY: 1.15, targetZ: 0 },
+        highlight: 'Spleen',
         desc: 'Cơ quan lympho lớn nhất cơ thể lọc máu, tiêu hủy hồng cầu già và sinh tế bào miễn dịch.'
       },
       {
