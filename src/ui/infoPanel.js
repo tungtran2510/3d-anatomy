@@ -179,7 +179,16 @@ export function updateInfoPanelContent(part, viewer) {
     cardSubtitle.textContent = latinName ? `${latinName} • ${systemName}` : systemName;
   }
 
-  // 2. Update Orientation UI Buttons
+  // 2. Core Anatomical Explanation (Là gì, Ý nghĩa là gì, Liên kết ra sao - Ưu tiên ở trên đầu)
+  const explainDesc = document.getElementById('cardExplainDesc');
+  const explainFunc = document.getElementById('cardExplainFunc');
+  const explainRel = document.getElementById('cardExplainRel');
+
+  if (explainDesc) explainDesc.textContent = clinical.description || 'Đang cập nhật thông tin giải phẫu học...';
+  if (explainFunc) explainFunc.textContent = clinical.function || 'Đang cập nhật chức năng sinh lý & cơ học...';
+  if (explainRel) explainRel.textContent = clinical.relationsText || 'Đang cập nhật liên kết giải phẫu...';
+
+  // 3. Update Orientation UI Buttons
   updateOrientationButtons();
 
   // 3. Render Interactive Anatomical Hierarchy Tree (Visible Body Standard: Photo 5)
@@ -349,15 +358,28 @@ function speakCurrentStructure() {
   if (!part) return;
 
   const clinical = getClinicalData(part.id);
-  const textToSpeak = clinical.nameLatin || clinical.nameVi || part.displayName || part.id;
+  const textToSpeak = clinical.speakTextVi || clinical.nameVi || part.displayName || part.id;
+  const cleanSpeech = textToSpeak
+    .replace(/\(.*?\)/g, '')
+    .replace(/[._]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = 'la'; // Latin for medical anatomical nomenclature
-    utterance.rate = 0.85;
+    const utterance = new SpeechSynthesisUtterance(cleanSpeech);
+    utterance.lang = 'vi-VN';
+    utterance.rate = 0.9;
+
+    // Select Vietnamese voice if available in browser
+    const voices = window.speechSynthesis.getVoices();
+    const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang.startsWith('vi'));
+    if (viVoice) {
+      utterance.voice = viVoice;
+    }
+
     window.speechSynthesis.speak(utterance);
-    showToast(`🔊 Đang phát âm: ${textToSpeak}`);
+    showToast(`🔊 Đang đọc: ${cleanSpeech}`);
   } else {
     showToast('Trình duyệt không hỗ trợ tổng hợp giọng nói Web Speech.');
   }

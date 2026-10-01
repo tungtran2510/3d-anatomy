@@ -2,9 +2,52 @@
 // Standardized in Vietnamese, Latin (TA2), English
 // Features: Anatomical Description, Biomechanical Function, Clinical Pathology,
 // and 4-way Anatomical Relations (Cơ - Xương - Thần kinh - Mạch máu)
-import { getVietnameseName } from './vietnamese.js';
+import { getVietnameseName, getAnatomyNomenclature } from './vietnamese.js';
 
 export const CLINICAL_DATABASE = {
+  // === ĐẦU - VÒM SỌ & MẠC DA ĐẦU (HEAD & SCALP) ===
+  'Epicranial aponeurosis': {
+    nameVi: 'Cân trên sọ',
+    nameLatin: 'Galea aponeurotica (TA2: 2010)',
+    nameEn: 'Epicranial aponeurosis',
+    regionVi: 'Đầu - Vòm sọ & Da đầu',
+    systemVi: 'Hệ Cơ & Mạc Đầu Mặt',
+    description: 'Lớp cân mô liên kết sợi collagen dày, chắc phủ toàn bộ vòm sọ, liên kết trực tiếp bụng trán và bụng chẩm của cơ chẩm trán, tạo nên lớp thứ 3 bền vững của da đầu (SCALP).',
+    function: 'Làm điểm tựa truyền lực căng cho cơ chẩm trán để cử động nhăn trán, nâng cung mày; đồng thời là lá chắn cơ học bảo vệ xương sọ và mạch máu dưới da đầu chống lại lực ma sát va chạm.',
+    relationsText: 'Phía trên dính chặt vào lớp da và mô mỡ dưới da; trượt tự do trên lớp mô liên kết lỏng lẻo phủ ngoài màng xương sọ; phía trước liên tục với cơ trán, phía sau bám vào cơ chẩm và mào chẩm ngoài.',
+    clinical: 'Là mốc giải phẫu then chốt trong chấn thương rách da đầu (khi vết thương đứt qua cân trên sọ, cơ co kéo làm miệng vết thương toác rộng, chảy máu nhiều) và là lớp phân chia phẫu thuật bóc tách vạt da đầu an toàn.',
+    relations: {
+      muscles: 'Bụng trán & bụng chẩm của cơ chẩm trán (Occipitofrontalis), cơ thái dương đỉnh (Temporoparietalis).',
+      bones: 'Trượt phía trên vòm sọ gồm xương trán (Frontal), xương đỉnh (Parietal) và xương chẩm (Occipital).',
+      nerves: 'Thần kinh trên ổ mắt (Supratrochlear), thần kinh trên ròng rọc, thần kinh tai thái dương và thần kinh chẩm lớn.',
+      vessels: 'Mạng lưới nối phong phú của động mạch trên ổ mắt, động mạch thái dương nông và động mạch chẩm.'
+    },
+    lessonLink: '/giai-phau-dau-mat/can-tren-so',
+    lessonTitle: 'Cân Trên Sọ (Galea Aponeurotica): Cấu Trúc & Ứng Dụng Phẫu Thuật',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Galea aponeurotica': {
+    nameVi: 'Cân trên sọ',
+    nameLatin: 'Galea aponeurotica (TA2: 2010)',
+    nameEn: 'Epicranial aponeurosis',
+    regionVi: 'Đầu - Vòm sọ & Da đầu',
+    systemVi: 'Hệ Cơ & Mạc Đầu Mặt',
+    description: 'Lớp cân mô liên kết sợi collagen dày, chắc phủ toàn bộ vòm sọ, liên kết trực tiếp bụng trán và bụng chẩm của cơ chẩm trán, tạo nên lớp thứ 3 bền vững của da đầu (SCALP).',
+    function: 'Làm điểm tựa truyền lực căng cho cơ chẩm trán để cử động nhăn trán, nâng cung mày; đồng thời là lá chắn cơ học bảo vệ xương sọ và mạch máu dưới da đầu chống lại lực ma sát va chạm.',
+    relationsText: 'Phía trên dính chặt vào lớp da và mô mỡ dưới da; trượt tự do trên lớp mô liên kết lỏng lẻo phủ ngoài màng xương sọ; phía trước liên tục với cơ trán, phía sau bám vào cơ chẩm và mào chẩm ngoài.',
+    clinical: 'Là mốc giải phẫu then chốt trong chấn thương rách da đầu (khi vết thương đứt qua cân trên sọ, cơ co kéo làm miệng vết thương toác rộng, chảy máu nhiều) và là lớp phân chia phẫu thuật bóc tách vạt da đầu an toàn.',
+    relations: {
+      muscles: 'Bụng trán & bụng chẩm của cơ chẩm trán (Occipitofrontalis), cơ thái dương đỉnh (Temporoparietalis).',
+      bones: 'Trượt phía trên vòm sọ gồm xương trán (Frontal), xương đỉnh (Parietal) và xương chẩm (Occipital).',
+      nerves: 'Thần kinh trên ổ mắt (Supratrochlear), thần kinh trên ròng rọc, thần kinh tai thái dương và thần kinh chẩm lớn.',
+      vessels: 'Mạng lưới nối phong phú của động mạch trên ổ mắt, động mạch thái dương nông và động mạch chẩm.'
+    },
+    lessonLink: '/giai-phau-dau-mat/can-tren-so',
+    lessonTitle: 'Cân Trên Sọ (Galea Aponeurotica): Cấu Trúc & Ứng Dụng Phẫu Thuật',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
   // === CỘT SỐNG & THÂN MÌNH (SPINE & TRUNK) ===
   'Lumbar vertebra': {
     nameVi: 'Đốt sống thắt lưng (L1 - L5)',
@@ -614,38 +657,95 @@ export const CLINICAL_DATABASE = {
 
 /**
  * Intelligent Academic Anatomical Lookup with Fallback
- * Generates accurate anatomical metadata and 4-way relations for ANY mesh in the 3D atlas
+ * Generates accurate anatomical metadata, 3-tier core explanation (Là gì, Ý nghĩa là gì, Liên kết ra sao),
+ * clean medical pronunciation, and 4-way relations for ANY mesh in the 3D atlas
  */
 export function getClinicalData(partId, baseName) {
   if (!partId && !baseName) return null;
 
-  // 1. Direct hit on clinical database
-  if (CLINICAL_DATABASE[partId]) return CLINICAL_DATABASE[partId];
-  if (baseName && CLINICAL_DATABASE[baseName]) return CLINICAL_DATABASE[baseName];
+  const raw = baseName || partId;
+  const nom = getAnatomyNomenclature(raw);
+
+  // 1. Direct hit on clinical database (by full partId, baseName, or cleanBase)
+  let matched = CLINICAL_DATABASE[partId] || (baseName && CLINICAL_DATABASE[baseName]) || CLINICAL_DATABASE[nom.cleanBase];
 
   // 2. Keyword substring hit
-  const target = `${partId} ${baseName || ''}`.toLowerCase();
-  for (const [key, data] of Object.entries(CLINICAL_DATABASE)) {
-    if (target.includes(key.toLowerCase())) {
-      return data;
+  if (!matched) {
+    const target = `${partId} ${baseName || ''} ${nom.cleanBase}`.toLowerCase();
+    for (const [key, data] of Object.entries(CLINICAL_DATABASE)) {
+      if (target.includes(key.toLowerCase()) || key.toLowerCase().includes(nom.cleanBase.toLowerCase())) {
+        matched = data;
+        break;
+      }
     }
   }
 
-  // 3. Fallback inference based on anatomical region & naming pattern
-  return generateFallbackAcademicData(partId, baseName);
+  if (matched) {
+    const result = { ...matched, relations: { ...matched.relations } };
+    if (nom.side) {
+      if (!result.nameVi.includes(nom.sideLabelVi)) {
+        result.nameVi = `${result.nameVi} (${nom.sideLabelVi})`;
+      }
+      if (!result.nameLatin.includes(nom.sideLatin)) {
+        result.nameLatin = `${result.nameLatin} (${nom.sideLatin})`;
+      }
+      if (!result.nameEn.includes(nom.sideEn)) {
+        result.nameEn = `${result.nameEn} (${nom.sideEn})`;
+      }
+      result.speakTextVi = `${matched.nameVi} ${nom.sideSpeechVi}`;
+    } else {
+      result.speakTextVi = matched.nameVi;
+    }
+
+    result.speakTextVi = result.speakTextVi.replace(/\(.*?\)/g, '').replace(/[._]/g, ' ').replace(/\s+/g, ' ').trim();
+
+    if (!result.relationsText) {
+      const rel = result.relations;
+      result.relationsText = `Tiếp giáp và liên kết với: Cơ (${rel?.muscles || 'mô cơ vùng'}). Xương (${rel?.bones || 'khung xương lân cận'}). Thần kinh (${rel?.nerves || 'nhánh thần kinh khu vực'}). Mạch máu (${rel?.vessels || 'mạng mạch nuôi dưỡng'}).`;
+    }
+    return result;
+  }
+
+  // 3. Fallback academic anatomical inference
+  return generateFallbackAcademicData(partId, baseName, nom);
 }
 
-function generateFallbackAcademicData(partId, baseName) {
-  const name = baseName || partId || 'Cấu trúc giải phẫu';
-  const nameVi = getVietnameseName(name) || name;
-  const lower = name.toLowerCase();
+function generateFallbackAcademicData(partId, baseName, passedNom) {
+  const nom = passedNom || getAnatomyNomenclature(baseName || partId);
+  const nameVi = nom.nameVi;
+  const nameLatin = nom.nameLatin;
+  const nameEn = nom.nameEn;
+  const speakTextVi = (nom.speakTextVi || nom.nameVi).replace(/\(.*?\)/g, '').replace(/[._]/g, ' ').replace(/\s+/g, ' ').trim();
+  const cleanBase = nom.cleanBase;
+  const lower = cleanBase.toLowerCase();
 
-  let regionVi = 'Thân mình & Chi';
+  // 1. Regional inference
+  let regionVi = 'Thân mình & Tứ chi';
+  if (/cran|scalp|head|face|facial|front|pariet|occipit|tempor|nasal|oral|eye|orbit|ear|mandib|maxill|zygomat|bucc|mental|masseter/i.test(lower)) {
+    regionVi = 'Đầu & Mặt';
+  } else if (/neck|cervic|throat|laryng|pharyng|thyroid|carotid|jugular|hyoid|platysma/i.test(lower)) {
+    regionVi = 'Cổ';
+  } else if (/thorac|chest|rib|costal|sternum|pectoral|intercostal|mediastin|heart|cardio|aort|pulmon|lung|pleura/i.test(lower)) {
+    regionVi = 'Lồng ngực';
+  } else if (/abdomin|stomach|gastr|liver|hepat|gall|pancrea|spleen|splen|intestin|duoden|jejun|ileum|colon|mesenter|omentum/i.test(lower)) {
+    regionVi = 'Ổ bụng';
+  } else if (/pelvi|sacr|coccyx|pubi|isch|iliac|bladder|ureter|urethr|prostat|uter|ovary|rectum/i.test(lower)) {
+    regionVi = 'Chậu hông & Đáy chậu';
+  } else if (/vertebra|spine|spinal|disc|erector|multifidus/i.test(lower)) {
+    regionVi = 'Cột sống & Lưng';
+  } else if (/scapul|clavicl|shoulder|deltoid|axill|brachi|arm|humerus|radius|ulna|forearm|carpal|wrist|metacarpal|hand|finger/i.test(lower)) {
+    regionVi = 'Chi trên (Vai - Tay)';
+  } else if (/hip|glute|femur|thigh|quadricep|hamstring|patella|knee|poplite|tibia|fibula|leg|calf|soleus|gastrocn|ankle|tarsal|calcane|talus|metatarsal|foot|toe/i.test(lower)) {
+    regionVi = 'Chi dưới (Hông - Chân)';
+  }
+
+  // 2. Tissue & System classification
   let systemVi = 'Hệ Giải Phẫu';
-  let desc = `Cấu trúc giải phẫu ${nameVi} (${name}), định danh trong hệ thống Terminologia Anatomica 2.`;
-  let func = 'Đóng vai trò quan trọng trong việc nâng đỡ, vận động và định hình giải phẫu học cơ thể.';
-  let clin = 'Cần được bảo vệ và tập luyện duy trì biên độ chuyển động tự nhiên; tránh chấn thương do sai tư thế kéo dài.';
-  let lessonLink = '/cot-song/tu-the-va-van-dong';
+  let desc = `Cấu trúc giải phẫu ${nameVi} (${cleanBase}), định danh quốc tế theo Terminologia Anatomica.`;
+  let func = 'Đóng vai trò quan trọng trong việc nâng đỡ cấu trúc, truyền lực cơ học hoặc tham gia điều hòa sinh lý cơ thể.';
+  let relationsText = `Nằm tại phân vùng ${regionVi}, tiếp giáp các bó cơ, màng xương và được cấp máu bởi mạng vi mạch thần kinh lân cận.`;
+  let clin = 'Cần được bảo vệ tránh chấn thương trực tiếp, viêm dính mô hạt hoặc chèn ép cơ học kéo dài.';
+  let lessonLink = '/giai-phau-tong-quan';
   let lessonTitle = 'Kiến Thức Giải Phẫu & Vận Động Đúng';
 
   let muscles = 'Liên kết với các bó cơ sâu và màng cơ cục bộ quanh vùng giải phẫu.';
@@ -653,43 +753,129 @@ function generateFallbackAcademicData(partId, baseName) {
   let nerves = 'Được chi phối bởi các nhánh thần kinh ngoại biên tương ứng theo từng đốt tủy.';
   let vessels = 'Được nuôi dưỡng bởi các nhánh động mạch và mạng lưới vi mạch cục bộ.';
 
-  if (lower.includes('vertebra') || lower.includes('spine') || lower.includes('disc')) {
-    regionVi = 'Cột sống';
-    systemVi = 'Hệ Xương & Đĩa Đệm';
-    desc = 'Thuộc trục cột sống, cấu tạo gồm thân đốt xương xốp, cuống cung, mỏm gai và mỏm ngang.';
-    func = 'Chịu tải trọng trục cơ thể, bảo vệ tủy gai và cho phép cử động uốn cong thân mình.';
-    clin = 'Dễ thoái hóa hoặc thoát vị đĩa đệm nếu ngồi sai tư thế hoặc mang vác vật nặng sai kỹ thuật.';
-    muscles = 'Cơ dựng sống (Erector spinae), cơ nhiều chân (Multifidus), cơ liên gai.';
-    bones = 'Khớp gian thân đốt sống (đĩa đệm) và khớp liên mỏm gai.';
-    nerves = 'Rễ thần kinh gai sống thoát ra từ lỗ gian đốt sống.';
-    vessels = 'Các nhánh động mạch gian đốt sống và đám rối tĩnh mạch đốt sống trong/ngoài.';
-    lessonLink = '/cot-song/tu-the-va-van-dong';
-    lessonTitle = 'Cột Sống: Tư Thế & Vận Động Đúng';
-  } else if (lower.includes('muscle') || lower.includes('cơ')) {
-    systemVi = 'Hệ Cơ bắp';
-    desc = 'Mô cơ vân có khả năng co rút sinh công lực, bám vào xương qua gân.';
-    func = 'Tạo lực vận động các khớp, duy trì tư thế đứng và sinh nhiệt cho cơ thể.';
-    clin = 'Căng cơ, co thắt cơ mạn tính (Trigger points), teo cơ do bất động lâu ngày.';
-  } else if (lower.includes('artery') || lower.includes('vein') || lower.includes('mạch')) {
-    systemVi = 'Hệ Tim mạch';
-    desc = 'Ống dẫn máu có thành đàn hồi vận chuyển oxy và dưỡng chất đi nuôi mô bào.';
-    func = 'Đảm bảo tưới máu liên tục cho các cơ quan và hồi lưu máu về tim.';
-    clin = 'Xơ vữa động mạch, huyết khối tĩnh mạch sâu, suy giãn tĩnh mạch.';
-  } else if (lower.includes('liver') || lower.includes('gall') || lower.includes('pancrea') || lower.includes('digest')) {
+  const isFascia = nameVi.startsWith('Cân') || nameVi.startsWith('Mạc') || nameVi.startsWith('Hãm gân') || /aponeurosis|fascia|retinaculum|sheath/i.test(lower);
+  const isMuscle = !isFascia && (nameVi.startsWith('Cơ') || /muscle|belly|head of |adductor|abductor|extensor|flexor|pronator|supinator|levator|depressor|tensor|rotator|platysma|sartorius|gracilis|masseter|temporalis|trapezius|latissimus|deltoid|pectoralis|biceps|triceps|quadriceps|gastrocnemius|soleus|gluteus|psoas|iliacus|scalenus|splenius|rhomboid|infraspinatus|supraspinatus/i.test(lower));
+  const isBoneJoint = nameVi.startsWith('Xương') || nameVi.startsWith('Sụn') || nameVi.startsWith('Khớp') || nameVi.startsWith('Dây chằng') || nameVi.startsWith('Đốt sống') || /bone|\bos\b|vertebra|process|tubercle|spine|crest|cartilage|meniscus|joint|ligament/i.test(lower);
+  const isArtery = nameVi.startsWith('Động mạch') || /artery|aort|trunk/i.test(lower);
+  const isVein = nameVi.startsWith('Tĩnh mạch') || /vein|vena|sinus/i.test(lower);
+  const isNerve = nameVi.startsWith('Dây thần kinh') || nameVi.startsWith('Thần kinh') || /nerve|plexus|ganglion|\bcord\b/i.test(lower);
+  const isLymph = nameVi.startsWith('Hạch') || nameVi.startsWith('Bạch huyết') || nameVi.startsWith('Ống ngực') || /\b(?:lymph|lymphatic|cisterna|thoracic duct)\b/i.test(lower) || (/\bnode\b/i.test(lower) && !isMuscle && !isBoneJoint);
+  const isResp = nameVi.includes('Phổi') || nameVi.includes('Khí quản') || /lung|bronch|trachea|pleura/i.test(lower);
+  const isDigest = nameVi.includes('Dạ dày') || nameVi.includes('Gan') || nameVi.includes('Mật') || nameVi.includes('Tụy') || nameVi.includes('Ruột') || /stomach|liver|gall|pancrea|intestin|colon|duct|oesophag|esophag/i.test(lower);
+  const isUrinary = nameVi.includes('Thận') || nameVi.includes('Bàng quang') || nameVi.includes('Niệu') || /kidney|ureter|bladder|urethr|prostat/i.test(lower);
+
+  if (isFascia) {
+    systemVi = 'Hệ Cơ & Mạc Liên Kết';
+    desc = `Lớp mô liên kết sợi collagen dày đặc và bền chắc ${nameVi} (${cleanBase}), tạo thành màng bọc bảo vệ hoặc bản gân dẹt.`;
+    func = 'Phân bố lực kéo cơ học đồng đều, cố định hướng trượt của các gân cơ, giảm ma sát chuyển động và duy trì khoang giải phẫu vững chắc.';
+    relationsText = `Bao phủ bên ngoài hoặc xen giữa các nhóm cơ vùng ${regionVi}; bám chặt vào màng xương và liên tục với các vách gian cơ lân cận.`;
+    muscles = 'Bao bọc các bó cơ lân cận, định hình hướng co cơ.';
+    bones = 'Bám chắc vào các gờ xương, mào xương hoặc mỏm xương lân cận.';
+    nerves = 'Chứa nhiều thụ thể nhận cảm bản thể (proprioception) và nhánh thần kinh cảm giác.';
+    vessels = 'Mạng vi mạch tưới máu từ mô liên kết bao quanh.';
+    clin = 'Viêm cân mạc (fasciitis), co rút mô sợi, dày dính sau phẫu thuật hoặc hội chứng chèn ép khoang cơ.';
+  } else if (isMuscle) {
+    systemVi = 'Hệ Cơ Bắp';
+    desc = `Khối mô cơ vân ${nameVi} (${cleanBase}) gồm các bó sợi cơ có khả năng co rút chủ động sinh công động lực.`;
+    func = 'Tạo lực vận động các khớp xương, ổn định tư thế giải phẫu, hỗ trợ bơm máu tĩnh mạch và sinh nhiệt nội sinh.';
+    relationsText = `Xuất phát từ nguyên ủy trên xương/mạc, đi qua khớp và bám tận vào xương đích tại vùng ${regionVi}; tiếp giáp bao thần kinh mạch máu.`;
+    muscles = 'Phối hợp với các cơ đồng vận và đối kháng trong chuỗi động học khu vực.';
+    bones = 'Bám vào mấu xương qua gân cơ, tạo đòn bẩy cử động.';
+    nerves = 'Được chi phối vận động và cảm giác bởi các sợi thần kinh vận động tương ứng.';
+    vessels = 'Được tưới máu dồi dào bởi nhánh động mạch cơ và mạng mao mạch dày đặc.';
+    clin = 'Căng rách sợi cơ, co thắt mạn tính hình thành điểm đau (Trigger points), teo cơ do bất động lâu ngày.';
+  } else if (isBoneJoint) {
+    systemVi = (nameVi.startsWith('Sụn') || /cartilage|meniscus/i.test(lower)) ? 'Hệ Sụn Khớp' : ((nameVi.startsWith('Dây chằng') || /ligament/i.test(lower)) ? 'Hệ Dây Chằng' : 'Hệ Xương');
+    desc = `Cấu trúc xương/sụn vững chắc ${nameVi} (${cleanBase}), cấu tạo từ khung chất nền khoáng hóa và tế bào chuyên biệt.`;
+    func = 'Chịu tải trọng cơ học của cơ thể, tạo khung nâng đỡ, bảo vệ tạng bên trong và làm điểm tựa đòn bẩy cho hệ cơ.';
+    relationsText = `Tiếp khớp với các cấu trúc xương lân cận qua diện khớp tại vùng ${regionVi}; là nơi bám chắc của các dây chằng và gân cơ.`;
+    muscles = 'Cung cấp diện bám chắc chắn cho gân của các cơ vận động.';
+    bones = 'Khớp nối với các xương kế cận trong trục giải phẫu.';
+    nerves = 'Màng xương được chi phối dày đặc bởi các sợi thần kinh cảm giác dẫn truyền đau.';
+    vessels = 'Được nuôi dưỡng bởi động mạch màng xương và nhánh mạch nuôi xương sâu.';
+    clin = 'Gãy nứt do chấn thương, viêm màng xương, thoái hóa bề mặt sụn khớp hoặc lỏng lẻo dây chằng.';
+  } else if (isArtery) {
+    systemVi = 'Hệ Tim Mạch (Động Mạch)';
+    desc = `Mạch máu động mạch đàn hồi ${nameVi} (${cleanBase}) vận chuyển máu giàu oxy và chất dinh dưỡng nuôi mô bào.`;
+    func = `Dẫn máu từ tim đến phân phối liên tục cho các cơ quan vùng ${regionVi}, duy trì huyết áp và tưới máu mô.`;
+    relationsText = `Đi trong bao mạch thần kinh cùng tĩnh mạch đồng hành và dây thần kinh khu vực ${regionVi}; phân nhánh cấp máu sâu.`;
+    muscles = 'Chạy dọc theo bờ các cơ mốc định vị giải phẫu.';
+    bones = 'Nằm sát rãnh xương hoặc uốn quanh các mỏm xương.';
+    nerves = 'Đi song song với các nhánh thần kinh ngoại biên cùng tên.';
+    vessels = 'Nối tiếp với mạng lưới động mạch kế cận tạo vòng tuần hoàn bàng hệ.';
+    clin = 'Xơ vữa thành mạch, hẹp tắc mạch gây thiếu máu cục bộ, phình mạch hoặc rách vỡ chấn thương.';
+  } else if (isVein) {
+    systemVi = 'Hệ Tim Mạch (Tĩnh Mạch)';
+    desc = `Mạch máu tĩnh mạch có van một chiều ${nameVi} (${cleanBase}), thu gom máu nghèo oxy từ mô bào.`;
+    func = 'Dẫn lưu máu hồi lưu về tim phải, tham gia điều hòa áp lực dịch kẽ và điều hòa thân nhiệt.';
+    relationsText = `Đi kèm theo động mạch cùng tên hoặc nằm nông dưới da vùng ${regionVi}; đổ dần về các thân tĩnh mạch lớn hơn.`;
+    muscles = 'Được các khối cơ xung quanh ép cơ học hỗ trợ dòng hồi lưu.';
+    bones = 'Nằm áp sát xương hoặc trong các rãnh tĩnh mạch sọ/xương.';
+    nerves = 'Đi cùng bao mô liên kết với các sợi thần kinh cảm giác.';
+    vessels = 'Nối thông phong phú với các tĩnh mạch nông và sâu lân cận.';
+    clin = 'Huyết khối tĩnh mạch sâu (DVT), suy giãn van tĩnh mạch, viêm tắc tĩnh mạch huyết khối.';
+  } else if (isNerve) {
+    systemVi = 'Hệ Thần Kinh';
+    desc = `Dây/đám rối thần kinh ngoại biên ${nameVi} (${cleanBase}) chứa hàng ngàn sợi trục dẫn truyền xung động thần kinh.`;
+    func = 'Chỉ huy vận động co cơ chủ động, truyền cảm giác xúc giác/đau/nhiệt về thần kinh trung ương và điều hòa tự chủ.';
+    relationsText = `Chạy trong khoang liên cơ hoặc bao mạch thần kinh vùng ${regionVi}; chia nhánh tận chi phối các cơ và da tương ứng.`;
+    muscles = 'Phân nhánh tận tạo synap bản vận động trên sợi cơ.';
+    bones = 'Chui qua các lỗ, ống xương hoặc rãnh xương.';
+    nerves = 'Xuất phát từ rễ thần kinh gai sống hoặc dây thần kinh sọ não.';
+    vessels = 'Được nuôi dưỡng bởi mạng vi mạch thần kinh riêng biệt (Vasa nervorum).';
+    clin = 'Hội chứng chèn ép thần kinh (tê bì, teo cơ, mất phản xạ), viêm đa dây thần kinh, đụng dập chấn thương.';
+  } else if (isLymph) {
+    systemVi = 'Hệ Bạch Huyết & Miễn Dịch';
+    desc = `Cấu trúc hạch/mạch bạch huyết ${nameVi} (${cleanBase}) thuộc mạng lưới miễn dịch và thanh thải dịch kẽ cơ thể.`;
+    func = 'Lọc sạch dịch bạch huyết, nhận diện và bắt giữ kháng nguyên lạ/vi khuẩn, sinh lympho bào và hoàn lưu dịch kẽ dư thừa.';
+    relationsText = `Xếp thành chuỗi dọc theo các mạch máu lớn vùng ${regionVi}; liên kết hệ thống mao mạch bạch huyết nông và sâu.`;
+    muscles = 'Nằm trong lớp mỡ lỏng lẻo giữa các cân mạc cơ.';
+    bones = 'Tựa vào các hõm xương và vùng tam giác giải phẫu an toàn.';
+    nerves = 'Được phân bố sợi thần kinh tự chủ điều hòa trương lực thành mạch.';
+    vessels = 'Dẫn lưu dịch kẽ từ mao mạch và đổ về hệ thống tĩnh mạch lớn.';
+    clin = 'Viêm sưng hạch phản ứng (Lymphadenitis), phù bạch huyết do tắc dòng dẫn lưu, di căn hạch ung thư.';
+  } else if (isResp) {
+    systemVi = 'Hệ Hô Hấp';
+    desc = `Cơ quan hô hấp ${nameVi} (${cleanBase}) có cấu trúc phế nang hoặc ống dẫn khí đàn hồi.`;
+    func = 'Dẫn khí, sưởi ấm, lọc sạch không khí và thực hiện trao đổi khí O2 - CO2 giữa phế nang và mao mạch.';
+    relationsText = `Nằm trong khoang lồng ngực vùng ${regionVi}; áp sát màng phổi và các tạng trung thất.`;
+    muscles = 'Phối hợp với cơ hoành và các cơ gian sườn trong chu kỳ hô hấp.';
+    bones = 'Được bảo vệ bên ngoài bởi lồng ngực gồm xương sườn và xương ức.';
+    nerves = 'Chi phối bởi đám rối thần kinh phổi và dây thần kinh hoành.';
+    vessels = 'Tuần hoàn kép gồm động mạch phổi (chức phận) và động mạch phế quản (dinh dưỡng).';
+    clin = 'Viêm phổi, hen phế quản, tràn dịch/tràn khí màng phổi, giãn phế quản.';
+  } else if (isDigest) {
     systemVi = 'Hệ Tiêu Hóa & Gan Mật';
-    desc = 'Cơ quan tiêu hóa và chuyển hóa trong ổ bụng, tiết dịch và hấp thu dưỡng chất.';
-    func = 'Chuyển hóa dinh dưỡng, tiêu hóa mỡ thức ăn và duy trì năng lượng cơ thể.';
-    clin = 'Dễ bị viêm nhiễm cấp tính, sỏi hoặc rối loạn chức năng tiêu hóa nếu ăn uống mất cân bằng.';
+    desc = `Cơ quan tiêu hóa ${nameVi} (${cleanBase}) cấu tạo từ nhiều tầng biểu mô, tuyến tiết dịch và cơ trơn co bóp.`;
+    func = 'Tiêu hóa thức ăn, tiết dịch enzyme phân giải chất hữu cơ, hấp thu dưỡng chất và chuyển hóa nội môi.';
+    relationsText = `Nằm trong khoang phúc mạc ổ bụng vùng ${regionVi}; được treo và cố định bởi mạc nối, mạc treo.`;
+    muscles = 'Thành tạng có lớp cơ trơn co bóp tạo sóng nhu động.';
+    bones = 'Được bảo vệ một phần bởi khung sườn dưới và khung chậu.';
+    nerves = 'Chi phối bởi hệ thần kinh phế vị (Thần kinh X) và đám rối tạng tự chủ.';
+    vessels = 'Cấp máu bởi các thân động mạch tạng xuất phát từ động mạch chủ bụng.';
+    clin = 'Viêm loét tiêu hóa, sỏi đường mật, tắc ruột, rối loạn tiêu hóa và hấp thu.';
+  } else if (isUrinary) {
+    systemVi = 'Hệ Tiết Niệu & Sinh Dục';
+    desc = `Cơ quan tiết niệu ${nameVi} (${cleanBase}) cấu tạo từ mô lọc chuyên biệt (nephron) và ống dẫn nước tiểu.`;
+    func = 'Lọc máu đào thải chất cặn bã chuyển hóa, cân bằng nước điện giải, điều hòa huyết áp và dẫn truyền nước tiểu.';
+    relationsText = `Nằm sau phúc mạc hoặc trong tiểu khung vùng ${regionVi}; tiếp giáp các bó cơ thành bụng sau và mạch chậu.`;
+    muscles = 'Tiếp giáp cơ thắt lưng lớn, cơ vuông thắt lưng và cơ đáy chậu.';
+    bones = 'Được che chở bởi xương sườn 11-12 hoặc khung chậu xương.';
+    nerves = 'Đám rối thận và đám rối hạ vị điều hòa bài tiết và co bóp.';
+    vessels = 'Được cấp máu áp lực cao trực tiếp từ động mạch thận / động mạch chậu.';
+    clin = 'Sỏi thận tiết niệu, viêm đường tiết niệu, suy thận, ứ nước bể thận.';
   }
 
   return {
-    nameVi: nameVi,
-    nameLatin: `${name} (Terminologia Anatomica)`,
-    nameEn: name,
+    nameVi,
+    nameLatin,
+    nameEn,
+    speakTextVi,
     regionVi,
     systemVi,
     description: desc,
     function: func,
+    relationsText,
     clinical: clin,
     relations: {
       muscles,

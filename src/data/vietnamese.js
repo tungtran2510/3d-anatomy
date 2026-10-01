@@ -236,8 +236,54 @@ const EXACT_DICTIONARY = {
   'Vagus nerve': 'Dây thần kinh phế vị (TK X)',
   'Trigeminal nerve': 'Dây thần kinh sinh ba (TK V)',
   'Facial nerve': 'Dây thần kinh mặt (TK VII)',
-  'Optic nerve': 'Dây thần kinh thị giác (TK II)',
-  'Olfactory nerve': 'Dây thần kinh khứu giác (TK I)'
+  'Olfactory nerve': 'Dây thần kinh khứu giác (TK I)',
+
+  // --- HEAD & FACE MUSCLES, FASCIAS & APONEUROSES ---
+  'Epicranial aponeurosis': 'Cân trên sọ',
+  'Galea aponeurotica': 'Cân trên sọ',
+  'Occipitofrontalis': 'Cơ chẩm trán',
+  'Occipitofrontalis muscle': 'Cơ chẩm trán',
+  'Frontalis': 'Cơ trán (Bụng trán cơ chẩm trán)',
+  'Occipitalis': 'Cơ chẩm (Bụng chẩm cơ chẩm trán)',
+  'Frontal belly of occipitofrontalis': 'Bụng trán (Cơ chẩm trán)',
+  'Occipital belly of occipitofrontalis': 'Bụng chẩm (Cơ chẩm trán)',
+  'Temporoparietalis': 'Cơ thái dương đỉnh',
+  'Temporoparietal fascia': 'Mạc thái dương đỉnh',
+  'Temporal fascia': 'Mạc thái dương',
+  'Platysma': 'Cơ bám da cổ',
+  'Orbicularis oculi': 'Cơ vòng mắt',
+  'Orbicularis oris': 'Cơ vòng miệng',
+  'Buccinator': 'Cơ mút',
+  'Zygomaticus major': 'Cơ gò má lớn',
+  'Zygomaticus minor': 'Cơ gò má bé',
+  'Risorius': 'Cơ cười',
+  'Levator labii superioris': 'Cơ nâng môi trên',
+  'Depressor labii inferioris': 'Cơ hạ môi dưới',
+  'Depressor anguli oris': 'Cơ hạ góc miệng',
+  'Mentalis': 'Cơ cằm',
+  'Corrugator supercilii': 'Cơ cau mày',
+  'Procerus': 'Cơ tháp',
+  'Nasalis': 'Cơ mũi',
+  'Medial pterygoid': 'Cơ chân bướm trong',
+  'Lateral pterygoid': 'Cơ chân bướm ngoài',
+
+  // --- FASCIAS, LIGAMENTS & TRUNK ---
+  'Thoracolumbar fascia': 'Mạc ngực thắt lưng',
+  'Fascia lata': 'Mạc rộng đùi',
+  'Iliotibial tract': 'Dải chậu chày',
+  'Plantar aponeurosis': 'Cân gan chân',
+  'Palmar aponeurosis': 'Cân gan tay',
+  'Linea alba': 'Đường trắng giữa bụng',
+  'Rectus sheath': 'Bao cơ thẳng bụng',
+  'Inguinal ligament': 'Dây chằng bẹn',
+  'Flexor retinaculum': 'Hãm gân gấp',
+  'Extensor retinaculum': 'Hãm gân duỗi',
+  'Cervical vertebra': 'Đốt sống cổ',
+  'Thoracic vertebra': 'Đốt sống ngực',
+  'Lumbar vertebra': 'Đốt sống thắt lưng',
+  'Intervertebral disc': 'Đĩa đệm gian đốt sống',
+  'Right lymphatic duct': 'Ống bạch huyết phải',
+  'Cisterna chyli': 'Bể dưỡng chấp'
 };
 
 // Morphological glossary for compound terms
@@ -259,8 +305,48 @@ const PATTERNS = [
   { match: /\bproximal phalanx\b/i, replace: 'Đốt ngón gần' },
   { match: /\bmiddle phalanx\b/i, replace: 'Đốt ngón giữa' },
   { match: /\bdistal phalanx\b/i, replace: 'Đốt ngón xa' },
+  { match: /\bintervertebral disc\b/i, replace: 'Đĩa đệm gian đốt sống' },
+  { match: /\bcervical vertebra\b/i, replace: 'Đốt sống cổ' },
+  { match: /\bthoracic vertebra\b/i, replace: 'Đốt sống ngực' },
+  { match: /\blumbar vertebra\b/i, replace: 'Đốt sống thắt lưng' },
+  { match: /\bsacral vertebra\b/i, replace: 'Đốt sống cùng' },
   { match: /\bvertebra\b/i, replace: 'Đốt sống' },
+  { match: /\bepicranial aponeurosis\b/i, replace: 'Cân trên sọ' },
+  { match: /\bgalea aponeurotica\b/i, replace: 'Cân trên sọ' },
+  { match: /\btemporoparietal fascia\b/i, replace: 'Mạc thái dương đỉnh' },
+  { match: /\btemporal fascia\b/i, replace: 'Mạc thái dương' },
+  { match: /\bthoracolumbar fascia\b/i, replace: 'Mạc ngực thắt lưng' },
+  { match: /\bfascia lata\b/i, replace: 'Mạc rộng đùi' },
+  { match: /\bplantar aponeurosis\b/i, replace: 'Cân gan chân' },
+  { match: /\bpalmar aponeurosis\b/i, replace: 'Cân gan tay' },
+  { match: /\baponeurosis of (.*)\b/i, replace: (m, p) => `Cân ${getVietnameseName(p)}` },
+  { match: /\baponeurosis\b/i, replace: 'Cân cơ' },
+  { match: /\bfascia of (.*)\b/i, replace: (m, p) => `Mạc ${getVietnameseName(p)}` },
+  { match: /\bfascia\b/i, replace: 'Mạc' },
+  { match: /\bretinaculum\b/i, replace: 'Hãm gân' },
+  { match: /\blymph node(s)? of (.*)\b/i, replace: (m, p1, p2) => `Hạch bạch huyết ${getVietnameseName(p2)}` },
+  { match: /\blymph node(s)?\b/i, replace: 'Hạch bạch huyết' },
+  { match: /\blymphatic vessel(s)?\b/i, replace: 'Mạch bạch huyết' },
   { match: /\bcartilage\b/i, replace: 'Sụn' },
+  { match: /\badductor longus\b/i, replace: 'Cơ khép dài' },
+  { match: /\badductor magnus\b/i, replace: 'Cơ khép lớn' },
+  { match: /\badductor brevis\b/i, replace: 'Cơ khép ngắn' },
+  { match: /\badductor\b/i, replace: 'Cơ khép' },
+  { match: /\babductor hallucis\b/i, replace: 'Cơ dạng ngón cái' },
+  { match: /\babductor pollicis\b/i, replace: 'Cơ dạng ngón cái' },
+  { match: /\babductor digiti minimi\b/i, replace: 'Cơ dạng ngón út' },
+  { match: /\babductor\b/i, replace: 'Cơ dạng' },
+  { match: /\bextensor digitorum\b/i, replace: 'Cơ duỗi các ngón' },
+  { match: /\bextensor\b/i, replace: 'Cơ duỗi' },
+  { match: /\bflexor digitorum\b/i, replace: 'Cơ gấp các ngón' },
+  { match: /\bflexor\b/i, replace: 'Cơ gấp' },
+  { match: /\bpronator teres\b/i, replace: 'Cơ sấp tròn' },
+  { match: /\bpronator quadratus\b/i, replace: 'Cơ sấp vuông' },
+  { match: /\bpronator\b/i, replace: 'Cơ sấp' },
+  { match: /\bsupinator\b/i, replace: 'Cơ ngửa' },
+  { match: /\blevator scapulae\b/i, replace: 'Cơ nâng vai' },
+  { match: /\blevator\b/i, replace: 'Cơ nâng' },
+  { match: /\bdepressor\b/i, replace: 'Cơ hạ' },
   { match: /\bmuscle\b/i, replace: 'Cơ' },
   { match: /\bartery\b/i, replace: 'Động mạch' },
   { match: /\bvein\b/i, replace: 'Tĩnh mạch' },
@@ -280,33 +366,116 @@ function translateNumber(word) {
   return map[word.toLowerCase()] || word;
 }
 
+export function splitSideAndSuffix(rawName) {
+  if (!rawName) return { base: '', side: null };
+  let str = String(rawName).trim();
+  str = str.replace(/^\((.*)\)$/, '$1').trim();
+
+  // Strip technical suffixes like .l, .r, _l, _r, .left, .right, (left), (right)
+  const leftRegex = /(?:[\._](?:l|left)|\s*\((?:l|left)\))\s*$/i;
+  const rightRegex = /(?:[\._](?:r|right)|\s*\((?:r|right)\))\s*$/i;
+
+  if (leftRegex.test(str)) {
+    const base = str.replace(leftRegex, '').trim();
+    return { base, side: 'left' };
+  }
+  if (rightRegex.test(str)) {
+    const base = str.replace(rightRegex, '').trim();
+    return { base, side: 'right' };
+  }
+
+  return { base: str, side: null };
+}
+
 export function getVietnameseName(englishBaseName) {
   if (!englishBaseName) return '';
-  const clean = englishBaseName.replace(/^\((.*)\)$/, '$1').trim();
+  const { base, side } = splitSideAndSuffix(englishBaseName);
+  const clean = base.replace(/^\((.*)\)$/, '$1').trim();
+
+  let vnBase = null;
 
   // 1. Direct match
   if (EXACT_DICTIONARY[clean]) {
-    return EXACT_DICTIONARY[clean];
-  }
-
-  // 2. Case-insensitive exact match
-  const lower = clean.toLowerCase();
-  for (const [key, val] of Object.entries(EXACT_DICTIONARY)) {
-    if (key.toLowerCase() === lower) return val;
-  }
-
-  // 3. Pattern match
-  for (const p of PATTERNS) {
-    if (p.match.test(clean)) {
-      if (typeof p.replace === 'function') {
-        return clean.replace(p.match, p.replace);
+    vnBase = EXACT_DICTIONARY[clean];
+  } else {
+    // 2. Case-insensitive exact match
+    const lower = clean.toLowerCase();
+    for (const [key, val] of Object.entries(EXACT_DICTIONARY)) {
+      if (key.toLowerCase() === lower) {
+        vnBase = val;
+        break;
       }
-      return clean.replace(p.match, p.replace);
     }
   }
 
-  // Fallback to English clean name
-  return clean;
+  // 3. Pattern match
+  if (!vnBase) {
+    for (const p of PATTERNS) {
+      if (p.match.test(clean)) {
+        if (typeof p.replace === 'function') {
+          vnBase = clean.replace(p.match, p.replace);
+        } else {
+          vnBase = clean.replace(p.match, p.replace);
+        }
+        break;
+      }
+    }
+  }
+
+  if (!vnBase) {
+    vnBase = clean;
+  }
+
+  if (side === 'left') {
+    return `${vnBase} (Trái)`;
+  } else if (side === 'right') {
+    return `${vnBase} (Phải)`;
+  }
+  return vnBase;
+}
+
+export function getAnatomyNomenclature(rawName) {
+  if (!rawName) {
+    return {
+      rawName: '',
+      cleanBase: '',
+      side: null,
+      sideLabelVi: '',
+      sideSpeechVi: '',
+      nameVi: '',
+      nameLatin: '',
+      nameEn: '',
+      speakTextVi: ''
+    };
+  }
+
+  const { base, side } = splitSideAndSuffix(rawName);
+  const cleanBase = base.replace(/^\((.*)\)$/, '$1').trim();
+  const baseVn = getVietnameseName(cleanBase);
+
+  const sideLabelVi = side === 'left' ? 'Trái' : (side === 'right' ? 'Phải' : '');
+  const sideSpeechVi = side === 'left' ? 'bên trái' : (side === 'right' ? 'bên phải' : '');
+  const sideLatin = side === 'left' ? 'Sinistra' : (side === 'right' ? 'Dextra' : '');
+  const sideEn = side === 'left' ? 'Left' : (side === 'right' ? 'Right' : '');
+
+  const nameVi = sideLabelVi ? `${baseVn} (${sideLabelVi})` : baseVn;
+  const nameEn = sideEn ? `${cleanBase} (${sideEn})` : cleanBase;
+  const nameLatin = sideLatin ? `${cleanBase} (${sideLatin})` : cleanBase;
+  const speakTextVi = sideSpeechVi ? `${baseVn} ${sideSpeechVi}` : baseVn;
+
+  return {
+    rawName,
+    cleanBase,
+    side,
+    sideLabelVi,
+    sideSpeechVi,
+    sideLatin,
+    sideEn,
+    nameVi,
+    nameLatin,
+    nameEn,
+    speakTextVi
+  };
 }
 
 export function getVietnameseSynonyms(englishBaseName) {

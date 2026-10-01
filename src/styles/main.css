@@ -10049,6 +10049,114 @@ body.theme-dark .latin-nomenclature-row {
   color: #38bdf8;
 }
 
+/* Core Anatomical Explanation (Priority at the very top of Selection Card) */
+.core-explanation-section {
+  margin-bottom: 10px;
+}
+
+.core-explain-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.explain-item {
+  background: rgba(248, 250, 252, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 9px;
+  padding: 8px 11px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .explain-item,
+body.theme-dark .explain-item {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(51, 65, 85, 0.65);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Distinctive Left Border Accents */
+.explain-item.explain-desc {
+  border-left: 3.5px solid #0d9488;
+}
+.explain-item.explain-func {
+  border-left: 3.5px solid #10b981;
+}
+.explain-item.explain-rel {
+  border-left: 3.5px solid #0284c7;
+}
+
+.explain-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.explain-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-desc {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0f766e;
+}
+[data-theme="dark"] .badge-desc,
+body.theme-dark .badge-desc {
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+}
+
+.badge-func {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+[data-theme="dark"] .badge-func,
+body.theme-dark .badge-func {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+.badge-rel {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0369a1;
+}
+[data-theme="dark"] .badge-rel,
+body.theme-dark .badge-rel {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.explain-subtitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+[data-theme="dark"] .explain-subtitle,
+body.theme-dark .explain-subtitle {
+  color: #94a3b8;
+}
+
+.explain-content {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #334155;
+  word-break: break-word;
+}
+[data-theme="dark"] .explain-content,
+body.theme-dark .explain-content {
+  color: #e2e8f0;
+}
+
 /* 4. Interactive Anatomical Hierarchy Tree (Photo 5) */
 .anatomical-hierarchy-tree {
   background: #f8fafc;
