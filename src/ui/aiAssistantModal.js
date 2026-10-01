@@ -17,6 +17,11 @@ export function initAIAssistantUI(viewer) {
   aiModalEl = document.createElement('div');
   aiModalEl.className = 'ai-assistant-modal hidden';
   aiModalEl.id = 'aiAssistantModal';
+  aiModalEl.addEventListener('click', (e) => {
+    if (e.target === aiModalEl) {
+      closeAIAssistant();
+    }
+  });
   const app = document.getElementById('app') || document.body;
   app.appendChild(aiModalEl);
 }

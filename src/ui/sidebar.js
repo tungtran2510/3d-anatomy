@@ -17,9 +17,9 @@ import { startQuiz, stopQuiz, isQuizRunning } from './quiz.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
 import { initClipping, setClippingPlane, updateClippingOffset, toggleClippingFlip, disableClipping } from '../viewer/clipping.js';
 import { toggleMeasurementMode, isMeasurementActive, clearMeasurement } from '../viewer/measurement.js';
-import { openStudyModulePicker } from './studyMode.js';
+import { openStudyModulePicker, closeStudyMode } from './studyMode.js';
 import { saveNote, getNote, getAllNotes, deleteNote } from '../state/notes.js';
-import { openAIAssistant, initAIAssistantUI } from './aiAssistantModal.js';
+import { openAIAssistant, closeAIAssistant, initAIAssistantUI } from './aiAssistantModal.js';
 import { renderRoadmapTab } from './roadmapTab.js';
 import { trackPartViewed } from '../state/learningRoadmap.js';
 
@@ -930,7 +930,14 @@ export function initFloatingTools(viewer) {
 
   const btnAI = document.getElementById('btnToolAI');
   btnAI?.addEventListener('click', () => {
-    openAIAssistant(viewer);
+    const modal = document.getElementById('aiAssistantModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      closeAIAssistant();
+      btnAI.classList.remove('active');
+    } else {
+      openAIAssistant(viewer);
+      btnAI.classList.add('active');
+    }
   });
 
   const btnExplode = document.getElementById('btnToolExplode');
@@ -1098,7 +1105,14 @@ export function initFloatingTools(viewer) {
   // Guided Study Mode
   const btnStudy = document.getElementById('btnToolStudy');
   btnStudy?.addEventListener('click', () => {
-    openStudyModulePicker(viewer);
+    const modal = document.getElementById('studyModeModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      closeStudyMode(viewer);
+      btnStudy.classList.remove('active');
+    } else {
+      openStudyModulePicker(viewer);
+      btnStudy.classList.add('active');
+    }
   });
 
   // Medical Exam Mode
@@ -1123,15 +1137,29 @@ export function initFloatingTools(viewer) {
   // Augmented Reality (AR) Mode
   const btnAR = document.getElementById('btnToolAR');
   btnAR?.addEventListener('click', async () => {
-    const { openARModal } = await import('./arModal.js');
-    openARModal(viewer);
+    const { openARModal, closeARModal } = await import('./arModal.js');
+    const hud = document.getElementById('arHUD');
+    if (hud && !hud.classList.contains('hidden')) {
+      closeARModal();
+      btnAR.classList.remove('active');
+    } else {
+      openARModal(viewer);
+      btnAR.classList.add('active');
+    }
   });
 
   // Offline & PWA Storage Manager Mode (LỆNH #06)
   const btnOffline = document.getElementById('btnToolOffline');
   btnOffline?.addEventListener('click', async () => {
-    const { openOfflineModal } = await import('./offlineModal.js');
-    openOfflineModal(viewer);
+    const { openOfflineModal, closeOfflineModal } = await import('./offlineModal.js');
+    const modal = document.getElementById('offlineModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      closeOfflineModal();
+      btnOffline.classList.remove('active');
+    } else {
+      openOfflineModal(viewer);
+      btnOffline.classList.add('active');
+    }
   });
 
   const netStatusBadge = document.getElementById('netStatusBadge');

@@ -48,6 +48,11 @@ export function initStudyModeUI(viewer) {
   modalEl = document.createElement('div');
   modalEl.className = 'study-mode-modal hidden';
   modalEl.id = 'studyModeModal';
+  modalEl.addEventListener('click', (e) => {
+    if (e.target === modalEl) {
+      closeStudyMode(viewer);
+    }
+  });
   document.body.appendChild(modalEl);
 }
 

@@ -334,19 +334,25 @@ class DynamicAnatomyEngine {
       }
 
       this.applyMotionFrame(this.progress);
-      if (this.viewer) {
+      if (typeof this.viewer?.invalidate === 'function') {
         this.viewer.invalidate(2);
+      } else if (typeof this.viewer?.render === 'function') {
+        this.viewer.render();
       }
       this.notifyStateChange();
     };
 
-    this.viewer.onFrame(this.registeredFrameCallback);
+    if (typeof this.viewer.onFrame === 'function') {
+      this.unsubscribeFrame = this.viewer.onFrame(this.registeredFrameCallback);
+    }
   }
 
   stopFrameLoop() {
-    if (this.registeredFrameCallback && this.viewer) {
-      this.registeredFrameCallback = null;
+    if (typeof this.unsubscribeFrame === 'function') {
+      this.unsubscribeFrame();
+      this.unsubscribeFrame = null;
     }
+    this.registeredFrameCallback = null;
   }
 
   // Applies biomechanical transformation according to active motion and normalized progress (0..1)

@@ -68,6 +68,11 @@ export async function openOfflineModal(viewer) {
     offlineModalEl = document.createElement('div');
     offlineModalEl.id = 'offlineModal';
     offlineModalEl.className = 'offline-modal-backdrop';
+    offlineModalEl.addEventListener('click', (e) => {
+      if (e.target === offlineModalEl) {
+        closeOfflineModal();
+      }
+    });
     document.body.appendChild(offlineModalEl);
   }
 

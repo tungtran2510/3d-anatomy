@@ -218,6 +218,7 @@ export function createScene() {
     startRenderLoop,
     stopRenderLoop,
     render,
+    invalidate,
     onFrame,
     dispose,
     onResize
