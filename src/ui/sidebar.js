@@ -20,6 +20,7 @@ import { toggleMeasurementMode, isMeasurementActive, clearMeasurement } from '..
 import { openStudyModulePicker, closeStudyMode } from './studyMode.js';
 import { saveNote, getNote, getAllNotes, deleteNote } from '../state/notes.js';
 import { openAIAssistant, closeAIAssistant, initAIAssistantUI } from './aiAssistantModal.js';
+import { initVoiceController } from '../ai/voiceController.js';
 import { renderRoadmapTab } from './roadmapTab.js';
 import { trackPartViewed } from '../state/learningRoadmap.js';
 
@@ -939,6 +940,9 @@ export function initFloatingTools(viewer) {
       btnAI.classList.add('active');
     }
   });
+
+  // Hands-free Voice AI Controller
+  initVoiceController(viewer);
 
   const btnExplode = document.getElementById('btnToolExplode');
   const explodePopover = document.getElementById('explodePopover');

@@ -42,6 +42,7 @@ export function openMotionPanel(viewer, defaultMotion = MOTIONS.CARDIAC) {
     initMotionPanel(viewer);
   }
 
+  popoverEl.style.display = '';
   popoverEl.classList.remove('hidden');
   popoverEl.classList.remove('minimized');
   document.getElementById('btnToolMotion')?.classList.add('active');
@@ -71,6 +72,7 @@ export function closeMotionPanel() {
   if (popoverEl) {
     popoverEl.classList.add('hidden');
     popoverEl.classList.remove('minimized');
+    popoverEl.style.display = 'none';
   }
   document.getElementById('btnToolMotion')?.classList.remove('active');
   dynamicAnatomy.pause();
@@ -79,7 +81,7 @@ export function closeMotionPanel() {
 }
 
 export function toggleMotionPanel(viewer) {
-  if (!popoverEl || popoverEl.classList.contains('hidden')) {
+  if (!popoverEl || popoverEl.classList.contains('hidden') || popoverEl.style.display === 'none') {
     openMotionPanel(viewer);
   } else if (!popoverEl.classList.contains('minimized')) {
     // Currently in full view: minimize so user can see 3D model completely!
@@ -98,8 +100,13 @@ function renderMotionPanelContent() {
   `).join('');
 
   popoverEl.innerHTML = `
-    <!-- Full Settings Body -->
+    <!-- Full Settings Body (Bottom Sheet style) -->
     <div class="motion-full-body">
+      <!-- Swipeable handle -->
+      <div class="bottom-sheet-drag-handle" id="motionDragHandle" title="Vuốt xuống hoặc chạm để thu nhỏ xem 3D">
+        <span class="drag-bar"></span>
+      </div>
+
       <div class="motion-header">
         <div class="motion-title-row">
           <span class="motion-badge">🎬 GIẢI PHẪU ĐỘNG</span>
@@ -118,6 +125,11 @@ function renderMotionPanelContent() {
           </select>
         </div>
       </div>
+
+      <!-- Quick watch full screen button -->
+      <button type="button" class="btn-motion-watch-full" id="btnMotionWatchFull" title="Chạy ngay và thu gọn thanh công cụ để ngắm mô hình 3D">
+        ▶ Bắt đầu & Xem 3D Toàn Màn Hình
+      </button>
 
       <!-- Live Phase & Physiology Banner -->
       <div class="motion-phase-card" id="motionPhaseCard">
@@ -188,6 +200,29 @@ function renderMotionPanelContent() {
 function setupEventListeners() {
   if (!popoverEl) return;
 
+  // Drag handle click/touch to minimize
+  const dragHandle = popoverEl.querySelector('#motionDragHandle');
+  dragHandle?.addEventListener('click', minimizeMotionPanel);
+
+  // Swipe down gesture on drag handle or header
+  let touchStartY = 0;
+  dragHandle?.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  dragHandle?.addEventListener('touchend', (e) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    if (touchEndY - touchStartY > 30) {
+      minimizeMotionPanel();
+    }
+  }, { passive: true });
+
+  // Quick watch full button: plays and immediately minimizes
+  const btnWatchFull = popoverEl.querySelector('#btnMotionWatchFull');
+  btnWatchFull?.addEventListener('click', () => {
+    dynamicAnatomy.play();
+    minimizeMotionPanel();
+  });
+
   // View 3D / Minimize button
   const view3dBtn = popoverEl.querySelector('#motionView3dBtn');
   view3dBtn?.addEventListener('click', minimizeMotionPanel);
@@ -218,10 +253,15 @@ function setupEventListeners() {
     dynamicAnatomy.setMotion(e.target.value);
   });
 
-  // Play/Pause button
+  // Play/Pause button: when clicked to PLAY, automatically minimize so user sees 3D!
   const btnPlayPause = popoverEl.querySelector('#btnMotionPlayPause');
   btnPlayPause?.addEventListener('click', () => {
+    const s = dynamicAnatomy.getState();
     dynamicAnatomy.togglePlay();
+    if (!s.isPlaying) {
+      // User tapped Play -> automatically minimize to reveal the 3D model!
+      setTimeout(() => minimizeMotionPanel(), 150);
+    }
   });
 
   // Rewind button
