@@ -1105,6 +1105,38 @@ export function initFloatingTools(viewer) {
     const { openARModal } = await import('./arModal.js');
     openARModal(viewer);
   });
+
+  // Offline & PWA Storage Manager Mode (LỆNH #06)
+  const btnOffline = document.getElementById('btnToolOffline');
+  btnOffline?.addEventListener('click', async () => {
+    const { openOfflineModal } = await import('./offlineModal.js');
+    openOfflineModal(viewer);
+  });
+
+  const netStatusBadge = document.getElementById('netStatusBadge');
+  netStatusBadge?.addEventListener('click', async () => {
+    const { openOfflineModal } = await import('./offlineModal.js');
+    openOfflineModal(viewer);
+  });
+
+  // Subscribe to live network & sync status
+  import('../utils/syncManager.js').then(({ subscribeNetworkStatus, initSyncManager }) => {
+    initSyncManager();
+    subscribeNetworkStatus(({ isOnline, isSyncing, pendingCount }) => {
+      const badge = document.getElementById('netStatusBadge');
+      const text = document.getElementById('netStatusText');
+      if (!badge || !text) return;
+
+      badge.className = `net-status-badge ${isOnline ? (isSyncing ? 'syncing' : 'online') : 'offline'}`;
+      if (isSyncing) {
+        text.textContent = 'Đang đồng bộ...';
+      } else if (!isOnline) {
+        text.textContent = pendingCount > 0 ? `Offline (${pendingCount})` : 'Ngoại tuyến';
+      } else {
+        text.textContent = pendingCount > 0 ? `Chờ sync (${pendingCount})` : 'Trực tuyến';
+      }
+    });
+  }).catch((err) => console.warn('Sync manager init skipped:', err));
 }
 
 // Help modal

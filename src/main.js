@@ -99,9 +99,54 @@ async function init() {
       await initUI(viewer);
       initSelection(viewer);
       trackViewState(viewer);
+
+      // Register PWA Service Worker & Version Update Banner (LỆNH #06)
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then((reg) => {
+              console.log('[SW] Service Worker registered successfully:', reg.scope);
+              import('./ui/updateBanner.js').then(({ initPWAUpdateBanner }) => {
+                initPWAUpdateBanner();
+              });
+            })
+            .catch((err) => console.warn('[SW] Registration failed:', err.message));
+        });
+      }
+
+      // Cross-platform Desktop Keyboard Shortcuts
+      initDesktopShortcuts(viewer);
     }
     console.log('[main] Z-Anatomy initialization complete');
   }
+}
+
+// Cross-platform Desktop Shortcuts (Space, R, Esc, F, H, I)
+function initDesktopShortcuts(viewer) {
+  window.addEventListener('keydown', (e) => {
+    // Ignore when typing inside input or textarea
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+
+    if (e.code === 'Space') {
+      e.preventDefault();
+      document.getElementById('btnMotionPlayPause')?.click();
+    } else if (e.key === 'r' || e.key === 'R') {
+      import('./viewer/camera.js').then(({ resetView }) => resetView(viewer));
+    } else if (e.key === 'Escape') {
+      document.getElementById('offlineCloseBtn')?.click();
+      document.getElementById('motionCloseBtn')?.click();
+      document.getElementById('aiCloseBtn')?.click();
+      document.getElementById('cardCloseBtn')?.click();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (state.selectedPart) {
+        import('./viewer/camera.js').then(({ frameRegion }) => frameRegion(state.selectedPart.id, viewer));
+      }
+    } else if (e.key === 'h' || e.key === 'H') {
+      document.getElementById('cardHideBtn')?.click();
+    } else if (e.key === 'i' || e.key === 'I') {
+      document.getElementById('cardIsolateBtn')?.click();
+    }
+  });
 }
 
 // Anything that changes what the link should reproduce schedules a rewrite.
