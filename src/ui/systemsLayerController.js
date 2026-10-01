@@ -318,6 +318,118 @@ export function isUrinaryGenitalVisibleAtLevel(partIdLower, level) {
 }
 
 // -----------------------------------------------------------------------------
+// LYMPHATIC DISSECTION LAYERS (8 nấc bóc tách từ 0.5 đến 4.0)
+// Chuẩn Y khoa đối chiếu trực tiếp từ Visible Body Atlas:
+// Level 4.0 (■■■■): Toàn bộ mạng lưới hạch & mạch nông/sâu khắp cơ thể tới tận đầu chi (Ảnh 4)
+// Level 3.0 (■■■_): Mạng lưới trung gian: Hạch bẹn, hạch nách, hạch dưới hàm, hạch khoeo (Ảnh 1)
+// Level 2.0 (■■__): Mạng lưới sâu thân mình & gốc chi: Hạch trung thất, liên sườn, rễ mạc treo, chậu sâu, nách sâu (Ảnh 3)
+// Level 1.0 (■___): Cơ quan lympho tiên phát & thân bạch huyết trung tâm: Lá lách, Tuyến ức, Amidan, Hạch quanh ĐM/TM chủ (Ảnh 2)
+// Level 0.5: Chỉ còn 2 cơ quan lympho lớn nhất: Lá lách (Spleen) & Tuyến ức (Thymus)
+// Level 0.0 (____): Ẩn hoàn toàn hệ bạch huyết
+// -----------------------------------------------------------------------------
+export function isLymphaticVisibleAtLevel(partIdLower, level) {
+  if (level <= 0) return false;
+
+  // 1. Distal Extremities & Superficial Craniofacial (Level 4.0 - Ảnh 4)
+  // Tibial, Fibular, Cubital, Supratrochlear, Superficial Craniofacial (Bucinator, Nasolabial, Mandibular, Mastoid, Occipital, Parotid, Auricular, Superficial inguinal)
+  const isDistalOrSuperficial = 
+    partIdLower.includes('tibial') || partIdLower.includes('fibular') || 
+    partIdLower.includes('cubital') || partIdLower.includes('supratrochlear') ||
+    partIdLower.includes('bucinator') || partIdLower.includes('nasolabial') ||
+    partIdLower.includes('mandibular node') || partIdLower.includes('mastoid') ||
+    partIdLower.includes('occipital') || partIdLower.includes('parotid') ||
+    partIdLower.includes('auricular') || partIdLower.includes('superficial parotid') ||
+    partIdLower.includes('superficial lateral cervical') ||
+    partIdLower.includes('superficial inguinal');
+  
+  if (isDistalOrSuperficial) {
+    if (partIdLower.includes('tibial') || partIdLower.includes('fibular') || 
+        partIdLower.includes('bucinator') || partIdLower.includes('nasolabial') ||
+        partIdLower.includes('mandibular node') || partIdLower.includes('mastoid') ||
+        partIdLower.includes('occipital') || partIdLower.includes('parotid') ||
+        partIdLower.includes('auricular') || partIdLower.includes('superficial lateral cervical')) {
+      return level >= 4.0;
+    }
+    return level >= 3.5;
+  }
+
+  // 2. Intermediate Mesenteric, Intermediate Inguinal, Axillary, Popliteal, Submandibular/Submental (Level 3.0 - Ảnh 1)
+  const isIntermediate = 
+    partIdLower.includes('deep inguinal') || partIdLower.includes('lacunar') ||
+    partIdLower.includes('popliteal') || partIdLower.includes('brachial') ||
+    partIdLower.includes('submandibular') || partIdLower.includes('submental') ||
+    partIdLower.includes('thyroid node') || partIdLower.includes('anterior inferior jugular') ||
+    partIdLower.includes('lateral superior jugular') || partIdLower.includes('superficial anterior cervical') ||
+    partIdLower.includes('mesenter') || partIdLower.includes('colic') ||
+    partIdLower.includes('appendicular') || partIdLower.includes('caecal') ||
+    partIdLower.includes('sigmoid') ||
+    partIdLower.includes('epigastric') || partIdLower.includes('supraclavicular') ||
+    partIdLower.includes('infraclavicular') || partIdLower.includes('interpectoral') ||
+    (partIdLower.includes('axillary') && (partIdLower.includes('anterior') || partIdLower.includes('lateral') || partIdLower.includes('posterior')));
+
+  if (isIntermediate) {
+    if (partIdLower.includes('deep inguinal') || partIdLower.includes('lacunar') ||
+        partIdLower.includes('popliteal') || partIdLower.includes('brachial') ||
+        partIdLower.includes('submandibular') || partIdLower.includes('submental') ||
+        partIdLower.includes('thyroid node') || partIdLower.includes('anterior inferior jugular') ||
+        partIdLower.includes('lateral superior jugular') || partIdLower.includes('superficial anterior cervical')) {
+      return level >= 3.0;
+    }
+    return level >= 2.5;
+  }
+
+  // 3. Deep Mediastinal, Intercostal, Deep Cervical, Visceral Gastric/Hepatic/Pancreatic, Deep Pelvic, Deep Central Axillary (Level 2.0 - Ảnh 3)
+  const isDeepRegional = 
+    partIdLower.includes('intercostal') || partIdLower.includes('parasternal') ||
+    partIdLower.includes('tracheo') || partIdLower.includes('bronch') ||
+    partIdLower.includes('oesophageal') || partIdLower.includes('pericardial') ||
+    partIdLower.includes('azygos') || partIdLower.includes('arteriosum') ||
+    partIdLower.includes('brachiocephalic') || partIdLower.includes('intrapulmonary') ||
+    partIdLower.includes('diaphragmatic') || partIdLower.includes('pretracheal') ||
+    partIdLower.includes('paratracheal') || partIdLower.includes('retropharyngeal') ||
+    partIdLower.includes('jugulodigastric') || partIdLower.includes('deep lateral cervical') ||
+    partIdLower.includes('coeliac') || partIdLower.includes('cystic node') ||
+    partIdLower.includes('gastric') || partIdLower.includes('omental') || partIdLower.includes('pyloric') ||
+    partIdLower.includes('pancreatic') || partIdLower.includes('splenic node') ||
+    partIdLower.includes('iliac') || partIdLower.includes('sacral') ||
+    partIdLower.includes('obturator') || partIdLower.includes('pararectal') ||
+    partIdLower.includes('vesical') || partIdLower.includes('gluteal') ||
+    (partIdLower.includes('axillary') && (partIdLower.includes('apical') || partIdLower.includes('central')));
+
+  if (isDeepRegional) {
+    if (partIdLower.includes('intercostal') || partIdLower.includes('parasternal') ||
+        partIdLower.includes('deep lateral cervical') || partIdLower.includes('retropharyngeal') ||
+        partIdLower.includes('jugulodigastric') || partIdLower.includes('coeliac') ||
+        partIdLower.includes('gastric') || partIdLower.includes('omental') || partIdLower.includes('pyloric') ||
+        partIdLower.includes('pancreatic') || partIdLower.includes('splenic node') ||
+        partIdLower.includes('iliac') || partIdLower.includes('sacral') ||
+        partIdLower.includes('obturator') || partIdLower.includes('pararectal') ||
+        partIdLower.includes('vesical') || partIdLower.includes('gluteal') ||
+        partIdLower.includes('axillary')) {
+      return level >= 2.0;
+    }
+    return level >= 1.5;
+  }
+
+  // 4. Primary Lymphoid Organs & Central Trunks (Level 1.0 - Ảnh 2)
+  // Spleen, Thymus, Tonsils, Central Aortic/Caval/Lumbar trunks along spine
+  if (partIdLower.includes('aortic') || partIdLower.includes('caval') || 
+      partIdLower.includes('lumbar node') || partIdLower.includes('prevertebral') ||
+      partIdLower.includes('tonsil') || partIdLower.includes('amidan')) {
+    return level >= 1.0;
+  }
+
+  // Level 0.5: Spleen (Lá lách) & Thymus (Tuyến ức)
+  const isPrimaryOrgan = partIdLower.includes('spleen') || partIdLower.includes('lá lách') || 
+                        partIdLower.includes('thymus') || partIdLower.includes('tuyến ức');
+  if (isPrimaryOrgan) {
+    return level >= 0.5;
+  }
+
+  return level >= 2.0;
+}
+
+// -----------------------------------------------------------------------------
 // MUSCULAR 3-TIER + SUB-STEP DISSECTION (8 nấc bóc tách từ 0.5 đến 4.0)
 // -----------------------------------------------------------------------------
 const SUPERFICIAL_PATTERNS = [
@@ -719,7 +831,12 @@ export async function setSystemLevel(systemId, level, viewer) {
   const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
   const maxLvl = cfg?.maxLevels || 4;
   const clamped = Math.max(0, Math.min(maxLvl, Math.round(Number(level) * 10) / 10));
-  await applySystemLevel(systemId, clamped, viewer);
+  await applySystemLevel(systemId, clamped, viewer || state.viewer || window.viewer);
+}
+
+if (typeof window !== 'undefined') {
+  window.setSystemLevel = setSystemLevel;
+  window.systemLevels = systemLevels;
 }
 
 async function applySystemLevel(systemId, level, viewer) {
@@ -873,8 +990,21 @@ async function applySystemLevel(systemId, level, viewer) {
           nodes.forEach(n => setStructureVisible(n.userData?.partId, true));
         }
       }
+    } else if (systemId === 'lymphatic') {
+      if (level <= 0) {
+        hideSystem('lymphatic');
+      } else {
+        showSystem('lymphatic');
+        const nodes = getMeshesBySystem('lymphatic') || [];
+        nodes.forEach(n => {
+          const partId = n.userData?.partId || n.name || '';
+          if (partId) {
+            setStructureVisible(partId, isLymphaticVisibleAtLevel(partId.toLowerCase(), level));
+          }
+        });
+      }
     } else {
-      // Standard full system (joints, lymphatic)
+      // Standard full system (joints)
       if (level <= 0) {
         hideSystem(systemId);
       } else {

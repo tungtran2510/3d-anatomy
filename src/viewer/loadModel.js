@@ -473,6 +473,40 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         metalness: 0.02
       });
     }
+  } else if (systemId === 'lymphatic') {
+    if (partName.includes('spleen') || partName.includes('lá lách')) {
+      // Spleen: vascular lymphoid purplish-crimson (chuẩn Visible Body Photo 1-4)
+      applyCustomProps(mesh, {
+        name: 'PBR_Spleen',
+        color: 0x58202E,
+        roughness: 0.25,
+        metalness: 0.03
+      });
+    } else if (partName.includes('thymus') || partName.includes('tuyến ức')) {
+      // Thymus: soft warm amber glandular tissue (chuẩn Visible Body Photo 1-4)
+      applyCustomProps(mesh, {
+        name: 'PBR_Thymus',
+        color: 0xA0684C,
+        roughness: 0.35,
+        metalness: 0.02
+      });
+    } else if (partName.includes('tonsil') || partName.includes('amidan')) {
+      // Palatine Tonsils: pinkish mucosa
+      applyCustomProps(mesh, {
+        name: 'PBR_Tonsil',
+        color: 0xC87B82,
+        roughness: 0.30,
+        metalness: 0.02
+      });
+    } else {
+      // Lymph nodes and vessels: Medical emerald-green PBR
+      applyCustomProps(mesh, {
+        name: 'PBR_LymphNode',
+        color: 0x3E9C44,
+        roughness: 0.28,
+        metalness: 0.04
+      });
+    }
   } else if (systemId === 'muscular') {
     if (partName.includes('tendon') || matName.includes('tendon') || partName.includes('gân')) {
       // Tendons: glistening silvery-white
