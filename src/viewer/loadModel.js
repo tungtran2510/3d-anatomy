@@ -410,6 +410,18 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         bumpMap: bump,
         bumpScale: 0.0020
       });
+    } else if (partName.includes('pleura') || matName.includes('pleura') || partName.includes('màng phổi')) {
+      // Pleura: smooth delicate semi-transparent bluish-lavender serous pleural sac (chuẩn Visible Body Atlas)
+      applyCustomProps(mesh, {
+        name: 'PBR_Pleura',
+        color: 0x6573B8,
+        roughness: 0.20,
+        metalness: 0.04,
+        transparent: true,
+        opacity: 0.45,
+        depthWrite: false,
+        renderOrder: 7
+      });
     } else if (partName.includes('lung') || matName.includes('lung') || partName.includes('phổi')) {
       // Lungs: living soft aerated roseate-lavender tissue
       applyCustomProps(mesh, {

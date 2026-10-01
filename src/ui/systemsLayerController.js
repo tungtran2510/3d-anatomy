@@ -142,6 +142,99 @@ export function isArteryVisibleAtLevel(partIdLower, level) {
 }
 
 // -----------------------------------------------------------------------------
+// RESPIRATORY SYSTEM DISSECTION LAYERS (8 nấc bóc tách từ 0.5 đến 4.0)
+// Chuẩn Y khoa đối chiếu trực tiếp từ Visible Body Atlas:
+// Level 4.0 (■■■■): Màng phổi bán trong suốt (Pleura) bao bọc hai lá phổi
+// Level 3.0 (■■■_): Bóc màng phổi, để lộ toàn bộ 5 thùy nhu mô phổi (Lungs parenchyma)
+// Level 2.0 (■■__): Bóc nhu mô phổi, để lộ toàn bộ cây phế quản phân nhánh (Bronchial tree)
+// Level 1.0 (■___): Bóc phế quản nhỏ, chỉ giữ lại Khí quản (Trachea) & Phế quản chính (Main bronchi) & Thanh quản
+// Level 0.5: Chỉ còn Khí quản (Trachea) & sụn nắp thanh môn (Epiglottis)
+// Level 0.0 (____): Ẩn hoàn toàn hệ hô hấp
+// -----------------------------------------------------------------------------
+export function isRespiratoryVisibleAtLevel(partIdLower, level) {
+  if (level <= 0) return false;
+
+  // 1. Màng phổi (Pleura): chỉ xuất hiện ở nấc cao nhất (Level 3.5 - 4.0)
+  if (partIdLower.includes('pleura') || partIdLower.includes('màng phổi')) {
+    return level >= 3.5;
+  }
+
+  // 2. Nhu mô phổi (Lung Lobes Parenchyma: 5 thùy phổi)
+  const isLungParenchyma = partIdLower.includes('lobe of') || (partIdLower.includes('lung') && !partIdLower.includes('bronch'));
+  if (isLungParenchyma) {
+    if (level < 2.5) return false;
+    if (level <= 2.5) return partIdLower.includes('right lung');
+    return true;
+  }
+
+  // 3. Phân thùy phế quản nhỏ (Segmental Bronchi)
+  const isSegmental = partIdLower.includes('segmental') || 
+    /\b(b[ivx]+(\+b[ivx]+)?)\b/i.test(partIdLower) ||
+    partIdLower.includes('lingular');
+  if (isSegmental) {
+    return level >= 2.0;
+  }
+
+  // 4. Phế quản thùy & trung gian (Lobar & Intermediate Bronchi)
+  const isLobar = partIdLower.includes('lobar bronchus') || partIdLower.includes('intermediate bronchus');
+  if (isLobar) {
+    return level >= 1.5;
+  }
+
+  // 5. Phế quản chính (Left & Right Main Bronchus)
+  if (partIdLower.includes('main bronchus')) {
+    return level >= 1.0;
+  }
+
+  // 6. Khí quản, Thanh quản & đường hô hấp trên (Trachea, Epiglottis, Pharynx, Nasal mucosa)
+  return level >= 0.5;
+}
+
+export function getRespiratoryParts() {
+  const sidebarParts = getSubSystemParts('respiratory');
+  if (sidebarParts && sidebarParts.length > 0) return sidebarParts;
+
+  const nodes = getMeshesBySystem('visceral') || [];
+  return nodes
+    .map(n => n.userData?.partId)
+    .filter(name => {
+      if (!name) return false;
+      const lower = name.toLowerCase();
+      return lower.includes('bronch') || lower.includes('lung') || lower.includes('trachea') || 
+             lower.includes('pleura') || lower.includes('nasal') || lower.includes('pharynx') || 
+             lower.includes('epiglottis');
+    });
+}
+
+export function getVisceralSubType(partIdLower) {
+  if (partIdLower.includes('bronch') || partIdLower.includes('lung') || partIdLower.includes('trachea') || 
+      partIdLower.includes('pleura') || partIdLower.includes('nasal') || partIdLower.includes('pharynx') || 
+      partIdLower.includes('epiglottis')) {
+    return 'respiratory';
+  }
+  if (partIdLower.includes('colon') || partIdLower.includes('liver') || partIdLower.includes('pancrea') || 
+      partIdLower.includes('stomach') || partIdLower.includes('duodenum') || partIdLower.includes('jejunum') || 
+      partIdLower.includes('appendix') || partIdLower.includes('bile') || partIdLower.includes('gallbladder') || 
+      partIdLower.includes('esophagus') || partIdLower.includes('oesophagus') || partIdLower.includes('parotid') || 
+      partIdLower.includes('sublingual') || partIdLower.includes('submandibular') || partIdLower.includes('gingiva') || 
+      partIdLower.includes('tongue') || partIdLower.includes('palate') || partIdLower.includes('omentum') || 
+      partIdLower.includes('taenia') || partIdLower.includes('meso')) {
+    return 'digestive';
+  }
+  if (partIdLower.includes('kidney') || partIdLower.includes('bladder') || partIdLower.includes('ureter') || 
+      partIdLower.includes('urethra') || partIdLower.includes('renal') || partIdLower.includes('penis') || 
+      partIdLower.includes('prostate') || partIdLower.includes('testis') || partIdLower.includes('seminal') || 
+      partIdLower.includes('deferens') || partIdLower.includes('epididymis') || partIdLower.includes('ejaculatory')) {
+    return 'urinary_genital';
+  }
+  if (partIdLower.includes('thyroid') || partIdLower.includes('suprarenal') || partIdLower.includes('hypophysis') || 
+      partIdLower.includes('pineal')) {
+    return 'endocrine';
+  }
+  return null;
+}
+
+// -----------------------------------------------------------------------------
 // MUSCULAR 3-TIER + SUB-STEP DISSECTION (8 nấc bóc tách từ 0.5 đến 4.0)
 // -----------------------------------------------------------------------------
 const SUPERFICIAL_PATTERNS = [
@@ -562,6 +655,15 @@ async function applySystemLevel(systemId, level, viewer) {
     setItemLoading(systemId, true);
     try {
       await loadModel(baseSys, viewer);
+      if (baseSys === 'visceral') {
+        // Initialize other visceral subsystems that are at level 0 to hidden
+        SYSTEM_CONFIGS.filter(s => s.baseSystem === 'visceral' && s.id !== systemId).forEach(sub => {
+          if ((Number(systemLevels[sub.id]) || 0) <= 0) {
+            const parts = getSubSystemParts(sub.subType);
+            parts.forEach(p => setStructureVisible(p, false));
+          }
+        });
+      }
     } catch (err) {
       console.error(`[systemsLayer] Failed to load model for ${baseSys}:`, err);
     } finally {
@@ -572,11 +674,38 @@ async function applySystemLevel(systemId, level, viewer) {
 
   // 2. Adjust visibility with solid, crisp, authentic medical colors (NO alpha transparency lag!)
   batchPartStates(() => {
-    if (cfg?.subType) {
-      // Sub-visceral system: respiratory, digestive, urinary_genital, endocrine
-      const parts = getSubSystemParts(cfg.subType);
-      const isVisible = level > 0;
-      parts.forEach(id => setStructureVisible(id, isVisible));
+    if (cfg?.baseSystem === 'visceral') {
+      // -------------------------------------------------------------
+      // VISCERAL SUB-SYSTEMS: RESPIRATORY, DIGESTIVE, URINARY, ENDOCRINE
+      // Filter every single visceral organ according to its respective stepper level!
+      // -------------------------------------------------------------
+      const respLvl = Number(systemLevels.respiratory) || 0;
+      const digLvl = Number(systemLevels.digestive) || 0;
+      const uriLvl = Number(systemLevels.urinary_genital) || 0;
+      const endLvl = Number(systemLevels.endocrine) || 0;
+
+      if (respLvl <= 0 && digLvl <= 0 && uriLvl <= 0 && endLvl <= 0) {
+        hideSystem('visceral');
+      } else {
+        showSystem('visceral');
+        const nodes = getMeshesBySystem('visceral') || [];
+        nodes.forEach(n => {
+          const partId = n.userData?.partId;
+          if (!partId) return;
+          const lower = partId.toLowerCase();
+          const subType = getVisceralSubType(lower);
+
+          if (subType === 'respiratory') {
+            setStructureVisible(partId, isRespiratoryVisibleAtLevel(lower, respLvl));
+          } else if (subType === 'digestive') {
+            setStructureVisible(partId, digLvl > 0);
+          } else if (subType === 'urinary_genital') {
+            setStructureVisible(partId, uriLvl > 0);
+          } else if (subType === 'endocrine') {
+            setStructureVisible(partId, endLvl > 0);
+          }
+        });
+      }
     } else if (systemId === 'arterial' || systemId === 'venous') {
       // -------------------------------------------------------------
       // CARDIOVASCULAR INDEPENDENT DISSECTION: ARTERIAL vs VENOUS
@@ -716,6 +845,14 @@ export function syncStateWithLoadedSystems() {
       if (systemLevels.arterial === 0 && systemLevels.venous === 0) {
         systemLevels.arterial = 4.0;
         systemLevels.venous = 4.0;
+      }
+    } else if (sysId === 'visceral') {
+      if (systemLevels.respiratory === 0 && systemLevels.digestive === 0 && 
+          systemLevels.urinary_genital === 0 && systemLevels.endocrine === 0) {
+        systemLevels.respiratory = 4.0;
+        systemLevels.digestive = 4.0;
+        systemLevels.urinary_genital = 4.0;
+        systemLevels.endocrine = 4.0;
       }
     } else if (systemLevels[sysId] === 0) {
       systemLevels[sysId] = 4.0;
