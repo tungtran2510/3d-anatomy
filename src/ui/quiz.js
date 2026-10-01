@@ -1,9 +1,9 @@
-// Interactive 3D Medical Exam & Practice Mode - Tap the correct anatomical structure
 import { state } from '../state/store.js';
 import { selectPartById, deselectPart } from '../viewer/selection.js';
 import { highlightMesh, clearHighlight } from '../viewer/visibility.js';
 import { getStructureInfo } from '../state/store.js';
 import { showToast } from './sidebar.js';
+import { recordMistake, recordCorrect, getWeakStructures } from '../state/learningRoadmap.js';
 
 export const EXAM_QUESTION_BANK = [
   {
@@ -142,6 +142,7 @@ export const EXAM_QUESTION_BANK = [
 ];
 
 let isQuizActive = false;
+let isAdaptiveMode = false;
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
@@ -158,6 +159,7 @@ export function isQuizRunning() {
 
 export function startQuiz(viewer) {
   isQuizActive = true;
+  isAdaptiveMode = false;
   score = 0;
   streak = 0;
   maxStreak = 0;
@@ -172,8 +174,34 @@ export function startQuiz(viewer) {
   if (navigator.vibrate) navigator.vibrate([50]);
 }
 
+export function startAdaptiveQuiz(viewer) {
+  const weakList = getWeakStructures().filter(w => !w.mastered);
+  isQuizActive = true;
+  isAdaptiveMode = true;
+  score = 0;
+  streak = 0;
+  maxStreak = 0;
+  currentIndex = 0;
+  missedQuestions = [];
+
+  if (weakList.length > 0) {
+    const weakPartIds = weakList.map(w => w.partId);
+    const matched = EXAM_QUESTION_BANK.filter(q => q.targetIds.some(t => weakPartIds.includes(t)));
+    const others = EXAM_QUESTION_BANK.filter(q => !matched.includes(q)).sort(() => 0.5 - Math.random());
+    currentQuestions = [...matched, ...others].slice(0, 5);
+    showToast(`🎯 Bắt đầu Quiz Thích Ứng: Ôn ${matched.length} cấu trúc bạn hay sai!`);
+  } else {
+    currentQuestions = [...EXAM_QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 5);
+    showToast('🎯 Chưa có câu sai! Bắt đầu bài kiểm tra thích ứng ngẫu nhiên');
+  }
+
+  renderQuizUI(viewer);
+  if (navigator.vibrate) navigator.vibrate([50, 50]);
+}
+
 export function stopQuiz() {
   isQuizActive = false;
+  isAdaptiveMode = false;
   clearInterval(timerInterval);
   if (quizOverlay) {
     quizOverlay.remove();
@@ -223,6 +251,7 @@ function handleTimeout(viewer) {
   const q = currentQuestions[currentIndex];
   missedQuestions.push(q);
   streak = 0;
+  recordMistake(q.targetIds[0], q.title, q.hint);
   showToast('⏰ Hết giờ cho câu hỏi này!');
   if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
@@ -258,6 +287,7 @@ function renderQuizUI(viewer) {
       <div class="quiz-card-header">
         <div class="quiz-badge">
           <span>🎯 Câu ${currentIndex + 1}/${currentQuestions.length}</span>
+          ${isAdaptiveMode ? '<span class="streak-badge" style="background:#8957e5;">⚡ Thích ứng</span>' : ''}
           ${streak > 1 ? `<span class="streak-badge">🔥 x${streak}</span>` : ''}
         </div>
         <div class="quiz-timer">
@@ -308,6 +338,7 @@ export function handleQuizClick(partId, viewer) {
     const streakBonus = (streak - 1) * 20;
     const gained = 100 + streakBonus;
     score += gained;
+    recordCorrect(q.targetIds[0]);
 
     highlightMesh(partId, 0x10b981, 1.0);
     showToast(`🎉 CHÍNH XÁC! +${gained} điểm ${streak > 1 ? `(Chuỗi x${streak})` : ''}`);
@@ -322,6 +353,7 @@ export function handleQuizClick(partId, viewer) {
     // Incorrect!
     streak = 0;
     missedQuestions.push(q);
+    recordMistake(q.targetIds[0], q.title, q.hint);
     const clickedInfo = getStructureInfo(partId);
     const clickedName = clickedInfo?.name?.[state.language] || clickedInfo?.name?.vi || partId;
 

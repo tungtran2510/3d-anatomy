@@ -19,6 +19,9 @@ import { initClipping, setClippingPlane, updateClippingOffset, toggleClippingFli
 import { toggleMeasurementMode, isMeasurementActive, clearMeasurement } from '../viewer/measurement.js';
 import { openStudyModulePicker } from './studyMode.js';
 import { saveNote, getNote, getAllNotes, deleteNote } from '../state/notes.js';
+import { openAIAssistant, initAIAssistantUI } from './aiAssistantModal.js';
+import { renderRoadmapTab } from './roadmapTab.js';
+import { trackPartViewed } from '../state/learningRoadmap.js';
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
 // digestive and urinary structures all live in the single "visceral" model.
@@ -537,6 +540,10 @@ export function initFooterActions(viewer) {
     document.getElementById('infoOpen')?.click();
   });
 
+  document.getElementById('cardAIBtn')?.addEventListener('click', () => {
+    openAIAssistant(viewer);
+  });
+
   // Card Note Button
   document.getElementById('cardNoteBtn')?.addEventListener('click', () => {
     const noteBox = document.getElementById('cardNoteBox');
@@ -671,12 +678,13 @@ export function updateBookmarkButton(partId) {
     : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Lưu`;
 }
 
-// Drawer Tabs (Systems, Regions, Bookmarks, History)
+// Drawer Tabs (Systems, Regions, Roadmap, Bookmarks, Notes, History)
 export function initDrawerTabs(viewer) {
   const tabButtons = document.querySelectorAll('.sidebar-tab');
   const panes = {
     systems: document.getElementById('tabSystemsContent'),
     regions: document.getElementById('tabRegionsContent'),
+    roadmap: document.getElementById('tabRoadmapContent'),
     bookmarks: document.getElementById('tabBookmarksContent'),
     notes: document.getElementById('tabNotesContent'),
     history: document.getElementById('tabHistoryContent')
@@ -698,6 +706,7 @@ export function initDrawerTabs(viewer) {
       });
 
       if (target === 'regions') renderRegionsList(viewer);
+      if (target === 'roadmap') renderRoadmapTab(viewer);
       if (target === 'bookmarks') renderBookmarksList(viewer);
       if (target === 'notes') renderNotesList(viewer);
       if (target === 'history') renderHistoryList(viewer);
@@ -709,6 +718,14 @@ export function initDrawerTabs(viewer) {
       renderNotesList(viewer);
     }
   });
+
+  const refreshRoadmapIfActive = () => {
+    if (document.querySelector('.sidebar-tab[data-tab="roadmap"]')?.classList.contains('active')) {
+      renderRoadmapTab(viewer);
+    }
+  };
+  window.addEventListener('anatomy-weak-points-updated', refreshRoadmapIfActive);
+  window.addEventListener('anatomy-stats-updated', refreshRoadmapIfActive);
 }
 
 export function renderNotesList(viewer) {
@@ -890,6 +907,11 @@ export function renderHistoryList(viewer) {
 
 // Floating Tools Bar (Visible Body Style: Explode, Labels, Clipping, Measurement, Study, Quiz)
 export function initFloatingTools(viewer) {
+  const btnAI = document.getElementById('btnToolAI');
+  btnAI?.addEventListener('click', () => {
+    openAIAssistant(viewer);
+  });
+
   const btnExplode = document.getElementById('btnToolExplode');
   const explodePopover = document.getElementById('explodePopover');
   const explodeSlider = document.getElementById('explodeSlider');
@@ -1281,6 +1303,7 @@ function onSelectionChange(part) {
   const card = document.getElementById('selectionCard');
 
   if (part) {
+    trackPartViewed(part.id);
     const item = document.querySelector(`.structure-item[data-part="${part.id}"]`);
     if (item) item.classList.add('selected');
 
@@ -1426,6 +1449,7 @@ export async function initUI(viewer) {
   initLabels(viewer);
   initClipping(viewer);
   initHelpModal();
+  initAIAssistantUI(viewer);
   initLanguageSelector();
   initSearch();
   initDrawers();
