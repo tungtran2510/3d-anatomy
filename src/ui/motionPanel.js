@@ -71,7 +71,10 @@ function renderMotionPanelContent() {
     <div class="motion-header">
       <div class="motion-title-row">
         <span class="motion-badge">🎬 GIẢI PHẪU ĐỘNG</span>
-        <button class="popover-close-btn" id="motionCloseBtn" aria-label="Đóng">&times;</button>
+        <div class="motion-head-actions">
+          <button type="button" class="popover-min-btn" id="motionMinBtn" title="Thu nhỏ / Mở rộng" aria-label="Thu nhỏ">─</button>
+          <button class="popover-close-btn" id="motionCloseBtn" aria-label="Đóng">&times;</button>
+        </div>
       </div>
       <div class="motion-select-wrapper">
         <select id="motionSelect" class="motion-select">
@@ -139,6 +142,13 @@ function setupEventListeners() {
 
   const closeBtn = popoverEl.querySelector('#motionCloseBtn');
   closeBtn?.addEventListener('click', closeMotionPanel);
+
+  const minBtn = popoverEl.querySelector('#motionMinBtn');
+  minBtn?.addEventListener('click', () => {
+    const isMin = popoverEl.classList.toggle('minimized');
+    minBtn.textContent = isMin ? '⤢' : '─';
+    minBtn.title = isMin ? 'Mở rộng bảng điều khiển' : 'Thu nhỏ bảng điều khiển';
+  });
 
   const motionSelect = popoverEl.querySelector('#motionSelect');
   motionSelect?.addEventListener('change', (e) => {

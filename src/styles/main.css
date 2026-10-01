@@ -809,38 +809,59 @@ body {
 /* Viewer Controls */
 /* Floating over the canvas rather than occupying a layout row: the 3D view is
    the product, and it was down to a third of the viewport. */
+/* Viewer Controls - Docked top-left icon bar */
 .viewer-controls {
   position: absolute;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%);
+  top: 10px;
+  left: 10px;
+  bottom: auto;
+  right: auto;
+  transform: none;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px;
-  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  gap: 4px;
+  padding: 4px;
+  background: rgba(22, 27, 34, 0.88);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   box-shadow: 0 4px 16px var(--shadow-strong);
-  backdrop-filter: blur(8px);
-  flex-wrap: wrap;
-  max-width: calc(100% - 24px);
-  z-index: 30;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 50;
+  max-width: none;
 }
 
 .control-btn {
-  padding: 8px 14px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--fg-primary);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
   font-family: inherit;
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ctrl-text,
+.tool-text {
+  display: none !important;
+}
+
+.ctrl-icon,
+.tool-icon {
+  font-size: 15px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .control-btn:hover {
@@ -1302,14 +1323,15 @@ body {
 
   .viewer-controls {
     position: absolute;
-    top: 10px;
+    top: 8px;
     bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 8px;
+    right: auto;
+    transform: none;
     z-index: 50;
-    gap: 4px;
-    padding: 4px 8px;
-    background: rgba(22, 27, 34, 0.85);
+    gap: 3px;
+    padding: 3px;
+    background: rgba(22, 27, 34, 0.88);
     border-radius: var(--radius-md);
   }
 
@@ -1377,14 +1399,18 @@ body {
   }
 
   .control-btn {
-    padding: 5px 8px;
-    font-size: 11px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 13px;
   }
 
   .viewer-controls {
-    gap: 4px;
-    padding: 4px 6px;
-    max-width: 96%;
+    top: 8px;
+    left: 8px;
+    gap: 2px;
+    padding: 2px;
+    max-width: none;
   }
 
   .action-btn {
@@ -1967,58 +1993,144 @@ body {
 /* Floating Tools Bar (Visible Body Style: Explode, Labels, Quiz) */
 .viewer-tools {
   position: absolute;
-  top: 60px;
-  left: 12px;
+  top: 48px;
+  left: 10px;
   z-index: 50;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-.tool-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: rgba(22, 27, 34, 0.88);
+  gap: 5px;
+  padding: 4px;
+  background: rgba(22, 27, 34, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--fg-primary);
-  font-size: 12px;
-  font-weight: 600;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.viewer-tools::-webkit-scrollbar {
+  display: none;
+}
+
+.tool-collapse-btn {
+  width: 32px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--fg-secondary);
+  font-size: 11px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  padding: 0;
+  margin-bottom: 2px;
+  transition: color 0.2s;
+}
+.tool-collapse-btn:hover {
+  color: var(--fg-primary);
+}
+
+.tool-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 27, 34, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--fg-primary);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   transition: all 0.2s ease;
   user-select: none;
+  flex-shrink: 0;
 }
 .tool-btn:hover {
   background: var(--bg-hover);
   border-color: var(--accent);
+  transform: scale(1.08);
 }
 .tool-btn.active {
-  background: rgba(88, 166, 255, 0.2);
+  background: rgba(88, 166, 255, 0.25);
   border-color: #58a6ff;
   color: #58a6ff;
+  transform: scale(1.05);
 }
 .tool-btn.highlight {
-  border-color: rgba(255, 215, 0, 0.4);
+  border-color: rgba(255, 215, 0, 0.5);
 }
 .tool-btn.highlight.active {
-  background: rgba(255, 215, 0, 0.2);
+  background: rgba(255, 215, 0, 0.25);
   border-color: #ffd700;
   color: #ffd700;
+}
+.tool-btn.highlight-motion {
+  border-color: rgba(255, 152, 0, 0.5);
+}
+.tool-btn.highlight-motion.active {
+  background: rgba(255, 152, 0, 0.25);
+  border-color: #ff9800;
+  color: #ff9800;
+}
+.tool-btn.highlight-ar {
+  border-color: rgba(163, 113, 247, 0.5);
+}
+.tool-btn.highlight-ar.active {
+  background: rgba(163, 113, 247, 0.25);
+  border-color: #a371f7;
+  color: #a371f7;
+}
+.tool-btn.highlight-offline {
+  border-color: rgba(56, 189, 248, 0.5);
+}
+.tool-btn.highlight-offline.active {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+/* Collapsed state for tools bar */
+.viewer-tools.collapsed {
+  max-height: 28px;
+  overflow: hidden;
+  padding: 2px;
+  background: rgba(22, 27, 34, 0.6);
+}
+.viewer-tools.collapsed .tool-btn {
+  display: none !important;
+}
+.viewer-tools.collapsed .tool-collapse-btn {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.viewer-tools.collapsed .tool-collapse-btn .collapse-icon {
+  transform: rotate(180deg);
 }
 
 @media (max-width: 1024px) {
   .viewer-tools {
-    top: 55px;
-    left: 10px;
-    gap: 6px;
+    top: 42px;
+    left: 8px;
+    gap: 4px;
+    padding: 3px;
   }
   .tool-btn {
-    padding: 6px 10px;
-    font-size: 11px;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+  .tool-collapse-btn {
+    width: 30px;
+    height: 18px;
   }
   .explode-popover {
     top: auto;
@@ -2030,11 +2142,29 @@ body {
   }
 }
 
+@media (max-width: 480px) {
+  .viewer-tools {
+    top: 40px;
+    left: 8px;
+    gap: 3px;
+    padding: 2px;
+  }
+  .tool-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  .tool-collapse-btn {
+    width: 28px;
+    height: 16px;
+  }
+}
+
 /* Explode Popover Slider */
 .explode-popover {
   position: absolute;
-  top: 60px;
-  left: 140px;
+  top: 48px;
+  left: 56px;
   z-index: 60;
   background: rgba(22, 27, 34, 0.95);
   backdrop-filter: blur(16px);
@@ -2061,12 +2191,16 @@ body {
   background: transparent;
   border: none;
   color: var(--fg-muted);
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
   line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 .popover-close-btn:hover {
-  color: var(--fg-primary);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
 }
 .explode-slider-row {
   display: flex;
@@ -3581,6 +3715,46 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 6px;
+}
+
+.motion-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popover-min-btn {
+  background: transparent;
+  border: none;
+  color: var(--fg-muted);
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.popover-min-btn:hover {
+  color: var(--fg-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.motion-popover.minimized {
+  padding: 6px 12px;
+  max-width: 320px;
+}
+.motion-popover.minimized .motion-select-wrapper,
+.motion-popover.minimized .motion-timeline-container,
+.motion-popover.minimized .motion-controls-row,
+.motion-popover.minimized .motion-isolation-section {
+  display: none !important;
+}
+.motion-popover.minimized .motion-header {
+  margin-bottom: 2px;
+}
+.motion-popover.minimized .motion-phase-card {
+  margin-top: 2px;
+  padding: 4px 8px;
+  font-size: 11px;
 }
 
 .motion-badge {

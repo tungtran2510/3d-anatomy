@@ -920,6 +920,14 @@ export function renderHistoryList(viewer) {
 
 // Floating Tools Bar (Visible Body Style: Explode, Labels, Clipping, Measurement, Study, Quiz)
 export function initFloatingTools(viewer) {
+  const btnToggleTools = document.getElementById('btnToggleTools');
+  const viewerTools = document.getElementById('viewerTools');
+  btnToggleTools?.addEventListener('click', () => {
+    const isCollapsed = viewerTools?.classList.toggle('collapsed');
+    const icon = btnToggleTools.querySelector('.collapse-icon');
+    if (icon) icon.textContent = isCollapsed ? '▶' : '◀';
+  });
+
   const btnAI = document.getElementById('btnToolAI');
   btnAI?.addEventListener('click', () => {
     openAIAssistant(viewer);
@@ -1468,7 +1476,10 @@ function updateUIText(lang) {
     const el = document.getElementById(id);
     if (el) {
       el.title = t(key);
-      if (el.tagName === 'BUTTON' && !el.querySelector('svg')) {
+      const ctrlText = el.querySelector('.ctrl-text');
+      if (ctrlText) {
+        ctrlText.textContent = t(key);
+      } else if (el.tagName === 'BUTTON' && !el.querySelector('svg') && !el.querySelector('.ctrl-icon')) {
         el.textContent = t(key);
       }
     }
