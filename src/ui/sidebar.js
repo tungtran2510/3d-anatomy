@@ -1,9 +1,9 @@
 // Sidebar UI - Systems panel with collapsible groups
-import { state, subscribe, getSystemParts, getStructureInfo, setLanguage, translate } from '../state/store.js';
+import { state, subscribe, getSystemParts, getStructureInfo, setLanguage, translate, pushUndo } from '../state/store.js';
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
 import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState } from '../viewer/visibility.js';
-import { selectPartById, deselectPart, undoLastDissect } from '../viewer/selection.js';
+import { selectPartById, deselectPart, undoLastDissect, executeUndo } from '../viewer/selection.js';
 import { setView, resetView, frameRegion } from '../viewer/camera.js';
 import { loadAllData, searchStructures } from '../utils/dataLoader.js';
 import { initDepthSlider, resetDepthSlider } from './depthSlider.js';
@@ -15,7 +15,7 @@ import { initLabels, toggleLabels } from '../viewer/labels.js';
 import { setExplodeFactor } from '../viewer/explodedView.js';
 import { startQuiz, stopQuiz, isQuizRunning } from './quiz.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
-import { initClipping, setClippingPlane, updateClippingOffset, toggleClippingFlip, disableClipping } from '../viewer/clipping.js';
+import { initClipping, setClippingPlane, updateClippingOffset, toggleClippingFlip, disableClipping, toggleHalfBody, flipHalfBody, isHalfBodyActive } from '../viewer/clipping.js';
 import { toggleMeasurementMode, isMeasurementActive, clearMeasurement } from '../viewer/measurement.js';
 import { openStudyModulePicker, closeStudyMode } from './studyMode.js';
 import { saveNote, getNote, getAllNotes, deleteNote } from '../state/notes.js';
@@ -23,6 +23,11 @@ import { openAIAssistant, closeAIAssistant, initAIAssistantUI } from './aiAssist
 import { initVoiceController } from '../ai/voiceController.js';
 import { renderRoadmapTab } from './roadmapTab.js';
 import { trackPartViewed } from '../state/learningRoadmap.js';
+import { ICONS } from './icons.js';
+import { initSystemsLayerController } from './systemsLayerController.js';
+import { initFloatingAIButton } from './floatingAIButton.js';
+import { initFullscreenController } from './fullscreenController.js';
+import { initAtlasHub, openAtlasHub } from './atlasHubModal.js';
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
 // digestive and urinary structures all live in the single "visceral" model.
@@ -31,15 +36,15 @@ const SYSTEM_LABELS = {
     skeletal: 'Hệ Xương',
     muscular: 'Hệ Cơ bắp',
     joints: 'Khớp & Dây chằng',
-    cardiovascular: 'Hệ Tim mạch',
-    lymphatic: 'Hệ Bạch huyết',
-    nervous: 'Hệ Thần kinh & Giác quan',
-    visceral: 'Hệ Nội tạng'
+    cardiovascular: 'Hệ Tim mạch & Mạch máu',
+    lymphatic: 'Hệ Bạch huyết & Miễn dịch',
+    nervous: 'Hệ Thần kinh & Não bộ',
+    visceral: 'Hệ Nội tạng toàn thể'
   },
   en: {
     skeletal: 'Skeletal system',
     muscular: 'Muscular system',
-    joints: 'Joints',
+    joints: 'Joints & Ligaments',
     cardiovascular: 'Cardiovascular system',
     lymphatic: 'Lymphoid organs',
     nervous: 'Nervous system & sense organs',
@@ -48,55 +53,178 @@ const SYSTEM_LABELS = {
 };
 
 const SYSTEM_ICONS = {
-  skeletal: '🦴',
-  muscular: '💪',
-  joints: '🦵',
-  cardiovascular: '❤️',
-  lymphatic: '🫧',
-  nervous: '🧠',
-  visceral: '🫁'
+  skeletal: ICONS.skeletal,
+  muscular: ICONS.muscular,
+  joints: ICONS.joints,
+  cardiovascular: ICONS.cardiovascular,
+  lymphatic: ICONS.lymphatic,
+  nervous: ICONS.nervous,
+  visceral: ICONS.visceral
 };
 
 export function systemLabel(systemId, lang = state.language || 'vi') {
   return SYSTEM_LABELS[lang]?.[systemId] || SYSTEM_LABELS.vi?.[systemId] || SYSTEM_LABELS.en?.[systemId] || systemId;
 }
 
+// 10 Full Medical Systems Catalog
+export const EXTENDED_SYSTEMS = [
+  {
+    id: 'skeletal',
+    baseSystem: 'skeletal',
+    label: { vi: 'Hệ Xương', en: 'Skeletal system' },
+    icon: ICONS.skeletal,
+    count: 277
+  },
+  {
+    id: 'joints',
+    baseSystem: 'joints',
+    label: { vi: 'Khớp & Dây chằng', en: 'Joints & Ligaments' },
+    icon: ICONS.joints,
+    count: 349
+  },
+  {
+    id: 'muscular',
+    baseSystem: 'muscular',
+    label: { vi: 'Hệ Cơ bắp', en: 'Muscular system' },
+    icon: ICONS.muscular,
+    count: 669
+  },
+  {
+    id: 'nervous',
+    baseSystem: 'nervous',
+    label: { vi: 'Hệ Thần kinh & Não bộ', en: 'Nervous system' },
+    icon: ICONS.nervous,
+    count: 580
+  },
+  {
+    id: 'cardiovascular',
+    baseSystem: 'cardiovascular',
+    label: { vi: 'Hệ Tim mạch & Mạch máu', en: 'Cardiovascular system' },
+    icon: ICONS.cardiovascular,
+    count: 676
+  },
+  {
+    id: 'respiratory',
+    baseSystem: 'visceral',
+    subType: 'respiratory',
+    label: { vi: 'Hệ Hô hấp (Phổi & Khí quản)', en: 'Respiratory system' },
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6a6 6 0 0 0 12 0V3"/><path d="M12 9v12"/><path d="M8 15a4 4 0 0 0 4 4 4 4 0 0 0 4-4"/></svg>`,
+    count: 40
+  },
+  {
+    id: 'digestive',
+    baseSystem: 'visceral',
+    subType: 'digestive',
+    label: { vi: 'Hệ Tiêu hóa (Gan, Dạ dày, Ruột)', en: 'Digestive system' },
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 6 5 6 9c0 6 6 13 6 13s6-7 6-13c0-4-2-7-6-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`,
+    count: 46
+  },
+  {
+    id: 'urinary_genital',
+    baseSystem: 'visceral',
+    subType: 'urinary_genital',
+    label: { vi: 'Hệ Tiết niệu & Sinh dục', en: 'Urogenital system' },
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    count: 24
+  },
+  {
+    id: 'lymphatic',
+    baseSystem: 'lymphatic',
+    label: { vi: 'Hệ Bạch huyết & Miễn dịch', en: 'Lymphatic system' },
+    icon: ICONS.lymphatic,
+    count: 158
+  },
+  {
+    id: 'endocrine',
+    baseSystem: 'visceral',
+    subType: 'endocrine',
+    label: { vi: 'Hệ Nội tiết (Tuyến giáp, Yên)', en: 'Endocrine system' },
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg>`,
+    count: 8
+  },
+  {
+    id: 'visceral',
+    baseSystem: 'visceral',
+    label: { vi: 'Nội tạng toàn thể', en: 'Visceral systems' },
+    icon: ICONS.visceral,
+    count: 118
+  }
+];
+
+export function getSubSystemParts(subType) {
+  const allVisceral = getSystemParts('visceral');
+  if (!allVisceral || !allVisceral.length) return [];
+
+  return allVisceral.filter(name => {
+    const lower = name.toLowerCase();
+    if (subType === 'respiratory') {
+      return lower.includes('bronchus') || lower.includes('lung') || lower.includes('trachea') || lower.includes('pleura') || lower.includes('nasal') || lower.includes('pharynx') || lower.includes('epiglottis');
+    }
+    if (subType === 'digestive') {
+      return lower.includes('colon') || lower.includes('liver') || lower.includes('pancrea') || lower.includes('stomach') || lower.includes('duodenum') || lower.includes('jejunum') || lower.includes('appendix') || lower.includes('bile') || lower.includes('gallbladder') || lower.includes('esophagus') || lower.includes('oesophagus') || lower.includes('parotid') || lower.includes('sublingual') || lower.includes('submandibular') || lower.includes('gingiva') || lower.includes('tongue') || lower.includes('palate') || lower.includes('omentum') || lower.includes('taenia') || lower.includes('meso');
+    }
+    if (subType === 'urinary_genital') {
+      return lower.includes('kidney') || lower.includes('bladder') || lower.includes('ureter') || lower.includes('urethra') || lower.includes('renal') || lower.includes('penis') || lower.includes('prostate') || lower.includes('testis') || lower.includes('seminal') || lower.includes('deferens') || lower.includes('epididymis') || lower.includes('ejaculatory');
+    }
+    if (subType === 'endocrine') {
+      return lower.includes('thyroid') || lower.includes('suprarenal') || lower.includes('hypophysis') || lower.includes('pineal');
+    }
+    return false;
+  });
+}
+
 export function initSystemsSidebar() {
   const container = document.getElementById('systemsList');
   if (!container) return;
 
-  const lang = state.language || 'en';
+  const lang = state.language || 'vi';
 
   const presets = `
     <div class="preset-row">
       ${PRESETS.map(preset => `
         <button type="button" class="preset-chip" data-preset="${preset.id}">
-          ${escapeHtml(preset.label[lang] || preset.label.en)}
+          ${escapeHtml(preset.label[lang] || preset.label.vi || preset.label.en)}
         </button>
       `).join('')}
     </div>
   `;
 
-  container.innerHTML = presets + SYSTEM_IDS.map(systemId => {
-    const parts = getSystemParts(systemId);
-    const count = parts.length;
-    const icon = SYSTEM_ICONS[systemId] || '🔬';
-    const label = systemLabel(systemId, lang);
+  container.innerHTML = presets + EXTENDED_SYSTEMS.map(item => {
+    const rawParts = item.subType ? getSubSystemParts(item.subType) : getSystemParts(item.baseSystem);
+    const count = rawParts.length || item.count;
+    const icon = item.icon || '🔬';
+    const label = item.label[lang] || item.label.vi || item.label.en;
 
     // Determine initial visibility state
-    const visibility = getSystemVisibilityState(systemId);
-    const isVisible = visibility.visible;
+    let isVisible = false;
+    if (item.subType) {
+      const subParts = getSubSystemParts(item.subType);
+      isVisible = state.loadedSystems.includes('visceral') && subParts.some(id => state.partStates.get(id)?.visible !== false && !state.hiddenParts.has(id));
+    } else {
+      const visibility = getSystemVisibilityState(item.id);
+      isVisible = visibility.visible;
+    }
     const checkboxState = isVisible ? 'checked' : '';
 
     return `
-      <div class="system-group" data-system="${systemId}">
-        <label class="system-group-label">
-          <input type="checkbox" ${checkboxState} data-system-checkbox="${systemId}">
-          <span class="system-icon">${icon}</span>
-          <span class="system-name">${label}</span>
-          <span class="system-count">${count}</span>
-        </label>
-        <div class="system-group-content" style="display: ${isVisible ? 'block' : 'none'};"></div>
+      <div class="system-group" data-system="${item.id}" data-base-system="${item.baseSystem}">
+        <div class="system-group-header">
+          <label class="system-checkbox-label" title="${isVisible ? 'Ẩn hệ này' : 'Hiện hệ này trên 3D'}">
+            <input type="checkbox" ${checkboxState} data-system-checkbox="${item.id}" data-base-system="${item.baseSystem}" data-subtype="${item.subType || ''}">
+            <span class="system-checkbox-custom"></span>
+          </label>
+          <div class="system-accordion-trigger" data-toggle-accordion="${item.id}">
+            <span class="system-icon">${icon}</span>
+            <div class="system-text-wrap">
+              <span class="system-name">${escapeHtml(label)}</span>
+            </div>
+            <span class="system-count">${count}</span>
+            <button type="button" class="system-expand-btn" aria-label="Xem chi tiết ${escapeHtml(label)}" title="Xem danh sách chi tiết">
+              <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="system-group-content" style="display: none;"></div>
       </div>
     `;
   }).join('');
@@ -108,43 +236,71 @@ export function initSystemsSidebar() {
     });
   });
 
-  // Systems loaded before this ran — the startup system, or anything restored
-  // from a link — never passed through the checkbox handler, so their lists
-  // would stay empty.
-  state.loadedSystems.forEach(systemId => {
-    const content = container.querySelector(`.system-group[data-system="${systemId}"] .system-group-content`);
-    if (content && content.children.length === 0) populateSystemStructures(systemId, content);
+  // Accordion Expand/Collapse
+  container.querySelectorAll('[data-toggle-accordion]').forEach(trigger => {
+    trigger.addEventListener('click', async (e) => {
+      const systemId = trigger.dataset.toggleAccordion;
+      const item = EXTENDED_SYSTEMS.find(s => s.id === systemId);
+      if (!item) return;
+
+      const group = trigger.closest('.system-group');
+      const content = group.querySelector('.system-group-content');
+      const chevron = trigger.querySelector('.system-expand-btn');
+      const isExpanded = content.style.display === 'block';
+
+      if (isExpanded) {
+        content.style.display = 'none';
+        group.classList.remove('is-expanded');
+        chevron?.classList.remove('is-open');
+      } else {
+        // Expand
+        content.style.display = 'block';
+        group.classList.add('is-expanded');
+        chevron?.classList.add('is-open');
+
+        if (content.children.length === 0) {
+          // If base system model is not loaded yet, fetch it
+          await ensureSystemLoaded(item.baseSystem, group);
+          const customParts = item.subType ? getSubSystemParts(item.subType) : null;
+          populateSystemStructures(item.baseSystem, content, customParts);
+        }
+      }
+    });
   });
 
-  // Add event listeners for system toggles
+  // Add event listeners for system checkboxes (3D Visibility)
   container.querySelectorAll('[data-system-checkbox]').forEach(checkbox => {
     checkbox.addEventListener('change', async (e) => {
       const systemId = e.target.dataset.systemCheckbox;
+      const baseSystem = e.target.dataset.baseSystem;
+      const subType = e.target.dataset.subtype;
       const group = e.target.closest('.system-group');
       const content = group.querySelector('.system-group-content');
 
-      // A manual toggle invalidates the depth slider's picture of the scene.
       resetDepthSlider();
 
+      if (subType) {
+        // Sub-system of visceral (respiratory, digestive, urinary_genital, endocrine)
+        const subParts = getSubSystemParts(subType);
+        if (!e.target.checked) {
+          subParts.forEach(id => hidePart(id));
+        } else {
+          await ensureSystemLoaded('visceral', group);
+          subParts.forEach(id => showPart(id));
+        }
+        return;
+      }
+
+      // Standard primary system
       if (!e.target.checked) {
         hideSystem(systemId);
-        content.style.display = 'none';
         scheduleUnload(systemId, content);
         return;
       }
 
       cancelUnload(systemId);
-
-      // Models are fetched on first activation, not upfront.
       await ensureSystemLoaded(systemId, group);
       showSystem(systemId);
-      content.style.display = 'block';
-
-      // Building the list here covers every activation path: clicking the
-      // checkbox, clicking the row, or keyboard activation.
-      if (content.children.length === 0) {
-        populateSystemStructures(systemId, content);
-      }
     });
   });
 }
@@ -218,8 +374,8 @@ async function ensureSystemLoaded(systemId, group) {
   if (state.loadedSystems.includes(systemId)) return;
 
   if (!pendingSystemLoads.has(systemId)) {
-    const label = group?.querySelector('.system-group-label');
-    const counter = label?.querySelector('.system-count');
+    const label = group?.querySelector('.system-accordion-trigger') || group?.querySelector('.system-group-header') || group?.querySelector('.system-group-label');
+    const counter = group?.querySelector('.system-count');
     const originalCount = counter?.textContent;
     label?.classList.add('loading');
 
@@ -259,10 +415,11 @@ const rovingRefreshers = new WeakMap();
 
 // One row per structure rather than per mesh: the left and right copies of the
 // same structure share a row and are picked with a side chip.
-function groupSystemStructures(systemId, lang) {
+function groupSystemStructures(systemId, lang, customParts = null) {
   const groups = new Map();
+  const parts = customParts || getSystemParts(systemId);
 
-  getSystemParts(systemId).forEach(partId => {
+  parts.forEach(partId => {
     const info = getStructureInfo(partId) || {};
     const base = info.baseName || partId;
 
@@ -270,7 +427,7 @@ function groupSystemStructures(systemId, lang) {
     if (!group) {
       group = {
         base,
-        label: (info.name?.[lang] || info.name?.en || base).replace(/\s*\((sinistro|destro|left|right)\)$/i, ''),
+        label: (info.name?.[lang] || info.name?.vi || info.name?.en || base).replace(/\s*\((sinistro|destro|left|right)\)$/i, ''),
         parts: [],
         sides: {}
       };
@@ -316,9 +473,9 @@ function rowMarkup(group) {
   `;
 }
 
-function populateSystemStructures(systemId, container) {
-  const lang = state.language || 'it';
-  const groups = groupSystemStructures(systemId, lang);
+function populateSystemStructures(systemId, container, customParts = null) {
+  const lang = state.language || 'vi';
+  const groups = groupSystemStructures(systemId, lang, customParts);
 
   // A 669-structure system used to build ~10 000 nodes and ~2700 listeners in
   // one go. Rows arrive in chunks as the panel is scrolled, behind a single
@@ -447,13 +604,44 @@ export function initToolbar(viewer) {
     frontViewBtn: () => setView('front', viewer),
     sideViewBtn: () => setView('right', viewer),
     backViewBtn: () => setView('back', viewer),
-    topViewBtn: () => setView('top', viewer)
+    topViewBtn: () => setView('top', viewer),
+    halfBodyBtn: () => handleHalfBodyToggle(viewer)
   };
 
   Object.entries(buttons).forEach(([id, handler]) => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', handler);
   });
+}
+
+export function handleHalfBodyToggle(viewer) {
+  const active = toggleHalfBody(viewer);
+  const btnCtrl = document.getElementById('halfBodyBtn');
+  const btnTool = document.getElementById('btnToolHalfBody');
+  const pill = document.getElementById('halfBodyPill');
+
+  if (btnCtrl) btnCtrl.classList.toggle('active', active);
+  if (btnTool) btnTool.classList.toggle('active', active);
+  if (pill) pill.classList.toggle('hidden', !active);
+
+  showToast(active ? 'Chế độ Nửa Người: ĐÃ BẬT (Mặt cắt đứng dọc Sagittal)' : 'Chế độ Nửa Người: ĐÃ TẮT');
+}
+
+export function handleHalfBodyFlip(viewer) {
+  const flipped = flipHalfBody(viewer);
+  showToast(flipped ? 'Đã đổi sang nửa người bên đối diện' : 'Đã đổi nửa người');
+}
+
+export function closeHalfBody(viewer) {
+  disableClipping(viewer);
+  const btnCtrl = document.getElementById('halfBodyBtn');
+  const btnTool = document.getElementById('btnToolHalfBody');
+  const pill = document.getElementById('halfBodyPill');
+
+  if (btnCtrl) btnCtrl.classList.remove('active');
+  if (btnTool) btnTool.classList.remove('active');
+  if (pill) pill.classList.add('hidden');
+  showToast('Đã tắt chế độ nửa người');
 }
 
 function isolateSelected() {
@@ -492,10 +680,46 @@ export function showToast(message, duration = 2500) {
 // Footer & Mobile Navigation actions
 export function initFooterActions(viewer) {
   // Legacy footer buttons if present
-  document.getElementById('footerIsolateBtn')?.addEventListener('click', isolateSelected);
-  document.getElementById('footerHideBtn')?.addEventListener('click', hideSelected);
-  document.getElementById('footerTransparentBtn')?.addEventListener('click', toggleTransparencySelected);
-  document.getElementById('footerShowAllBtn')?.addEventListener('click', () => { restoreAllParts(); deselectPart(); });
+  document.getElementById('footerIsolateBtn')?.addEventListener('click', () => {
+    if (state.selectedPart) {
+      pushUndo({
+        type: 'isolate',
+        partId: state.selectedPart.id,
+        prevIsolated: state.isolatedPart || null
+      });
+      isolateSelected();
+      viewer?.render();
+    }
+  });
+  document.getElementById('footerHideBtn')?.addEventListener('click', () => {
+    if (state.selectedPart) {
+      pushUndo({
+        type: 'hide',
+        partId: state.selectedPart.id
+      });
+      hideSelected();
+      viewer?.render();
+    }
+  });
+  document.getElementById('footerTransparentBtn')?.addEventListener('click', () => {
+    if (state.selectedPart) {
+      const partState = state.partStates.get(state.selectedPart.id);
+      const prevOpacity = partState?.opacity ?? 1;
+      pushUndo({
+        type: 'ghost',
+        partId: state.selectedPart.id,
+        prevOpacity: prevOpacity
+      });
+      toggleTransparencySelected();
+      viewer?.render();
+    }
+  });
+  document.getElementById('footerShowAllBtn')?.addEventListener('click', () => {
+    restoreAllParts();
+    deselectPart(true);
+    if (viewer) resetView(viewer, true);
+    viewer?.render();
+  });
 
   // Floating Selection Card buttons
   document.getElementById('cardBookmarkBtn')?.addEventListener('click', () => {
@@ -523,18 +747,61 @@ export function initFooterActions(viewer) {
   });
 
   document.getElementById('cardIsolateBtn')?.addEventListener('click', () => {
-    isolateSelected();
-    showToast('Đã cô lập bộ phận này');
+    const btn = document.getElementById('cardIsolateBtn');
+    const isCurrentlyIsolated = btn?.classList.contains('active') || (state.selectedPart && state.isolatedPart === state.selectedPart.id);
+    if (isCurrentlyIsolated) {
+      if (state.selectedPart) {
+        pushUndo({
+          type: 'isolate',
+          partId: state.selectedPart.id,
+          prevIsolated: state.isolatedPart
+        });
+      }
+      // Toggle OFF: un-isolate and restore
+      restoreAllParts();
+      btn?.classList.remove('active');
+      viewer?.render();
+      showToast('Đã tắt cô lập - Khôi phục toàn bộ giải phẫu');
+    } else {
+      if (state.selectedPart) {
+        pushUndo({
+          type: 'isolate',
+          partId: state.selectedPart.id,
+          prevIsolated: state.isolatedPart || null
+        });
+        isolateSelected();
+        btn?.classList.add('active');
+        viewer?.render();
+        showToast('Đã cô lập bộ phận này (Nhấn lại để tắt cô lập)');
+      }
+    }
   });
 
   document.getElementById('cardHideBtn')?.addEventListener('click', () => {
-    hideSelected();
-    showToast('Đã bóc tách / ẩn bộ phận');
+    if (state.selectedPart) {
+      pushUndo({
+        type: 'hide',
+        partId: state.selectedPart.id
+      });
+      hideSelected();
+      viewer?.render();
+      showToast('Đã bóc tách / ẩn bộ phận');
+    }
   });
 
   document.getElementById('cardGhostBtn')?.addEventListener('click', () => {
-    toggleTransparencySelected();
-    showToast('Đã đổi độ trong suốt');
+    if (state.selectedPart) {
+      const partState = state.partStates.get(state.selectedPart.id);
+      const prevOpacity = partState?.opacity ?? 1;
+      pushUndo({
+        type: 'ghost',
+        partId: state.selectedPart.id,
+        prevOpacity: prevOpacity
+      });
+      toggleTransparencySelected();
+      viewer?.render();
+      showToast('Đã đổi độ trong suốt');
+    }
   });
 
   document.getElementById('cardInfoBtn')?.addEventListener('click', () => {
@@ -590,13 +857,18 @@ export function initFooterActions(viewer) {
   });
 
   document.getElementById('cardCloseBtn')?.addEventListener('click', () => {
+    const isolateBtn = document.getElementById('cardIsolateBtn');
+    if (isolateBtn?.classList.contains('active')) {
+      restoreAllParts();
+      isolateBtn.classList.remove('active');
+    }
     deselectPart();
     document.getElementById('cardNoteBox')?.classList.add('hidden');
   });
 
   // Mobile Bottom Bar Navigation
   document.getElementById('btnNavSystems')?.addEventListener('click', () => {
-    document.getElementById('systemsOpen')?.click();
+    openAtlasHub(viewer, 'views');
   });
 
   document.getElementById('btnNavSearch')?.addEventListener('click', () => {
@@ -616,11 +888,9 @@ export function initFooterActions(viewer) {
 
   const btnUndo = document.getElementById('btnNavUndo');
   btnUndo?.addEventListener('click', () => {
-    const restored = undoLastDissect();
-    if (restored) {
-      const info = getStructureInfo(restored);
-      const name = info?.name?.[state.language] || info?.name?.vi || restored;
-      showToast(`Đã phục hồi: ${name}`);
+    const msg = executeUndo(viewer);
+    if (msg) {
+      showToast(msg);
     } else {
       showToast('Không còn thao tác nào để hoàn tác');
     }
@@ -628,8 +898,24 @@ export function initFooterActions(viewer) {
 
   document.getElementById('btnNavReset')?.addEventListener('click', () => {
     restoreAllParts();
-    deselectPart();
-    showToast('Đã khôi phục toàn bộ giải phẫu');
+    deselectPart(true);
+    const isolateBtn = document.getElementById('cardIsolateBtn');
+    if (isolateBtn) isolateBtn.classList.remove('active');
+
+    // Turn off dissect mode if active
+    if (state.dissectMode) {
+      state.dissectMode = false;
+      document.getElementById('btnNavDissect')?.classList.remove('dissect-active');
+    }
+
+    // Reset camera to default full front view
+    if (viewer) {
+      resetView(viewer, true);
+    }
+
+    state.undoStack = [];
+    viewer?.render();
+    showToast('Đã khôi phục toàn bộ giải phẫu & góc nhìn');
   });
 }
 
@@ -644,17 +930,24 @@ export function openLesson(lessonUrl, lessonTitle) {
   }
 }
 
-export function openVideo(videoId, videoTitle) {
-  if (!videoId) return;
+export function openVideo(videoIdOrUrl, videoTitle) {
+  if (!videoIdOrUrl) return;
   const modal = document.getElementById('videoModal');
   const title = document.getElementById('videoModalTitle');
   const container = document.getElementById('videoFrameContainer');
   if (!modal || !container) return;
 
+  let embedUrl = videoIdOrUrl;
+  if (!videoIdOrUrl.startsWith('http')) {
+    embedUrl = `https://www.youtube.com/embed/${videoIdOrUrl}?autoplay=1&rel=0`;
+  } else if (!videoIdOrUrl.includes('autoplay=1')) {
+    embedUrl += (videoIdOrUrl.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
+  }
+
   if (title) title.textContent = videoTitle || 'Video Bài Giảng Giải Phẫu';
   container.innerHTML = `
     <iframe width="100%" height="100%"
-            src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0"
+            src="${embedUrl}"
             title="${escapeHtml(videoTitle || 'Video')}"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -663,6 +956,8 @@ export function openVideo(videoId, videoTitle) {
   `;
   modal.classList.remove('hidden');
 }
+
+export const openVideoModal = openVideo;
 
 export function closeVideo() {
   const modal = document.getElementById('videoModal');
@@ -814,10 +1109,25 @@ export function renderRegionsList(viewer) {
 
   container.querySelectorAll('.region-card').forEach(card => {
     card.addEventListener('click', () => {
+      const isAlreadyActive = card.classList.contains('active');
+      if (isAlreadyActive) {
+        // Toggle OFF!
+        card.classList.remove('active');
+        resetView(viewer);
+        showToast('Đã tắt phân vùng - Khôi phục toàn thân');
+        if (window.innerWidth <= 1024) {
+          document.getElementById('systemsToggle')?.click();
+        }
+        return;
+      }
+
+      container.querySelectorAll('.region-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
       const region = REGIONS_DATA.find(r => r.id === card.dataset.regionId);
       if (region && viewer) {
         frameRegion(region.camera, viewer);
-        showToast(`Chuyển đến: ${region.labelVi}`);
+        showToast(`Chuyển đến: ${region.labelVi} (Nhấn lại để tắt)`);
         if (window.innerWidth <= 1024) {
           document.getElementById('systemsToggle')?.click();
         }
@@ -923,11 +1233,38 @@ export function renderHistoryList(viewer) {
 export function initFloatingTools(viewer) {
   const btnToggleTools = document.getElementById('btnToggleTools');
   const viewerTools = document.getElementById('viewerTools');
+
+  // On mobile screens, default to collapsed to keep 3D view 100% clean and unobstructed
+  if (window.innerWidth <= 1024 && viewerTools) {
+    viewerTools.classList.add('collapsed');
+  }
+
+  const updateToggleIcon = () => {
+    const isCollapsed = viewerTools?.classList.contains('collapsed');
+    const icon = btnToggleTools?.querySelector('.collapse-icon');
+    if (icon) {
+      icon.innerHTML = isCollapsed 
+        ? ICONS.toolsFab 
+        : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+    }
+  };
+  updateToggleIcon();
+
   btnToggleTools?.addEventListener('click', () => {
-    const isCollapsed = viewerTools?.classList.toggle('collapsed');
-    const icon = btnToggleTools.querySelector('.collapse-icon');
-    if (icon) icon.textContent = isCollapsed ? '▶' : '◀';
+    viewerTools?.classList.toggle('collapsed');
+    updateToggleIcon();
   });
+
+  // Touch outside on canvas auto-collapses tools on mobile
+  const canvas = document.getElementById('threeCanvas');
+  const autoCollapse = () => {
+    if (window.innerWidth <= 1024 && viewerTools && !viewerTools.classList.contains('collapsed')) {
+      viewerTools.classList.add('collapsed');
+      updateToggleIcon();
+    }
+  };
+  canvas?.addEventListener('click', autoCollapse);
+  canvas?.addEventListener('pointerdown', autoCollapse);
 
   const btnAI = document.getElementById('btnToolAI');
   btnAI?.addEventListener('click', () => {
@@ -1027,8 +1364,20 @@ export function initFloatingTools(viewer) {
     disableClipping(viewer);
     clippingPopover.classList.add('hidden');
     btnClipping?.classList.remove('active');
+    document.getElementById('halfBodyBtn')?.classList.remove('active');
+    document.getElementById('btnToolHalfBody')?.classList.remove('active');
+    document.getElementById('halfBodyPill')?.classList.add('hidden');
     showToast('Đã tắt mặt cắt 3D');
   });
+
+  // Half-Body Hemisection Toolbar & Floating Pill controls
+  const btnToolHalfBody = document.getElementById('btnToolHalfBody');
+  const pillFlipHalfBodyBtn = document.getElementById('pillFlipHalfBodyBtn');
+  const pillCloseHalfBodyBtn = document.getElementById('pillCloseHalfBodyBtn');
+
+  btnToolHalfBody?.addEventListener('click', () => handleHalfBodyToggle(viewer));
+  pillFlipHalfBodyBtn?.addEventListener('click', () => handleHalfBodyFlip(viewer));
+  pillCloseHalfBodyBtn?.addEventListener('click', () => closeHalfBody(viewer));
 
   // 3D Measurement Caliper
   const btnMeasure = document.getElementById('btnToolMeasure');
@@ -1422,7 +1771,9 @@ function onSelectionChange(part) {
 
     updateBookmarkButton(part.id);
     updateFooterButtons(part);
+    document.getElementById('cardIsolateBtn')?.classList.toggle('active', !!(part && state.isolatedPart === part.id));
   } else {
+    document.getElementById('cardIsolateBtn')?.classList.remove('active');
     if (card) card.classList.add('hidden');
     document.getElementById('footerBar')?.style.setProperty('display', 'none');
   }
@@ -1557,6 +1908,12 @@ export async function initUI(viewer) {
   initDrawers();
   initMobileSearch();
   initDepthSlider();
+
+  // Complete Anatomy Style System Stepper, Floating AI Widget, Fullscreen Controller & Atlas 2027 Hub
+  initSystemsLayerController(viewer);
+  initFloatingAIButton(viewer);
+  initFullscreenController(viewer);
+  initAtlasHub(viewer);
 }
 
 // Under 1024px the search field is hidden; this button is the only way to it.
@@ -1607,6 +1964,13 @@ function initDrawers() {
       panel.el.style.transform = '';
     }
 
+    // Touch / Click Outside Backdrop for Drawers on Mobile
+    const backdrop = document.getElementById('sidebarBackdrop');
+    if (backdrop && drawerQuery.matches) {
+      const anyOpen = (name === 'systems' ? open : isOpen('systems')) || (name === 'info' ? open : isOpen('info'));
+      backdrop.classList.toggle('active', anyOpen);
+    }
+
     // A panel that is off screen must not be reachable with Tab. The systems
     // panel is a real column on desktop, so it only goes inert as a drawer.
     const offScreen = name === 'systems' ? drawerQuery.matches && !open : !open;
@@ -1635,6 +1999,42 @@ function initDrawers() {
   document.getElementById('systemsToggle')?.addEventListener('click', () => apply('systems', false, { moveFocus: true }));
   document.getElementById('infoOpen')?.addEventListener('click', () => apply('info', !isOpen('info'), { moveFocus: true }));
   document.getElementById('infoToggle')?.addEventListener('click', () => apply('info', false, { moveFocus: true }));
+
+  // Auto-dismiss when touching or clicking backdrop
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (backdrop) {
+    backdrop.addEventListener('click', () => {
+      if (isOpen('systems')) apply('systems', false, { moveFocus: true });
+      if (isOpen('info')) apply('info', false, { moveFocus: true });
+    });
+    backdrop.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (isOpen('systems')) apply('systems', false, { moveFocus: true });
+      if (isOpen('info')) apply('info', false, { moveFocus: true });
+    }, { passive: false });
+  }
+
+  // Auto-dismiss when touching / orbiting on 3D canvas
+  const canvas = document.getElementById('threeCanvas');
+  canvas?.addEventListener('pointerdown', () => {
+    if (drawerQuery.matches) {
+      if (isOpen('systems')) apply('systems', false);
+      if (isOpen('info')) apply('info', false);
+    }
+  });
+
+  // Global document pointerdown to catch any click outside sidebars & triggers
+  document.addEventListener('pointerdown', (e) => {
+    if (!drawerQuery.matches) return;
+    if (!isOpen('systems') && !isOpen('info')) return;
+    const inSystems = panels.systems.el?.contains(e.target);
+    const inInfo = panels.info.el?.contains(e.target);
+    const isTrigger = e.target.closest('#systemsOpen') || e.target.closest('#infoOpen');
+    if (!inSystems && !inInfo && !isTrigger) {
+      if (isOpen('systems')) apply('systems', false);
+      if (isOpen('info')) apply('info', false);
+    }
+  });
 
   // Escape closes whichever panel the focus is in.
   Object.entries(panels).forEach(([name, panel]) => {

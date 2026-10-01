@@ -20,6 +20,16 @@ export const PRESETS = [
     id: 'nervous-spine',
     label: { vi: 'Thần Kinh & Não', en: 'Nervous system', it: 'Sistema nervoso' },
     hash: 'sys=skeletal,nervous&cam=0,1.4,1.2,0,1.4,0'
+  },
+  {
+    id: 'respiratory-visceral',
+    label: { vi: 'Hô Hấp & Nội Tạng', en: 'Visceral & Respiratory', it: 'Organi interni' },
+    hash: 'sys=skeletal,visceral&cam=0,1.2,1.2,0,1.2,0'
+  },
+  {
+    id: 'joints-skeleton',
+    label: { vi: 'Khớp & Dây Chằng', en: 'Joints & Ligaments', it: 'Articolazioni' },
+    hash: 'sys=skeletal,joints&cam=0,0.86,2.2,0,0.86,0'
   }
 ];
 
