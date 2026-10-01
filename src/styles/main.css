@@ -6592,6 +6592,9 @@ body.theme-dark .btn-mini-action:hover {
 .level-segment.filled {
   background: #0284c7;
 }
+.level-segment.half-filled {
+  background: linear-gradient(to right, #0284c7 50%, #cbd5e1 50%);
+}
 
 /* 4. Bottom Footer Tools (Pelvis & Gender) */
 .stepper-drawer-footer {

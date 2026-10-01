@@ -33,17 +33,23 @@ export function applyDepth(stage) {
     const loaded = state.loadedSystems || [];
     const { superficial, intermediate, deep } = getMuscleLayers();
 
-    // STAGE 0: All active systems fully visible (Muscular Level 3)
+    // STAGE 0: All active systems fully visible (Muscular Level 4)
     if (stage === 0) {
       if (loaded.includes('muscular')) {
         showSystem('muscular');
         superficial.forEach(id => setStructureVisible(id, true));
         intermediate.forEach(id => setStructureVisible(id, true));
         deep.forEach(id => setStructureVisible(id, true));
-        systemLevels.muscular = 3;
+        systemLevels.muscular = 4.0;
         updateItemUI('muscular');
       }
-      if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
+      if (loaded.includes('cardiovascular')) {
+        showSystem('cardiovascular');
+        systemLevels.arterial = 4.0;
+        systemLevels.venous = 4.0;
+        updateItemUI('arterial');
+        updateItemUI('venous');
+      }
       if (loaded.includes('nervous')) showSystem('nervous');
       if (loaded.includes('lymphatic')) showSystem('lymphatic');
       if (loaded.includes('visceral')) showSystem('visceral');
@@ -51,14 +57,14 @@ export function applyDepth(stage) {
       if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
-    // STAGE 1: Dissect superficial muscles & fascia, reveal intermediate & deep musculature (Muscular Level 2)
+    // STAGE 1: Dissect superficial muscles & fascia, reveal intermediate & deep musculature (Muscular Level 2.0)
     else if (stage === 1) {
       if (loaded.includes('muscular')) {
         showSystem('muscular');
         superficial.forEach(id => setStructureVisible(id, false));
         intermediate.forEach(id => setStructureVisible(id, true));
         deep.forEach(id => setStructureVisible(id, true));
-        systemLevels.muscular = 2;
+        systemLevels.muscular = 2.0;
         updateItemUI('muscular');
       }
       if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
@@ -69,14 +75,14 @@ export function applyDepth(stage) {
       if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
-    // STAGE 2: Dissect intermediate muscles, reveal deep layer only (Muscular Level 1)
+    // STAGE 2: Dissect intermediate muscles, reveal deep layer only (Muscular Level 1.0)
     else if (stage === 2) {
       if (loaded.includes('muscular')) {
         showSystem('muscular');
         superficial.forEach(id => setStructureVisible(id, false));
         intermediate.forEach(id => setStructureVisible(id, false));
         deep.forEach(id => setStructureVisible(id, true));
-        systemLevels.muscular = 1;
+        systemLevels.muscular = 1.0;
         updateItemUI('muscular');
       }
       if (loaded.includes('cardiovascular')) showSystem('cardiovascular');
@@ -109,7 +115,13 @@ export function applyDepth(stage) {
         systemLevels.muscular = 0;
         updateItemUI('muscular');
       }
-      if (loaded.includes('cardiovascular')) hideSystem('cardiovascular');
+      if (loaded.includes('cardiovascular')) {
+        hideSystem('cardiovascular');
+        systemLevels.arterial = 0;
+        systemLevels.venous = 0;
+        updateItemUI('arterial');
+        updateItemUI('venous');
+      }
       if (loaded.includes('nervous')) hideSystem('nervous');
       if (loaded.includes('lymphatic')) hideSystem('lymphatic');
       if (loaded.includes('visceral')) hideSystem('visceral');
@@ -124,7 +136,13 @@ export function applyDepth(stage) {
         systemLevels.muscular = 0;
         updateItemUI('muscular');
       }
-      if (loaded.includes('cardiovascular')) hideSystem('cardiovascular');
+      if (loaded.includes('cardiovascular')) {
+        hideSystem('cardiovascular');
+        systemLevels.arterial = 0;
+        systemLevels.venous = 0;
+        updateItemUI('arterial');
+        updateItemUI('venous');
+      }
       if (loaded.includes('nervous')) hideSystem('nervous');
       if (loaded.includes('lymphatic')) hideSystem('lymphatic');
       if (loaded.includes('visceral')) hideSystem('visceral');
@@ -176,7 +194,6 @@ export function initDepthSlider() {
     });
   });
 
-  // Tap on hint pill cycles through stages 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 0 instantly
   hintEl?.addEventListener('click', (e) => {
     e.stopPropagation();
     const nextStage = (currentStage + 1) % 6;
@@ -187,7 +204,6 @@ export function initDepthSlider() {
   return wrapper;
 }
 
-// Toggling a system by hand or resetting view restores the slider
 export function resetDepthSlider() {
   if (slider) {
     slider.value = 0;

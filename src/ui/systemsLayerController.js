@@ -1,6 +1,7 @@
 // Systems +/- Layer Stepper Controller (Complete Anatomy / Visible Body style)
 // Allows gradual layer-by-layer opening and closing of each anatomical system.
 // Features a collapsible left-edge pull tab: "Systems +/-"
+// Supports half-step increments (0.5 nấc: ví dụ 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0).
 // Ultra-optimized for 60fps instant responsiveness with solid anatomical colors.
 
 import { state, batchPartStates } from '../state/store.js';
@@ -12,24 +13,26 @@ import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
 
 export const SYSTEM_CONFIGS = [
-  { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 3, defaultLevel: 3, baseSystem: 'skeletal' },
-  { id: 'joints', icon: ICONS.joints, nameVi: 'Khớp & Dây chằng', shortNameVi: 'KHỚP', maxLevels: 3, defaultLevel: 0, baseSystem: 'joints' },
-  { id: 'muscular', icon: ICONS.muscular, nameVi: 'Hệ Cơ bắp', shortNameVi: 'CƠ BẮP', maxLevels: 3, defaultLevel: 0, baseSystem: 'muscular' },
-  { id: 'nervous', icon: ICONS.nervous, nameVi: 'Não & Thần kinh', shortNameVi: 'THẦN KINH', maxLevels: 3, defaultLevel: 0, baseSystem: 'nervous' },
-  { id: 'cardiovascular', icon: ICONS.cardiovascular, nameVi: 'Hệ Tim mạch', shortNameVi: 'TIM MẠCH', maxLevels: 3, defaultLevel: 0, baseSystem: 'cardiovascular' },
-  { id: 'respiratory', icon: ICONS.respiratory, nameVi: 'Hệ Hô hấp (Phổi)', shortNameVi: 'HÔ HẤP', maxLevels: 3, defaultLevel: 0, baseSystem: 'visceral', subType: 'respiratory' },
-  { id: 'digestive', icon: ICONS.digestive, nameVi: 'Hệ Tiêu hóa (Gan, Ruột)', shortNameVi: 'TIÊU HÓA', maxLevels: 3, defaultLevel: 0, baseSystem: 'visceral', subType: 'digestive' },
-  { id: 'urinary_genital', icon: ICONS.urinary_genital, nameVi: 'Tiết niệu & Sinh dục', shortNameVi: 'TIẾT NIỆU', maxLevels: 3, defaultLevel: 0, baseSystem: 'visceral', subType: 'urinary_genital' },
-  { id: 'endocrine', icon: ICONS.endocrine, nameVi: 'Hệ Nội tiết', shortNameVi: 'NỘI TIẾT', maxLevels: 3, defaultLevel: 0, baseSystem: 'visceral', subType: 'endocrine' },
-  { id: 'lymphatic', icon: ICONS.lymphatic, nameVi: 'Hệ Bạch huyết', shortNameVi: 'BẠCH HUYẾT', maxLevels: 3, defaultLevel: 0, baseSystem: 'lymphatic' }
+  { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 4, defaultLevel: 4, baseSystem: 'skeletal' },
+  { id: 'joints', icon: ICONS.joints, nameVi: 'Khớp & Dây chằng', shortNameVi: 'KHỚP', maxLevels: 4, defaultLevel: 0, baseSystem: 'joints' },
+  { id: 'muscular', icon: ICONS.muscular, nameVi: 'Hệ Cơ bắp', shortNameVi: 'CƠ BẮP', maxLevels: 4, defaultLevel: 0, baseSystem: 'muscular' },
+  { id: 'nervous', icon: ICONS.nervous, nameVi: 'Não & Thần kinh', shortNameVi: 'THẦN KINH', maxLevels: 4, defaultLevel: 0, baseSystem: 'nervous' },
+  { id: 'arterial', icon: ICONS.arterial, nameVi: 'Tim & Động mạch', shortNameVi: 'ĐỘNG MẠCH', maxLevels: 4, defaultLevel: 0, baseSystem: 'cardiovascular' },
+  { id: 'venous', icon: ICONS.venous, nameVi: 'Hệ Tĩnh mạch', shortNameVi: 'TĨNH MẠCH', maxLevels: 4, defaultLevel: 0, baseSystem: 'cardiovascular' },
+  { id: 'respiratory', icon: ICONS.respiratory, nameVi: 'Hệ Hô hấp (Phổi)', shortNameVi: 'HÔ HẤP', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'respiratory' },
+  { id: 'digestive', icon: ICONS.digestive, nameVi: 'Hệ Tiêu hóa (Gan, Ruột)', shortNameVi: 'TIÊU HÓA', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'digestive' },
+  { id: 'urinary_genital', icon: ICONS.urinary_genital, nameVi: 'Tiết niệu & Sinh dục', shortNameVi: 'TIẾT NIỆU', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'urinary_genital' },
+  { id: 'endocrine', icon: ICONS.endocrine, nameVi: 'Hệ Nội tiết', shortNameVi: 'NỘI TIẾT', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'endocrine' },
+  { id: 'lymphatic', icon: ICONS.lymphatic, nameVi: 'Hệ Bạch huyết', shortNameVi: 'BẠCH HUYẾT', maxLevels: 4, defaultLevel: 0, baseSystem: 'lymphatic' }
 ];
 
 export const systemLevels = {
-  skeletal: 3,
+  skeletal: 4.0,
   joints: 0,
   muscular: 0,
   nervous: 0,
-  cardiovascular: 0,
+  arterial: 0,
+  venous: 0,
   respiratory: 0,
   digestive: 0,
   urinary_genital: 0,
@@ -38,13 +41,109 @@ export const systemLevels = {
 };
 
 // -----------------------------------------------------------------------------
-// 3-TIER ANATOMICAL MUSCLE DISSECTION ENGINE (Chuẩn Y khoa Visible Body)
-// Level 3 (Superficial): 669 cơ đầy đủ (mạc, ngực lớn, thẳng bụng, delta, mông lớn...)
-// Level 2 (Intermediate): 487 cơ giữa & sâu (bóc cơ nông, lộ ngực bé, chéo bụng trong, tứ đầu đùi...)
-// Level 1 (Deep): 357 cơ sâu nhất sát xương (bóc cơ giữa, chỉ còn cơ ngang bụng, gian sườn, cơ bịt...)
-// Level 0: Ẩn hoàn toàn hệ cơ
+// VENOUS SYSTEM DISSECTION LAYERS (8 nấc bóc tách từ 0.5 đến 4.0)
 // -----------------------------------------------------------------------------
+const VEIN_05 = [
+  'inferior vena cava', 'superior vena cava', 'external iliac vein', 'common iliac vein',
+  'femoral vein', 'subclavian vein', 'brachiocephalic vein', 'internal jugular vein'
+];
+const VEIN_10 = [
+  ...VEIN_05,
+  'renal vein', 'hepatic vein', 'portal vein', 'splenic vein', 'azygos', 'hemiazygos',
+  'internal iliac vein', 'deep femoral vein'
+];
+const VEIN_15 = [
+  ...VEIN_10,
+  'axillary vein', 'brachial vein', 'basilic vein', 'cephalic vein',
+  'popliteal vein', 'great saphenous vein'
+];
+const VEIN_20 = [
+  ...VEIN_15,
+  'small saphenous vein', 'anterior tibial vein', 'posterior tibial vein',
+  'pulmonary vein', 'mesenteric vein', 'gastric vein', 'vertebral vein'
+];
+const VEIN_25 = [
+  ...VEIN_20,
+  'radial vein', 'ulnar vein', 'fibular vein', 'peroneal vein',
+  'intercostal vein', 'facial vein', 'temporal vein', 'sigmoid sinus', 'transverse sinus'
+];
+const VEIN_30 = [
+  ...VEIN_25,
+  'palmar venous', 'plantar venous', 'dorsal venous arch', 'sagittal sinus',
+  'cavernous sinus', 'thyroid vein', 'sinus'
+];
+const VEIN_35 = [
+  ...VEIN_30,
+  'digital vein', 'metacarpal vein', 'metatarsal vein'
+];
 
+export function isVeinVisibleAtLevel(partIdLower, level) {
+  if (level <= 0) return false;
+  if (level >= 4.0) return true;
+  if (level <= 0.5) return VEIN_05.some(kw => partIdLower.includes(kw));
+  if (level <= 1.0) return VEIN_10.some(kw => partIdLower.includes(kw));
+  if (level <= 1.5) return VEIN_15.some(kw => partIdLower.includes(kw));
+  if (level <= 2.0) return VEIN_20.some(kw => partIdLower.includes(kw));
+  if (level <= 2.5) return VEIN_25.some(kw => partIdLower.includes(kw));
+  if (level <= 3.0) return VEIN_30.some(kw => partIdLower.includes(kw));
+  if (level <= 3.5) return VEIN_35.some(kw => partIdLower.includes(kw));
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// ARTERIAL & HEART DISSECTION LAYERS (8 nấc bóc tách từ 0.5 đến 4.0)
+// -----------------------------------------------------------------------------
+const ARTERY_05 = [
+  'heart', 'atrium', 'ventricle', 'myocard', 'endocard', 'valve', 'ascending aorta',
+  'aortic arch', 'pulmonary trunk', 'coronary'
+];
+const ARTERY_10 = [
+  ...ARTERY_05,
+  'descending aorta', 'thoracic aorta', 'abdominal aorta', 'aorta',
+  'common iliac artery', 'common carotid', 'subclavian artery', 'celiac trunk',
+  'brachiocephalic trunk'
+];
+const ARTERY_15 = [
+  ...ARTERY_10,
+  'renal artery', 'mesenteric artery', 'internal iliac', 'external iliac',
+  'femoral artery', 'axillary artery', 'brachial artery'
+];
+const ARTERY_20 = [
+  ...ARTERY_15,
+  'deep femoral', 'popliteal artery', 'internal carotid', 'external carotid',
+  'vertebral artery', 'splenic artery', 'hepatic artery', 'gastric artery'
+];
+const ARTERY_25 = [
+  ...ARTERY_20,
+  'radial artery', 'ulnar artery', 'tibial artery', 'fibular artery',
+  'peroneal artery', 'intercostal artery', 'basilar artery', 'cerebral artery'
+];
+const ARTERY_30 = [
+  ...ARTERY_25,
+  'palmar arch', 'plantar artery', 'dorsalis pedis', 'facial artery',
+  'maxillary artery', 'temporal artery'
+];
+const ARTERY_35 = [
+  ...ARTERY_30,
+  'digital artery', 'metacarpal artery', 'metatarsal artery'
+];
+
+export function isArteryVisibleAtLevel(partIdLower, level) {
+  if (level <= 0) return false;
+  if (level >= 4.0) return true;
+  if (level <= 0.5) return ARTERY_05.some(kw => partIdLower.includes(kw));
+  if (level <= 1.0) return ARTERY_10.some(kw => partIdLower.includes(kw));
+  if (level <= 1.5) return ARTERY_15.some(kw => partIdLower.includes(kw));
+  if (level <= 2.0) return ARTERY_20.some(kw => partIdLower.includes(kw));
+  if (level <= 2.5) return ARTERY_25.some(kw => partIdLower.includes(kw));
+  if (level <= 3.0) return ARTERY_30.some(kw => partIdLower.includes(kw));
+  if (level <= 3.5) return ARTERY_35.some(kw => partIdLower.includes(kw));
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// MUSCULAR 3-TIER + SUB-STEP DISSECTION (8 nấc bóc tách từ 0.5 đến 4.0)
+// -----------------------------------------------------------------------------
 const SUPERFICIAL_PATTERNS = [
   'fascia', 'retinaculum', 'aponeurosis', 'mạc', 'cân',
   'platysma', 'cơ bám da cổ',
@@ -148,49 +247,11 @@ export function getMuscleLayers() {
 }
 
 // -----------------------------------------------------------------------------
-// CARDIOVASCULAR DISSECTION LAYERS (3 Levels)
-// Level 3: Toàn bộ mạng mạch máu (676 mạch)
-// Level 2: Các động mạch & tĩnh mạch chính
-// Level 1: Tim & các đại mạch gốc (ĐM chủ, TM chủ, Thân ĐM phổi)
+// NERVOUS & SKELETAL PATTERNS
 // -----------------------------------------------------------------------------
-const GREAT_VESSELS_PATTERNS = [
-  'heart', 'tim', 'aorta', 'động mạch chủ', 'cava', 'tĩnh mạch chủ',
-  'pulmonary trunk', 'thân động mạch phổi', 'coronary', 'vành'
-];
-const MAJOR_VESSELS_PATTERNS = [
-  ...GREAT_VESSELS_PATTERNS,
-  'carotid', 'cảnh', 'jugular', 'subclavian', 'dưới đòn',
-  'femoral', 'đùi', 'iliac', 'chậu', 'brachial', 'cánh tay',
-  'renal artery', 'renal vein', 'thận'
-];
-
-// -----------------------------------------------------------------------------
-// NERVOUS DISSECTION LAYERS (3 Levels)
-// Level 3: Toàn bộ hệ thần kinh (580 dây thần kinh)
-// Level 2: Hệ TKTW & các đám rối thần kinh chính
-// Level 1: Hệ thần kinh trung ương (Não bộ & Tủy sống)
-// -----------------------------------------------------------------------------
-const CNS_PATTERNS = [
-  'brain', 'não', 'cerebr', 'cerebell', 'spinal cord', 'tủy sống',
-  'brainstem', 'pons', 'medulla', 'thalamus'
-];
-const PLEXUS_PATTERNS = [
-  ...CNS_PATTERNS,
-  'plexus', 'đám rối', 'sciatic', 'ngồi', 'femoral nerve', 'đùi',
-  'radial nerve', 'quay', 'median nerve', 'giữa', 'ulnar nerve', 'trụ',
-  'vagus', 'lang thang', 'phrenic', 'hoành'
-];
-
-// -----------------------------------------------------------------------------
-// SKELETAL DISSECTION LAYERS (3 Levels)
-// Level 3: Toàn bộ 277 xương
-// Level 2: Trục xương + Lồng ngực + Chi
-// Level 1: Khung xương trục cốt lõi (Hộp sọ, Cột sống, Lồng ngực)
-// -----------------------------------------------------------------------------
-const AXIAL_SKELETON_PATTERNS = [
-  'skull', 'sọ', 'vertebra', 'đốt sống', 'sacrum', 'cùng',
-  'coccyx', 'cụt', 'sternum', 'ức', 'rib', 'sườn', 'hyoid', 'móng'
-];
+const CNS_PATTERNS = ['brain', 'não', 'cerebr', 'cerebell', 'spinal cord', 'tủy sống', 'brainstem', 'pons', 'medulla'];
+const PLEXUS_PATTERNS = [...CNS_PATTERNS, 'plexus', 'đám rối', 'sciatic', 'ngồi', 'femoral nerve', 'radial nerve', 'median nerve', 'ulnar nerve'];
+const AXIAL_SKELETON_PATTERNS = ['skull', 'sọ', 'vertebra', 'đốt sống', 'sacrum', 'coccyx', 'sternum', 'ức', 'rib', 'sườn', 'hyoid'];
 
 const loadingSystems = new Set();
 let drawerEl = null;
@@ -250,7 +311,7 @@ export function initSystemsLayerController(viewer) {
       </div>
     </div>
 
-    <!-- Systems Steppers List (3 segments per row, instant 60fps) -->
+    <!-- Systems Steppers List (4 segments per row, 0.5 step increments) -->
     <div class="stepper-systems-list" id="stepperSystemsList">
       ${renderSystemRows()}
     </div>
@@ -273,21 +334,21 @@ export function initSystemsLayerController(viewer) {
 
 function renderSystemRows() {
   return SYSTEM_CONFIGS.map(sys => {
-    const lvl = systemLevels[sys.id] || 0;
+    const lvl = Number(systemLevels[sys.id]) || 0;
     return `
       <div class="system-stepper-item ${lvl > 0 ? 'is-active' : ''}" data-system="${sys.id}">
         <div class="stepper-item-header">
           <span class="system-name-tag">${sys.shortNameVi}</span>
         </div>
         <div class="stepper-controls-row">
-          <button type="button" class="btn-stepper-dec minus stepper-btn" data-action="dec" data-system="${sys.id}" title="Giảm lớp ${sys.nameVi}" ${lvl <= 0 ? 'disabled' : ''}>
+          <button type="button" class="btn-stepper-dec minus stepper-btn" data-action="dec" data-system="${sys.id}" title="Giảm lớp ${sys.nameVi} (bước 0.5)" ${lvl <= 0 ? 'disabled' : ''}>
             —
           </button>
           <button type="button" class="btn-stepper-icon ${lvl > 0 ? 'active' : ''}" data-action="toggle" data-system="${sys.id}" title="${sys.nameVi} (Bật / Tắt)">
             <span class="sys-icon">${sys.icon}</span>
             <span class="sys-loading-spinner hidden"></span>
           </button>
-          <button type="button" class="btn-stepper-inc plus stepper-btn" data-action="inc" data-system="${sys.id}" title="Tăng lớp ${sys.nameVi}" ${lvl >= sys.maxLevels ? 'disabled' : ''}>
+          <button type="button" class="btn-stepper-inc plus stepper-btn" data-action="inc" data-system="${sys.id}" title="Tăng lớp ${sys.nameVi} (bước 0.5)" ${lvl >= sys.maxLevels ? 'disabled' : ''}>
             +
           </button>
         </div>
@@ -299,11 +360,17 @@ function renderSystemRows() {
   }).join('');
 }
 
-function renderSegments(currentLevel, maxLevels = 3) {
+function renderSegments(currentLevel, maxLevels = 4) {
   let html = '';
+  const lvl = Number(currentLevel) || 0;
   for (let i = 1; i <= maxLevels; i++) {
-    const isFilled = i <= currentLevel;
-    html += `<span class="level-segment ${isFilled ? 'filled' : ''}"></span>`;
+    let stateClass = '';
+    if (lvl >= i) {
+      stateClass = 'filled';
+    } else if (lvl >= i - 0.5) {
+      stateClass = 'half-filled';
+    }
+    html += `<span class="level-segment ${stateClass}"></span>`;
   }
   return html;
 }
@@ -380,7 +447,7 @@ function setupEvents(viewer) {
     });
   });
 
-  // 7. Stepper Actions (+, -, Icon toggle)
+  // 7. Stepper Actions (+, -, Icon toggle) with 0.5 step
   drawerEl?.querySelector('#stepperSystemsList')?.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn || btn.disabled) return;
@@ -437,7 +504,6 @@ export function closeDrawer() {
   drawerEl.classList.add('hidden');
   pullTabEl?.classList.remove('drawer-open');
   isDrawerOpen = false;
-  // Also close dropdown if opened
   drawerEl.querySelector('#regionDropdownMenu')?.classList.add('hidden');
 }
 
@@ -450,27 +516,33 @@ export function toggleDrawer() {
 }
 
 async function incrementSystemLevel(systemId, viewer) {
-  const current = systemLevels[systemId] || 0;
-  if (current >= 3) return;
-  const next = current + 1;
+  const current = Number(systemLevels[systemId]) || 0;
+  const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
+  const maxLvl = cfg?.maxLevels || 4;
+  if (current >= maxLvl) return;
+  const next = Math.min(maxLvl, Math.round((current + 0.5) * 10) / 10);
   await applySystemLevel(systemId, next, viewer);
 }
 
 async function decrementSystemLevel(systemId, viewer) {
-  const current = systemLevels[systemId] || 0;
+  const current = Number(systemLevels[systemId]) || 0;
   if (current <= 0) return;
-  const next = current - 1;
+  const next = Math.max(0, Math.round((current - 0.5) * 10) / 10);
   await applySystemLevel(systemId, next, viewer);
 }
 
 async function toggleSystemLevel(systemId, viewer) {
-  const current = systemLevels[systemId] || 0;
-  const next = current > 0 ? 0 : 3;
+  const current = Number(systemLevels[systemId]) || 0;
+  const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
+  const maxLvl = cfg?.maxLevels || 4;
+  const next = current > 0 ? 0 : maxLvl;
   await applySystemLevel(systemId, next, viewer);
 }
 
 export async function setSystemLevel(systemId, level, viewer) {
-  const clamped = Math.max(0, Math.min(3, Math.round(Number(level) || 0)));
+  const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
+  const maxLvl = cfg?.maxLevels || 4;
+  const clamped = Math.max(0, Math.min(maxLvl, Math.round(Number(level) * 10) / 10));
   await applySystemLevel(systemId, clamped, viewer);
 }
 
@@ -505,109 +577,85 @@ async function applySystemLevel(systemId, level, viewer) {
       const parts = getSubSystemParts(cfg.subType);
       const isVisible = level > 0;
       parts.forEach(id => setStructureVisible(id, isVisible));
+    } else if (systemId === 'arterial' || systemId === 'venous') {
+      // -------------------------------------------------------------
+      // CARDIOVASCULAR INDEPENDENT DISSECTION: ARTERIAL vs VENOUS
+      // Step: 0.5 increments (0.0 to 4.0)
+      // -------------------------------------------------------------
+      const artLvl = Number(systemLevels.arterial) || 0;
+      const venLvl = Number(systemLevels.venous) || 0;
+      if (artLvl <= 0 && venLvl <= 0) {
+        hideSystem('cardiovascular');
+      } else {
+        showSystem('cardiovascular');
+        const nodes = getMeshesBySystem('cardiovascular') || [];
+        nodes.forEach(n => {
+          const partId = n.userData?.partId || '';
+          const lower = partId.toLowerCase();
+          const isVenous = lower.includes('vein') || lower.includes('vena') || lower.includes('venous') || lower.includes('sinus');
+          if (isVenous) {
+            setStructureVisible(partId, isVeinVisibleAtLevel(lower, venLvl));
+          } else {
+            setStructureVisible(partId, isArteryVisibleAtLevel(lower, artLvl));
+          }
+        });
+      }
     } else if (systemId === 'muscular') {
       // -------------------------------------------------------------
-      // MUSCULAR 3-TIER LAYERED DISSECTION:
-      // Level 3: All 669 muscles (Superficial + Intermediate + Deep)
-      // Level 2: 487 muscles (Intermediate + Deep, Superficial peeled off)
-      // Level 1: 357 muscles (Deepest layer only)
-      // Level 0: Muscular system hidden
+      // MUSCULAR 4-TIER MULTI-STEP DISSECTION (0.5 steps)
       // -------------------------------------------------------------
-      if (level === 0) {
+      if (level <= 0) {
         hideSystem('muscular');
       } else {
         showSystem('muscular');
         const { superficial, intermediate, deep } = getMuscleLayers();
-        if (level === 1) {
+        if (level <= 1.0) {
+          // Deepest layer (Level 0.5 - 1.0)
           superficial.forEach(id => setStructureVisible(id, false));
           intermediate.forEach(id => setStructureVisible(id, false));
           deep.forEach(id => setStructureVisible(id, true));
-        } else if (level === 2) {
+        } else if (level <= 2.5) {
+          // Intermediate layer (Level 1.5 - 2.5)
           superficial.forEach(id => setStructureVisible(id, false));
           intermediate.forEach(id => setStructureVisible(id, true));
           deep.forEach(id => setStructureVisible(id, true));
-        } else if (level >= 3) {
+        } else {
+          // Superficial layer (Level 3.0 - 4.0)
           superficial.forEach(id => setStructureVisible(id, true));
           intermediate.forEach(id => setStructureVisible(id, true));
           deep.forEach(id => setStructureVisible(id, true));
         }
       }
-    } else if (systemId === 'cardiovascular') {
-      // -------------------------------------------------------------
-      // CARDIOVASCULAR 3-TIER DISSECTION:
-      // Level 3: Full cardiovascular (676 vessels)
-      // Level 2: Heart & major arteries/veins
-      // Level 1: Heart & great vessels (Aorta, Vena Cava, Pulmonary)
-      // Level 0: Hidden
-      // -------------------------------------------------------------
-      if (level === 0) {
-        hideSystem('cardiovascular');
-      } else {
-        showSystem('cardiovascular');
-        const nodes = getMeshesBySystem('cardiovascular') || [];
-        if (level === 1) {
-          nodes.forEach(n => {
-            const pId = (n.userData?.partId || '').toLowerCase();
-            const isGreat = GREAT_VESSELS_PATTERNS.some(kw => pId.includes(kw));
-            setStructureVisible(n.userData?.partId, isGreat);
-          });
-        } else if (level === 2) {
-          nodes.forEach(n => {
-            const pId = (n.userData?.partId || '').toLowerCase();
-            const isMajor = MAJOR_VESSELS_PATTERNS.some(kw => pId.includes(kw));
-            setStructureVisible(n.userData?.partId, isMajor);
-          });
-        } else {
-          nodes.forEach(n => setStructureVisible(n.userData?.partId, true));
-        }
-      }
     } else if (systemId === 'nervous') {
-      // -------------------------------------------------------------
-      // NERVOUS 3-TIER DISSECTION:
-      // Level 3: Full nervous system (580 nerves)
-      // Level 2: CNS + major nerve plexuses
-      // Level 1: Brain & Spinal Cord (CNS core)
-      // Level 0: Hidden
-      // -------------------------------------------------------------
-      if (level === 0) {
+      if (level <= 0) {
         hideSystem('nervous');
       } else {
         showSystem('nervous');
         const nodes = getMeshesBySystem('nervous') || [];
-        if (level === 1) {
+        if (level <= 1.0) {
           nodes.forEach(n => {
             const pId = (n.userData?.partId || '').toLowerCase();
-            const isCNS = CNS_PATTERNS.some(kw => pId.includes(kw));
-            setStructureVisible(n.userData?.partId, isCNS);
+            setStructureVisible(n.userData?.partId, CNS_PATTERNS.some(kw => pId.includes(kw)));
           });
-        } else if (level === 2) {
+        } else if (level <= 2.5) {
           nodes.forEach(n => {
             const pId = (n.userData?.partId || '').toLowerCase();
-            const isPlexus = PLEXUS_PATTERNS.some(kw => pId.includes(kw));
-            setStructureVisible(n.userData?.partId, isPlexus);
+            setStructureVisible(n.userData?.partId, PLEXUS_PATTERNS.some(kw => pId.includes(kw)));
           });
         } else {
           nodes.forEach(n => setStructureVisible(n.userData?.partId, true));
         }
       }
     } else if (systemId === 'skeletal') {
-      // -------------------------------------------------------------
-      // SKELETAL 3-TIER DISSECTION:
-      // Level 3: Full skeleton (277 bones)
-      // Level 2: Axial skeleton + Pelvis + Limbs
-      // Level 1: Axial core (Spine, Ribs, Skull)
-      // Level 0: Hidden
-      // -------------------------------------------------------------
-      if (level === 0) {
+      if (level <= 0) {
         hideSystem('skeletal');
       } else {
         showSystem('skeletal');
         const nodes = getMeshesBySystem('skeletal') || [];
-        if (level === 1) {
+        if (level <= 1.5) {
           nodes.forEach(n => {
             const pId = (n.userData?.partId || '').toLowerCase();
-            const isAxial = AXIAL_SKELETON_PATTERNS.some(kw => pId.includes(kw));
-            setStructureVisible(n.userData?.partId, isAxial);
+            setStructureVisible(n.userData?.partId, AXIAL_SKELETON_PATTERNS.some(kw => pId.includes(kw)));
           });
         } else {
           nodes.forEach(n => setStructureVisible(n.userData?.partId, true));
@@ -615,7 +663,7 @@ async function applySystemLevel(systemId, level, viewer) {
       }
     } else {
       // Standard full system (joints, lymphatic)
-      if (level === 0) {
+      if (level <= 0) {
         hideSystem(systemId);
       } else {
         showSystem(systemId);
@@ -641,7 +689,10 @@ export function updateItemUI(systemId) {
   const itemEl = drawerEl?.querySelector(`.system-stepper-item[data-system="${systemId}"]`);
   if (!itemEl) return;
 
-  const lvl = systemLevels[systemId] || 0;
+  const lvl = Number(systemLevels[systemId]) || 0;
+  const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
+  const maxLvl = cfg?.maxLevels || 4;
+
   itemEl.classList.toggle('is-active', lvl > 0);
 
   const iconBtn = itemEl.querySelector('.btn-stepper-icon');
@@ -651,18 +702,23 @@ export function updateItemUI(systemId) {
   if (decBtn) decBtn.disabled = lvl <= 0;
 
   const incBtn = itemEl.querySelector('.btn-stepper-inc');
-  if (incBtn) incBtn.disabled = lvl >= 3;
+  if (incBtn) incBtn.disabled = lvl >= maxLvl;
 
   const segmentsEl = itemEl.querySelector('.stepper-level-segments');
   if (segmentsEl) {
-    segmentsEl.innerHTML = renderSegments(lvl, 3);
+    segmentsEl.innerHTML = renderSegments(lvl, maxLvl);
   }
 }
 
 export function syncStateWithLoadedSystems() {
   state.loadedSystems.forEach(sysId => {
-    if (systemLevels[sysId] === 0) {
-      systemLevels[sysId] = 3;
+    if (sysId === 'cardiovascular') {
+      if (systemLevels.arterial === 0 && systemLevels.venous === 0) {
+        systemLevels.arterial = 4.0;
+        systemLevels.venous = 4.0;
+      }
+    } else if (systemLevels[sysId] === 0) {
+      systemLevels[sysId] = 4.0;
     }
   });
   SYSTEM_CONFIGS.forEach(sys => updateItemUI(sys.id));
