@@ -1091,6 +1091,20 @@ export function initFloatingTools(viewer) {
       btnQuiz.classList.add('active');
     }
   });
+
+  // Dynamic Anatomy & Physiological Motion Mode
+  const btnMotion = document.getElementById('btnToolMotion');
+  btnMotion?.addEventListener('click', async () => {
+    const { toggleMotionPanel } = await import('./motionPanel.js');
+    toggleMotionPanel(viewer);
+  });
+
+  // Augmented Reality (AR) Mode
+  const btnAR = document.getElementById('btnToolAR');
+  btnAR?.addEventListener('click', async () => {
+    const { openARModal } = await import('./arModal.js');
+    openARModal(viewer);
+  });
 }
 
 // Help modal

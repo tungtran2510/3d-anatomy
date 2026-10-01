@@ -120,6 +120,12 @@
             <button class="tool-btn highlight" id="btnToolQuiz" title="Bài kiểm tra trắc nghiệm chạm cấu trúc 3D">
               <span>🎯 Kiểm tra</span>
             </button>
+            <button type="button" class="tool-btn highlight-motion" id="btnToolMotion" title="Giải phẫu động & Chuyển động sinh lý (Tim đập, Hô hấp, Khớp gối, Khuỷu...)">
+              <span>🎬 Chuyển động</span>
+            </button>
+            <button type="button" class="tool-btn highlight-ar" id="btnToolAR" title="Thực tế tăng cường AR - Đặt mô hình vào không gian phòng thật">
+              <span>📱 AR Không gian</span>
+            </button>
           </div>
 
           <!-- Exploded View Popover Slider -->
@@ -169,6 +175,12 @@
               <button type="button" class="clip-action-btn primary" id="measureSaveNoteBtn">Lưu vào ghi chú</button>
             </div>
           </div>
+
+          <!-- Motion Popover Container -->
+          <div class="explode-popover motion-popover hidden" id="motionPopover"></div>
+
+          <!-- AR HUD Overlay Container -->
+          <div class="ar-hud hidden" id="arHud"></div>
         </div>
       </section>
 

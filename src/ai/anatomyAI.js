@@ -202,6 +202,44 @@ export function interpretAIQuery(query, activePart = null) {
     };
   }
 
+  // Intent: Dynamic Motion & Physiological Animation
+  if (
+    q.includes('chuyển động') ||
+    q.includes('giải phẫu động') ||
+    q.includes('tim đập') ||
+    q.includes('nhịp tim') ||
+    q.includes('hô hấp') ||
+    q.includes('thở') ||
+    q.includes('gập gối') ||
+    q.includes('khớp gối') ||
+    q.includes('khớp khuỷu') ||
+    q.includes('gập khuỷu') ||
+    q.includes('cúi ngửa') ||
+    (q.includes('cột sống') && q.includes('cúi')) ||
+    q.includes('dạng háng')
+  ) {
+    let motionType = 'cardiac';
+    if (q.includes('hô hấp') || q.includes('thở') || q.includes('phổi')) motionType = 'respiratory';
+    if (q.includes('khuỷu') || q.includes('biceps') || q.includes('nhị đầu')) motionType = 'elbow_flexion';
+    if (q.includes('gối') || q.includes('patella') || q.includes('bánh chè')) motionType = 'knee_flexion';
+    if (q.includes('cột sống') || q.includes('cúi')) motionType = 'spine_flexion';
+    if (q.includes('háng') || q.includes('dạng')) motionType = 'hip_abduction';
+
+    return {
+      intent: 'DYNAMIC_MOTION',
+      motionType,
+      rawQuery: query
+    };
+  }
+
+  // Intent: Augmented Reality (AR)
+  if (q.includes('ar') || q.includes('thực tế tăng cường') || q.includes('không gian thật') || q.includes('đặt vào phòng') || q.includes('mở camera')) {
+    return {
+      intent: 'AR_CONTROL',
+      rawQuery: query
+    };
+  }
+
   // Intent: Roadmap & Progress
   if (q.includes('lộ trình') || q.includes('tiến độ') || q.includes('tiến bộ') || q.includes('thống kê học tập')) {
     return {
@@ -425,7 +463,55 @@ export async function executeAICommand(interpreted, viewer) {
     };
   }
 
-  // 8. CLINICAL Q&A (Grounded Medical Knowledge)
+  // 8. DYNAMIC ANATOMY & MOTION CONTROL
+  if (intent === 'DYNAMIC_MOTION') {
+    import('../ui/motionPanel.js').then(({ openMotionPanel }) => {
+      openMotionPanel(viewer, interpreted.motionType);
+    }).catch(err => console.error('Failed to load motion panel:', err));
+
+    const motionLabels = {
+      cardiac: '🫀 Nhịp Tim & Chu kỳ Tim',
+      respiratory: '🫁 Cơ Chế Hô Hấp',
+      elbow_flexion: '💪 Gập Duỗi Khớp Khuỷu',
+      knee_flexion: '🦵 Gập Duỗi Khớp Gối',
+      spine_flexion: '🦴 Cúi Ngửa Cột Sống',
+      hip_abduction: '🤸 Dạng Khép Khớp Háng'
+    };
+    const title = motionLabels[interpreted.motionType] || 'Mô phỏng chuyển động sinh lý';
+
+    return {
+      action: 'DYNAMIC_MOTION',
+      actionBadge: `🎬 AI đã mở mô phỏng: ${title}`,
+      message: `
+        ### 🎬 ${title}
+        Đã kích hoạt mô phỏng giải phẫu động 3D theo cơ chế sinh lý thực tế:
+        - Sử dụng thanh trượt **Timeline** để tua tới từng góc độ hoặc thì chuyển động.
+        - Điều chỉnh tốc độ **0.25x - 0.5x** để quan sát chuyển động chậm.
+        - Chọn và bấm **Cô lập** để chỉ quan sát chuyển động của xương/cơ bạn quan tâm.
+      `.trim()
+    };
+  }
+
+  // 9. AUGMENTED REALITY (AR)
+  if (intent === 'AR_CONTROL') {
+    import('../ui/arModal.js').then(({ openARModal }) => {
+      openARModal(viewer);
+    }).catch(err => console.error('Failed to load AR modal:', err));
+
+    return {
+      action: 'AR_CONTROL',
+      actionBadge: '📱 AI đã kích hoạt AR Thực tế',
+      message: `
+        ### 📱 Thực Tế Tăng Cường AR
+        Đang khởi động chế độ AR để đưa mô hình người 3D vào phòng thực tế:
+        - Hỗ trợ dò bề mặt sàn/bàn (WebXR) hoặc chiếu Camera trực tiếp.
+        - Có thể chuyển đổi tỉ lệ: **Mặt bàn (1:5)** hoặc **Người thật (1:1)**.
+        - Dùng 1 ngón tay xoay, 2 ngón tay chụm thu phóng và bấm **Chụp ảnh** để lưu lại.
+      `.trim()
+    };
+  }
+
+  // 10. CLINICAL Q&A (Grounded Medical Knowledge)
   if (target) {
     const clinical = getClinicalData(target.id, target.base);
     const rel = clinical.relations || {};
