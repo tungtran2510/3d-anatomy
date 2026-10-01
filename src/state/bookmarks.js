@@ -84,5 +84,7 @@ export function addToHistory(partId, metadata = {}) {
 export function clearHistory() {
   try {
     localStorage.removeItem(HISTORY_KEY);
-  } catch {}
+  } catch (_err) {
+    // Ignore storage clear error
+  }
 }

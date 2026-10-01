@@ -182,7 +182,9 @@ class ARManager {
         } catch {
           try {
             stream = await fetchStream({ video: true, audio: false });
-          } catch {}
+          } catch (_err) {
+            // Ignore camera stream fallback error
+          }
         }
       }
     } catch (e) {
@@ -311,7 +313,7 @@ class ARManager {
   exitAR() {
     // 1. End WebXR session if active
     if (this.xrSession) {
-      try { this.xrSession.end(); } catch (e) { /* ignore */ }
+      try { this.xrSession.end(); } catch (_e) { /* ignore */ }
       this.xrSession = null;
     }
     if (this.viewer?.renderer?.xr) {

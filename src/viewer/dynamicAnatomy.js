@@ -5,7 +5,7 @@
 
 import * as THREE from 'three';
 import { getMeshRegistry, ownMeshesOf, loadModel } from './loadModel.js';
-import { getPartState, state } from '../state/store.js';
+import { state } from '../state/store.js';
 
 export const MOTIONS = {
   CARDIAC: 'cardiac',

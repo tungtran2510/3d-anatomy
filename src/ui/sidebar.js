@@ -11,7 +11,7 @@ import { PRESETS, applyPreset } from '../data/presets.js';
 import { setInert, focusFirst, trapFocus, rovingList } from './focus.js';
 import { REGIONS_DATA } from '../data/regions.js';
 import { getBookmarks, isBookmarked, toggleBookmark, getHistory } from '../state/bookmarks.js';
-import { initLabels, toggleLabels, areLabelsVisible } from '../viewer/labels.js';
+import { initLabels, toggleLabels } from '../viewer/labels.js';
 import { setExplodeFactor } from '../viewer/explodedView.js';
 import { startQuiz, stopQuiz, isQuizRunning } from './quiz.js';
 import { getClinicalData } from '../data/clinicalInfo.js';

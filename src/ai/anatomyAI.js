@@ -3,10 +3,10 @@
 import { state } from '../state/store.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
 import { searchStructures } from '../utils/dataLoader.js';
-import { selectPartById, deselectPart } from '../viewer/selection.js';
+import { selectPartById } from '../viewer/selection.js';
 import { loadModel } from '../viewer/loadModel.js';
-import { showSystem, hideSystem, isolatePart, setPartTransparency } from '../viewer/visibility.js';
-import { highlightMesh, clearHighlight } from '../viewer/visibility.js';
+import { showSystem, hideSystem } from '../viewer/visibility.js';
+import { highlightMesh } from '../viewer/visibility.js';
 import { setClippingPlane } from '../viewer/clipping.js';
 import { toggleMeasurementMode } from '../viewer/measurement.js';
 import { getWeakStructures, getRoadmapProgress } from '../state/learningRoadmap.js';

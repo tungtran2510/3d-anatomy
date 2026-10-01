@@ -4,10 +4,8 @@
 import { arManager, AR_MODES } from '../viewer/arManager.js';
 
 let arHudEl = null;
-let activeViewer = null;
 
 export function initARUI(viewer) {
-  activeViewer = viewer;
   arManager.init(viewer);
 
   arHudEl = document.getElementById('arHud');

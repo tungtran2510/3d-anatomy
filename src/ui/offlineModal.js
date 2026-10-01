@@ -6,7 +6,6 @@
 import { asset } from '../utils/paths.js';
 import { getStorageQuotaEstimate, triggerMemoryCleanup, getHeapMemoryInfo } from '../viewer/memoryManager.js';
 import { triggerManualSync, checkPendingCount, showSyncToast } from '../utils/syncManager.js';
-import { getProgressSummaryOffline } from '../utils/offlineDB.js';
 
 let offlineModalEl = null;
 let currentViewer = null;
@@ -359,7 +358,7 @@ async function downloadAllSystems() {
   }
 
   if (bar) bar.style.width = '100%';
-  if (label) label.textContent = '✓ Đã hoàn tất tải toàn bộ mô hình giải phẫu 3D!';
+  if (label) label.textContent = `✓ Đã hoàn tất tải ${completed}/${total} hệ giải phẫu 3D!`;
   showSyncToast('🎉 Toàn bộ Atlas Giải Phẫu 3D đã sẵn sàng dùng 100% Offline!', 'success');
 
   setTimeout(() => {

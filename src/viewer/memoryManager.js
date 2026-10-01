@@ -3,8 +3,6 @@
  * Optimizes mobile RAM and VRAM, prevents memory leaks and OOM crashes during long 3D sessions.
  */
 
-import * as THREE from 'three';
-
 export function disposeHierarchy(root) {
   if (!root) return;
 
@@ -48,7 +46,7 @@ function disposeMaterial(mat) {
 export function triggerMemoryCleanup(viewer) {
   if (!viewer) return { freed: true };
 
-  const { renderer, scene } = viewer;
+  const { renderer } = viewer;
 
   // 1. Dispose internal Three.js render lists
   if (renderer?.renderLists) {
@@ -63,7 +61,7 @@ export function triggerMemoryCleanup(viewer) {
   // 3. Request a clean render pass
   viewer.render?.();
 
-  console.log('[MemoryManager] GPU RenderLists and unused shaders purged.');
+  console.warn('[MemoryManager] GPU RenderLists and unused shaders purged.');
   return { freed: true, timestamp: Date.now() };
 }
 

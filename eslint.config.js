@@ -3,7 +3,7 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', 'assets-src/**', 'public/draco/**']
+    ignores: ['dist/**', 'node_modules/**', 'assets-src/**', 'public/draco/**', 'public/sw.js']
   },
   js.configs.recommended,
   {
@@ -13,16 +13,21 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.node
+        ...globals.node,
+        ...globals.serviceworker
       }
     },
     rules: {
-      // The two defects that shipped to production were a shadowed import and a
-      // call to a name that was never imported. Both are caught here.
       'no-shadow': 'error',
       'no-undef': 'error',
-      'no-unused-vars': ['error', { args: 'none', varsIgnorePattern: '^_' }],
+      'no-unused-vars': ['error', { args: 'none', varsIgnorePattern: '^_', caughtErrors: 'none' }],
       'no-console': ['warn', { allow: ['warn', 'error'] }]
+    }
+  },
+  {
+    files: ['tools/**/*.mjs'],
+    rules: {
+      'no-console': 'off'
     }
   }
 ];

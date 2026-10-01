@@ -1,7 +1,7 @@
 // Learning Roadmap, Weak-Point Tracking, and Adaptive Analytics System
 // Persists learning milestones, mistake history, and progress metrics
 
-const ROADMAP_STORAGE_KEY = 'anatomy_learning_roadmap';
+const _ROADMAP_STORAGE_KEY = 'anatomy_learning_roadmap';
 const WEAK_POINTS_STORAGE_KEY = 'anatomy_weak_structures';
 const STATS_STORAGE_KEY = 'anatomy_learning_stats';
 

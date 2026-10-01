@@ -194,7 +194,7 @@ async function handleAISubmit(text, viewer) {
     });
 
     renderAIAssistantMarkup(viewer, state.selectedPart?.displayName);
-  } catch (err) {
+  } catch (_err) {
     document.getElementById('aiThinkingBubble')?.remove();
     chatHistory.push({
       role: 'bot',

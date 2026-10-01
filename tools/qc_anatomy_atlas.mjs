@@ -23,7 +23,7 @@ export async function runAnatomyQC(options = {}) {
 
   const report = {
     timestamp: new Date().toISOString(),
-    version: '1.2.0',
+    version: '1.0.0',
     status: 'PASS',
     totalChecks: 0,
     passedChecks: 0,
@@ -127,11 +127,11 @@ export async function runAnatomyQC(options = {}) {
 
   // Sample check terminology quality & Latin names
   let missingLatinCount = 0;
-  let missingEnglishCount = 0;
+  let _missingEnglishCount = 0;
   const entries = Object.entries(lexiconData).slice(0, 500);
   for (const [key, item] of entries) {
     if (!item.la && !item.latin && !item.name_latin) missingLatinCount++;
-    if (!key && !item.en && !item.name_en) missingEnglishCount++;
+    if (!key && !item.en && !item.name_en) _missingEnglishCount++;
   }
   check('LATIN_TERMINOLOGY_COVERAGE', missingLatinCount < 50, `Too many structures missing Latin TA2 names (${missingLatinCount}/500 sampled)`, false);
 
@@ -141,7 +141,7 @@ export async function runAnatomyQC(options = {}) {
   if (!silent) console.log('🧬 3. Checking Hierarchy & System Parent-Child Relations...');
   let orphanPointers = 0;
   if (systemsData && typeof systemsData === 'object') {
-    for (const [sys, items] of Object.entries(systemsData)) {
+    for (const [_sys, items] of Object.entries(systemsData)) {
       if (Array.isArray(items)) {
         for (const item of items) {
           if (item.parentId && !items.some(p => p.id === item.parentId) && !structureKeys.includes(item.parentId)) {

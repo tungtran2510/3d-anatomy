@@ -122,7 +122,7 @@ async function init() {
 }
 
 // Cross-platform Desktop Shortcuts (Space, R, Esc, F, H, I)
-function initDesktopShortcuts(viewer) {
+function initDesktopShortcuts(targetViewer) {
   window.addEventListener('keydown', (e) => {
     // Ignore when typing inside input or textarea
     if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
@@ -131,7 +131,7 @@ function initDesktopShortcuts(viewer) {
       e.preventDefault();
       document.getElementById('btnMotionPlayPause')?.click();
     } else if (e.key === 'r' || e.key === 'R') {
-      import('./viewer/camera.js').then(({ resetView }) => resetView(viewer));
+      import('./viewer/camera.js').then(({ resetView }) => resetView(targetViewer));
     } else if (e.key === 'Escape') {
       document.getElementById('offlineCloseBtn')?.click();
       document.getElementById('motionCloseBtn')?.click();
@@ -139,7 +139,7 @@ function initDesktopShortcuts(viewer) {
       document.getElementById('cardCloseBtn')?.click();
     } else if (e.key === 'f' || e.key === 'F') {
       if (state.selectedPart) {
-        import('./viewer/camera.js').then(({ frameRegion }) => frameRegion(state.selectedPart.id, viewer));
+        import('./viewer/camera.js').then(({ frameRegion }) => frameRegion(state.selectedPart.id, targetViewer));
       }
     } else if (e.key === 'h' || e.key === 'H') {
       document.getElementById('cardHideBtn')?.click();

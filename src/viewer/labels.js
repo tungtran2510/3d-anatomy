@@ -50,6 +50,17 @@ let isVisible = false;
 let frameUnsub = null;
 const pinElements = new Map();
 
+export function disposeLabels() {
+  if (frameUnsub) {
+    frameUnsub();
+    frameUnsub = null;
+  }
+  if (labelsContainer) {
+    labelsContainer.remove();
+    labelsContainer = null;
+  }
+}
+
 export function initLabels(viewer) {
   if (labelsContainer) return;
 

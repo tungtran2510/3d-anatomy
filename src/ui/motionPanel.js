@@ -6,10 +6,8 @@ import { dynamicAnatomy, MOTIONS, MOTION_METADATA } from '../viewer/dynamicAnato
 
 let popoverEl = null;
 let isDraggingScrubber = false;
-let activeViewer = null;
 
 export function initMotionPanel(viewer) {
-  activeViewer = viewer;
   dynamicAnatomy.init(viewer);
   popoverEl = document.getElementById('motionPopover');
 

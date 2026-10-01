@@ -1,5 +1,5 @@
 import { state } from '../state/store.js';
-import { selectPartById, deselectPart } from '../viewer/selection.js';
+import { selectPartById } from '../viewer/selection.js';
 import { highlightMesh, clearHighlight } from '../viewer/visibility.js';
 import { getStructureInfo } from '../state/store.js';
 import { showToast } from './sidebar.js';
