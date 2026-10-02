@@ -529,13 +529,17 @@ export function importAtlasMediaJSON(jsonString) {
   }
 }
 
-// Bộ phân giải URL Video thông minh (YouTube watch, youtu.be, embed, shorts, hoặc video MP4/WebM)
+// Bộ phân giải URL Video thông minh (YouTube watch, youtu.be, embed, shorts, hoặc video MP4/WebM/Blob)
 export function parseVideoUrl(rawUrl) {
   if (!rawUrl) return { type: 'none', url: '' };
   const str = rawUrl.trim();
 
-  // Kiểm tra file video trực tiếp (.mp4, .webm, .ogg)
-  if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(str)) {
+  // Kiểm tra file video trực tiếp (.mp4, .webm, .ogg, .mov, blob:, data:video)
+  if (
+    str.startsWith('blob:') ||
+    str.startsWith('data:video') ||
+    /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(str)
+  ) {
     return { type: 'video', url: str };
   }
 
@@ -577,5 +581,140 @@ export function setAdminLoggedIn(status) {
     sessionStorage.setItem(ADMIN_LOGGED_IN_KEY, 'true');
   } else {
     sessionStorage.removeItem(ADMIN_LOGGED_IN_KEY);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// BINDING VIDEO VÀO TỪNG CƠ QUAN / BỘ PHẬN GIẢI PHẪU (PART-TO-VIDEO MAPPINGS)
+// -----------------------------------------------------------------------------
+const PART_VIDEOS_KEY = 'atlas_part_videos_v2';
+
+export function getPartVideo(partId) {
+  if (!partId) return null;
+  const clean = String(partId).replace(/[\._](l|r)$/i, '').replace(/\s*\((l|r|left|right)\)$/i, '').trim();
+
+  // 1. Kiểm tra cấu hình do Admin đã tự gắn trực tiếp vào bộ phận này
+  try {
+    const raw = localStorage.getItem(PART_VIDEOS_KEY);
+    if (raw) {
+      const map = JSON.parse(raw);
+      if (map[partId]) return map[partId];
+      if (map[clean]) return map[clean];
+    }
+  } catch {}
+
+  // 2. Tự động liên kết thông minh với các video mẫu chuẩn có sẵn theo hệ cơ quan
+  const lower = clean.toLowerCase();
+  const categories = getAtlasMediaCategories();
+  for (const cat of categories) {
+    if (!cat.cards) continue;
+    for (const card of cat.cards) {
+      const cardTitleLower = (card.title + ' ' + (card.subtitle || '') + ' ' + (card.desc || '')).toLowerCase();
+
+      if (
+        (lower.includes('heart') || lower.includes('tim') || lower.includes('atrium') || lower.includes('ventricle')) &&
+        (card.id.includes('heart') || cardTitleLower.includes('heart') || cardTitleLower.includes('tim'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+      if (
+        (lower.includes('femur') || lower.includes('đùi') || lower.includes('hip') || lower.includes('háng')) &&
+        (card.id.includes('ball_socket') || cardTitleLower.includes('ball and socket'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+      if (
+        (lower.includes('knee') || lower.includes('gối') || lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('chéo')) &&
+        (card.id.includes('condyloid') || cardTitleLower.includes('gối') || cardTitleLower.includes('condyloid'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+      if (
+        (lower.includes('skin') || lower.includes('da')) &&
+        (card.id.includes('skin') || cardTitleLower.includes('da'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+      if (
+        (lower.includes('biceps') || lower.includes('triceps') || lower.includes('nhị đầu') || lower.includes('tam đầu')) &&
+        (card.id.includes('paired_muscles') || cardTitleLower.includes('cơ đối vận'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+      if (
+        (lower.includes('lung') || lower.includes('phổi') || lower.includes('trachea') || lower.includes('khí quản')) &&
+        (card.id.includes('gas_exchange') || cardTitleLower.includes('khí') || cardTitleLower.includes('phổi'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+      if (
+        (lower.includes('vertebra') || lower.includes('spine') || lower.includes('đốt sống') || lower.includes('cột sống')) &&
+        (card.id.includes('skeleton') || cardTitleLower.includes('xương'))
+      ) {
+        return { ...card, isDefault: true };
+      }
+    }
+  }
+
+  return null;
+}
+
+export function setPartVideo(partId, videoData) {
+  if (!partId || !videoData) return false;
+  try {
+    const raw = localStorage.getItem(PART_VIDEOS_KEY);
+    const map = raw ? JSON.parse(raw) : {};
+    const clean = String(partId).replace(/[\._](l|r)$/i, '').replace(/\s*\((l|r|left|right)\)$/i, '').trim();
+
+    const record = {
+      id: videoData.id || `pvid_${Date.now()}`,
+      partId,
+      cleanPartId: clean,
+      title: videoData.title || 'Video Minh Họa Giải Phẫu',
+      subtitle: videoData.subtitle || '',
+      videoUrl: videoData.videoUrl || '',
+      videoType: videoData.videoType || (videoData.videoUrl?.includes('youtube') ? 'youtube' : 'local_mp4'),
+      localVideoId: videoData.localVideoId || null,
+      thumbnail: videoData.thumbnail || './images/atlas/med_skin.png',
+      duration: videoData.duration || '0:30',
+      badge: videoData.badge || 'Giải phẫu',
+      desc: videoData.desc || '',
+      updatedAt: Date.now()
+    };
+
+    map[partId] = record;
+    map[clean] = record;
+    localStorage.setItem(PART_VIDEOS_KEY, JSON.stringify(map));
+    window.dispatchEvent(new CustomEvent('atlas-part-video-updated', { detail: record }));
+    return true;
+  } catch (err) {
+    console.error('[AtlasMediaManager] setPartVideo error:', err);
+    return false;
+  }
+}
+
+export function removePartVideo(partId) {
+  if (!partId) return false;
+  try {
+    const raw = localStorage.getItem(PART_VIDEOS_KEY);
+    if (!raw) return true;
+    const map = JSON.parse(raw);
+    const clean = String(partId).replace(/[\._](l|r)$/i, '').replace(/\s*\((l|r|left|right)\)$/i, '').trim();
+    delete map[partId];
+    delete map[clean];
+    localStorage.setItem(PART_VIDEOS_KEY, JSON.stringify(map));
+    window.dispatchEvent(new CustomEvent('atlas-part-video-updated', { detail: { partId, removed: true } }));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function getAllPartVideos() {
+  try {
+    const raw = localStorage.getItem(PART_VIDEOS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
   }
 }

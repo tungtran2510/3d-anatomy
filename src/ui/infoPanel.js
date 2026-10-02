@@ -10,6 +10,10 @@ import { hidePart, isolatePart, setPartTransparency, restoreAllParts } from '../
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
+import { getPartVideo, removePartVideo, isAdminLoggedIn } from '../data/atlasMediaManager.js';
+import { getLocalVideoBlobUrl } from '../data/videoStore.js';
+import { openQuickVideoModal } from './quickVideoModal.js';
+import { openVideoModal } from './sidebar.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -256,6 +260,9 @@ export function updateInfoPanelContent(part, viewer) {
 
   // 2b. Render Dynamic Flow Pathway (Đường đi & Chu trình giải phẫu - Dịch não tủy, Gan mật tụy, Tim mạch)
   renderDynamicPathway(part, clinical, mainName);
+
+  // 2c. Render Video Bài Giảng & Minh Họa Giải Phẫu (YouTube & MP4 Tự Động Nén)
+  renderPartVideoSection(part, clinical, mainName, viewer);
 
   // 3. Update Orientation UI Buttons & Zoom Step UI
   updateOrientationButtons();
@@ -715,4 +722,101 @@ function showHistologyPreview(structureName, title) {
   const close = () => container.remove();
   container.querySelector('#histologyCloseBtn')?.addEventListener('click', close);
   container.querySelector('#histologyBackdrop')?.addEventListener('click', close);
+}
+
+// -----------------------------------------------------------------------------
+// RENDER KHỐI VIDEO MINH HỌA GIẢI PHẪU (YOUTUBE & MP4 NỘI BỘ KÈM NÉN)
+// -----------------------------------------------------------------------------
+function renderPartVideoSection(part, clinical, mainName, viewer) {
+  const section = document.getElementById('cardVideoSection');
+  if (!section) return;
+
+  const video = getPartVideo(part.id);
+  const isAdmin = isAdminLoggedIn();
+
+  if (video) {
+    section.classList.remove('hidden');
+    section.innerHTML = `
+      <div class="part-video-card">
+        <div class="part-video-header">
+          <span class="part-video-tag">🎬 Video Minh Họa Y Khoa</span>
+          <span class="part-video-duration">${video.duration || '0:45'}</span>
+        </div>
+        <div class="part-video-preview" id="btnPlayPartVideo" title="Chạm để phát video">
+          <div class="part-video-poster" style="background-image: url('${video.thumbnail || './images/atlas/med_skin.png'}')"></div>
+          <div class="part-video-play-overlay">
+            <div class="play-circle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <span class="play-label">Chạm để phát video</span>
+          </div>
+        </div>
+        <div class="part-video-title">${video.title}</div>
+        <div class="part-video-toolbar">
+          <button type="button" class="btn-video-watch" id="btnWatchPartVideo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Phát Video</span>
+          </button>
+          <button type="button" class="btn-video-edit-admin" id="btnAdminEditVideo" title="Đổi hoặc gắn video mới">
+            <span>⚙️ Đổi Video</span>
+          </button>
+          ${video.isDefault ? '' : `
+            <button type="button" class="btn-video-remove-admin" id="btnAdminRemoveVideo" title="Gỡ video khỏi bộ phận này">
+              <span>🗑️ Gỡ</span>
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+
+    const playAction = async (e) => {
+      e?.stopPropagation();
+      let playUrl = video.videoUrl;
+      if (video.localVideoId) {
+        const blobUrl = await getLocalVideoBlobUrl(video.localVideoId);
+        if (blobUrl) playUrl = blobUrl;
+      }
+      openVideoModal(playUrl, video.title);
+    };
+
+    section.querySelector('#btnPlayPartVideo')?.addEventListener('click', playAction);
+    section.querySelector('#btnWatchPartVideo')?.addEventListener('click', playAction);
+
+    section.querySelector('#btnAdminEditVideo')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openQuickVideoModal(part.id, mainName, () => updateInfoPanelContent(part, viewer));
+    });
+
+    section.querySelector('#btnAdminRemoveVideo')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm(`Gỡ video khỏi bộ phận ${mainName}?`)) {
+        removePartVideo(part.id);
+        showToast(`✓ Đã gỡ video khỏi ${mainName}`);
+        updateInfoPanelContent(part, viewer);
+      }
+    });
+
+  } else {
+    // Chưa có video gắn cho bộ phận này
+    section.classList.remove('hidden');
+    section.innerHTML = `
+      <div class="part-video-card empty-card">
+        <div class="empty-video-info">
+          <span class="empty-icon">🎬</span>
+          <div class="empty-text-wrap">
+            <strong class="empty-title">Chưa có video cho ${mainName}</strong>
+            <span class="empty-desc">Gắn link YouTube hoặc tải video MP4 từ máy để học tập trực quan.</span>
+          </div>
+        </div>
+        <button type="button" class="btn-add-organ-video" id="btnAdminAddOrganVideo" title="Thêm video YouTube hoặc file MP4 từ máy">
+          <span>➕ Gắn Video Cho Bộ Phận Này</span>
+        </button>
+      </div>
+    `;
+
+    section.querySelector('#btnAdminAddOrganVideo')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openQuickVideoModal(part.id, mainName, () => updateInfoPanelContent(part, viewer));
+    });
+  }
 }

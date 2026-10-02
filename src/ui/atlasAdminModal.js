@@ -16,6 +16,8 @@ import {
   DEFAULT_ATLAS_MEDIA_CATEGORIES
 } from '../data/atlasMediaManager.js';
 import { showToast, openVideoModal } from './sidebar.js';
+import { compressVideoFile } from '../utils/videoCompressor.js';
+import { saveLocalVideo, getLocalVideoBlobUrl, formatBytes } from '../data/videoStore.js';
 
 let adminModalEl = null;
 let currentEditingItem = null; // { categoryId, cardIndex, card }
@@ -489,6 +491,13 @@ function openEditDrawer(itemData) {
             <button type="button" class="btn-test-url" id="btnDrawerTestUrl" title="Kiểm tra phát thử link này ngay">▶️ Thử link</button>
           </div>
           <span class="admin-field-tip">Hệ thống tự động nhận diện và chuyển hóa mọi link YouTube hoặc file MP4 trực tiếp.</span>
+          <div class="admin-local-mp4-box" style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px dashed rgba(56,189,248,0.3);border-radius:8px;">
+            <label class="btn-admin-secondary" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;margin:0;">
+              <span>📁 Hoặc chọn video MP4 từ máy (Kèm tự động nén)</span>
+              <input type="file" id="drawerLocalFileInput" accept="video/mp4,video/webm,video/quicktime" style="display:none;" />
+            </label>
+            <div id="drawerLocalFileStatus" style="font-size:11px;opacity:0.85;margin-top:6px;display:none;"></div>
+          </div>
         </div>
 
         <div class="admin-drawer-field">
@@ -536,6 +545,47 @@ function openEditDrawer(itemData) {
       return;
     }
     openVideoModal(rawUrl, titleVal);
+  });
+
+  const localFileInput = drawer.querySelector('#drawerLocalFileInput');
+  const localFileStatus = drawer.querySelector('#drawerLocalFileStatus');
+  const urlInput = drawer.querySelector('#drawerUrlInput');
+  const durInput = drawer.querySelector('#drawerDurationInput');
+
+  localFileInput?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    localFileStatus.style.display = 'block';
+    localFileStatus.textContent = `Đang nén ${file.name}...`;
+
+    try {
+      const res = await compressVideoFile(file, { shouldCompress: true, speed: 2.0 }, (pct, status) => {
+        localFileStatus.textContent = `${status} (${pct}%)`;
+      });
+
+      const vidId = `local_vid_${Date.now()}`;
+      await saveLocalVideo({
+        id: vidId,
+        title: drawer.querySelector('#drawerTitleInput').value.trim() || file.name,
+        blob: res.blob,
+        originalSize: file.size,
+        duration: res.duration,
+        thumbnail: res.thumbnail
+      });
+
+      const blobUrl = await getLocalVideoBlobUrl(vidId);
+      urlInput.value = blobUrl;
+      card.localVideoId = vidId;
+      if (res.duration) durInput.value = res.duration;
+      if (res.thumbnail) imgInput.value = res.thumbnail;
+
+      const origMB = formatBytes(res.originalSize);
+      const compMB = formatBytes(res.compressedSize);
+      localFileStatus.innerHTML = `✓ Đã nén: ${origMB} ➔ <strong>${compMB}</strong>!`;
+    } catch (err) {
+      localFileStatus.textContent = '⚠️ Lỗi: ' + err.message;
+    }
   });
 
   drawer.querySelectorAll('.btn-preset-thumb').forEach(b => {

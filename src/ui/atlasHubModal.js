@@ -19,6 +19,7 @@ import {
 } from '../data/atlasViewsData.js';
 import { getAtlasMediaCategories } from '../data/atlasMediaManager.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
+import { openQuickVideoModal } from './quickVideoModal.js';
 import { toggleAppTheme, updateThemeButtons, isDarkTheme } from '../utils/themeManager.js';
 import { setModelOrientation } from '../viewer/orientationManager.js';
 import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
@@ -678,9 +679,14 @@ function renderMediaTab(container, viewer) {
         <span class="media-count-badge">🎬 ${totalCards} Hoạt Ảnh & Video Y Khoa</span>
         <span class="media-count-sub">(Đồng bộ 12 chuyên đề lâm sàng Atlas)</span>
       </div>
-      <button type="button" class="btn-media-admin-shortcut" id="btnMediaAdminShortcut" title="Mở bảng quản trị để thêm/sửa link video">
-        <span>⚙️ Quản trị & Sửa link video (Pass: 123456)</span>
-      </button>
+      <div class="media-admin-bar-actions">
+        <button type="button" class="btn-media-add-new" id="btnMediaAddNewVideo" title="Gắn hoặc thêm video mới (YouTube hoặc MP4 từ máy)">
+          <span>➕ Thêm Video</span>
+        </button>
+        <button type="button" class="btn-media-admin-shortcut" id="btnMediaAdminShortcut" title="Mở bảng quản trị để thêm/sửa link video">
+          <span>⚙️ Bảng Quản Trị</span>
+        </button>
+      </div>
     </div>
   `;
 
@@ -747,6 +753,13 @@ function renderMediaTab(container, viewer) {
   // Bind Admin Shortcut Button
   container.querySelector('#btnMediaAdminShortcut')?.addEventListener('click', () => {
     openAtlasAdmin(viewer);
+  });
+
+  // Bind Add New Video Button
+  container.querySelector('#btnMediaAddNewVideo')?.addEventListener('click', () => {
+    openQuickVideoModal(null, 'Thư Viện Hoạt Ảnh', () => {
+      renderMediaCategories(container, getAtlasMediaCategories(), '', viewer);
+    });
   });
 
   // Bind Media Card Click Events
