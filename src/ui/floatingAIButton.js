@@ -36,8 +36,8 @@ export function initFloatingAIButton(viewer) {
     bubbleEl.style.right = 'auto';
     bubbleEl.style.bottom = 'auto';
   } else {
-    bubbleEl.style.left = '16px';
-    bubbleEl.style.bottom = '80px';
+    bubbleEl.style.left = '14px';
+    bubbleEl.style.bottom = typeof window !== 'undefined' && window.innerWidth <= 768 ? '118px' : '80px';
     bubbleEl.style.right = 'auto';
     bubbleEl.style.top = 'auto';
   }
@@ -143,9 +143,19 @@ function setupLongPressDragHandlers(viewer) {
       isDragging = false;
       isLongPressed = false;
       bubbleEl.classList.remove('is-dragging');
+      lastToggleTime = Date.now();
       toggleAIAssistant(viewer);
     }
   };
+
+  let lastToggleTime = 0;
+  bubbleEl.addEventListener('click', (e) => {
+    if (Date.now() - lastToggleTime < 350) return;
+    if (!pointerMoved && !isLongPressed) {
+      lastToggleTime = Date.now();
+      toggleAIAssistant(viewer);
+    }
+  });
 
   bubbleEl.addEventListener('pointerdown', onPointerDown);
   window.addEventListener('pointermove', onPointerMove, { passive: false });

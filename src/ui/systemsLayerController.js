@@ -784,6 +784,14 @@ export function openDrawer() {
   drawerEl.classList.add('open');
   pullTabEl?.classList.add('drawer-open');
   isDrawerOpen = true;
+
+  // On mobile, collapse selection card to compact mode to prevent collision
+  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+    const card = document.getElementById('selectionCard');
+    if (card && !card.classList.contains('hidden') && !card.classList.contains('compact-mode')) {
+      card.classList.add('compact-mode');
+    }
+  }
 }
 
 export function closeDrawer() {
