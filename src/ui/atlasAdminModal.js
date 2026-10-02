@@ -160,42 +160,50 @@ function renderAdminDashboard() {
       
       <!-- Top Action Bar -->
       <div class="admin-dash-header">
-        <div class="admin-brand-info">
-          <h2 class="admin-title">
-            <span class="admin-shield-icon">🛡️</span>
-            Bảng Quản Trị Video & Hoạt Ảnh Y Khoa
-          </h2>
-          <span class="admin-status-badge">Đang đăng nhập quyền Admin</span>
+        <div class="admin-dash-top">
+          <div class="admin-brand-info">
+            <h2 class="admin-title">
+              <span class="admin-shield-icon">🛡️</span>
+              Bảng Quản Trị Video Y Khoa
+            </h2>
+            <span class="admin-status-badge">Đang đăng nhập Admin</span>
+          </div>
+          <button type="button" class="btn-admin-close" id="btnAdminCloseModal" aria-label="Đóng">&times;</button>
         </div>
 
-        <div class="admin-header-buttons">
-          <button type="button" class="btn-admin-action" id="btnAdminAddVideo" title="Thêm video mới vào thư viện">
-            <span>➕ Thêm Video Mới</span>
-          </button>
-          <button type="button" class="btn-admin-action btn-admin-accent" id="btnAdminSaveAll" title="Lưu toàn bộ thay đổi vào bộ nhớ">
-            <span>💾 Lưu Dữ Liệu</span>
-          </button>
-          <button type="button" class="btn-admin-action btn-admin-danger" id="btnAdminReset" title="Khôi phục danh mục 12 nhóm ban đầu">
-            <span>🔄 Khôi phục gốc</span>
-          </button>
-          <button type="button" class="btn-admin-action" id="btnAdminExport" title="Xuất file sao lưu JSON">
-            <span>📥 Xuất JSON</span>
-          </button>
-          <label class="btn-admin-action" title="Nhập file JSON đã sao lưu" style="cursor:pointer;margin:0;">
-            <span>📤 Nhập JSON</span>
-            <input type="file" id="adminImportFile" accept=".json" style="display:none;" />
-          </label>
-          <button type="button" class="btn-admin-action btn-admin-logout" id="btnAdminLogout" title="Đăng xuất quyền Admin">
-            <span>🚪 Đăng xuất</span>
-          </button>
-          <button type="button" class="btn-admin-close" id="btnAdminCloseModal" aria-label="Đóng">&times;</button>
+        <div class="admin-action-grid">
+          <!-- Hàng 1: Thao tác chính -->
+          <div class="admin-btn-row">
+            <button type="button" class="btn-admin-action btn-admin-accent" id="btnAdminAddVideo" title="Thêm video mới vào thư viện">
+              <span>➕ Thêm Video</span>
+            </button>
+            <button type="button" class="btn-admin-action btn-admin-save" id="btnAdminSaveAll" title="Lưu toàn bộ thay đổi vào bộ nhớ">
+              <span>💾 Lưu Dữ Liệu</span>
+            </button>
+            <button type="button" class="btn-admin-action btn-admin-logout" id="btnAdminLogout" title="Đăng xuất quyền Admin">
+              <span>🚪 Đăng xuất</span>
+            </button>
+          </div>
+          <!-- Hàng 2: Dữ liệu & Sao lưu -->
+          <div class="admin-btn-row">
+            <button type="button" class="btn-admin-action btn-admin-danger" id="btnAdminReset" title="Khôi phục danh mục 12 nhóm ban đầu">
+              <span>🔄 Khôi phục gốc</span>
+            </button>
+            <button type="button" class="btn-admin-action" id="btnAdminExport" title="Xuất file sao lưu JSON">
+              <span>📥 Xuất JSON</span>
+            </button>
+            <label class="btn-admin-action" title="Nhập file JSON đã sao lưu" style="cursor:pointer;margin:0;">
+              <span>📤 Nhập JSON</span>
+              <input type="file" id="adminImportFile" accept=".json" style="display:none;" />
+            </label>
+          </div>
         </div>
       </div>
 
       <!-- Filter & Search Controls -->
       <div class="admin-toolbar">
         <div class="admin-filter-group">
-          <label for="adminCategoryFilter">Danh mục:</label>
+          <label for="adminCategoryFilter">📁 Danh mục:</label>
           <select id="adminCategoryFilter" class="admin-select">
             <option value="all" ${filterCategory === 'all' ? 'selected' : ''}>Tất cả (${categories.length} danh mục - ${totalVideos} video)</option>
             ${categories.map(cat => `
@@ -207,12 +215,13 @@ function renderAdminDashboard() {
         </div>
 
         <div class="admin-search-wrap">
-          <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="Tìm theo tên video, ID, link YouTube..." value="${searchQuery}" />
+          <span class="admin-search-icon">🔍</span>
+          <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="Tìm theo tên video, ID, link..." value="${searchQuery}" />
           ${searchQuery ? `<button type="button" class="admin-search-clear" id="btnAdminSearchClear">&times;</button>` : ''}
         </div>
       </div>
 
-      <!-- Scrollable Video List Table / Grid -->
+      <!-- Scrollable Video Cards List -->
       <div class="admin-media-list-container" id="adminMediaListContainer">
         <!-- Rendered by renderAdminVideoList -->
       </div>
@@ -325,59 +334,48 @@ function renderAdminVideoList() {
     html += `
       <div class="admin-category-block" data-cat-id="${cat.id}">
         <div class="admin-category-header">
-          <h3 class="admin-category-title">${cat.titleVi}</h3>
+          <h3 class="admin-category-title">📁 ${cat.titleVi}</h3>
           <div class="admin-category-badge">${cards.length} video</div>
         </div>
-        <div class="admin-video-table-wrap">
-          <table class="admin-video-table">
-            <thead>
-              <tr>
-                <th style="width: 50px;">Ảnh</th>
-                <th>Tiêu đề & Chú thích</th>
-                <th style="width: 75px;">Thời lượng</th>
-                <th>Liên kết Video (YouTube / MP4)</th>
-                <th style="width: 170px; text-align: center;">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${cards.map((card, idx) => {
-                const parsed = parseVideoUrl(card.videoUrl);
-                const isYouTube = parsed.type === 'youtube';
-                const isDirect = parsed.type === 'video';
-                return `
-                  <tr class="admin-video-row" data-card-id="${card.id}">
-                    <td>
-                      <img class="admin-table-thumb" src="${card.image || './images/atlas/med_skin.png'}" alt="${card.title}" onerror="this.src='./images/atlas/med_skin.png'" />
-                    </td>
-                    <td>
-                      <div class="admin-card-title-cell">
-                        <strong>${card.title}</strong>
-                        <span class="admin-card-sub-cell">${card.subtitle || ''}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="admin-pill-duration">${card.duration || '--:--'}</span>
-                    </td>
-                    <td>
-                      <div class="admin-url-cell">
+        <div class="admin-video-cards-list">
+          ${cards.map((card, idx) => {
+            const parsed = parseVideoUrl(card.videoUrl);
+            const isYouTube = parsed.type === 'youtube';
+            const isDirect = parsed.type === 'video';
+            return `
+              <div class="admin-video-card" data-card-id="${card.id}">
+                <!-- HÀNG 1: Thumbnail + Tiêu đề + Thời lượng + Badge nguồn -->
+                <div class="admin-card-head">
+                  <img class="admin-card-thumb" src="${card.image || './images/atlas/med_skin.png'}" alt="${card.title}" onerror="this.src='./images/atlas/med_skin.png'" />
+                  <div class="admin-card-info-col">
+                    <div class="admin-card-title-row">
+                      <h4 class="admin-card-title">${card.title}</h4>
+                      <div class="admin-card-meta-tags">
+                        <span class="admin-pill-duration">⏱️ ${card.duration || '--:--'}</span>
                         <span class="admin-url-badge ${isYouTube ? 'badge-yt' : (isDirect ? 'badge-mp4' : '')}">
                           ${isYouTube ? 'YouTube' : (isDirect ? 'MP4' : 'Link')}
                         </span>
-                        <span class="admin-url-text" title="${card.videoUrl}">${card.videoUrl || '(Chưa có link)'}</span>
                       </div>
-                    </td>
-                    <td>
-                      <div class="admin-table-actions">
-                        <button type="button" class="btn-mini-play" data-action="preview" data-cat="${cat.id}" data-idx="${idx}" title="Phát thử video">▶️ Thử</button>
-                        <button type="button" class="btn-mini-edit" data-action="edit" data-cat="${cat.id}" data-idx="${idx}" title="Sửa link & thông tin">✏️ Sửa</button>
-                        <button type="button" class="btn-mini-delete" data-action="delete" data-cat="${cat.id}" data-idx="${idx}" title="Xóa video này">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
+                    </div>
+                    ${card.subtitle ? `<p class="admin-card-subtitle">${card.subtitle}</p>` : ''}
+                  </div>
+                </div>
+
+                <!-- HÀNG 2: Video URL & Bộ 3 nút thao tác (Thử - Sửa - Xóa) -->
+                <div class="admin-card-foot">
+                  <div class="admin-card-url-box" title="${card.videoUrl || '(Chưa có link)'}">
+                    <span class="admin-url-icon">🔗</span>
+                    <span class="admin-card-url-text">${card.videoUrl || '(Chưa gắn link video)'}</span>
+                  </div>
+                  <div class="admin-card-actions">
+                    <button type="button" class="btn-card-action btn-mini-play" data-action="preview" data-cat="${cat.id}" data-idx="${idx}" title="Phát thử video">▶️ Thử</button>
+                    <button type="button" class="btn-card-action btn-mini-edit" data-action="edit" data-cat="${cat.id}" data-idx="${idx}" title="Sửa link & thông tin">✏️ Sửa</button>
+                    <button type="button" class="btn-card-action btn-mini-delete" data-action="delete" data-cat="${cat.id}" data-idx="${idx}" title="Xóa video này">🗑️ Xóa</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
     `;
