@@ -1,4 +1,4 @@
-// Radiological CT/MRI Scout Inset Box Controller
+﻿// Radiological CT/MRI Scout Inset Box Controller
 // Inspired by Visible Body Image 3: Inset radiological scan at bottom left showing cutting plane position
 import { showToast } from './sidebar.js';
 
@@ -18,7 +18,7 @@ export function initRadiologicalScout(viewer) {
     scoutBoxEl = document.createElement('div');
     scoutBoxEl.className = 'radiological-scout-box hidden';
     scoutBoxEl.id = 'radiologicalScoutBox';
-    scoutBoxEl.title = 'Ảnh Chẩn Đoán Hình Ảnh (CT / MRI) Đối Chiếu (Chạm để xem chi tiết)';
+    scoutBoxEl.title = 'áº¢nh Cháº©n ÄoÃ¡n HÃ¬nh áº¢nh (CT / MRI) Äá»‘i Chiáº¿u (Cháº¡m Ä‘á»ƒ xem chi tiáº¿t)';
     scoutBoxEl.innerHTML = `
       <div class="scout-preview-frame">
         <div class="scout-badge" id="scoutBadgeLabel">CT Scout</div>
@@ -167,8 +167,8 @@ function openScoutDetailModal() {
   const existing = document.getElementById('scoutDetailModal');
   if (existing) existing.remove();
 
-  const title = currentCard?.title || 'Lát Cắt Chẩn Đoán Hình Ảnh (CT / MRI)';
-  const subtitle = currentCard?.subtitle || 'Đối chiếu giải phẫu 3D và phim cắt lớp vi tính y khoa';
+  const title = currentCard?.title || 'LÃ¡t Cáº¯t Cháº©n ÄoÃ¡n HÃ¬nh áº¢nh (CT / MRI)';
+  const subtitle = currentCard?.subtitle || 'Äá»‘i chiáº¿u giáº£i pháº«u 3D vÃ  phim cáº¯t lá»›p vi tÃ­nh y khoa';
   const scoutLabel = currentCard?.scoutLabel || `${currentPlane.toUpperCase()} ${(currentOffset * 100).toFixed(1)} cm`;
 
   const modal = document.createElement('div');
@@ -179,10 +179,10 @@ function openScoutDetailModal() {
     <div class="study-dialog" style="max-width: 480px; padding: 22px;">
       <div class="study-dialog-header">
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:22px;">🩻</span>
+          <span style="font-size:22px;">ðŸ©»</span>
           <div>
             <h3 style="margin:0;font-size:16.5px;font-weight:700;color:#0f172a;">${title}</h3>
-            <span style="font-size:13px;color:#0d9488;font-weight:600;">Mặt phẳng: ${scoutLabel}</span>
+            <span style="font-size:13px;color:#0d9488;font-weight:600;">Máº·t pháº³ng: ${scoutLabel}</span>
           </div>
         </div>
         <button type="button" class="dialog-close-btn" id="scoutModalClose">&times;</button>
@@ -190,7 +190,7 @@ function openScoutDetailModal() {
 
       <div style="margin-top:16px;text-align:center;">
         <div style="background:#020617;padding:16px;border-radius:12px;border:1px solid #1e293b;display:inline-block;width:100%;box-sizing:border-box;">
-          <img src="${currentCard?.image || '/3d/images/atlas/nerv_brain.png'}" alt="Scout Detail" style="max-height:180px;object-fit:contain;filter:contrast(1.15) brightness(0.95);" />
+          <img src="${currentCard?.image || '/images/atlas/nerv_brain.png'}" alt="Scout Detail" style="max-height:180px;object-fit:contain;filter:contrast(1.15) brightness(0.95);" />
           <div style="margin-top:8px;font-family:monospace;font-size:11.5px;color:#38bdf8;letter-spacing:1px;">
             LEVEL: ${(currentOffset * 100).toFixed(1)} cm | PLANE: ${currentPlane.toUpperCase()} | P-THICKNESS: 1.0mm
           </div>
@@ -198,13 +198,13 @@ function openScoutDetailModal() {
       </div>
 
       <div style="margin-top:14px;background:#f8fafc;padding:12px 14px;border-radius:10px;border:1px solid #e2e8f0;font-size:13px;color:#334155;line-height:1.55;">
-        <p style="margin:0 0 6px;"><strong>Ý nghĩa đối chiếu lâm sàng:</strong></p>
-        <p style="margin:0;">${currentCard?.desc || 'Mặt phẳng cắt lớp giúp bác sĩ và sinh viên y khoa đối chiếu cấu trúc mô học 3D với hình ảnh lát cắt trên phim CT / MRI thực tế trong chẩn đoán.'}</p>
+        <p style="margin:0 0 6px;"><strong>Ã nghÄ©a Ä‘á»‘i chiáº¿u lÃ¢m sÃ ng:</strong></p>
+        <p style="margin:0;">${currentCard?.desc || 'Máº·t pháº³ng cáº¯t lá»›p giÃºp bÃ¡c sÄ© vÃ  sinh viÃªn y khoa Ä‘á»‘i chiáº¿u cáº¥u trÃºc mÃ´ há»c 3D vá»›i hÃ¬nh áº£nh lÃ¡t cáº¯t trÃªn phim CT / MRI thá»±c táº¿ trong cháº©n Ä‘oÃ¡n.'}</p>
       </div>
 
       <div style="margin-top:16px;display:flex;justify-content:flex-end;">
         <button type="button" class="btn-isolate-action primary" id="scoutModalDone" style="padding:8px 18px;border-radius:8px;">
-          Đã hiểu & Tiếp tục xem 3D
+          ÄÃ£ hiá»ƒu & Tiáº¿p tá»¥c xem 3D
         </button>
       </div>
     </div>

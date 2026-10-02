@@ -72,10 +72,15 @@ async function init() {
     console.log(`[main] Anatomy data ready: ${Object.keys(partsData).length} structures`);
 
     if (viewer) {
-      // A shared link wins over the default view; a reload falls back to
-      // whatever was last looked at.
-      const saved = readState() || storedState();
-      const systems = saved?.systems?.length ? saved.systems : [DEFAULT_SYSTEM];
+      // A shared link with explicit URL hash wins over default.
+      // On regular/first visit without URL hash, ALWAYS default strictly to skeletal (no muscular).
+      const hashState = readState();
+      const saved = hashState || storedState();
+      if (!hashState && saved) {
+        // Enforce skeleton-only default when opening root application
+        saved.systems = [DEFAULT_SYSTEM];
+      }
+      const systems = (hashState?.systems?.length) ? hashState.systems : [DEFAULT_SYSTEM];
 
       console.log(`[main] Loading ${systems.join(', ')}...`);
       await loadSystems(systems, viewer);
@@ -119,6 +124,11 @@ async function init() {
             .catch((err) => console.warn('[SW] Registration failed:', err.message));
         });
       }
+
+      // PWA Home Screen Installation Prompt (Gợi ý Cài đặt App lần đầu)
+      import('./ui/pwaInstallPrompt.js').then(({ initPWAInstallPrompt }) => {
+        initPWAInstallPrompt();
+      });
 
       // Offline download recommendation prompt (LỆNH #10)
       import('./ui/offlinePrompt.js').then(({ initOfflinePrompt }) => {

@@ -107,9 +107,18 @@ function update() {
   let labelX = x + OFFSET_X;
   let labelY = y + OFFSET_Y;
 
-  // Keep within safe viewport boundaries
+  // Keep within safe viewport boundaries and NEVER overlap the bottom selection card
+  const cardEl = document.getElementById('selectionCard');
+  let maxBottom = height - box.height - 84;
+  if (cardEl && !cardEl.classList.contains('hidden')) {
+    const cardRect = cardEl.getBoundingClientRect();
+    if (cardRect.top > 80 && cardRect.top < height) {
+      maxBottom = Math.min(maxBottom, cardRect.top - box.height - 12);
+    }
+  }
+
   labelX = Math.min(Math.max(labelX, EDGE_PADDING), width - box.width - EDGE_PADDING);
-  labelY = Math.min(Math.max(labelY, 56), height - box.height - 84);
+  labelY = Math.min(Math.max(labelY, 56), Math.max(56, maxBottom));
 
   label.style.transform = `translate(${Math.round(labelX)}px, ${Math.round(labelY)}px)`;
 

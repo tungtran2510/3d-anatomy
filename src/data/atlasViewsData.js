@@ -1,329 +1,329 @@
-// Comprehensive Atlas 2027 Preset Views & Media Data
-// Chuẩn thiết kế & Danh mục Giải phẫu học Quốc tế (Việt hóa 100% chuẩn Y khoa)
+﻿// Comprehensive Atlas 2027 Preset Views & Media Data
+// Chuáº©n thiáº¿t káº¿ & Danh má»¥c Giáº£i pháº«u há»c Quá»‘c táº¿ (Viá»‡t hÃ³a 100% chuáº©n Y khoa)
 
 export const ATLAS_SYSTEMS_CATEGORIES = [
   {
     id: 'skeletal_views',
-    titleVi: 'Hệ Xương Khớp',
+    titleVi: 'Há»‡ XÆ°Æ¡ng Khá»›p',
     systemKey: 'skeletal',
     cards: [
       {
         id: 'skel_full',
-        title: '1. Toàn Bộ Hệ Xương',
-        subtitle: '206 xương trục và xương chi thể',
-        badge: 'Toàn thân',
-        image: '/3d/images/atlas/skel_full.png',
+        title: '1. ToÃ n Bá»™ Há»‡ XÆ°Æ¡ng',
+        subtitle: '206 xÆ°Æ¡ng trá»¥c vÃ  xÆ°Æ¡ng chi thá»ƒ',
+        badge: 'ToÃ n thÃ¢n',
+        image: '/images/atlas/skel_full.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 0.86, z: 2.6, targetX: 0, targetY: 0.86, targetZ: 0 },
-        desc: 'Bộ xương người trưởng thành: bảo vệ tạng, tạo máu và khung vận động.'
+        desc: 'Bá»™ xÆ°Æ¡ng ngÆ°á»i trÆ°á»Ÿng thÃ nh: báº£o vá»‡ táº¡ng, táº¡o mÃ¡u vÃ  khung váº­n Ä‘á»™ng.'
       },
       {
         id: 'skel_skull',
-        title: '2. Hộp Sọ & Xương Mặt',
-        subtitle: 'Vòm sọ, nền sọ và xương hàm dưới',
-        badge: 'Đầu mặt',
-        image: '/3d/images/atlas/skel_skull.png',
+        title: '2. Há»™p Sá» & XÆ°Æ¡ng Máº·t',
+        subtitle: 'VÃ²m sá», ná»n sá» vÃ  xÆ°Æ¡ng hÃ m dÆ°á»›i',
+        badge: 'Äáº§u máº·t',
+        image: '/images/atlas/skel_skull.png',
         systems: ['skeletal'],
         camera: { x: 0.48, y: 1.62, z: 0.58, targetX: 0, targetY: 1.58, targetZ: 0 },
         highlight: 'Frontal bone',
-        desc: 'Khối xương sọ não bảo vệ não bộ và khối xương mặt nâng đỡ các giác quan.'
+        desc: 'Khá»‘i xÆ°Æ¡ng sá» nÃ£o báº£o vá»‡ nÃ£o bá»™ vÃ  khá»‘i xÆ°Æ¡ng máº·t nÃ¢ng Ä‘á»¡ cÃ¡c giÃ¡c quan.'
       },
       {
         id: 'skel_cranial_fossae',
-        title: '3. Cấu Trúc Nền Sọ',
-        subtitle: 'Hố sọ trước, hố sọ giữa và hố sọ sau',
-        badge: 'Nền sọ',
-        image: '/3d/images/atlas/skel_cranial_fossae.png',
+        title: '3. Cáº¥u TrÃºc Ná»n Sá»',
+        subtitle: 'Há»‘ sá» trÆ°á»›c, há»‘ sá» giá»¯a vÃ  há»‘ sá» sau',
+        badge: 'Ná»n sá»',
+        image: '/images/atlas/skel_cranial_fossae.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 1.40, z: 0.45, targetX: 0, targetY: 1.55, targetZ: 0 },
         highlight: 'Sphenoid bone',
-        desc: 'Hệ thống các lỗ nền sọ cho 12 đôi dây thần kinh sọ và mạch máu não đi qua.'
+        desc: 'Há»‡ thá»‘ng cÃ¡c lá»— ná»n sá» cho 12 Ä‘Ã´i dÃ¢y tháº§n kinh sá» vÃ  máº¡ch mÃ¡u nÃ£o Ä‘i qua.'
       },
       {
         id: 'skel_spine',
-        title: '4. Cột Sống & Lồng Ngực',
-        subtitle: '33 đốt sống và 12 đôi xương sườn',
-        badge: 'Thân mình',
-        image: '/3d/images/atlas/skel_spine.png',
+        title: '4. Cá»™t Sá»‘ng & Lá»“ng Ngá»±c',
+        subtitle: '33 Ä‘á»‘t sá»‘ng vÃ  12 Ä‘Ã´i xÆ°Æ¡ng sÆ°á»n',
+        badge: 'ThÃ¢n mÃ¬nh',
+        image: '/images/atlas/skel_spine.png',
         systems: ['skeletal'],
         camera: { x: 0.6, y: 1.15, z: 1.15, targetX: 0, targetY: 1.1, targetZ: 0 },
         highlight: 'Vertebra L1',
-        desc: 'Trục nâng đỡ cơ thể và khung lồng ngực bảo vệ tim phổi.'
+        desc: 'Trá»¥c nÃ¢ng Ä‘á»¡ cÆ¡ thá»ƒ vÃ  khung lá»“ng ngá»±c báº£o vá»‡ tim phá»•i.'
       },
       {
         id: 'skel_pelvis',
-        title: '5. Khung Chậu & Khớp Háng',
-        subtitle: 'Xương chậu, xương cùng và ổ cối',
-        badge: 'Vùng chậu',
-        image: '/3d/images/atlas/skel_pelvis.png',
+        title: '5. Khung Cháº­u & Khá»›p HÃ¡ng',
+        subtitle: 'XÆ°Æ¡ng cháº­u, xÆ°Æ¡ng cÃ¹ng vÃ  á»• cá»‘i',
+        badge: 'VÃ¹ng cháº­u',
+        image: '/images/atlas/skel_pelvis.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 0.88, z: 0.95, targetX: 0, targetY: 0.85, targetZ: 0 },
         highlight: 'Hip bone.l',
-        desc: 'Hai xương chậu kết hợp xương cùng tạo thành khung chậu vững chắc.'
+        desc: 'Hai xÆ°Æ¡ng cháº­u káº¿t há»£p xÆ°Æ¡ng cÃ¹ng táº¡o thÃ nh khung cháº­u vá»¯ng cháº¯c.'
       }
     ]
   },
   {
     id: 'circulatory_views',
-    titleVi: 'Hệ Tim Mạch & Tuần Hoàn',
+    titleVi: 'Há»‡ Tim Máº¡ch & Tuáº§n HoÃ n',
     systemKey: 'cardiovascular',
     cards: [
       {
         id: 'circ_full',
-        title: '1. Tuần Hoàn Toàn Thân',
-        subtitle: 'Mạng lưới động mạch và tĩnh mạch chủ',
-        badge: 'Toàn thân',
-        image: '/3d/images/atlas/circ_full.png',
+        title: '1. Tuáº§n HoÃ n ToÃ n ThÃ¢n',
+        subtitle: 'Máº¡ng lÆ°á»›i Ä‘á»™ng máº¡ch vÃ  tÄ©nh máº¡ch chá»§',
+        badge: 'ToÃ n thÃ¢n',
+        image: '/images/atlas/circ_full.png',
         systems: ['cardiovascular', 'skeletal'],
         camera: { x: 0, y: 1.0, z: 2.0, targetX: 0, targetY: 1.0, targetZ: 0 },
-        desc: 'Mạng lưới tuần hoàn lớn và nhỏ vận chuyển oxy và dưỡng chất đi khắp cơ thể.'
+        desc: 'Máº¡ng lÆ°á»›i tuáº§n hoÃ n lá»›n vÃ  nhá» váº­n chuyá»ƒn oxy vÃ  dÆ°á»¡ng cháº¥t Ä‘i kháº¯p cÆ¡ thá»ƒ.'
       },
       {
         id: 'circ_heart_thorax',
-        title: '2. Vị Trí Tim Trong Lồng Ngực',
-        subtitle: 'Tim, quai động mạch chủ và trung thất',
-        badge: 'Trung thất',
-        image: '/3d/images/atlas/circ_heart_thorax.png',
+        title: '2. Vá»‹ TrÃ­ Tim Trong Lá»“ng Ngá»±c',
+        subtitle: 'Tim, quai Ä‘á»™ng máº¡ch chá»§ vÃ  trung tháº¥t',
+        badge: 'Trung tháº¥t',
+        image: '/images/atlas/circ_heart_thorax.png',
         systems: ['cardiovascular', 'skeletal'],
         camera: { x: 0, y: 1.28, z: 0.72, targetX: 0, targetY: 1.28, targetZ: 0 },
         highlight: 'Left ventricle',
-        desc: 'Mối tương quan giải phẫu giữa tim, màng ngoài tim và khung xương lồng ngực.'
+        desc: 'Má»‘i tÆ°Æ¡ng quan giáº£i pháº«u giá»¯a tim, mÃ ng ngoÃ i tim vÃ  khung xÆ°Æ¡ng lá»“ng ngá»±c.'
       },
       {
         id: 'circ_simplified',
-        title: '3. Mạch Máu Đại Tuần Hoàn',
-        subtitle: 'Động mạch chủ ngực, cảnh và chi',
-        badge: 'Đại tuần hoàn',
-        image: '/3d/images/atlas/circ_simplified.png',
+        title: '3. Máº¡ch MÃ¡u Äáº¡i Tuáº§n HoÃ n',
+        subtitle: 'Äá»™ng máº¡ch chá»§ ngá»±c, cáº£nh vÃ  chi',
+        badge: 'Äáº¡i tuáº§n hoÃ n',
+        image: '/images/atlas/circ_simplified.png',
         systems: ['cardiovascular'],
         camera: { x: 0, y: 1.2, z: 1.1, targetX: 0, targetY: 1.2, targetZ: 0 },
         highlight: 'Ascending aorta',
-        desc: 'Cây động mạch chủ phân nhánh nuôi đầu mặt, não bộ và các chi thể.'
+        desc: 'CÃ¢y Ä‘á»™ng máº¡ch chá»§ phÃ¢n nhÃ¡nh nuÃ´i Ä‘áº§u máº·t, nÃ£o bá»™ vÃ  cÃ¡c chi thá»ƒ.'
       }
     ]
   },
   {
     id: 'nervous_views',
-    titleVi: 'Hệ Thần Kinh Trung Ương & Ngoại Biên',
+    titleVi: 'Há»‡ Tháº§n Kinh Trung Æ¯Æ¡ng & Ngoáº¡i BiÃªn',
     systemKey: 'nervous',
     cards: [
       {
         id: 'nerv_full',
-        title: '1. Hệ Thần Kinh Toàn Thân',
-        subtitle: 'Não bộ, tủy sống và mạng lưới dây TK',
-        badge: 'Toàn thân',
-        image: '/3d/images/atlas/nerv_full.png',
+        title: '1. Há»‡ Tháº§n Kinh ToÃ n ThÃ¢n',
+        subtitle: 'NÃ£o bá»™, tá»§y sá»‘ng vÃ  máº¡ng lÆ°á»›i dÃ¢y TK',
+        badge: 'ToÃ n thÃ¢n',
+        image: '/images/atlas/nerv_full.png',
         systems: ['nervous', 'skeletal'],
         camera: { x: 0, y: 1.0, z: 2.1, targetX: 0, targetY: 1.0, targetZ: 0 },
-        desc: 'Hệ thống điều khiển toàn bộ cảm giác, vận động và chức năng tự chủ.'
+        desc: 'Há»‡ thá»‘ng Ä‘iá»u khiá»ƒn toÃ n bá»™ cáº£m giÃ¡c, váº­n Ä‘á»™ng vÃ  chá»©c nÄƒng tá»± chá»§.'
       },
       {
         id: 'nerv_brain',
-        title: '2. Não Bộ & Thần Kinh Sọ',
-        subtitle: 'Đại não, tiểu não và 12 đôi dây TK sọ',
-        badge: 'Não bộ',
-        image: '/3d/images/atlas/nerv_brain.png',
+        title: '2. NÃ£o Bá»™ & Tháº§n Kinh Sá»',
+        subtitle: 'Äáº¡i nÃ£o, tiá»ƒu nÃ£o vÃ  12 Ä‘Ã´i dÃ¢y TK sá»',
+        badge: 'NÃ£o bá»™',
+        image: '/images/atlas/nerv_brain.png',
         systems: ['nervous'],
         camera: { x: 0.35, y: 1.62, z: 0.52, targetX: 0, targetY: 1.58, targetZ: 0 },
         highlight: 'Falx cerebri',
-        desc: 'Trung khu thần kinh cao cấp, điều khiển tư duy, vận động và cảm giác giác quan.'
+        desc: 'Trung khu tháº§n kinh cao cáº¥p, Ä‘iá»u khiá»ƒn tÆ° duy, váº­n Ä‘á»™ng vÃ  cáº£m giÃ¡c giÃ¡c quan.'
       },
       {
         id: 'nerv_spinal',
-        title: '3. Tủy Sống & Rễ Thần Kinh',
-        subtitle: 'Ống sống và 31 đôi rễ thần kinh gai',
-        badge: 'Tủy sống',
-        image: '/3d/images/atlas/nerv_spinal.png',
+        title: '3. Tá»§y Sá»‘ng & Rá»… Tháº§n Kinh',
+        subtitle: 'á»ng sá»‘ng vÃ  31 Ä‘Ã´i rá»… tháº§n kinh gai',
+        badge: 'Tá»§y sá»‘ng',
+        image: '/images/atlas/nerv_spinal.png',
         systems: ['nervous', 'skeletal'],
         camera: { x: 0.65, y: 1.15, z: 0.95, targetX: 0, targetY: 1.1, targetZ: 0 },
         highlight: 'Anterior horn of spinal cord',
-        desc: 'Đường dẫn truyền xung động thần kinh giữa não bộ và ngoại vi cơ thể.'
+        desc: 'ÄÆ°á»ng dáº«n truyá»n xung Ä‘á»™ng tháº§n kinh giá»¯a nÃ£o bá»™ vÃ  ngoáº¡i vi cÆ¡ thá»ƒ.'
       },
       {
         id: 'nerv_csf',
-        title: '4. Hệ Não Thất & Dịch Não Tủy (CSF)',
-        subtitle: 'Não thất bên, não thất 3-4 và chu trình tuần hoàn CSF',
-        badge: 'Dịch não tủy',
-        image: '/3d/images/atlas/nerv_csf.png',
+        title: '4. Há»‡ NÃ£o Tháº¥t & Dá»‹ch NÃ£o Tá»§y (CSF)',
+        subtitle: 'NÃ£o tháº¥t bÃªn, nÃ£o tháº¥t 3-4 vÃ  chu trÃ¬nh tuáº§n hoÃ n CSF',
+        badge: 'Dá»‹ch nÃ£o tá»§y',
+        image: '/images/atlas/nerv_csf.png',
         systems: ['nervous'],
         camera: { x: 0.28, y: 1.60, z: 0.45, targetX: 0, targetY: 1.58, targetZ: 0 },
         highlight: 'Lateral ventricle.l',
-        desc: 'Hệ thống các buồng não thất chứa dịch não tủy đệm giảm xóc và thanh thải độc tố hệ Glymphatic.'
+        desc: 'Há»‡ thá»‘ng cÃ¡c buá»“ng nÃ£o tháº¥t chá»©a dá»‹ch nÃ£o tá»§y Ä‘á»‡m giáº£m xÃ³c vÃ  thanh tháº£i Ä‘á»™c tá»‘ há»‡ Glymphatic.'
       }
     ]
   },
   {
     id: 'respiratory_views',
-    titleVi: 'Hệ Hô Hấp & Phổi',
+    titleVi: 'Há»‡ HÃ´ Háº¥p & Phá»•i',
     systemKey: 'visceral',
     cards: [
       {
         id: 'resp_upper',
-        title: '1. Đường Hô Hấp Trên',
-        subtitle: 'Mũi xoang, thanh quản và khí quản',
-        badge: 'Đường thở trên',
-        image: '/3d/images/atlas/resp_upper.png',
+        title: '1. ÄÆ°á»ng HÃ´ Háº¥p TrÃªn',
+        subtitle: 'MÅ©i xoang, thanh quáº£n vÃ  khÃ­ quáº£n',
+        badge: 'ÄÆ°á»ng thá»Ÿ trÃªn',
+        image: '/images/atlas/resp_upper.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.20, y: 1.48, z: 0.60, targetX: 0, targetY: 1.45, targetZ: 0 },
         highlight: 'Trachea',
-        desc: 'Đường dẫn khí, sụn thanh nhiệt, sụn giáp và dây thanh âm phát âm.'
+        desc: 'ÄÆ°á»ng dáº«n khÃ­, sá»¥n thanh nhiá»‡t, sá»¥n giÃ¡p vÃ  dÃ¢y thanh Ã¢m phÃ¡t Ã¢m.'
       },
       {
         id: 'resp_lungs',
-        title: '2. Phổi & Cây Phế Quản',
-        subtitle: 'Hai lá phổi và hệ phân chia phế quản',
-        badge: 'Phổi',
-        image: '/3d/images/atlas/resp_lungs.png',
+        title: '2. Phá»•i & CÃ¢y Pháº¿ Quáº£n',
+        subtitle: 'Hai lÃ¡ phá»•i vÃ  há»‡ phÃ¢n chia pháº¿ quáº£n',
+        badge: 'Phá»•i',
+        image: '/images/atlas/resp_lungs.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 1.25, z: 0.88, targetX: 0, targetY: 1.25, targetZ: 0 },
         highlight: 'Superior lobe of left lung',
-        desc: 'Nơi trao đổi khí oxy và CO2 qua màng phế nang - mao mạch.'
+        desc: 'NÆ¡i trao Ä‘á»•i khÃ­ oxy vÃ  CO2 qua mÃ ng pháº¿ nang - mao máº¡ch.'
       },
       {
         id: 'resp_diaphragm',
-        title: '3. Cơ Hoành & Động Học Thở',
-        subtitle: 'Vòm hoành ngăn cách ngực và bụng',
-        badge: 'Cơ hô hấp',
-        image: '/3d/images/atlas/resp_diaphragm.png',
+        title: '3. CÆ¡ HoÃ nh & Äá»™ng Há»c Thá»Ÿ',
+        subtitle: 'VÃ²m hoÃ nh ngÄƒn cÃ¡ch ngá»±c vÃ  bá»¥ng',
+        badge: 'CÆ¡ hÃ´ háº¥p',
+        image: '/images/atlas/resp_diaphragm.png',
         systems: ['muscular', 'skeletal', 'visceral'],
         camera: { x: 0, y: 1.15, z: 0.82, targetX: 0, targetY: 1.15, targetZ: 0 },
         highlight: 'Diaphragm',
-        desc: 'Cơ hô hấp chính đảm nhiệm 70% thông khí khi hít vào bình thường.'
+        desc: 'CÆ¡ hÃ´ háº¥p chÃ­nh Ä‘áº£m nhiá»‡m 70% thÃ´ng khÃ­ khi hÃ­t vÃ o bÃ¬nh thÆ°á»ng.'
       }
     ]
   },
   {
     id: 'muscular_views',
-    titleVi: 'Hệ Cơ Vân Toàn Thân',
+    titleVi: 'Há»‡ CÆ¡ VÃ¢n ToÃ n ThÃ¢n',
     systemKey: 'muscular',
     cards: [
       {
         id: 'musc_head',
-        title: '1. Cơ Vùng Đầu Mặt Cổ & Mạch Máu',
-        subtitle: 'Bóc tách cơ nhai, cơ cổ và mạng mạch thái dương',
-        badge: 'Đầu mặt',
-        image: '/3d/images/atlas/musc_head.png',
+        title: '1. CÆ¡ VÃ¹ng Äáº§u Máº·t Cá»• & Máº¡ch MÃ¡u',
+        subtitle: 'BÃ³c tÃ¡ch cÆ¡ nhai, cÆ¡ cá»• vÃ  máº¡ng máº¡ch thÃ¡i dÆ°Æ¡ng',
+        badge: 'Äáº§u máº·t',
+        image: '/images/atlas/musc_head.png',
         systems: ['muscular', 'skeletal', 'cardiovascular'],
         camera: { x: 0.52, y: 1.62, z: 0.55, targetX: 0, targetY: 1.58, targetZ: 0 },
-        desc: 'Quan sát tương quan giải phẫu xương sọ, cơ cắn, cơ ức đòn chũm và mạng mạch máu mặt.'
+        desc: 'Quan sÃ¡t tÆ°Æ¡ng quan giáº£i pháº«u xÆ°Æ¡ng sá», cÆ¡ cáº¯n, cÆ¡ á»©c Ä‘Ã²n chÅ©m vÃ  máº¡ng máº¡ch mÃ¡u máº·t.'
       },
       {
         id: 'musc_torso',
-        title: '2. Cơ Thân Mình & Lưng Bụng',
-        subtitle: 'Cơ ngực, cơ liên sườn và cơ thẳng bụng',
-        badge: 'Thân mình',
-        image: '/3d/images/atlas/musc_torso.png',
+        title: '2. CÆ¡ ThÃ¢n MÃ¬nh & LÆ°ng Bá»¥ng',
+        subtitle: 'CÆ¡ ngá»±c, cÆ¡ liÃªn sÆ°á»n vÃ  cÆ¡ tháº³ng bá»¥ng',
+        badge: 'ThÃ¢n mÃ¬nh',
+        image: '/images/atlas/musc_torso.png',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0, y: 1.18, z: 1.2, targetX: 0, targetY: 1.15, targetZ: 0 },
-        desc: 'Bảo vệ nội tạng ổ bụng và giữ vững cột sống trong tư thế đứng thẳng.'
+        desc: 'Báº£o vá»‡ ná»™i táº¡ng á»• bá»¥ng vÃ  giá»¯ vá»¯ng cá»™t sá»‘ng trong tÆ° tháº¿ Ä‘á»©ng tháº³ng.'
       },
       {
         id: 'musc_limbs',
-        title: '3. Nhóm Cơ Chi Thể',
-        subtitle: 'Cơ vai cánh tay, mông đùi và cẳng chân',
-        badge: 'Chi thể',
-        image: '/3d/images/atlas/musc_limbs.png',
+        title: '3. NhÃ³m CÆ¡ Chi Thá»ƒ',
+        subtitle: 'CÆ¡ vai cÃ¡nh tay, mÃ´ng Ä‘Ã¹i vÃ  cáº³ng chÃ¢n',
+        badge: 'Chi thá»ƒ',
+        image: '/images/atlas/musc_limbs.png',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0, y: 0.9, z: 2.2, targetX: 0, targetY: 0.9, targetZ: 0 },
-        desc: 'Cơ delta, nhị đầu, tam đầu, tứ đầu đùi và nhóm cơ cẳng chân tạo lực vận động.'
+        desc: 'CÆ¡ delta, nhá»‹ Ä‘áº§u, tam Ä‘áº§u, tá»© Ä‘áº§u Ä‘Ã¹i vÃ  nhÃ³m cÆ¡ cáº³ng chÃ¢n táº¡o lá»±c váº­n Ä‘á»™ng.'
       }
     ]
   },
   {
     id: 'digestive_views',
-    titleVi: 'Hệ Tiêu Hóa & Gan Mật',
+    titleVi: 'Há»‡ TiÃªu HÃ³a & Gan Máº­t',
     systemKey: 'visceral',
     cards: [
       {
         id: 'dig_upper',
-        title: '1. Đường Tiêu Hóa Trên',
-        subtitle: 'Thực quản, dạ dày và tá tràng',
-        badge: 'Dạ dày',
-        image: '/3d/images/atlas/dig_upper.png',
+        title: '1. ÄÆ°á»ng TiÃªu HÃ³a TrÃªn',
+        subtitle: 'Thá»±c quáº£n, dáº¡ dÃ y vÃ  tÃ¡ trÃ ng',
+        badge: 'Dáº¡ dÃ y',
+        image: '/images/atlas/dig_upper.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 1.15, z: 0.82, targetX: 0, targetY: 1.15, targetZ: 0 },
         highlight: 'Stomach',
-        desc: 'Nơi tiếp nhận, nhào trộn và tiêu hóa sơ bộ thức ăn nhờ axit dịch vị.'
+        desc: 'NÆ¡i tiáº¿p nháº­n, nhÃ o trá»™n vÃ  tiÃªu hÃ³a sÆ¡ bá»™ thá»©c Äƒn nhá» axit dá»‹ch vá»‹.'
       },
       {
         id: 'dig_lower',
-        title: '2. Đường Tiêu Hóa Dưới',
-        subtitle: 'Ruột non, ruột già và trực tràng',
-        badge: 'Ruột non & già',
-        image: '/3d/images/atlas/dig_lower.png',
+        title: '2. ÄÆ°á»ng TiÃªu HÃ³a DÆ°á»›i',
+        subtitle: 'Ruá»™t non, ruá»™t giÃ  vÃ  trá»±c trÃ ng',
+        badge: 'Ruá»™t non & giÃ ',
+        image: '/images/atlas/dig_lower.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 0.92, z: 0.85, targetX: 0, targetY: 0.92, targetZ: 0 },
         highlight: 'Ascending colon',
-        desc: 'Hấp thu triệt để chất dinh dưỡng và đào thải cặn bã qua đại trực tràng.'
+        desc: 'Háº¥p thu triá»‡t Ä‘á»ƒ cháº¥t dinh dÆ°á»¡ng vÃ  Ä‘Ã o tháº£i cáº·n bÃ£ qua Ä‘áº¡i trá»±c trÃ ng.'
       },
       {
         id: 'dig_peritoneum',
-        title: '3. Gan Mật & Tụy Tạng',
-        subtitle: 'Lá gan, túi mật và tuyến tụy nội/ngoại tiết',
-        badge: 'Gan mật tụy',
-        image: '/3d/images/atlas/dig_peritoneum.png',
+        title: '3. Gan Máº­t & Tá»¥y Táº¡ng',
+        subtitle: 'LÃ¡ gan, tÃºi máº­t vÃ  tuyáº¿n tá»¥y ná»™i/ngoáº¡i tiáº¿t',
+        badge: 'Gan máº­t tá»¥y',
+        image: '/images/atlas/dig_peritoneum.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: -0.15, y: 1.1, z: 0.88, targetX: 0, targetY: 1.1, targetZ: 0 },
         highlight: 'Gallbladder',
-        desc: 'Nhà máy chuyển hóa chất, khử độc và tiết enzym tiêu hóa thức ăn.'
+        desc: 'NhÃ  mÃ¡y chuyá»ƒn hÃ³a cháº¥t, khá»­ Ä‘á»™c vÃ  tiáº¿t enzym tiÃªu hÃ³a thá»©c Äƒn.'
       }
     ]
   },
   {
     id: 'lymphatic_views',
-    titleVi: 'Hệ Bạch Huyết & Miễn Dịch',
+    titleVi: 'Há»‡ Báº¡ch Huyáº¿t & Miá»…n Dá»‹ch',
     systemKey: 'lymphatic',
     cards: [
       {
         id: 'lymph_spleen',
-        title: '1. Lá Lách & Hệ Bạch Huyết',
-        subtitle: 'Lá lách (Tỳ), chuỗi hạch bạch huyết và ống ngực',
-        badge: 'Lá lách & Miễn dịch',
-        image: '/3d/images/atlas/lymph_spleen.png',
+        title: '1. LÃ¡ LÃ¡ch & Há»‡ Báº¡ch Huyáº¿t',
+        subtitle: 'LÃ¡ lÃ¡ch (Tá»³), chuá»—i háº¡ch báº¡ch huyáº¿t vÃ  á»‘ng ngá»±c',
+        badge: 'LÃ¡ lÃ¡ch & Miá»…n dá»‹ch',
+        image: '/images/atlas/lymph_spleen.png',
         systems: ['lymphatic', 'skeletal', 'visceral'],
         camera: { x: 0.25, y: 1.15, z: 0.78, targetX: 0.08, targetY: 1.15, targetZ: 0 },
         highlight: 'Spleen',
-        desc: 'Cơ quan lympho lớn nhất cơ thể lọc máu, tiêu hủy hồng cầu già và sinh tế bào miễn dịch.'
+        desc: 'CÆ¡ quan lympho lá»›n nháº¥t cÆ¡ thá»ƒ lá»c mÃ¡u, tiÃªu há»§y há»“ng cáº§u giÃ  vÃ  sinh táº¿ bÃ o miá»…n dá»‹ch.'
       },
       {
         id: 'lymph_nodes_system',
-        title: '2. Mạng Lưới Hạch Bạch Huyết Toàn Thân',
-        subtitle: 'Hạch vùng cổ, nách, bẹn và ống ngực dẫn lưu',
-        badge: 'Hạch bạch huyết',
-        image: '/3d/images/atlas/lymph_nodes_system.png',
+        title: '2. Máº¡ng LÆ°á»›i Háº¡ch Báº¡ch Huyáº¿t ToÃ n ThÃ¢n',
+        subtitle: 'Háº¡ch vÃ¹ng cá»•, nÃ¡ch, báº¹n vÃ  á»‘ng ngá»±c dáº«n lÆ°u',
+        badge: 'Háº¡ch báº¡ch huyáº¿t',
+        image: '/images/atlas/lymph_nodes_system.png',
         systems: ['lymphatic', 'skeletal'],
         camera: { x: 0, y: 1.2, z: 1.4, targetX: 0, targetY: 1.15, targetZ: 0 },
         highlight: 'Central axillary nodes.l',
-        desc: 'Hàng rào phòng thủ miễn dịch tế bào, bắt giữ vi khuẩn và dẫn lưu dịch bạch huyết về tĩnh mạch.'
+        desc: 'HÃ ng rÃ o phÃ²ng thá»§ miá»…n dá»‹ch táº¿ bÃ o, báº¯t giá»¯ vi khuáº©n vÃ  dáº«n lÆ°u dá»‹ch báº¡ch huyáº¿t vá» tÄ©nh máº¡ch.'
       }
     ]
   },
   {
     id: 'urinary_views',
-    titleVi: 'Hệ Tiết Niệu & Vùng Chậu',
+    titleVi: 'Há»‡ Tiáº¿t Niá»‡u & VÃ¹ng Cháº­u',
     systemKey: 'visceral',
     cards: [
       {
         id: 'urin_system',
-        title: '1. Hệ Tiết Niệu Thận',
-        subtitle: 'Hai quả thận, niệu quản và bàng quang',
-        badge: 'Thận tiết niệu',
-        image: '/3d/images/atlas/urin_system.png',
+        title: '1. Há»‡ Tiáº¿t Niá»‡u Tháº­n',
+        subtitle: 'Hai quáº£ tháº­n, niá»‡u quáº£n vÃ  bÃ ng quang',
+        badge: 'Tháº­n tiáº¿t niá»‡u',
+        image: '/images/atlas/urin_system.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 1.05, z: 0.85, targetX: 0, targetY: 1.05, targetZ: 0 },
         highlight: 'Kidney.l',
-        desc: 'Lọc máu, cân bằng điện giải và bài tiết chất thải qua nước tiểu.'
+        desc: 'Lá»c mÃ¡u, cÃ¢n báº±ng Ä‘iá»‡n giáº£i vÃ  bÃ i tiáº¿t cháº¥t tháº£i qua nÆ°á»›c tiá»ƒu.'
       },
       {
         id: 'urin_pelvic',
-        title: '2. Các Tạng Vùng Chậu',
-        subtitle: 'Bàng quang, niệu đạo và đáy chậu',
-        badge: 'Chậu hông',
-        image: '/3d/images/atlas/urin_pelvic.png',
+        title: '2. CÃ¡c Táº¡ng VÃ¹ng Cháº­u',
+        subtitle: 'BÃ ng quang, niá»‡u Ä‘áº¡o vÃ  Ä‘Ã¡y cháº­u',
+        badge: 'Cháº­u hÃ´ng',
+        image: '/images/atlas/urin_pelvic.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 0.88, z: 0.78, targetX: 0, targetY: 0.88, targetZ: 0 },
         highlight: 'Urinary bladder',
-        desc: 'Giải phẫu đáy chậu, nâng đỡ các tạng sinh dục và bài tiết nước tiểu.'
+        desc: 'Giáº£i pháº«u Ä‘Ã¡y cháº­u, nÃ¢ng Ä‘á»¡ cÃ¡c táº¡ng sinh dá»¥c vÃ  bÃ i tiáº¿t nÆ°á»›c tiá»ƒu.'
       }
     ]
   }
@@ -332,55 +332,55 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
 export const ATLAS_REGIONS_CATEGORIES = [
   {
     id: 'reg_head_neck',
-    title: 'Vùng Đầu & Cổ',
-    subtitle: 'Hộp sọ, khối mặt và các cơ mạch máu cổ',
-    badge: 'Đầu & Cổ',
-    image: '/3d/images/atlas/reg_head_neck.png',
+    title: 'VÃ¹ng Äáº§u & Cá»•',
+    subtitle: 'Há»™p sá», khá»‘i máº·t vÃ  cÃ¡c cÆ¡ máº¡ch mÃ¡u cá»•',
+    badge: 'Äáº§u & Cá»•',
+    image: '/images/atlas/reg_head_neck.png',
     camera: { x: 0, y: 1.55, z: 0.7, targetX: 0, targetY: 1.52, targetZ: 0 },
     systems: ['skeletal', 'nervous', 'cardiovascular']
   },
   {
     id: 'reg_thorax',
-    title: 'Vùng Lồng Ngực',
-    subtitle: 'Tim, hai lá phổi, trung thất và thành ngực',
-    badge: 'Lồng ngực',
-    image: '/3d/images/atlas/reg_thorax.png',
+    title: 'VÃ¹ng Lá»“ng Ngá»±c',
+    subtitle: 'Tim, hai lÃ¡ phá»•i, trung tháº¥t vÃ  thÃ nh ngá»±c',
+    badge: 'Lá»“ng ngá»±c',
+    image: '/images/atlas/reg_thorax.png',
     camera: { x: 0, y: 1.25, z: 1.0, targetX: 0, targetY: 1.22, targetZ: 0 },
     systems: ['skeletal', 'cardiovascular', 'visceral']
   },
   {
     id: 'reg_abdomen_pelvis',
-    title: 'Vùng Bụng & Chậu',
-    subtitle: 'Khoang phúc mạc, ruột và tạng chậu hông',
-    badge: 'Bụng & Chậu',
-    image: '/3d/images/atlas/reg_abdomen_pelvis.png',
+    title: 'VÃ¹ng Bá»¥ng & Cháº­u',
+    subtitle: 'Khoang phÃºc máº¡c, ruá»™t vÃ  táº¡ng cháº­u hÃ´ng',
+    badge: 'Bá»¥ng & Cháº­u',
+    image: '/images/atlas/reg_abdomen_pelvis.png',
     camera: { x: 0, y: 0.98, z: 1.05, targetX: 0, targetY: 0.95, targetZ: 0 },
     systems: ['skeletal', 'visceral']
   },
   {
     id: 'reg_spine',
-    title: 'Trục Cột Sống',
-    subtitle: 'Đoạn sống cổ, ngực, thắt lưng và cùng cụt',
-    badge: 'Cột sống',
-    image: '/3d/images/atlas/reg_spine.png',
+    title: 'Trá»¥c Cá»™t Sá»‘ng',
+    subtitle: 'Äoáº¡n sá»‘ng cá»•, ngá»±c, tháº¯t lÆ°ng vÃ  cÃ¹ng cá»¥t',
+    badge: 'Cá»™t sá»‘ng',
+    image: '/images/atlas/reg_spine.png',
     camera: { x: 0.75, y: 1.15, z: 0.9, targetX: 0, targetY: 1.1, targetZ: 0 },
     systems: ['skeletal']
   },
   {
     id: 'reg_upper_limb',
-    title: 'Vùng Chi Trên',
-    subtitle: 'Đai vai, cánh tay, cẳng tay và bàn tay',
-    badge: 'Chi trên',
-    image: '/3d/images/atlas/reg_upper_limb.png',
+    title: 'VÃ¹ng Chi TrÃªn',
+    subtitle: 'Äai vai, cÃ¡nh tay, cáº³ng tay vÃ  bÃ n tay',
+    badge: 'Chi trÃªn',
+    image: '/images/atlas/reg_upper_limb.png',
     camera: { x: 0.45, y: 1.1, z: 1.1, targetX: 0.35, targetY: 1.1, targetZ: 0 },
     systems: ['skeletal', 'muscular']
   },
   {
     id: 'reg_lower_limb',
-    title: 'Vùng Chi Dưới',
-    subtitle: 'Khớp háng, đùi, khớp gối và cẳng bàn chân',
-    badge: 'Chi dưới',
-    image: '/3d/images/atlas/reg_lower_limb.png',
+    title: 'VÃ¹ng Chi DÆ°á»›i',
+    subtitle: 'Khá»›p hÃ¡ng, Ä‘Ã¹i, khá»›p gá»‘i vÃ  cáº³ng bÃ n chÃ¢n',
+    badge: 'Chi dÆ°á»›i',
+    image: '/images/atlas/reg_lower_limb.png',
     camera: { x: 0.25, y: 0.5, z: 1.3, targetX: 0.2, targetY: 0.5, targetZ: 0 },
     systems: ['skeletal']
   }
@@ -394,752 +394,752 @@ export const ATLAS_MEDIA_CATEGORIES = getAtlasMediaCategories();
 export const ATLAS_QUIZZES_DATA = [
   {
     id: 'quiz_identify',
-    title: '1. Trắc Nghiệm Nhận Diện 3D',
-    subtitle: 'Chạm trực tiếp vào đúng cấu trúc được yêu cầu',
-    badge: 'Trắc nghiệm 3D',
-    image: '/3d/images/atlas/quiz_identify.png',
+    title: '1. Tráº¯c Nghiá»‡m Nháº­n Diá»‡n 3D',
+    subtitle: 'Cháº¡m trá»±c tiáº¿p vÃ o Ä‘Ãºng cáº¥u trÃºc Ä‘Æ°á»£c yÃªu cáº§u',
+    badge: 'Tráº¯c nghiá»‡m 3D',
+    image: '/images/atlas/quiz_identify.png',
     action: 'start_quiz',
-    desc: 'Hệ thống đưa ra câu hỏi danh pháp y khoa, bạn xoay mô hình 3D và chạm đúng đích.'
+    desc: 'Há»‡ thá»‘ng Ä‘Æ°a ra cÃ¢u há»i danh phÃ¡p y khoa, báº¡n xoay mÃ´ hÃ¬nh 3D vÃ  cháº¡m Ä‘Ãºng Ä‘Ã­ch.'
   },
   {
     id: 'quiz_fsrs',
-    title: '2. Thẻ Ghi Nhớ Thông Minh FSRS',
-    subtitle: 'Thuật toán ôn tập ngắt quãng khoa học',
-    badge: 'Ôn tập FSRS',
-    image: '/3d/images/atlas/quiz_fsrs.png',
+    title: '2. Tháº» Ghi Nhá»› ThÃ´ng Minh FSRS',
+    subtitle: 'Thuáº­t toÃ¡n Ã´n táº­p ngáº¯t quÃ£ng khoa há»c',
+    badge: 'Ã”n táº­p FSRS',
+    image: '/images/atlas/quiz_fsrs.png',
     action: 'start_fsrs',
-    desc: 'Tự động lên lịch ôn các mốc giải phẫu hay quên để khắc sâu vào trí nhớ dài hạn.'
+    desc: 'Tá»± Ä‘á»™ng lÃªn lá»‹ch Ã´n cÃ¡c má»‘c giáº£i pháº«u hay quÃªn Ä‘á»ƒ kháº¯c sÃ¢u vÃ o trÃ­ nhá»› dÃ i háº¡n.'
   },
   {
     id: 'quiz_clinical_cases',
-    title: '3. Ca Bệnh Lâm Sàng Tương Tác',
-    subtitle: 'Tình huống cấp cứu tai nạn và phẫu thuật',
-    badge: 'Bác sĩ ảo',
-    image: '/3d/images/atlas/quiz_clinical_cases.png',
+    title: '3. Ca Bá»‡nh LÃ¢m SÃ ng TÆ°Æ¡ng TÃ¡c',
+    subtitle: 'TÃ¬nh huá»‘ng cáº¥p cá»©u tai náº¡n vÃ  pháº«u thuáº­t',
+    badge: 'BÃ¡c sÄ© áº£o',
+    image: '/images/atlas/quiz_clinical_cases.png',
     action: 'start_scenario',
-    desc: 'Vận dụng giải phẫu vào lâm sàng: vết thương thấu ngực, gãy cổ xương đùi, thoát vị.'
+    desc: 'Váº­n dá»¥ng giáº£i pháº«u vÃ o lÃ¢m sÃ ng: váº¿t thÆ°Æ¡ng tháº¥u ngá»±c, gÃ£y cá»• xÆ°Æ¡ng Ä‘Ã¹i, thoÃ¡t vá»‹.'
   }
 ];
 
-// 4. GROSS ANATOMY LAB (Phòng Thực Tập Giải Phẫu Thi Thể / Bàn Mổ - Visible Body Cadaver Standard)
+// 4. GROSS ANATOMY LAB (PhÃ²ng Thá»±c Táº­p Giáº£i Pháº«u Thi Thá»ƒ / BÃ n Má»• - Visible Body Cadaver Standard)
 export const ATLAS_LAB_CATEGORIES = [
   {
     id: 'lab_back',
-    title: '1. Vùng Lưng (Back - Nằm sấp)',
-    subtitle: 'Cơ thang, cơ lưng rộng và cột sống trên bàn mổ',
-    badge: 'Nằm sấp',
+    title: '1. VÃ¹ng LÆ°ng (Back - Náº±m sáº¥p)',
+    subtitle: 'CÆ¡ thang, cÆ¡ lÆ°ng rá»™ng vÃ  cá»™t sá»‘ng trÃªn bÃ n má»•',
+    badge: 'Náº±m sáº¥p',
     orientation: 'prone',
     showTable: true,
     systems: ['muscular', 'skeletal'],
     camera: { x: 0.65, y: 1.55, z: 0.45, targetX: 0, targetY: 0.85, targetZ: 0 },
-    image: '/3d/images/atlas/reg_thorax.png',
-    desc: 'Phẫu tích vùng lưng ở tư thế nằm sấp (Prone) trên bàn mổ inox y khoa.'
+    image: '/images/atlas/reg_thorax.png',
+    desc: 'Pháº«u tÃ­ch vÃ¹ng lÆ°ng á»Ÿ tÆ° tháº¿ náº±m sáº¥p (Prone) trÃªn bÃ n má»• inox y khoa.'
   },
   {
     id: 'lab_upper_limb',
-    title: '2. Chi Trên & Đai Vai (Upper Limb)',
-    subtitle: 'Đai vai, cánh tay, cẳng tay và bàn tay',
-    badge: 'Nằm ngửa',
+    title: '2. Chi TrÃªn & Äai Vai (Upper Limb)',
+    subtitle: 'Äai vai, cÃ¡nh tay, cáº³ng tay vÃ  bÃ n tay',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['muscular', 'skeletal', 'nervous'],
     camera: { x: 0.85, y: 1.35, z: 0.65, targetX: 0.35, targetY: 0.85, targetZ: -0.35 },
-    image: '/3d/images/atlas/reg_upper_limb.png',
-    desc: 'Bộc lộ cơ delta, ống cánh tay và bó mạch thần kinh chi trên.'
+    image: '/images/atlas/reg_upper_limb.png',
+    desc: 'Bá»™c lá»™ cÆ¡ delta, á»‘ng cÃ¡nh tay vÃ  bÃ³ máº¡ch tháº§n kinh chi trÃªn.'
   },
   {
     id: 'lab_thorax',
-    title: '3. Lồng Ngực (Thorax)',
-    subtitle: 'Khung sườn, cơ liên sườn và cơ ngực lớn',
-    badge: 'Nằm ngửa',
+    title: '3. Lá»“ng Ngá»±c (Thorax)',
+    subtitle: 'Khung sÆ°á»n, cÆ¡ liÃªn sÆ°á»n vÃ  cÆ¡ ngá»±c lá»›n',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['skeletal', 'muscular'],
     camera: { x: 0.45, y: 1.50, z: 0.35, targetX: 0, targetY: 0.85, targetZ: -0.25 },
-    image: '/3d/images/atlas/reg_thorax.png',
-    desc: 'Bóc tách thành ngực trước bộc lộ xương ức, sụn sườn và cơ hoành.'
+    image: '/images/atlas/reg_thorax.png',
+    desc: 'BÃ³c tÃ¡ch thÃ nh ngá»±c trÆ°á»›c bá»™c lá»™ xÆ°Æ¡ng á»©c, sá»¥n sÆ°á»n vÃ  cÆ¡ hoÃ nh.'
   },
   {
     id: 'lab_heart_lungs',
-    title: '4. Tim & Phổi (Heart & Lungs)',
-    subtitle: 'Trung thất, màng ngoài tim và phế quản',
-    badge: 'Nằm ngửa',
+    title: '4. Tim & Phá»•i (Heart & Lungs)',
+    subtitle: 'Trung tháº¥t, mÃ ng ngoÃ i tim vÃ  pháº¿ quáº£n',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['visceral', 'cardiovascular', 'skeletal'],
     camera: { x: 0.35, y: 1.45, z: 0.25, targetX: 0, targetY: 0.85, targetZ: -0.25 },
-    image: '/3d/images/atlas/med_heart.png',
-    desc: 'Phẫu tích trung thất giữa bộc lộ các buồng tim, quai động mạch chủ và hai lá phổi.'
+    image: '/images/atlas/med_heart.png',
+    desc: 'Pháº«u tÃ­ch trung tháº¥t giá»¯a bá»™c lá»™ cÃ¡c buá»“ng tim, quai Ä‘á»™ng máº¡ch chá»§ vÃ  hai lÃ¡ phá»•i.'
   },
   {
     id: 'lab_abdomen',
-    title: '5. Thành Bụng & Ổ Bụng (Abdomen)',
-    subtitle: 'Cơ thẳng bụng, cơ chéo bụng và bao cơ',
-    badge: 'Nằm ngửa',
+    title: '5. ThÃ nh Bá»¥ng & á»” Bá»¥ng (Abdomen)',
+    subtitle: 'CÆ¡ tháº³ng bá»¥ng, cÆ¡ chÃ©o bá»¥ng vÃ  bao cÆ¡',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['muscular', 'visceral'],
     camera: { x: 0.50, y: 1.40, z: 0.45, targetX: 0, targetY: 0.82, targetZ: 0.05 },
-    image: '/3d/images/atlas/reg_abdomen.png',
-    desc: 'Mở thành bụng trước bộc lộ lá phúc mạc thành và mạc nối lớn.'
+    image: '/images/atlas/reg_abdomen.png',
+    desc: 'Má»Ÿ thÃ nh bá»¥ng trÆ°á»›c bá»™c lá»™ lÃ¡ phÃºc máº¡c thÃ nh vÃ  máº¡c ná»‘i lá»›n.'
   },
   {
     id: 'lab_intraperitoneal',
-    title: '6. Tạng Trong Phúc Mạc (Intraperitoneal)',
-    subtitle: 'Dạ dày, gan, ruột non và đại tràng',
-    badge: 'Nằm ngửa',
+    title: '6. Táº¡ng Trong PhÃºc Máº¡c (Intraperitoneal)',
+    subtitle: 'Dáº¡ dÃ y, gan, ruá»™t non vÃ  Ä‘áº¡i trÃ ng',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['visceral'],
     camera: { x: 0.40, y: 1.35, z: 0.35, targetX: 0, targetY: 0.82, targetZ: 0.05 },
-    image: '/3d/images/atlas/reg_abdomen.png',
-    desc: 'Hệ tiêu hóa trong ổ bụng, mạc treo ruột và phân bố mạch mạc treo tràng trên.'
+    image: '/images/atlas/reg_abdomen.png',
+    desc: 'Há»‡ tiÃªu hÃ³a trong á»• bá»¥ng, máº¡c treo ruá»™t vÃ  phÃ¢n bá»‘ máº¡ch máº¡c treo trÃ ng trÃªn.'
   },
   {
     id: 'lab_retroperitoneal',
-    title: '7. Tạng Sau Phúc Mạc (Retroperitoneal)',
-    subtitle: 'Hai quả thận, tuyến thượng thận và ĐM chủ bụng',
-    badge: 'Nằm ngửa',
+    title: '7. Táº¡ng Sau PhÃºc Máº¡c (Retroperitoneal)',
+    subtitle: 'Hai quáº£ tháº­n, tuyáº¿n thÆ°á»£ng tháº­n vÃ  ÄM chá»§ bá»¥ng',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['visceral', 'cardiovascular', 'skeletal'],
     camera: { x: 0.30, y: 1.35, z: 0.20, targetX: 0, targetY: 0.82, targetZ: 0.02 },
-    image: '/3d/images/atlas/reg_abdomen.png',
-    desc: 'Bóc tách khoang sau phúc mạc bộc lộ đài bể thận, niệu quản và TM chủ dưới.'
+    image: '/images/atlas/reg_abdomen.png',
+    desc: 'BÃ³c tÃ¡ch khoang sau phÃºc máº¡c bá»™c lá»™ Ä‘Ã i bá»ƒ tháº­n, niá»‡u quáº£n vÃ  TM chá»§ dÆ°á»›i.'
   },
   {
     id: 'lab_pelvis',
-    title: '8. Vùng Chậu (Pelvis & Perineum)',
-    subtitle: 'Bàng quang, trực tràng và đáy chậu',
-    badge: 'Nằm ngửa',
+    title: '8. VÃ¹ng Cháº­u (Pelvis & Perineum)',
+    subtitle: 'BÃ ng quang, trá»±c trÃ ng vÃ  Ä‘Ã¡y cháº­u',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['skeletal', 'visceral', 'muscular'],
     camera: { x: 0.45, y: 1.35, z: 0.55, targetX: 0, targetY: 0.80, targetZ: 0.25 },
-    image: '/3d/images/atlas/reg_pelvis.png',
-    desc: 'Khung chậu thực tập giải phẫu cơ sàn chậu và động mạch chậu trong.'
+    image: '/images/atlas/reg_pelvis.png',
+    desc: 'Khung cháº­u thá»±c táº­p giáº£i pháº«u cÆ¡ sÃ n cháº­u vÃ  Ä‘á»™ng máº¡ch cháº­u trong.'
   },
   {
     id: 'lab_lower_limb',
-    title: '9. Chi Dưới (Lower Limb Regional)',
-    subtitle: 'Đùi, khớp gối, cẳng chân và bàn chân',
-    badge: 'Nằm ngửa',
+    title: '9. Chi DÆ°á»›i (Lower Limb Regional)',
+    subtitle: 'ÄÃ¹i, khá»›p gá»‘i, cáº³ng chÃ¢n vÃ  bÃ n chÃ¢n',
+    badge: 'Náº±m ngá»­a',
     orientation: 'supine',
     showTable: true,
     systems: ['muscular', 'skeletal', 'nervous'],
     camera: { x: 0.75, y: 1.25, z: 0.85, targetX: 0, targetY: 0.78, targetZ: 0.65 },
-    image: '/3d/images/atlas/reg_lower_limb.png',
-    desc: 'Bộc lộ tam giác đùi Scarpa, thần kinh tọa và các nhóm cơ cẳng chân.'
+    image: '/images/atlas/reg_lower_limb.png',
+    desc: 'Bá»™c lá»™ tam giÃ¡c Ä‘Ã¹i Scarpa, tháº§n kinh tá»a vÃ  cÃ¡c nhÃ³m cÆ¡ cáº³ng chÃ¢n.'
   }
 ];
 
-// 5. CROSS SECTIONS (Lát Cắt Giải Phẫu 3D - Cắt Lớp Y Khoa CT/MRI Chuẩn Visible Body)
+// 5. CROSS SECTIONS (LÃ¡t Cáº¯t Giáº£i Pháº«u 3D - Cáº¯t Lá»›p Y Khoa CT/MRI Chuáº©n Visible Body)
 export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   {
     id: 'cs_group_head_axial',
-    titleVi: 'Vùng Đầu (Head Axial - Cắt ngang)',
+    titleVi: 'VÃ¹ng Äáº§u (Head Axial - Cáº¯t ngang)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_head_thalamus',
         title: '1. Head (Thalamus)',
-        subtitle: 'Lát cắt ngang qua não thất ba, đồi thị và bao trong',
+        subtitle: 'LÃ¡t cáº¯t ngang qua nÃ£o tháº¥t ba, Ä‘á»“i thá»‹ vÃ  bao trong',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.62,
         camera: { x: 0, y: 1.88, z: 0.05, targetX: 0, targetY: 1.62, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/nerv_brain.png',
-        desc: 'Lát cắt ngang tiêu chuẩn qua đồi thị và hạch nền não bộ.'
+        image: '/images/atlas/nerv_brain.png',
+        desc: 'LÃ¡t cáº¯t ngang tiÃªu chuáº©n qua Ä‘á»“i thá»‹ vÃ  háº¡ch ná»n nÃ£o bá»™.'
       },
       {
         id: 'cs_head_brow',
         title: '2. Head (Brow)',
-        subtitle: 'Lát cắt ngang qua thùy trán, xoang trán và sừng trán não thất bên',
+        subtitle: 'LÃ¡t cáº¯t ngang qua thÃ¹y trÃ¡n, xoang trÃ¡n vÃ  sá»«ng trÃ¡n nÃ£o tháº¥t bÃªn',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.58,
         camera: { x: 0, y: 1.85, z: 0.05, targetX: 0, targetY: 1.58, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/nerv_brain.png',
-        desc: 'Mặt phẳng cắt ngang qua mức cung mày và cực trán.'
+        image: '/images/atlas/nerv_brain.png',
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua má»©c cung mÃ y vÃ  cá»±c trÃ¡n.'
       },
       {
         id: 'cs_head_orbit_ax',
         title: '3. Head (Orbit) (Axial)',
-        subtitle: 'Lát cắt ngang qua nhãn cầu, thần kinh thị giác và xương bướm',
+        subtitle: 'LÃ¡t cáº¯t ngang qua nhÃ£n cáº§u, tháº§n kinh thá»‹ giÃ¡c vÃ  xÆ°Æ¡ng bÆ°á»›m',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.52,
         camera: { x: 0, y: 1.80, z: 0.05, targetX: 0, targetY: 1.52, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/skel_skull.png',
-        desc: 'Mặt phẳng cắt ngang qua hai hốc mắt và xoang bướm.'
+        image: '/images/atlas/skel_skull.png',
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua hai há»‘c máº¯t vÃ  xoang bÆ°á»›m.'
       }
     ]
   },
   {
     id: 'cs_group_head_coronal',
-    titleVi: 'Vùng Đầu (Head Coronal - Cắt trán)',
+    titleVi: 'VÃ¹ng Äáº§u (Head Coronal - Cáº¯t trÃ¡n)',
     plane: 'coronal',
     cards: [
       {
         id: 'cs_head_orbit_cor',
         title: '1. Head (Orbit) (Coronal)',
-        subtitle: 'Mặt phẳng đứng ngang qua nhãn cầu, xoang trán và xoang hàm trên',
+        subtitle: 'Máº·t pháº³ng Ä‘á»©ng ngang qua nhÃ£n cáº§u, xoang trÃ¡n vÃ  xoang hÃ m trÃªn',
         badge: 'Coronal',
         plane: 'coronal',
         offset: 0.06,
         camera: { x: 0, y: 1.55, z: 0.70, targetX: 0, targetY: 1.55, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/skel_skull.png',
-        desc: 'Cắt đứng ngang bộc lộ hốc mắt và xoang cạnh mũi.'
+        image: '/images/atlas/skel_skull.png',
+        desc: 'Cáº¯t Ä‘á»©ng ngang bá»™c lá»™ há»‘c máº¯t vÃ  xoang cáº¡nh mÅ©i.'
       },
       {
         id: 'cs_head_pituitary',
         title: '2. Head (Pituitary)',
-        subtitle: 'Mặt phẳng đứng ngang qua hố yên, tuyến yên và giao thoa thị',
+        subtitle: 'Máº·t pháº³ng Ä‘á»©ng ngang qua há»‘ yÃªn, tuyáº¿n yÃªn vÃ  giao thoa thá»‹',
         badge: 'Coronal',
         plane: 'coronal',
         offset: 0.00,
         camera: { x: 0, y: 1.55, z: 0.70, targetX: 0, targetY: 1.55, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/nerv_brain.png',
-        desc: 'Lát cắt đứng ngang qua tuyến yên và động mạch cảnh trong xoang hang.'
+        image: '/images/atlas/nerv_brain.png',
+        desc: 'LÃ¡t cáº¯t Ä‘á»©ng ngang qua tuyáº¿n yÃªn vÃ  Ä‘á»™ng máº¡ch cáº£nh trong xoang hang.'
       },
       {
         id: 'cs_head_pons',
         title: '3. Head (Pons)',
-        subtitle: 'Mặt phẳng đứng ngang qua cầu não, não thất tư và bán cầu tiểu não',
+        subtitle: 'Máº·t pháº³ng Ä‘á»©ng ngang qua cáº§u nÃ£o, nÃ£o tháº¥t tÆ° vÃ  bÃ¡n cáº§u tiá»ƒu nÃ£o',
         badge: 'Coronal',
         plane: 'coronal',
         offset: -0.04,
         camera: { x: 0, y: 1.55, z: 0.70, targetX: 0, targetY: 1.55, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/nerv_brain.png',
-        desc: 'Cắt đứng ngang hố sọ sau bộc lộ cầu não và tiểu não.'
+        image: '/images/atlas/nerv_brain.png',
+        desc: 'Cáº¯t Ä‘á»©ng ngang há»‘ sá» sau bá»™c lá»™ cáº§u nÃ£o vÃ  tiá»ƒu nÃ£o.'
       }
     ]
   },
   {
     id: 'cs_group_head_sagittal',
-    titleVi: 'Vùng Đầu (Head Sagittal - Cắt dọc)',
+    titleVi: 'VÃ¹ng Äáº§u (Head Sagittal - Cáº¯t dá»c)',
     plane: 'sagittal',
     cards: [
       {
         id: 'cs_head_midsagittal',
         title: '1. Head (Midsagittal)',
-        subtitle: 'Lát cắt đứng dọc chính giữa qua thể chai, thân não và tủy sống',
+        subtitle: 'LÃ¡t cáº¯t Ä‘á»©ng dá»c chÃ­nh giá»¯a qua thá»ƒ chai, thÃ¢n nÃ£o vÃ  tá»§y sá»‘ng',
         badge: 'Sagittal',
         plane: 'sagittal',
         offset: 0.00,
         camera: { x: 0.70, y: 1.55, z: 0.0, targetX: 0, targetY: 1.55, targetZ: 0 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/nerv_brain.png',
-        desc: 'Lát cắt đứng dọc chính giữa thể hiện hệ thần kinh trung ương trung tâm.'
+        image: '/images/atlas/nerv_brain.png',
+        desc: 'LÃ¡t cáº¯t Ä‘á»©ng dá»c chÃ­nh giá»¯a thá»ƒ hiá»‡n há»‡ tháº§n kinh trung Æ°Æ¡ng trung tÃ¢m.'
       },
       {
         id: 'cs_head_orbit_sag',
         title: '2. Head (Orbit) (Sagittal)',
-        subtitle: 'Lát cắt đứng dọc qua nhãn cầu, thần kinh thị và cơ thẳng trên/dưới',
+        subtitle: 'LÃ¡t cáº¯t Ä‘á»©ng dá»c qua nhÃ£n cáº§u, tháº§n kinh thá»‹ vÃ  cÆ¡ tháº³ng trÃªn/dÆ°á»›i',
         badge: 'Sagittal',
         plane: 'sagittal',
         offset: 0.05,
         camera: { x: 0.70, y: 1.55, z: 0.05, targetX: 0.05, targetY: 1.55, targetZ: 0.05 },
         systems: ['skeletal', 'nervous'],
-        image: '/3d/images/atlas/skel_skull.png',
-        desc: 'Mặt phẳng đứng dọc xuyên qua trục hốc mắt và ổ mắt.'
+        image: '/images/atlas/skel_skull.png',
+        desc: 'Máº·t pháº³ng Ä‘á»©ng dá»c xuyÃªn qua trá»¥c há»‘c máº¯t vÃ  á»• máº¯t.'
       }
     ]
   },
   {
     id: 'cs_group_thorax_axial',
-    titleVi: 'Lồng Ngực (Thorax Axial)',
+    titleVi: 'Lá»“ng Ngá»±c (Thorax Axial)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_thorax_t02_t03',
         title: '1. Thorax (T02-T03)',
-        subtitle: 'Lát cắt ngang qua cung động mạch chủ, tĩnh mạch vô danh và khí quản',
+        subtitle: 'LÃ¡t cáº¯t ngang qua cung Ä‘á»™ng máº¡ch chá»§, tÄ©nh máº¡ch vÃ´ danh vÃ  khÃ­ quáº£n',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.36,
         camera: { x: 0, y: 1.70, z: 0.05, targetX: 0, targetY: 1.36, targetZ: 0 },
         systems: ['cardiovascular', 'visceral', 'skeletal'],
-        image: '/3d/images/atlas/reg_thorax.png',
+        image: '/images/atlas/reg_thorax.png',
         scoutLabel: 'Thorax T02-T03',
-        desc: 'Mặt phẳng cắt ngang qua đốt sống ngực T2-T3 bộc lộ các mạch máu lớn vùng nền cổ.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua Ä‘á»‘t sá»‘ng ngá»±c T2-T3 bá»™c lá»™ cÃ¡c máº¡ch mÃ¡u lá»›n vÃ¹ng ná»n cá»•.'
       },
       {
         id: 'cs_thorax_t03_t04',
         title: '2. Thorax (T03-T04)',
-        subtitle: 'Lát cắt ngang qua phế quản gốc, trạc ba khí quản carina và ĐM phổi',
+        subtitle: 'LÃ¡t cáº¯t ngang qua pháº¿ quáº£n gá»‘c, tráº¡c ba khÃ­ quáº£n carina vÃ  ÄM phá»•i',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.32,
         camera: { x: 0, y: 1.68, z: 0.05, targetX: 0, targetY: 1.32, targetZ: 0 },
         systems: ['cardiovascular', 'visceral', 'skeletal'],
-        image: '/3d/images/atlas/resp_lungs.png',
+        image: '/images/atlas/resp_lungs.png',
         scoutLabel: 'Thorax T03-T04',
-        desc: 'Mặt phẳng cắt ngang qua trạc ba khí quản và cuống phổi.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua tráº¡c ba khÃ­ quáº£n vÃ  cuá»‘ng phá»•i.'
       },
       {
         id: 'cs_thorax_t04_t05',
         title: '3. Thorax (T04-T05)',
-        subtitle: 'Lát cắt ngang qua 4 buồng tim, nhĩ thất và rãnh liên thất',
+        subtitle: 'LÃ¡t cáº¯t ngang qua 4 buá»“ng tim, nhÄ© tháº¥t vÃ  rÃ£nh liÃªn tháº¥t',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.28,
         camera: { x: 0, y: 1.65, z: 0.05, targetX: 0, targetY: 1.28, targetZ: 0 },
         systems: ['cardiovascular', 'visceral', 'skeletal'],
-        image: '/3d/images/atlas/circ_heart_thorax.png',
+        image: '/images/atlas/circ_heart_thorax.png',
         scoutLabel: 'Thorax T04-T05',
-        desc: 'Lát cắt ngang 4 buồng tim tiêu chuẩn đối chiếu siêu âm và CT tim.'
+        desc: 'LÃ¡t cáº¯t ngang 4 buá»“ng tim tiÃªu chuáº©n Ä‘á»‘i chiáº¿u siÃªu Ã¢m vÃ  CT tim.'
       }
     ]
   },
   {
     id: 'cs_group_abdomen_axial',
-    titleVi: 'Ổ Bụng (Abdomen Axial)',
+    titleVi: 'á»” Bá»¥ng (Abdomen Axial)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_abdomen_t11_t12',
         title: '1. Abdomen (T11-T12)',
-        subtitle: 'Lát cắt ngang qua thùy gan, phình vị dạ dày, lách và động mạch thân tạng',
+        subtitle: 'LÃ¡t cáº¯t ngang qua thÃ¹y gan, phÃ¬nh vá»‹ dáº¡ dÃ y, lÃ¡ch vÃ  Ä‘á»™ng máº¡ch thÃ¢n táº¡ng',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.12,
         camera: { x: 0, y: 1.55, z: 0.05, targetX: 0, targetY: 1.12, targetZ: 0 },
         systems: ['visceral', 'skeletal'],
-        image: '/3d/images/atlas/dig_upper.png',
+        image: '/images/atlas/dig_upper.png',
         scoutLabel: 'Abdomen T11-T12',
-        desc: 'Mặt phẳng cắt ngang tầng trên mạc treo bộc lộ gan, dạ dày và lách.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang táº§ng trÃªn máº¡c treo bá»™c lá»™ gan, dáº¡ dÃ y vÃ  lÃ¡ch.'
       },
       {
         id: 'cs_abdomen_t12_l01',
         title: '2. Abdomen (T12-L01)',
-        subtitle: 'Lát cắt ngang qua tụy, tá tràng, cuống thận và động mạch mạc treo tràng trên',
+        subtitle: 'LÃ¡t cáº¯t ngang qua tá»¥y, tÃ¡ trÃ ng, cuá»‘ng tháº­n vÃ  Ä‘á»™ng máº¡ch máº¡c treo trÃ ng trÃªn',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.08,
         camera: { x: 0, y: 1.50, z: 0.05, targetX: 0, targetY: 1.08, targetZ: 0 },
         systems: ['visceral', 'skeletal'],
-        image: '/3d/images/atlas/dig_upper.png',
+        image: '/images/atlas/dig_upper.png',
         scoutLabel: 'Abdomen T12-L01',
-        desc: 'Lát cắt ngang qua cuống mạch thận và đầu tụy tá tràng.'
+        desc: 'LÃ¡t cáº¯t ngang qua cuá»‘ng máº¡ch tháº­n vÃ  Ä‘áº§u tá»¥y tÃ¡ trÃ ng.'
       },
       {
         id: 'cs_abdomen_l01_l02',
         title: '3. Abdomen (L01-L02)',
-        subtitle: 'Lát cắt ngang qua quai ruột non, đại tràng lên/xuống và tĩnh mạch chủ dưới',
+        subtitle: 'LÃ¡t cáº¯t ngang qua quai ruá»™t non, Ä‘áº¡i trÃ ng lÃªn/xuá»‘ng vÃ  tÄ©nh máº¡ch chá»§ dÆ°á»›i',
         badge: 'Axial',
         plane: 'axial',
         offset: 1.04,
         camera: { x: 0, y: 1.48, z: 0.05, targetX: 0, targetY: 1.04, targetZ: 0 },
         systems: ['visceral', 'skeletal'],
-        image: '/3d/images/atlas/dig_lower.png',
+        image: '/images/atlas/dig_lower.png',
         scoutLabel: 'Abdomen L01-L02',
-        desc: 'Mặt phẳng cắt ngang tầng dưới mạc treo đại tràng ngang.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang táº§ng dÆ°á»›i máº¡c treo Ä‘áº¡i trÃ ng ngang.'
       }
     ]
   },
   {
     id: 'cs_group_pelvis_axial',
-    titleVi: 'Vùng Chậu (Pelvis Axial)',
+    titleVi: 'VÃ¹ng Cháº­u (Pelvis Axial)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_pelvis_s05',
         title: '1. Pelvis (S05) (M)',
-        subtitle: 'Lát cắt ngang qua khớp cùng chậu, đỉnh bàng quang và bóng trực tràng',
+        subtitle: 'LÃ¡t cáº¯t ngang qua khá»›p cÃ¹ng cháº­u, Ä‘á»‰nh bÃ ng quang vÃ  bÃ³ng trá»±c trÃ ng',
         badge: 'Axial',
         plane: 'axial',
         offset: 0.92,
         camera: { x: 0, y: 1.35, z: 0.05, targetX: 0, targetY: 0.92, targetZ: 0 },
         systems: ['visceral', 'skeletal', 'muscular'],
-        image: '/3d/images/atlas/skel_pelvis.png',
+        image: '/images/atlas/skel_pelvis.png',
         scoutLabel: 'Pelvis S05',
-        desc: 'Mặt phẳng cắt ngang qua chậu hông bé và bóng bàng quang.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua cháº­u hÃ´ng bÃ© vÃ  bÃ³ng bÃ ng quang.'
       },
       {
         id: 'cs_pelvis_coccyx',
         title: '2. Pelvis (Coccyx) (M)',
-        subtitle: 'Lát cắt ngang qua xương cụt, tuyến tiền liệt/tử cung và cơ nâng hậu môn',
+        subtitle: 'LÃ¡t cáº¯t ngang qua xÆ°Æ¡ng cá»¥t, tuyáº¿n tiá»n liá»‡t/tá»­ cung vÃ  cÆ¡ nÃ¢ng háº­u mÃ´n',
         badge: 'Axial',
         plane: 'axial',
         offset: 0.87,
         camera: { x: 0, y: 1.30, z: 0.05, targetX: 0, targetY: 0.87, targetZ: 0 },
         systems: ['visceral', 'skeletal', 'muscular'],
-        image: '/3d/images/atlas/urin_pelvic.png',
+        image: '/images/atlas/urin_pelvic.png',
         scoutLabel: 'Pelvis Coccyx',
-        desc: 'Mặt phẳng cắt ngang qua sàn chậu và cơ nâng hậu môn.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua sÃ n cháº­u vÃ  cÆ¡ nÃ¢ng háº­u mÃ´n.'
       },
       {
         id: 'cs_pelvis_symphysis',
         title: '3. Pelvis (Symphysis) (M)',
-        subtitle: 'Lát cắt ngang qua khớp mu, chỏm xương đùi và củ ngồi',
+        subtitle: 'LÃ¡t cáº¯t ngang qua khá»›p mu, chá»m xÆ°Æ¡ng Ä‘Ã¹i vÃ  cá»§ ngá»“i',
         badge: 'Axial',
         plane: 'axial',
         offset: 0.83,
         camera: { x: 0, y: 1.25, z: 0.05, targetX: 0, targetY: 0.83, targetZ: 0 },
         systems: ['skeletal', 'muscular'],
-        image: '/3d/images/atlas/skel_pelvis.png',
+        image: '/images/atlas/skel_pelvis.png',
         scoutLabel: 'Pelvis Symphysis',
-        desc: 'Mặt phẳng cắt ngang qua ổ cối và diện khớp mu.'
+        desc: 'Máº·t pháº³ng cáº¯t ngang qua á»• cá»‘i vÃ  diá»‡n khá»›p mu.'
       },
       {
         id: 'cs_pelvis_midsagittal',
         title: '4. Pelvis (Midsagittal)',
-        subtitle: 'Lát cắt đứng dọc qua bàng quang, trực tràng và sàn chậu',
+        subtitle: 'LÃ¡t cáº¯t Ä‘á»©ng dá»c qua bÃ ng quang, trá»±c trÃ ng vÃ  sÃ n cháº­u',
         badge: 'Sagittal',
         plane: 'sagittal',
         offset: 0.00,
         camera: { x: 0.75, y: 0.85, z: 0.0, targetX: 0, targetY: 0.85, targetZ: 0 },
         systems: ['visceral', 'skeletal', 'muscular'],
-        image: '/3d/images/atlas/skel_pelvis.png',
+        image: '/images/atlas/skel_pelvis.png',
         scoutLabel: 'Pelvis Midsagittal',
-        desc: 'Mặt phẳng đứng dọc chính giữa qua các tạng vùng chậu và đáy chậu.'
+        desc: 'Máº·t pháº³ng Ä‘á»©ng dá»c chÃ­nh giá»¯a qua cÃ¡c táº¡ng vÃ¹ng cháº­u vÃ  Ä‘Ã¡y cháº­u.'
       }
     ]
   }
 ];
 
-// 6. MICROANATOMY (Giải Phẫu Vi Thể & Cắt Lớp Tầng Da - Mô Học Y Khoa)
+// 6. MICROANATOMY (Giáº£i Pháº«u Vi Thá»ƒ & Cáº¯t Lá»›p Táº§ng Da - MÃ´ Há»c Y Khoa)
 export const ATLAS_MICROANATOMY_CATEGORIES = [
   {
     id: 'micro_group_skin',
-    titleVi: 'Hệ Da & Cắt Lớp Tầng Da (Integumentary System)',
+    titleVi: 'Há»‡ Da & Cáº¯t Lá»›p Táº§ng Da (Integumentary System)',
     cards: [
       {
         id: 'micro_skin_dark',
         title: '1. Skin (Dark Pigmentation)',
-        subtitle: 'Cắt lớp 3D đa tầng: Biểu bì, Trung bì và Mô mỡ dưới da',
-        badge: 'Cắt lớp da',
+        subtitle: 'Cáº¯t lá»›p 3D Ä‘a táº§ng: Biá»ƒu bÃ¬, Trung bÃ¬ vÃ  MÃ´ má»¡ dÆ°á»›i da',
+        badge: 'Cáº¯t lá»›p da',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.15, y: 1.15, z: 0.35, targetX: 0.05, targetY: 1.12, targetZ: 0 },
-        image: '/3d/images/atlas/med_skin.png',
-        desc: 'Mô hình cắt lớp 3D tầng da: lớp sừng, lớp gai, lớp hạt, lớp đáy hắc tố Melanin, collagen và mỡ hạ bì.'
+        image: '/images/atlas/med_skin.png',
+        desc: 'MÃ´ hÃ¬nh cáº¯t lá»›p 3D táº§ng da: lá»›p sá»«ng, lá»›p gai, lá»›p háº¡t, lá»›p Ä‘Ã¡y háº¯c tá»‘ Melanin, collagen vÃ  má»¡ háº¡ bÃ¬.'
       },
       {
         id: 'micro_skin_light',
         title: '2. Skin (Light Pigmentation)',
-        subtitle: 'Lát cắt da sắc tố sáng: Tế bào đáy sinh sản và vi tuần hoàn mao mạch',
-        badge: 'Mô học da',
+        subtitle: 'LÃ¡t cáº¯t da sáº¯c tá»‘ sÃ¡ng: Táº¿ bÃ o Ä‘Ã¡y sinh sáº£n vÃ  vi tuáº§n hoÃ n mao máº¡ch',
+        badge: 'MÃ´ há»c da',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.12, y: 1.15, z: 0.30, targetX: 0.05, targetY: 1.12, targetZ: 0 },
-        image: '/3d/images/atlas/med_skin.png',
-        desc: 'Chi tiết mô học vi thể các lớp tế bào sừng hóa và mạng lưới sợi đàn hồi elastin nâng đỡ.'
+        image: '/images/atlas/med_skin.png',
+        desc: 'Chi tiáº¿t mÃ´ há»c vi thá»ƒ cÃ¡c lá»›p táº¿ bÃ o sá»«ng hÃ³a vÃ  máº¡ng lÆ°á»›i sá»£i Ä‘Ã n há»“i elastin nÃ¢ng Ä‘á»¡.'
       },
       {
         id: 'micro_hair_follicle',
         title: '3. Hair Follicle (Curly Hair)',
-        subtitle: 'Nang lông, tuyến bã nhờn, tuyến mồ hôi và cơ dựng lông',
-        badge: 'Phụ bì',
+        subtitle: 'Nang lÃ´ng, tuyáº¿n bÃ£ nhá»n, tuyáº¿n má»“ hÃ´i vÃ  cÆ¡ dá»±ng lÃ´ng',
+        badge: 'Phá»¥ bÃ¬',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.10, y: 1.18, z: 0.28, targetX: 0.05, targetY: 1.15, targetZ: 0 },
-        image: '/3d/images/atlas/med_soft_tissue.png',
-        desc: 'Đơn vị nang lông tuyến bã: bóng chân lông, cơ dựng lông arrector pili và tuyến tiết bã nhờn.'
+        image: '/images/atlas/med_soft_tissue.png',
+        desc: 'ÄÆ¡n vá»‹ nang lÃ´ng tuyáº¿n bÃ£: bÃ³ng chÃ¢n lÃ´ng, cÆ¡ dá»±ng lÃ´ng arrector pili vÃ  tuyáº¿n tiáº¿t bÃ£ nhá»n.'
       }
     ]
   },
   {
     id: 'micro_group_senses',
-    titleVi: 'Giác Quan Vi Thể (Senses)',
+    titleVi: 'GiÃ¡c Quan Vi Thá»ƒ (Senses)',
     cards: [
       {
         id: 'micro_eye',
-        title: '1. Eye (Nhãn Cầu 3D)',
-        subtitle: 'Giác mạc, củng mạc, màng bồ đào, thể mi, mống mắt và võng mạc',
-        badge: 'Thị giác',
+        title: '1. Eye (NhÃ£n Cáº§u 3D)',
+        subtitle: 'GiÃ¡c máº¡c, cá»§ng máº¡c, mÃ ng bá»“ Ä‘Ã o, thá»ƒ mi, má»‘ng máº¯t vÃ  vÃµng máº¡c',
+        badge: 'Thá»‹ giÃ¡c',
         systems: ['nervous', 'skeletal'],
         camera: { x: 0.10, y: 1.58, z: 0.25, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
-        image: '/3d/images/atlas/skel_skull.png',
-        desc: 'Mặt cắt cấu trúc nhãn cầu thể hiện đường truyền ánh sáng và võng mạc thụ cảm.'
+        image: '/images/atlas/skel_skull.png',
+        desc: 'Máº·t cáº¯t cáº¥u trÃºc nhÃ£n cáº§u thá»ƒ hiá»‡n Ä‘Æ°á»ng truyá»n Ã¡nh sÃ¡ng vÃ  vÃµng máº¡c thá»¥ cáº£m.'
       },
       {
         id: 'micro_lacrimal',
-        title: '2. Lacrimal Apparatus (Bộ Lệ)',
-        subtitle: 'Tuyến lệ chính, tiểu quản lệ, túi lệ và ống lệ mũi',
-        badge: 'Bộ lệ',
+        title: '2. Lacrimal Apparatus (Bá»™ Lá»‡)',
+        subtitle: 'Tuyáº¿n lá»‡ chÃ­nh, tiá»ƒu quáº£n lá»‡, tÃºi lá»‡ vÃ  á»‘ng lá»‡ mÅ©i',
+        badge: 'Bá»™ lá»‡',
         systems: ['skeletal', 'nervous'],
         camera: { x: 0.08, y: 1.60, z: 0.22, targetX: 0.02, targetY: 1.60, targetZ: 0.04 },
-        image: '/3d/images/atlas/skel_skull.png',
-        desc: 'Hệ thống tiết và dẫn lưu nước mắt giữ ẩm và bảo vệ bề mặt giác mạc.'
+        image: '/images/atlas/skel_skull.png',
+        desc: 'Há»‡ thá»‘ng tiáº¿t vÃ  dáº«n lÆ°u nÆ°á»›c máº¯t giá»¯ áº©m vÃ  báº£o vá»‡ bá» máº·t giÃ¡c máº¡c.'
       },
       {
         id: 'micro_lens_zonule',
         title: '3. Lens and Zonular Fibers',
-        subtitle: 'Thể thủy tinh hai mặt lồi và dây chằng treo Zinn điều tiết',
-        badge: 'Khúc xạ',
+        subtitle: 'Thá»ƒ thá»§y tinh hai máº·t lá»“i vÃ  dÃ¢y cháº±ng treo Zinn Ä‘iá»u tiáº¿t',
+        badge: 'KhÃºc xáº¡',
         systems: ['nervous'],
         camera: { x: 0.06, y: 1.58, z: 0.18, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
-        image: '/3d/images/atlas/skel_skull.png',
-        desc: 'Dây chằng Zinn treo thể thủy tinh vào thể mi phục vụ điều tiết thị lực gần xa.'
+        image: '/images/atlas/skel_skull.png',
+        desc: 'DÃ¢y cháº±ng Zinn treo thá»ƒ thá»§y tinh vÃ o thá»ƒ mi phá»¥c vá»¥ Ä‘iá»u tiáº¿t thá»‹ lá»±c gáº§n xa.'
       }
     ]
   },
   {
     id: 'micro_group_skeletal',
-    titleVi: 'Hệ Xương Vi Thể (Skeletal System)',
+    titleVi: 'Há»‡ XÆ°Æ¡ng Vi Thá»ƒ (Skeletal System)',
     cards: [
       {
         id: 'micro_femur_section',
-        title: '1. Sectioned Femur (Mặt Cắt Xương Đùi)',
-        subtitle: 'Vỏ xương đặc ngoài, bè xương xốp xốp và khoang tủy xương',
-        badge: 'Mô học xương',
+        title: '1. Sectioned Femur (Máº·t Cáº¯t XÆ°Æ¡ng ÄÃ¹i)',
+        subtitle: 'Vá» xÆ°Æ¡ng Ä‘áº·c ngoÃ i, bÃ¨ xÆ°Æ¡ng xá»‘p xá»‘p vÃ  khoang tá»§y xÆ°Æ¡ng',
+        badge: 'MÃ´ há»c xÆ°Æ¡ng',
         systems: ['skeletal'],
         camera: { x: 0.25, y: 0.65, z: 0.45, targetX: 0.15, targetY: 0.65, targetZ: 0 },
-        image: '/3d/images/atlas/med_skeleton.png',
-        desc: 'Cấu trúc giải phẫu vi thể xương đùi với hệ thống bè xương xốp chịu lực nén tối ưu.'
+        image: '/images/atlas/med_skeleton.png',
+        desc: 'Cáº¥u trÃºc giáº£i pháº«u vi thá»ƒ xÆ°Æ¡ng Ä‘Ã¹i vá»›i há»‡ thá»‘ng bÃ¨ xÆ°Æ¡ng xá»‘p chá»‹u lá»±c nÃ©n tá»‘i Æ°u.'
       },
       {
         id: 'micro_osteon',
-        title: '2. Osteon (Đơn Vị Xương Vi Thể Havers)',
-        subtitle: 'Ống Havers trung tâm, các lá xương đồng tâm và tế bào xương Osteocyte',
-        badge: 'Vi thể',
+        title: '2. Osteon (ÄÆ¡n Vá»‹ XÆ°Æ¡ng Vi Thá»ƒ Havers)',
+        subtitle: 'á»ng Havers trung tÃ¢m, cÃ¡c lÃ¡ xÆ°Æ¡ng Ä‘á»“ng tÃ¢m vÃ  táº¿ bÃ o xÆ°Æ¡ng Osteocyte',
+        badge: 'Vi thá»ƒ',
         systems: ['skeletal'],
         camera: { x: 0.20, y: 0.65, z: 0.35, targetX: 0.15, targetY: 0.65, targetZ: 0 },
-        image: '/3d/images/atlas/med_bone_repair.png',
-        desc: 'Đơn vị cấu tạo chức năng cơ bản của xương đặc, dẫn truyền mạch máu và thần kinh nuôi xương.'
+        image: '/images/atlas/med_bone_repair.png',
+        desc: 'ÄÆ¡n vá»‹ cáº¥u táº¡o chá»©c nÄƒng cÆ¡ báº£n cá»§a xÆ°Æ¡ng Ä‘áº·c, dáº«n truyá»n máº¡ch mÃ¡u vÃ  tháº§n kinh nuÃ´i xÆ°Æ¡ng.'
       }
     ]
   }
 ];
 
-// 7. MUSCLE ACTIONS (Chuyển Động Khớp & Cơ Sinh Lý 3D - Chuẩn Visible Body)
+// 7. MUSCLE ACTIONS (Chuyá»ƒn Äá»™ng Khá»›p & CÆ¡ Sinh LÃ½ 3D - Chuáº©n Visible Body)
 export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   {
     id: 'act_group_spine',
-    titleVi: 'Cột Sống & Lưng (Spine and Back)',
+    titleVi: 'Cá»™t Sá»‘ng & LÆ°ng (Spine and Back)',
     cards: [
       {
         id: 'act_spine_flex',
-        title: '1. Spine Flexion (Gập Cột Sống)',
-        subtitle: 'Cơ thẳng bụng co, cột sống thắt lưng gập ra trước',
-        badge: 'Cột sống',
+        title: '1. Spine Flexion (Gáº­p Cá»™t Sá»‘ng)',
+        subtitle: 'CÆ¡ tháº³ng bá»¥ng co, cá»™t sá»‘ng tháº¯t lÆ°ng gáº­p ra trÆ°á»›c',
+        badge: 'Cá»™t sá»‘ng',
         motionId: 'spine_flexion',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.85, y: 1.15, z: 1.1, targetX: 0, targetY: 1.05, targetZ: 0 },
-        image: '/3d/images/atlas/musc_torso.png',
-        desc: 'Chuyển động gập thân mình quanh trục ngang ở các đốt sống thắt lưng.'
+        image: '/images/atlas/musc_torso.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng gáº­p thÃ¢n mÃ¬nh quanh trá»¥c ngang á»Ÿ cÃ¡c Ä‘á»‘t sá»‘ng tháº¯t lÆ°ng.'
       },
       {
         id: 'act_spine_ext',
-        title: '2. Spine Extension (Duỗi Cột Sống)',
-        subtitle: 'Nhóm cơ dựng sống (Erector spinae) kéo cột sống ngửa ra sau',
-        badge: 'Cột sống',
+        title: '2. Spine Extension (Duá»—i Cá»™t Sá»‘ng)',
+        subtitle: 'NhÃ³m cÆ¡ dá»±ng sá»‘ng (Erector spinae) kÃ©o cá»™t sá»‘ng ngá»­a ra sau',
+        badge: 'Cá»™t sá»‘ng',
         motionId: 'spine_extension',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.85, y: 1.15, z: 1.1, targetX: 0, targetY: 1.05, targetZ: 0 },
-        image: '/3d/images/atlas/musc_torso.png',
-        desc: 'Chuyển động duỗi cột sống giúp duy trì tư thế đứng thẳng của con người.'
+        image: '/images/atlas/musc_torso.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng duá»—i cá»™t sá»‘ng giÃºp duy trÃ¬ tÆ° tháº¿ Ä‘á»©ng tháº³ng cá»§a con ngÆ°á»i.'
       },
       {
         id: 'act_spine_lat',
-        title: '3. Spine Lateral Flexion (Nghiêng Cột Sống)',
-        subtitle: 'Cơ vuông thắt lưng và cơ chéo bụng co nghiêng thân sang bên',
-        badge: 'Cột sống',
+        title: '3. Spine Lateral Flexion (NghiÃªng Cá»™t Sá»‘ng)',
+        subtitle: 'CÆ¡ vuÃ´ng tháº¯t lÆ°ng vÃ  cÆ¡ chÃ©o bá»¥ng co nghiÃªng thÃ¢n sang bÃªn',
+        badge: 'Cá»™t sá»‘ng',
         motionId: 'spine_lat_flexion',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0, y: 1.15, z: 1.45, targetX: 0, targetY: 1.05, targetZ: 0 },
-        image: '/3d/images/atlas/musc_torso.png',
-        desc: 'Chuyển động nghiêng cột sống trong mặt phẳng đứng ngang.'
+        image: '/images/atlas/musc_torso.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng nghiÃªng cá»™t sá»‘ng trong máº·t pháº³ng Ä‘á»©ng ngang.'
       }
     ]
   },
   {
     id: 'act_group_pelvis',
-    titleVi: 'Khung Chậu & Khớp Háng (Pelvis and Hip)',
+    titleVi: 'Khung Cháº­u & Khá»›p HÃ¡ng (Pelvis and Hip)',
     cards: [
       {
         id: 'act_hip_flex',
-        title: '1. Hip Flexion (Gập Khớp Háng)',
-        subtitle: 'Cơ thắt lưng chậu (Iliopsoas) và cơ thẳng đùi nâng đùi ra trước',
-        badge: 'Khớp háng',
+        title: '1. Hip Flexion (Gáº­p Khá»›p HÃ¡ng)',
+        subtitle: 'CÆ¡ tháº¯t lÆ°ng cháº­u (Iliopsoas) vÃ  cÆ¡ tháº³ng Ä‘Ã¹i nÃ¢ng Ä‘Ã¹i ra trÆ°á»›c',
+        badge: 'Khá»›p hÃ¡ng',
         motionId: 'hip_flexion',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.75, y: 0.75, z: 1.0, targetX: 0.1, targetY: 0.75, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Chuyển động gập khớp chỏm đùi - ổ cối trong bước đi và chạy.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng gáº­p khá»›p chá»m Ä‘Ã¹i - á»• cá»‘i trong bÆ°á»›c Ä‘i vÃ  cháº¡y.'
       },
       {
         id: 'act_hip_ext',
-        title: '2. Hip Extension (Duỗi Khớp Háng)',
-        subtitle: 'Cơ mông lớn (Gluteus maximus) và gân kheo kéo đùi ra sau',
-        badge: 'Khớp háng',
+        title: '2. Hip Extension (Duá»—i Khá»›p HÃ¡ng)',
+        subtitle: 'CÆ¡ mÃ´ng lá»›n (Gluteus maximus) vÃ  gÃ¢n kheo kÃ©o Ä‘Ã¹i ra sau',
+        badge: 'Khá»›p hÃ¡ng',
         motionId: 'hip_extension',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.75, y: 0.75, z: 1.0, targetX: 0.1, targetY: 0.75, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Chuyển động tạo lực đẩy chính khi đứng dậy, leo dốc và chạy nhảy.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng táº¡o lá»±c Ä‘áº©y chÃ­nh khi Ä‘á»©ng dáº­y, leo dá»‘c vÃ  cháº¡y nháº£y.'
       },
       {
         id: 'act_hip_rot',
-        title: '3. Hip Medial Rotation (Xoay Trong Khớp Háng)',
-        subtitle: 'Cơ căng mạc đùi và cơ mông nhỡ xoay đùi vào trong',
-        badge: 'Khớp háng',
+        title: '3. Hip Medial Rotation (Xoay Trong Khá»›p HÃ¡ng)',
+        subtitle: 'CÆ¡ cÄƒng máº¡c Ä‘Ã¹i vÃ  cÆ¡ mÃ´ng nhá»¡ xoay Ä‘Ã¹i vÃ o trong',
+        badge: 'Khá»›p hÃ¡ng',
         motionId: 'hip_rotation',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.35, y: 0.75, z: 1.1, targetX: 0.1, targetY: 0.75, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Chuyển động xoay trục đùi quanh đường nối từ chỏm đùi đến lồi cầu.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng xoay trá»¥c Ä‘Ã¹i quanh Ä‘Æ°á»ng ná»‘i tá»« chá»m Ä‘Ã¹i Ä‘áº¿n lá»“i cáº§u.'
       }
     ]
   },
   {
     id: 'act_group_lower_limbs',
-    titleVi: 'Chi Dưới & Khớp Gối (Lower Limbs)',
+    titleVi: 'Chi DÆ°á»›i & Khá»›p Gá»‘i (Lower Limbs)',
     cards: [
       {
         id: 'act_knee_flex',
-        title: '1. Knee Flexion (Gập Khớp Gối)',
-        subtitle: 'Nhóm cơ gân kheo (Hamstrings) co gập cẳng chân ra sau',
-        badge: 'Khớp gối',
+        title: '1. Knee Flexion (Gáº­p Khá»›p Gá»‘i)',
+        subtitle: 'NhÃ³m cÆ¡ gÃ¢n kheo (Hamstrings) co gáº­p cáº³ng chÃ¢n ra sau',
+        badge: 'Khá»›p gá»‘i',
         motionId: 'knee_flexion',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.65, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Khớp bản lề gối gập cẳng chân lên đùi.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Khá»›p báº£n lá» gá»‘i gáº­p cáº³ng chÃ¢n lÃªn Ä‘Ã¹i.'
       },
       {
         id: 'act_knee_ext',
-        title: '2. Knee Extension (Duỗi Khớp Gối)',
-        subtitle: 'Cơ tứ đầu đùi (Quadriceps) kéo bánh chè duỗi thẳng cẳng chân',
-        badge: 'Khớp gối',
+        title: '2. Knee Extension (Duá»—i Khá»›p Gá»‘i)',
+        subtitle: 'CÆ¡ tá»© Ä‘áº§u Ä‘Ã¹i (Quadriceps) kÃ©o bÃ¡nh chÃ¨ duá»—i tháº³ng cáº³ng chÃ¢n',
+        badge: 'Khá»›p gá»‘i',
         motionId: 'knee_extension',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.65, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Khóa khớp gối giúp giữ vững trọng tâm cơ thể khi đứng thẳng.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'KhÃ³a khá»›p gá»‘i giÃºp giá»¯ vá»¯ng trá»ng tÃ¢m cÆ¡ thá»ƒ khi Ä‘á»©ng tháº³ng.'
       },
       {
         id: 'act_knee_rot',
-        title: '3. Knee Medial Rotation (Xoay Trong Khớp Gối)',
-        subtitle: 'Cơ khoeo và cơ bán gân xoay nhẹ cẳng chân vào trong',
-        badge: 'Khớp gối',
+        title: '3. Knee Medial Rotation (Xoay Trong Khá»›p Gá»‘i)',
+        subtitle: 'CÆ¡ khoeo vÃ  cÆ¡ bÃ¡n gÃ¢n xoay nháº¹ cáº³ng chÃ¢n vÃ o trong',
+        badge: 'Khá»›p gá»‘i',
         motionId: 'knee_rotation',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.35, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Mở khóa khớp gối khi bắt đầu bước gập chân.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Má»Ÿ khÃ³a khá»›p gá»‘i khi báº¯t Ä‘áº§u bÆ°á»›c gáº­p chÃ¢n.'
       }
     ]
   },
   {
     id: 'act_group_shoulder',
-    titleVi: 'Khớp Vai (Shoulder)',
+    titleVi: 'Khá»›p Vai (Shoulder)',
     cards: [
       {
         id: 'act_shoulder_flex',
-        title: '1. Shoulder Flexion (Gập Khớp Vai)',
-        subtitle: 'Bó trước cơ delta và cơ ngực lớn nâng cánh tay ra trước',
-        badge: 'Khớp vai',
+        title: '1. Shoulder Flexion (Gáº­p Khá»›p Vai)',
+        subtitle: 'BÃ³ trÆ°á»›c cÆ¡ delta vÃ  cÆ¡ ngá»±c lá»›n nÃ¢ng cÃ¡nh tay ra trÆ°á»›c',
+        badge: 'Khá»›p vai',
         motionId: 'shoulder_flexion',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.65, y: 1.35, z: 0.9, targetX: 0.2, targetY: 1.30, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Chuyển động nâng cánh tay lên phía trước theo mặt phẳng đứng dọc.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng nÃ¢ng cÃ¡nh tay lÃªn phÃ­a trÆ°á»›c theo máº·t pháº³ng Ä‘á»©ng dá»c.'
       },
       {
         id: 'act_shoulder_ext',
-        title: '2. Shoulder Extension (Duỗi Khớp Vai)',
-        subtitle: 'Cơ lưng rộng, cơ tròn lớn và bó sau cơ delta kéo tay ra sau',
-        badge: 'Khớp vai',
+        title: '2. Shoulder Extension (Duá»—i Khá»›p Vai)',
+        subtitle: 'CÆ¡ lÆ°ng rá»™ng, cÆ¡ trÃ²n lá»›n vÃ  bÃ³ sau cÆ¡ delta kÃ©o tay ra sau',
+        badge: 'Khá»›p vai',
         motionId: 'shoulder_extension',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.65, y: 1.35, z: 0.9, targetX: 0.2, targetY: 1.30, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Chuyển động đưa cánh tay về sau thân mình.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng Ä‘Æ°a cÃ¡nh tay vá» sau thÃ¢n mÃ¬nh.'
       },
       {
         id: 'act_shoulder_abd',
         title: '3. Shoulder Horizontal Abduction (Dang Ngang Vai)',
-        subtitle: 'Cơ delta và cơ trên gai dang cánh tay sang bên',
-        badge: 'Khớp vai',
+        subtitle: 'CÆ¡ delta vÃ  cÆ¡ trÃªn gai dang cÃ¡nh tay sang bÃªn',
+        badge: 'Khá»›p vai',
         motionId: 'shoulder_abduction',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0, y: 1.35, z: 1.3, targetX: 0.15, targetY: 1.30, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Khớp chỏm cầu ổ chảo dang cánh tay từ 0 đến 90 độ.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Khá»›p chá»m cáº§u á»• cháº£o dang cÃ¡nh tay tá»« 0 Ä‘áº¿n 90 Ä‘á»™.'
       }
     ]
   },
   {
     id: 'act_group_upper_limbs',
-    titleVi: 'Chi Trên & Khớp Khuỷu (Upper Limbs)',
+    titleVi: 'Chi TrÃªn & Khá»›p Khuá»·u (Upper Limbs)',
     cards: [
       {
         id: 'act_elbow_flex',
-        title: '1. Elbow Flexion (Gập Khớp Khuỷu)',
-        subtitle: 'Cơ nhị đầu cánh tay (Biceps) và cơ cánh tay gập cẳng tay',
-        badge: 'Khuỷu tay',
+        title: '1. Elbow Flexion (Gáº­p Khá»›p Khuá»·u)',
+        subtitle: 'CÆ¡ nhá»‹ Ä‘áº§u cÃ¡nh tay (Biceps) vÃ  cÆ¡ cÃ¡nh tay gáº­p cáº³ng tay',
+        badge: 'Khuá»·u tay',
         motionId: 'elbow_flexion',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.55, y: 1.10, z: 0.75, targetX: 0.25, targetY: 1.05, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Chuyển động gập bản lề của khớp cánh tay - trụ và cánh tay - quay.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng gáº­p báº£n lá» cá»§a khá»›p cÃ¡nh tay - trá»¥ vÃ  cÃ¡nh tay - quay.'
       },
       {
         id: 'act_elbow_ext',
-        title: '2. Elbow Extension (Duỗi Khớp Khuỷu)',
-        subtitle: 'Cơ tam đầu cánh tay (Triceps) kéo mỏm khuỷu duỗi thẳng tay',
-        badge: 'Khuỷu tay',
+        title: '2. Elbow Extension (Duá»—i Khá»›p Khuá»·u)',
+        subtitle: 'CÆ¡ tam Ä‘áº§u cÃ¡nh tay (Triceps) kÃ©o má»m khuá»·u duá»—i tháº³ng tay',
+        badge: 'Khuá»·u tay',
         motionId: 'elbow_extension',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.55, y: 1.10, z: 0.75, targetX: 0.25, targetY: 1.05, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Khóa khớp khuỷu khi đẩy hoặc nâng vật thể.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'KhÃ³a khá»›p khuá»·u khi Ä‘áº©y hoáº·c nÃ¢ng váº­t thá»ƒ.'
       },
       {
         id: 'act_forearm_pro',
-        title: '3. Forearm Pronation (Sấp Cẳng Tay)',
-        subtitle: 'Cơ sấp tròn và cơ sấp vuông xoay xương quay vắt chéo xương trụ',
-        badge: 'Cẳng tay',
+        title: '3. Forearm Pronation (Sáº¥p Cáº³ng Tay)',
+        subtitle: 'CÆ¡ sáº¥p trÃ²n vÃ  cÆ¡ sáº¥p vuÃ´ng xoay xÆ°Æ¡ng quay váº¯t chÃ©o xÆ°Æ¡ng trá»¥',
+        badge: 'Cáº³ng tay',
         motionId: 'forearm_pronation',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.45, y: 1.00, z: 0.65, targetX: 0.25, targetY: 0.95, targetZ: 0 },
-        image: '/3d/images/atlas/musc_limbs.png',
-        desc: 'Khớp quay - trụ xoay bàn tay úp xuống dưới.'
+        image: '/images/atlas/musc_limbs.png',
+        desc: 'Khá»›p quay - trá»¥ xoay bÃ n tay Ãºp xuá»‘ng dÆ°á»›i.'
       }
     ]
   },
   {
     id: 'act_group_thorax',
-    titleVi: 'Lồng Ngực & Hô Hấp (Thorax & Respiration)',
+    titleVi: 'Lá»“ng Ngá»±c & HÃ´ Háº¥p (Thorax & Respiration)',
     cards: [
       {
         id: 'act_ribs_elev',
-        title: '1. Ribs Elevation (Nâng Khung Sườn - Hít Vào)',
-        subtitle: 'Cơ liên sườn ngoài nâng khung sườn làm tăng thể tích lồng ngực',
-        badge: 'Hô hấp',
+        title: '1. Ribs Elevation (NÃ¢ng Khung SÆ°á»n - HÃ­t VÃ o)',
+        subtitle: 'CÆ¡ liÃªn sÆ°á»n ngoÃ i nÃ¢ng khung sÆ°á»n lÃ m tÄƒng thá»ƒ tÃ­ch lá»“ng ngá»±c',
+        badge: 'HÃ´ háº¥p',
         motionId: 'respiratory',
         systems: ['skeletal', 'visceral'],
         camera: { x: 0, y: 1.28, z: 1.0, targetX: 0, targetY: 1.28, targetZ: 0 },
-        image: '/3d/images/atlas/med_respiratory_cycle.png',
-        desc: 'Chuyển động nâng sườn dạng cán xô và tay cầm bơm khi hít vào.'
+        image: '/images/atlas/med_respiratory_cycle.png',
+        desc: 'Chuyá»ƒn Ä‘á»™ng nÃ¢ng sÆ°á»n dáº¡ng cÃ¡n xÃ´ vÃ  tay cáº§m bÆ¡m khi hÃ­t vÃ o.'
       },
       {
         id: 'act_ribs_dep',
-        title: '2. Ribs Depression (Hạ Khung Sườn - Thở Ra)',
-        subtitle: 'Khung sườn hạ xuống xẹp lại, phổi co hồi thụ động đẩy khí ra ngoài',
-        badge: 'Hô hấp',
+        title: '2. Ribs Depression (Háº¡ Khung SÆ°á»n - Thá»Ÿ Ra)',
+        subtitle: 'Khung sÆ°á»n háº¡ xuá»‘ng xáº¹p láº¡i, phá»•i co há»“i thá»¥ Ä‘á»™ng Ä‘áº©y khÃ­ ra ngoÃ i',
+        badge: 'HÃ´ háº¥p',
         motionId: 'respiratory',
         systems: ['skeletal', 'visceral'],
         camera: { x: 0, y: 1.28, z: 1.0, targetX: 0, targetY: 1.28, targetZ: 0 },
-        image: '/3d/images/atlas/med_respiratory_cycle.png',
-        desc: 'Giai đoạn thở ra của chu kỳ thông khí phổi.'
+        image: '/images/atlas/med_respiratory_cycle.png',
+        desc: 'Giai Ä‘oáº¡n thá»Ÿ ra cá»§a chu ká»³ thÃ´ng khÃ­ phá»•i.'
       },
       {
         id: 'act_cardiac',
-        title: '3. Cardiac Cycle (Chu Kỳ Co Bóp Tim)',
-        subtitle: 'Tâm thu tống máu vào động mạch và tâm trương giãn nở hút máu về',
-        badge: 'Tuần hoàn',
+        title: '3. Cardiac Cycle (Chu Ká»³ Co BÃ³p Tim)',
+        subtitle: 'TÃ¢m thu tá»‘ng mÃ¡u vÃ o Ä‘á»™ng máº¡ch vÃ  tÃ¢m trÆ°Æ¡ng giÃ£n ná»Ÿ hÃºt mÃ¡u vá»',
+        badge: 'Tuáº§n hoÃ n',
         motionId: 'cardiac',
         systems: ['cardiovascular', 'skeletal'],
         camera: { x: 0.05, y: 1.28, z: 0.65, targetX: 0.02, targetY: 1.28, targetZ: 0.03 },
-        image: '/3d/images/atlas/med_cardiac_cycle.png',
-        desc: 'Hoạt động co bóp nhịp nhàng của cơ tim theo hệ thống dẫn truyền tự động.'
+        image: '/images/atlas/med_cardiac_cycle.png',
+        desc: 'Hoáº¡t Ä‘á»™ng co bÃ³p nhá»‹p nhÃ ng cá»§a cÆ¡ tim theo há»‡ thá»‘ng dáº«n truyá»n tá»± Ä‘á»™ng.'
       }
     ]
   }

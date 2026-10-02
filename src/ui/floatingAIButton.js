@@ -26,6 +26,7 @@ export function initFloatingAIButton(viewer) {
   bubbleEl.innerHTML = `
     <span class="ai-sparkle-dot"></span>
     <span class="ai-bubble-icon">${ICONS.aiSparkle}</span>
+    <span class="ai-bubble-text">AI</span>
   `;
 
   // Restore saved position or default to floating bottom right

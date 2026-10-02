@@ -164,12 +164,15 @@ export function initDepthSlider() {
   const container = document.getElementById('viewerContainer');
   if (!container || slider) return;
 
+  const initialStage = state.loadedSystems?.includes('muscular') ? 0 : 5;
+  currentStage = initialStage;
+
   const wrapper = document.createElement('div');
   wrapper.className = 'depth-control';
   wrapper.id = 'depthControl';
   wrapper.title = 'Độ sâu bóc tách giải phẫu (0: Đầy đủ - 5: Sâu)';
   wrapper.innerHTML = `
-    <input type="range" id="depthSlider" class="depth-slider" min="0" max="5" value="0" step="1"
+    <input type="range" id="depthSlider" class="depth-slider" min="0" max="5" value="${initialStage}" step="1"
            orient="vertical" aria-label="${translate('depth')}">
   `;
   container.appendChild(wrapper);
@@ -190,8 +193,9 @@ export function initDepthSlider() {
 }
 
 export function resetDepthSlider() {
+  const initialStage = state.loadedSystems?.includes('muscular') ? 0 : 5;
   if (slider) {
-    slider.value = 0;
+    slider.value = initialStage;
   }
-  currentStage = 0;
+  currentStage = initialStage;
 }

@@ -933,6 +933,11 @@ export function initFooterActions(viewer) {
     }
   });
 
+  // Mobile Bottom Bar AI Assistant button
+  document.getElementById('btnNavAI')?.addEventListener('click', () => {
+    openAIAssistant(viewer);
+  });
+
   // Study Mode quick triggers (mobile bottom bar & quick toolbar)
   const btnNavStudy = document.getElementById('btnNavStudy');
   btnNavStudy?.addEventListener('click', () => {
