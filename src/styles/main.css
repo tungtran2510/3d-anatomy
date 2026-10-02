@@ -6784,47 +6784,48 @@ body.theme-dark .btn-mini-action:hover {
    SYSTEMS +/- LAYER STEPPER CONTROLLER (Complete Anatomy / Visible Body Style)
    ========================================================================== */
 
-/* 1. Pull Tab on Right Edge (Visible Body style) */
+/* 1. Pull Tab on Left Edge (Exact Visible Body style) */
 .systems-pull-tab {
   position: absolute;
-  top: 135px !important;
-  right: 0 !important;
-  left: auto !important;
-  transform: none !important;
+  top: 180px !important;
+  left: 0 !important;
+  right: auto !important;
+  transform: translateX(0) !important;
   z-index: 1205;
-  background: rgba(15, 23, 42, 0.55) !important;
+  background: rgba(245, 245, 245, 0.72) !important;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-right: none;
-  border-radius: 14px 0 0 14px;
-  padding: 14px 8px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-left: none !important;
+  border-radius: 0 10px 10px 0 !important;
+  padding: 12px 7px !important;
   min-height: 108px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  box-shadow: -2px 4px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 14px rgba(0, 0, 0, 0.10);
   cursor: pointer;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
   touch-action: manipulation;
 }
 .systems-pull-tab:hover {
-  background: rgba(15, 23, 42, 0.85) !important;
-  box-shadow: -3px 6px 20px rgba(0, 0, 0, 0.35);
+  background: rgba(235, 238, 242, 0.88) !important;
+  box-shadow: 3px 6px 18px rgba(0, 0, 0, 0.14);
 }
 [data-theme="dark"] .systems-pull-tab,
 body.theme-dark .systems-pull-tab {
-  background: rgba(15, 23, 42, 0.55) !important;
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: -2px 4px 16px rgba(0, 0, 0, 0.35);
+  background: rgba(30, 41, 59, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  border-left: none !important;
+  box-shadow: 2px 4px 14px rgba(0, 0, 0, 0.35);
 }
-[data-theme="dark"] .systems-pull-tab .tab-vertical-text,
-body.theme-dark .systems-pull-tab .tab-vertical-text {
-  color: #e2e8f0 !important;
+[data-theme="dark"] .systems-pull-tab:hover,
+body.theme-dark .systems-pull-tab:hover {
+  background: rgba(30, 41, 59, 0.90) !important;
 }
 .systems-pull-tab.drawer-open {
-  transform: translateX(-126px) !important;
+  transform: translateX(126px) !important;
 }
 .tab-body-icon {
   font-size: 15px;
@@ -6835,43 +6836,51 @@ body.theme-dark .systems-pull-tab .tab-vertical-text {
 .tab-body-icon svg {
   width: 18px;
   height: 18px;
-  stroke: #0284c7;
+  stroke: #64748b !important;
   stroke-width: 1.8px;
   display: block;
 }
+[data-theme="dark"] .tab-body-icon svg,
+body.theme-dark .tab-body-icon svg {
+  stroke: #94a3b8 !important;
+}
 .tab-vertical-text {
   writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size: 10px;
-  font-weight: 700;
-  color: #e2e8f0;
-  letter-spacing: 0.5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #475569 !important;
+  letter-spacing: 0.4px;
   white-space: nowrap;
 }
+[data-theme="dark"] .tab-vertical-text,
+body.theme-dark .tab-vertical-text {
+  color: #cbd5e1 !important;
+}
 
-/* 2. Sliding Systems Stepper Panel - Slim Medical Sidebar (Width 126px) */
+/* 2. Sliding Systems Stepper Panel - Slim Medical Sidebar (Width 126px) on Left */
 .systems-stepper-drawer {
   position: absolute;
   top: 48px;
-  right: 0 !important;
-  left: auto !important;
+  left: 0 !important;
+  right: auto !important;
   bottom: 60px;
   width: 126px;
   max-width: 42vw;
   z-index: 1200;
-  background: rgba(15, 23, 42, 0.95) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-right: none !important;
-  box-shadow: -4px 0 18px rgba(0, 0, 0, 0.25);
+  border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-left: none !important;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
   padding: 8px 6px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   overflow-y: auto;
   overflow-x: hidden;
-  transform: translateX(100%) !important;
+  transform: translateX(-100%) !important;
+  pointer-events: none;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   scrollbar-width: none;
 }
@@ -6880,6 +6889,7 @@ body.theme-dark .systems-pull-tab .tab-vertical-text {
 }
 .systems-stepper-drawer.open {
   transform: translateX(0) !important;
+  pointer-events: auto;
 }
 .stepper-drawer-header {
   display: flex;
@@ -7670,6 +7680,10 @@ body.is-fullscreen .floating-views-quick-nav {
 :-webkit-full-screen .systems-pull-tab,
 body.is-fullscreen .systems-pull-tab {
   top: calc(var(--ctrl-col-top) + 130px) !important;
+  left: 0 !important;
+  right: auto !important;
+  border-radius: 0 10px 10px 0 !important;
+  border-left: none !important;
 }
 
 :fullscreen .depth-control,
@@ -7682,17 +7696,19 @@ body.is-fullscreen .depth-control {
 /* Dark Mode Theme Support (Explicit theme switch only) */
 [data-theme="dark"] .systems-pull-tab,
 body.theme-dark .systems-pull-tab {
-  background: rgba(22, 27, 34, 0.92);
-  border-color: rgba(56, 68, 85, 0.85);
+  background: rgba(30, 41, 59, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  border-left: none !important;
 }
 [data-theme="dark"] .tab-vertical-text,
 body.theme-dark .tab-vertical-text {
-  color: #94a3b8;
+  color: #cbd5e1 !important;
 }
 [data-theme="dark"] .systems-stepper-drawer,
 body.theme-dark .systems-stepper-drawer {
-  background: rgba(15, 23, 42, 0.96) !important;
-  border-color: rgba(51, 65, 85, 0.85);
+  background: rgba(15, 23, 42, 0.94) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-left: none !important;
 }
 [data-theme="dark"] .system-stepper-item,
 body.theme-dark .system-stepper-item {
@@ -11673,9 +11689,11 @@ body.theme-dark .btn-tag-action.clear-tags {
 
   .systems-pull-tab {
     top: calc(var(--ctrl-col-top) + 130px) !important;
-    right: 0 !important;
-    left: auto !important;
+    left: 0 !important;
+    right: auto !important;
     min-height: 108px !important;
+    border-radius: 0 10px 10px 0 !important;
+    border-left: none !important;
   }
 
   .depth-control {

@@ -87,3 +87,66 @@ describe('SYSTEM_IDS', () => {
     expect(formatPartName('Vertebra C2', 'vi')).toBe('Đốt sống cổ C2 (Đốt trục)');
   });
 });
+
+import { isSkeletalVisibleAtLevel } from '../src/ui/systemsLayerController.js';
+
+describe('isSkeletalVisibleAtLevel - 4 Visible Body Dissection Stages', () => {
+  it('Level 0 hides all skeletal parts', () => {
+    expect(isSkeletalVisibleAtLevel('vertebra c1', 0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('femur.l', 0)).toBe(false);
+  });
+
+  it('Level 1 shows ONLY vertebral column + occiput (Spine)', () => {
+    // Spine parts should be visible
+    expect(isSkeletalVisibleAtLevel('vertebra c1', 1.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('vertebra t5', 1.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('vertebra l5', 1.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('sacrum', 1.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('coccyx', 1.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('occipital bone', 1.0)).toBe(true);
+
+    // Non-spine parts MUST be hidden
+    expect(isSkeletalVisibleAtLevel('frontal bone', 1.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('mandible', 1.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('rib 1.l', 1.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('sternum', 1.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('ilium.l', 1.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('femur.l', 1.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('humerus.r', 1.0)).toBe(false);
+  });
+
+  it('Level 2 shows Axial Skeleton (Spine + Skull + Thorax) + Pelvis, hides limbs', () => {
+    expect(isSkeletalVisibleAtLevel('vertebra c1', 2.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('frontal bone', 2.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('mandible', 2.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('rib 1.l', 2.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('sternum', 2.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('ilium.l', 2.0)).toBe(true);
+
+    // Limbs MUST be hidden
+    expect(isSkeletalVisibleAtLevel('femur.l', 2.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('humerus.r', 2.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('tibia.l', 2.0)).toBe(false);
+  });
+
+  it('Level 3 shows Axial + Pelvis + Long bones of 4 limbs, peels distal hand/foot bones', () => {
+    expect(isSkeletalVisibleAtLevel('vertebra c1', 3.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('femur.l', 3.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('tibia.r', 3.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('humerus.l', 3.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('radius.r', 3.0)).toBe(true);
+
+    // Distal hands and feet bones peeled away
+    expect(isSkeletalVisibleAtLevel('scaphoid.l', 3.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('calcaneus.r', 3.0)).toBe(false);
+    expect(isSkeletalVisibleAtLevel('distal phalanx.l', 3.0)).toBe(false);
+  });
+
+  it('Level 4 shows 100% complete skeleton', () => {
+    expect(isSkeletalVisibleAtLevel('vertebra c1', 4.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('scaphoid.l', 4.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('calcaneus.r', 4.0)).toBe(true);
+    expect(isSkeletalVisibleAtLevel('distal phalanx.l', 4.0)).toBe(true);
+  });
+});
+

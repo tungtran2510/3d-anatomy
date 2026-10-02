@@ -540,7 +540,90 @@ export function getMuscleLayers() {
 // -----------------------------------------------------------------------------
 const CNS_PATTERNS = ['brain', 'não', 'cerebr', 'cerebell', 'spinal cord', 'tủy sống', 'brainstem', 'pons', 'medulla'];
 const PLEXUS_PATTERNS = [...CNS_PATTERNS, 'plexus', 'đám rối', 'sciatic', 'ngồi', 'femoral nerve', 'radial nerve', 'median nerve', 'ulnar nerve'];
-const AXIAL_SKELETON_PATTERNS = ['skull', 'sọ', 'vertebra', 'đốt sống', 'sacrum', 'coccyx', 'sternum', 'ức', 'rib', 'sườn', 'hyoid'];
+
+// -----------------------------------------------------------------------------
+// SKELETAL SYSTEM DISSECTION LAYERS (Chuẩn đối chiếu Visible Body - 4 nấc)
+// Level 1.0 (■___): Trục Cột sống & Nền chẩm (Vertebral Column: C1-Coccyx + Occipital) (Ảnh 3)
+// Level 2.0 (■■__): Khung xương trục + Khung chậu (Hộp sọ, Cột sống, Lồng ngực, Xương chậu) (Ảnh 4)
+// Level 3.0 (■■■_): Xương trục + Chậu + Các xương dài 4 chi (Cánh tay, Cẳng tay, Đùi, Cẳng chân) (Ảnh 1)
+// Level 4.0 (■■■■): Toàn bộ hệ xương 100% (Gồm xương bàn ngón tay/chân, sụn sườn, thanh quản, răng...)
+// -----------------------------------------------------------------------------
+export function isSkeletalVisibleAtLevel(pIdLower, level) {
+  if (level <= 0) return false;
+  if (level >= 4.0) return true;
+
+  // 1. Cột sống (Vertebral Column) & Nền chẩm Occipital (Mức >= 0.5; hiển thị duy nhất ở Level 1 - Ảnh 3)
+  const isSpine = 
+    pIdLower.includes('vertebra') || pIdLower.includes('atlas') || pIdLower.includes('axis') ||
+    pIdLower.includes('sacrum') || pIdLower.includes('coccyx') || pIdLower.includes('occipital') ||
+    pIdLower.includes('c1') || pIdLower.includes('c2') || pIdLower.includes('c3') || pIdLower.includes('c4') || 
+    pIdLower.includes('c5') || pIdLower.includes('c6') || pIdLower.includes('c7') ||
+    pIdLower.includes('t1') || pIdLower.includes('t2') || pIdLower.includes('t3') || pIdLower.includes('t4') || 
+    pIdLower.includes('t5') || pIdLower.includes('t6') || pIdLower.includes('t7') || pIdLower.includes('t8') || 
+    pIdLower.includes('t9') || pIdLower.includes('t10') || pIdLower.includes('t11') || pIdLower.includes('t12') ||
+    pIdLower.includes('l1') || pIdLower.includes('l2') || pIdLower.includes('l3') || pIdLower.includes('l4') || pIdLower.includes('l5') ||
+    pIdLower.includes('cột sống') || pIdLower.includes('đốt sống') || pIdLower.includes('xương cùng') || pIdLower.includes('xương cụt');
+
+  if (isSpine) return true;
+  if (level <= 1.0) return false; // Level 1 ONLY shows spine!
+
+  // 2. Hộp sọ (Skull) & Sọ mặt, Lồng ngực (Thorax) & Khung chậu (Pelvis) (Level >= 1.5 - 2.0 - Ảnh 4)
+  const isSkull = 
+    pIdLower.includes('ethmoid') || pIdLower.includes('sphenoid') || pIdLower.includes('frontal') || 
+    pIdLower.includes('parietal') || pIdLower.includes('temporal') || pIdLower.includes('maxilla') || 
+    pIdLower.includes('mandible') || pIdLower.includes('zygomatic') || pIdLower.includes('nasal') || 
+    pIdLower.includes('lacrimal') || pIdLower.includes('palatine') || pIdLower.includes('vomer') || 
+    pIdLower.includes('hyoid') || pIdLower.includes('concha') || pIdLower.includes('ossicle') || 
+    pIdLower.includes('malleus') || pIdLower.includes('incus') || pIdLower.includes('stapes') || 
+    pIdLower.includes('skull') || pIdLower.includes('tooth') || pIdLower.includes('molar') || 
+    pIdLower.includes('incisor') || pIdLower.includes('premolar') || pIdLower.includes('canine') ||
+    pIdLower.includes('sọ') || pIdLower.includes('hàm') || pIdLower.includes('răng');
+
+  const isThorax = 
+    pIdLower.includes('sternum') || pIdLower.includes('rib') || pIdLower.includes('costal') || 
+    pIdLower.includes('xiphoid') || pIdLower.includes('manubrium') || pIdLower.includes('sườn') || pIdLower.includes('ức');
+
+  const isPelvis = 
+    pIdLower.includes('ilium') || pIdLower.includes('ischium') || pIdLower.includes('pubis') || 
+    pIdLower.includes('hip bone') || pIdLower.includes('pelvi') || pIdLower.includes('chậu');
+
+  if (level <= 1.5) {
+    return isSkull;
+  }
+
+  if (isSkull || isThorax || isPelvis) {
+    return true;
+  }
+  if (level <= 2.0) return false; // Level 2 ONLY shows Axial + Pelvis!
+
+  // 3. Xương dài của 4 chi (Appendicular Long Bones: Cánh tay, Cẳng tay, Đùi, Cẳng chân) (Level >= 2.5 - 3.0 - Ảnh 1)
+  const isLongLimb = 
+    pIdLower.includes('clavicle') || pIdLower.includes('scapula') || pIdLower.includes('humerus') || 
+    pIdLower.includes('radius') || pIdLower.includes('ulna') || pIdLower.includes('femur') || 
+    pIdLower.includes('patella') || pIdLower.includes('tibia') || pIdLower.includes('fibula') ||
+    pIdLower.includes('cánh tay') || pIdLower.includes('cẳng tay') || pIdLower.includes('đùi') || 
+    pIdLower.includes('cẳng chân') || pIdLower.includes('bánh chè') || pIdLower.includes('đòn') || pIdLower.includes('vai');
+
+  if (isLongLimb) {
+    return true;
+  }
+  if (level <= 3.0) return false; // Level 3 peels away distal extremities (hands & feet small bones)!
+
+  // 4. Khớp cổ tay, cổ chân, Tarsals, Carpals (Level 3.5)
+  const isCarpalTarsal = 
+    pIdLower.includes('carpal') || pIdLower.includes('scaphoid') || pIdLower.includes('lunate') || 
+    pIdLower.includes('triquetrum') || pIdLower.includes('pisiform') || pIdLower.includes('trapezium') || 
+    pIdLower.includes('trapezoid') || pIdLower.includes('capitate') || pIdLower.includes('hamate') ||
+    pIdLower.includes('tarsal') || pIdLower.includes('calcaneus') || pIdLower.includes('talus') || 
+    pIdLower.includes('navicular') || pIdLower.includes('cuboid') || pIdLower.includes('cuneiform');
+
+  if (level <= 3.5) {
+    return isCarpalTarsal;
+  }
+
+  // 5. Level 4.0: Toàn bộ cấu trúc còn lại (Metacarpals, Metatarsals, Phalanges, Cartilages, Sesamoids...)
+  return true;
+}
 
 const loadingSystems = new Set();
 let drawerEl = null;
@@ -557,15 +640,15 @@ export function initSystemsLayerController(viewer) {
   pullTabEl.className = 'systems-pull-tab';
   pullTabEl.title = 'Hệ cơ quan & Phân lớp giải phẫu (Systems +/-)';
   pullTabEl.innerHTML = `
-    <span class="tab-body-icon">${ICONS.humanAnatomyWithPlus}</span>
     <span class="tab-vertical-text">Systems +/-</span>
+    <span class="tab-body-icon">${ICONS.humanAnatomyWithPlus}</span>
   `;
   container.appendChild(pullTabEl);
 
   // 2. Sliding Systems Stepper Panel - Slim Medical Sidebar (~126px width)
   drawerEl = document.createElement('div');
   drawerEl.id = 'systemsStepperDrawer';
-  drawerEl.className = 'systems-stepper-drawer hidden';
+  drawerEl.className = 'systems-stepper-drawer';
   drawerEl.innerHTML = `
     <div class="stepper-drawer-header">
       <div class="stepper-header-title">
@@ -784,7 +867,6 @@ function updateSilhouetteActive(viewName) {
 
 export function openDrawer() {
   if (!drawerEl) return;
-  drawerEl.classList.remove('hidden');
   drawerEl.classList.add('open');
   pullTabEl?.classList.add('drawer-open');
   isDrawerOpen = true;
@@ -801,7 +883,6 @@ export function openDrawer() {
 export function closeDrawer() {
   if (!drawerEl) return;
   drawerEl.classList.remove('open');
-  drawerEl.classList.add('hidden');
   pullTabEl?.classList.remove('drawer-open');
   isDrawerOpen = false;
   drawerEl.querySelector('#regionDropdownMenu')?.classList.add('hidden');
@@ -999,14 +1080,12 @@ async function applySystemLevel(systemId, level, viewer) {
       } else {
         showSystem('skeletal');
         const nodes = getMeshesBySystem('skeletal') || [];
-        if (level <= 1.5) {
-          nodes.forEach(n => {
-            const pId = (n.userData?.partId || '').toLowerCase();
-            setStructureVisible(n.userData?.partId, AXIAL_SKELETON_PATTERNS.some(kw => pId.includes(kw)));
-          });
-        } else {
-          nodes.forEach(n => setStructureVisible(n.userData?.partId, true));
-        }
+        nodes.forEach(n => {
+          const partId = n.userData?.partId || n.name || '';
+          if (partId) {
+            setStructureVisible(partId, isSkeletalVisibleAtLevel(partId.toLowerCase(), level));
+          }
+        });
       }
     } else if (systemId === 'lymphatic') {
       if (level <= 0) {

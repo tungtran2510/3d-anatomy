@@ -17,9 +17,9 @@ THREE.Mesh.prototype.raycast = acceleratedRaycast;
 // (copied into public/draco) is required to read them.
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath(asset('draco/'));
-// Fetch the decoder alongside the first model instead of after it: otherwise
-// the two requests are serialised on the critical path.
-dracoLoader.preload();
+if (typeof window !== 'undefined') {
+  dracoLoader.preload();
+}
 
 let meshRegistry = new Map(); // Map<partId, node>
 let structures = new Map(); // Map<partId, { node, systemId, parentId, childIds, ownMeshes }>
