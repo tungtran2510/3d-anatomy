@@ -728,10 +728,10 @@ function showClinicalModal() {
           <button type="button" class="dialog-close-btn" id="clinicalCloseBtn">&times;</button>
         </div>
         <div style="margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: #334155;">
-          <p><strong>Triệu chứng thường gặp:</strong> ${clinical.symptoms || 'Đau khu trú, hạn chế vận động khi có chấn thương hoặc viêm.'}</p>
-          <div style="margin-top: 10px; padding: 10px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
-            <strong style="color: #166534;">Ý nghĩa lâm sàng:</strong>
-            <p style="margin: 4px 0 0; color: #15803d;">Cột mốc giải phẫu quan trọng trong thăm khám, chẩn đoán hình ảnh (X-quang, MRI) và phẫu thuật tiếp cận an toàn.</p>
+          ${clinical.symptoms ? `<p><strong>Triệu chứng thường gặp:</strong> ${clinical.symptoms}</p>` : ''}
+          <div style="margin-top: 10px; padding: 12px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
+            <strong style="color: #166534;">🩺 Bệnh lý & Ý nghĩa lâm sàng y khoa:</strong>
+            <p style="margin: 6px 0 0; color: #15803d; line-height: 1.6;">${clinical.clinical || 'Cột mốc giải phẫu quan trọng trong thăm khám, chẩn đoán hình ảnh (X-quang, MRI) và phẫu thuật tiếp cận an toàn.'}</p>
           </div>
         </div>
       </div>
