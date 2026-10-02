@@ -569,26 +569,29 @@ export function initSystemsLayerController(viewer) {
     <div class="stepper-drawer-header">
       <div class="stepper-header-title">
         <button type="button" class="btn-stepper-nav" id="btnViewPrev" title="Góc nhìn trước">‹</button>
-        <span class="stepper-views-title">Views</span>
+        <span class="stepper-views-title">Góc nhìn</span>
         <button type="button" class="btn-stepper-nav" id="btnViewNext" title="Góc nhìn tiếp theo">›</button>
         <button type="button" class="btn-stepper-close" id="btnStepperClose" title="Đóng bảng">✕</button>
       </div>
       
-      <div class="stepper-region-label">Affected Region</div>
+      <div class="stepper-region-label">Mặt trước / sau</div>
       
       <!-- Quick Region Selector: Anterior, Posterior, and More Dots -->
       <div class="stepper-regions-row">
-        <button type="button" class="btn-region-silhouette active" data-region="front" title="Mặt trước (Anterior)">
+        <button type="button" class="btn-region-silhouette active" data-region="front" title="Xoay mặt trước (Anterior View)">
           ${ICONS.silhouetteAnterior}
+          <span class="region-sublabel">Trước</span>
         </button>
-        <button type="button" class="btn-region-silhouette" data-region="back" title="Mặt sau (Posterior)">
+        <button type="button" class="btn-region-silhouette" data-region="back" title="Xoay mặt sau (Posterior View)">
           ${ICONS.silhouettePosterior}
+          <span class="region-sublabel">Sau</span>
         </button>
         <div class="region-dropdown-wrap">
-          <button type="button" class="btn-region-more" id="btnRegionMore" title="Chọn phân vùng giải phẫu khác">
+          <button type="button" class="btn-region-more" id="btnRegionMore" title="Chọn phân vùng giải phẫu khác (Đầu, Ngực, Chậu, Chi trên, Chi dưới)">
             ${ICONS.moreDots}
           </button>
           <div class="region-dropdown-menu hidden" id="regionDropdownMenu">
+            <div class="region-dropdown-header">Phân vùng giải phẫu:</div>
             <button type="button" class="region-menu-item" data-region="head">Đầu & Cổ</button>
             <button type="button" class="region-menu-item" data-region="torso">Lồng ngực</button>
             <button type="button" class="region-menu-item" data-region="pelvis">Khung chậu</button>
@@ -609,7 +612,7 @@ export function initSystemsLayerController(viewer) {
       <button type="button" class="btn-drawer-tool" id="btnFocusPelvis" title="Tập trung vùng chậu (Pelvis)">
         <span class="drawer-tool-icon">${ICONS.pelvisBox}</span>
       </button>
-      <button type="button" class="btn-drawer-tool" id="btnToggleGender" title="Chuyển đổi hình thái (Nam / Nữ)">
+      <button type="button" class="btn-drawer-tool" id="btnToggleGender" title="Mô hình: Nam Y khoa chuẩn (Dữ liệu Nữ đang cập nhật)">
         <span class="drawer-tool-icon">${ICONS.genderToggle}</span>
       </button>
     </div>
@@ -758,7 +761,7 @@ function setupEvents(viewer) {
   });
   drawerEl?.querySelector('#btnToggleGender')?.addEventListener('click', () => {
     if (window.showAtlasToast) {
-      window.showAtlasToast('Mô hình Nam Y khoa chuẩn (Male Anatomy Model)');
+      window.showAtlasToast('Hiện tại hệ thống sử dụng bộ dữ liệu 3D Nam chuẩn Y khoa (Z-Anatomy). Dữ liệu giải phẫu Nữ đang được cập nhật.');
     }
   });
 }
