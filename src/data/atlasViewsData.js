@@ -462,129 +462,441 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
   },
   {
     id: 'respiratory_views',
-    titleVi: 'Hệ Hô Hấp & Phổi',
+    titleVi: 'Hệ Hô Hấp',
+    titleEn: 'Respiratory System Views',
     systemKey: 'visceral',
     cards: [
       {
-        id: 'resp_upper',
-        title: '1. Đường Hô Hấp Trên',
+        id: 'resp_1_upper',
+        title: '1. Upper Respiratory',
+        titleVi: '1. Đường Hô Hấp Trên',
         subtitle: 'Mũi xoang, thanh quản và khí quản',
-        badge: 'Đường thở trên',
         image: '/images/atlas/resp_upper.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0.20, y: 1.48, z: 0.60, targetX: 0, targetY: 1.45, targetZ: 0 },
+        camera: { x: 0.28, y: 1.54, z: 0.52, targetX: 0, targetY: 1.50, targetZ: 0 },
         highlight: 'Trachea',
-        desc: 'Đường dẫn khí, sụn thanh nhiệt, sụn giáp và dây thanh âm phát âm.'
+        desc: 'Đường dẫn khí vùng đầu mặt cổ: mũi, xoang, hầu và thanh quản.'
       },
       {
-        id: 'resp_lungs',
-        title: '2. Phổi & Cây Phế Quản',
-        subtitle: 'Hai lá phổi và hệ phân chia phế quản',
-        badge: 'Phổi',
+        id: 'resp_2_nasal_cavity',
+        title: '2. Nasal Cavity',
+        titleVi: '2. Ổ Mũi & Cuống Mũi',
+        subtitle: 'Xoang bướm, xoang trán & niêm mạc khứu',
+        image: '/images/atlas/resp_upper.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0.38, y: 1.58, z: 0.38, targetX: 0, targetY: 1.56, targetZ: 0 },
+        clipping: { plane: 'sagittal', offset: 0 },
+        desc: 'Khoang mũi có chức năng sưởi ấm, làm ẩm và lọc sạch không khí hít vào.'
+      },
+      {
+        id: 'resp_3_eustachian',
+        title: '3. Eustachian Tubes',
+        titleVi: '3. Vòi Nhĩ Tai (Eustachian)',
+        subtitle: 'Đường thông hòm nhĩ và hầu mũi',
+        image: '/images/atlas/resp_upper.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0.26, y: 1.58, z: 0.36, targetX: 0.05, targetY: 1.55, targetZ: 0 },
+        desc: 'Vòi tai cân bằng áp suất giữa tai giữa và khí quyển bên ngoài.'
+      },
+      {
+        id: 'resp_4_pharynx_larynx',
+        title: '4. Pharynx and Larynx',
+        titleVi: '4. Hầu & Thanh Quản',
+        subtitle: 'Sụn giáp, sụn nhẫn & dây thanh âm',
+        image: '/images/atlas/resp_upper.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0.22, y: 1.48, z: 0.45, targetX: 0, targetY: 1.46, targetZ: 0 },
+        highlight: 'Thyroid cartilage',
+        desc: 'Cơ quan phát âm và ngã tư giữa đường thở và đường tiêu hóa.'
+      },
+      {
+        id: 'resp_5_trachea_carotids',
+        title: '5. Trachea and Carotids',
+        titleVi: '5. Khí Quản & Động Mạch Cảnh',
+        subtitle: 'Khí quản cổ và bó mạch thần kinh cảnh',
+        image: '/images/atlas/circ_heart_thorax.png',
+        systems: ['visceral', 'cardiovascular', 'skeletal'],
+        camera: { x: 0.18, y: 1.42, z: 0.52, targetX: 0, targetY: 1.38, targetZ: 0 },
+        highlight: 'Trachea',
+        desc: 'Ống dẫn khí chính từ cổ xuống trung thất trước cột sống.'
+      },
+      {
+        id: 'resp_6_laryngeal_muscles',
+        title: '6. Laryngeal Muscles',
+        titleVi: '6. Hệ Cơ Nội Tại Thanh Quản',
+        subtitle: 'Cơ nhẫn giáp, nhẫn phễu căng chùng dây thanh',
+        image: '/images/atlas/musc_head.png',
+        systems: ['visceral', 'muscular', 'skeletal'],
+        camera: { x: 0.15, y: 1.48, z: 0.35, targetX: 0, targetY: 1.46, targetZ: 0 },
+        desc: 'Điều hòa độ căng của dây thanh âm giúp điều chỉnh cao độ giọng nói.'
+      },
+      {
+        id: 'resp_7_location_lungs',
+        title: '7. Location of Lungs',
+        titleVi: '7. Vị Trí Hai Lá Phổi',
+        subtitle: 'Khoang màng phổi trong lồng ngực',
         image: '/images/atlas/resp_lungs.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.25, z: 0.88, targetX: 0, targetY: 1.25, targetZ: 0 },
+        camera: { x: 0, y: 1.25, z: 0.90, targetX: 0, targetY: 1.25, targetZ: 0 },
         highlight: 'Superior lobe of left lung',
-        desc: 'Nơi trao đổi khí oxy và CO2 qua màng phế nang - mao mạch.'
+        desc: 'Mối tương quan giữa hai lá phổi, trung thất và khung xương sườn.'
       },
       {
-        id: 'resp_diaphragm',
-        title: '3. Cơ Hoành & Động Học Thở',
-        subtitle: 'Vòm hoành ngăn cách ngực và bụng',
-        badge: 'Cơ hô hấp',
+        id: 'resp_8_hilum',
+        title: '8. Hilum',
+        titleVi: '8. Rốn Phổi & Cuống Phổi',
+        subtitle: 'Phế quản gốc, ĐM phổi & TM phổi',
+        image: '/images/atlas/resp_lungs.png',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0.25, y: 1.26, z: 0.55, targetX: 0.05, targetY: 1.25, targetZ: 0 },
+        desc: 'Nơi ra vào của các cấu trúc mạch máu và đường thở chính của phổi.'
+      },
+      {
+        id: 'resp_9_inhalation_muscles',
+        title: '9. Inhalation Muscles',
+        titleVi: '9. Nhóm Cơ Hít Vào',
+        subtitle: 'Cơ hoành & cơ liên sườn ngoài',
         image: '/images/atlas/resp_diaphragm.png',
-        systems: ['muscular', 'skeletal', 'visceral'],
-        camera: { x: 0, y: 1.15, z: 0.82, targetX: 0, targetY: 1.15, targetZ: 0 },
+        systems: ['visceral', 'muscular', 'skeletal'],
+        camera: { x: 0, y: 1.20, z: 0.85, targetX: 0, targetY: 1.20, targetZ: 0 },
         highlight: 'Diaphragm',
-        desc: 'Cơ hô hấp chính đảm nhiệm 70% thông khí khi hít vào bình thường.'
+        desc: 'Vòm hoành hạ xuống kết hợp sườn nâng lên làm tăng thể tích lồng ngực.'
+      },
+      {
+        id: 'resp_10_exhalation_muscles',
+        title: '10. Exhalation Muscles',
+        titleVi: '10. Nhóm Cơ Thở Ra',
+        subtitle: 'Cơ liên sườn trong & cơ thành bụng',
+        image: '/images/atlas/musc_torso.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0, y: 1.15, z: 0.95, targetX: 0, targetY: 1.15, targetZ: 0 },
+        desc: 'Kéo khung sườn xuống và ép nội tạng bụng hỗ trợ thở ra gắng sức.'
+      },
+      {
+        id: 'resp_11_respiratory_innervation',
+        title: '11. Respiratory Innervation',
+        titleVi: '11. Thần Kinh Chi Phối Hô Hấp',
+        subtitle: 'Dây thần kinh hoành C3-C5 & thần kinh gian sườn',
+        image: '/images/atlas/circ_heart_thorax.png',
+        systems: ['visceral', 'nervous', 'skeletal'],
+        camera: { x: 0.15, y: 1.28, z: 0.70, targetX: 0, targetY: 1.26, targetZ: 0 },
+        desc: 'Mạng lưới thần kinh tự động duy trì nhịp thở sinh tồn liên tục.'
+      },
+      {
+        id: 'resp_12_pulmonary_circ',
+        title: '12. Pulmonary Circulation',
+        titleVi: '12. Tuần Hoàn Máu Tại Phổi',
+        subtitle: 'Hệ vi mao mạch phế nang trao đổi khí',
+        image: '/images/atlas/resp_lungs.png',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0, y: 1.26, z: 0.70, targetX: 0, targetY: 1.26, targetZ: 0 },
+        highlight: 'Pulmonary trunk',
+        desc: 'Tiểu tuần hoàn mang máu thiếu oxy đến phế nang để nhận oxy tươi.'
       }
     ]
   },
   {
     id: 'muscular_views',
-    titleVi: 'Hệ Cơ Vân Toàn Thân',
+    titleVi: 'Hệ Cơ Vân',
+    titleEn: 'Muscular System Views',
     systemKey: 'muscular',
     cards: [
       {
-        id: 'musc_head',
-        title: '1. Cơ Vùng Đầu Mặt Cổ & Mạch Máu',
-        subtitle: 'Bóc tách cơ nhai, cơ cổ và mạng mạch thái dương',
-        badge: 'Đầu mặt',
+        id: 'musc_1_expression',
+        title: '1. Expression',
+        titleVi: '1. Cơ Biểu Cảm Khuôn Mặt',
+        subtitle: 'Cơ trán, cơ vòng mắt & cơ vòng miệng',
         image: '/images/atlas/musc_head.png',
-        systems: ['muscular', 'skeletal', 'cardiovascular'],
-        camera: { x: 0.52, y: 1.62, z: 0.55, targetX: 0, targetY: 1.58, targetZ: 0 },
-        desc: 'Quan sát tương quan giải phẫu xương sọ, cơ cắn, cơ ức đòn chũm và mạng mạch máu mặt.'
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.25, y: 1.60, z: 0.50, targetX: 0, targetY: 1.58, targetZ: 0 },
+        desc: 'Hệ cơ bám da mặt do dây thần kinh số VII chi phối tạo các nét mặt.'
       },
       {
-        id: 'musc_torso',
-        title: '2. Cơ Thân Mình & Lưng Bụng',
-        subtitle: 'Cơ ngực, cơ liên sườn và cơ thẳng bụng',
-        badge: 'Thân mình',
+        id: 'musc_2_mastication',
+        title: '2. Mastication',
+        titleVi: '2. Cơ Nhai',
+        subtitle: 'Cơ cắn, cơ thái dương & cơ chân bướm',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.45, y: 1.58, z: 0.40, targetX: 0, targetY: 1.56, targetZ: 0 },
+        highlight: 'Masseter',
+        desc: 'Tạo lực cắn nghiền thức ăn mạnh mẽ ở khớp thái dương hàm.'
+      },
+      {
+        id: 'musc_3_laryngeal',
+        title: '3. Laryngeal Muscles',
+        titleVi: '3. Nhóm Cơ Thanh Quản',
+        subtitle: 'Cơ dưới móng và cơ giáp móng',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.20, y: 1.48, z: 0.38, targetX: 0, targetY: 1.46, targetZ: 0 },
+        desc: 'Nâng hạ thanh quản khi nuốt và điều hòa phát âm.'
+      },
+      {
+        id: 'musc_4_lateral_flexion',
+        title: '4. Lateral Flexion',
+        titleVi: '4. Cơ Nghiêng Cổ',
+        subtitle: 'Cơ gối đầu và cơ bậc thang',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0, y: 1.45, z: -0.65, targetX: 0, targetY: 1.45, targetZ: 0 },
+        desc: 'Nghiêng đầu sang bên trong mặt phẳng đứng ngang.'
+      },
+      {
+        id: 'musc_5_head_rotation',
+        title: '5. Head Rotation',
+        titleVi: '5. Cơ Xoay Đầu',
+        subtitle: 'Cơ ức đòn chũm (SCM)',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.35, y: 1.52, z: 0.45, targetX: 0, targetY: 1.50, targetZ: 0 },
+        desc: 'Xoay mặt sang phía đối diện và gập cột sống cổ.'
+      },
+      {
+        id: 'musc_6_head_neck_ext',
+        title: '6. Head and Neck Extension',
+        titleVi: '6. Cơ Duỗi Đầu Cổ',
+        subtitle: 'Cơ thang và các cơ sâu vùng gáy',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.40, y: 1.52, z: -0.45, targetX: 0, targetY: 1.50, targetZ: 0 },
+        desc: 'Giữ đầu ngẩng cao và kéo ngửa cột sống cổ ra sau.'
+      },
+      {
+        id: 'musc_7_head_flexion',
+        title: '7. Head Flexion',
+        titleVi: '7. Cơ Gập Đầu',
+        subtitle: 'Cơ dài đầu và cơ dài cổ',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.30, y: 1.54, z: 0.45, targetX: 0, targetY: 1.50, targetZ: 0 },
+        desc: 'Gập cằm về phía xương ức ở mặt trước cột sống cổ.'
+      },
+      {
+        id: 'musc_8_mandible_depression',
+        title: '8. Mandible Depression',
+        titleVi: '8. Cơ Hạ Xương Hàm Dưới',
+        subtitle: 'Cơ hai thân và cơ hàm móng',
+        image: '/images/atlas/musc_head.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.35, y: 1.50, z: 0.35, targetX: 0, targetY: 1.50, targetZ: 0 },
+        desc: 'Mở miệng và hạ hàm dưới khi ăn nhai và nói chuyện.'
+      },
+      {
+        id: 'musc_9_inhalation',
+        title: '9. Inhalation',
+        titleVi: '9. Cơ Hít Vào Thân Mình',
+        subtitle: 'Cơ ngực lớn, ngực bé và cơ liên sườn',
         image: '/images/atlas/musc_torso.png',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0, y: 1.18, z: 1.2, targetX: 0, targetY: 1.15, targetZ: 0 },
-        desc: 'Bảo vệ nội tạng ổ bụng và giữ vững cột sống trong tư thế đứng thẳng.'
+        camera: { x: 0, y: 1.25, z: 0.85, targetX: 0, targetY: 1.25, targetZ: 0 },
+        desc: 'Nâng khung xương sườn mở rộng thể tích khoang ngực.'
       },
       {
-        id: 'musc_limbs',
-        title: '3. Nhóm Cơ Chi Thể',
-        subtitle: 'Cơ vai cánh tay, mông đùi và cẳng chân',
-        badge: 'Chi thể',
+        id: 'musc_10_exhalation',
+        title: '10. Exhalation',
+        titleVi: '10. Cơ Thở Ra Thân Mình',
+        subtitle: 'Cơ thẳng bụng và cơ chéo bụng',
+        image: '/images/atlas/musc_torso.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.2, y: 1.15, z: 0.90, targetX: 0, targetY: 1.15, targetZ: 0 },
+        desc: 'Nén thành bụng đẩy cơ hoành lên trên ép khí ra ngoài.'
+      },
+      {
+        id: 'musc_11_shoulder',
+        title: '11. Shoulder',
+        titleVi: '11. Cơ Vùng Khớp Vai',
+        subtitle: 'Cơ delta, cơ trên gai, dưới gai và cơ tròn',
         image: '/images/atlas/musc_limbs.png',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0, y: 0.9, z: 2.2, targetX: 0, targetY: 0.9, targetZ: 0 },
-        desc: 'Cơ delta, nhị đầu, tam đầu, tứ đầu đùi và nhóm cơ cẳng chân tạo lực vận động.'
+        camera: { x: 0.35, y: 1.35, z: 0.65, targetX: 0.18, targetY: 1.30, targetZ: 0 },
+        desc: 'Đai cơ chóp xoay giữ vững chỏm xương cánh tay trong ổ chảo.'
+      },
+      {
+        id: 'musc_12_elbow',
+        title: '12. Elbow',
+        titleVi: '12. Cơ Vùng Khuỷu Tay',
+        subtitle: 'Cơ nhị đầu, tam đầu và cơ cánh tay',
+        image: '/images/atlas/musc_limbs.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.38, y: 1.10, z: 0.60, targetX: 0.22, targetY: 1.05, targetZ: 0 },
+        desc: 'Thực hiện động tác gập duỗi khớp bản lề khuỷu tay.'
+      },
+      {
+        id: 'musc_13_wrist_hand',
+        title: '13. Wrist and Hand',
+        titleVi: '13. Cơ Cổ Tay & Bàn Tay',
+        subtitle: 'Các gân gập duỗi ngón tay và mạc hãm gân',
+        image: '/images/atlas/reg_upper_limb.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.40, y: 0.85, z: 0.55, targetX: 0.30, targetY: 0.80, targetZ: 0 },
+        desc: 'Điều khiển chuyển động cầm nắm tinh xảo của các ngón tay.'
+      },
+      {
+        id: 'musc_14_upper_back',
+        title: '14. Upper Back',
+        titleVi: '14. Cơ Vùng Lưng Trên',
+        subtitle: 'Cơ lưng rộng, cơ trám và cơ nâng vai',
+        image: '/images/atlas/musc_torso.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0, y: 1.30, z: -0.95, targetX: 0, targetY: 1.28, targetZ: 0 },
+        desc: 'Kéo xương bả vai về sau và áp sát cột sống lưng.'
+      },
+      {
+        id: 'musc_15_lower_back',
+        title: '15. Lower Back',
+        titleVi: '15. Cơ Vùng Thắt Lưng',
+        subtitle: 'Nhóm cơ dựng sống và cơ vuông thắt lưng',
+        image: '/images/atlas/skel_spine.png',
+        systems: ['muscular', 'skeletal'],
+        camera: { x: 0.2, y: 1.05, z: -0.85, targetX: 0, targetY: 1.05, targetZ: 0 },
+        desc: 'Giữ vững trục thắt lưng và chống đỡ toàn bộ nửa trên cơ thể.'
       }
     ]
   },
   {
     id: 'digestive_views',
-    titleVi: 'Hệ Tiêu Hóa & Gan Mật',
+    titleVi: 'Hệ Tiêu Hóa',
+    titleEn: 'Digestive System Views',
     systemKey: 'visceral',
     cards: [
       {
-        id: 'dig_upper',
-        title: '1. Đường Tiêu Hóa Trên',
-        subtitle: 'Thực quản, dạ dày và tá tràng',
-        badge: 'Dạ dày',
+        id: 'dig_1_upper',
+        title: '1. Upper Digestive System',
+        titleVi: '1. Đường Tiêu Hóa Trên',
+        subtitle: 'Miệng, thực quản và dạ dày',
         image: '/images/atlas/dig_upper.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.15, z: 0.82, targetX: 0, targetY: 1.15, targetZ: 0 },
-        highlight: 'Stomach',
-        desc: 'Nơi tiếp nhận, nhào trộn và tiêu hóa sơ bộ thức ăn nhờ axit dịch vị.'
+        camera: { x: 0.35, y: 1.45, z: 0.55, targetX: 0, targetY: 1.40, targetZ: 0 },
+        highlight: 'Esophagus',
+        desc: 'Ống dẫn thức ăn từ miệng qua thực quản xuống dạ dày.'
       },
       {
-        id: 'dig_lower',
-        title: '2. Đường Tiêu Hóa Dưới',
-        subtitle: 'Ruột non, ruột già và trực tràng',
-        badge: 'Ruột non & già',
+        id: 'dig_2_lower',
+        title: '2. Lower Digestive System',
+        titleVi: '2. Đường Tiêu Hóa Dưới',
+        subtitle: 'Ruột non, ruột già và hậu môn trực tràng',
         image: '/images/atlas/dig_lower.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 0.92, z: 0.85, targetX: 0, targetY: 0.92, targetZ: 0 },
+        camera: { x: 0, y: 0.95, z: 0.90, targetX: 0, targetY: 0.95, targetZ: 0 },
         highlight: 'Ascending colon',
-        desc: 'Hấp thu triệt để chất dinh dưỡng và đào thải cặn bã qua đại trực tràng.'
+        desc: 'Hấp thu triệt để chất dinh dưỡng và hình thành khuôn phân.'
       },
       {
-        id: 'dig_peritoneum',
-        title: '3. Gan Mật & Tụy Tạng',
-        subtitle: 'Lá gan, túi mật và tuyến tụy nội/ngoại tiết',
-        badge: 'Gan mật tụy',
+        id: 'dig_3_peritoneum',
+        title: '3. Peritoneum',
+        titleVi: '3. Phúc Mạc & Mạc Nối',
+        subtitle: 'Mạc nối lớn, mạc nối nhỏ và rễ mạc treo',
         image: '/images/atlas/dig_peritoneum.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: -0.15, y: 1.1, z: 0.88, targetX: 0, targetY: 1.1, targetZ: 0 },
-        highlight: 'Gallbladder',
-        desc: 'Nhà máy chuyển hóa chất, khử độc và tiết enzym tiêu hóa thức ăn.'
+        camera: { x: 0, y: 1.05, z: 0.95, targetX: 0, targetY: 1.05, targetZ: 0 },
+        desc: 'Màng bao bọc và cố định các tạng trong ổ bụng, chứa mạch máu nuôi ruột.'
+      },
+      {
+        id: 'dig_4_salivary_glands',
+        title: '4. Salivary Glands',
+        titleVi: '4. Tuyến Nước Bọt',
+        subtitle: 'Tuyến mang tai, dưới hàm và dưới lưỡi',
+        image: '/images/atlas/dig_upper.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0.35, y: 1.54, z: 0.40, targetX: 0, targetY: 1.52, targetZ: 0 },
+        desc: 'Tiết enzym amylase bắt đầu quá trình tiêu hóa tinh bột ngay tại miệng.'
+      },
+      {
+        id: 'dig_5_teeth',
+        title: '5. Teeth',
+        titleVi: '5. Bộ Răng Vĩnh Viễn',
+        subtitle: '32 răng người lớn: răng cửa, nanh, hàm',
+        image: '/images/atlas/skel_skull.png',
+        systems: ['skeletal'],
+        camera: { x: 0, y: 1.54, z: 0.35, targetX: 0, targetY: 1.52, targetZ: 0 },
+        highlight: 'Maxilla',
+        desc: 'Bộ phận cơ học cắn xé và nghiền nhỏ thức ăn trước khi nuốt.'
+      },
+      {
+        id: 'dig_6_laryngopharynx',
+        title: '6. Laryngopharynx',
+        titleVi: '6. Hầu Thanh Quản',
+        subtitle: 'Ngã tư đường ăn và đường thở',
+        image: '/images/atlas/resp_upper.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0.25, y: 1.46, z: 0.40, targetX: 0, targetY: 1.44, targetZ: 0 },
+        desc: 'Nắp thanh nhiệt đậy kín đường thở khi thức ăn đi qua hầu vào thực quản.'
+      },
+      {
+        id: 'dig_7_alimentary_canal',
+        title: '7. Alimentary Canal',
+        titleVi: '7. Toàn Bộ Ống Tiêu Hóa',
+        subtitle: 'Trục ống liên tục từ miệng đến trực tràng',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0, y: 0.95, z: 1.00, targetX: 0, targetY: 0.95, targetZ: 0 },
+        desc: 'Đoạn ống tiêu hóa dài khoảng 9 mét với nhu động co bóp liên tục.'
+      },
+      {
+        id: 'dig_8_stomach_vasculature',
+        title: '8. Stomach Vasculature',
+        titleVi: '8. Mạng Mạch Máu Nuôi Dạ Dày',
+        subtitle: 'Vòng ĐM bờ cong lớn và bờ cong nhỏ',
+        image: '/images/atlas/dig_upper.png',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0.15, y: 1.15, z: 0.75, targetX: 0, targetY: 1.12, targetZ: 0 },
+        highlight: 'Stomach',
+        desc: 'Nhánh tách từ động mạch thân tạng cấp máu phong phú cho dạ dày.'
+      },
+      {
+        id: 'dig_9_sphincters',
+        title: '9. Sphincters',
+        titleVi: '9. Các Cơ Thắt Đường Tiêu Hóa',
+        subtitle: 'Cơ thắt tâm vị, môn vị, van hồi manh tràng',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['visceral'],
+        camera: { x: 0, y: 1.05, z: 0.70, targetX: 0, targetY: 1.05, targetZ: 0 },
+        desc: 'Các van một chiều ngăn trào ngược dịch vị và kiểm soát lưu thông thức ăn.'
+      },
+      {
+        id: 'dig_10_accessory_organs',
+        title: '10. Accessory Organs',
+        titleVi: '10. Tuyến Tiêu Hóa Phụ Trợ',
+        subtitle: 'Lá gan, túi mật và tuyến tụy',
+        image: '/images/atlas/dig_peritoneum.png',
+        systems: ['visceral'],
+        camera: { x: -0.15, y: 1.15, z: 0.75, targetX: 0, targetY: 1.12, targetZ: 0 },
+        highlight: 'Liver',
+        desc: 'Sản xuất mật nhũ hóa chất béo và enzym phân giải protid, lipid, glucid.'
+      },
+      {
+        id: 'dig_11_regional_vasculature',
+        title: '11. Regional Vasculature',
+        titleVi: '11. Mạch Máu Vùng Ổ Bụng',
+        subtitle: 'ĐM mạc treo tràng trên và tĩnh mạch cửa',
+        image: '/images/atlas/dig_peritoneum.png',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0.1, y: 1.12, z: 0.80, targetX: 0, targetY: 1.10, targetZ: 0 },
+        desc: 'Thu gom toàn bộ chất dinh dưỡng hấp thu từ ruột về gan xử lý.'
+      },
+      {
+        id: 'dig_12_intestines',
+        title: '12. Intestines',
+        titleVi: '12. Ruột Non & Ruột Già',
+        subtitle: 'Hỗng tràng, hồi tràng, đại tràng lên, ngang, xuống',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0, y: 0.95, z: 0.85, targetX: 0, targetY: 0.92, targetZ: 0 },
+        desc: 'Toàn bộ các quai ruột non và khung đại tràng bao quanh ổ bụng.'
       }
     ]
   },
   {
     id: 'lymphatic_views',
-    titleVi: 'Hệ Bạch Huyết & Miễn Dịch',
+    titleVi: 'Hệ Bạch Huyết',
+    titleEn: 'Lymphatic System Views',
     systemKey: 'lymphatic',
     cards: [
       {
         id: 'lymph_spleen',
-        title: '1. Lá Lách & Hệ Bạch Huyết',
+        title: '1. Spleen & Lymphatics',
+        titleVi: '1. Lá Lách & Hệ Bạch Huyết',
         subtitle: 'Lá lách (Tỳ), chuỗi hạch bạch huyết và ống ngực',
         badge: 'Lá lách & Miễn dịch',
         image: '/images/atlas/lymph_spleen.png',
@@ -595,7 +907,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
       },
       {
         id: 'lymph_nodes_system',
-        title: '2. Mạng Lưới Hạch Bạch Huyết Toàn Thân',
+        title: '2. Lymphatic Nodes Network',
+        titleVi: '2. Mạng Lưới Hạch Bạch Huyết Toàn Thân',
         subtitle: 'Hạch vùng cổ, nách, bẹn và ống ngực dẫn lưu',
         badge: 'Hạch bạch huyết',
         image: '/images/atlas/lymph_nodes_system.png',
@@ -608,12 +921,14 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
   },
   {
     id: 'urinary_views',
-    titleVi: 'Hệ Tiết Niệu & Vùng Chậu',
+    titleVi: 'Hệ Tiết Niệu',
+    titleEn: 'Urinary System Views',
     systemKey: 'visceral',
     cards: [
       {
         id: 'urin_system',
-        title: '1. Hệ Tiết Niệu Thận',
+        title: '1. Urinary System',
+        titleVi: '1. Hệ Tiết Niệu Thận',
         subtitle: 'Hai quả thận, niệu quản và bàng quang',
         badge: 'Thận tiết niệu',
         image: '/images/atlas/urin_system.png',
@@ -624,7 +939,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
       },
       {
         id: 'urin_pelvic',
-        title: '2. Các Tạng Vùng Chậu',
+        title: '2. Pelvic Organs',
+        titleVi: '2. Các Tạng Vùng Chậu',
         subtitle: 'Bàng quang, niệu đạo và đáy chậu',
         badge: 'Chậu hông',
         image: '/images/atlas/urin_pelvic.png',
