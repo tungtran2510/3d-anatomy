@@ -12,7 +12,7 @@ import { getSubSystemParts } from './sidebar.js';
 import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
-import { toggleBodyEnvelope, isBodyEnvelopeVisible, setBodyEnvelopeVisible } from '../viewer/bodyEnvelope.js';
+import { toggleBodyEnvelope, isBodyEnvelopeVisible, setBodyEnvelopeVisible, updateBodyEnvelopeAuto } from '../viewer/bodyEnvelope.js';
 
 export const SYSTEM_CONFIGS = [
   { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 4, defaultLevel: 4, baseSystem: 'skeletal' },

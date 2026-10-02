@@ -11,11 +11,25 @@ import { triggerManualSync, checkPendingCount, showSyncToast } from '../utils/sy
 let offlineModalEl = null;
 let currentViewer = null;
 
+export const MODELS_CACHE_NAME = 'atlas-models-atlas-v1.0.0';
+
+export async function getActiveModelsCache() {
+  if (typeof window === 'undefined' || !('caches' in window)) return null;
+  try {
+    const keys = await caches.keys();
+    const found = keys.find(k => k.startsWith('atlas-models'));
+    return await caches.open(found || MODELS_CACHE_NAME);
+  } catch (err) {
+    console.warn('[OfflineModal] Cannot open cache:', err);
+    return null;
+  }
+}
+
 export const SYSTEM_CATALOG = [
   {
     id: 'skeletal',
     nameVi: 'Hệ Xương & Khớp',
-    nameEn: 'Skeletal & Joints',
+    nameEn: 'Xương & Khớp',
     icon: '🦴',
     models: ['skeletal.glb', 'joints.glb'],
     sizeMB: 2.7
@@ -23,7 +37,7 @@ export const SYSTEM_CATALOG = [
   {
     id: 'muscular',
     nameVi: 'Hệ Cơ Bắp',
-    nameEn: 'Muscular System',
+    nameEn: 'Hệ Cơ bắp',
     icon: '💪',
     models: ['muscular.glb'],
     sizeMB: 4.5
@@ -31,7 +45,7 @@ export const SYSTEM_CATALOG = [
   {
     id: 'nervous',
     nameVi: 'Hệ Thần Kinh & Não',
-    nameEn: 'Nervous System',
+    nameEn: 'Não & Thần kinh',
     icon: '🧠',
     models: ['nervous.glb'],
     sizeMB: 3.8
@@ -39,7 +53,7 @@ export const SYSTEM_CATALOG = [
   {
     id: 'cardiovascular',
     nameVi: 'Hệ Tuần Hoàn & Tim',
-    nameEn: 'Cardiovascular System',
+    nameEn: 'Tuần hoàn & Tim',
     icon: '🫀',
     models: ['cardiovascular.glb'],
     sizeMB: 5.6
@@ -47,7 +61,7 @@ export const SYSTEM_CATALOG = [
   {
     id: 'visceral',
     nameVi: 'Hệ Nội Tạng & Hô Hấp',
-    nameEn: 'Visceral & Respiratory',
+    nameEn: 'Nội tạng & Phổi',
     icon: '🫁',
     models: ['visceral.glb'],
     sizeMB: 1.8
@@ -55,7 +69,7 @@ export const SYSTEM_CATALOG = [
   {
     id: 'lymphatic',
     nameVi: 'Hệ Bạch Huyết',
-    nameEn: 'Lymphatic System',
+    nameEn: 'Bạch huyết',
     icon: '🛡️',
     models: ['lymphatic.glb'],
     sizeMB: 0.4
@@ -63,7 +77,7 @@ export const SYSTEM_CATALOG = [
   {
     id: 'integumentary',
     nameVi: 'Hệ Da (Lớp Da Người)',
-    nameEn: 'Integumentary System',
+    nameEn: 'Lớp Da người',
     icon: '👤',
     models: ['integumentary.glb'],
     sizeMB: 1.1
@@ -102,6 +116,8 @@ async function renderModalContent(targetSystemId = null) {
   const heapInfo = getHeapMemoryInfo();
   const pendingCount = await checkPendingCount();
   const cachedUrls = await getCachedUrlsFromSW();
+  const totalSystemsCount = SYSTEM_CATALOG.length;
+  const totalSizeMB = SYSTEM_CATALOG.reduce((acc, s) => acc + (s.sizeMB || 0), 0).toFixed(1);
 
   const allCached = SYSTEM_CATALOG.every(sys =>
     sys.models.every(m => cachedUrls.some(u => u.includes(m)))
@@ -119,9 +135,9 @@ async function renderModalContent(targetSystemId = null) {
             <h3 class="offline-title">Tải Ngoại Tuyến (Offline)</h3>
             <div class="offline-sub-row">
               <span class="status-indicator-dot ${navigator.onLine ? 'online' : 'offline'}"></span>
-              <span class="status-net-text">${navigator.onLine ? 'Đang trực tuyến' : 'Ngoại tuyến'}</span>
+              <span class="status-net-text">${navigator.onLine ? 'Trực tuyến' : 'Ngoại tuyến'}</span>
               <span class="status-divider">•</span>
-              <span class="status-count-text">6 hệ giải phẫu (~18.8 MB)</span>
+              <span class="status-count-text">${totalSystemsCount} hệ (${totalSizeMB} MB)</span>
             </div>
           </div>
         </div>
@@ -135,23 +151,21 @@ async function renderModalContent(targetSystemId = null) {
           <div class="hero-top-row">
             <div class="hero-badge">
               <span class="pulse-dot"></span>
-              <span>${allCached ? 'ĐÃ SẴN SÀNG OFFLINE 100%' : 'KHUYÊN DÙNG CHO ĐIỆN THOẠI'}</span>
+              <span>${allCached ? 'ĐÃ LƯU OFFLINE 100%' : 'KHUYÊN DÙNG'}</span>
             </div>
             <div class="hero-wifi-pill">
-              <span>📶 Nên dùng Wi-Fi</span>
+              <span>📶 Khuyên dùng Wi-Fi</span>
             </div>
           </div>
 
           <div class="hero-content">
             <h4 class="hero-download-title">${allCached ? 'Thư Viện 3D Đã Sẵn Sàng Ngoại Tuyến' : 'Tải Toàn Bộ Thư Viện 3D'}</h4>
-            <p class="hero-download-desc">
-              Lưu toàn bộ mô hình giải phẫu 3D vào bộ nhớ máy giúp thao tác siêu mượt, không giật lag và tra cứu 100% không cần Internet.
-            </p>
+            <p class="hero-download-desc">Lưu toàn bộ mô hình vào bộ nhớ máy giúp thao tác siêu mượt và tra cứu 100% không cần Internet.</p>
           </div>
 
           <button type="button" class="btn-hero-download-all ${allCached ? 'is-complete' : ''}" id="btnHeroDownloadAll">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span id="heroDownloadBtnText">${allCached ? '✓ ĐÃ TẢI TOÀN BỘ (DÙNG OFFLINE 100%)' : 'TẢI TẤT CẢ VỀ MÁY (18.8 MB)'}</span>
+            <span id="heroDownloadBtnText">${allCached ? '✓ ĐÃ TẢI TOÀN BỘ (DÙNG OFFLINE 100%)' : `TẢI TẤT CẢ VỀ MÁY (${totalSizeMB} MB)`}</span>
           </button>
 
           <div class="download-progress-container hidden" id="masterProgressContainer">
@@ -351,22 +365,13 @@ async function downloadSingleSystem(sysId) {
     badge.textContent = 'Đang tải...';
   }
 
-const MODELS_CACHE_NAME = 'atlas-models-atlas-v1.0.0';
-
-async function getActiveModelsCache() {
-  if (!('caches' in window)) return null;
-  const keys = await caches.keys();
-  const found = keys.find(k => k.startsWith('atlas-models'));
-  return await caches.open(found || MODELS_CACHE_NAME);
-}
-
   try {
+    const cache = await getActiveModelsCache();
     for (const modelFile of sys.models) {
       const url = asset(`models/${modelFile}`);
-      const res = await fetch(url);
-      const cache = await getActiveModelsCache();
-      if (cache) {
-        await cache.put(url, res);
+      const res = await fetch(url, { cache: 'reload' });
+      if (res.ok && cache) {
+        await cache.put(url, res.clone());
       }
     }
     showSyncToast(`✓ Đã tải xong ${sys.nameVi} vào bộ nhớ ngoại tuyến!`, 'success');
@@ -416,7 +421,7 @@ async function downloadAllSystems() {
 
   for (let i = 0; i < total; i++) {
     const sys = SYSTEM_CATALOG[i];
-    const pct = Math.round((i / (total + 1)) * 100);
+    const pct = Math.round(((i + 1) / (total + 1)) * 100);
     if (label) label.textContent = `Đang tải ${sys.nameVi} (${i + 1}/${total})... (${pct}%)`;
     if (heroBtnText) heroBtnText.textContent = `ĐANG TẢI... (${pct}%)`;
     if (bar) bar.style.width = `${pct}%`;
@@ -424,9 +429,9 @@ async function downloadAllSystems() {
     try {
       for (const modelFile of sys.models) {
         const url = asset(`models/${modelFile}`);
-        const res = await fetch(url);
-        if (cache) {
-          await cache.put(url, res);
+        const res = await fetch(url, { cache: 'reload' });
+        if (res.ok && cache) {
+          await cache.put(url, res.clone());
         }
       }
       completed++;
@@ -441,9 +446,9 @@ async function downloadAllSystems() {
   try {
     for (const jsonFile of ['data/systems.json', 'data/lexicon.json']) {
       const url = asset(jsonFile);
-      const res = await fetch(url);
-      if (cache) {
-        await cache.put(url, res);
+      const res = await fetch(url, { cache: 'reload' });
+      if (res.ok && cache) {
+        await cache.put(url, res.clone());
       }
     }
   } catch (err) {
@@ -451,7 +456,7 @@ async function downloadAllSystems() {
   }
 
   if (bar) bar.style.width = '100%';
-  if (label) label.textContent = `✓ Đã hoàn tất tải 100% dữ liệu (${completed}/${total} hệ giải phẫu)!`;
+  if (label) label.textContent = `✓ Đã hoàn tất tải 100% (${completed}/${total} hệ giải phẫu)!`;
   if (heroBtnText) heroBtnText.textContent = '✓ ĐÃ TẢI TOÀN BỘ (DÙNG OFFLINE 100%)';
   if (heroBtn) {
     heroBtn.classList.add('is-complete');

@@ -158,7 +158,7 @@ function processModel(model, systemId, viewer) {
   // exporter rewrites object names (spaces, dots) and paired structures would
   // otherwise collapse onto the same name.
   model.traverse((child) => {
-    const partId = child.userData?.za_name;
+    const partId = child.userData?.za_name || child.userData?.partId || (child.isMesh && child.name ? child.name : null);
     if (!partId) return;
 
     child.userData.partId = partId;
