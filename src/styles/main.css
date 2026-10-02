@@ -7093,6 +7093,8 @@ body.theme-dark .tab-vertical-text {
   align-items: center;
   justify-content: center;
   width: 100%;
+  cursor: pointer;
+  user-select: none;
 }
 .system-name-tag {
   font-size: 9px;
@@ -7101,6 +7103,11 @@ body.theme-dark .tab-vertical-text {
   text-transform: uppercase;
   letter-spacing: 0.3px;
   white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.system-name-tag:hover {
+  color: #0284c7;
 }
 .system-stepper-item.is-active .system-name-tag {
   color: #0369a1;

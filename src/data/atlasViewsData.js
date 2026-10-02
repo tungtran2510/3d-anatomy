@@ -830,7 +830,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         subtitle: 'Trục ống liên tục từ miệng đến trực tràng',
         image: '/images/atlas/dig_lower.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 0.95, z: 1.00, targetX: 0, targetY: 0.95, targetZ: 0 },
+        camera: { x: 0, y: 1.12, z: 1.55, targetX: 0, targetY: 1.12, targetZ: 0 },
         desc: 'Đoạn ống tiêu hóa dài khoảng 9 mét với nhu động co bóp liên tục.'
       },
       {

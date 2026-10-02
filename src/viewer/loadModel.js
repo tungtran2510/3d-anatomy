@@ -301,86 +301,208 @@ function enhanceMaterialForOrgan(mesh, systemId) {
 
   if (systemId === 'visceral') {
     if (partName.includes('greater omentum') || partName.includes('lesser omentum') || partName.includes('mạc nối')) {
-      // Greater / Lesser Omentum: Physiological adipose apron (chuẩn Visible Body Photo 1)
+      // Greater / Lesser Omentum: Delicate physiological adipose veil (chuẩn Visible Body Photo 1)
       applyCustomProps(mesh, {
         name: 'PBR_Omentum',
-        color: 0xBA867E,
-        roughness: 0.35,
-        metalness: 0.02,
+        color: 0xE8DBBF,
+        roughness: 0.42,
+        metalness: 0.0,
         transparent: true,
-        opacity: 0.90,
-        depthWrite: true,
+        opacity: 0.30,
+        depthWrite: false,
         bumpMap: bump,
-        bumpScale: 0.0012,
+        bumpScale: 0.0010,
         renderOrder: 10
       });
     } else if (partName.includes('mesocolon') || partName.includes('meso-appendix') || matName.includes('peritoneum')) {
-      // Peritoneum & Mesentery
+      // Peritoneum & Mesentery: delicate glistening peritoneal fold
       applyCustomProps(mesh, {
         name: 'PBR_Peritoneum',
         color: 0xE5DAC0,
         roughness: 0.38,
-        metalness: 0.01,
+        metalness: 0.0,
         transparent: true,
-        opacity: 0.50,
+        opacity: 0.40,
         depthWrite: false,
         renderOrder: 8
       });
     } else if (partName.includes('liver') || partName.includes('gan')) {
-      // Liver & hepatic segments: deep rich mahogany red-brown parenchymal tissue
+      // Liver & hepatic segments (I to VIII): deep rich mahogany red-brown parenchymal tissue with moist Glisson's capsule sheen (chuẩn Visible Body Photo 2-4)
       applyCustomProps(mesh, {
         name: 'PBR_Liver',
-        color: 0x5A1A18,
-        roughness: 0.22,
-        metalness: 0.05,
+        color: 0x4E1715,
+        roughness: 0.24,
+        metalness: 0.0,
         bumpMap: bump,
-        bumpScale: 0.0008
+        bumpScale: 0.0006
       });
-    } else if (partName.includes('gallbladder') || partName.includes('bile duct') || matName.includes('gallbladder')) {
-      // Gallbladder & bile ducts: wet emerald green
+    } else if (partName.includes('gallbladder') || partName.includes('túi mật')) {
+      // Gallbladder: pearlescent muted slate teal/greenish-gray (chuẩn Visible Body Photo 2-3)
       applyCustomProps(mesh, {
         name: 'PBR_Gallbladder',
-        color: 0x1B4E28,
-        roughness: 0.14,
-        metalness: 0.08
+        color: 0x365E53,
+        roughness: 0.20,
+        metalness: 0.0
       });
-    } else if (partName.includes('stomach') || partName.includes('dạ dày')) {
-      // Stomach: thick muscular mucosal wall
+    } else if (partName.includes('bile duct') || partName.includes('cystic duct') || partName.includes('hepatic duct') || partName.includes('ống mật')) {
+      // Bile ducts: delicate smooth greenish-teal duct
+      applyCustomProps(mesh, {
+        name: 'PBR_BileDuct',
+        color: 0x487466,
+        roughness: 0.25,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.92,
+        depthWrite: true
+      });
+    } else if (partName.includes('stomach') || partName.includes('dạ dày') || partName.includes('gastric')) {
+      // Stomach: warm living gastric mucosa & muscularis with semi-translucent wall showing inner cavity & rugae folds (chuẩn Visible Body Photo 2-5)
       applyCustomProps(mesh, {
         name: 'PBR_Stomach',
-        color: 0xBA5A4E,
-        roughness: 0.25,
-        metalness: 0.03,
-        bumpMap: bump,
-        bumpScale: 0.0012
-      });
-    } else if (partName.includes('duodenum') || partName.includes('jejunum') || partName.includes('ileum')) {
-      // Small intestine: living warm coral-pink loops
-      applyCustomProps(mesh, {
-        name: 'PBR_SmallIntestine',
-        color: 0xCF6D62,
-        roughness: 0.22,
-        metalness: 0.04,
+        color: 0xBD6E68,
+        roughness: 0.28,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.84,
+        depthWrite: true,
         bumpMap: bump,
         bumpScale: 0.0010
       });
+    } else if (partName.includes('duodenum') || partName.includes('tá tràng')) {
+      // Duodenum: C-loop wrapping around pancreas head with living mucosal depth
+      applyCustomProps(mesh, {
+        name: 'PBR_Duodenum',
+        color: 0xD0847A,
+        roughness: 0.28,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.90,
+        depthWrite: true,
+        bumpMap: bump,
+        bumpScale: 0.0008
+      });
+    } else if (partName.includes('jejunum') || partName.includes('ileum') || partName.includes('ruột non') || partName.includes('hỗng tràng') || partName.includes('hồi tràng')) {
+      // Small intestine: living delicate warm coral-pink loops with semi-translucency avoiding plastic hose effect (chuẩn Visible Body Photo 2-3)
+      applyCustomProps(mesh, {
+        name: 'PBR_SmallIntestine',
+        color: 0xD89288,
+        roughness: 0.30,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.90,
+        depthWrite: true,
+        bumpMap: bump,
+        bumpScale: 0.0008
+      });
     } else if (partName.includes('taenia')) {
-      // Taenia coli: silvery-ivory longitudinal smooth muscle bands
+      // Taenia coli: silvery-ivory longitudinal smooth muscle band
       applyCustomProps(mesh, {
         name: 'PBR_TaeniaColi',
-        color: 0xE4DEC8,
-        roughness: 0.40,
-        metalness: 0.02
+        color: 0xDDD6C2,
+        roughness: 0.35,
+        metalness: 0.0
       });
-    } else if (partName.includes('colon') || partName.includes('caecum') || partName.includes('rectum') || partName.includes('appendix')) {
-      // Large intestine / Colon haustra
+    } else if (partName.includes('appendix') || partName.includes('ruột thừa')) {
+      // Vermiform appendix: tapered vascular mucosal appendage hanging from cecum (chuẩn Visible Body Photo 2-3)
+      applyCustomProps(mesh, {
+        name: 'PBR_Appendix',
+        color: 0xAB5E55,
+        roughness: 0.26,
+        metalness: 0.0
+      });
+    } else if (partName.includes('rectum') || partName.includes('anal') || partName.includes('trực tràng') || partName.includes('hậu môn')) {
+      // Rectum & anal canal: deeper muscular tone with longitudinal striations (chuẩn Visible Body Photo 1-3)
+      applyCustomProps(mesh, {
+        name: 'PBR_Rectum',
+        color: 0xA65850,
+        roughness: 0.30,
+        metalness: 0.0
+      });
+    } else if (partName.includes('colon') || partName.includes('caecum') || partName.includes('cecum') || partName.includes('đại tràng') || partName.includes('manh tràng')) {
+      // Large intestine / Colon haustra: segmented mucosal muscular sacs with subtle translucency (chuẩn Visible Body Photo 2-3)
       applyCustomProps(mesh, {
         name: 'PBR_Colon',
-        color: 0xA65850,
-        roughness: 0.25,
-        metalness: 0.03,
+        color: 0xB86C64,
+        roughness: 0.28,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.92,
+        depthWrite: true,
+        bumpMap: bump,
+        bumpScale: 0.0010
+      });
+    } else if (partName.includes('pancreatic duct') || partName.includes('ống tụy')) {
+      // Pancreatic ducts (Wirsung, Santorini): fine pearly-white duct
+      applyCustomProps(mesh, {
+        name: 'PBR_PancreaticDuct',
+        color: 0xEDE9DF,
+        roughness: 0.30,
+        metalness: 0.0
+      });
+    } else if (partName.includes('pancreas') || partName.includes('tụy')) {
+      // Pancreas: textured granular cornmeal/ochre-yellow tan lobular gland (chuẩn Visible Body Photo 2-3)
+      applyCustomProps(mesh, {
+        name: 'PBR_Pancreas',
+        color: 0xBF9854,
+        roughness: 0.60,
+        metalness: 0.0,
+        bumpMap: bump,
+        bumpScale: 0.0025
+      });
+    } else if (partName.includes('esophagus') || partName.includes('oesophagus') || partName.includes('thực quản')) {
+      // Esophagus: slender smooth mucosal muscular tube descending anterior to spine (chuẩn Visible Body Photo 2 & 5)
+      applyCustomProps(mesh, {
+        name: 'PBR_Esophagus',
+        color: 0xA25E64,
+        roughness: 0.28,
+        metalness: 0.0,
+        bumpMap: bump,
+        bumpScale: 0.0006
+      });
+    } else if (partName.includes('parotid') || partName.includes('submandibular') || partName.includes('sublingual') || partName.includes('salivary') || partName.includes('tuyến nước bọt') || partName.includes('tuyến mang tai')) {
+      if (partName.includes('duct') || partName.includes('ống')) {
+        applyCustomProps(mesh, {
+          name: 'PBR_SalivaryDuct',
+          color: 0xD8D0C4,
+          roughness: 0.30,
+          metalness: 0.0
+        });
+      } else {
+        // Salivary glands: textured lobular salmon-tan gland (chuẩn Visible Body Photo 5)
+        applyCustomProps(mesh, {
+          name: 'PBR_SalivaryGland',
+          color: 0xB87E6C,
+          roughness: 0.58,
+          metalness: 0.0,
+          bumpMap: bump,
+          bumpScale: 0.0022
+        });
+      }
+    } else if (partName.includes('tongue') || partName.includes('lưỡi')) {
+      // Tongue: muscular papillar mucosal tongue
+      applyCustomProps(mesh, {
+        name: 'PBR_Tongue',
+        color: 0xC26672,
+        roughness: 0.38,
+        metalness: 0.0,
         bumpMap: bump,
         bumpScale: 0.0012
+      });
+    } else if (partName.includes('gingiva') || partName.includes('nướu') || partName.includes('palate') || partName.includes('khẩu cái')) {
+      // Oral mucosa, gums & palate
+      applyCustomProps(mesh, {
+        name: 'PBR_OralMucosa',
+        color: 0xBD6D78,
+        roughness: 0.32,
+        metalness: 0.0
+      });
+    } else if (partName.includes('pharynx') || partName.includes('hầu')) {
+      // Pharynx: muscular mucosal funnel
+      applyCustomProps(mesh, {
+        name: 'PBR_Pharynx',
+        color: 0xA8666C,
+        roughness: 0.32,
+        metalness: 0.0
       });
     } else if (partName.includes('kidney') || partName.includes('thận')) {
       // Kidneys: reddish-brown renal cortex
@@ -431,21 +553,12 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         metalness: 0.02
       });
     } else if (partName.includes('spleen') || partName.includes('lá lách')) {
-      // Spleen: vascular lymphoid purplish-crimson
+      // Spleen: vascular lymphoid purplish-crimson (chuẩn Visible Body Photo 1-4)
       applyCustomProps(mesh, {
         name: 'PBR_Spleen',
-        color: 0x662434,
-        roughness: 0.25,
-        metalness: 0.03
-      });
-    } else if (partName.includes('pancreas') || partName.includes('tụy')) {
-      // Pancreas: lobular glandular warm yellowish-pink
-      applyCustomProps(mesh, {
-        name: 'PBR_Pancreas',
-        color: 0xD4A284,
-        roughness: 0.45,
-        bumpMap: bump,
-        bumpScale: 0.0020
+        color: 0x581F2C,
+        roughness: 0.24,
+        metalness: 0.02
       });
     } else if (partName.includes('pleura') || matName.includes('pleura') || partName.includes('màng phổi')) {
       // Pleura: smooth delicate semi-transparent bluish-lavender serous pleural sac (chuẩn Visible Body Atlas)

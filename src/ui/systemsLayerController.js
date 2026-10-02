@@ -12,7 +12,7 @@ import { getSubSystemParts } from './sidebar.js';
 import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
-import { toggleBodyEnvelope, isBodyEnvelopeVisible } from '../viewer/bodyEnvelope.js';
+import { toggleBodyEnvelope, isBodyEnvelopeVisible, setBodyEnvelopeVisible } from '../viewer/bodyEnvelope.js';
 
 export const SYSTEM_CONFIGS = [
   { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 4, defaultLevel: 4, baseSystem: 'skeletal' },
@@ -626,6 +626,106 @@ export function isSkeletalVisibleAtLevel(pIdLower, level) {
   return true;
 }
 
+export function isSkullOrTeeth(partIdLower) {
+  return partIdLower.includes('skull') ||
+         partIdLower.includes('frontal') ||
+         partIdLower.includes('parietal') ||
+         partIdLower.includes('occipital') ||
+         partIdLower.includes('temporal') ||
+         partIdLower.includes('sphenoid') ||
+         partIdLower.includes('ethmoid') ||
+         partIdLower.includes('maxilla') ||
+         partIdLower.includes('mandible') ||
+         partIdLower.includes('zygomatic') ||
+         partIdLower.includes('nasal') ||
+         partIdLower.includes('lacrimal') ||
+         partIdLower.includes('palatine') ||
+         partIdLower.includes('vomer') ||
+         partIdLower.includes('hyoid') ||
+         partIdLower.includes('concha') ||
+         partIdLower.includes('ossicle') ||
+         partIdLower.includes('malleus') ||
+         partIdLower.includes('incus') ||
+         partIdLower.includes('stapes') ||
+         partIdLower.includes('tooth') ||
+         partIdLower.includes('teeth') ||
+         partIdLower.includes('molar') ||
+         partIdLower.includes('incisor') ||
+         partIdLower.includes('canine') ||
+         partIdLower.includes('premolar') ||
+         partIdLower.includes('sọ') ||
+         partIdLower.includes('hàm') ||
+         partIdLower.includes('răng');
+}
+
+export async function focusDigestiveSystem(viewer = state.viewer || window.viewer) {
+  if (!viewer) return;
+
+  // 1. Ensure visceral and skeletal models are loaded
+  if (!state.loadedSystems.includes('visceral')) {
+    setItemLoading('digestive', true);
+    await loadModel('visceral', viewer);
+    setItemLoading('digestive', false);
+  }
+  if (!state.loadedSystems.includes('skeletal')) {
+    await loadModel('skeletal', viewer);
+  }
+
+  // 2. Hide other soft-tissue systems
+  SYSTEM_CONFIGS.forEach(sys => {
+    if (sys.id !== 'digestive' && sys.id !== 'skeletal') {
+      systemLevels[sys.id] = 0;
+      updateItemUI(sys.id);
+    }
+  });
+  ['muscular', 'cardiovascular', 'lymphatic', 'nervous'].forEach(s => hideSystem(s));
+
+  // 3. Configure Visceral: Level 3.0 (all organs: liver, gallbladder, stomach, pancreas, intestines, colon, esophagus, salivary glands, tongue visible; omentum hidden)
+  showSystem('visceral');
+  systemLevels.digestive = 3.0;
+  systemLevels.respiratory = 0;
+  systemLevels.urinary_genital = 0;
+  systemLevels.endocrine = 0;
+
+  const visceralNodes = getMeshesBySystem('visceral') || [];
+  visceralNodes.forEach(n => {
+    const partId = n.userData?.partId;
+    if (!partId) return;
+    const lower = partId.toLowerCase();
+    const subType = getVisceralSubType(lower);
+    if (subType === 'digestive') {
+      setStructureVisible(partId, isDigestiveVisibleAtLevel(lower, 3.0));
+    } else {
+      setStructureVisible(partId, false);
+    }
+  });
+
+  // 4. Configure Skeletal: Keep Skull & Teeth at head, hide ribs, vertebrae, pelvis, limbs
+  showSystem('skeletal');
+  systemLevels.skeletal = 1.5;
+  const skeletalNodes = getMeshesBySystem('skeletal') || [];
+  skeletalNodes.forEach(n => {
+    const partId = n.userData?.partId;
+    if (!partId) return;
+    const lower = partId.toLowerCase();
+    const isHeadBone = isSkullOrTeeth(lower);
+    setStructureVisible(partId, isHeadBone);
+  });
+
+  // 5. Activate frosted body silhouette envelope
+  setBodyEnvelopeVisible(true, viewer);
+  const envBtn = drawerEl?.querySelector('#btnToggleEnvelope');
+  if (envBtn) envBtn.classList.add('active');
+
+  // 6. Frame camera on anterior digestive tract (Visible Body Photo 2 & 3: target at stomach/navel level, z ~1.55)
+  frameRegion({ x: 0, y: 1.12, z: 1.55, targetX: 0, targetY: 1.12, targetZ: 0 }, viewer);
+
+  // 7. Update UI steppers
+  SYSTEM_CONFIGS.forEach(sys => updateItemUI(sys.id));
+  updateSilhouetteActive('front');
+  viewer?.render?.();
+}
+
 const loadingSystems = new Set();
 let drawerEl = null;
 let pullTabEl = null;
@@ -826,9 +926,25 @@ function setupEvents(viewer) {
     });
   });
 
-  // 7. Stepper Actions (+, -, Icon toggle) with 0.5 step
+  // 7. Stepper Actions (+, -, Icon toggle, or item title click) with 0.5 step
   drawerEl?.querySelector('#stepperSystemsList')?.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
+    const header = e.target.closest('.stepper-item-header') || e.target.closest('.system-name-tag');
+
+    if (header) {
+      const item = header.closest('.system-stepper-item');
+      const sysId = item?.dataset?.system;
+      if (sysId === 'digestive') {
+        const cur = Number(systemLevels.digestive) || 0;
+        if (cur <= 0) {
+          await focusDigestiveSystem(viewer);
+        } else {
+          await applySystemLevel('digestive', 0, viewer);
+        }
+        return;
+      }
+    }
+
     if (!btn || btn.disabled) return;
     const action = btn.dataset.action;
     const sysId = btn.dataset.system;
@@ -925,6 +1041,14 @@ async function decrementSystemLevel(systemId, viewer) {
 
 async function toggleSystemLevel(systemId, viewer) {
   const current = Number(systemLevels[systemId]) || 0;
+  if (systemId === 'digestive') {
+    if (current <= 0) {
+      await focusDigestiveSystem(viewer);
+    } else {
+      await applySystemLevel(systemId, 0, viewer);
+    }
+    return;
+  }
   const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
   const maxLvl = cfg?.maxLevels || 4;
   const next = current > 0 ? 0 : maxLvl;
