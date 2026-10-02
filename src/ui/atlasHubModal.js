@@ -25,6 +25,7 @@ import { setModelOrientation } from '../viewer/orientationManager.js';
 import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
 import { normalise, searchStructures } from '../utils/dataLoader.js';
 import { setExplodeFactor, resetExplode } from '../viewer/explodedView.js';
+import { applyAtlasPreset } from './atlasPresetEngine.js';
 
 function escapeHtml(text) {
   if (!text) return '';
@@ -953,88 +954,13 @@ function bindCardClickEvents(container, viewer) {
 // ACTION: Apply 3D View Preset
 async function applyAtlasView(card, viewer) {
   closeAtlasHub();
-  showToast(`🎯 Đang tải góc nhìn: ${card.title}...`);
+  showToast(`🎯 Đang tải góc nhìn: ${card.titleVi || card.title}...`);
 
   const activeViewer = viewer || state.viewer || window.viewer;
   if (!activeViewer) return;
 
   try {
-    // 1. Load requested systems
-    const systemsToLoad = card.systems || ['skeletal'];
-    for (const sys of systemsToLoad) {
-      if (!state.loadedSystems.includes(sys)) {
-        await loadModel(sys, activeViewer);
-      }
-      showSystem(sys);
-    }
-
-    // Hide systems not in view
-    ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'].forEach(sys => {
-      if (!systemsToLoad.includes(sys)) {
-        hideSystem(sys);
-      }
-    });
-
-    // 2. Set Model Orientation & Dissection Table
-    setModelOrientation(card.orientation || 'standing', activeViewer, { showTable: !!card.showTable });
-
-    // 3. Handle Explode factor (e.g. Disarticulated Skull)
-    if (card.explode) {
-      setExplodeFactor(card.explode / 100, activeViewer);
-      const btnExplode = document.getElementById('btnToolExplode');
-      btnExplode?.classList.add('active');
-    } else {
-      resetExplode(activeViewer);
-      const btnExplode = document.getElementById('btnToolExplode');
-      btnExplode?.classList.remove('active');
-    }
-
-    // 4. Handle Cross-Section Clipping vs Kinematic Muscle Action vs Normal View
-    if (card.plane) {
-      closeMotionPanel();
-      setClippingPlane(card.plane, card.offset !== undefined ? card.offset : 0, false, activeViewer, true);
-      document.getElementById('btnToolClipping')?.classList.add('active');
-      import('./radiologicalScout.js').then(({ showScoutView }) => {
-        showScoutView(card, card.plane, card.offset);
-      });
-    } else if (card.motionId) {
-      import('./radiologicalScout.js').then(({ hideScoutView }) => {
-        hideScoutView();
-      });
-      disableClipping(activeViewer);
-      document.getElementById('btnToolClipping')?.classList.remove('active');
-      openMotionPanel(activeViewer, card.motionId);
-    } else {
-      import('./radiologicalScout.js').then(({ hideScoutView }) => {
-        hideScoutView();
-      });
-      disableClipping(activeViewer);
-      document.getElementById('btnToolClipping')?.classList.remove('active');
-      closeMotionPanel();
-    }
-
-    // 5. Animate camera
-    if (card.camera) {
-      const cam = card.camera;
-      const { camera, controls } = activeViewer;
-      const targetPos = { x: cam.x, y: cam.y, z: cam.z };
-      const targetLook = { x: cam.targetX || 0, y: cam.targetY || cam.y, z: cam.targetZ || 0 };
-      animateCameraTo(camera, controls, targetPos, targetLook);
-    }
-
-    // 6. Highlight specific part if present, or deselect
-    if (card.highlight) {
-      setTimeout(() => {
-        const ok = selectPartById(card.highlight, activeViewer, false, true);
-        if (!ok) {
-          setTimeout(() => selectPartById(card.highlight, activeViewer, false, true), 350);
-        }
-      }, 350);
-    } else {
-      deselectPart(true);
-    }
-
-    activeViewer.render();
+    await applyAtlasPreset(card, activeViewer);
   } catch (err) {
     console.error('Error applying atlas view:', err);
     showToast(`Đã mở góc nhìn: ${card.title}`);

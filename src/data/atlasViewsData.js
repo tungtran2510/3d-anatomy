@@ -186,8 +186,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         titleVi: '1. Toàn Bộ Hệ Tuần Hoàn',
         subtitle: 'Mạng lưới động - tĩnh mạch toàn thân',
         image: '/images/atlas/circ_full.png',
-        systems: ['cardiovascular', 'skeletal'],
-        camera: { x: 0, y: 1.0, z: 2.0, targetX: 0, targetY: 1.0, targetZ: 0 },
+        systems: ['cardiovascular'],
+        camera: { x: 0, y: 0.95, z: 2.3, targetX: 0, targetY: 0.95, targetZ: 0 },
         desc: 'Mạng lưới đại tuần hoàn và tiểu tuần hoàn vận chuyển máu đi khắp cơ thể.'
       },
       {
@@ -331,8 +331,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         titleVi: '1. Toàn Bộ Hệ Thần Kinh',
         subtitle: 'Não bộ, tủy sống & mạng lưới TK',
         image: '/images/atlas/nerv_full.png',
-        systems: ['nervous', 'skeletal'],
-        camera: { x: 0, y: 1.0, z: 2.1, targetX: 0, targetY: 1.0, targetZ: 0 },
+        systems: ['nervous'],
+        camera: { x: 0, y: 0.95, z: 2.3, targetX: 0, targetY: 0.95, targetZ: 0 },
         desc: 'Trung tâm chỉ huy cảm giác, vận động và tư duy toàn diện của cơ thể.'
       },
       {
@@ -1092,7 +1092,7 @@ export const ATLAS_LAB_CATEGORIES = [
     showTable: true,
     systems: ['visceral', 'cardiovascular', 'skeletal'],
     camera: { x: 0.35, y: 1.45, z: 0.25, targetX: 0, targetY: 0.85, targetZ: -0.25 },
-    image: '/images/atlas/med_heart.png',
+    image: '/images/atlas/circ_heart_thorax.png',
     desc: 'Phẫu tích trung thất giữa bộc lộ các buồng tim, quai động mạch chủ và hai lá phổi.'
   },
   {
@@ -1104,7 +1104,7 @@ export const ATLAS_LAB_CATEGORIES = [
     showTable: true,
     systems: ['muscular', 'visceral'],
     camera: { x: 0.50, y: 1.40, z: 0.45, targetX: 0, targetY: 0.82, targetZ: 0.05 },
-    image: '/images/atlas/reg_abdomen.png',
+    image: '/images/atlas/reg_abdomen_pelvis.png',
     desc: 'Mở thành bụng trước bộc lộ lá phúc mạc thành và mạc nối lớn.'
   },
   {
@@ -1116,7 +1116,7 @@ export const ATLAS_LAB_CATEGORIES = [
     showTable: true,
     systems: ['visceral'],
     camera: { x: 0.40, y: 1.35, z: 0.35, targetX: 0, targetY: 0.82, targetZ: 0.05 },
-    image: '/images/atlas/reg_abdomen.png',
+    image: '/images/atlas/reg_abdomen_pelvis.png',
     desc: 'Hệ tiêu hóa trong ổ bụng, mạc treo ruột và phân bố mạch mạc treo tràng trên.'
   },
   {
@@ -1128,7 +1128,7 @@ export const ATLAS_LAB_CATEGORIES = [
     showTable: true,
     systems: ['visceral', 'cardiovascular', 'skeletal'],
     camera: { x: 0.30, y: 1.35, z: 0.20, targetX: 0, targetY: 0.82, targetZ: 0.02 },
-    image: '/images/atlas/reg_abdomen.png',
+    image: '/images/atlas/reg_abdomen_pelvis.png',
     desc: 'Bóc tách khoang sau phúc mạc bộc lộ đài bể thận, niệu quản và TM chủ dưới.'
   },
   {
@@ -1140,7 +1140,7 @@ export const ATLAS_LAB_CATEGORIES = [
     showTable: true,
     systems: ['skeletal', 'visceral', 'muscular'],
     camera: { x: 0.45, y: 1.35, z: 0.55, targetX: 0, targetY: 0.80, targetZ: 0.25 },
-    image: '/images/atlas/reg_pelvis.png',
+    image: '/images/atlas/skel_pelvis.png',
     desc: 'Khung chậu thực tập giải phẫu cơ sàn chậu và động mạch chậu trong.'
   },
   {
@@ -1476,9 +1476,9 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '1. Eye (Nhãn Cầu 3D)',
         subtitle: 'Giác mạc, củng mạc, màng bồ đào, thể mi, mống mắt và võng mạc',
         badge: 'Thị giác',
-        systems: ['nervous', 'skeletal'],
-        camera: { x: 0.10, y: 1.58, z: 0.25, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
-        image: '/images/atlas/skel_skull.png',
+        systems: ['nervous'],
+        camera: { x: 0.08, y: 1.58, z: 0.26, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
+        image: '/images/atlas/micro_eye.jpg',
         desc: 'Mặt cắt cấu trúc nhãn cầu thể hiện đường truyền ánh sáng và võng mạc thụ cảm.'
       },
       {
@@ -1486,9 +1486,9 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '2. Lacrimal Apparatus (Bộ Lệ)',
         subtitle: 'Tuyến lệ chính, tiểu quản lệ, túi lệ và ống lệ mũi',
         badge: 'Bộ lệ',
-        systems: ['skeletal', 'nervous'],
-        camera: { x: 0.08, y: 1.60, z: 0.22, targetX: 0.02, targetY: 1.60, targetZ: 0.04 },
-        image: '/images/atlas/skel_skull.png',
+        systems: ['nervous'],
+        camera: { x: 0.06, y: 1.60, z: 0.22, targetX: 0.03, targetY: 1.60, targetZ: 0.04 },
+        image: '/images/atlas/micro_lacrimal.jpg',
         desc: 'Hệ thống tiết và dẫn lưu nước mắt giữ ẩm và bảo vệ bề mặt giác mạc.'
       },
       {
@@ -1497,8 +1497,8 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         subtitle: 'Thể thủy tinh hai mặt lồi và dây chằng treo Zinn điều tiết',
         badge: 'Khúc xạ',
         systems: ['nervous'],
-        camera: { x: 0.06, y: 1.58, z: 0.18, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
-        image: '/images/atlas/skel_skull.png',
+        camera: { x: 0.05, y: 1.58, z: 0.18, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
+        image: '/images/atlas/micro_lens_zonule.jpg',
         desc: 'Dây chằng Zinn treo thể thủy tinh vào thể mi phục vụ điều tiết thị lực gần xa.'
       }
     ]
