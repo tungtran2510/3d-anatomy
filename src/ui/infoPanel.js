@@ -86,6 +86,51 @@ export function initInfoPanel(viewer) {
     }
   });
 
+  // 3a. Mini-Bar Interactions (1-2 line mode)
+  const miniExpandBtn = document.getElementById('btnMiniExpand');
+  const miniTrigger = document.getElementById('miniBarExpandTrigger');
+  const miniAudioBtn = document.getElementById('btnMiniAudio');
+  const miniZoomBtn = document.getElementById('btnMiniZoom');
+  const miniCloseBtn = document.getElementById('btnMiniClose');
+
+  miniExpandBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setCompactMode(false);
+  });
+
+  miniTrigger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setCompactMode(false);
+  });
+
+  miniAudioBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    speakCurrentStructure();
+  });
+
+  miniZoomBtn?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    isZoomedIn = !isZoomedIn;
+    updateZoomStepButtonUI();
+    if (isZoomedIn) {
+      await zoomIntoCurrentSelection(viewer);
+      showToast('🔍 Đã phóng to chi tiết cấu trúc');
+    } else {
+      await zoomOutSelectionOverview(viewer);
+      showToast('🌐 Đã trở về góc nhìn bao quát');
+    }
+  });
+
+  miniCloseBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    card.classList.add('hidden');
+    showToast('Đã thu gọn thanh (Cấu trúc vẫn đang được chỉ điểm 📍)');
+  });
+
+  window.addEventListener('expand-selection-card', () => {
+    setCompactMode(false);
+  });
+
   // 3. Compact Mode & Dropdown Toggles
   const toggleCompactBtn = document.getElementById('btnToggleCompactCard');
   const compactBar = document.getElementById('btnSwitchCompactMode');
@@ -93,7 +138,7 @@ export function initInfoPanel(viewer) {
 
   toggleCompactBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    setCompactMode(!isCompact);
+    setCompactMode(true);
   });
 
   compactBar?.addEventListener('click', (e) => {
@@ -103,7 +148,7 @@ export function initInfoPanel(viewer) {
 
   toggleDropdownBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    toggleCardBodyDropdown();
+    setCompactMode(true);
   });
 
   // 3b. 2-Step Zoom / Overview Toggle (Không zoom giật đột ngột, chỉ phóng to khi người dùng bấm)
@@ -244,6 +289,18 @@ export function updateInfoPanelContent(part, viewer) {
   if (cardCompactLabel) cardCompactLabel.textContent = mainName;
   if (cardSubtitle) {
     cardSubtitle.textContent = latinName ? `${latinName} • ${systemName}` : systemName;
+  }
+
+  // Populate 1-to-2 line Mini-Bar
+  const miniTitle = document.getElementById('miniCardTitle');
+  const miniLatin = document.getElementById('miniCardLatin');
+  const miniDesc = document.getElementById('miniCardDesc');
+  if (miniTitle) miniTitle.textContent = mainName;
+  if (miniLatin) miniLatin.textContent = latinName ? `(${latinName})` : '';
+  if (miniDesc) {
+    const rawDesc = clinical.description || '';
+    const firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;
+    miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Xem thêm" để đọc chi tiết giải phẫu.';
   }
 
   // 2. Core Anatomical Explanation (Là gì, Ý nghĩa là gì, Liên kết ra sao - Ưu tiên ở trên đầu)

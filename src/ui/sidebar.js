@@ -29,7 +29,7 @@ import { initFloatingAIButton } from './floatingAIButton.js';
 import { initFullscreenController } from './fullscreenController.js';
 import { initAtlasHub, openAtlasHub } from './atlasHubModal.js';
 import { parseVideoUrl } from '../data/atlasMediaManager.js';
-import { initInfoPanel, updateInfoPanelContent } from './infoPanel.js';
+import { initInfoPanel, updateInfoPanelContent, setCompactMode } from './infoPanel.js';
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
 
@@ -908,7 +908,8 @@ export function initFooterActions(viewer) {
       restoreAllParts();
       isolateBtn.classList.remove('active');
     }
-    deselectPart();
+    // Collapse to compact mini-bar, keeping 3D indicator and highlight intact
+    setCompactMode(true);
     document.getElementById('cardNoteBox')?.classList.add('hidden');
   });
 
@@ -1832,6 +1833,7 @@ function onSelectionChange(part) {
 
     if (card) {
       card.classList.remove('hidden');
+      setCompactMode(true);
       updateInfoPanelContent(part, state.viewer);
     }
 

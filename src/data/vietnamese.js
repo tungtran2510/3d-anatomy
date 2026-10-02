@@ -35,7 +35,14 @@ const EXACT_DICTIONARY = {
   'Fourth cervical vertebra (C4)': 'Đốt sống cổ C4',
   'Fifth cervical vertebra (C5)': 'Đốt sống cổ C5',
   'Sixth cervical vertebra (C6)': 'Đốt sống cổ C6',
-  'Seventh cervical vertebra (C7)': 'Đốt sống cổ C7',
+  'Seventh cervical vertebra (C7)': 'Đốt sống cổ C7 (Đốt sống lồi)',
+  'Vertebra C1': 'Đốt sống cổ C1 (Đốt đội)',
+  'Vertebra C2': 'Đốt sống cổ C2 (Đốt trục)',
+  'Vertebra C3': 'Đốt sống cổ C3',
+  'Vertebra C4': 'Đốt sống cổ C4',
+  'Vertebra C5': 'Đốt sống cổ C5',
+  'Vertebra C6': 'Đốt sống cổ C6',
+  'Vertebra C7': 'Đốt sống cổ C7 (Đốt sống lồi)',
   'First thoracic vertebra (T1)': 'Đốt sống ngực T1',
   'Second thoracic vertebra (T2)': 'Đốt sống ngực T2',
   'Third thoracic vertebra (T3)': 'Đốt sống ngực T3',
@@ -48,11 +55,28 @@ const EXACT_DICTIONARY = {
   'Tenth thoracic vertebra (T10)': 'Đốt sống ngực T10',
   'Eleventh thoracic vertebra (T11)': 'Đốt sống ngực T11',
   'Twelfth thoracic vertebra (T12)': 'Đốt sống ngực T12',
+  'Vertebra T1': 'Đốt sống ngực T1',
+  'Vertebra T2': 'Đốt sống ngực T2',
+  'Vertebra T3': 'Đốt sống ngực T3',
+  'Vertebra T4': 'Đốt sống ngực T4',
+  'Vertebra T5': 'Đốt sống ngực T5',
+  'Vertebra T6': 'Đốt sống ngực T6',
+  'Vertebra T7': 'Đốt sống ngực T7',
+  'Vertebra T8': 'Đốt sống ngực T8',
+  'Vertebra T9': 'Đốt sống ngực T9',
+  'Vertebra T10': 'Đốt sống ngực T10',
+  'Vertebra T11': 'Đốt sống ngực T11',
+  'Vertebra T12': 'Đốt sống ngực T12',
   'First lumbar vertebra (L1)': 'Đốt sống thắt lưng L1',
   'Second lumbar vertebra (L2)': 'Đốt sống thắt lưng L2',
   'Third lumbar vertebra (L3)': 'Đốt sống thắt lưng L3',
   'Fourth lumbar vertebra (L4)': 'Đốt sống thắt lưng L4',
   'Fifth lumbar vertebra (L5)': 'Đốt sống thắt lưng L5',
+  'Vertebra L1': 'Đốt sống thắt lưng L1',
+  'Vertebra L2': 'Đốt sống thắt lưng L2',
+  'Vertebra L3': 'Đốt sống thắt lưng L3',
+  'Vertebra L4': 'Đốt sống thắt lưng L4',
+  'Vertebra L5': 'Đốt sống thắt lưng L5',
   'Sacrum': 'Xương cùng',
   'Coccyx': 'Xương cụt',
   'Sternum': 'Xương ức',
@@ -851,7 +875,37 @@ export function getVietnameseSynonyms(englishBaseName) {
   if (lower.includes('cơ delta')) synonyms.push('cơ vai', 'bắp vai');
   if (lower.includes('cơ nhị đầu')) synonyms.push('chuột trước', 'bắp tay trước');
   if (lower.includes('cơ tam đầu')) synonyms.push('chuột sau', 'bắp tay sau');
-  if (lower.includes('đốt sống')) synonyms.push('cột sống', 'xương sống', 'dot song', 'cot song');
+  if (lower.includes('đốt sống') || enLower.includes('vertebra')) {
+    synonyms.push('cột sống', 'xương sống', 'dot song', 'cot song');
+
+    // Cervical vertebrae (C1 - C7)
+    if (enLower.includes('c7') || lower.includes('c7')) {
+      synonyms.push('c7', 'đốt sống c7', 'dot song c7', 'đốt sống cổ c7', 'dot song co c7', 'đốt c7', 'cổ c7', 'co c7', 'đốt sống lồi', 'đốt lồi', 'dot loi', 'vertebra prominens', 'cervical vertebra 7');
+    }
+    if (enLower.includes('c1') || lower.includes('c1') || enLower.includes('atlas')) {
+      synonyms.push('c1', 'đốt sống c1', 'dot song c1', 'đốt sống cổ c1', 'đốt đội', 'dot doi', 'atlas');
+    }
+    if (enLower.includes('c2') || lower.includes('c2') || enLower.includes('axis')) {
+      synonyms.push('c2', 'đốt sống c2', 'dot song c2', 'đốt sống cổ c2', 'đốt trục', 'dot truc', 'axis');
+    }
+    for (let c = 3; c <= 6; c++) {
+      if (enLower.includes(`c${c}`) || lower.includes(`c${c}`)) {
+        synonyms.push(`c${c}`, `đốt sống c${c}`, `dot song c${c}`, `đốt sống cổ c${c}`, `dot song co c${c}`, `đốt c${c}`, `cổ c${c}`);
+      }
+    }
+    // Thoracic vertebrae (T1 - T12)
+    for (let t = 1; t <= 12; t++) {
+      if (enLower.includes(`t${t}`) || lower.includes(`t${t}`)) {
+        synonyms.push(`t${t}`, `đốt sống t${t}`, `dot song t${t}`, `đốt sống ngực t${t}`, `dot song nguc t${t}`, `đốt t${t}`, `ngực t${t}`);
+      }
+    }
+    // Lumbar vertebrae (L1 - L5)
+    for (let l = 1; l <= 5; l++) {
+      if (enLower.includes(`l${l}`) || lower.includes(`l${l}`)) {
+        synonyms.push(`l${l}`, `đốt sống l${l}`, `dot song l${l}`, `đốt sống thắt lưng l${l}`, `dot song that lung l${l}`, `đốt l${l}`, `thắt lưng l${l}`);
+      }
+    }
+  }
   if (lower.includes('thần kinh tọa')) synonyms.push('thần kinh ngồi', 'đau dây tọa');
 
   return [...new Set(synonyms)];

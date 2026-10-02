@@ -80,4 +80,10 @@ describe('SYSTEM_IDS', () => {
     expect(formatPartName('Choroid plexus.l', 'vi')).toBe('Đám rối màng mạch (Sinh dịch não tủy) (trái)');
     expect(formatPartName('Spinal dura', 'vi')).toBe('Màng cứng tủy gai & Hộp sọ');
   });
+
+  it('translates cervical vertebrae accurately', () => {
+    expect(formatPartName('Vertebra C7', 'vi')).toBe('Đốt sống cổ C7 (Đốt sống lồi)');
+    expect(formatPartName('Vertebra C1', 'vi')).toBe('Đốt sống cổ C1 (Đốt đội)');
+    expect(formatPartName('Vertebra C2', 'vi')).toBe('Đốt sống cổ C2 (Đốt trục)');
+  });
 });

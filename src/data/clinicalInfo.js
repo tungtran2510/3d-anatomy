@@ -109,6 +109,48 @@ export const CLINICAL_DATABASE = {
     videoId: 'fGjG7V3A2sQ'
   },
 
+  'Vertebra C7': {
+    nameVi: 'Đốt sống cổ C7 (Đốt sống lồi)',
+    nameLatin: 'Vertebra prominens (TA2: 1023)',
+    nameEn: 'Seventh cervical vertebra (C7)',
+    regionVi: 'Cột sống cổ & Lưng trên',
+    systemVi: 'Hệ Xương',
+    description: 'Đốt sống cổ thứ 7 (đốt sống lồi) có mỏm gai dài nhất trong các đốt sống cổ, không chẻ đôi, sờ thấy rõ nhất dưới da đáy gáy khi cúi đầu.',
+    function: 'Là mốc giải phẫu then chốt định vị cột sống; điểm bám của dây chằng gáy và cơ vùng gáy; bảo vệ tủy cổ và rễ thần kinh C8.',
+    clinical: 'Mốc đếm đốt sống quan trọng; thường chịu lực kéo căng lớn do hội chứng Text Neck (cúi đầu xem điện thoại/máy tính kéo dài); thoái hóa mấu khớp chèn ép rễ C8 gây tê mỏi lan ra ngón tay 4-5.',
+    relationsText: 'Nằm ở ranh giới giữa cột sống cổ và ngực; khớp với C6 ở trên qua đĩa đệm C6-C7 và khớp với T1 ở dưới qua đĩa đệm C7-T1; hai bên có động mạch và tĩnh mạch đốt sống đi qua gần mỏm ngang.',
+    relations: {
+      muscles: 'Cơ thang, cơ trám bé, cơ gối cổ, cơ trám lớn, dây chằng gáy (Ligamentum nuchae).',
+      bones: 'Khớp ở trên với đốt sống cổ C6, khớp ở dưới với đốt sống ngực T1 và xương sườn 1.',
+      nerves: 'Rễ thần kinh cổ C7 và C8 (thoát ra phía dưới C7), thân dưới đám rối thần kinh cánh tay.',
+      vessels: 'Động mạch đốt sống (Vertebral artery), tĩnh mạch đốt sống, động mạch cổ ngang.'
+    },
+    lessonLink: '/cot-song/dot-song-co',
+    lessonTitle: 'Đốt Sống Cổ C7: Mốc Giải Phẫu Lồi Đáy Cổ & Thoái Hóa Cổ Vai Gáy',
+    videoId: 'fGjG7V3A2sQ'
+  },
+
+  'Seventh cervical vertebra (C7)': {
+    nameVi: 'Đốt sống cổ C7 (Đốt sống lồi)',
+    nameLatin: 'Vertebra prominens (TA2: 1023)',
+    nameEn: 'Seventh cervical vertebra (C7)',
+    regionVi: 'Cột sống cổ & Lưng trên',
+    systemVi: 'Hệ Xương',
+    description: 'Đốt sống cổ thứ 7 (đốt sống lồi) có mỏm gai dài nhất trong các đốt sống cổ, không chẻ đôi, sờ thấy rõ nhất dưới da đáy gáy khi cúi đầu.',
+    function: 'Là mốc giải phẫu then chốt định vị cột sống; điểm bám của dây chằng gáy và cơ vùng gáy; bảo vệ tủy cổ và rễ thần kinh C8.',
+    clinical: 'Mốc đếm đốt sống quan trọng; thường chịu lực kéo căng lớn do hội chứng Text Neck (cúi đầu xem điện thoại/máy tính kéo dài); thoái hóa mấu khớp chèn ép rễ C8 gây tê mỏi lan ra ngón tay 4-5.',
+    relationsText: 'Nằm ở ranh giới giữa cột sống cổ và ngực; khớp với C6 ở trên qua đĩa đệm C6-C7 và khớp với T1 ở dưới qua đĩa đệm C7-T1; hai bên có động mạch và tĩnh mạch đốt sống đi qua gần mỏm ngang.',
+    relations: {
+      muscles: 'Cơ thang, cơ trám bé, cơ gối cổ, cơ trám lớn, dây chằng gáy (Ligamentum nuchae).',
+      bones: 'Khớp ở trên với đốt sống cổ C6, khớp ở dưới với đốt sống ngực T1 và xương sườn 1.',
+      nerves: 'Rễ thần kinh cổ C7 và C8 (thoát ra phía dưới C7), thân dưới đám rối thần kinh cánh tay.',
+      vessels: 'Động mạch đốt sống (Vertebral artery), tĩnh mạch đốt sống, động mạch cổ ngang.'
+    },
+    lessonLink: '/cot-song/dot-song-co',
+    lessonTitle: 'Đốt Sống Cổ C7: Mốc Giải Phẫu Lồi Đáy Cổ & Thoái Hóa Cổ Vai Gáy',
+    videoId: 'fGjG7V3A2sQ'
+  },
+
   'Cervical vertebra': {
     nameVi: 'Đốt sống cổ C3 - C7',
     nameLatin: 'Vertebrae cervicales (TA2: 1017)',

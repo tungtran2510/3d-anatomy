@@ -22,24 +22,35 @@ function build(container) {
   root = document.createElement('div');
   root.className = 'callout-layer';
   root.innerHTML = `
-    <svg class="callout-line" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0" /></svg>
+    <svg class="callout-line" aria-hidden="true">
+      <defs>
+        <radialGradient id="calloutPinGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9" />
+          <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.4" />
+          <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <circle class="pin-halo" cx="0" cy="0" r="16" fill="url(#calloutPinGlow)" />
+      <circle class="pin-ring" cx="0" cy="0" r="10" fill="none" stroke="#f59e0b" stroke-width="1.8" />
+      <circle class="pin-dot" cx="0" cy="0" r="4.5" fill="#ffffff" stroke="#f59e0b" stroke-width="2.2" />
+      <line class="callout-leader-line" x1="0" y1="0" x2="0" y2="0" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="3 3" />
+    </svg>
     <div class="callout" role="status">
-      <div class="callout-header-row" data-callout="zoom" title="Chạm để phóng to chi tiết">
+      <div class="callout-header-row" data-callout="info" title="Chạm để mở thông tin">
         <span class="callout-pin-icon">📍</span>
         <span class="callout-name"></span>
       </div>
       <div class="callout-actions">
         <button type="button" class="callout-btn callout-zoom" data-callout="zoom" title="Phóng to chi tiết (Zoom closer)">🔍 Phóng to</button>
-        <button type="button" class="callout-btn" data-callout="isolate"></button>
-        <button type="button" class="callout-btn" data-callout="hide"></button>
-        <button type="button" class="callout-btn callout-close" data-callout="close" aria-label="Đóng">&times;</button>
+        <button type="button" class="callout-btn callout-more" data-callout="info" title="Xem giải thích chi tiết y khoa">📖 Xem thêm</button>
+        <button type="button" class="callout-btn callout-close" data-callout="close" aria-label="Ẩn nhãn chỉ">&times;</button>
       </div>
     </div>
   `;
   container.appendChild(root);
 
   label = root.querySelector('.callout');
-  line = root.querySelector('.callout-line line');
+  line = root.querySelector('.callout-leader-line') || root.querySelector('.callout-line line');
 
   root.addEventListener('click', event => {
     const action = event.target.closest('[data-callout]')?.dataset.callout;
@@ -80,12 +91,25 @@ function update() {
   root.classList.toggle('is-hidden', behind);
   if (behind) return;
 
+  // Update glowing pin dot and pulsing ring at projected structure coordinate
+  const halo = root.querySelector('.pin-halo');
+  const ring = root.querySelector('.pin-ring');
+  const dot = root.querySelector('.pin-dot');
+
+  halo?.setAttribute('cx', x);
+  halo?.setAttribute('cy', y);
+  ring?.setAttribute('cx', x);
+  ring?.setAttribute('cy', y);
+  dot?.setAttribute('cx', x);
+  dot?.setAttribute('cy', y);
+
   const box = label.getBoundingClientRect();
   let labelX = x + OFFSET_X;
   let labelY = y + OFFSET_Y;
 
+  // Keep within safe viewport boundaries
   labelX = Math.min(Math.max(labelX, EDGE_PADDING), width - box.width - EDGE_PADDING);
-  labelY = Math.min(Math.max(labelY, EDGE_PADDING), height - box.height - EDGE_PADDING);
+  labelY = Math.min(Math.max(labelY, 56), height - box.height - 84);
 
   label.style.transform = `translate(${Math.round(labelX)}px, ${Math.round(labelY)}px)`;
 
@@ -108,9 +132,10 @@ export function showCallout(partId, displayName, actions = {}) {
   const info = state.partsData?.[partId];
   const nameEl = root.querySelector('.callout-name');
   nameEl.textContent = `${displayName} (ở đây)`;
-  nameEl.title = `Chạm để phóng to chi tiết: ${displayName}`;
-  root.querySelector('[data-callout="isolate"]').textContent = translate('isolate');
-  root.querySelector('[data-callout="hide"]').textContent = translate('hide');
+  const isolateBtn = root.querySelector('[data-callout="isolate"]');
+  if (isolateBtn) isolateBtn.textContent = translate('isolate');
+  const hideBtn = root.querySelector('[data-callout="hide"]');
+  if (hideBtn) hideBtn.textContent = translate('hide');
 
   computeAnchor(partId);
   root.classList.remove('is-hidden');

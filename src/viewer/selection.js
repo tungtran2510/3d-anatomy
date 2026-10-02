@@ -374,6 +374,13 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
     zoom: () => {
       zoomIntoCurrentSelection(viewer);
     },
+    info: () => {
+      const card = document.getElementById('selectionCard');
+      if (card) {
+        card.classList.remove('hidden');
+        window.dispatchEvent(new CustomEvent('expand-selection-card'));
+      }
+    },
     isolate: id => {
       pushUndo({
         type: 'isolate',
@@ -392,7 +399,7 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
       deselectPart();
       viewer?.render();
     },
-    close: () => deselectPart()
+    close: () => hideCallout()
   });
 
   // Update part state

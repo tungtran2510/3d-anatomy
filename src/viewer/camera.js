@@ -113,7 +113,7 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplic
   const box = new THREE.Box3().setFromObject(mesh);
   const center = box.getCenter(new THREE.Vector3());
   const size = box.getSize(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z, 0.05);
+  const maxDim = Math.max(size.x, size.y, size.z, 0.04);
 
   let distance;
   // Calculate direction from current camera to target, preserving user's viewing angle
@@ -124,12 +124,18 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplic
 
   if (isExplicitZoom) {
     // Explicit 2nd step: Smooth close-up inspection (Zoom gần khi người dùng ấn nút Phóng to)
-    distance = Math.max(0.42, maxDim * 3.2);
+    distance = Math.max(0.42, maxDim * 3.5);
   } else {
-    // 1st step: Keep wide anatomical context (vẫn ở giải phẫu đó và chỉ vào, KHÔNG zoom sát rạt)
+    // 1st step: Keep wide anatomical context (vẫn ở giải phẫu đó và chỉ vào, KHÔNG zoom quá nhiều)
+    // Cho các đốt sống (C1-C7, T1-T12): khoảng cách 1.15m - 1.35m bao quát cả vùng đầu cổ và ngực trên
+    const idealContextDist = Math.min(Math.max(maxDim * 6.0, 1.15), 1.85);
     const curDist = camera.position.distanceTo(controls.target);
-    // Giữ nguyên khoảng cách góc nhìn hiện tại, đảm bảo không bị giật zoom in
-    distance = Math.max(curDist, 1.45);
+    // Nếu khoảng cách hiện tại đã vừa vặn (1.05m - 1.95m), giữ nguyên để tránh giật hình; nếu quá xa/quá gần thì chuyển về context chuẩn
+    if (curDist >= 1.05 && curDist <= 1.95) {
+      distance = curDist;
+    } else {
+      distance = idealContextDist;
+    }
   }
 
   const targetPosition = center.clone().add(direction.clone().multiplyScalar(distance));
