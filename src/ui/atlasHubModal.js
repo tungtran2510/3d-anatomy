@@ -1,5 +1,5 @@
 // Atlas 2027 Full-Screen Views & Media Hub Controller
-// Mapped accurately to Visible Body / Human Anatomy Atlas (Atlas 2027) standards
+// Visible Body Human Anatomy Atlas (Atlas 2027) Native Standard Layout
 import { state } from '../state/store.js';
 import { loadModel } from '../viewer/loadModel.js';
 import { showSystem, hideSystem } from '../viewer/visibility.js';
@@ -24,6 +24,7 @@ import { toggleAppTheme, updateThemeButtons, isDarkTheme } from '../utils/themeM
 import { setModelOrientation } from '../viewer/orientationManager.js';
 import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
 import { normalise, searchStructures } from '../utils/dataLoader.js';
+import { setExplodeFactor, resetExplode } from '../viewer/explodedView.js';
 
 function escapeHtml(text) {
   if (!text) return '';
@@ -35,8 +36,8 @@ function escapeHtml(text) {
 }
 
 let hubModalEl = null;
-let currentTab = 'views'; // 'views' | 'media' | 'quizzes'
-let currentSubFilter = 'all'; // 'all' | 'systems' | 'regions'
+let currentTab = 'views'; // 'views' | 'search' | 'media' | 'quizzes' | 'library'
+let currentSubFilter = 'systems'; // 'regions' | 'systems' | 'lab' | 'cross_sections' | 'microanatomy' | 'muscle_actions'
 let searchQuery = '';
 
 export function initAtlasHub(viewer) {
@@ -50,87 +51,151 @@ export function initAtlasHub(viewer) {
     hubModalEl.id = 'atlasHubModal';
     hubModalEl.className = 'atlas-hub-modal hidden';
     hubModalEl.innerHTML = `
-    <div class="atlas-hub-backdrop" id="atlasHubBackdrop"></div>
-    <div class="atlas-hub-panel" role="dialog" aria-modal="true" aria-label="Trung tâm góc nhìn và hoạt ảnh Atlas">
-      
-      <!-- Sleek 1-line Hub Header Frame -->
-      <div class="atlas-hub-header">
-        <div class="atlas-hub-brand-row">
-          <div class="atlas-brand-badge">
-            <span class="brand-cube-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            </span>
-            <h2 class="atlas-hub-title-1line">Thư Viện Atlas 3D</h2>
+      <div class="atlas-hub-backdrop" id="atlasHubBackdrop"></div>
+      <div class="atlas-hub-container" role="dialog" aria-modal="true" aria-label="Human Anatomy Atlas Views Hub">
+        
+        <!-- 1. TOP PRIMARY NAVIGATION BAR (5 Tabs: Views, Search, Media, Quizzes, My Library) -->
+        <header class="atlas-vb-topbar">
+          <div class="atlas-vb-tabs">
+            <button type="button" class="vb-tab-btn active" data-tab="views" id="tabBtnViews">
+              <div class="vb-tab-icon cube-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                </svg>
+              </div>
+              <span class="vb-tab-label">Views</span>
+            </button>
+            <button type="button" class="vb-tab-btn" data-tab="search" id="tabBtnSearch">
+              <div class="vb-tab-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </div>
+              <span class="vb-tab-label">Search</span>
+            </button>
+            <button type="button" class="vb-tab-btn" data-tab="media" id="tabBtnMedia">
+              <div class="vb-tab-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <rect x="2" y="4" width="20" height="16" rx="3"/>
+                  <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                </svg>
+              </div>
+              <span class="vb-tab-label">Media</span>
+            </button>
+            <button type="button" class="vb-tab-btn" data-tab="quizzes" id="tabBtnQuizzes">
+              <div class="vb-tab-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <polyline points="9 11 12 14 22 4"/>
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                </svg>
+              </div>
+              <span class="vb-tab-label">Quizzes</span>
+            </button>
+            <button type="button" class="vb-tab-btn" data-tab="library" id="tabBtnLibrary">
+              <div class="vb-tab-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <rect x="3" y="3" width="14" height="18" rx="2"/>
+                  <polygon points="10 7 11 9 13.5 9.5 11.7 11 12.2 13.5 10 12.2 7.8 13.5 8.3 11 6.5 9.5 9 9" fill="currentColor"/>
+                </svg>
+              </div>
+              <span class="vb-tab-label">My Library</span>
+            </button>
           </div>
-          <div class="atlas-hub-header-actions">
-            <button type="button" class="btn-hub-theme-toggle" id="btnHubThemeToggle" title="Chuyển chế độ Nền Sáng / Nền Tối">
-              <span class="theme-icon">◐</span>
-              <span class="theme-label">Giao diện</span>
+          <button type="button" class="vb-topbar-close" id="btnAtlasHubClose" title="Quay lại mô hình 3D (Đóng)">&times;</button>
+        </header>
+
+        <!-- 2. SUB-CATEGORY BAR (Regions, Systems, Gross Anatomy Lab, Cross Sections, Microanatomy, Muscle Actions) -->
+        <nav class="atlas-vb-subbar" id="atlasSubCategoryBar">
+          <div class="atlas-vb-subnav-scroll">
+            <button type="button" class="vb-sub-item" data-sub="regions">Regions</button>
+            <button type="button" class="vb-sub-item active" data-sub="systems">Systems</button>
+            <button type="button" class="vb-sub-item" data-sub="lab">Gross Anatomy Lab</button>
+            <button type="button" class="vb-sub-item" data-sub="cross_sections">Cross Sections</button>
+            <button type="button" class="vb-sub-item" data-sub="microanatomy">Microanatomy</button>
+            <button type="button" class="vb-sub-item" data-sub="muscle_actions">Muscle Actions</button>
+          </div>
+        </nav>
+
+        <!-- 3. FILTER SEARCH BAR -->
+        <div class="atlas-vb-filter-bar" id="atlasFilterBar">
+          <div class="vb-search-box">
+            <svg class="vb-search-glass" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" class="vb-search-input" id="atlasHubSearchInput" placeholder="Filter results by name..." autocomplete="off">
+            <button type="button" class="vb-voice-btn" id="btnHubVoiceMic" title="Tìm bằng giọng nói tiếng Việt">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
             </button>
-            <button type="button" class="btn-hub-offline-compact" id="btnHubOpenOffline" title="Tải toàn bộ thư viện về máy (Dùng Offline 100%)">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span>Tải Offline</span>
-            </button>
-            <button type="button" class="btn-launch-link-compact" id="btnHubLaunchLink" title="Sao chép liên kết góc nhìn 3D hiện tại">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              <span>Chia sẻ</span>
-            </button>
-            <button type="button" class="btn-hub-admin" id="btnHubAdmin" title="Quản trị Video & Dữ liệu Atlas (Mật khẩu: 123456)">
-              <span class="admin-icon">🔐</span>
-              <span class="admin-label">Quản trị</span>
-            </button>
-            <button type="button" class="atlas-hub-close" id="btnAtlasHubClose" aria-label="Đóng">&times;</button>
+            <button type="button" class="vb-clear-btn hidden" id="btnHubSearchClear" title="Xóa">&times;</button>
           </div>
         </div>
 
-        <!-- KHỐI KHUNG 1: Segmented Navigation Control Frame -->
-        <div class="atlas-hub-segmented-frame">
-          <button type="button" class="atlas-main-tab active" data-tab="views" id="tabBtnViews">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            <span>Góc nhìn 3D</span>
-          </button>
-          <button type="button" class="atlas-main-tab" data-tab="media" id="tabBtnMedia">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-            <span>Hoạt ảnh & Video</span>
-          </button>
-          <button type="button" class="atlas-main-tab" data-tab="quizzes" id="tabBtnQuizzes">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <span>Trắc nghiệm 3D</span>
-          </button>
-        </div>
+        <!-- 4. MAIN SCROLLABLE SHELVES CONTENT -->
+        <div class="atlas-vb-body" id="atlasHubBody"></div>
 
-        <!-- KHỐI KHUNG 2: Search & Filter Toolbox Frame -->
-        <div class="atlas-hub-filter-frame">
-          <div class="search-input-wrapper">
-            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="atlas-hub-search-input" id="atlasHubSearchInput" placeholder="Tìm nhanh cấu trúc (Dịch não tủy, Túi mật, Cột sống...)" autocomplete="off">
-            <button type="button" class="hub-voice-mic-btn" id="btnHubVoiceMic" title="Tìm bằng giọng nói tiếng Việt">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-            </button>
-            <button type="button" class="search-clear-btn hidden" id="btnHubSearchClear" title="Xóa tìm kiếm">&times;</button>
-          </div>
-          <div class="atlas-subfilter-chips-row" id="atlasSubfilterChips">
-            <span class="subfilter-chips-label">Lọc theo:</span>
-            <div class="atlas-subfilter-chips">
-              <button type="button" class="subchip active" data-sub="all">Tất cả</button>
-              <button type="button" class="subchip" data-sub="systems">Hệ cơ quan</button>
-              <button type="button" class="subchip" data-sub="regions">Phân vùng</button>
-              <button type="button" class="subchip" data-sub="lab">Bàn mổ (Lab)</button>
-              <button type="button" class="subchip" data-sub="cross_sections">Cắt lớp (Cross Sections)</button>
-              <button type="button" class="subchip" data-sub="microanatomy">Vi thể & Da (Microanatomy)</button>
-              <button type="button" class="subchip" data-sub="muscle_actions">Chuyển động (Muscle Actions)</button>
+        <!-- 5. BOTTOM NAVIGATION BAR (5 Items: Menu, Launch Link, Settings, Help, Store) -->
+        <footer class="atlas-vb-bottombar">
+          <button type="button" class="vb-bottom-item" id="btnHubBottomMenu" title="Menu giải phẫu">
+            <div class="vb-bottom-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                <polyline points="18 9 21 12 18 15"/>
+              </svg>
             </div>
-          </div>
-        </div>
+            <span>Menu</span>
+          </button>
+          <button type="button" class="vb-bottom-item" id="btnHubLaunchLink" title="Sao chép Launch Link góc nhìn">
+            <div class="vb-bottom-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M9 15l6-6"/>
+                <polyline points="11 9 15 9 15 13"/>
+                <polyline points="13 15 9 15 9 11"/>
+              </svg>
+            </div>
+            <span>Launch Link</span>
+          </button>
+          <button type="button" class="vb-bottom-item" id="btnHubBottomSettings" title="Cài đặt giao diện & Quản trị">
+            <div class="vb-bottom-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <span>Settings</span>
+          </button>
+          <button type="button" class="vb-bottom-item" id="btnHubBottomHelp" title="Hướng dẫn sử dụng">
+            <div class="vb-bottom-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <span>Help</span>
+          </button>
+          <button type="button" class="vb-bottom-item" id="btnHubBottomStore" title="Tải toàn bộ dữ liệu Offline 100%">
+            <div class="vb-bottom-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              </svg>
+            </div>
+            <span>Store</span>
+          </button>
+        </footer>
       </div>
-
-      <!-- Hub Scrollable Content Body -->
-      <div class="atlas-hub-body" id="atlasHubBody">
-        <!-- Rendered dynamically -->
-      </div>
-
-    </div>
-  `;
+    `;
 
     container.appendChild(hubModalEl);
   }
@@ -144,8 +209,8 @@ function setupHubEvents(viewer) {
   const backdrop = hubModalEl.querySelector('#atlasHubBackdrop');
   const searchInput = hubModalEl.querySelector('#atlasHubSearchInput');
   const clearSearchBtn = hubModalEl.querySelector('#btnHubSearchClear');
-  const tabBtns = hubModalEl.querySelectorAll('.atlas-main-tab');
-  const subChips = hubModalEl.querySelectorAll('.subchip');
+  const tabBtns = hubModalEl.querySelectorAll('.vb-tab-btn');
+  const subBtns = hubModalEl.querySelectorAll('.vb-sub-item');
   const launchLinkBtn = hubModalEl.querySelector('#btnHubLaunchLink');
 
   closeBtn?.addEventListener('click', closeAtlasHub);
@@ -157,38 +222,39 @@ function setupHubEvents(viewer) {
     }
   });
 
+  // Top tabs click
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       tabBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentTab = btn.dataset.tab;
-      
-      // Update subchips visibility depending on tab
-      const subChipsContainer = hubModalEl.querySelector('#atlasSubfilterChips');
+
+      const subBar = hubModalEl.querySelector('#atlasSubCategoryBar');
       if (currentTab === 'views') {
-        subChipsContainer.style.display = 'flex';
+        if (subBar) subBar.style.display = 'flex';
       } else {
-        subChipsContainer.style.display = 'none';
+        if (subBar) subBar.style.display = 'none';
+      }
+
+      if (currentTab === 'search') {
+        setTimeout(() => searchInput?.focus(), 100);
       }
 
       renderHubContent(viewer);
     });
   });
 
-  subChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const targetSub = chip.dataset.sub;
-      if (currentSubFilter === targetSub && targetSub !== 'all') {
-        // Toggle OFF! Revert to 'all'
-        currentSubFilter = 'all';
-      } else {
-        currentSubFilter = targetSub;
-      }
-      subChips.forEach(c => c.classList.toggle('active', c.dataset.sub === currentSubFilter));
+  // Sub-category click
+  subBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      subBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSubFilter = btn.dataset.sub;
       renderHubContent(viewer);
     });
   });
 
+  // Search input
   searchInput?.addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase().trim();
     if (searchQuery) {
@@ -207,6 +273,7 @@ function setupHubEvents(viewer) {
     renderHubContent(viewer);
   });
 
+  // Voice search
   const hubVoiceBtn = hubModalEl.querySelector('#btnHubVoiceMic');
   let hubRecognition = null;
   hubVoiceBtn?.addEventListener('click', () => {
@@ -222,7 +289,7 @@ function setupHubEvents(viewer) {
       hubRecognition.interimResults = false;
       hubRecognition.onstart = () => {
         hubVoiceBtn.classList.add('listening');
-        showToast('🎙️ Đang nghe... Hãy nói tên bộ phận (VD: "dịch não tủy", "túi mật")');
+        showToast('🎙️ Đang nghe... Hãy nói tên góc nhìn hoặc bộ phận (VD: "não bộ", "sọ")');
       };
       hubRecognition.onend = () => {
         hubVoiceBtn.classList.remove('listening');
@@ -249,25 +316,33 @@ function setupHubEvents(viewer) {
     }
   });
 
+  // Bottom buttons
+  const bottomMenuBtn = hubModalEl.querySelector('#btnHubBottomMenu');
+  bottomMenuBtn?.addEventListener('click', () => {
+    closeAtlasHub();
+    document.getElementById('btnMenuToggle')?.click();
+  });
+
   launchLinkBtn?.addEventListener('click', () => {
     copyLaunchLink();
   });
 
-  const themeToggleBtn = hubModalEl.querySelector('#btnHubThemeToggle');
-  themeToggleBtn?.addEventListener('click', () => {
+  const bottomSettingsBtn = hubModalEl.querySelector('#btnHubBottomSettings');
+  bottomSettingsBtn?.addEventListener('click', () => {
     toggleAppTheme(viewer);
+    showToast(`Đã chuyển sang giao diện ${isDarkTheme() ? 'Tối' : 'Sáng'}`);
   });
 
-  const hubOfflineBtn = hubModalEl.querySelector('#btnHubOpenOffline');
-  hubOfflineBtn?.addEventListener('click', async () => {
+  const bottomHelpBtn = hubModalEl.querySelector('#btnHubBottomHelp');
+  bottomHelpBtn?.addEventListener('click', () => {
+    showToast('💡 Mẹo: Chạm vào bất kỳ thẻ góc nhìn nào để mở trực tiếp trên mô hình 3D.');
+  });
+
+  const bottomStoreBtn = hubModalEl.querySelector('#btnHubBottomStore');
+  bottomStoreBtn?.addEventListener('click', async () => {
     closeAtlasHub();
     const { openOfflineModal } = await import('./offlineModal.js');
     openOfflineModal(viewer);
-  });
-
-  const hubAdminBtn = hubModalEl.querySelector('#btnHubAdmin');
-  hubAdminBtn?.addEventListener('click', () => {
-    openAtlasAdmin(viewer);
   });
 
   window.addEventListener('atlas-media-updated', () => {
@@ -277,7 +352,6 @@ function setupHubEvents(viewer) {
   });
 }
 
-
 export function openAtlasHub(viewer, targetTab = 'views') {
   if (!hubModalEl) initAtlasHub(viewer);
 
@@ -285,12 +359,18 @@ export function openAtlasHub(viewer, targetTab = 'views') {
   document.body.classList.add('atlas-hub-open');
   updateThemeButtons();
 
-  // Activate tab
   currentTab = targetTab;
-  const tabBtns = hubModalEl.querySelectorAll('.atlas-main-tab');
+  const tabBtns = hubModalEl.querySelectorAll('.vb-tab-btn');
   tabBtns.forEach(b => {
     b.classList.toggle('active', b.dataset.tab === currentTab);
   });
+
+  const subBar = hubModalEl.querySelector('#atlasSubCategoryBar');
+  if (currentTab === 'views') {
+    if (subBar) subBar.style.display = 'flex';
+  } else {
+    if (subBar) subBar.style.display = 'none';
+  }
 
   renderHubContent(viewer);
 }
@@ -317,32 +397,334 @@ function renderHubContent(viewer) {
 
   if (currentTab === 'views') {
     renderViewsTab(body, viewer);
+  } else if (currentTab === 'search') {
+    renderSearchTab(body, viewer);
   } else if (currentTab === 'media') {
     renderMediaTab(body, viewer);
   } else if (currentTab === 'quizzes') {
     renderQuizzesTab(body, viewer);
+  } else if (currentTab === 'library') {
+    renderLibraryTab(body, viewer);
   }
+
+  setupShelfScrollIndicators(body);
 }
 
-// 1. RENDER VIEWS TAB (Preset Views by Systems & Regions)
+// Attach dynamic scroll indicator & desktop horizontal mouse wheel to shelves
+function setupShelfScrollIndicators(container) {
+  const shelves = container.querySelectorAll('.atlas-carousel-shelf');
+  shelves.forEach(shelf => {
+    const track = shelf.querySelector('.shelf-track');
+    const pill = shelf.querySelector('.shelf-scroll-pill');
+    if (!track || !pill) return;
+
+    // Smooth horizontal scroll with mouse wheel on desktop
+    track.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        track.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // Update scroll indicator pill position
+    const updatePill = () => {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll <= 0) {
+        pill.style.transform = 'translateX(0)';
+        return;
+      }
+      const scrollPct = Math.min(Math.max(track.scrollLeft / maxScroll, 0), 1);
+      const indicatorWidth = 80;
+      const pillWidth = 28;
+      const travel = indicatorWidth - pillWidth;
+      pill.style.transform = `translateX(${scrollPct * travel}px)`;
+    };
+
+    track.addEventListener('scroll', updatePill, { passive: true });
+    updatePill();
+  });
+}
+
+// 1. RENDER VIEWS TAB (Horizontal Carousel Shelves by Sub-Category)
 function renderViewsTab(container, viewer) {
   let html = '';
   const normQuery = normalise(searchQuery);
 
-  // If user searched, show matching individual 3D structures first!
+  // If user searched, show matching 3D structures first
   if (normQuery && normQuery.length >= 2) {
     const matchedStructures = searchStructures(searchQuery, 12);
     if (matchedStructures.length > 0) {
       html += `
-        <div class="atlas-view-section matched-structures-section">
-          <div class="atlas-view-section-header">
-            <div class="section-title-wrap">
-              <span class="system-icon-mini">📍</span>
-              <h3 class="section-heading">Cấu Trúc Giải Phẫu 3D Khớp Tìm Kiếm (${matchedStructures.length})</h3>
-            </div>
-            <span class="section-count">Nhấn để xem & định vị 3D</span>
+        <div class="atlas-carousel-shelf matched-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">Cấu Trúc Khớp Tìm Kiếm (${matchedStructures.length})</h3>
+            <span class="shelf-action-btn">•••</span>
           </div>
-          <div class="atlas-structures-grid">
+          <div class="shelf-track">
+            ${matchedStructures.map(s => {
+              const targetPart = s.sides.none || s.sides.right || s.sides.left;
+              return `
+                <div class="atlas-shelf-card structure-shelf-card" data-structure-part="${escapeHtml(targetPart)}" role="button" tabindex="0">
+                  <div class="shelf-thumb-box">
+                    <span class="shelf-pin-icon">📍</span>
+                    <span class="shelf-thumb-dots">•••</span>
+                  </div>
+                  <div class="shelf-card-title">${escapeHtml(s.label)}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    }
+  }
+
+  if (currentSubFilter === 'systems') {
+    // Render all Systems shelves
+    const filteredSystems = ATLAS_SYSTEMS_CATEGORIES.map(cat => {
+      const matchedCards = cat.cards.filter(c =>
+        !normQuery ||
+        normalise(c.title).includes(normQuery) ||
+        (c.titleVi && normalise(c.titleVi).includes(normQuery)) ||
+        (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
+        (c.desc && normalise(c.desc).includes(normQuery)) ||
+        normalise(cat.titleVi).includes(normQuery) ||
+        (cat.titleEn && normalise(cat.titleEn).includes(normQuery))
+      );
+      return { ...cat, cards: matchedCards };
+    }).filter(cat => cat.cards.length > 0);
+
+    filteredSystems.forEach(cat => {
+      html += `
+        <div class="atlas-carousel-shelf" data-shelf-id="${cat.id}">
+          <div class="shelf-header">
+            <h3 class="shelf-title">${escapeHtml(cat.titleEn || cat.titleVi)}</h3>
+            <button type="button" class="shelf-action-btn" title="Tùy chọn">•••</button>
+          </div>
+          <div class="shelf-track">
+            ${cat.cards.map(card => `
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)} (${escapeHtml(card.titleVi || card.subtitle || '')})">
+                <div class="shelf-thumb-box">
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/skel_full.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/skel_full.png'" />
+                  <span class="shelf-thumb-dots">•••</span>
+                  ${card.hasPlay || card.explode || card.motionId ? `
+                    <span class="shelf-thumb-play">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                    </span>
+                  ` : ''}
+                </div>
+                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    });
+  } else if (currentSubFilter === 'regions') {
+    const filteredRegions = ATLAS_REGIONS_CATEGORIES.filter(r =>
+      !normQuery ||
+      normalise(r.title).includes(normQuery) ||
+      (r.subtitle && normalise(r.subtitle).includes(normQuery))
+    );
+    if (filteredRegions.length > 0) {
+      html += `
+        <div class="atlas-carousel-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">Regional Anatomy Views</h3>
+            <button type="button" class="shelf-action-btn">•••</button>
+          </div>
+          <div class="shelf-track">
+            ${filteredRegions.map(reg => `
+              <div class="atlas-shelf-card" data-region-id="${reg.id}" title="${escapeHtml(reg.title)}">
+                <div class="shelf-thumb-box">
+                  <img class="shelf-thumb-img" src="${reg.image || '/images/atlas/reg_head_neck.png'}" alt="${escapeHtml(reg.title)}" loading="lazy" onerror="this.src='/images/atlas/reg_head_neck.png'" />
+                  <span class="shelf-thumb-dots">•••</span>
+                </div>
+                <div class="shelf-card-title">${escapeHtml(reg.title)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    }
+  } else if (currentSubFilter === 'lab') {
+    const filteredLab = ATLAS_LAB_CATEGORIES.filter(c =>
+      !normQuery ||
+      normalise(c.title).includes(normQuery) ||
+      (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
+      (c.desc && normalise(c.desc).includes(normQuery))
+    );
+    if (filteredLab.length > 0) {
+      html += `
+        <div class="atlas-carousel-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">Gross Anatomy Lab (Bàn Phẫu Tích)</h3>
+            <button type="button" class="shelf-action-btn">•••</button>
+          </div>
+          <div class="shelf-track">
+            ${filteredLab.map(card => `
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+                <div class="shelf-thumb-box">
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/reg_thorax.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/reg_thorax.png'" />
+                  <span class="shelf-thumb-dots">•••</span>
+                </div>
+                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    }
+  } else if (currentSubFilter === 'cross_sections') {
+    const filteredCross = ATLAS_CROSS_SECTIONS_CATEGORIES.map(group => {
+      const matched = group.cards.filter(c =>
+        !normQuery ||
+        normalise(c.title).includes(normQuery) ||
+        (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
+        (c.desc && normalise(c.desc).includes(normQuery)) ||
+        normalise(group.titleVi).includes(normQuery)
+      );
+      return { ...group, cards: matched };
+    }).filter(g => g.cards.length > 0);
+
+    filteredCross.forEach(group => {
+      html += `
+        <div class="atlas-carousel-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">${escapeHtml(group.titleVi)}</h3>
+            <button type="button" class="shelf-action-btn">•••</button>
+          </div>
+          <div class="shelf-track">
+            ${group.cards.map(card => `
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+                <div class="shelf-thumb-box">
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/nerv_brain.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/nerv_brain.png'" />
+                  <span class="shelf-thumb-dots">•••</span>
+                </div>
+                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    });
+  } else if (currentSubFilter === 'microanatomy') {
+    const filteredMicro = ATLAS_MICROANATOMY_CATEGORIES.map(group => {
+      const matched = group.cards.filter(c =>
+        !normQuery ||
+        normalise(c.title).includes(normQuery) ||
+        (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
+        (c.desc && normalise(c.desc).includes(normQuery)) ||
+        normalise(group.titleVi).includes(normQuery)
+      );
+      return { ...group, cards: matched };
+    }).filter(g => g.cards.length > 0);
+
+    filteredMicro.forEach(group => {
+      html += `
+        <div class="atlas-carousel-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">${escapeHtml(group.titleVi)}</h3>
+            <button type="button" class="shelf-action-btn">•••</button>
+          </div>
+          <div class="shelf-track">
+            ${group.cards.map(card => `
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+                <div class="shelf-thumb-box">
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/med_skin.png'" />
+                  <span class="shelf-thumb-dots">•••</span>
+                </div>
+                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    });
+  } else if (currentSubFilter === 'muscle_actions') {
+    const filteredActions = ATLAS_MUSCLE_ACTIONS_CATEGORIES.map(group => {
+      const matched = group.cards.filter(c =>
+        !normQuery ||
+        normalise(c.title).includes(normQuery) ||
+        (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
+        (c.desc && normalise(c.desc).includes(normQuery)) ||
+        normalise(group.titleVi).includes(normQuery)
+      );
+      return { ...group, cards: matched };
+    }).filter(g => g.cards.length > 0);
+
+    filteredActions.forEach(group => {
+      html += `
+        <div class="atlas-carousel-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">${escapeHtml(group.titleVi)}</h3>
+            <button type="button" class="shelf-action-btn">•••</button>
+          </div>
+          <div class="shelf-track">
+            ${group.cards.map(card => `
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+                <div class="shelf-thumb-box">
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/musc_torso.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/musc_torso.png'" />
+                  <span class="shelf-thumb-dots">•••</span>
+                  <span class="shelf-thumb-play">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  </span>
+                </div>
+                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+        </div>
+      `;
+    });
+  }
+
+  if (!html) {
+    html = `
+      <div class="atlas-empty-state">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <p>Không tìm thấy góc nhìn phù hợp với "<strong>${escapeHtml(searchQuery)}</strong>".</p>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+  bindCardClickEvents(container, viewer);
+}
+
+// 2. RENDER SEARCH TAB
+function renderSearchTab(container, viewer) {
+  let html = '';
+  const normQuery = normalise(searchQuery);
+
+  if (!normQuery) {
+    html = `
+      <div class="atlas-search-prompt">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="1.8">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <h3>Tìm Kiếm Danh Pháp & Góc Nhìn Giải Phẫu</h3>
+        <p>Gõ tên cấu trúc (VD: "não", "cơ hoành", "xương sườn", "tim") hoặc nói qua micro để định vị 3D tức thì.</p>
+      </div>
+    `;
+  } else {
+    const matchedStructures = searchStructures(searchQuery, 30);
+    if (matchedStructures.length > 0) {
+      html += `
+        <div class="atlas-carousel-shelf">
+          <div class="shelf-header">
+            <h3 class="shelf-title">Cấu Trúc Giải Phẫu 3D Khớp (${matchedStructures.length})</h3>
+            <span class="shelf-action-btn">•••</span>
+          </div>
+          <div class="shelf-search-list">
             ${matchedStructures.map(s => {
               const targetPart = s.sides.none || s.sides.right || s.sides.left;
               return `
@@ -358,261 +740,17 @@ function renderViewsTab(container, viewer) {
           </div>
         </div>
       `;
+    } else {
+      html = `
+        <div class="atlas-empty-state">
+          <p>Không tìm thấy cấu trúc giải phẫu nào với từ khóa "<strong>${escapeHtml(searchQuery)}</strong>".</p>
+        </div>
+      `;
     }
-  }
-
-  // Filter Categories by search using normalized matching
-  const filteredSystems = ATLAS_SYSTEMS_CATEGORIES.map(cat => {
-    const matchedCards = cat.cards.filter(c => 
-      !normQuery || 
-      normalise(c.title).includes(normQuery) ||
-      normalise(c.subtitle).includes(normQuery) ||
-      (c.desc && normalise(c.desc).includes(normQuery)) ||
-      normalise(cat.titleVi).includes(normQuery)
-    );
-    return { ...cat, cards: matchedCards };
-  }).filter(cat => cat.cards.length > 0);
-
-  const filteredRegions = ATLAS_REGIONS_CATEGORIES.filter(r =>
-    !normQuery ||
-    normalise(r.title).includes(normQuery) ||
-    normalise(r.subtitle).includes(normQuery)
-  );
-
-  const filteredLab = ATLAS_LAB_CATEGORIES.filter(c =>
-    !normQuery ||
-    normalise(c.title).includes(normQuery) ||
-    normalise(c.subtitle).includes(normQuery) ||
-    (c.desc && normalise(c.desc).includes(normQuery))
-  );
-
-  const filteredCrossSections = ATLAS_CROSS_SECTIONS_CATEGORIES.map(group => {
-    const matchedCards = group.cards.filter(c =>
-      !normQuery ||
-      normalise(c.title).includes(normQuery) ||
-      normalise(c.subtitle).includes(normQuery) ||
-      (c.desc && normalise(c.desc).includes(normQuery)) ||
-      normalise(group.titleVi).includes(normQuery)
-    );
-    return { ...group, cards: matchedCards };
-  }).filter(group => group.cards.length > 0);
-
-  const filteredMicroanatomy = ATLAS_MICROANATOMY_CATEGORIES.map(group => {
-    const matchedCards = group.cards.filter(c =>
-      !normQuery ||
-      normalise(c.title).includes(normQuery) ||
-      normalise(c.subtitle).includes(normQuery) ||
-      (c.desc && normalise(c.desc).includes(normQuery)) ||
-      normalise(group.titleVi).includes(normQuery)
-    );
-    return { ...group, cards: matchedCards };
-  }).filter(group => group.cards.length > 0);
-
-  const filteredMuscleActions = ATLAS_MUSCLE_ACTIONS_CATEGORIES.map(group => {
-    const matchedCards = group.cards.filter(c =>
-      !normQuery ||
-      normalise(c.title).includes(normQuery) ||
-      normalise(c.subtitle).includes(normQuery) ||
-      (c.desc && normalise(c.desc).includes(normQuery)) ||
-      normalise(group.titleVi).includes(normQuery)
-    );
-    return { ...group, cards: matchedCards };
-  }).filter(group => group.cards.length > 0);
-
-  // Render Systems if selected
-  if (currentSubFilter === 'all' || currentSubFilter === 'systems') {
-    filteredSystems.forEach(cat => {
-      html += `
-        <div class="atlas-view-section">
-          <div class="atlas-view-section-header">
-            <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS[cat.systemKey] || ICONS.skeletal}</span>
-              <h3 class="section-heading">${cat.titleVi}</h3>
-            </div>
-            <span class="section-count">${cat.cards.length} góc nhìn</span>
-          </div>
-          <div class="atlas-cards-grid">
-            ${cat.cards.map(card => `
-              <div class="atlas-view-card" data-view-id="${card.id}">
-                <div class="card-thumb-banner">
-                  <img class="card-thumb-img" src="${card.image || '/images/atlas/skel_full.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
-                  <div class="thumb-badge">${card.badge}</div>
-                </div>
-                <div class="card-info">
-                  <h4 class="card-title">${card.title}</h4>
-                  <p class="card-subtitle">${card.subtitle}</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  // Render Cross Sections if selected (Image 4 Visible Body standard)
-  if ((currentSubFilter === 'all' || currentSubFilter === 'cross_sections') && filteredCrossSections.length > 0) {
-    filteredCrossSections.forEach(group => {
-      html += `
-        <div class="atlas-view-section">
-          <div class="atlas-view-section-header">
-            <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS.crossSection || '📐'}</span>
-              <h3 class="section-heading">${group.titleVi}</h3>
-            </div>
-            <span class="section-count">${group.cards.length} lát cắt</span>
-          </div>
-          <div class="atlas-cards-grid">
-            ${group.cards.map(card => `
-              <div class="atlas-view-card cross-section-card" data-view-id="${card.id}">
-                <div class="card-thumb-banner cross-thumb">
-                  <img class="card-thumb-img" src="${card.image || '/images/atlas/nerv_brain.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
-                  <div class="thumb-badge cross-badge">${card.badge}</div>
-                </div>
-                <div class="card-info">
-                  <h4 class="card-title">${card.title}</h4>
-                  <p class="card-subtitle">${card.subtitle}</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  // Render Microanatomy & Skin Layers if selected (Image 1 Visible Body standard)
-  if ((currentSubFilter === 'all' || currentSubFilter === 'microanatomy') && filteredMicroanatomy.length > 0) {
-    filteredMicroanatomy.forEach(group => {
-      html += `
-        <div class="atlas-view-section">
-          <div class="atlas-view-section-header">
-            <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS.microanatomy || '🔬'}</span>
-              <h3 class="section-heading">${group.titleVi}</h3>
-            </div>
-            <span class="section-count">${group.cards.length} vi thể</span>
-          </div>
-          <div class="atlas-cards-grid">
-            ${group.cards.map(card => `
-              <div class="atlas-view-card micro-card" data-view-id="${card.id}">
-                <div class="card-thumb-banner micro-thumb">
-                  <img class="card-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
-                  <div class="thumb-badge micro-badge">${card.badge}</div>
-                </div>
-                <div class="card-info">
-                  <h4 class="card-title">${card.title}</h4>
-                  <p class="card-subtitle">${card.subtitle}</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  // Render Muscle Actions if selected (Image 2 & 3 Visible Body standard)
-  if ((currentSubFilter === 'all' || currentSubFilter === 'muscle_actions') && filteredMuscleActions.length > 0) {
-    filteredMuscleActions.forEach(group => {
-      html += `
-        <div class="atlas-view-section">
-          <div class="atlas-view-section-header">
-            <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS.muscleAction || '💪'}</span>
-              <h3 class="section-heading">${group.titleVi}</h3>
-            </div>
-            <span class="section-count">${group.cards.length} chuyển động</span>
-          </div>
-          <div class="atlas-cards-grid">
-            ${group.cards.map(card => `
-              <div class="atlas-view-card action-card" data-view-id="${card.id}">
-                <div class="card-thumb-banner action-thumb">
-                  <img class="card-thumb-img" src="${card.image || '/images/atlas/musc_torso.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
-                  <div class="thumb-badge action-badge">${card.badge}</div>
-                </div>
-                <div class="card-info">
-                  <h4 class="card-title">${card.title}</h4>
-                  <p class="card-subtitle">${card.subtitle}</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  // Render Gross Anatomy Lab if selected
-  if ((currentSubFilter === 'all' || currentSubFilter === 'lab') && filteredLab.length > 0) {
-    html += `
-      <div class="atlas-view-section">
-        <div class="atlas-view-section-header">
-          <div class="section-title-wrap">
-            <span class="system-icon-mini">🗄️</span>
-            <h3 class="section-heading">Bàn Phẫu Tích Y Khoa (Gross Anatomy Cadaver Lab)</h3>
-          </div>
-          <span class="section-count">${filteredLab.length} góc mổ</span>
-        </div>
-        <div class="atlas-cards-grid">
-          ${filteredLab.map(card => `
-            <div class="atlas-view-card lab-card" data-view-id="${card.id}">
-              <div class="card-thumb-banner lab-thumb">
-                <img class="card-thumb-img" src="${card.image || '/images/atlas/reg_thorax.png'}" alt="${card.title}" loading="lazy" onerror="this.style.display='none'" />
-                <div class="thumb-badge lab-badge">${card.badge}</div>
-              </div>
-              <div class="card-info">
-                <h4 class="card-title">${card.title}</h4>
-                <p class="card-subtitle">${card.subtitle}</p>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render Regions if selected
-  if ((currentSubFilter === 'all' || currentSubFilter === 'regions') && filteredRegions.length > 0) {
-    html += `
-      <div class="atlas-view-section">
-        <div class="atlas-view-section-header">
-          <div class="section-title-wrap">
-            <span class="system-icon-mini">${ICONS.regionWhole}</span>
-            <h3 class="section-heading">Phân Vùng Cơ Thể</h3>
-          </div>
-          <span class="section-count">${filteredRegions.length} phân vùng</span>
-        </div>
-        <div class="atlas-cards-grid">
-          ${filteredRegions.map(reg => `
-            <div class="atlas-view-card region-card" data-region-id="${reg.id}">
-              <div class="card-thumb-banner region-thumb">
-                <img class="card-thumb-img" src="${reg.image || '/images/atlas/reg_head_neck.png'}" alt="${reg.title}" loading="lazy" onerror="this.style.display='none'" />
-                <div class="thumb-badge">${reg.badge}</div>
-              </div>
-              <div class="card-info">
-                <h4 class="card-title">${reg.title}</h4>
-                <p class="card-subtitle">${reg.subtitle}</p>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  if (!html) {
-    html = `
-      <div class="atlas-empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p>Không tìm thấy góc nhìn nào phù hợp với từ khóa "<strong>${escapeHtml(searchQuery)}</strong>".</p>
-      </div>
-    `;
   }
 
   container.innerHTML = html;
 
-  // Bind Matched 3D Structure Click Events
   container.querySelectorAll('.atlas-structure-item-card').forEach(cardEl => {
     cardEl.addEventListener('click', async () => {
       const partId = cardEl.dataset.structurePart;
@@ -623,9 +761,157 @@ function renderViewsTab(container, viewer) {
       await selectStructureAnywhere(partId);
     });
   });
+}
 
-  // Bind View Card Click Events
-  container.querySelectorAll('.atlas-view-card').forEach(cardEl => {
+// 3. RENDER MEDIA TAB (Patient Education Animations & Biomechanics)
+function renderMediaTab(container, viewer) {
+  const mediaCategories = getAtlasMediaCategories();
+  const normQuery = normalise(searchQuery);
+
+  const filteredMedia = mediaCategories.map(cat => {
+    const matched = (cat.cards || []).filter(c =>
+      !normQuery ||
+      normalise(c.title).includes(normQuery) ||
+      (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
+      (c.desc && normalise(c.desc).includes(normQuery)) ||
+      normalise(cat.titleVi).includes(normQuery)
+    );
+    return { ...cat, cards: matched };
+  }).filter(cat => cat.cards.length > 0);
+
+  let html = `
+    <div class="media-shelf-topbar">
+      <div class="media-shelf-info">
+        <span class="media-shelf-badge">🎬 12 Chuyên Đề Hoạt Ảnh Lâm Sàng Atlas</span>
+      </div>
+      <button type="button" class="btn-media-add-new" id="btnMediaAddNewVideo" title="Thêm video mới">
+        <span>➕ Thêm Video</span>
+      </button>
+    </div>
+  `;
+
+  filteredMedia.forEach(cat => {
+    html += `
+      <div class="atlas-carousel-shelf">
+        <div class="shelf-header">
+          <h3 class="shelf-title">${escapeHtml(cat.titleVi)}</h3>
+          <button type="button" class="shelf-action-btn">•••</button>
+        </div>
+        <div class="shelf-track">
+          ${cat.cards.map(card => `
+            <div class="atlas-shelf-card media-shelf-card" data-media-id="${card.id}" title="${escapeHtml(card.title)}">
+              <div class="shelf-thumb-box">
+                <img class="shelf-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/med_skin.png'" />
+                <span class="shelf-thumb-dots">•••</span>
+                <span class="shelf-thumb-play">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </span>
+                <span class="shelf-duration-pill">${card.duration || '0:30'}</span>
+              </div>
+              <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+      </div>
+    `;
+  });
+
+  if (filteredMedia.length === 0) {
+    html += `
+      <div class="atlas-empty-state">
+        <p>Không tìm thấy hoạt ảnh nào phù hợp.</p>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+
+  container.querySelector('#btnMediaAddNewVideo')?.addEventListener('click', () => {
+    openQuickVideoModal(null, 'Thư Viện Hoạt Ảnh', () => {
+      renderMediaTab(container, viewer);
+    });
+  });
+
+  container.querySelectorAll('.media-shelf-card').forEach(cardEl => {
+    cardEl.addEventListener('click', () => {
+      const mediaId = cardEl.dataset.mediaId;
+      let targetMedia = null;
+      for (const cat of mediaCategories) {
+        const found = (cat.cards || []).find(c => c.id === mediaId);
+        if (found) { targetMedia = found; break; }
+      }
+      if (targetMedia) applyAtlasMedia(targetMedia, viewer);
+    });
+  });
+}
+
+// 4. RENDER QUIZZES TAB
+function renderQuizzesTab(container, viewer) {
+  let html = `
+    <div class="atlas-carousel-shelf">
+      <div class="shelf-header">
+        <h3 class="shelf-title">Quizzes & Knowledge Checks (Trắc Nghiệm 3D)</h3>
+        <button type="button" class="shelf-action-btn">•••</button>
+      </div>
+      <div class="shelf-track">
+        ${ATLAS_QUIZZES_DATA.map(q => `
+          <div class="atlas-shelf-card quiz-shelf-card" data-quiz-id="${q.id}" title="${escapeHtml(q.title)}">
+            <div class="shelf-thumb-box">
+              <img class="shelf-thumb-img" src="${q.image || '/images/atlas/quiz_identify.png'}" alt="${escapeHtml(q.title)}" loading="lazy" onerror="this.src='/images/atlas/quiz_identify.png'" />
+              <span class="shelf-thumb-dots">•••</span>
+            </div>
+            <div class="shelf-card-title">${escapeHtml(q.title)}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="shelf-scroll-indicator"><div class="shelf-scroll-pill"></div></div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.quiz-shelf-card').forEach(cardEl => {
+    cardEl.addEventListener('click', () => {
+      const qId = cardEl.dataset.quizId;
+      closeAtlasHub();
+      if (qId === 'quiz_identify') {
+        document.getElementById('btnToolQuiz')?.click();
+      } else {
+        document.getElementById('btnToolStudy')?.click();
+      }
+    });
+  });
+}
+
+// 5. RENDER MY LIBRARY TAB
+function renderLibraryTab(container, viewer) {
+  let html = `
+    <div class="atlas-carousel-shelf">
+      <div class="shelf-header">
+        <h3 class="shelf-title">Saved Views & Custom Notes (Thư Viện Của Tôi)</h3>
+        <button type="button" class="shelf-action-btn">•••</button>
+      </div>
+      <div class="atlas-library-empty">
+        <div class="library-empty-icon">📁</div>
+        <h4>Chưa có góc nhìn tùy chỉnh nào được lưu</h4>
+        <p>Khi khám phá mô hình 3D, nhấn nút <strong>Launch Link</strong> hoặc lưu góc nhìn để truy cập nhanh tại đây.</p>
+        <button type="button" class="btn-lib-explore" id="btnLibExploreViews">Khám phá Góc Nhìn Chuẩn</button>
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  container.querySelector('#btnLibExploreViews')?.addEventListener('click', () => {
+    const tabViews = hubModalEl.querySelector('#tabBtnViews');
+    tabViews?.click();
+  });
+}
+
+// Helper: Bind card click events across all shelves
+function bindCardClickEvents(container, viewer) {
+  container.querySelectorAll('.atlas-shelf-card').forEach(cardEl => {
     cardEl.addEventListener('click', () => {
       const viewId = cardEl.dataset.viewId;
       const regId = cardEl.dataset.regionId;
@@ -636,9 +922,7 @@ function renderViewsTab(container, viewer) {
           const found = cat.cards.find(c => c.id === viewId);
           if (found) { targetCard = found; break; }
         }
-        if (!targetCard) {
-          targetCard = ATLAS_LAB_CATEGORIES.find(c => c.id === viewId);
-        }
+        if (!targetCard) targetCard = ATLAS_LAB_CATEGORIES.find(c => c.id === viewId);
         if (!targetCard) {
           for (const g of ATLAS_CROSS_SECTIONS_CATEGORIES) {
             const found = g.cards.find(c => c.id === viewId);
@@ -661,163 +945,6 @@ function renderViewsTab(container, viewer) {
       } else if (regId) {
         const targetReg = ATLAS_REGIONS_CATEGORIES.find(r => r.id === regId);
         if (targetReg) applyAtlasRegion(targetReg, viewer);
-      }
-    });
-  });
-}
-
-
-// 2. RENDER MEDIA TAB (Photo 5: Patient Education Animations & 3D Biomechanics)
-function renderMediaTab(container, viewer) {
-  const mediaCategories = getAtlasMediaCategories();
-  let totalCards = 0;
-  mediaCategories.forEach(c => totalCards += (c.cards ? c.cards.length : 0));
-
-  let html = `
-    <div class="media-admin-quick-bar">
-      <div class="media-admin-bar-info">
-        <span class="media-count-badge">🎬 ${totalCards} Hoạt Ảnh & Video Y Khoa</span>
-        <span class="media-count-sub">(Đồng bộ 12 chuyên đề lâm sàng Atlas)</span>
-      </div>
-      <div class="media-admin-bar-actions">
-        <button type="button" class="btn-media-add-new" id="btnMediaAddNewVideo" title="Gắn hoặc thêm video mới (YouTube hoặc MP4 từ máy)">
-          <span>➕ Thêm Video</span>
-        </button>
-        <button type="button" class="btn-media-admin-shortcut" id="btnMediaAdminShortcut" title="Mở bảng quản trị để thêm/sửa link video">
-          <span>⚙️ Bảng Quản Trị</span>
-        </button>
-      </div>
-    </div>
-  `;
-
-  const normQuery = normalise(searchQuery);
-  const filteredMedia = mediaCategories.map(cat => {
-    const matched = (cat.cards || []).filter(c =>
-      !normQuery ||
-      normalise(c.title).includes(normQuery) ||
-      (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
-      (c.desc && normalise(c.desc).includes(normQuery)) ||
-      normalise(cat.titleVi).includes(normQuery)
-    );
-    return { ...cat, cards: matched };
-  }).filter(cat => cat.cards.length > 0);
-
-  filteredMedia.forEach(cat => {
-    html += `
-      <div class="atlas-view-section">
-        <div class="atlas-view-section-header">
-          <div class="section-title-wrap">
-            <span class="system-icon-mini">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-            </span>
-            <h3 class="section-heading">${cat.titleVi}</h3>
-          </div>
-          <span class="section-count">${cat.cards.length} hoạt ảnh</span>
-        </div>
-        <div class="atlas-cards-grid">
-          ${cat.cards.map(card => `
-            <div class="atlas-view-card media-card" data-media-id="${card.id}">
-              <div class="card-thumb-banner media-thumb ${card.type === 'motion' ? 'motion-accent' : ''}">
-                <img class="card-thumb-img" src="${card.image || './images/atlas/med_skin.png'}" alt="${card.title}" loading="lazy" onerror="this.src='./images/atlas/med_skin.png'" />
-                <div class="thumb-badge">${card.badge || 'Video'}</div>
-                <div class="thumb-duration-pill">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  <span>${card.duration || '0:30'}</span>
-                </div>
-                <div class="media-play-indicator">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.6)"/><polygon points="9.5 7.5 16.5 12 9.5 16.5 9.5 7.5" fill="#38bdf8"/></svg>
-                </div>
-              </div>
-              <div class="card-info">
-                <h4 class="card-title">${card.title}</h4>
-                <p class="card-subtitle">${card.subtitle || ''}</p>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  });
-
-  if (filteredMedia.length === 0) {
-    html += `
-      <div class="atlas-empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p>Không tìm thấy hoạt ảnh y khoa nào phù hợp với "<strong>${searchQuery}</strong>".</p>
-      </div>
-    `;
-  }
-
-  container.innerHTML = html;
-
-  // Bind Admin Shortcut Button
-  container.querySelector('#btnMediaAdminShortcut')?.addEventListener('click', () => {
-    openAtlasAdmin(viewer);
-  });
-
-  // Bind Add New Video Button
-  container.querySelector('#btnMediaAddNewVideo')?.addEventListener('click', () => {
-    openQuickVideoModal(null, 'Thư Viện Hoạt Ảnh', () => {
-      renderMediaCategories(container, getAtlasMediaCategories(), '', viewer);
-    });
-  });
-
-  // Bind Media Card Click Events
-  container.querySelectorAll('.media-card').forEach(cardEl => {
-    cardEl.addEventListener('click', () => {
-      const mediaId = cardEl.dataset.mediaId;
-      let targetMedia = null;
-      for (const cat of mediaCategories) {
-        const found = (cat.cards || []).find(c => c.id === mediaId);
-        if (found) { targetMedia = found; break; }
-      }
-      if (targetMedia) applyAtlasMedia(targetMedia, viewer);
-    });
-  });
-}
-
-
-// 3. RENDER QUIZZES TAB
-function renderQuizzesTab(container, viewer) {
-  let html = `
-    <div class="atlas-view-section">
-      <div class="atlas-view-section-header">
-        <div class="section-title-wrap">
-          <span class="system-icon-mini">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          </span>
-          <h3 class="section-heading">Hệ Thống Trắc Nghiệm & Kiểm Tra Kiến Thức 3D</h3>
-        </div>
-      </div>
-      <div class="atlas-cards-grid">
-        ${ATLAS_QUIZZES_DATA.map(q => `
-          <div class="atlas-view-card hub-quiz-card" data-quiz-id="${q.id}">
-            <div class="card-thumb-banner quiz-thumb">
-              <img class="card-thumb-img" src="${q.image || '/images/atlas/quiz_identify.png'}" alt="${q.title}" loading="lazy" onerror="this.style.display='none'" />
-              <div class="thumb-badge">${q.badge}</div>
-            </div>
-            <div class="card-info">
-              <h4 class="card-title">${q.title}</h4>
-              <p class="card-subtitle">${q.subtitle}</p>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-
-  container.innerHTML = html;
-
-  container.querySelectorAll('.hub-quiz-card').forEach(cardEl => {
-    cardEl.addEventListener('click', () => {
-      const qId = cardEl.dataset.quizId;
-      closeAtlasHub();
-      if (qId === 'quiz_identify') {
-        document.getElementById('btnToolQuiz')?.click();
-      } else if (qId === 'quiz_fsrs') {
-        document.getElementById('btnToolStudy')?.click();
-      } else {
-        document.getElementById('btnToolStudy')?.click();
       }
     });
   });
@@ -851,41 +978,22 @@ async function applyAtlasView(card, viewer) {
     // 2. Set Model Orientation & Dissection Table
     setModelOrientation(card.orientation || 'standing', activeViewer, { showTable: !!card.showTable });
 
-    // 3. Handle Cross-Section Clipping vs Kinematic Muscle Action vs Normal View
+    // 3. Handle Explode factor (e.g. Disarticulated Skull)
+    if (card.explode) {
+      setExplodeFactor(card.explode / 100, activeViewer);
+      const btnExplode = document.getElementById('btnToolExplode');
+      btnExplode?.classList.add('active');
+    } else {
+      resetExplode(activeViewer);
+      const btnExplode = document.getElementById('btnToolExplode');
+      btnExplode?.classList.remove('active');
+    }
+
+    // 4. Handle Cross-Section Clipping vs Kinematic Muscle Action vs Normal View
     if (card.plane) {
       closeMotionPanel();
       setClippingPlane(card.plane, card.offset !== undefined ? card.offset : 0, false, activeViewer, true);
       document.getElementById('btnToolClipping')?.classList.add('active');
-      const popover = document.getElementById('clippingPopover');
-      if (popover) {
-        popover.classList.remove('hidden');
-        const planeBtns = popover.querySelectorAll('.clipping-plane-select .plane-btn');
-        planeBtns.forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.plane === card.plane);
-        });
-        const slider = document.getElementById('clippingSlider');
-        const valLabel = document.getElementById('clippingValue');
-        if (slider) {
-          if (card.plane === 'axial') {
-            slider.min = '0.0';
-            slider.max = '1.8';
-            slider.step = '0.01';
-          } else if (card.plane === 'coronal') {
-            slider.min = '-0.3';
-            slider.max = '0.3';
-            slider.step = '0.01';
-          } else {
-            slider.min = '-0.4';
-            slider.max = '0.4';
-            slider.step = '0.01';
-          }
-          slider.value = card.offset !== undefined ? card.offset : 0;
-        }
-        if (valLabel) {
-          const off = card.offset !== undefined ? card.offset : 0;
-          valLabel.textContent = `${(off * 100).toFixed(1)} cm`;
-        }
-      }
       import('./radiologicalScout.js').then(({ showScoutView }) => {
         showScoutView(card, card.plane, card.offset);
       });
@@ -894,8 +1002,6 @@ async function applyAtlasView(card, viewer) {
         hideScoutView();
       });
       disableClipping(activeViewer);
-      const popover = document.getElementById('clippingPopover');
-      if (popover) popover.classList.add('hidden');
       document.getElementById('btnToolClipping')?.classList.remove('active');
       openMotionPanel(activeViewer, card.motionId);
     } else {
@@ -903,23 +1009,20 @@ async function applyAtlasView(card, viewer) {
         hideScoutView();
       });
       disableClipping(activeViewer);
-      const popover = document.getElementById('clippingPopover');
-      if (popover) popover.classList.add('hidden');
       document.getElementById('btnToolClipping')?.classList.remove('active');
       closeMotionPanel();
     }
 
-    // 4. Animate camera
+    // 5. Animate camera
     if (card.camera) {
       const cam = card.camera;
       const { camera, controls } = activeViewer;
       const targetPos = { x: cam.x, y: cam.y, z: cam.z };
       const targetLook = { x: cam.targetX || 0, y: cam.targetY || cam.y, z: cam.targetZ || 0 };
-
       animateCameraTo(camera, controls, targetPos, targetLook);
     }
 
-    // 5. Highlight specific part if present, or deselect
+    // 6. Highlight specific part if present, or deselect
     if (card.highlight) {
       setTimeout(() => {
         const ok = selectPartById(card.highlight, activeViewer, false, true);
@@ -952,15 +1055,12 @@ async function applyAtlasRegion(reg, viewer) {
   if (!activeViewer) return;
 
   disableClipping(activeViewer);
-  const popover = document.getElementById('clippingPopover');
-  if (popover) popover.classList.add('hidden');
   closeMotionPanel();
 
   if (currentActiveRegionId === reg.id) {
-    // Toggle OFF: revert to front whole body view!
     currentActiveRegionId = null;
     setView('front', activeViewer);
-    showToast(`Đã tắt phân vùng: ${reg.title} - Trở về toàn thân`);
+    showToast(`Đã trở về toàn thân`);
     activeViewer.render();
     return;
   }
@@ -985,18 +1085,15 @@ async function applyAtlasRegion(reg, viewer) {
   activeViewer.render();
 }
 
-// ACTION: Apply Media (3D Biomechanics Motion or Clinical Video)
+// ACTION: Apply Media
 function applyAtlasMedia(media, viewer) {
   const activeViewer = viewer || state.viewer || window.viewer;
   if (media.type === 'motion') {
     closeAtlasHub();
     disableClipping(activeViewer);
-    const popover = document.getElementById('clippingPopover');
-    if (popover) popover.classList.add('hidden');
     showToast(`▶️ Đang khởi chạy mô phỏng 3D: ${media.title}`);
     openMotionPanel(activeViewer, media.motionType);
   } else if (media.type === 'video') {
-    // Giữ nguyên Thư Viện Atlas Hub bên dưới để khi xem xong người dùng đóng video sẽ quay lại đúng danh mục và vị trí đang duyệt
     closeMotionPanel();
     showToast(`🎬 Đang phát video y khoa: ${media.title}`);
     openVideoModal(media.videoUrl, media.title);
@@ -1012,7 +1109,7 @@ function animateCameraTo(camera, controls, pos, lookAt, duration = 650) {
   function step(now) {
     const elapsed = now - startTime;
     const t = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+    const ease = 1 - Math.pow(1 - t, 3);
 
     camera.position.x = startPos.x + (pos.x - startPos.x) * ease;
     camera.position.y = startPos.y + (pos.y - startPos.y) * ease;

@@ -5,150 +5,458 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
   {
     id: 'skeletal_views',
     titleVi: 'Hệ Xương Khớp',
+    titleEn: 'Skeletal System Views',
     systemKey: 'skeletal',
     cards: [
       {
-        id: 'skel_full',
-        title: '1. Toàn Bộ Hệ Xương',
-        subtitle: '206 xương trục và xương chi thể',
-        badge: 'Toàn thân',
+        id: 'skel_1_full',
+        title: '1. Full Skeleton',
+        titleVi: '1. Toàn bộ Hệ Xương',
+        subtitle: 'Bộ xương người trưởng thành',
         image: '/images/atlas/skel_full.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 0.86, z: 2.6, targetX: 0, targetY: 0.86, targetZ: 0 },
-        desc: 'Bộ xương người trưởng thành: bảo vệ tạng, tạo máu và khung vận động.'
+        desc: 'Bộ xương người trưởng thành: 206 xương trục và xương chi thể.'
       },
       {
-        id: 'skel_skull',
-        title: '2. Hộp Sọ & Xương Mặt',
-        subtitle: 'Vòm sọ, nền sọ và xương hàm dưới',
-        badge: 'Đầu mặt',
+        id: 'skel_2_skull',
+        title: '2. Skull',
+        titleVi: '2. Hộp Sọ & Xương Mặt',
+        subtitle: 'Vòm sọ, nền sọ và xương hàm',
         image: '/images/atlas/skel_skull.png',
         systems: ['skeletal'],
         camera: { x: 0.48, y: 1.62, z: 0.58, targetX: 0, targetY: 1.58, targetZ: 0 },
         highlight: 'Frontal bone',
-        desc: 'Khối xương sọ não bảo vệ não bộ và khối xương mặt nâng đỡ các giác quan.'
+        desc: 'Khối xương sọ não bảo vệ não bộ và khối xương mặt.'
       },
       {
-        id: 'skel_cranial_fossae',
-        title: '3. Cấu Trúc Nền Sọ',
-        subtitle: 'Hố sọ trước, hố sọ giữa và hố sọ sau',
-        badge: 'Nền sọ',
+        id: 'skel_3_cranial_fossae',
+        title: '3. Cranial Fossae',
+        titleVi: '3. Cấu Trúc Nền Sọ',
+        subtitle: 'Hố sọ trước, giữa và sau',
         image: '/images/atlas/skel_cranial_fossae.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 1.40, z: 0.45, targetX: 0, targetY: 1.55, targetZ: 0 },
         highlight: 'Sphenoid bone',
-        desc: 'Hệ thống các lỗ nền sọ cho 12 đôi dây thần kinh sọ và mạch máu não đi qua.'
+        desc: 'Hệ thống các lỗ nền sọ cho 12 đôi dây TK sọ đi qua.'
       },
       {
-        id: 'skel_spine',
-        title: '4. Cột Sống & Lồng Ngực',
-        subtitle: '33 đốt sống và 12 đôi xương sườn',
-        badge: 'Thân mình',
+        id: 'skel_4_skull_sagittal',
+        title: '4. Skull, Sagittal Section',
+        titleVi: '4. Sọ Cắt Đứng Dọc',
+        subtitle: 'Khoang sọ & vách ngăn mũi',
+        image: '/images/atlas/skel_skull.png',
+        systems: ['skeletal'],
+        camera: { x: 0.55, y: 1.60, z: 0.45, targetX: 0, targetY: 1.58, targetZ: 0 },
+        clipping: { plane: 'sagittal', offset: 0 },
+        desc: 'Mặt cắt dọc giữa hộp sọ bộc lộ xoang bướm, xoang trán và nền sọ.'
+      },
+      {
+        id: 'skel_5_skull_transverse',
+        title: '5. Skull, Transverse Section',
+        titleVi: '5. Sọ Cắt Ngang',
+        subtitle: 'Vòm sọ và các tầng nền sọ',
+        image: '/images/atlas/skel_cranial_fossae.png',
+        systems: ['skeletal'],
+        camera: { x: 0, y: 1.75, z: 0.35, targetX: 0, targetY: 1.58, targetZ: 0 },
+        clipping: { plane: 'axial', offset: 0.05 },
+        desc: 'Mặt cắt ngang qua vòm sọ quan sát cấu trúc bản trong và ngoài xương sọ.'
+      },
+      {
+        id: 'skel_6_disarticulated',
+        title: '6. Disarticulated Skull',
+        titleVi: '6. Sọ Tháo Rời Từng Mảnh',
+        subtitle: 'Tách rời các xương khớp sọ',
+        hasPlay: true,
+        image: '/images/atlas/skel_skull.png',
+        systems: ['skeletal'],
+        camera: { x: 0.3, y: 1.60, z: 0.65, targetX: 0, targetY: 1.58, targetZ: 0 },
+        explode: 40,
+        desc: 'Quan sát các đường khớp sọ tách rời từng xương thành phần.'
+      },
+      {
+        id: 'skel_7_arches',
+        title: '7. Upper and Lower Arches',
+        titleVi: '7. Cung Răng Hàm Trên & Dưới',
+        subtitle: 'Cung răng và huyệt ổ răng',
+        hasPlay: true,
+        image: '/images/atlas/skel_skull.png',
+        systems: ['skeletal'],
+        camera: { x: 0, y: 1.54, z: 0.35, targetX: 0, targetY: 1.52, targetZ: 0 },
+        highlight: 'Maxilla',
+        desc: 'Cung răng hàm trên gắn xương hàm trên, cung răng hàm dưới gắn xương hàm dưới.'
+      },
+      {
+        id: 'skel_8_teeth_blood',
+        title: '8. Teeth Blood Supply',
+        titleVi: '8. Mạch Máu Nuôi Răng',
+        subtitle: 'Động mạch ổ răng trên & dưới',
+        image: '/images/atlas/skel_skull.png',
+        systems: ['skeletal', 'cardiovascular'],
+        camera: { x: 0.22, y: 1.54, z: 0.38, targetX: 0, targetY: 1.52, targetZ: 0 },
+        highlight: 'Mandible',
+        desc: 'Mạng lưới động mạch hàm trên và nhánh huyệt răng dưới nuôi tủy răng.'
+      },
+      {
+        id: 'skel_9_thoracic_cage',
+        title: '9. Thoracic Cage',
+        titleVi: '9. Lồng Ngực Sườn',
+        subtitle: '12 đôi xương sườn & xương ức',
         image: '/images/atlas/skel_spine.png',
         systems: ['skeletal'],
-        camera: { x: 0.6, y: 1.15, z: 1.15, targetX: 0, targetY: 1.1, targetZ: 0 },
-        highlight: 'Vertebra L1',
-        desc: 'Trục nâng đỡ cơ thể và khung lồng ngực bảo vệ tim phổi.'
+        camera: { x: 0, y: 1.25, z: 0.85, targetX: 0, targetY: 1.25, targetZ: 0 },
+        highlight: 'Sternum',
+        desc: 'Khung xương lồng ngực bảo vệ tim phổi và tham gia động học hô hấp.'
       },
       {
-        id: 'skel_pelvis',
-        title: '5. Khung Chậu & Khớp Háng',
-        subtitle: 'Xương chậu, xương cùng và ổ cối',
-        badge: 'Vùng chậu',
+        id: 'skel_10_thoracic_cavity',
+        title: '10. Thoracic Cavity',
+        titleVi: '10. Khoang Lồng Ngực',
+        subtitle: 'Mối tương quan khung ngực và tạng',
+        image: '/images/atlas/reg_thorax.png',
+        systems: ['skeletal', 'visceral', 'cardiovascular'],
+        camera: { x: 0, y: 1.25, z: 0.90, targetX: 0, targetY: 1.25, targetZ: 0 },
+        desc: 'Toàn bộ khoang trung thất chứa tim và hai khoang màng phổi chứa phổi.'
+      },
+      {
+        id: 'skel_11_pelvic_girdle',
+        title: '11. Pelvic Girdle',
+        titleVi: '11. Đai Chậu & Khớp Háng',
+        subtitle: 'Xương chậu, xương cùng & ổ cối',
         image: '/images/atlas/skel_pelvis.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 0.88, z: 0.95, targetX: 0, targetY: 0.85, targetZ: 0 },
         highlight: 'Hip bone.l',
-        desc: 'Hai xương chậu kết hợp xương cùng tạo thành khung chậu vững chắc.'
+        desc: 'Hai xương chậu kết hợp xương cùng tạo thành khung chậu nâng đỡ trọng lượng.'
+      },
+      {
+        id: 'skel_12_pelvic_section',
+        title: '12. Pelvic Section',
+        titleVi: '12. Cắt Lớp Khung Chậu',
+        subtitle: 'Mặt cắt đứng dọc qua chậu hông',
+        image: '/images/atlas/skel_pelvis.png',
+        systems: ['skeletal', 'visceral'],
+        camera: { x: 0.4, y: 0.88, z: 0.85, targetX: 0, targetY: 0.85, targetZ: 0 },
+        clipping: { plane: 'sagittal', offset: 0 },
+        desc: 'Mặt cắt chậu hông quan sát bàng quang, trực tràng và cơ đáy chậu.'
+      },
+      {
+        id: 'skel_13_spine_lateral',
+        title: '13. Spine, Lateral',
+        titleVi: '13. Cột Sống Nhìn Nghiêng',
+        subtitle: '4 đường cong sinh lý cột sống',
+        image: '/images/atlas/skel_spine.png',
+        systems: ['skeletal'],
+        camera: { x: 0.9, y: 1.15, z: 0, targetX: 0, targetY: 1.1, targetZ: 0 },
+        highlight: 'Vertebra L1',
+        desc: 'Góc nhìn nghiêng quan sát đường cong ưỡn cổ, gù ngực, ưỡn thắt lưng và cong cùng.'
+      },
+      {
+        id: 'skel_14_spine_musculature',
+        title: '14. Spine, Musculature',
+        titleVi: '14. Cột Sống & Cơ Cạnh Sống',
+        subtitle: 'Hệ thống cơ dựng sống và cơ sâu',
+        image: '/images/atlas/musc_torso.png',
+        systems: ['skeletal', 'muscular'],
+        camera: { x: 0.6, y: 1.15, z: -0.9, targetX: 0, targetY: 1.1, targetZ: 0 },
+        desc: 'Hệ cơ cạnh sống giữ trục cột sống vững chắc trong mọi tư thế vận động.'
+      },
+      {
+        id: 'skel_15_shoulder_girdle',
+        title: '15. Shoulder Girdle',
+        titleVi: '15. Đai Vai & Khớp Cánh Tay',
+        subtitle: 'Xương đòn, xương vai và ổ chảo',
+        image: '/images/atlas/skel_full.png',
+        systems: ['skeletal', 'joints'],
+        camera: { x: 0.35, y: 1.35, z: 0.65, targetX: 0.2, targetY: 1.32, targetZ: 0 },
+        highlight: 'Clavicle.l',
+        desc: 'Đai vai nối chi trên với thân mình, khớp có biên độ vận động lớn nhất cơ thể.'
       }
     ]
   },
   {
     id: 'circulatory_views',
     titleVi: 'Hệ Tim Mạch & Tuần Hoàn',
+    titleEn: 'Circulatory System Views',
     systemKey: 'cardiovascular',
     cards: [
       {
-        id: 'circ_full',
-        title: '1. Tuần Hoàn Toàn Thân',
-        subtitle: 'Mạng lưới động mạch và tĩnh mạch chủ',
-        badge: 'Toàn thân',
+        id: 'circ_1_full',
+        title: '1. Circulatory System',
+        titleVi: '1. Toàn Bộ Hệ Tuần Hoàn',
+        subtitle: 'Mạng lưới động - tĩnh mạch toàn thân',
         image: '/images/atlas/circ_full.png',
         systems: ['cardiovascular', 'skeletal'],
         camera: { x: 0, y: 1.0, z: 2.0, targetX: 0, targetY: 1.0, targetZ: 0 },
-        desc: 'Mạng lưới tuần hoàn lớn và nhỏ vận chuyển oxy và dưỡng chất đi khắp cơ thể.'
+        desc: 'Mạng lưới đại tuần hoàn và tiểu tuần hoàn vận chuyển máu đi khắp cơ thể.'
       },
       {
-        id: 'circ_heart_thorax',
-        title: '2. Vị Trí Tim Trong Lồng Ngực',
-        subtitle: 'Tim, quai động mạch chủ và trung thất',
-        badge: 'Trung thất',
+        id: 'circ_2_simplified',
+        title: '2. Circulatory System, Simplified',
+        titleVi: '2. Hệ Tuần Hoàn Giản Lược',
+        subtitle: 'Các thân mạch máu chính yếu',
+        image: '/images/atlas/circ_simplified.png',
+        systems: ['cardiovascular'],
+        camera: { x: 0, y: 1.0, z: 2.0, targetX: 0, targetY: 1.0, targetZ: 0 },
+        desc: 'Trục động mạch chủ và tĩnh mạch chủ phân nhánh chính nuôi cơ thể.'
+      },
+      {
+        id: 'circ_3_location_heart',
+        title: '3. Location of Heart',
+        titleVi: '3. Vị Trí Tim Trong Lồng Ngực',
+        subtitle: 'Tim, quai ĐM chủ và trung thất',
         image: '/images/atlas/circ_heart_thorax.png',
         systems: ['cardiovascular', 'skeletal'],
         camera: { x: 0, y: 1.28, z: 0.72, targetX: 0, targetY: 1.28, targetZ: 0 },
         highlight: 'Left ventricle',
-        desc: 'Mối tương quan giải phẫu giữa tim, màng ngoài tim và khung xương lồng ngực.'
+        desc: 'Mối tương quan giải phẫu giữa quả tim, màng ngoài tim và khung xương sườn.'
       },
       {
-        id: 'circ_simplified',
-        title: '3. Mạch Máu Đại Tuần Hoàn',
-        subtitle: 'Động mạch chủ ngực, cảnh và chi',
-        badge: 'Đại tuần hoàn',
-        image: '/images/atlas/circ_simplified.png',
+        id: 'circ_4_vasculature_brain',
+        title: '4. Vasculature of the Brain',
+        titleVi: '4. Mạng Mạch Não Bộ',
+        subtitle: 'Động mạch cảnh trong & đốt sống',
+        image: '/images/atlas/nerv_brain.png',
+        systems: ['cardiovascular', 'nervous'],
+        camera: { x: 0.42, y: 1.62, z: 0.52, targetX: 0, targetY: 1.58, targetZ: 0 },
+        desc: 'Hệ thống cấp máu chuyên biệt nuôi vỏ não và các nhân xám trung ương.'
+      },
+      {
+        id: 'circ_5_circle_willis',
+        title: '5. Circle of Willis',
+        titleVi: '5. Đa Giác Động Mạch Não Willis',
+        subtitle: 'Vòng nối thông động mạch nền sọ',
+        image: '/images/atlas/nerv_brain.png',
         systems: ['cardiovascular'],
-        camera: { x: 0, y: 1.2, z: 1.1, targetX: 0, targetY: 1.2, targetZ: 0 },
-        highlight: 'Ascending aorta',
-        desc: 'Cây động mạch chủ phân nhánh nuôi đầu mặt, não bộ và các chi thể.'
+        camera: { x: 0, y: 1.45, z: 0.40, targetX: 0, targetY: 1.56, targetZ: 0 },
+        highlight: 'Basilar artery',
+        desc: 'Vòng tuần hoàn bàng hệ bù trừ quan trọng nhất nuôi toàn bộ bán cầu đại não.'
+      },
+      {
+        id: 'circ_6_carotid_jugular',
+        title: '6. Carotid and Jugular',
+        titleVi: '6. ĐM Cảnh & TM Cảnh',
+        subtitle: 'Bó mạch thần kinh vùng cổ',
+        image: '/images/atlas/circ_heart_thorax.png',
+        systems: ['cardiovascular', 'skeletal'],
+        camera: { x: 0.25, y: 1.48, z: 0.55, targetX: 0, targetY: 1.45, targetZ: 0 },
+        highlight: 'Common carotid artery.l',
+        desc: 'Động mạch cảnh chung và tĩnh mạch cảnh trong vận chuyển máu nuôi đầu mặt cổ.'
+      },
+      {
+        id: 'circ_7_pulmonary',
+        title: '7. Pulmonary',
+        titleVi: '7. Mạch Phổi & Tiểu Tuần Hoàn',
+        subtitle: 'Thân động mạch & tĩnh mạch phổi',
+        image: '/images/atlas/resp_lungs.png',
+        systems: ['cardiovascular', 'visceral'],
+        camera: { x: 0, y: 1.28, z: 0.75, targetX: 0, targetY: 1.26, targetZ: 0 },
+        highlight: 'Pulmonary trunk',
+        desc: 'Vòng tiểu tuần hoàn đưa máu giàu CO2 lên phổi và nhận máu giàu oxy về tim.'
+      },
+      {
+        id: 'circ_8_heart_section',
+        title: '8. Heart Section',
+        titleVi: '8. Mặt Cắt Buồng Tim & Van Tim',
+        subtitle: '4 buồng tim và van 2 lá, 3 lá',
+        image: '/images/atlas/circ_heart_thorax.png',
+        systems: ['cardiovascular'],
+        camera: { x: 0.15, y: 1.28, z: 0.55, targetX: 0, targetY: 1.28, targetZ: 0 },
+        clipping: { plane: 'coronal', offset: 0 },
+        desc: 'Mặt cắt trán qua tim quan sát tâm thất trái, tâm thất phải và hệ thống van tim.'
+      },
+      {
+        id: 'circ_9_azygos_system',
+        title: '9. Azygos System',
+        titleVi: '9. Hệ Tĩnh Mạch Đơn Azygos',
+        subtitle: 'Tĩnh mạch đơn, bán đơn & gian sườn',
+        image: '/images/atlas/circ_full.png',
+        systems: ['cardiovascular', 'skeletal'],
+        camera: { x: 0.45, y: 1.22, z: -0.75, targetX: 0, targetY: 1.22, targetZ: 0 },
+        highlight: 'Azygos vein',
+        desc: 'Hệ thống dẫn lưu máu thành ngực và là cầu nối quan trọng giữa hai tĩnh mạch chủ.'
+      },
+      {
+        id: 'circ_10_vagus',
+        title: '10. Vagus',
+        titleVi: '10. Dây Thần Kinh Lang Thang X',
+        subtitle: 'Thần kinh X đồng hành cùng bó mạch',
+        image: '/images/atlas/circ_heart_thorax.png',
+        systems: ['cardiovascular', 'nervous', 'visceral'],
+        camera: { x: 0.2, y: 1.35, z: 0.65, targetX: 0, targetY: 1.32, targetZ: 0 },
+        desc: 'Dây thần kinh X đi trong bao cảnh cùng động mạch cảnh và tĩnh mạch cảnh trong.'
+      },
+      {
+        id: 'circ_11_liver_circulation',
+        title: '11. Liver Circulation',
+        titleVi: '11. Tuần Hoàn Cửa & Gan',
+        subtitle: 'Tĩnh mạch cửa, ĐM gan & TM trên gan',
+        image: '/images/atlas/dig_peritoneum.png',
+        systems: ['cardiovascular', 'visceral'],
+        camera: { x: 0.15, y: 1.10, z: 0.75, targetX: 0, targetY: 1.08, targetZ: 0 },
+        highlight: 'Liver',
+        desc: 'Hệ thống tĩnh mạch cửa thu gom máu giàu dưỡng chất từ ruột về gan xử lý.'
+      },
+      {
+        id: 'circ_12_lower_digestive',
+        title: '12. Lower Digestive',
+        titleVi: '12. Mạch Máu Tiêu Hóa Dưới',
+        subtitle: 'ĐM mạc treo tràng trên và dưới',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['cardiovascular', 'visceral'],
+        camera: { x: 0, y: 0.95, z: 0.85, targetX: 0, targetY: 0.95, targetZ: 0 },
+        desc: 'Mạng lưới mạch máu nuôi toàn bộ hỗng tràng, hồi tràng và đại trực tràng.'
+      },
+      {
+        id: 'circ_13_pelvic_circulation',
+        title: '13. Pelvic Circulation',
+        titleVi: '13. Mạch Máu Vùng Chậu',
+        subtitle: 'Động mạch chậu trong & ngoài',
+        image: '/images/atlas/urin_pelvic.png',
+        systems: ['cardiovascular', 'skeletal'],
+        camera: { x: 0, y: 0.85, z: 0.85, targetX: 0, targetY: 0.82, targetZ: 0 },
+        desc: 'Phân nhánh cấp máu cho bàng quang, tử cung/tuyến tiền liệt và chi dưới.'
       }
     ]
   },
   {
     id: 'nervous_views',
     titleVi: 'Hệ Thần Kinh Trung Ương & Ngoại Biên',
+    titleEn: 'Nervous System Views',
     systemKey: 'nervous',
     cards: [
       {
-        id: 'nerv_full',
-        title: '1. Hệ Thần Kinh Toàn Thân',
-        subtitle: 'Não bộ, tủy sống và mạng lưới dây TK',
-        badge: 'Toàn thân',
+        id: 'nerv_1_full',
+        title: '1. Nervous System',
+        titleVi: '1. Toàn Bộ Hệ Thần Kinh',
+        subtitle: 'Não bộ, tủy sống & mạng lưới TK',
         image: '/images/atlas/nerv_full.png',
         systems: ['nervous', 'skeletal'],
         camera: { x: 0, y: 1.0, z: 2.1, targetX: 0, targetY: 1.0, targetZ: 0 },
-        desc: 'Hệ thống điều khiển toàn bộ cảm giác, vận động và chức năng tự chủ.'
+        desc: 'Trung tâm chỉ huy cảm giác, vận động và tư duy toàn diện của cơ thể.'
       },
       {
-        id: 'nerv_brain',
-        title: '2. Não Bộ & Thần Kinh Sọ',
-        subtitle: 'Đại não, tiểu não và 12 đôi dây TK sọ',
-        badge: 'Não bộ',
+        id: 'nerv_2_simplified',
+        title: '2. Nervous System, Simplified',
+        titleVi: '2. Hệ Thần Kinh Giản Lược',
+        subtitle: 'Trục não - tủy sống cốt lõi',
+        image: '/images/atlas/nerv_full.png',
+        systems: ['nervous'],
+        camera: { x: 0, y: 1.0, z: 2.1, targetX: 0, targetY: 1.0, targetZ: 0 },
+        desc: 'Hệ thần kinh trung ương bao gồm não bộ trong hộp sọ và tủy sống trong ống sống.'
+      },
+      {
+        id: 'nerv_3_brain',
+        title: '3. Brain',
+        titleVi: '3. Não Bộ Toàn Diện',
+        subtitle: 'Đại não, tiểu não và thân não',
         image: '/images/atlas/nerv_brain.png',
         systems: ['nervous'],
         camera: { x: 0.35, y: 1.62, z: 0.52, targetX: 0, targetY: 1.58, targetZ: 0 },
         highlight: 'Falx cerebri',
-        desc: 'Trung khu thần kinh cao cấp, điều khiển tư duy, vận động và cảm giác giác quan.'
+        desc: 'Trung khu thần kinh cao cấp điều khiển toàn bộ chức năng sống và trí tuệ.'
       },
       {
-        id: 'nerv_spinal',
-        title: '3. Tủy Sống & Rễ Thần Kinh',
-        subtitle: 'Ống sống và 31 đôi rễ thần kinh gai',
-        badge: 'Tủy sống',
-        image: '/images/atlas/nerv_spinal.png',
-        systems: ['nervous', 'skeletal'],
-        camera: { x: 0.65, y: 1.15, z: 0.95, targetX: 0, targetY: 1.1, targetZ: 0 },
-        highlight: 'Anterior horn of spinal cord',
-        desc: 'Đường dẫn truyền xung động thần kinh giữa não bộ và ngoại vi cơ thể.'
+        id: 'nerv_4_brain_blood',
+        title: '4. Brain Blood Supply',
+        titleVi: '4. Mạch Cấp Máu Cho Não',
+        subtitle: 'Mạch não trước, giữa và sau',
+        image: '/images/atlas/nerv_brain.png',
+        systems: ['nervous', 'cardiovascular'],
+        camera: { x: 0.38, y: 1.60, z: 0.52, targetX: 0, targetY: 1.58, targetZ: 0 },
+        desc: 'Cung cấp liên tục 20% lượng oxy và năng lượng của toàn bộ cơ thể cho não.'
       },
       {
-        id: 'nerv_csf',
-        title: '4. Hệ Não Thất & Dịch Não Tủy (CSF)',
-        subtitle: 'Não thất bên, não thất 3-4 và chu trình tuần hoàn CSF',
-        badge: 'Dịch não tủy',
+        id: 'nerv_5_limbic_system',
+        title: '5. Limbic System',
+        titleVi: '5. Hệ Viền Limbic & Trí Nhớ',
+        subtitle: 'Hải mã, thể hạnh nhân & vòm não',
         image: '/images/atlas/nerv_csf.png',
         systems: ['nervous'],
         camera: { x: 0.28, y: 1.60, z: 0.45, targetX: 0, targetY: 1.58, targetZ: 0 },
-        highlight: 'Lateral ventricle.l',
-        desc: 'Hệ thống các buồng não thất chứa dịch não tủy đệm giảm xóc và thanh thải độc tố hệ Glymphatic.'
+        highlight: 'Hippocampus',
+        desc: 'Trung tâm cảm xúc, động lực hành vi và củng cố trí nhớ dài hạn.'
+      },
+      {
+        id: 'nerv_6_thalamus',
+        title: '6. Thalamus',
+        titleVi: '6. Đồi Thị & Nhân Xám',
+        subtitle: 'Trạm chuyển tiếp cảm giác',
+        image: '/images/atlas/nerv_brain.png',
+        systems: ['nervous'],
+        camera: { x: 0.25, y: 1.60, z: 0.42, targetX: 0, targetY: 1.58, targetZ: 0 },
+        highlight: 'Thalamus',
+        desc: 'Trạm chuyển tiếp mọi đường dẫn truyền cảm giác (trừ khứu giác) lên vỏ não.'
+      },
+      {
+        id: 'nerv_7_cranial_nerves',
+        title: '7. Cranial Nerves',
+        titleVi: '7. 12 Đôi Dây Thần Kinh Sọ',
+        subtitle: 'Thần kinh khứu, thị, vận nhãn, sọ...',
+        image: '/images/atlas/nerv_brain.png',
+        systems: ['nervous', 'skeletal'],
+        camera: { x: 0.25, y: 1.58, z: 0.52, targetX: 0, targetY: 1.56, targetZ: 0 },
+        desc: '12 đôi dây thần kinh xuất phát trực tiếp từ não chi phối vùng đầu mặt cổ.'
+      },
+      {
+        id: 'nerv_8_vagus_nerve',
+        title: '8. Vagus Nerve (X)',
+        titleVi: '8. Dây Thần Kinh Phế Vị (X)',
+        subtitle: 'Dây thần kinh lang thang cổ - ngực - bụng',
+        image: '/images/atlas/circ_heart_thorax.png',
+        systems: ['nervous', 'visceral', 'cardiovascular'],
+        camera: { x: 0.18, y: 1.35, z: 0.65, targetX: 0, targetY: 1.32, targetZ: 0 },
+        desc: 'Chi phối phó giao cảm cho tim, phổi và hầu hết các cơ quan tiêu hóa.'
+      },
+      {
+        id: 'nerv_9_phrenic_nerves',
+        title: '9. Phrenic Nerves',
+        titleVi: '9. Dây Thần Kinh Hoành',
+        subtitle: 'Nhánh C3-C5 vận động cơ hoành',
+        image: '/images/atlas/resp_diaphragm.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.15, y: 1.30, z: 0.68, targetX: 0, targetY: 1.25, targetZ: 0 },
+        desc: 'Dây thần kinh quan trọng nhất điều khiển nhịp hô hấp cơ hoành.'
+      },
+      {
+        id: 'nerv_10_brachial_plexus',
+        title: '10. Brachial Plexus',
+        titleVi: '10. Đám Rối Thần Kinh Cánh Tay',
+        subtitle: 'Thần kinh quay, trụ, giữa & cơ bì',
+        image: '/images/atlas/musc_limbs.png',
+        systems: ['nervous', 'skeletal', 'muscular'],
+        camera: { x: 0.35, y: 1.40, z: 0.58, targetX: 0.18, targetY: 1.36, targetZ: 0 },
+        desc: 'Mạng lưới thần kinh chi phối toàn bộ cảm giác và vận động chi trên.'
+      },
+      {
+        id: 'nerv_11_lumbosacral',
+        title: '11. Lumbosacral Plexus',
+        titleVi: '11. Đám Rối Thắt Lưng - Cùng',
+        subtitle: 'Rễ thần kinh L1-S4 chi phối chậu & chi dưới',
+        image: '/images/atlas/nerv_spinal.png',
+        systems: ['nervous', 'skeletal'],
+        camera: { x: 0, y: 0.95, z: 0.85, targetX: 0, targetY: 0.92, targetZ: 0 },
+        desc: 'Tập hợp các rễ thần kinh vùng thắt lưng và xương cùng tạo thành thần kinh đùi và tọa.'
+      },
+      {
+        id: 'nerv_12_sciatic_nerve',
+        title: '12. Sciatic Nerve',
+        titleVi: '12. Dây Thần Kinh Tọa (Hông To)',
+        subtitle: 'Dây thần kinh lớn nhất cơ thể',
+        image: '/images/atlas/reg_lower_limb.png',
+        systems: ['nervous', 'skeletal', 'muscular'],
+        camera: { x: 0.3, y: 0.80, z: -0.9, targetX: 0.15, targetY: 0.75, targetZ: 0 },
+        desc: 'Dây thần kinh chạy từ vùng mông xuống cẳng bàn chân, hay gặp trong bệnh lý thoát vị đĩa đệm.'
+      },
+      {
+        id: 'nerv_13_autonomic',
+        title: '13. Autonomic Nerves',
+        titleVi: '13. Hệ Thần Kinh Tự Chủ',
+        subtitle: 'Chuỗi hạch giao cảm cạnh sống',
+        image: '/images/atlas/nerv_full.png',
+        systems: ['nervous', 'visceral'],
+        camera: { x: 0.35, y: 1.10, z: 0.85, targetX: 0, targetY: 1.10, targetZ: 0 },
+        desc: 'Điều hòa nhịp tim, huyết áp, nhu động ruột và các phản ứng sinh tồn tự động.'
       }
     ]
   },
