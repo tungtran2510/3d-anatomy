@@ -9,31 +9,46 @@ export const STUDY_MODULES = [
   {
     id: 'spine',
     title: 'Cột Sống & Đĩa Đệm',
-    description: 'Nền tảng trục xương thân mình, cơ sinh học và phòng tránh thoát vị đĩa đệm',
+    focus: 'Đốt sống C1-L5 • Thoát vị đĩa đệm • Xương cùng',
+    color: '#0284c7',
+    bgGradient: 'linear-gradient(135deg, rgba(2, 132, 199, 0.16) 0%, rgba(56, 189, 248, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><rect x="9" y="3.5" width="6" height="3" rx="1.5"/><rect x="8" y="8.5" width="8" height="3" rx="1.5"/><rect x="7" y="13.5" width="10" height="3.5" rx="1.5"/><path d="M10 20.5l2 1.5 2-1.5"/></svg>`,
     items: ['Atlas', 'Axis', 'Lumbar vertebra', 'Sacrum', 'Coccyx']
   },
   {
     id: 'lower_limb',
     title: 'Chi Dưới & Khớp Gối',
-    description: 'Trục chịu lực, khớp háng, khớp gối và chuyển động đi đứng',
+    focus: 'Khớp háng • Khớp gối • Dây chằng chéo',
+    color: '#059669',
+    bgGradient: 'linear-gradient(135deg, rgba(5, 150, 105, 0.16) 0%, rgba(52, 211, 153, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v6.5"/><path d="M12 15.5V22"/><path d="M7 6c2 1.5 4 1.5 5 0"/><path d="M7 18c2-1.5 4-1.5 5 0"/><path d="M16 21l3-1"/></svg>`,
     items: ['Hip bone.l', 'Femur.l', 'Patella.l', 'Tibia.l', 'Fibula.l', 'Calcaneus.l']
   },
   {
     id: 'upper_limb',
     title: 'Chi Trên & Đai Vai',
-    description: 'Sự linh hoạt đai vai, khớp khuỷu và bàn tay cầm nắm',
+    focus: 'Đai vai • Khớp khuỷu • Vận động bàn tay',
+    color: '#d97706',
+    bgGradient: 'linear-gradient(135deg, rgba(217, 119, 6, 0.16) 0%, rgba(251, 191, 36, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="6" r="3"/><path d="M9.5 8.5L14 13l4 8"/><circle cx="14" cy="13" r="2.5"/><path d="M18 21l3-2"/></svg>`,
     items: ['Clavicle.l', 'Scapula.l', 'Humerus.l', 'Radius.l', 'Ulna.l']
   },
   {
     id: 'thorax',
     title: 'Lồng Ngực & Hô Hấp',
-    description: 'Khung bảo vệ tim phổi và cơ chế hô hấp sinh lý',
+    focus: 'Khung sườn • Xương ức • Cơ hoành sinh lý',
+    color: '#e11d48',
+    bgGradient: 'linear-gradient(135deg, rgba(225, 29, 72, 0.16) 0%, rgba(251, 113, 133, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M12 6c-3.5 0-7 1.5-8 4.5 1 3 4.5 4.5 8 4.5"/><path d="M12 6c3.5 0 7 1.5 8 4.5-1 3-4.5 4.5-8 4.5"/><path d="M12 11c-2.5 0-5 1-6 3 1 2 3.5 3 6 3"/><path d="M12 11c2.5 0 5 1 6 3-1 2-3.5 3-6 3"/></svg>`,
     items: ['Body of sternum', 'First rib.l']
   },
   {
     id: 'cranium',
     title: 'Hộp Sọ & Đầu Mặt Cổ',
-    description: 'Khung bảo vệ não bộ, khớp thái dương hàm và các giác quan',
+    focus: 'Vòm sọ • Xương hàm dưới • Khớp TD-hàm',
+    color: '#7c3aed',
+    bgGradient: 'linear-gradient(135deg, rgba(124, 58, 237, 0.16) 0%, rgba(167, 139, 250, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 3 1.5 5.5 3.5 6.8V19a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.7c2-1.3 3.5-3.8 3.5-6.8A7.5 7.5 0 0 0 12 2z"/><circle cx="9.5" cy="10" r="1.2" fill="currentColor"/><circle cx="14.5" cy="10" r="1.2" fill="currentColor"/><path d="M10 15h4"/></svg>`,
     items: ['Frontal bone', 'Mandible']
   }
 ];
@@ -61,6 +76,7 @@ export function initStudyModeUI(viewer) {
 export function openStudyModulePicker(viewer) {
   if (!modalEl) initStudyModeUI(viewer);
 
+  modalEl.classList.remove('step-mode');
   // Hide selectionCard to avoid overlap
   const selCard = document.getElementById('selectionCard');
   if (selCard) selCard.classList.add('hidden');
@@ -69,21 +85,34 @@ export function openStudyModulePicker(viewer) {
   modalEl.innerHTML = `
     <div class="study-dialog">
       <div class="study-dialog-header">
-        <div>
-          <h3>📚 Chế Độ Tự Học Giải Phẫu 3D</h3>
-          <p>Khám phá chuyên sâu cấu trúc, chức năng và liên quan 4 thành phần (Cơ - Xương - Thần kinh - Mạch máu)</p>
+        <div class="study-dialog-header-left">
+          <div class="study-dialog-badge-row">
+            <span class="study-dialog-pill">Định hướng lâm sàng</span>
+            <span class="study-dialog-pill secondary">4 hệ giải phẫu</span>
+          </div>
+          <h3 class="study-dialog-title">Chuyên Đề Tự Học Trọng Tâm</h3>
+          <p class="study-dialog-sub">Chọn chuyên đề để khám phá cấu trúc &amp; cơ sinh học</p>
         </div>
-        <button type="button" class="dialog-close-btn" id="studyClosePickerBtn">&times;</button>
+        <button type="button" class="dialog-close-btn" id="studyClosePickerBtn" title="Đóng">&times;</button>
       </div>
 
       <div class="study-modules-grid">
         ${STUDY_MODULES.map(mod => `
-          <div class="study-module-card" data-module-id="${mod.id}">
-            <div class="module-card-icon">🩺</div>
+          <div class="study-module-card" data-module-id="${mod.id}" style="--mod-accent: ${mod.color};">
+            <div class="module-card-icon-wrap" style="background: ${mod.bgGradient}; color: ${mod.color}; border: 1px solid ${mod.color}35;">
+              ${mod.iconSvg}
+            </div>
             <div class="module-card-body">
-              <h4>${mod.title}</h4>
-              <p>${mod.description}</p>
-              <span class="module-count">${mod.items.length} cấu trúc trọng tâm</span>
+              <div class="module-card-title-row">
+                <h4 class="module-card-title">${mod.title}</h4>
+                <span class="module-card-count-badge" style="color: ${mod.color}; background: ${mod.bgGradient}; border: 1px solid ${mod.color}30;">
+                  ${mod.items.length} cấu trúc
+                </span>
+              </div>
+              <div class="module-card-focus">${mod.focus}</div>
+            </div>
+            <div class="module-card-arrow" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </div>
         `).join('')}
@@ -111,6 +140,7 @@ export function startStudyModule(module, viewer) {
   currentIndex = 0;
   isStudyCollapsed = false;
   showStudyDetails = false;
+  if (modalEl) modalEl.classList.add('step-mode');
   renderStudyStep(viewer);
 }
 
@@ -260,6 +290,7 @@ function renderStudyStep(viewer) {
 }
 
 function showCompletionCard(viewer) {
+  if (modalEl) modalEl.classList.remove('step-mode');
   modalEl.innerHTML = `
     <div class="study-dialog text-center">
       <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
@@ -286,6 +317,7 @@ export function closeStudyMode(viewer) {
   activeModule = null;
   currentIndex = 0;
   if (modalEl) {
+    modalEl.classList.remove('step-mode');
     modalEl.classList.add('hidden');
     modalEl.innerHTML = '';
   }
