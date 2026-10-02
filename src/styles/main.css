@@ -698,7 +698,7 @@ body {
   position: absolute;
   right: 8px !important;
   left: auto !important;
-  top: 295px !important;
+  top: 255px !important;
   transform: none !important;
   display: flex;
   flex-direction: column;
@@ -6674,7 +6674,7 @@ body.theme-dark .btn-mini-action:hover {
 /* 1. Pull Tab on Right Edge (Visible Body style) */
 .systems-pull-tab {
   position: absolute;
-  top: 175px !important;
+  top: 135px !important;
   right: 0 !important;
   left: auto !important;
   transform: none !important;
@@ -11155,44 +11155,9 @@ body.theme-dark .btn-tag-action.clear-tags {
   height: 88px;
 }
 
-/* 8. Floating AR Pill Button (Visible Body Standard: Photo 5) */
+/* 8. Floating AR Pill Button (Removed / Deprecated) */
 .floating-ar-btn {
-  position: absolute;
-  top: 130px !important;
-  right: 10px !important;
-  left: auto !important;
-  bottom: auto !important;
-  z-index: 85;
-  width: 34px !important;
-  height: 34px !important;
-  padding: 0 !important;
-  border-radius: 50% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 23, 42, 0.45) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  color: #38bdf8;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
-  transition: all 0.2s ease;
-}
-
-.floating-ar-btn span {
   display: none !important;
-}
-
-.floating-ar-btn svg {
-  width: 17px;
-  height: 17px;
-}
-
-.floating-ar-btn:hover {
-  background: rgba(15, 23, 42, 0.8) !important;
-  border-color: #38bdf8 !important;
-  transform: scale(1.06);
 }
 
 /* 8b. Floating Top View Button (Góc nhìn đỉnh đầu nhân vật) */
@@ -11395,23 +11360,15 @@ body.theme-dark .btn-tag-action.clear-tags {
     padding: 0 !important;
   }
 
-  .floating-ar-btn {
-    top: 130px !important;
-    right: 10px !important;
-    bottom: auto !important;
-    left: auto !important;
-    padding: 0 !important;
-  }
-
   .systems-pull-tab {
-    top: 175px !important;
+    top: 135px !important;
     right: 0 !important;
     left: auto !important;
     min-height: 108px !important;
   }
 
   .depth-control {
-    top: 295px !important;
+    top: 255px !important;
     right: 8px !important;
     left: auto !important;
   }

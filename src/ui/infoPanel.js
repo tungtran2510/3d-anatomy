@@ -254,11 +254,6 @@ export function initInfoPanel(viewer) {
     }
   });
 
-  // 9. Floating AR Button (Bottom Left)
-  const floatingAR = document.getElementById('floatingARBtn');
-  floatingAR?.addEventListener('click', () => {
-    document.getElementById('btnToolAR')?.click();
-  });
 
   // Synchronize history buttons initial state
   notifySelectionHistoryChanged();

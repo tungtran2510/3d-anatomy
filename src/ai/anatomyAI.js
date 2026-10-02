@@ -653,21 +653,16 @@ export async function executeAICommand(interpreted, viewer) {
     };
   }
 
-  // 9. AUGMENTED REALITY (AR)
+  // 9. AUGMENTED REALITY (AR - Deprecated / Streamlined)
   if (intent === 'AR_CONTROL') {
-    import('../ui/arModal.js').then(({ openARModal }) => {
-      openARModal(viewer);
-    }).catch(err => console.error('Failed to load AR modal:', err));
-
     return {
-      action: 'AR_CONTROL',
-      actionBadge: '📱 AI đã kích hoạt AR Thực tế',
+      action: 'NONE',
+      actionBadge: '💡 Thông Báo Tính Năng',
       message: `
-        ### 📱 Thực Tế Tăng Cường AR
-        Đang khởi động chế độ AR để đưa mô hình người 3D vào phòng thực tế:
-        - Hỗ trợ dò bề mặt sàn/bàn (WebXR) hoặc chiếu Camera trực tiếp.
-        - Có thể chuyển đổi tỉ lệ: **Mặt bàn (1:5)** hoặc **Người thật (1:1)**.
-        - Dùng 1 ngón tay xoay, 2 ngón tay chụm thu phóng và bấm **Chụp ảnh** để lưu lại.
+        ### 💡 Chế độ Quan sát 3D Chuyên Sâu
+        Tính năng AR (thực tế tăng cường) đã được gỡ bỏ để tối ưu hiệu năng và độ nét cho mô hình giải phẫu 3D chuyên sâu trên nền tương phản cao.
+        - Bạn có thể xoay 360°, phóng to/thu nhỏ và bóc tách các lớp giải phẫu mượt mà.
+        - Sử dụng thanh công cụ để mở **Mặt cắt 3D**, **Thước đo**, **Chuyển động** hoặc làm **Trắc nghiệm**.
       `.trim()
     };
   }

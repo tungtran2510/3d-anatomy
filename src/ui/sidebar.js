@@ -1563,19 +1563,6 @@ export function initFloatingTools(viewer) {
     toggleMotionPanel(viewer);
   });
 
-  // Augmented Reality (AR) Mode
-  const btnAR = document.getElementById('btnToolAR');
-  btnAR?.addEventListener('click', async () => {
-    const { openARModal, closeARModal } = await import('./arModal.js');
-    const hud = document.getElementById('arHUD');
-    if (hud && !hud.classList.contains('hidden')) {
-      closeARModal();
-      btnAR.classList.remove('active');
-    } else {
-      openARModal(viewer);
-      btnAR.classList.add('active');
-    }
-  });
 
   // Offline & PWA Storage Manager Mode (LỆNH #06)
   const btnOffline = document.getElementById('btnToolOffline');
