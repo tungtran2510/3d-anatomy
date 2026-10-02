@@ -12,6 +12,7 @@ import { getSubSystemParts } from './sidebar.js';
 import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
+import { toggleBodyEnvelope, isBodyEnvelopeVisible } from '../viewer/bodyEnvelope.js';
 
 export const SYSTEM_CONFIGS = [
   { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 4, defaultLevel: 4, baseSystem: 'skeletal' },
@@ -691,10 +692,13 @@ export function initSystemsLayerController(viewer) {
       ${renderSystemRows()}
     </div>
 
-    <!-- Bottom Tools: Pelvis & Sex Switcher -->
+    <!-- Bottom Tools: Pelvis, Silhouette Envelope & Sex Switcher -->
     <div class="stepper-drawer-footer">
       <button type="button" class="btn-drawer-tool" id="btnFocusPelvis" title="Tập trung vùng chậu (Pelvis)">
         <span class="drawer-tool-icon">${ICONS.pelvisBox}</span>
+      </button>
+      <button type="button" class="btn-drawer-tool active" id="btnToggleEnvelope" title="Lớp phủ mờ cơ thể (Body Silhouette Envelope) - Bật/Tắt">
+        <span class="drawer-tool-icon">${ICONS.humanAnatomyWithPlus}</span>
       </button>
       <button type="button" class="btn-drawer-tool" id="btnToggleGender" title="Mô hình: Nam Y khoa chuẩn (Dữ liệu Nữ đang cập nhật)">
         <span class="drawer-tool-icon">${ICONS.genderToggle}</span>
@@ -839,9 +843,16 @@ function setupEvents(viewer) {
     }
   });
 
-  // 8. Bottom Footer Tools (Pelvis & Gender)
+  // 8. Bottom Footer Tools (Pelvis, Envelope & Gender)
   drawerEl?.querySelector('#btnFocusPelvis')?.addEventListener('click', () => {
     frameRegion({ x: 0, y: 0.95, z: 0.9, targetX: 0, targetY: 0.92, targetZ: 0 }, viewer);
+  });
+  drawerEl?.querySelector('#btnToggleEnvelope')?.addEventListener('click', () => {
+    toggleBodyEnvelope(viewer);
+    const envBtn = drawerEl?.querySelector('#btnToggleEnvelope');
+    if (envBtn) {
+      envBtn.classList.toggle('active', isBodyEnvelopeVisible());
+    }
   });
   drawerEl?.querySelector('#btnToggleGender')?.addEventListener('click', () => {
     if (window.showAtlasToast) {
@@ -1169,4 +1180,8 @@ export function syncStateWithLoadedSystems() {
     }
   });
   SYSTEM_CONFIGS.forEach(sys => updateItemUI(sys.id));
+  const envBtn = drawerEl?.querySelector('#btnToggleEnvelope');
+  if (envBtn) {
+    envBtn.classList.toggle('active', isBodyEnvelopeVisible());
+  }
 }

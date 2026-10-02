@@ -6,6 +6,7 @@ import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-
 import { state, setLoadingSystem } from '../state/store.js';
 import { asset } from '../utils/paths.js';
 import { getAnatomyRoot } from './orientationManager.js';
+import { updateBodyEnvelopeAuto } from './bodyEnvelope.js';
 
 // Without an acceleration structure, picking cost grows with the triangle
 // count: 10.4M triangles tested per pointer event across seven systems.
@@ -144,6 +145,8 @@ async function loadModelOnce(systemId, viewer, options = {}) {
 
   state.loadedSystems.push(systemId);
   setLoadingSystem(systemId, true, 100);
+
+  updateBodyEnvelopeAuto(viewer);
 
   return { systemId, model, meshCount: systemRegistry.get(systemId)?.length || 0 };
 }
@@ -597,7 +600,22 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         }
       });
     }
-  } else if (systemId === 'skeletal' || systemId === 'joints') {
+  } else if (systemId === 'joints') {
+    // Joints & Ligaments (dây chằng, bao khớp, sụn chêm, màng gian cốt chuẩn Visible Body)
+    // Silvery-pearl glistening fibrous bands (chuẩn Photo 4)
+    applyCustomProps(mesh, {
+      name: 'PBR_Ligament',
+      color: 0xCAD4DC,
+      roughness: 0.26,
+      metalness: 0.02,
+      transparent: true,
+      opacity: 0.88,
+      depthWrite: true,
+      bumpMap: bump,
+      bumpScale: 0.0010,
+      renderOrder: 2
+    });
+  } else if (systemId === 'skeletal') {
     const parentName = (mesh.parent?.name || '').toLowerCase();
     const isIntervertebralDisc =
       partName.includes('intervertebral') ||
@@ -607,51 +625,74 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       (partName.includes('disc') && !partName.includes('discipline')) ||
       ((partName.includes('verteb') || parentName.includes('verteb') || partName.includes('sacrum') || partName.includes('atlas') || parentName.includes('axis')) && mesh.name.endsWith('_2'));
 
-    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-    mats.forEach(m => {
-      if (m && m.isMeshStandardMaterial) {
-        const mName = m.name || '';
-        if (isIntervertebralDisc) {
-          // Intervertebral disc fibrocartilage: distinctive medical cyan-blue tint so it never blends with ivory spine bones
-          m.name = 'PBR_IntervertebralDisc';
-          m.roughness = 0.22;
-          m.metalness = 0.02;
-          m.transparent = true;
-          m.opacity = 0.94;
-          m.color.set(0x38BDF8);
-        } else if (mName.includes('Cartilage') || partName.includes('cartilage') || partName.includes('sụn')) {
-          // Costal, articular, and nasal cartilage: authentic semi-translucent bluish-ivory
-          m.roughness = 0.28;
-          m.metalness = 0.01;
-          m.transparent = true;
-          m.opacity = 0.88;
-          m.color.set(0xB6C8CE);
-        } else if (mName.includes('Suture')) {
-          // Cranial suture seams (khớp vành, khớp dọc, khớp vảy sọ)
-          m.roughness = 0.80;
-          m.metalness = 0.01;
-          m.color.set(0x8A7660);
-        } else if (mName.includes('Teeth-roots')) {
-          m.roughness = 0.45;
-          m.metalness = 0.01;
-          m.color.set(0xD6C298);
-        } else if (mName.includes('Teeth')) {
-          // Bright natural pearlescent enamel
-          m.roughness = 0.15;
-          m.metalness = 0.02;
-          m.color.set(0xFBF8EE);
-        } else {
-          // Refined authentic warm ivory bone tone (màu trắng ngà ánh vàng ấm chuẩn Complete Anatomy)
-          m.roughness = 0.50;
-          m.metalness = 0.01;
-          m.color.set(0xE8DFCA);
-          if (bump) {
-            m.bumpMap = bump;
-            m.bumpScale = 0.0006;
-          }
-        }
-      }
-    });
+    const isCartilage =
+      matName.includes('cartilage') ||
+      partName.includes('cartilage') ||
+      partName.includes('sụn') ||
+      partName.includes('costal') ||
+      partName.includes('chondro');
+
+    if (isIntervertebralDisc) {
+      // Intervertebral disc fibrocartilage: delicate fibrous silvery-gray with cool undertone (chuẩn Visible Body Photo 4)
+      applyCustomProps(mesh, {
+        name: 'PBR_IntervertebralDisc',
+        color: 0x98A4AF,
+        roughness: 0.38,
+        metalness: 0.02,
+        transparent: true,
+        opacity: 0.92,
+        depthWrite: true,
+        bumpMap: bump,
+        bumpScale: 0.0015,
+        renderOrder: 2
+      });
+    } else if (isCartilage) {
+      // Costal, articular, and nasal cartilage: pearlescent translucent hyaline cartilage (chuẩn Visible Body Photo 1-3)
+      applyCustomProps(mesh, {
+        name: 'PBR_HyalineCartilage',
+        color: 0xBAC8CF,
+        roughness: 0.25,
+        metalness: 0.02,
+        transparent: true,
+        opacity: 0.86,
+        depthWrite: true,
+        renderOrder: 2
+      });
+    } else if (matName.includes('suture') || partName.includes('suture') || partName.includes('khớp sọ')) {
+      // Cranial suture seams (khớp vành, khớp dọc, khớp vảy sọ)
+      applyCustomProps(mesh, {
+        name: 'PBR_Suture',
+        color: 0x8C7762,
+        roughness: 0.80,
+        metalness: 0.01
+      });
+    } else if (matName.includes('teeth-roots') || partName.includes('root')) {
+      // Tooth roots: warm ivory-amber dentine
+      applyCustomProps(mesh, {
+        name: 'PBR_TeethRoots',
+        color: 0xD8C59A,
+        roughness: 0.45,
+        metalness: 0.01
+      });
+    } else if (matName.includes('teeth') || matName.includes('dentine') || partName.includes('tooth') || partName.includes('teeth')) {
+      // Bright natural pearlescent enamel
+      applyCustomProps(mesh, {
+        name: 'PBR_TeethEnamel',
+        color: 0xFAF6EA,
+        roughness: 0.15,
+        metalness: 0.02
+      });
+    } else {
+      // Warm authentic natural aged-ivory bone tone (màu xương ngà ánh vàng ấm chuẩn Visible Body Photo 1-4)
+      applyCustomProps(mesh, {
+        name: 'PBR_Bone',
+        color: 0xD8CFBC,
+        roughness: 0.44,
+        metalness: 0.01,
+        bumpMap: bump,
+        bumpScale: 0.0008
+      });
+    }
   } else if (systemId === 'cardiovascular') {
     const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     mats.forEach(m => {

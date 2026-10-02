@@ -7230,6 +7230,11 @@ body.theme-dark .tab-vertical-text {
   background: #e2e8f0;
   color: #0284c7;
 }
+.btn-drawer-tool.active {
+  background: rgba(2, 132, 199, 0.15);
+  border-color: #0284c7;
+  color: #0284c7;
+}
 .drawer-tool-icon svg {
   width: 18px;
   height: 18px;
@@ -7802,6 +7807,12 @@ body.theme-dark .btn-drawer-tool {
 [data-theme="dark"] .btn-drawer-tool:hover,
 body.theme-dark .btn-drawer-tool:hover {
   background: rgba(56, 189, 248, 0.2) !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+}
+[data-theme="dark"] .btn-drawer-tool.active,
+body.theme-dark .btn-drawer-tool.active {
+  background: rgba(56, 189, 248, 0.25) !important;
   border-color: #38bdf8 !important;
   color: #38bdf8 !important;
 }
