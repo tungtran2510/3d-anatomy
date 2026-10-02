@@ -698,18 +698,18 @@ body {
   position: absolute;
   right: 8px !important;
   left: auto !important;
-  top: calc(22% + 64px) !important;
+  top: 295px !important;
   transform: none !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   padding: 6px 4px !important;
-  background: rgba(15, 23, 42, 0.35) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 20px !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
   z-index: 1200;
 }
@@ -2187,9 +2187,10 @@ body.theme-dark .mobile-bottom-bar .nav-item {
 
 .selection-card {
   position: fixed;
-  bottom: 58px;
-  right: 18px;
-  width: 350px;
+  bottom: 68px;
+  left: 20px;
+  right: auto;
+  width: 360px;
   max-width: calc(100vw - 32px);
   max-height: min(520px, calc(100vh - 120px));
   background: rgba(255, 255, 255, 0.98);
@@ -2198,7 +2199,7 @@ body.theme-dark .mobile-bottom-bar .nav-item {
   border: 1px solid rgba(226, 232, 240, 0.95);
   border-radius: 16px;
   box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.16), 0 4px 12px -2px rgba(15, 23, 42, 0.08);
-  z-index: 105;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2762,18 +2763,20 @@ body.theme-dark .info-group-title {
 
 .selection-card.compact-mode {
   position: fixed;
-  top: 54px;
-  bottom: auto;
+  bottom: 68px;
+  left: 20px;
+  top: auto;
   right: auto;
-  left: 50%;
-  transform: translateX(-50%);
+  transform: none;
   width: auto;
   min-width: 260px;
-  max-width: 90vw;
+  max-width: 420px;
+  height: 42px;
   max-height: 42px;
   padding: 4px 10px;
   border-radius: 21px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
 .selection-card.compact-mode .selection-card-body,
@@ -2782,39 +2785,31 @@ body.theme-dark .info-group-title {
 }
 
 .selection-card.compact-mode .selection-card-header {
-  padding: 0;
+  padding: 0 4px;
   border: none;
   background: transparent;
   gap: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.selection-card.compact-mode .selection-structure-names {
-  flex-direction: row;
-  align-items: baseline;
-  gap: 6px;
-  min-width: 0;
-  flex: 1;
-}
-
-.selection-card.compact-mode #cardTitle {
-  font-size: 13.5px;
-  flex-shrink: 0;
-  font-weight: 700;
-  color: #0284c7;
-}
-
-body.theme-dark .selection-card.compact-mode #cardTitle,
-[data-theme="dark"] .selection-card.compact-mode #cardTitle {
-  color: #38bdf8;
-}
-
-.selection-card.compact-mode #cardSubtitle {
-  font-size: 11px;
-  flex-shrink: 1;
-  min-width: 0;
+.selection-card.compact-mode #cardCompactLabel {
+  display: inline-block !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #0284c7 !important;
+  max-width: 170px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+body.theme-dark .selection-card.compact-mode #cardCompactLabel,
+[data-theme="dark"] .selection-card.compact-mode #cardCompactLabel {
+  color: #38bdf8 !important;
 }
 
 .selection-card.compact-mode .btn-pronounce-audio {
@@ -6318,19 +6313,19 @@ body.theme-dark .btn-mini-action:hover {
 /* 1. Pull Tab on Right Edge (Visible Body style) */
 .systems-pull-tab {
   position: absolute;
-  top: 22% !important;
+  top: 175px !important;
   right: 0 !important;
   left: auto !important;
-  transform: translateY(-50%);
+  transform: none !important;
   z-index: 1205;
   background: rgba(15, 23, 42, 0.55) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-right: none;
   border-radius: 14px 0 0 14px;
-  padding: 16px 8px !important;
-  min-height: 94px;
+  padding: 14px 8px !important;
+  min-height: 108px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6355,7 +6350,7 @@ body.theme-dark .systems-pull-tab .tab-vertical-text {
   color: #e2e8f0 !important;
 }
 .systems-pull-tab.drawer-open {
-  transform: translateY(-50%) translateX(-126px) !important;
+  transform: translateX(-126px) !important;
 }
 .tab-body-icon {
   font-size: 15px;
@@ -10463,7 +10458,7 @@ body.theme-dark .btn-tag-action.clear-tags {
 /* 6. Floating Views Quick Nav (Icon Button on Right Edge) */
 .floating-views-quick-nav {
   position: absolute;
-  top: 52px !important;
+  top: 90px !important;
   right: 10px !important;
   left: auto !important;
   z-index: 85;
@@ -10590,7 +10585,7 @@ body.theme-dark .btn-tag-action.clear-tags {
 /* 8. Floating AR Pill Button (Visible Body Standard: Photo 5) */
 .floating-ar-btn {
   position: absolute;
-  top: 178px !important;
+  top: 130px !important;
   right: 10px !important;
   left: auto !important;
   bottom: auto !important;
@@ -10630,7 +10625,7 @@ body.theme-dark .btn-tag-action.clear-tags {
 /* 8b. Floating Top View Button (Góc nhìn đỉnh đầu nhân vật) */
 .floating-top-view-btn {
   position: absolute;
-  top: 96px !important;
+  top: 50px !important;
   right: 10px !important;
   left: auto !important;
   z-index: 85;
@@ -10775,33 +10770,59 @@ body.theme-dark .btn-tag-action.clear-tags {
 
 /* 9. Mobile Responsive Refinements */
 @media (max-width: 768px) {
+  /* Selection Card docked safely on left/center, NEVER overlapping right-side controls */
   .selection-card:not(.compact-mode) {
-    width: min(72vw, 340px) !important;
-    max-width: 72vw !important;
-    right: 10px !important;
-    left: auto !important;
+    position: fixed !important;
+    left: 10px !important;
+    right: 52px !important; /* Critical 52px safety zone for right controls */
+    width: auto !important;
+    max-width: 440px !important;
+    bottom: 64px !important;
+    max-height: 46vh !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45) !important;
+    z-index: 1000 !important;
     transform: none !important;
-    bottom: 60px !important;
-    max-height: 60vh !important;
-    z-index: 120 !important;
   }
 
-  .floating-views-quick-nav {
-    top: 136px !important;
+  .selection-card.compact-mode {
+    position: fixed !important;
+    left: 10px !important;
+    right: 52px !important;
+    bottom: 64px !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: 440px !important;
+    height: 42px !important;
+    max-height: 42px !important;
+    padding: 4px 10px !important;
+    border-radius: 21px !important;
+    transform: none !important;
+    z-index: 1000 !important;
+  }
+
+  /* Right-Side Unified Control Column (Fullscreen -> Top-View -> Views -> AR -> Systems -> Depth) */
+  .btn-fullscreen-toggle {
+    top: 10px !important;
+    right: 10px !important;
+  }
+
+  .floating-top-view-btn {
+    top: 50px !important;
     right: 10px !important;
     left: auto !important;
     padding: 0 !important;
   }
 
-  .floating-top-view-btn {
-    top: 96px !important;
+  .floating-views-quick-nav {
+    top: 90px !important;
     right: 10px !important;
     left: auto !important;
     padding: 0 !important;
   }
 
   .floating-ar-btn {
-    top: 176px !important;
+    top: 130px !important;
     right: 10px !important;
     bottom: auto !important;
     left: auto !important;
@@ -10809,13 +10830,14 @@ body.theme-dark .btn-tag-action.clear-tags {
   }
 
   .systems-pull-tab {
-    top: 222px !important;
+    top: 175px !important;
     right: 0 !important;
     left: auto !important;
+    min-height: 108px !important;
   }
 
   .depth-control {
-    top: 344px !important;
+    top: 295px !important;
     right: 8px !important;
     left: auto !important;
   }

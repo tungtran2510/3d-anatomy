@@ -230,12 +230,14 @@ export function updateInfoPanelContent(part, viewer) {
   // 1. Title & Subtitle (Visible Body Prominent Anatomy Teal Header)
   const cardTitle = document.getElementById('cardTitle');
   const cardSubtitle = document.getElementById('cardSubtitle');
+  const cardCompactLabel = document.getElementById('cardCompactLabel');
 
   const mainName = clinical.nameVi || part.info?.name?.[lang] || part.displayName || part.id;
   const latinName = clinical.nameLatin || part.info?.latinName || '';
   const systemName = clinical.systemVi || part.system || '';
 
   if (cardTitle) cardTitle.textContent = mainName;
+  if (cardCompactLabel) cardCompactLabel.textContent = mainName;
   if (cardSubtitle) {
     cardSubtitle.textContent = latinName ? `${latinName} • ${systemName}` : systemName;
   }

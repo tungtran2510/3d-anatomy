@@ -116,27 +116,23 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplic
   const maxDim = Math.max(size.x, size.y, size.z, 0.05);
 
   let distance;
-  if (isExplicitZoom) {
-    // Explicit 2nd step: Smooth close-up inspection
-    distance = Math.max(0.42, maxDim * 3.2);
-  } else {
-    // 1st step: Keep wide anatomical context (vẫn ở giải phẫu đó và chỉ vào)
-    const curDist = camera.position.distanceTo(controls.target);
-    if (curDist >= 0.85 && curDist <= 1.6) {
-      distance = curDist; // Giữ nguyên khoảng cách hiện tại, không zoom giật
-    } else if (curDist > 1.6) {
-      distance = 1.25; // Chuyển từ toàn thân về tầm nhìn khu vực rộng rãi
-    } else {
-      distance = 0.95; // Đảm bảo khoảng cách tối thiểu luôn bao quát cả vùng
-    }
+  // Calculate direction from current camera to target, preserving user's viewing angle
+  let direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+  if (direction.lengthSq() < 0.001) {
+    direction.set(0, 0, 1).normalize();
   }
 
-  // Calculate direction from current camera to target, biasing towards front view for visibility
-  let direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
-  if (direction.lengthSq() < 0.001 || direction.z < 0.2) {
-    direction.set(direction.x * 0.4, 0.15, 0.85).normalize();
+  if (isExplicitZoom) {
+    // Explicit 2nd step: Smooth close-up inspection (Zoom gần khi người dùng ấn nút Phóng to)
+    distance = Math.max(0.42, maxDim * 3.2);
+  } else {
+    // 1st step: Keep wide anatomical context (vẫn ở giải phẫu đó và chỉ vào, KHÔNG zoom sát rạt)
+    const curDist = camera.position.distanceTo(controls.target);
+    // Giữ nguyên khoảng cách góc nhìn hiện tại, đảm bảo không bị giật zoom in
+    distance = Math.max(curDist, 1.45);
   }
-  const targetPosition = center.clone().add(direction.multiplyScalar(distance));
+
+  const targetPosition = center.clone().add(direction.clone().multiplyScalar(distance));
 
   if (animate) {
     return animateCamera(camera, controls, targetPosition, center, viewer);
