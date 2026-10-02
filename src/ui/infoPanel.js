@@ -758,7 +758,7 @@ function showHistologyPreview(structureName, title) {
           <h3 style="margin: 0; font-size: 16px;">🔬 ${title}</h3>
           <button type="button" class="dialog-close-btn" id="histologyCloseBtn">&times;</button>
         </div>
-        <p style="color: #0284c7; font-weight: 600; font-size: 13px; margin: 6px 0 14px;">${structureName}</p>
+        <p style="color: #1e3a8a; font-weight: 600; font-size: 13px; margin: 6px 0 14px;">${structureName}</p>
         <div style="width: 100%; height: 260px; border-radius: 12px; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid #334155;">
           <div style="color: #94a3b8; font-size: 13px; padding: 20px; line-height: 1.6;">
             <span style="font-size: 36px; display: block; margin-bottom: 8px;">🔬</span>

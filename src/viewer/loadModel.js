@@ -646,17 +646,31 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       });
     }
   } else if (systemId === 'joints') {
-    // Joints & Ligaments (dây chằng, bao khớp, sụn chêm, màng gian cốt chuẩn Visible Body)
-    applyCustomProps(mesh, {
-      name: 'PBR_Ligament',
-      color: 0xCAD4DC,
-      roughness: 0.75,
-      metalness: 0.0,
-      transparent: true,
-      opacity: 0.88,
-      depthWrite: true,
-      renderOrder: 2
-    });
+    if (partName.includes('cartilage') || partName.includes('meniscus') || partName.includes('discus') || partName.includes('articular') || matName.includes('cartilage')) {
+      // Joint articular cartilage & meniscus: sophisticated luxury Navy (màu Navi sang, matte)
+      applyCustomProps(mesh, {
+        name: 'PBR_JointCartilage',
+        color: 0x1E3E6D,
+        roughness: 0.72,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.90,
+        depthWrite: true,
+        renderOrder: 2
+      });
+    } else {
+      // Joints & Ligaments (dây chằng, bao khớp, màng gian cốt chuẩn Visible Body)
+      applyCustomProps(mesh, {
+        name: 'PBR_Ligament',
+        color: 0xCAD4DC,
+        roughness: 0.75,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.88,
+        depthWrite: true,
+        renderOrder: 2
+      });
+    }
   } else if (systemId === 'skeletal') {
     const parentName = (mesh.parent?.name || '').toLowerCase();
     const isIntervertebralDisc =
@@ -672,14 +686,21 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       partName.includes('cartilage') ||
       partName.includes('sụn') ||
       partName.includes('costal') ||
-      partName.includes('chondro');
+      partName.includes('chondro') ||
+      partName.includes('articular') ||
+      partName.includes('meniscus') ||
+      partName.includes('larynx') ||
+      partName.includes('epiglottis') ||
+      partName.includes('cricoid') ||
+      partName.includes('arytenoid') ||
+      partName.includes('thyroid');
 
     if (isIntervertebralDisc) {
-      // Intervertebral disc fibrocartilage: delicate fibrous silvery-gray (chuẩn Visible Body, matte)
+      // Intervertebral disc fibrocartilage: deep refined Navy (chuẩn màu Navi sang, matte)
       applyCustomProps(mesh, {
         name: 'PBR_IntervertebralDisc',
-        color: 0x98A4AF,
-        roughness: 0.76,
+        color: 0x183050,
+        roughness: 0.75,
         metalness: 0.0,
         transparent: true,
         opacity: 0.94,
@@ -687,14 +708,14 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         renderOrder: 2
       });
     } else if (isCartilage) {
-      // Costal, articular, and nasal cartilage: pearlescent translucent hyaline cartilage (matte)
+      // Costal, articular, and nasal cartilage: sophisticated luxurious Navy (chuẩn màu Navi sang, matte)
       applyCustomProps(mesh, {
         name: 'PBR_HyalineCartilage',
-        color: 0xBAC8CF,
+        color: 0x1E3E6D,
         roughness: 0.72,
         metalness: 0.0,
         transparent: true,
-        opacity: 0.88,
+        opacity: 0.90,
         depthWrite: true,
         renderOrder: 2
       });
@@ -757,11 +778,15 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       if (m && m.isMeshStandardMaterial) {
         const mName = m.name || '';
         if (partName.includes('ventricle') || partName.includes('aqueduct')) {
-          // Ventricular cavities (CSF fluid stream): luminous medical cyan-blue translucency
+          // Ventricular cavities (CSF fluid stream): sophisticated luxury royal navy translucency
           m.name = 'PBR_VentricleCSF';
           m.roughness = 0.15;
           m.metalness = 0.0;
-          m.color.set(0x38BDF8); // Vibrant bio-cyan
+          m.color.set(0x1E40AF); // Luxurious Royal Navy
+          m.transparent = true;
+          m.opacity = 0.82;
+          m.depthWrite = true;
+          mesh.renderOrder = 2;
           m.transparent = true;
           m.opacity = 0.82;
           m.depthWrite = true;

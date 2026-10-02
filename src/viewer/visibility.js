@@ -421,8 +421,8 @@ export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
       ownMaterials(mesh).forEach(mat => {
         mat.transparent = false;
         mat.opacity = 1.0;
-        mat.color = new THREE.Color(0x0ea5e9); // Vibrant hydrogel blue
-        mat.emissive = new THREE.Color(0x38bdf8); // Bioluminescent inner nucleus glow
+        mat.color = new THREE.Color(0x1e3a8a); // Luxurious sapphire navy
+        mat.emissive = new THREE.Color(0x1e40af); // Refined inner nucleus glow
         mat.emissiveIntensity = 0.9;
         mat.needsUpdate = true;
       });

@@ -191,7 +191,7 @@ function openScoutDetailModal() {
       <div style="margin-top:16px;text-align:center;">
         <div style="background:#020617;padding:16px;border-radius:12px;border:1px solid #1e293b;display:inline-block;width:100%;box-sizing:border-box;">
           <img src="${currentCard?.image || '/images/atlas/nerv_brain.png'}" alt="Scout Detail" style="max-height:180px;object-fit:contain;filter:contrast(1.15) brightness(0.95);" />
-          <div style="margin-top:8px;font-family:monospace;font-size:11.5px;color:#38bdf8;letter-spacing:1px;">
+          <div style="margin-top:8px;font-family:monospace;font-size:11.5px;color:#3b82f6;letter-spacing:1px;">
             LEVEL: ${(currentOffset * 100).toFixed(1)} cm | PLANE: ${currentPlane.toUpperCase()} | P-THICKNESS: 1.0mm
           </div>
         </div>

@@ -10,8 +10,8 @@ export const STUDY_MODULES = [
     id: 'spine',
     title: 'Cột Sống & Đĩa Đệm',
     focus: 'Đốt sống C1-L5 • Thoát vị đĩa đệm • Xương cùng',
-    color: '#0284c7',
-    bgGradient: 'linear-gradient(135deg, rgba(2, 132, 199, 0.16) 0%, rgba(56, 189, 248, 0.06) 100%)',
+    color: '#1e3a8a',
+    bgGradient: 'linear-gradient(135deg, rgba(30, 58, 138, 0.16) 0%, rgba(59, 130, 246, 0.06) 100%)',
     iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><rect x="9" y="3.5" width="6" height="3" rx="1.5"/><rect x="8" y="8.5" width="8" height="3" rx="1.5"/><rect x="7" y="13.5" width="10" height="3.5" rx="1.5"/><path d="M10 20.5l2 1.5 2-1.5"/></svg>`,
     items: ['Atlas', 'Axis', 'Lumbar vertebra', 'Sacrum', 'Coccyx']
   },
