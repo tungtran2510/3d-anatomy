@@ -103,12 +103,21 @@ function update() {
   dot?.setAttribute('cx', x);
   dot?.setAttribute('cy', y);
 
+  const cardEl = document.getElementById('selectionCard');
+  if (cardEl && !cardEl.classList.contains('hidden') && !cardEl.classList.contains('compact-mode')) {
+    // When full sheet is expanded, hide floating callout tooltip to prevent overlap
+    label.style.display = 'none';
+    line.style.display = 'none';
+  } else {
+    label.style.display = '';
+    line.style.display = '';
+  }
+
   const box = label.getBoundingClientRect();
   let labelX = x + OFFSET_X;
   let labelY = y + OFFSET_Y;
 
   // Keep within safe viewport boundaries and NEVER overlap the bottom selection card
-  const cardEl = document.getElementById('selectionCard');
   let maxBottom = height - box.height - 84;
   if (cardEl && !cardEl.classList.contains('hidden')) {
     const cardRect = cardEl.getBoundingClientRect();
