@@ -24,11 +24,15 @@ function build(container) {
   root.innerHTML = `
     <svg class="callout-line" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0" /></svg>
     <div class="callout" role="status">
-      <span class="callout-name"></span>
+      <div class="callout-header-row" data-callout="zoom" title="Chạm để phóng to chi tiết">
+        <span class="callout-pin-icon">📍</span>
+        <span class="callout-name"></span>
+      </div>
       <div class="callout-actions">
+        <button type="button" class="callout-btn callout-zoom" data-callout="zoom" title="Phóng to chi tiết (Zoom closer)">🔍 Phóng to</button>
         <button type="button" class="callout-btn" data-callout="isolate"></button>
         <button type="button" class="callout-btn" data-callout="hide"></button>
-        <button type="button" class="callout-btn callout-close" data-callout="close" aria-label="Chiudi">&times;</button>
+        <button type="button" class="callout-btn callout-close" data-callout="close" aria-label="Đóng">&times;</button>
       </div>
     </div>
   `;
@@ -103,8 +107,8 @@ export function showCallout(partId, displayName, actions = {}) {
 
   const info = state.partsData?.[partId];
   const nameEl = root.querySelector('.callout-name');
-  nameEl.textContent = displayName;
-  nameEl.title = info?.latinName ? `${displayName} — ${info.latinName}` : displayName;
+  nameEl.textContent = `${displayName} (ở đây)`;
+  nameEl.title = `Chạm để phóng to chi tiết: ${displayName}`;
   root.querySelector('[data-callout="isolate"]').textContent = translate('isolate');
   root.querySelector('[data-callout="hide"]').textContent = translate('hide');
 

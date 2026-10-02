@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo } from '../state/store.js';
 import { getMeshRegistry, getPickTargets, getStructure } from './loadModel.js';
 import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart, restoreAllParts, setPartTransparency } from './visibility.js';
-import { focusOnMesh } from './camera.js';
+import { focusOnMesh, zoomIntoMesh, zoomOutToOverview } from './camera.js';
 import { showCallout, hideCallout } from '../ui/callout.js';
 import { loadDefinitions } from '../data/anatomy.js';
 import { handleQuizClick } from '../ui/quiz.js';
@@ -323,7 +323,7 @@ export function notifySelectionHistoryChanged() {
   }
 }
 
-export function selectPart(partId, viewer, skipHistory = false) {
+export function selectPart(partId, viewer, skipHistory = false, skipCamera = false) {
   // Record selection history stack
   if (!skipHistory) {
     recordSelectionHistory(partId);
@@ -361,8 +361,8 @@ export function selectPart(partId, viewer, skipHistory = false) {
   highlightMesh(partId, 0xffdf5d, 0.8);
   lastSelectedMesh = mesh;
 
-  // Smoothly jump/focus camera onto the selected structure
-  if (viewer) {
+  // Smoothly jump/focus camera onto the selected structure if not skipped
+  if (viewer && !skipCamera) {
     focusOnMesh(mesh, viewer, true, 2.2);
   }
 
@@ -371,6 +371,9 @@ export function selectPart(partId, viewer, skipHistory = false) {
   ghostAllExcept(partId);
 
   showCallout(partId, partData.displayName, {
+    zoom: () => {
+      zoomIntoCurrentSelection(viewer);
+    },
     isolate: id => {
       pushUndo({
         type: 'isolate',
@@ -677,7 +680,7 @@ export function getSelectedPart() {
   return state.selectedPart;
 }
 
-export function selectPartById(partId, viewer, skipHistory = false) {
+export function selectPartById(partId, viewer, skipHistory = false, skipCamera = false) {
   if (!partId) return false;
   const targetViewer = viewer || state.viewer || window.viewer;
   const registry = getMeshRegistry();
@@ -711,7 +714,7 @@ export function selectPartById(partId, viewer, skipHistory = false) {
   }
 
   if (mesh) {
-    selectPart(resolvedId, targetViewer, skipHistory);
+    selectPart(resolvedId, targetViewer, skipHistory, skipCamera);
     return true;
   }
   return false;
@@ -783,4 +786,15 @@ export function executeUndo(viewer = state.viewer) {
 
 export function undoLastDissect(viewer) {
   return executeUndo(viewer);
+}
+
+export function zoomIntoCurrentSelection(viewer) {
+  const targetViewer = viewer || state.viewer || window.viewer;
+  if (!lastSelectedMesh || !targetViewer) return Promise.resolve();
+  return zoomIntoMesh(lastSelectedMesh, targetViewer, true);
+}
+
+export function zoomOutSelectionOverview(viewer) {
+  const targetViewer = viewer || state.viewer || window.viewer;
+  return zoomOutToOverview(targetViewer, true);
 }

@@ -536,6 +536,7 @@ export const CLINICAL_DATABASE = {
 
   'Spleen': {
     nameVi: 'Lá lách (Tỳ)',
+    speakTextVi: 'Lá lách',
     nameLatin: 'Splen / Lien (TA2: 3880)',
     nameEn: 'Spleen',
     regionVi: 'Hạ sườn trái (Sau dạ dày)',
@@ -551,6 +552,126 @@ export const CLINICAL_DATABASE = {
     },
     lessonLink: '/bach-huyet/la-lach-mien-dich',
     lessonTitle: 'Lá Lách: Cơ Quan Miễn Dịch & Bộ Lọc Máu Cơ Thể',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Left ventricle': {
+    nameVi: 'Tâm thất trái',
+    nameLatin: 'Ventriculus sinister cordis (TA2: 3820)',
+    nameEn: 'Left ventricle',
+    regionVi: 'Lồng ngực (Trung thất giữa)',
+    systemVi: 'Hệ Tim Mạch (Tim & Buồng Tim)',
+    description: 'Buồng tim cơ bắp dày nhất (thành cơ tim 8-12 mm, gấp 3 lần thất phải), tạo nên đỉnh tim (mỏm tim) và phần lớn mặt sau dưới của quả tim. Nhận máu giàu oxy từ nhĩ trái qua van hai lá và bơm vào động mạch chủ qua van tổ chim.',
+    function: 'Chiếc bơm áp lực cao chính của hệ tuần hoàn, tạo áp lực tâm thu 100-140 mmHg tống máu nuôi toàn bộ mô tế bào cơ thể.',
+    clinical: 'Phì đại thất trái do tăng huyết áp vô căn hoặc hẹp van động mạch chủ; suy tim trái ứ huyết (gây phù phổi cấp, khó thở khi nằm kịch phát ban đêm); nhồi máu cơ tim thất trái do tắc nhánh liên thất trước (LAD).',
+    relations: {
+      muscles: 'Cơ tim thất trái dày đặc, có hai cột cơ (trước và sau) giữ thừng gân van hai lá.',
+      bones: 'Mỏm tim đập ở khoang liên sườn 5 đường trung đòn trái.',
+      nerves: 'Đám rối thần kinh tim (hệ tự chủ: giao cảm tăng nhịp, phế vị giảm nhịp).',
+      vessels: 'Cấp máu bởi động mạch liên thất trước (LAD) và động mạch mũ từ ĐM vành trái.'
+    },
+    lessonLink: '/tim-mach/cac-buong-tim',
+    lessonTitle: 'Tâm Thất Trái & Động Học Tuần Hoàn Đại Tuần Hoàn',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Right ventricle': {
+    nameVi: 'Tâm thất phải',
+    nameLatin: 'Ventriculus dexter cordis (TA2: 3810)',
+    nameEn: 'Right ventricle',
+    regionVi: 'Lồng ngực (Trung thất giữa)',
+    systemVi: 'Hệ Tim Mạch (Tim & Buồng Tim)',
+    description: 'Buồng tim hình tam giác nằm ở mặt trước xương ức của quả tim. Nhận máu nghèo oxy từ nhĩ phải qua van ba lá và tống máu lên phổi qua thân động mạch phổi.',
+    function: 'Bơm áp lực thấp (tâm thu 15-30 mmHg) tống máu lên tiểu tuần hoàn phổi để trao đổi khí oxy và CO2.',
+    clinical: 'Suy tim phải (gây phù mắt cá chân, gan to đàn xếp, phản hồi gan - tĩnh mạch cổ nổi (+)); thuyên tắc động mạch phổi cấp tính gây tâm phế cấp (Cor pulmonale).',
+    relations: {
+      muscles: 'Thành cơ tim dày 3-5 mm, có ba cột cơ gắn van ba lá và dải điều hòa (Moderator band).',
+      bones: 'Nằm ngay sau thân xương ức và các sụn sườn 4 - 6.',
+      nerves: 'Chi phối bởi đám rối thần kinh tim nông và sâu.',
+      vessels: 'Cấp máu chủ yếu bởi động mạch vành phải (RCA) và nhánh bờ phải.'
+    },
+    lessonLink: '/tim-mach/cac-buong-tim',
+    lessonTitle: 'Tâm Thất Phải & Tiểu Tuần Hoàn Phổi',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Ascending aorta': {
+    nameVi: 'Động mạch chủ lên',
+    nameLatin: 'Aorta ascendens (TA2: 3950)',
+    nameEn: 'Ascending aorta',
+    regionVi: 'Lồng ngực (Trung thất giữa)',
+    systemVi: 'Hệ Tim Mạch (Đại Tuần Hoàn)',
+    description: 'Đoạn đầu tiên của cây động mạch chủ, dài khoảng 5 cm, xuất phát từ lỗ van động mạch chủ của thất trái chạy chếch lên trên, sang phải và ra trước đến mức sụn sườn 2 phải thì tiếp nối cung động mạch chủ.',
+    function: 'Chịu xung động áp lực máu tống cực đại từ tâm thất trái, đàn hồi co giãn (hiệu ứng Windkessel) giúp dòng máu chảy liên tục êm ả vào hệ thống mao mạch.',
+    clinical: 'Phình bóc tách động mạch chủ ngực loại A (Stanford Type A Dissection - cấp cứu ngoại khoa tối khẩn cấp với tỷ lệ tử vong cao từng giờ); vôi hóa xơ vữa van động mạch chủ.',
+    relations: {
+      muscles: 'Nằm trong màng ngoài tim sợi, tiếp giáp thân động mạch phổi ở bên trái và nhĩ phải ở bên phải.',
+      bones: 'Nằm sau cán xương ức và sụn sườn 2 - 3 bên phải.',
+      nerves: 'Các nhánh thần kinh áp cảm thụ quan (Baroreceptors) từ xoang cảnh và quai ĐM chủ.',
+      vessels: 'Phát sinh hai nhánh duy nhất: Động mạch vành phải và Động mạch vành trái từ xoang Valsalva.'
+    },
+    lessonLink: '/tim-mach/dong-mach-chu',
+    lessonTitle: 'Cây Động Mạch Chủ & Bệnh Lý Phình Bóc Tách Ngực',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Diaphragm': {
+    nameVi: 'Cơ hoành (Vòm hoành)',
+    nameLatin: 'Diaphragma (TA2: 2150)',
+    nameEn: 'Diaphragm',
+    regionVi: 'Ranh giới Ngực - Bụng',
+    systemVi: 'Hệ Cơ Hô Hấp',
+    description: 'Tấm cơ - gân dẹt hình vòm đôi ngăn cách hoàn toàn khoang lồng ngực và ổ bụng. Gồm phần cơ ngoại vi bám vào xương ức, sườn, cột sống và tụ lại ở trung tâm gân (Centrum tendineum). Vòm hoành phải cao hơn vòm hoành trái khoảng 1 khoang liên sườn.',
+    function: 'Cơ hô hấp chính yếu nhất cơ thể, đảm nhiệm 70-80% thể tích khí lưu thông hít vào bình thường; đồng thời tăng áp lực ổ bụng hỗ trợ rặn đẻ, đại tiện và nôn.',
+    clinical: 'Thoát vị hoành (Hernia qua lỗ thực quản hoặc khe Bochdalek); liệt cơ hoành do tổn thương thần kinh hoành (C3-C5); nấc cụt do co thắt đột ngột cơ hoành.',
+    relations: {
+      muscles: 'Liên tục với cơ ngang bụng, cơ thắt lưng chậu (Psoas) và cơ vuông thắt lưng.',
+      bones: 'Bám vào mỏm mũi kiếm xương ức, mặt trong 6 sụn sườn dưới và các đốt sống thắt lưng L1 - L3.',
+      nerves: 'Thần kinh hoành (Phrenic nerve) bắt nguồn từ rễ cổ C3, C4, C5 chi phối vận động duy nhất.',
+      vessels: 'Động mạch hoành trên, động mạch hoành dưới (nhánh ĐM chủ bụng) và động mạch cơ hoành.'
+    },
+    lessonLink: '/ho-hap/co-hoanh-dong-hoc',
+    lessonTitle: 'Cơ Hoành: Cơ Sinh Học Hô Hấp & Ứng Dụng Lâm Sàng',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Trachea': {
+    nameVi: 'Khí quản',
+    nameLatin: 'Trachea (TA2: 3200)',
+    nameEn: 'Trachea',
+    regionVi: 'Cổ & Trung thất trên',
+    systemVi: 'Hệ Hô Hấp',
+    description: 'Ống dẫn khí hình trụ dẹp phía sau, dài 11-13 cm, đường kính 2 cm, cấu tạo bởi 16-20 vòng sụn hình chữ C hở phía sau được nối kín bởi cơ khí quản. Bắt đầu từ sụn nhẫn (C6) xuống đến trạc ba khí quản (Carina - mức T4-T5).',
+    function: 'Dẫn khí, sưởi ấm, tạo độ ẩm và lọc bụi bẩn nhờ biểu mô trụ giả tầng có lông chuyển và lớp chất nhầy bảo vệ.',
+    clinical: 'Thủ thuật mở khí quản cấp cứu (Tracheostomy) ở khoang nhẫn giáp hoặc đốt sụn 2-3; hóc dị vật đường thở kẹt ở Carina; xẹp khí quản (Tracheomalacia).',
+    relations: {
+      muscles: 'Thành sau là cơ trơn khí quản tiếp giáp trực tiếp mặt trước thực quản.',
+      bones: 'Chạy dọc phía trước cột sống cổ và ngực trên.',
+      nerves: 'Dây thần kinh thanh quản quặt ngược (nhánh Thần kinh X) nằm trong rãnh khí thực quản.',
+      vessels: 'Động mạch giáp dưới và các nhánh phế quản của động mạch chủ ngực.'
+    },
+    lessonLink: '/ho-hap/khi-phe-quan',
+    lessonTitle: 'Khí Quản: Cấu Tạo Giải Phẫu & Kỹ Thuật Mở Khí Quản',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Superior lobe of left lung': {
+    nameVi: 'Thùy trên phổi trái',
+    nameLatin: 'Lobus superior pulmonis sinistri',
+    nameEn: 'Superior lobe of left lung',
+    regionVi: 'Lồng ngực trái',
+    systemVi: 'Hệ Hô Hấp (Phổi)',
+    description: 'Thùy trên của phổi trái, chiếm phần lớn mặt trước và đỉnh phổi trái, ngăn cách với thùy dưới bởi khe chếch. Có khuyết tim sâu ở bờ trước và mỏm lưỡi (Lingula) tương đương thùy giữa phổi phải.',
+    function: 'Trao đổi khí O2 và CO2 cho các phân thùy đỉnh, sau, trước và vùng lưỡi.',
+    clinical: 'Viêm thùy phổi, lao phổi (thường khu trú đỉnh phổi thùy trên), u phế quản thùy trên phổi.',
+    relations: {
+      muscles: 'Áp sát thành lồng ngực và cơ liên sườn phía trước bên.',
+      bones: 'Nằm sau xương đòn và các xương sườn 1 đến 6 bên trái.',
+      nerves: 'Đám rối phổi trước và sau.',
+      vessels: 'Nhánh thùy trên của động mạch phổi trái và tĩnh mạch phổi trên trái.'
+    },
+    lessonLink: '/ho-hap/phoi-va-mang-phoi',
+    lessonTitle: 'Phổi Trái: Các Phân Thùy & Rốn Phổi',
     videoId: '3ZfVjV7VqJ8'
   },
 
@@ -652,6 +773,217 @@ export const CLINICAL_DATABASE = {
     lessonLink: '/tieu-hoa/da-day-va-ruot',
     lessonTitle: 'Dạ Dày: Cấu Trúc Cơ Học & Chức Năng Tiêu Hóa',
     videoId: '3ZfVjV7VqJ8'
+  },
+
+  // === HỆ THỐNG NÃO THẤT & DỊCH NÃO TỦY (VENTRICULAR SYSTEM & CSF) ===
+  'Lateral ventricle': {
+    nameVi: 'Não thất bên (Não thất I & II)',
+    nameLatin: 'Ventriculus lateralis (TA2: 5493)',
+    nameEn: 'Lateral ventricle',
+    regionVi: 'Đầu - Bán cầu đại não',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Hai khoang chứa dịch não tủy lớn nhất hình chữ C uốn cong đối xứng sâu bên trong hai bán cầu đại não. Gồm sừng trán (sừng trước), thân não thất, sừng chẩm (sừng sau) và sừng thái dương (sừng dưới) ôm cong quanh đồi thị.',
+    function: 'Tiếp nhận dịch não tủy do đám rối màng mạch (Choroid plexus) tiết ra (~500ml/ngày), tạo đệm thủy lực chống va đập cơ học cho não bộ và tham gia chu trình thanh thải độc tố hệ Glymphatic.',
+    relationsText: 'Chu trình lưu thông dịch não tủy: Dịch từ Đám rối màng mạch não thất bên chảy qua Lỗ gian não thất (Lỗ Monro) đổ vào Não thất ba; tiếp giáp thể chai (Corpus callosum) ở trần, đồi thị và nhân đuôi ở sàn, vách trong suốt ngăn đôi ở thành trong.',
+    clinical: 'Giãn não thất bên do tắc lỗ Monro hoặc não úng thủy áp lực bình thường (NPH - tam chứng Adams: sa sút trí tuệ, rối loạn dáng đi, tiểu không tự chủ); đo chỉ số Evans trên CT/MRI sọ não chẩn đoán Não úng thủy (Hydrocephalus).',
+    relations: {
+      muscles: 'Được bảo vệ trong hộp sọ kín, không tiếp xúc cơ vân trực tiếp.',
+      bones: 'Nằm sâu dưới vòm sọ gồm xương trán, xương đỉnh, xương chẩm và xương thái dương.',
+      nerves: 'Bao quanh bởi chất trắng não, thể chai, vòm não (Fornix), đồi thị và các hạch nền não.',
+      vessels: 'Đám rối màng mạch não thất bên được cấp máu bởi ĐM màng mạch trước (nhánh ĐM cảnh trong) và ĐM màng mạch sau (nhánh ĐM não sau); tĩnh mạch nội não dẫn lưu về TM Galen.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Hệ Não Thất & Vòng Tuần Hoàn Dịch Não Tủy (CSF)',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Lateral ventricle.l': {
+    nameVi: 'Não thất bên (trái)',
+    nameLatin: 'Ventriculus lateralis sinister (TA2: 5493)',
+    nameEn: 'Left lateral ventricle',
+    regionVi: 'Đầu - Bán cầu đại não trái',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Khoang chứa dịch não tủy hình chữ C đối xứng sâu trong bán cầu đại não trái, ôm cong quanh đồi thị trái.',
+    function: 'Tiếp nhận và lưu chuyển dịch não tủy do đám rối màng mạch trái tiết ra, bảo vệ bán cầu đại não trái.',
+    relationsText: 'Dẫn lưu dịch não tủy qua lỗ Monro trái vào Não thất ba; tiếp giáp thể chai, nhân đuôi và vách trong suốt.',
+    clinical: 'Tắc lỗ Monro trái gây giãn đơn độc não thất bên trái, tăng áp lực nội sọ khu trú.',
+    relations: {
+      muscles: 'Bảo vệ kín trong hộp sọ.',
+      bones: 'Xương trán, đỉnh, chẩm, thái dương bên trái.',
+      nerves: 'Chất trắng bán cầu đại não trái, thể chai, vòm não.',
+      vessels: 'Động mạch màng mạch trước và sau bên trái.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Hệ Não Thất & Vòng Tuần Hoàn Dịch Não Tủy (CSF)',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Lateral ventricle.r': {
+    nameVi: 'Não thất bên (phải)',
+    nameLatin: 'Ventriculus lateralis dexter (TA2: 5493)',
+    nameEn: 'Right lateral ventricle',
+    regionVi: 'Đầu - Bán cầu đại não phải',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Khoang chứa dịch não tủy hình chữ C đối xứng sâu trong bán cầu đại não phải, ôm cong quanh đồi thị phải.',
+    function: 'Tiếp nhận và lưu chuyển dịch não tủy do đám rối màng mạch phải tiết ra, bảo vệ bán cầu đại não phải.',
+    relationsText: 'Dẫn lưu dịch não tủy qua lỗ Monro phải vào Não thất ba; tiếp giáp thể chai, nhân đuôi và vách trong suốt.',
+    clinical: 'Tắc lỗ Monro phải gây giãn đơn độc não thất bên phải, tăng áp lực nội sọ khu trú.',
+    relations: {
+      muscles: 'Bảo vệ kín trong hộp sọ.',
+      bones: 'Xương trán, đỉnh, chẩm, thái dương bên phải.',
+      nerves: 'Chất trắng bán cầu đại não phải, thể chai, vòm não.',
+      vessels: 'Động mạch màng mạch trước và sau bên phải.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Hệ Não Thất & Vòng Tuần Hoàn Dịch Não Tủy (CSF)',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Third ventricle': {
+    nameVi: 'Não thất ba',
+    nameLatin: 'Ventriculus tertius (TA2: 5410)',
+    nameEn: 'Third ventricle',
+    regionVi: 'Đầu - Gian não (Diencephalon)',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Khoang hẹp hình khe nằm dọc chính giữa đường giữa của gian não, kẹp giữa hai đồi thị và vùng hạ đồi, nối thông với hai não thất bên qua lỗ Monro và nối với não thất tư qua cống não Sylvius.',
+    function: 'Nhận toàn bộ dòng dịch não tủy từ hai não thất bên, bổ sung dịch não tủy do đám rối màng mạch não thất ba tiết ra và hướng dòng dịch chảy xuôi xuống cống não Sylvius.',
+    relationsText: 'Chu trình lưu thông: Nhận dịch não tủy từ hai lỗ Monro → Não thất ba → Dẫn dịch chảy vào Cống não Sylvius. Hai thành bên là đồi thị và vùng hạ đồi; sàn là giao thoa thị giác, củ xám, cuống tuyến yên; trần là vòm não.',
+    clinical: 'U nang dạng keo não thất ba (Colloid cyst) có thể gây tắc nghẽn cấp tính dòng chảy CSF gây tăng áp lực nội sọ kịch phát, đau đầu dữ dội khi thay đổi tư thế, tụt kẹt não đe dọa tính mạng.',
+    relations: {
+      muscles: 'Nằm sâu trong khối gian não, không có cơ trực tiếp.',
+      bones: 'Nằm phía trên thân xương bướm và hố yên.',
+      nerves: 'Tiếp giáp hai đồi thị (Thalamus), vùng hạ đồi (Hypothalamus), giao thoa thị giác (Optic chiasm) và vòm não (Fornix).',
+      vessels: 'Được cấp máu bởi động mạch màng mạch sau trong (nhánh ĐM não sau); tĩnh mạch não trong chạy trên trần.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Hệ Não Thất & Vòng Tuần Hoàn Dịch Não Tủy (CSF)',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Aqueduct of midbrain': {
+    nameVi: 'Cống não Sylvius (Cống trung não)',
+    nameLatin: 'Aqueductus mesencephali / Aqueductus cerebri (TA2: 5396)',
+    nameEn: 'Aqueduct of midbrain (Cerebral aqueduct)',
+    regionVi: 'Đầu - Trung não (Midbrain)',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Ống dẫn hẹp dài khoảng 1.5 - 2 cm, đường kính chỉ khoảng 1 - 2 mm, chạy dọc qua trung não để nối thông khoang Não thất ba với Não thất tư.',
+    function: 'Là eo thắt huyết mạch dẫn toàn bộ dịch não tủy từ bán cầu đại não và gian não thoát xuống hố sau (não thất tư và tủy sống).',
+    relationsText: 'Chu trình lưu thông: Nối từ Não thất ba → xuyên qua Trung não → đổ vào Não thất tư. Phía trước là cuống đại não (Tegmentum), phía sau là củ não sinh tư (Tectum), bao quanh là chất xám quanh cống não (PAG).',
+    clinical: 'Vị trí dễ bị tắc nghẽn nhất trong toàn bộ hệ thần kinh trung ương (Hẹp cống não bẩm sinh hoặc do khối u chèn ép hố sau) → Ứ trệ dịch gây Não úng thủy tắc nghẽn (Obstructive hydrocephalus), giãn to não thất ba và hai não thất bên.',
+    relations: {
+      muscles: 'Nằm sâu trong trung tâm trung não, không tiếp giáp cơ.',
+      bones: 'Nằm ngang mức xương chẩm và dốc nền xương bướm.',
+      nerves: 'Bao quanh bởi chất xám quanh cống não (PAG), nhân thần kinh vận nhãn (TK III) và nhân thần kinh ròng rọc (TK IV).',
+      vessels: 'Được cấp máu bởi các nhánh xuyên của động mạch nền (Basilar artery) và động mạch não sau.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Cống Não Sylvius & Cơ Chế Não Úng Thủy Tắc Nghẽn',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Fourth ventricle': {
+    nameVi: 'Não thất tư',
+    nameLatin: 'Ventriculus quartus (TA2: 5313)',
+    nameEn: 'Fourth ventricle',
+    regionVi: 'Đầu - Trám não & Hố sau',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Khoang hình thoi (hố trám) nằm ở hố sọ sau, phía trước là cầu não và hành tủy, phía sau là tiểu não, thông lên trên với cống não Sylvius và liên tục xuống dưới với ống trung tâm tủy sống.',
+    function: 'Cửa thoát duy nhất của dịch não tủy từ hệ thống não thất ra khoang dưới nhện bao quanh toàn bộ não và tủy sống thông qua 3 lỗ: 1 lỗ giữa (Magendie) và 2 lỗ bên (Luschka).',
+    relationsText: 'Chu trình lưu thông: Nhận dịch từ Cống Sylvius → thoát qua 3 lỗ (Magendie & Luschka) → đổ vào Bể lớn (Cisterna magna) và Khoang dưới nhện (Subarachnoid space) bao quanh não & tủy sống.',
+    clinical: 'Hội chứng Dandy-Walker (teo thùy giun tiểu não, bít tắc lỗ thoát dịch não thất tư tạo nang khổng lồ); dị tật Chiari (hạnh nhân tiểu não tụt qua lỗ chẩm chèn ép hành tủy và cản trở lưu thông dịch não tủy).',
+    relations: {
+      muscles: 'Được bảo vệ bởi khối cơ dưới chẩm và cơ thang phía sau gáy.',
+      bones: 'Nằm tựa trên dốc nền xương chẩm phía trước và vảy chẩm phía sau.',
+      nerves: 'Sàn hố trám chứa nhân các dây thần kinh sọ quan trọng (TK VI, VII, VIII, IX, X, XII) và trung tâm hô hấp, tuần hoàn.',
+      vessels: 'Được cấp máu bởi động mạch tiểu não sau dưới (PICA) và động mạch tiểu não trước dưới (AICA).'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Não Thất Tư & 3 Cửa Thoát Dịch Não Tủy (Magendie - Luschka)',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Choroid plexus': {
+    nameVi: 'Đám rối màng mạch (Sinh dịch não tủy)',
+    nameLatin: 'Plexus choroideus (TA2: 5500)',
+    nameEn: 'Choroid plexus',
+    regionVi: 'Đầu - Các buồng não thất',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Mạng lưới mao mạch vi nhung mao giàu mạch máu phủ lớp tế bào biểu mô màng mạch có nguồn gốc từ màng mềm (Pia mater), nhô vào lòng các não thất bên, não thất ba và não thất tư.',
+    function: 'Sản xuất và bài tiết hơn 80% tổng lượng dịch não tủy (CSF) của cơ thể (khoảng 400 - 600 ml/ngày) bằng cơ chế vận chuyển tích cực và siêu lọc huyết tương; đóng vai trò hàng rào máu - dịch não tủy (BCSFB).',
+    relationsText: 'Nằm trong lòng các não thất bên (chạy từ sừng thái dương qua thân não thất đến lỗ Monro), não thất ba và não thất tư; liên tục bài tiết dịch não tủy tạo áp lực dòng chảy tuần hoàn liên tục.',
+    clinical: 'U nhú đám rối màng mạch (Choroid plexus papilloma) gây tăng tiết dịch não tủy quá mức hoặc chảy máu não thất gây Não úng thủy giao thông (Communicating hydrocephalus).',
+    relations: {
+      muscles: 'Nằm lơ lửng trong dịch não tủy bên trong các buồng não thất.',
+      bones: 'Bảo vệ an toàn sâu trong hộp sọ.',
+      nerves: 'Chi phối bởi các sợi thần kinh thực vật tự chủ điều hòa bài tiết.',
+      vessels: 'Động mạch màng mạch trước (nhánh ĐM cảnh trong), các động mạch màng mạch sau ngoài và sau trong (nhánh ĐM não sau).'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Đám Rối Màng Mạch & Cơ Chế Sản Sinh Dịch Não Tủy',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Choroid plexus.l': {
+    nameVi: 'Đám rối màng mạch trái (Sinh dịch não tủy)',
+    nameLatin: 'Plexus choroideus sinister (TA2: 5500)',
+    nameEn: 'Left choroid plexus',
+    regionVi: 'Đầu - Não thất bên trái',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Mạng vi mạch màng mềm nhô vào lòng não thất bên trái, liên tục sản sinh dịch não tủy làm đầy não thất bên trái.',
+    function: 'Tiết dịch não tủy vô khuẩn giàu dưỡng chất nuôi dưỡng tế bào thần kinh và bảo vệ nhu mô não.',
+    relationsText: 'Chạy uốn lượn trong lòng não thất bên trái, hội tụ về phía lỗ Monro bên trái.',
+    clinical: 'Chảy máu não thất do vỡ dị dạng mạch đám rối màng mạch bên trái.',
+    relations: {
+      muscles: 'Nằm kín trong hộp sọ.',
+      bones: 'Xương sọ bán cầu trái.',
+      nerves: 'Tiếp giáp đồi thị và vòm não bên trái.',
+      vessels: 'Động mạch màng mạch trước và sau bên trái.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Đám Rối Màng Mạch & Cơ Chế Sản Sinh Dịch Não Tủy',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Choroid plexus.r': {
+    nameVi: 'Đám rối màng mạch phải (Sinh dịch não tủy)',
+    nameLatin: 'Plexus choroideus dexter (TA2: 5500)',
+    nameEn: 'Right choroid plexus',
+    regionVi: 'Đầu - Não thất bên phải',
+    systemVi: 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)',
+    description: 'Mạng vi mạch màng mềm nhô vào lòng não thất bên phải, liên tục sản sinh dịch não tủy làm đầy não thất bên phải.',
+    function: 'Tiết dịch não tủy vô khuẩn giàu dưỡng chất nuôi dưỡng tế bào thần kinh và bảo vệ nhu mô não.',
+    relationsText: 'Chạy uốn lượn trong lòng não thất bên phải, hội tụ về phía lỗ Monro bên phải.',
+    clinical: 'Chảy máu não thất do vỡ dị dạng mạch đám rối màng mạch bên phải.',
+    relations: {
+      muscles: 'Nằm kín trong hộp sọ.',
+      bones: 'Xương sọ bán cầu phải.',
+      nerves: 'Tiếp giáp đồi thị và vòm não bên phải.',
+      vessels: 'Động mạch màng mạch trước và sau bên phải.'
+    },
+    lessonLink: '/than-kinh/he-nao-that-va-csf',
+    lessonTitle: 'Đám Rối Màng Mạch & Cơ Chế Sản Sinh Dịch Não Tủy',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Spinal dura': {
+    nameVi: 'Màng cứng tủy sống & Hộp sọ',
+    nameLatin: 'Dura mater spinalis (TA2: 5128)',
+    nameEn: 'Spinal dura mater',
+    regionVi: 'Cột sống & Ống sống',
+    systemVi: 'Hệ Thần Kinh (Màng Não Tủy & Bao Dịch Não Tủy)',
+    description: 'Màng xơ collagen dày đặc, dai chắc bọc ngoài cùng của tủy sống, kéo dài từ lỗ chẩm (Foramen magnum) xuống tận đốt sống cùng S2 tạo thành túi màng cứng (Thecal sac).',
+    function: 'Tạo bao kín chứa màng nhện, khoang dưới nhện và toàn bộ dịch não tủy bao bọc tủy sống; bảo vệ cơ học chống lại lực uốn cong, kéo giãn của cột sống.',
+    relationsText: 'Chu trình dịch não tủy: Bên trong màng cứng là màng nhện và khoang dưới nhện chứa dòng dịch não tủy lưu thông từ não xuống bao quanh tủy sống đến tận bể thắt lưng L2-S2. Phía ngoài là khoang ngoài màng cứng (Epidural space) chứa mỡ và đám rối tĩnh mạch.',
+    clinical: 'Vị trí gây tê ngoài màng cứng (Epidural anesthesia) trong giảm đau đẻ; và chọc dò dịch não tủy (Lumbar puncture) qua màng cứng vào khoang dưới nhện tại khe đốt sống L3-L4 hoặc L4-L5 an toàn vì tủy sống đã kết thúc ở tầng L1-L2.',
+    relations: {
+      muscles: 'Cơ dựng gai sống, cơ nhiều chân và các dây chằng vàng, dây chằng gian gai bảo vệ phía sau.',
+      bones: 'Nằm trong ống sống tạo bởi thân các đốt sống và cung đốt sống từ C1 đến S2.',
+      nerves: 'Bao bọc tủy sống, nón tủy và chùm đuôi ngựa; các rễ thần kinh gai sống xuyên qua màng cứng.',
+      vessels: 'Đám rối tĩnh mạch ngoài màng cứng Batson, động mạch gai sống trước và sau.'
+    },
+    lessonLink: '/than-kinh/mang-nao-tuy-va-choc-do-csf',
+    lessonTitle: 'Màng Cứng Tủy Sống & Giải Phẫu Chọc Dò Dịch Não Tủy',
+    videoId: '3ZfVjV7VqJ8'
   }
 };
 
@@ -683,21 +1015,33 @@ export function getClinicalData(partId, baseName) {
   if (matched) {
     const result = { ...matched, relations: { ...matched.relations } };
     if (nom.side) {
-      if (!result.nameVi.includes(nom.sideLabelVi)) {
-        result.nameVi = `${result.nameVi} (${nom.sideLabelVi})`;
+      const sideVi = nom.side === 'left' ? 'trái' : 'phải';
+      const hasSideAlready = result.nameVi.toLowerCase().includes('trái') || result.nameVi.toLowerCase().includes('phải');
+      if (!hasSideAlready) {
+        result.nameVi = `${result.nameVi} (${sideVi})`;
       }
-      if (!result.nameLatin.includes(nom.sideLatin)) {
+      if (!result.nameLatin.toLowerCase().includes(nom.sideLatin.toLowerCase())) {
         result.nameLatin = `${result.nameLatin} (${nom.sideLatin})`;
       }
-      if (!result.nameEn.includes(nom.sideEn)) {
+      if (!result.nameEn.toLowerCase().includes(nom.sideEn.toLowerCase())) {
         result.nameEn = `${result.nameEn} (${nom.sideEn})`;
       }
-      result.speakTextVi = `${matched.nameVi} ${nom.sideSpeechVi}`;
+      // Accurate Vietnamese pronunciation with lateral side (e.g. "Não thất bên trái")
+      if (hasSideAlready) {
+        result.speakTextVi = result.nameVi.replace(/[()]/g, ' ');
+      } else {
+        result.speakTextVi = `${matched.nameVi} ${sideVi}`;
+      }
     } else {
       result.speakTextVi = matched.nameVi;
     }
 
-    result.speakTextVi = result.speakTextVi.replace(/\(.*?\)/g, '').replace(/[._]/g, ' ').replace(/\s+/g, ' ').trim();
+    result.speakTextVi = result.speakTextVi
+      .replace(/\([A-Z0-9_:\s.-]+\)/gi, '')
+      .replace(/[()]/g, ' ')
+      .replace(/[._]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
     if (!result.relationsText) {
       const rel = result.relations;
@@ -715,7 +1059,12 @@ function generateFallbackAcademicData(partId, baseName, passedNom) {
   const nameVi = nom.nameVi;
   const nameLatin = nom.nameLatin;
   const nameEn = nom.nameEn;
-  const speakTextVi = (nom.speakTextVi || nom.nameVi).replace(/\(.*?\)/g, '').replace(/[._]/g, ' ').replace(/\s+/g, ' ').trim();
+  const speakTextVi = (nom.speakTextVi || nom.nameVi)
+    .replace(/\([A-Z0-9_:\s.-]+\)/gi, '')
+    .replace(/[()]/g, ' ')
+    .replace(/[._]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   const cleanBase = nom.cleanBase;
   const lower = cleanBase.toLowerCase();
 
@@ -753,8 +1102,10 @@ function generateFallbackAcademicData(partId, baseName, passedNom) {
   let nerves = 'Được chi phối bởi các nhánh thần kinh ngoại biên tương ứng theo từng đốt tủy.';
   let vessels = 'Được nuôi dưỡng bởi các nhánh động mạch và mạng lưới vi mạch cục bộ.';
 
+  const isBrainVentricle = /ventricle\.[lr]|lateral ventricle|third ventricle|fourth ventricle|aqueduct|choroid plexus|spinal dura/i.test(lower) || nameVi.includes('Não thất') || nameVi.includes('Cống não') || nameVi.includes('màng mạch') || nameVi.includes('Màng cứng');
+  const isHeart = !isBrainVentricle && (nameVi.includes('thất') || nameVi.includes('nhĩ') || nameVi.includes('tim') || nameVi.includes('Van') || /ventric|atrium|heart|myocard|valv|septum/i.test(lower));
   const isFascia = nameVi.startsWith('Cân') || nameVi.startsWith('Mạc') || nameVi.startsWith('Hãm gân') || /aponeurosis|fascia|retinaculum|sheath/i.test(lower);
-  const isMuscle = !isFascia && (nameVi.startsWith('Cơ') || /muscle|belly|head of |adductor|abductor|extensor|flexor|pronator|supinator|levator|depressor|tensor|rotator|platysma|sartorius|gracilis|masseter|temporalis|trapezius|latissimus|deltoid|pectoralis|biceps|triceps|quadriceps|gastrocnemius|soleus|gluteus|psoas|iliacus|scalenus|splenius|rhomboid|infraspinatus|supraspinatus/i.test(lower));
+  const isMuscle = !isFascia && !isHeart && !isBrainVentricle && (nameVi.startsWith('Cơ') || /muscle|belly|head of |adductor|abductor|extensor|flexor|pronator|supinator|levator|depressor|tensor|rotator|platysma|sartorius|gracilis|masseter|temporalis|trapezius|latissimus|deltoid|pectoralis|biceps|triceps|quadriceps|gastrocnemius|soleus|gluteus|psoas|iliacus|scalenus|splenius|rhomboid|infraspinatus|supraspinatus/i.test(lower));
   const isBoneJoint = nameVi.startsWith('Xương') || nameVi.startsWith('Sụn') || nameVi.startsWith('Khớp') || nameVi.startsWith('Dây chằng') || nameVi.startsWith('Đốt sống') || /bone|\bos\b|vertebra|process|tubercle|spine|crest|cartilage|meniscus|joint|ligament/i.test(lower);
   const isArtery = nameVi.startsWith('Động mạch') || /artery|aort|trunk/i.test(lower);
   const isVein = nameVi.startsWith('Tĩnh mạch') || /vein|vena|sinus/i.test(lower);
@@ -764,7 +1115,27 @@ function generateFallbackAcademicData(partId, baseName, passedNom) {
   const isDigest = nameVi.includes('Dạ dày') || nameVi.includes('Gan') || nameVi.includes('Mật') || nameVi.includes('Tụy') || nameVi.includes('Ruột') || /stomach|liver|gall|pancrea|intestin|colon|duct|oesophag|esophag/i.test(lower);
   const isUrinary = nameVi.includes('Thận') || nameVi.includes('Bàng quang') || nameVi.includes('Niệu') || /kidney|ureter|bladder|urethr|prostat/i.test(lower);
 
-  if (isFascia) {
+  if (isBrainVentricle) {
+    systemVi = 'Hệ Thần Kinh (Hệ Thống Não Thất & Dịch Não Tủy - CSF)';
+    desc = `Cấu trúc não thất / màng não dẫn lưu dịch não tủy ${nameVi} (${cleanBase}) thuộc hệ thống các khoang chứa và tuần hoàn dịch não tủy (CSF) bảo vệ thần kinh trung ương.`;
+    func = 'Chứa đựng, sản sinh hoặc dẫn truyền dòng dịch não tủy, giảm chấn động cơ học cho não bộ (đệm thủy lực) và tham gia chu trình thanh thải độc tố hệ Glymphatic.';
+    relationsText = `Nằm trong hệ thống não thất và khoang dưới nhện tại vùng ${regionVi}; thông thương liên tục từ hai bán cầu đại não qua cống Sylvius xuống não thất tư và tủy sống.`;
+    muscles = 'Được bảo vệ tuyệt đối bên trong hộp sọ và ống sống, không tiếp xúc cơ vân trực tiếp.';
+    bones = 'Được che chở an toàn bởi các xương sọ và các cung đốt sống.';
+    nerves = 'Tiếp giáp các cấu trúc thần kinh trung ương trọng yếu như đồi thị, thể chai, trung não và tủy sống.';
+    vessels = 'Đám rối màng mạch được cấp máu bởi các nhánh động mạch màng mạch trước/sau; tĩnh mạch não trong dẫn lưu.';
+    clin = 'Não úng thủy (Hydrocephalus) do tắc cống Sylvius hoặc lỗ Monro, tăng áp lực nội sọ, viêm màng não hoặc rò rỉ dịch não tủy.';
+  } else if (isHeart) {
+    systemVi = 'Hệ Tim Mạch (Tim & Buồng Tim)';
+    desc = `Cấu trúc tim học ${nameVi} (${cleanBase}) thuộc khối cơ tim rỗng 4 buồng hoạt động như một chiếc bơm áp lực cao nhịp nhàng.`;
+    func = 'Co bóp tống máu giàu oxy vào đại tuần hoàn hoặc máu nghèo oxy lên phổi, phối hợp đóng mở van tim ngăn dòng máu phụt ngược.';
+    relationsText = `Nằm trong trung thất giữa khoang lồng ngực ${regionVi}; được bao bọc bởi màng ngoài tim (Pericardium), tiếp giáp xương ức phía trước, thực quản phía sau và hai lá phổi hai bên.`;
+    muscles = 'Cấu tạo từ các lớp sợi cơ tim xoắn ốc (Myocardium) có tính tự động dẫn truyền xung động.';
+    bones = 'Được bảo vệ phía trước bởi xương ức và các sụn sườn 3 - 6, phía sau tựa các đốt sống ngực T5 - T8.';
+    nerves = 'Được điều hòa bởi hệ thần kinh tự chủ (Đám rối tim, Thần kinh X và chuỗi hạch giao cảm ngực).';
+    vessels = 'Được nuôi dưỡng trực tiếp bởi hai nhánh động mạch vành (ĐM vành phải và ĐM vành trái).';
+    clin = 'Nhồi máu cơ tim, suy tim sung huyết, hở/hẹp van tim, rối loạn nhịp tim hoặc phì đại tâm thất.';
+  } else if (isFascia) {
     systemVi = 'Hệ Cơ & Mạc Liên Kết';
     desc = `Lớp mô liên kết sợi collagen dày đặc và bền chắc ${nameVi} (${cleanBase}), tạo thành màng bọc bảo vệ hoặc bản gân dẹt.`;
     func = 'Phân bố lực kéo cơ học đồng đều, cố định hướng trượt của các gân cơ, giảm ma sát chuyển động và duy trì khoang giải phẫu vững chắc.';

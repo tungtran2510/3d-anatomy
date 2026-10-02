@@ -102,7 +102,10 @@ export function initAtlasHub(viewer) {
         <div class="atlas-hub-filter-frame">
           <div class="search-input-wrapper">
             <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="atlas-hub-search-input" id="atlasHubSearchInput" placeholder="Tìm nhanh cấu trúc (Hộp sọ, Cơ delta, Tim, Khớp...)" autocomplete="off">
+            <input type="text" class="atlas-hub-search-input" id="atlasHubSearchInput" placeholder="Tìm nhanh cấu trúc (Dịch não tủy, Túi mật, Cột sống...)" autocomplete="off">
+            <button type="button" class="hub-voice-mic-btn" id="btnHubVoiceMic" title="Tìm bằng giọng nói tiếng Việt">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            </button>
             <button type="button" class="search-clear-btn hidden" id="btnHubSearchClear" title="Xóa tìm kiếm">&times;</button>
           </div>
           <div class="atlas-subfilter-chips-row" id="atlasSubfilterChips">
@@ -201,6 +204,48 @@ function setupHubEvents(viewer) {
     clearSearchBtn.classList.add('hidden');
     searchInput.focus();
     renderHubContent(viewer);
+  });
+
+  const hubVoiceBtn = hubModalEl.querySelector('#btnHubVoiceMic');
+  let hubRecognition = null;
+  hubVoiceBtn?.addEventListener('click', () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      showToast('⚠️ Trình duyệt chưa hỗ trợ nhận diện giọng nói');
+      return;
+    }
+    if (!hubRecognition) {
+      hubRecognition = new SpeechRecognition();
+      hubRecognition.lang = 'vi-VN';
+      hubRecognition.continuous = false;
+      hubRecognition.interimResults = false;
+      hubRecognition.onstart = () => {
+        hubVoiceBtn.classList.add('listening');
+        showToast('🎙️ Đang nghe... Hãy nói tên bộ phận (VD: "dịch não tủy", "túi mật")');
+      };
+      hubRecognition.onend = () => {
+        hubVoiceBtn.classList.remove('listening');
+      };
+      hubRecognition.onerror = (err) => {
+        hubVoiceBtn.classList.remove('listening');
+        if (err.error === 'not-allowed') showToast('⚠️ Vui lòng cấp quyền Microphone để nói');
+      };
+      hubRecognition.onresult = (ev) => {
+        const text = ev.results?.[0]?.[0]?.transcript?.trim();
+        if (text) {
+          searchInput.value = text;
+          searchQuery = text.toLowerCase().trim();
+          clearSearchBtn.classList.remove('hidden');
+          renderHubContent(viewer);
+          showToast(`🎯 Đã tìm: "${text}"`);
+        }
+      };
+    }
+    try {
+      hubRecognition.start();
+    } catch {
+      hubVoiceBtn.classList.remove('listening');
+    }
   });
 
   launchLinkBtn?.addEventListener('click', () => {
@@ -863,7 +908,12 @@ async function applyAtlasView(card, viewer) {
 
     // 5. Highlight specific part if present, or deselect
     if (card.highlight) {
-      setTimeout(() => selectPartById(card.highlight, activeViewer), 400);
+      setTimeout(() => {
+        const ok = selectPartById(card.highlight, activeViewer, false, true);
+        if (!ok) {
+          setTimeout(() => selectPartById(card.highlight, activeViewer, false, true), 350);
+        }
+      }, 350);
     } else {
       deselectPart(true);
     }

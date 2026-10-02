@@ -4,18 +4,24 @@
 import { state } from '../state/store.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
 import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getTableVisibility } from '../viewer/orientationManager.js';
-import { openLesson, showToast } from './sidebar.js';
+import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
 import { hidePart, isolatePart, setPartTransparency, restoreAllParts } from '../viewer/visibility.js';
-import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById } from '../viewer/selection.js';
+import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview } from '../viewer/selection.js';
+import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
+let isZoomedIn = false;
+let currentlySpeakingBtn = null;
+
+let isInfoPanelInitialized = false;
 
 export function initInfoPanel(viewer) {
   const card = document.getElementById('selectionCard');
-  if (!card) return;
+  if (!card || isInfoPanelInitialized) return;
+  isInfoPanelInitialized = true;
 
   // 1. Selection History Navigation (< and > buttons, Visible Body standard)
   const backBtn = document.getElementById('btnSelectionHistoryBack');
@@ -42,6 +48,40 @@ export function initInfoPanel(viewer) {
     speakCurrentStructure();
   });
 
+  // 2b. Section Explanation TTS Speaker Buttons (Đọc tiếng Việt chuẩn y khoa cho từng mục)
+  document.getElementById('btnSpeakDesc')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const text = document.getElementById('cardExplainDesc')?.textContent || '';
+    const btn = document.getElementById('btnSpeakDesc');
+    speakSectionExplanation(text, btn, 'Bản chất & Khái niệm');
+  });
+
+  document.getElementById('btnSpeakFunc')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const text = document.getElementById('cardExplainFunc')?.textContent || '';
+    const btn = document.getElementById('btnSpeakFunc');
+    speakSectionExplanation(text, btn, 'Ý nghĩa & Chức năng');
+  });
+
+  document.getElementById('btnSpeakRel')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const text = document.getElementById('cardExplainRel')?.textContent || '';
+    const btn = document.getElementById('btnSpeakRel');
+    speakSectionExplanation(text, btn, 'Vị trí & Liên kết giải phẫu');
+  });
+
+  // 2c. Floating Top View Button (Nhìn từ trên đỉnh đầu)
+  document.getElementById('btnQuickTopView')?.addEventListener('click', () => {
+    const curView = getCurrentView?.();
+    if (curView === 'top') {
+      setView('front', viewer);
+      showToast('🔄 Trở về góc nhìn chính diện');
+    } else {
+      setView('top', viewer);
+      showToast('⬇️ Góc nhìn từ trên đỉnh đầu (Top View)');
+    }
+  });
+
   // 3. Compact Mode & Dropdown Toggles
   const toggleCompactBtn = document.getElementById('btnToggleCompactCard');
   const compactBar = document.getElementById('btnSwitchCompactMode');
@@ -60,6 +100,21 @@ export function initInfoPanel(viewer) {
   toggleDropdownBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleCardBodyDropdown();
+  });
+
+  // 3b. 2-Step Zoom / Overview Toggle (Không zoom giật đột ngột, chỉ phóng to khi người dùng bấm)
+  const toggleZoomBtn = document.getElementById('btnToggleZoomStep');
+  toggleZoomBtn?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    isZoomedIn = !isZoomedIn;
+    updateZoomStepButtonUI();
+    if (isZoomedIn) {
+      await zoomIntoCurrentSelection(viewer);
+      showToast('🔍 Đã phóng to chi tiết cấu trúc');
+    } else {
+      await zoomOutSelectionOverview(viewer);
+      showToast('🌐 Đã trở về góc nhìn bao quát');
+    }
   });
 
   // 4. Model Orientation Buttons
@@ -163,6 +218,12 @@ export function initInfoPanel(viewer) {
 export function updateInfoPanelContent(part, viewer) {
   if (!part) return;
 
+  const cardBody = document.getElementById('selectionCardBody');
+  if (cardBody) {
+    cardBody.scrollTop = 0;
+    cardBody.scrollLeft = 0;
+  }
+
   const clinical = getClinicalData(part.id);
   const lang = state.language || 'vi';
 
@@ -188,8 +249,16 @@ export function updateInfoPanelContent(part, viewer) {
   if (explainFunc) explainFunc.textContent = clinical.function || 'Đang cập nhật chức năng sinh lý & cơ học...';
   if (explainRel) explainRel.textContent = clinical.relationsText || 'Đang cập nhật liên kết giải phẫu...';
 
-  // 3. Update Orientation UI Buttons
+  // Stop any previous active speech synthesis when changing structure
+  stopCurrentSpeech();
+
+  // 2b. Render Dynamic Flow Pathway (Đường đi & Chu trình giải phẫu - Dịch não tủy, Gan mật tụy, Tim mạch)
+  renderDynamicPathway(part, clinical, mainName);
+
+  // 3. Update Orientation UI Buttons & Zoom Step UI
   updateOrientationButtons();
+  isZoomedIn = false;
+  updateZoomStepButtonUI();
 
   // 3. Render Interactive Anatomical Hierarchy Tree (Visible Body Standard: Photo 5)
   const hierarchyBox = document.getElementById('cardHierarchyBox');
@@ -353,36 +422,215 @@ export function updateOrientationButtons() {
   }
 }
 
+export function updateZoomStepButtonUI() {
+  const btn = document.getElementById('btnToggleZoomStep');
+  if (!btn) return;
+  const textEl = btn.querySelector('.btn-zoom-step-text');
+  if (textEl) {
+    textEl.textContent = isZoomedIn ? 'Toàn cảnh' : 'Phóng to';
+  }
+  btn.title = isZoomedIn ? 'Thu nhỏ toàn cảnh (Overview)' : 'Phóng to chi tiết (Zoom closer)';
+  btn.classList.toggle('active', isZoomedIn);
+  const zoomInIcon = btn.querySelector('.icon-zoom-in');
+  if (zoomInIcon) {
+    zoomInIcon.innerHTML = isZoomedIn
+      ? '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>'
+      : '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>';
+  }
+}
+
+function cleanMedicalSpeech(rawText) {
+  if (!rawText) return '';
+  return rawText
+    .replace(/\([A-Z0-9_:\s.-]+\)/gi, '')
+    .replace(/(\d+)\s*cm\b/gi, '$1 xen ti mét')
+    .replace(/(\d+)\s*mm\b/gi, '$1 mi li mét')
+    .replace(/(\d+)\s*g\b/gi, '$1 gam')
+    .replace(/(\d+)\s*kg\b/gi, '$1 ki lô gam')
+    .replace(/(\d+)\s*ml\b/gi, '$1 mi li lít')
+    .replace(/~/g, 'khoảng ')
+    .replace(/\bCSF\b/g, 'dịch não tủy')
+    .replace(/→/g, ', dẫn tới ')
+    .replace(/&/g, 'và')
+    .replace(/[()[\]]/g, ' ')
+    .replace(/[:;]/g, ', ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function stopCurrentSpeech() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  if (currentlySpeakingBtn) {
+    currentlySpeakingBtn.classList.remove('is-speaking');
+    currentlySpeakingBtn = null;
+  }
+}
+
+function speakSectionExplanation(text, btnEl, sectionLabel) {
+  if (!text || !('speechSynthesis' in window)) {
+    showToast('Trình duyệt không hỗ trợ đọc giọng nói Web Speech.');
+    return;
+  }
+
+  // If already speaking this button, clicking again stops speech
+  if (btnEl && btnEl.classList.contains('is-speaking')) {
+    stopCurrentSpeech();
+    showToast('⏹️ Đã dừng đọc');
+    return;
+  }
+
+  stopCurrentSpeech();
+
+  const clean = cleanMedicalSpeech(text);
+  if (!clean) return;
+
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.lang = 'vi-VN';
+  utterance.rate = 0.95; // Natural medical cadence
+
+  const voices = window.speechSynthesis.getVoices();
+  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang.startsWith('vi'));
+  if (viVoice) {
+    utterance.voice = viVoice;
+  }
+
+  if (btnEl) {
+    btnEl.classList.add('is-speaking');
+    currentlySpeakingBtn = btnEl;
+  }
+
+  utterance.onend = () => {
+    if (btnEl) btnEl.classList.remove('is-speaking');
+    if (currentlySpeakingBtn === btnEl) currentlySpeakingBtn = null;
+  };
+
+  utterance.onerror = () => {
+    if (btnEl) btnEl.classList.remove('is-speaking');
+    if (currentlySpeakingBtn === btnEl) currentlySpeakingBtn = null;
+  };
+
+  window.speechSynthesis.speak(utterance);
+  showToast(`🔊 Đang đọc: ${sectionLabel}`);
+}
+
 function speakCurrentStructure() {
   const part = state.selectedPart;
   if (!part) return;
 
   const clinical = getClinicalData(part.id);
   const textToSpeak = clinical.speakTextVi || clinical.nameVi || part.displayName || part.id;
-  const cleanSpeech = textToSpeak
-    .replace(/\(.*?\)/g, '')
-    .replace(/[._]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const cleanSpeech = cleanMedicalSpeech(textToSpeak);
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(cleanSpeech);
-    utterance.lang = 'vi-VN';
-    utterance.rate = 0.9;
+  const audioBtn = document.getElementById('btnPronounceAudio');
+  speakSectionExplanation(cleanSpeech, audioBtn, cleanSpeech);
+}
 
-    // Select Vietnamese voice if available in browser
-    const voices = window.speechSynthesis.getVoices();
-    const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang.startsWith('vi'));
-    if (viVoice) {
-      utterance.voice = viVoice;
-    }
-
-    window.speechSynthesis.speak(utterance);
-    showToast(`🔊 Đang đọc: ${cleanSpeech}`);
-  } else {
-    showToast('Trình duyệt không hỗ trợ tổng hợp giọng nói Web Speech.');
+// Physiological & Anatomical Circulation Pathways (Đường đi & Chu trình giải phẫu trực quan)
+const ANATOMICAL_PATHWAYS = [
+  {
+    id: 'csf_pathway',
+    title: '🌊 Chu Trình Tuần Hoàn Dịch Não Tủy (CSF Flow)',
+    match: (partId, nameVi, lower) =>
+      (/ventricle|choroid|aqueduct|spinal dura|dura|csf/i.test(partId) && !/left ventricle|right ventricle|cordis/i.test(partId)) ||
+      lower.includes('não thất') || lower.includes('dịch não tủy') || lower.includes('cống não') || lower.includes('màng mạch') || lower.includes('màng cứng'),
+    steps: [
+      { num: '1', name: 'Đám rối màng mạch', partId: 'Choroid plexus.l', subtitle: 'Tiết ~500ml CSF/ngày' },
+      { num: '2', name: 'Não thất bên (2 bên)', partId: 'Lateral ventricle.l', subtitle: 'Khoang hình chữ C' },
+      { num: '3', name: 'Não thất ba', partId: 'Third ventricle', subtitle: 'Gian não (Lỗ Monro)' },
+      { num: '4', name: 'Cống não Sylvius', partId: 'Aqueduct of midbrain', fallbackId: 'Fourth ventricle', subtitle: 'Eo thắt 1-2mm qua trung não' },
+      { num: '5', name: 'Não thất tư', partId: 'Fourth ventricle', subtitle: 'Hố trám & 3 lỗ thoát' },
+      { num: '6', name: 'Khoang dưới nhện & Tủy', partId: 'Spinal dura', subtitle: 'Bao bọc não - tủy sống' }
+    ],
+    note: '💡 Dịch não tủy lưu thông liên tục từ các buồng não thất ra khoang dưới nhện bao bọc toàn bộ não và tủy sống, hoạt động như đệm thủy lực giảm chấn và thanh thải độc tố hệ Glymphatic.'
+  },
+  {
+    id: 'biliary_pathway',
+    title: '🌿 Chu Trình Dòng Chảy Mật & Dịch Tụy (Biliary-Pancreatic)',
+    match: (partId, nameVi, lower) =>
+      /liver|gall|pancrea|bile|chole|cystic|ductus/i.test(partId) ||
+      lower.includes('gan') || lower.includes('mật') || lower.includes('tụy') || lower.includes('túi mật'),
+    steps: [
+      { num: '1', name: 'Gan (Nhu mô gan)', partId: 'Liver', subtitle: 'Sản xuất dịch mật' },
+      { num: '2', name: 'Túi mật & Ống túi mật', partId: 'Gallbladder', subtitle: 'Cô đặc & dự trữ mật' },
+      { num: '3', name: 'Ống mật chủ', partId: 'Bile duct', fallbackId: 'Gallbladder', subtitle: 'Dẫn mật xuống ruột' },
+      { num: '4', name: 'Tuyến tụy & Ống tụy', partId: 'Pancreas', subtitle: 'Tiết men tiêu hóa & Insulin' },
+      { num: '5', name: 'Tá tràng (Bóng Vater)', partId: 'Duodenum', subtitle: 'Hòa trộn nhũ trấp thức ăn' }
+    ],
+    note: '💡 Mật từ gan qua túi mật hòa cùng dịch tụy tại bóng Vater đổ vào tá tràng để tiêu hóa lipid chất béo.'
+  },
+  {
+    id: 'cardiac_circuit',
+    title: '❤️ Vòng Tuần Hoàn Tim Phổi & Đại Tuần Hoàn',
+    match: (partId, nameVi, lower) =>
+      (/ventricle|atrium|aort|pulmonary/i.test(partId) && !/lateral|third|fourth/i.test(partId)) ||
+      lower.includes('tâm thất') || lower.includes('tâm nhĩ') || lower.includes('động mạch chủ') || lower.includes('van tim'),
+    steps: [
+      { num: '1', name: 'Tâm nhĩ phải', partId: 'Right atrium', subtitle: 'Nhận máu tĩnh mạch nghèo O₂' },
+      { num: '2', name: 'Tâm thất phải', partId: 'Right ventricle', subtitle: 'Bơm máu lên động mạch phổi' },
+      { num: '3', name: 'Thân ĐM phổi', partId: 'Pulmonary trunk', subtitle: 'Trao đổi khí tại phế nang' },
+      { num: '4', name: 'Tâm nhĩ trái', partId: 'Left atrium', subtitle: 'Nhận máu giàu O₂ từ phổi' },
+      { num: '5', name: 'Tâm thất trái', partId: 'Left ventricle', subtitle: 'Buồng bóp áp lực cao nhất' },
+      { num: '6', name: 'Cung ĐM chủ', partId: 'Aorta', subtitle: 'Phân phối máu đi nuôi toàn thân' }
+    ],
+    note: '💡 Chu chuyển tim co bóp nhịp nhàng 60-80 lần/phút tống máu qua 2 vòng tiểu tuần hoàn phổi và đại tuần hoàn toàn thân.'
   }
+];
+
+function renderDynamicPathway(part, clinical, mainName) {
+  const section = document.getElementById('cardPathwaySection');
+  const container = document.getElementById('cardPathwayContainer');
+  const titleEl = document.getElementById('cardPathwayHeaderTitle');
+  if (!section || !container) return;
+
+  const partId = part.id || '';
+  const lower = (partId + ' ' + mainName + ' ' + (clinical.systemVi || '')).toLowerCase();
+
+  const matched = ANATOMICAL_PATHWAYS.find(p => p.match(partId, mainName, lower));
+  if (!matched) {
+    section.classList.add('hidden');
+    container.innerHTML = '';
+    return;
+  }
+
+  if (titleEl) titleEl.textContent = matched.title;
+  section.classList.remove('hidden');
+
+  container.innerHTML = `
+    <div class="pathway-flow-scroll">
+      ${matched.steps.map((step, idx) => {
+        const isCurrent = partId.toLowerCase().includes(step.partId.toLowerCase()) || 
+                          (step.fallbackId && partId.toLowerCase().includes(step.fallbackId.toLowerCase()));
+        return `
+          <button type="button" class="pathway-step-btn ${isCurrent ? 'active' : ''}" data-part="${step.partId}" data-fallback="${step.fallbackId || ''}" title="Chạm để chuyển góc nhìn 3D tới ${step.name}">
+            <span class="step-badge">${step.num}</span>
+            <span class="step-main">
+              <span class="step-name">${step.name}</span>
+              <span class="step-sub">${step.subtitle}</span>
+            </span>
+          </button>
+          ${idx < matched.steps.length - 1 ? '<span class="pathway-arrow">→</span>' : ''}
+        `;
+      }).join('')}
+    </div>
+    <div class="pathway-clinical-note">${matched.note}</div>
+  `;
+
+  // Bind click on each step to jump to that 3D structure
+  container.querySelectorAll('.pathway-step-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const targetPart = btn.dataset.part;
+      const fallbackPart = btn.dataset.fallback;
+      showToast(`🎯 Định vị 3D: ${btn.querySelector('.step-name')?.textContent}`);
+      try {
+        await selectStructureAnywhere(targetPart);
+      } catch {
+        if (fallbackPart) await selectStructureAnywhere(fallbackPart);
+      }
+    });
+  });
 }
 
 function handleRadiusBlast(viewer) {

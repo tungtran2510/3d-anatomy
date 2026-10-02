@@ -25,6 +25,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/3d/images/atlas/skel_skull.png',
         systems: ['skeletal'],
         camera: { x: 0.48, y: 1.62, z: 0.58, targetX: 0, targetY: 1.58, targetZ: 0 },
+        highlight: 'Frontal bone',
         desc: 'Khối xương sọ não bảo vệ não bộ và khối xương mặt nâng đỡ các giác quan.'
       },
       {
@@ -34,7 +35,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Nền sọ',
         image: '/3d/images/atlas/skel_cranial_fossae.png',
         systems: ['skeletal'],
-        camera: { x: 0, y: 1.95, z: 0.25, targetX: 0, targetY: 1.58, targetZ: 0 },
+        camera: { x: 0, y: 1.40, z: 0.45, targetX: 0, targetY: 1.55, targetZ: 0 },
+        highlight: 'Sphenoid bone',
         desc: 'Hệ thống các lỗ nền sọ cho 12 đôi dây thần kinh sọ và mạch máu não đi qua.'
       },
       {
@@ -44,7 +46,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Thân mình',
         image: '/3d/images/atlas/skel_spine.png',
         systems: ['skeletal'],
-        camera: { x: 0, y: 1.15, z: 1.25, targetX: 0, targetY: 1.1, targetZ: 0 },
+        camera: { x: 0.6, y: 1.15, z: 1.15, targetX: 0, targetY: 1.1, targetZ: 0 },
+        highlight: 'Vertebra L1',
         desc: 'Trục nâng đỡ cơ thể và khung lồng ngực bảo vệ tim phổi.'
       },
       {
@@ -55,6 +58,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/3d/images/atlas/skel_pelvis.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 0.88, z: 0.95, targetX: 0, targetY: 0.85, targetZ: 0 },
+        highlight: 'Hip bone.l',
         desc: 'Hai xương chậu kết hợp xương cùng tạo thành khung chậu vững chắc.'
       }
     ]
@@ -81,7 +85,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Trung thất',
         image: '/3d/images/atlas/circ_heart_thorax.png',
         systems: ['cardiovascular', 'skeletal'],
-        camera: { x: 0, y: 1.28, z: 0.78, targetX: 0, targetY: 1.28, targetZ: 0 },
+        camera: { x: 0, y: 1.28, z: 0.72, targetX: 0, targetY: 1.28, targetZ: 0 },
+        highlight: 'Left ventricle',
         desc: 'Mối tương quan giải phẫu giữa tim, màng ngoài tim và khung xương lồng ngực.'
       },
       {
@@ -92,6 +97,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/3d/images/atlas/circ_simplified.png',
         systems: ['cardiovascular'],
         camera: { x: 0, y: 1.2, z: 1.1, targetX: 0, targetY: 1.2, targetZ: 0 },
+        highlight: 'Ascending aorta',
         desc: 'Cây động mạch chủ phân nhánh nuôi đầu mặt, não bộ và các chi thể.'
       }
     ]
@@ -117,8 +123,9 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         subtitle: 'Đại não, tiểu não và 12 đôi dây TK sọ',
         badge: 'Não bộ',
         image: '/3d/images/atlas/nerv_brain.png',
-        systems: ['nervous', 'skeletal'],
-        camera: { x: 0, y: 1.62, z: 0.75, targetX: 0, targetY: 1.58, targetZ: 0 },
+        systems: ['nervous'],
+        camera: { x: 0.35, y: 1.62, z: 0.52, targetX: 0, targetY: 1.58, targetZ: 0 },
+        highlight: 'Falx cerebri',
         desc: 'Trung khu thần kinh cao cấp, điều khiển tư duy, vận động và cảm giác giác quan.'
       },
       {
@@ -128,8 +135,20 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Tủy sống',
         image: '/3d/images/atlas/nerv_spinal.png',
         systems: ['nervous', 'skeletal'],
-        camera: { x: 0, y: 1.15, z: 1.0, targetX: 0, targetY: 1.1, targetZ: 0 },
+        camera: { x: 0.65, y: 1.15, z: 0.95, targetX: 0, targetY: 1.1, targetZ: 0 },
+        highlight: 'Anterior horn of spinal cord',
         desc: 'Đường dẫn truyền xung động thần kinh giữa não bộ và ngoại vi cơ thể.'
+      },
+      {
+        id: 'nerv_csf',
+        title: '4. Hệ Não Thất & Dịch Não Tủy (CSF)',
+        subtitle: 'Não thất bên, não thất 3-4 và chu trình tuần hoàn CSF',
+        badge: 'Dịch não tủy',
+        image: '/3d/images/atlas/nerv_csf.png',
+        systems: ['nervous'],
+        camera: { x: 0.28, y: 1.60, z: 0.45, targetX: 0, targetY: 1.58, targetZ: 0 },
+        highlight: 'Lateral ventricle.l',
+        desc: 'Hệ thống các buồng não thất chứa dịch não tủy đệm giảm xóc và thanh thải độc tố hệ Glymphatic.'
       }
     ]
   },
@@ -145,7 +164,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Đường thở trên',
         image: '/3d/images/atlas/resp_upper.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.48, z: 0.75, targetX: 0, targetY: 1.45, targetZ: 0 },
+        camera: { x: 0.20, y: 1.48, z: 0.60, targetX: 0, targetY: 1.45, targetZ: 0 },
+        highlight: 'Trachea',
         desc: 'Đường dẫn khí, sụn thanh nhiệt, sụn giáp và dây thanh âm phát âm.'
       },
       {
@@ -155,7 +175,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Phổi',
         image: '/3d/images/atlas/resp_lungs.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.25, z: 0.95, targetX: 0, targetY: 1.25, targetZ: 0 },
+        camera: { x: 0, y: 1.25, z: 0.88, targetX: 0, targetY: 1.25, targetZ: 0 },
+        highlight: 'Superior lobe of left lung',
         desc: 'Nơi trao đổi khí oxy và CO2 qua màng phế nang - mao mạch.'
       },
       {
@@ -164,8 +185,9 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         subtitle: 'Vòm hoành ngăn cách ngực và bụng',
         badge: 'Cơ hô hấp',
         image: '/3d/images/atlas/resp_diaphragm.png',
-        systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.15, z: 0.88, targetX: 0, targetY: 1.15, targetZ: 0 },
+        systems: ['muscular', 'skeletal', 'visceral'],
+        camera: { x: 0, y: 1.15, z: 0.82, targetX: 0, targetY: 1.15, targetZ: 0 },
+        highlight: 'Diaphragm',
         desc: 'Cơ hô hấp chính đảm nhiệm 70% thông khí khi hít vào bình thường.'
       }
     ]
@@ -219,7 +241,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Dạ dày',
         image: '/3d/images/atlas/dig_upper.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.15, z: 0.9, targetX: 0, targetY: 1.15, targetZ: 0 },
+        camera: { x: 0, y: 1.15, z: 0.82, targetX: 0, targetY: 1.15, targetZ: 0 },
+        highlight: 'Stomach',
         desc: 'Nơi tiếp nhận, nhào trộn và tiêu hóa sơ bộ thức ăn nhờ axit dịch vị.'
       },
       {
@@ -229,7 +252,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Ruột non & già',
         image: '/3d/images/atlas/dig_lower.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 0.92, z: 0.9, targetX: 0, targetY: 0.92, targetZ: 0 },
+        camera: { x: 0, y: 0.92, z: 0.85, targetX: 0, targetY: 0.92, targetZ: 0 },
+        highlight: 'Ascending colon',
         desc: 'Hấp thu triệt để chất dinh dưỡng và đào thải cặn bã qua đại trực tràng.'
       },
       {
@@ -239,7 +263,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Gan mật tụy',
         image: '/3d/images/atlas/dig_peritoneum.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: -0.15, y: 1.1, z: 0.95, targetX: 0, targetY: 1.1, targetZ: 0 },
+        camera: { x: -0.15, y: 1.1, z: 0.88, targetX: 0, targetY: 1.1, targetZ: 0 },
         highlight: 'Gallbladder',
         desc: 'Nhà máy chuyển hóa chất, khử độc và tiết enzym tiêu hóa thức ăn.'
       }
@@ -255,9 +279,9 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         title: '1. Lá Lách & Hệ Bạch Huyết',
         subtitle: 'Lá lách (Tỳ), chuỗi hạch bạch huyết và ống ngực',
         badge: 'Lá lách & Miễn dịch',
-        image: '/3d/images/atlas/circ_full.png',
+        image: '/3d/images/atlas/lymph_spleen.png',
         systems: ['lymphatic', 'skeletal', 'visceral'],
-        camera: { x: -0.25, y: 1.15, z: 0.85, targetX: -0.05, targetY: 1.15, targetZ: 0 },
+        camera: { x: 0.25, y: 1.15, z: 0.78, targetX: 0.08, targetY: 1.15, targetZ: 0 },
         highlight: 'Spleen',
         desc: 'Cơ quan lympho lớn nhất cơ thể lọc máu, tiêu hủy hồng cầu già và sinh tế bào miễn dịch.'
       },
@@ -266,9 +290,10 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         title: '2. Mạng Lưới Hạch Bạch Huyết Toàn Thân',
         subtitle: 'Hạch vùng cổ, nách, bẹn và ống ngực dẫn lưu',
         badge: 'Hạch bạch huyết',
-        image: '/3d/images/atlas/nerv_full.png',
+        image: '/3d/images/atlas/lymph_nodes_system.png',
         systems: ['lymphatic', 'skeletal'],
-        camera: { x: 0, y: 1.2, z: 1.5, targetX: 0, targetY: 1.15, targetZ: 0 },
+        camera: { x: 0, y: 1.2, z: 1.4, targetX: 0, targetY: 1.15, targetZ: 0 },
+        highlight: 'Central axillary nodes.l',
         desc: 'Hàng rào phòng thủ miễn dịch tế bào, bắt giữ vi khuẩn và dẫn lưu dịch bạch huyết về tĩnh mạch.'
       }
     ]
@@ -285,7 +310,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Thận tiết niệu',
         image: '/3d/images/atlas/urin_system.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.05, z: 0.95, targetX: 0, targetY: 1.05, targetZ: 0 },
+        camera: { x: 0, y: 1.05, z: 0.85, targetX: 0, targetY: 1.05, targetZ: 0 },
+        highlight: 'Kidney.l',
         desc: 'Lọc máu, cân bằng điện giải và bài tiết chất thải qua nước tiểu.'
       },
       {
@@ -295,7 +321,8 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         badge: 'Chậu hông',
         image: '/3d/images/atlas/urin_pelvic.png',
         systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 0.88, z: 0.85, targetX: 0, targetY: 0.88, targetZ: 0 },
+        camera: { x: 0, y: 0.88, z: 0.78, targetX: 0, targetY: 0.88, targetZ: 0 },
+        highlight: 'Urinary bladder',
         desc: 'Giải phẫu đáy chậu, nâng đỡ các tạng sinh dục và bài tiết nước tiểu.'
       }
     ]
@@ -345,7 +372,7 @@ export const ATLAS_REGIONS_CATEGORIES = [
     subtitle: 'Đai vai, cánh tay, cẳng tay và bàn tay',
     badge: 'Chi trên',
     image: '/3d/images/atlas/reg_upper_limb.png',
-    camera: { x: 0.45, y: 1.1, z: 1.1, targetX: 0.35, ty: 1.1, tz: 0 },
+    camera: { x: 0.45, y: 1.1, z: 1.1, targetX: 0.35, targetY: 1.1, targetZ: 0 },
     systems: ['skeletal', 'muscular']
   },
   {

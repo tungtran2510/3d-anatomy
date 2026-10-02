@@ -105,8 +105,9 @@ function animateCamera(camera, controls, targetPosition, targetTarget, viewer) {
 }
 
 // `spread` sets how much room is left around the structure. Selecting uses a
-// gentler value than double-click, which is an explicit "take me there".
-export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5) {
+// Context-preserving structure indication (Góc nhìn chỉ điểm bao quát, không zoom sát rạt)
+// Preserves surrounding anatomical overview so user sees where the structure is in relation to the body.
+export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplicitZoom = false) {
   const { camera, controls } = viewer;
 
   const box = new THREE.Box3().setFromObject(mesh);
@@ -114,9 +115,21 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5) {
   const size = box.getSize(new THREE.Vector3());
   const maxDim = Math.max(size.x, size.y, size.z, 0.05);
 
-  // A small organ would otherwise pull the camera inside neighbouring geometry.
-  // Ensure a minimum comfortable viewing distance (0.38m) so surrounding anatomical context is clear.
-  const distance = Math.max(0.38, maxDim * Math.max(spread, 2.8));
+  let distance;
+  if (isExplicitZoom) {
+    // Explicit 2nd step: Smooth close-up inspection
+    distance = Math.max(0.42, maxDim * 3.2);
+  } else {
+    // 1st step: Keep wide anatomical context (vẫn ở giải phẫu đó và chỉ vào)
+    const curDist = camera.position.distanceTo(controls.target);
+    if (curDist >= 0.85 && curDist <= 1.6) {
+      distance = curDist; // Giữ nguyên khoảng cách hiện tại, không zoom giật
+    } else if (curDist > 1.6) {
+      distance = 1.25; // Chuyển từ toàn thân về tầm nhìn khu vực rộng rãi
+    } else {
+      distance = 0.95; // Đảm bảo khoảng cách tối thiểu luôn bao quát cả vùng
+    }
+  }
 
   // Calculate direction from current camera to target, biasing towards front view for visibility
   let direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
@@ -130,6 +143,29 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5) {
   } else {
     camera.position.copy(targetPosition);
     controls.target.copy(center);
+    controls.update();
+    viewer?.render();
+    return Promise.resolve();
+  }
+}
+
+// Explicit Step 2: Jump into close-up detail inspection
+export function zoomIntoMesh(mesh, viewer, animate = true) {
+  return focusOnMesh(mesh, viewer, animate, 2.5, true);
+}
+
+// Zoom out back to comfortable regional overview
+export function zoomOutToOverview(viewer, animate = true) {
+  if (!viewer) return Promise.resolve();
+  const { camera, controls } = viewer;
+  const curDist = camera.position.distanceTo(controls.target);
+  if (curDist >= 1.2) return Promise.resolve(); // already wide
+  const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+  const targetPos = controls.target.clone().add(direction.multiplyScalar(1.25));
+  if (animate) {
+    return animateCamera(camera, controls, targetPos, controls.target, viewer);
+  } else {
+    camera.position.copy(targetPos);
     controls.update();
     viewer?.render();
     return Promise.resolve();

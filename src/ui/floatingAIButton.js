@@ -28,15 +28,18 @@ export function initFloatingAIButton(viewer) {
     <span class="ai-bubble-icon">${ICONS.aiSparkle}</span>
   `;
 
-  // Restore saved position or default to top right
+  // Restore saved position or default to floating bottom right
   const savedPos = getSavedPosition();
   if (savedPos) {
     bubbleEl.style.left = `${savedPos.x}px`;
     bubbleEl.style.top = `${savedPos.y}px`;
     bubbleEl.style.right = 'auto';
+    bubbleEl.style.bottom = 'auto';
   } else {
-    bubbleEl.style.right = '8px';
-    bubbleEl.style.top = '48px';
+    bubbleEl.style.left = '16px';
+    bubbleEl.style.bottom = '80px';
+    bubbleEl.style.right = 'auto';
+    bubbleEl.style.top = 'auto';
   }
 
   container.appendChild(bubbleEl);

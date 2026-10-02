@@ -4,6 +4,7 @@
 
 import { dynamicAnatomy, MOTIONS } from '../viewer/dynamicAnatomy.js';
 import { openMotionPanel, minimizeMotionPanel, closeMotionPanel } from '../ui/motionPanel.js';
+import { handleCompactAISubmit } from '../ui/aiAssistantModal.js';
 
 let recognition = null;
 let isListening = false;
@@ -201,6 +202,6 @@ function executeVoiceCommand(text, viewer) {
     return;
   }
 
-  // Fallback unrecognized
-  showVoiceToast(`🎙️ "${text}" (Chưa rõ lệnh)`, 2000);
+  // 7. ANATOMICAL 3D SEARCH & AI DISCOVERY (Dịch não tủy, Túi mật, Tuyến tụy, Khung chậu...)
+  handleCompactAISubmit(text, viewer);
 }

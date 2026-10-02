@@ -28,11 +28,35 @@ export const ANATOMICAL_SYNONYMS = {
   'cơ ức đòn chũm': { id: 'Sternocleidomastoid.l', base: 'Sternocleidomastoid', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
   'cơ bắp chân': { id: 'Gastrocnemius.l', base: 'Gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân (Bắp chân)' },
 
-  // Nerves
+  // Nerves & Ventricular System / CSF
   'thần kinh tọa': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa (Dây thần kinh ngồi)' },
   'thần kinh hông to': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa' },
   'thần kinh đùi': { id: 'Femoral nerve.l', base: 'Femoral nerve', system: 'nervous', nameVi: 'Dây thần kinh đùi' },
   'tủy sống': { id: 'Spinal cord', base: 'Spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'dịch não tủy': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất & Dịch não tủy (CSF)' },
+  'dich nao tuy': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất & Dịch não tủy (CSF)' },
+  'nước não tủy': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Dịch não tủy (CSF)' },
+  'csf': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Dịch não tủy (CSF)' },
+  'não thất': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất & Dịch não tủy' },
+  'nao that': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất' },
+  'hệ thống não thất': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất & Dịch não tủy' },
+  'não thất bên': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Não thất bên (Lateral ventricle)' },
+  'nao that ben': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Não thất bên' },
+  'não thất 3': { id: 'Third ventricle', base: 'Third ventricle', system: 'nervous', nameVi: 'Não thất ba' },
+  'não thất ba': { id: 'Third ventricle', base: 'Third ventricle', system: 'nervous', nameVi: 'Não thất ba' },
+  'nao that ba': { id: 'Third ventricle', base: 'Third ventricle', system: 'nervous', nameVi: 'Não thất ba' },
+  'não thất 4': { id: 'Fourth ventricle', base: 'Fourth ventricle', system: 'nervous', nameVi: 'Não thất tư' },
+  'não thất tư': { id: 'Fourth ventricle', base: 'Fourth ventricle', system: 'nervous', nameVi: 'Não thất tư' },
+  'nao that tu': { id: 'Fourth ventricle', base: 'Fourth ventricle', system: 'nervous', nameVi: 'Não thất tư' },
+  'cống não': { id: 'Aqueduct of midbrain', base: 'Aqueduct of midbrain', system: 'nervous', nameVi: 'Cống não Sylvius' },
+  'cong nao': { id: 'Aqueduct of midbrain', base: 'Aqueduct of midbrain', system: 'nervous', nameVi: 'Cống não Sylvius' },
+  'cống sylvius': { id: 'Aqueduct of midbrain', base: 'Aqueduct of midbrain', system: 'nervous', nameVi: 'Cống não Sylvius' },
+  'cống trung não': { id: 'Aqueduct of midbrain', base: 'Aqueduct of midbrain', system: 'nervous', nameVi: 'Cống não Sylvius' },
+  'đám rối màng mạch': { id: 'Choroid plexus.l', base: 'Choroid plexus', system: 'nervous', nameVi: 'Đám rối màng mạch (Sinh dịch não tủy)' },
+  'dam roi mang mach': { id: 'Choroid plexus.l', base: 'Choroid plexus', system: 'nervous', nameVi: 'Đám rối màng mạch' },
+  'màng cứng': { id: 'Spinal dura', base: 'Spinal dura', system: 'nervous', nameVi: 'Màng cứng tủy sống & Hộp sọ' },
+  'khoang dưới nhện': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Khoang dịch não tủy' },
+  'khoang duoi nhen': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Khoang dịch não tủy' },
 
   // Bones & Joints
   // Bones & Joints - Pelvis / Hip bone (Xương chậu & Khung hông)
@@ -123,14 +147,27 @@ export const ANATOMICAL_SYNONYMS = {
   'xương ức': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Xương ức' },
   'xương sườn': { id: 'First rib.l', base: 'First rib', system: 'skeletal', nameVi: 'Xương sườn' },
 
-  // Visceral & Cardiovascular
+  // Visceral, Lymphatic & Cardiovascular
   'tim': { id: 'heart_all', base: 'Heart', system: 'cardiovascular', nameVi: 'Trái tim' },
   'trái tim': { id: 'heart_all', base: 'Heart', system: 'cardiovascular', nameVi: 'Trái tim' },
   'phổi': { id: 'lungs_all', base: 'Lungs', system: 'visceral', nameVi: 'Hai lá phổi' },
   'lá phổi': { id: 'lungs_all', base: 'Lungs', system: 'visceral', nameVi: 'Hai lá phổi' },
   'dạ dày': { id: 'Stomach', base: 'Stomach', system: 'visceral', nameVi: 'Dạ dày (Bao tử)' },
   'bao tử': { id: 'Stomach', base: 'Stomach', system: 'visceral', nameVi: 'Dạ dày' },
-  'gan': { id: 'Liver', base: 'Liver', system: 'visceral', nameVi: 'Lá gan' }
+  'gan': { id: 'Liver', base: 'Liver', system: 'visceral', nameVi: 'Lá gan' },
+  'túi mật': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật' },
+  'tui mat': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật' },
+  'mật': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật & Đường mật' },
+  'mat': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật' },
+  'ống mật': { id: 'Bile duct', base: 'Bile duct', system: 'visceral', nameVi: 'Ống dẫn mật' },
+  'tuyến tụy': { id: 'Pancreas', base: 'Pancreas', system: 'visceral', nameVi: 'Tuyến tụy (Tụy tạng)' },
+  'tuyen tuy': { id: 'Pancreas', base: 'Pancreas', system: 'visceral', nameVi: 'Tuyến tụy' },
+  'tụy': { id: 'Pancreas', base: 'Pancreas', system: 'visceral', nameVi: 'Tụy' },
+  'tuy': { id: 'Pancreas', base: 'Pancreas', system: 'visceral', nameVi: 'Tụy' },
+  'lá lách': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách (Tỳ)' },
+  'la lach': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' },
+  'lách': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' },
+  'lach': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' }
 };
 
 /**

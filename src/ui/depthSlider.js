@@ -151,11 +151,8 @@ export function applyDepth(stage) {
     }
   });
 
-  // Update UI hint badge
-  if (hintEl) {
-    hintEl.textContent = DISSECTION_STAGES[stage]?.short || `Lớp ${stage}`;
-    hintEl.title = DISSECTION_STAGES[stage]?.title || '';
-  }
+  // Update state stage
+  currentStage = stage;
 
   // Re-render viewer smoothly
   if (state.viewer) {
@@ -170,35 +167,23 @@ export function initDepthSlider() {
   const wrapper = document.createElement('div');
   wrapper.className = 'depth-control';
   wrapper.id = 'depthControl';
+  wrapper.title = 'Độ sâu bóc tách giải phẫu (0: Đầy đủ - 5: Sâu)';
   wrapper.innerHTML = `
-    <span class="depth-label" for="depthSlider">${translate('depth')}</span>
     <input type="range" id="depthSlider" class="depth-slider" min="0" max="5" value="0" step="1"
            orient="vertical" aria-label="${translate('depth')}">
-    <div class="depth-stage-hint" id="depthStageHint" title="Chạm để đổi lớp bóc tách">Lớp 0: Đầy đủ</div>
   `;
   container.appendChild(wrapper);
 
   slider = wrapper.querySelector('#depthSlider');
-  hintEl = wrapper.querySelector('#depthStageHint');
 
   let depthRaf = null;
   slider.addEventListener('input', event => {
     const val = Number(event.target.value);
-    if (hintEl) {
-      hintEl.textContent = DISSECTION_STAGES[val]?.short || `Lớp ${val}`;
-    }
     if (depthRaf) cancelAnimationFrame(depthRaf);
     depthRaf = requestAnimationFrame(() => {
       depthRaf = null;
       applyDepth(val);
     });
-  });
-
-  hintEl?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const nextStage = (currentStage + 1) % 6;
-    if (slider) slider.value = nextStage;
-    applyDepth(nextStage);
   });
 
   return wrapper;
@@ -207,9 +192,6 @@ export function initDepthSlider() {
 export function resetDepthSlider() {
   if (slider) {
     slider.value = 0;
-  }
-  if (hintEl) {
-    hintEl.textContent = 'Lớp 0: Đầy đủ';
   }
   currentStage = 0;
 }

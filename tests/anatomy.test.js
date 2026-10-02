@@ -71,4 +71,13 @@ describe('SYSTEM_IDS', () => {
       'skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'
     ]);
   });
+
+  it('translates ventricular system & CSF structures to Vietnamese accurately', () => {
+    expect(formatPartName('Lateral ventricle.l', 'vi')).toBe('Não thất bên (trái)');
+    expect(formatPartName('Third ventricle', 'vi')).toBe('Não thất ba');
+    expect(formatPartName('Aqueduct of midbrain', 'vi')).toBe('Cống não Sylvius');
+    expect(formatPartName('Fourth ventricle', 'vi')).toBe('Não thất tư');
+    expect(formatPartName('Choroid plexus.l', 'vi')).toBe('Đám rối màng mạch (Sinh dịch não tủy) (trái)');
+    expect(formatPartName('Spinal dura', 'vi')).toBe('Màng cứng tủy gai & Hộp sọ');
+  });
 });

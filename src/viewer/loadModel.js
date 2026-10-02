@@ -204,6 +204,8 @@ function processModel(model, systemId, viewer) {
     setupMesh(child, systemId, viewer);
 
     const ownerId = findAncestorPartId(child);
+    if (!child.userData.system) child.userData.system = systemId;
+    if (ownerId && !child.userData.partId) child.userData.partId = ownerId;
     const owner = ownerId && structures.get(ownerId);
     if (owner) owner.ownMeshes.push(child);
   });
@@ -595,12 +597,29 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         }
       });
     }
-  } else if (systemId === 'skeletal') {
+  } else if (systemId === 'skeletal' || systemId === 'joints') {
+    const parentName = (mesh.parent?.name || '').toLowerCase();
+    const isIntervertebralDisc =
+      partName.includes('intervertebral') ||
+      partName.includes('đĩa đệm') ||
+      partName.includes('dia dem') ||
+      partName.includes('discus') ||
+      (partName.includes('disc') && !partName.includes('discipline')) ||
+      ((partName.includes('verteb') || parentName.includes('verteb') || partName.includes('sacrum') || partName.includes('atlas') || parentName.includes('axis')) && mesh.name.endsWith('_2'));
+
     const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     mats.forEach(m => {
       if (m && m.isMeshStandardMaterial) {
         const mName = m.name || '';
-        if (mName.includes('Cartilage') || partName.includes('cartilage') || partName.includes('sụn')) {
+        if (isIntervertebralDisc) {
+          // Intervertebral disc fibrocartilage: distinctive medical cyan-blue tint so it never blends with ivory spine bones
+          m.name = 'PBR_IntervertebralDisc';
+          m.roughness = 0.22;
+          m.metalness = 0.02;
+          m.transparent = true;
+          m.opacity = 0.94;
+          m.color.set(0x38BDF8);
+        } else if (mName.includes('Cartilage') || partName.includes('cartilage') || partName.includes('sụn')) {
           // Costal, articular, and nasal cartilage: authentic semi-translucent bluish-ivory
           m.roughness = 0.28;
           m.metalness = 0.01;
@@ -658,7 +677,35 @@ function enhanceMaterialForOrgan(mesh, systemId) {
     mats.forEach(m => {
       if (m && m.isMeshStandardMaterial) {
         const mName = m.name || '';
-        if (mName.includes('Brain') || mName.includes('Frontal') || mName.includes('Cerebell')) {
+        if (partName.includes('ventricle') || partName.includes('aqueduct')) {
+          // Ventricular cavities (CSF fluid stream): luminous medical cyan-blue translucency
+          m.name = 'PBR_VentricleCSF';
+          m.roughness = 0.12;
+          m.metalness = 0.04;
+          m.color.set(0x38BDF8); // Vibrant bio-cyan
+          m.transparent = true;
+          m.opacity = 0.82;
+          m.depthWrite = true;
+          mesh.renderOrder = 2;
+        } else if (partName.includes('choroid')) {
+          // Choroid plexus (CSF vascular factory): crimson-orange capillary fronds
+          m.name = 'PBR_ChoroidPlexus';
+          m.roughness = 0.28;
+          m.metalness = 0.04;
+          m.color.set(0xEA580C);
+          m.transparent = false;
+          m.opacity = 1.0;
+        } else if (partName.includes('dura')) {
+          // Spinal & cranial dura mater: protective pearlescent-silver sheath
+          m.name = 'PBR_DuraMater';
+          m.roughness = 0.35;
+          m.metalness = 0.02;
+          m.color.set(0xD9E2EC);
+          m.transparent = true;
+          m.opacity = 0.55;
+          m.depthWrite = false;
+          mesh.renderOrder = 3;
+        } else if (mName.includes('Brain') || mName.includes('Frontal') || mName.includes('Cerebell') || partName.includes('brain') || partName.includes('falx') || partName.includes('tentorium')) {
           m.roughness = 0.32;
           m.metalness = 0.02;
           m.color.set(0xDFB8A2);

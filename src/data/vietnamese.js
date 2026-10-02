@@ -207,7 +207,18 @@ const EXACT_DICTIONARY = {
   'Mesentery': 'Mạc treo ruột',
   'Mesocolon': 'Mạc treo đại tràng',
 
-  // --- CARDIOVASCULAR ---
+  // --- CARDIOVASCULAR & HEART ---
+  'Heart': 'Quả tim',
+  'Left ventricle': 'Tâm thất trái',
+  'Right ventricle': 'Tâm thất phải',
+  'Left atrium': 'Tâm nhĩ trái',
+  'Right atrium': 'Tâm nhĩ phải',
+  'Interventricular septum': 'Vách liên thất',
+  'Interatrial septum': 'Vách liên nhĩ',
+  'Mitral valve': 'Van hai lá',
+  'Tricuspid valve': 'Van ba lá',
+  'Aortic valve': 'Van động mạch chủ',
+  'Pulmonary valve': 'Van động mạch phổi',
   'Aorta': 'Động mạch chủ',
   'Ascending aorta': 'Động mạch chủ lên',
   'Aortic arch': 'Cung động mạch chủ',
@@ -218,6 +229,8 @@ const EXACT_DICTIONARY = {
   'Pulmonary trunk': 'Thân động mạch phổi',
   'Pulmonary artery': 'Động mạch phổi',
   'Pulmonary vein': 'Tĩnh mạch phổi',
+  'Left pulmonary artery': 'Động mạch phổi trái',
+  'Right pulmonary artery': 'Động mạch phổi phải',
   'Common carotid artery': 'Động mạch cảnh chung',
   'Internal carotid artery': 'Động mạch cảnh trong',
   'External carotid artery': 'Động mạch cảnh ngoài',
@@ -226,8 +239,47 @@ const EXACT_DICTIONARY = {
   'Ulnar artery': 'Động mạch trụ',
   'Brachial artery': 'Động mạch cánh tay',
   'Subclavian artery': 'Động mạch dưới đòn',
+  'Circumflex artery of heart': 'Nhánh mũ động mạch vành',
+  'Anterior interventricular artery': 'Động mạch liên thất trước',
 
-  // --- NERVES ---
+  // --- RESPIRATORY LOBES ---
+  'Superior lobe of left lung': 'Thùy trên phổi trái',
+  'Inferior lobe of left lung': 'Thùy dưới phổi trái',
+  'Superior lobe of right lung': 'Thùy trên phổi phải',
+  'Middle lobe of right lung': 'Thùy giữa phổi phải',
+  'Inferior lobe of right lung': 'Thùy dưới phổi phải',
+  'Left main bronchus': 'Phế quản chính trái',
+  'Right main bronchus': 'Phế quản chính phải',
+
+  // --- LYMPHATIC NODES ---
+  'Central axillary nodes': 'Nhóm hạch nách trung tâm',
+  'Central axillary nodes.l': 'Hạch nách trung tâm (trái)',
+  'Central axillary nodes.r': 'Hạch nách trung tâm (phải)',
+  'Anterior axillary nodes.l': 'Hạch nách trước (trái)',
+  'Anterior axillary nodes.r': 'Hạch nách trước (phải)',
+  'Apical axillary nodes.l': 'Hạch nách đỉnh (trái)',
+  'Apical axillary nodes.r': 'Hạch nách đỉnh (phải)',
+  'Brachiocephalic nodes': 'Nhóm hạch cánh tay đầu',
+
+  // --- NERVES & CENTRAL NERVOUS ---
+  'Falx cerebri': 'Liềm đại não',
+  'Tentorium cerebelli': 'Lều tiểu não',
+  'Hypothalamus': 'Vùng hạ đồi',
+  'Thalamus': 'Đồi thị',
+  'Lateral ventricle': 'Não thất bên',
+  'Lateral ventricle.l': 'Não thất bên (trái)',
+  'Lateral ventricle.r': 'Não thất bên (phải)',
+  'Third ventricle': 'Não thất ba',
+  'Fourth ventricle': 'Não thất tư',
+  'Aqueduct of midbrain': 'Cống não Sylvius',
+  'Cerebral aqueduct': 'Cống não Sylvius',
+  'Choroid plexus': 'Đám rối màng mạch (Sinh dịch não tủy)',
+  'Choroid plexus.l': 'Đám rối màng mạch trái (Sinh dịch não tủy)',
+  'Choroid plexus.r': 'Đám rối màng mạch phải (Sinh dịch não tủy)',
+  'Spinal dura': 'Màng cứng tủy gai & Hộp sọ',
+  'Anterior horn of spinal cord': 'Sừng trước tủy sống',
+  'Posterior horn of spinal cord': 'Sừng sau tủy sống',
+  'Spinal cord': 'Tủy sống',
   'Sciatic nerve': 'Dây thần kinh tọa (thần kinh ngồi)',
   'Femoral nerve': 'Dây thần kinh đùi',
   'Radial nerve': 'Dây thần kinh quay',
@@ -528,6 +580,36 @@ export function getVietnameseSynonyms(englishBaseName) {
   }
   if (lower.includes('bạch huyết') || enLower.includes('lymph')) {
     synonyms.push('hệ bạch huyết', 'hạch bạch huyết', 'bach huyet', 'hach');
+  }
+
+  // Cerebrospinal fluid & Ventricular system (CSF) - Exclude heart chambers!
+  const isHeartVentricle = /heart|cardiac|coronary|left ventricle|right ventricle|ventriculus cordis|interventricular|papillary/i.test(enLower) ||
+    lower.includes('tâm thất') || lower.includes('thất trái') || lower.includes('thất phải') || lower.includes('tim');
+
+  if (
+    !isHeartVentricle &&
+    (
+      lower.includes('não thất') ||
+      lower.includes('cống não') ||
+      lower.includes('màng mạch') ||
+      lower.includes('màng cứng') ||
+      lower.includes('dịch não tủy') ||
+      (enLower.includes('ventric') && (enLower.includes('lateral') || enLower.includes('third') || enLower.includes('fourth') || enLower.includes('brain') || enLower.includes('cerebr'))) ||
+      enLower.includes('aqueduct') ||
+      enLower.includes('choroid') ||
+      enLower.includes('spinal dura')
+    )
+  ) {
+    synonyms.push(
+      'dịch não tủy', 'dich nao tuy', 'csf', 'nước não tủy', 'nuoc nao tuy',
+      'não thất', 'nao that', 'hệ thống não thất', 'he thong nao that',
+      'não thất bên', 'nao that ben', 'não thất 3', 'não thất ba', 'nao that 3', 'nao that ba',
+      'não thất 4', 'não thất tư', 'nao that 4', 'nao that tu',
+      'cống não', 'cong nao', 'cống sylvius', 'cong sylvius', 'cống trung não',
+      'đám rối màng mạch', 'dam roi mang mach',
+      'màng cứng', 'mang cung', 'màng não', 'mang nao',
+      'khoang dưới nhện', 'khoang duoi nhen', 'lưu thông dịch não tủy'
+    );
   }
 
   // Bones & Muscles
