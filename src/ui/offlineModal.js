@@ -59,6 +59,14 @@ export const SYSTEM_CATALOG = [
     icon: '🛡️',
     models: ['lymphatic.glb'],
     sizeMB: 0.4
+  },
+  {
+    id: 'integumentary',
+    nameVi: 'Hệ Da (Lớp Da Người)',
+    nameEn: 'Integumentary System',
+    icon: '👤',
+    models: ['integumentary.glb'],
+    sizeMB: 1.1
   }
 ];
 

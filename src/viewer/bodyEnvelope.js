@@ -83,7 +83,7 @@ export async function initBodyEnvelope(viewer = state.viewer || window.viewer) {
   try {
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
-    const modelPath = asset('models/muscular.glb');
+    const modelPath = asset('models/integumentary.glb');
 
     const gltf = await new Promise((resolve, reject) => {
       loader.load(modelPath, resolve, undefined, reject);
@@ -92,27 +92,21 @@ export async function initBodyEnvelope(viewer = state.viewer || window.viewer) {
     const fresnelMat = createFresnelMaterial();
     const model = gltf.scene;
 
-    // Attach cloned meshes to the envelope group with Fresnel rim shader
     model.traverse(node => {
       if (node.isMesh && node.geometry) {
-        const mesh = new THREE.Mesh(node.geometry, fresnelMat);
-        mesh.name = `Envelope_${node.name}`;
-        mesh.matrix.copy(node.matrix);
-        mesh.matrixWorld.copy(node.matrixWorld);
-        mesh.position.copy(node.position);
-        mesh.rotation.copy(node.rotation);
-        mesh.scale.copy(node.scale);
-        mesh.renderOrder = 99; // Render over internal anatomy with soft depth blending
-        mesh.raycast = () => null; // Never intercept user pointer picking
-        mesh.userData.isBodyEnvelope = true;
-        bodyEnvelopeGroup.add(mesh);
+        node.material = fresnelMat;
+        node.renderOrder = 99; // Render over internal anatomy with soft depth blending
+        node.raycast = () => null; // Never intercept user pointer picking
+        node.userData.isBodyEnvelope = true;
       }
     });
+
+    bodyEnvelopeGroup.add(model);
 
     isLoaded = true;
     updateBodyEnvelopeAuto(viewer);
   } catch (error) {
-    console.warn('[bodyEnvelope] Could not load muscular envelope:', error);
+    console.warn('[bodyEnvelope] Could not load integumentary envelope:', error);
   } finally {
     isLoading = false;
   }
@@ -167,6 +161,7 @@ export function updateBodyEnvelopeAuto(viewer = state.viewer || window.viewer) {
 
   const isSkelLoaded = state.loadedSystems.includes('skeletal');
   const isMuscLoaded = state.loadedSystems.includes('muscular');
+  const isSkinLoaded = state.loadedSystems.includes('integumentary');
 
   // Check if muscular system is currently solid/visible
   let muscIsSolid = false;
@@ -180,7 +175,19 @@ export function updateBodyEnvelopeAuto(viewer = state.viewer || window.viewer) {
     });
   }
 
-  // Show body envelope when skeleton is active and muscular system is not displayed in solid mode
-  const shouldShow = isSkelLoaded && !muscIsSolid;
+  // Check if real integumentary skin is currently solid/visible
+  let skinIsSolid = false;
+  if (isSkinLoaded) {
+    viewer?.scene?.traverse(node => {
+      if (node.isMesh && node.userData?.system === 'integumentary' && node.visible) {
+        if (!node.material?.transparent || node.material?.opacity > 0.8) {
+          skinIsSolid = true;
+        }
+      }
+    });
+  }
+
+  // Show body envelope when skeleton is active and muscular / skin system is not displayed in solid mode
+  const shouldShow = isSkelLoaded && !muscIsSolid && !skinIsSolid;
   setBodyEnvelopeVisible(shouldShow, viewer);
 }

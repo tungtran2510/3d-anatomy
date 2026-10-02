@@ -1081,6 +1081,29 @@ body.theme-dark .ctrl-collapse-btn {
 body.theme-dark .ctrl-collapse-btn {
   color: #94a3b8;
 }
+[data-theme="dark"] .system-stepper-item.is-active,
+body.theme-dark .system-stepper-item.is-active {
+  background: rgba(30, 58, 138, 0.4) !important;
+  border-color: rgba(96, 165, 250, 0.7) !important;
+}
+[data-theme="dark"] .system-stepper-item.is-active .system-name-tag,
+body.theme-dark .system-stepper-item.is-active .system-name-tag {
+  color: #93c5fd !important;
+  font-weight: 700 !important;
+}
+[data-theme="dark"] .btn-stepper-icon.active,
+body.theme-dark .btn-stepper-icon.active {
+  background: rgba(59, 130, 246, 0.3) !important;
+  border-color: #60a5fa !important;
+}
+[data-theme="dark"] .btn-stepper-icon.active svg,
+body.theme-dark .btn-stepper-icon.active svg {
+  stroke: #93c5fd !important;
+}
+[data-theme="dark"] .level-segment.filled,
+body.theme-dark .level-segment.filled {
+  background: #3b82f6 !important;
+}
 
 [data-theme="dark"] .ctrl-collapse-btn:hover,
 body.theme-dark .ctrl-collapse-btn:hover {
@@ -6787,7 +6810,7 @@ body.theme-dark .btn-mini-action:hover {
 /* 1. Pull Tab on Left Edge (Exact Visible Body style) */
 .systems-pull-tab {
   position: absolute;
-  top: 180px !important;
+  top: calc(52px + 24vh - 54px) !important;
   left: 0 !important;
   right: auto !important;
   transform: translateX(0) !important;
@@ -6860,10 +6883,13 @@ body.theme-dark .tab-vertical-text {
 /* 2. Sliding Systems Stepper Panel - Slim Medical Sidebar (Width 126px) on Left */
 .systems-stepper-drawer {
   position: absolute;
-  top: 48px;
+  top: 52px;
   left: 0 !important;
   right: auto !important;
-  bottom: 60px;
+  bottom: auto !important;
+  height: 48vh !important;
+  max-height: 440px;
+  min-height: 350px;
   width: 126px;
   max-width: 42vw;
   z-index: 1200;
@@ -6871,14 +6897,16 @@ body.theme-dark .tab-vertical-text {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
   border-left: none !important;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
+  border-radius: 0 14px 14px 0 !important;
+  box-shadow: 4px 6px 24px rgba(0, 0, 0, 0.12);
   padding: 8px 6px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden !important;
   transform: translateX(-100%) !important;
   pointer-events: none;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -6893,6 +6921,7 @@ body.theme-dark .tab-vertical-text {
 }
 .stepper-drawer-header {
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   gap: 4px;
   padding-bottom: 5px;
@@ -7068,9 +7097,24 @@ body.theme-dark .tab-vertical-text {
 
 /* 3. System Stepper Item Rows */
 .stepper-systems-list {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(30, 58, 138, 0.25) transparent;
+  padding-right: 2px;
+}
+.stepper-systems-list::-webkit-scrollbar {
+  width: 3px;
+}
+.stepper-systems-list::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 138, 0.25);
+  border-radius: 3px;
 }
 .system-stepper-item {
   display: flex;
@@ -7212,6 +7256,7 @@ body.theme-dark .tab-vertical-text {
 /* 4. Bottom Footer Tools (Pelvis & Gender) */
 .stepper-drawer-footer {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: 5px;
@@ -7691,7 +7736,7 @@ body.is-fullscreen .floating-views-quick-nav {
 :fullscreen .systems-pull-tab,
 :-webkit-full-screen .systems-pull-tab,
 body.is-fullscreen .systems-pull-tab {
-  top: calc(var(--ctrl-col-top) + 130px) !important;
+  top: calc(52px + 24vh - 54px) !important;
   left: 0 !important;
   right: auto !important;
   border-radius: 0 10px 10px 0 !important;

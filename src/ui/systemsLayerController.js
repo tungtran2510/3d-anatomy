@@ -25,7 +25,8 @@ export const SYSTEM_CONFIGS = [
   { id: 'digestive', icon: ICONS.digestive, nameVi: 'Hệ Tiêu hóa (Gan, Ruột)', shortNameVi: 'TIÊU HÓA', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'digestive' },
   { id: 'urinary_genital', icon: ICONS.urinary_genital, nameVi: 'Tiết niệu & Sinh dục', shortNameVi: 'TIẾT NIỆU', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'urinary_genital' },
   { id: 'endocrine', icon: ICONS.endocrine, nameVi: 'Hệ Nội tiết', shortNameVi: 'NỘI TIẾT', maxLevels: 4, defaultLevel: 0, baseSystem: 'visceral', subType: 'endocrine' },
-  { id: 'lymphatic', icon: ICONS.lymphatic, nameVi: 'Hệ Bạch huyết', shortNameVi: 'BẠCH HUYẾT', maxLevels: 4, defaultLevel: 0, baseSystem: 'lymphatic' }
+  { id: 'lymphatic', icon: ICONS.lymphatic, nameVi: 'Hệ Bạch huyết', shortNameVi: 'BẠCH HUYẾT', maxLevels: 4, defaultLevel: 0, baseSystem: 'lymphatic' },
+  { id: 'integumentary', icon: ICONS.integumentary, nameVi: 'Hệ Da (Lớp da người)', shortNameVi: 'HỆ DA', maxLevels: 2, defaultLevel: 0, baseSystem: 'integumentary' }
 ];
 
 export const systemLevels = {
@@ -39,7 +40,8 @@ export const systemLevels = {
   digestive: 0,
   urinary_genital: 0,
   endocrine: 0,
-  lymphatic: 0
+  lymphatic: 0,
+  integumentary: 0
 };
 
 // -----------------------------------------------------------------------------
@@ -1227,6 +1229,28 @@ async function applySystemLevel(systemId, level, viewer) {
           const partId = n.userData?.partId || n.name || '';
           if (partId) {
             setStructureVisible(partId, isLymphaticVisibleAtLevel(partId.toLowerCase(), level));
+          }
+        });
+      }
+    } else if (systemId === 'integumentary') {
+      if (level <= 0) {
+        hideSystem('integumentary');
+        updateBodyEnvelopeAuto(viewer);
+      } else {
+        showSystem('integumentary');
+        setBodyEnvelopeVisible(false, viewer);
+        const nodes = getMeshesBySystem('integumentary') || [];
+        nodes.forEach(n => {
+          if (n.isMesh && n.material) {
+            if (level <= 1.0) {
+              n.material.transparent = true;
+              n.material.opacity = 0.45;
+              n.material.depthWrite = true;
+            } else {
+              n.material.transparent = false;
+              n.material.opacity = 1.0;
+              n.material.depthWrite = true;
+            }
           }
         });
       }

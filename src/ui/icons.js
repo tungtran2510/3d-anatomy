@@ -115,6 +115,16 @@ export const ICONS = {
     </svg>
   `,
 
+  integumentary: `
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="10" rx="1.5"/>
+      <path d="M3 15.5h18"/>
+      <path d="M3 18.5h18"/>
+      <path d="M8 15.5c0-4 4-5 4-11"/>
+      <path d="M15 15.5c0-3 2-4 3-7"/>
+    </svg>
+  `,
+
   // Affected Region Anatomy Icons (Monochrome minimal silhouettes)
   regionWhole: `
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">

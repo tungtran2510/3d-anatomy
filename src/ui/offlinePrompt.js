@@ -96,6 +96,13 @@ const SYSTEM_INFO_MAP = {
     sizeMB: '1.0',
     baseSystem: 'skeletal',
     tip: 'Toàn bộ bao khớp & dây chằng'
+  },
+  integumentary: {
+    nameVi: 'Hệ Da (Lớp Da Người)',
+    icon: '👤',
+    sizeMB: '1.1',
+    baseSystem: 'integumentary',
+    tip: 'Lớp da người toàn thân chân thực'
   }
 };
 
