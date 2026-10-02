@@ -935,12 +935,7 @@ function setupEvents(viewer) {
       const item = header.closest('.system-stepper-item');
       const sysId = item?.dataset?.system;
       if (sysId === 'digestive') {
-        const cur = Number(systemLevels.digestive) || 0;
-        if (cur <= 0) {
-          await focusDigestiveSystem(viewer);
-        } else {
-          await applySystemLevel('digestive', 0, viewer);
-        }
+        await focusDigestiveSystem(viewer);
         return;
       }
     }

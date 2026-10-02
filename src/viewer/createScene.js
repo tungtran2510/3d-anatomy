@@ -232,45 +232,45 @@ export function createScene() {
 function createLights(scene) {
   const lights = {};
 
-  // Medical Studio Ambient Light - controlled intensity for authentic anatomical cavity depth
-  lights.ambient = new THREE.AmbientLight(0xfff6ec, 0.38);
+  // Medical Studio Ambient Light - uniform diffuse light so all anatomical structures are clearly and softly lit
+  lights.ambient = new THREE.AmbientLight(0xffffff, 0.95);
   scene.add(lights.ambient);
 
-  // Key directional light - warm ivory studio light from upper front-right
-  lights.key = new THREE.DirectionalLight(0xfff7ee, 1.35);
+  // Key directional light - soft warm studio fill from upper front-right
+  lights.key = new THREE.DirectionalLight(0xfff8f2, 0.55);
   lights.key.position.set(28, 65, 45);
   scene.add(lights.key);
 
   // Fill light - soft cool-neutral fill to preserve tissue contrast
-  lights.fill = new THREE.DirectionalLight(0xebf2fa, 0.38);
+  lights.fill = new THREE.DirectionalLight(0xf0f5ff, 0.40);
   lights.fill.position.set(-30, 25, -25);
   scene.add(lights.fill);
 
-  // Rim light - crisp back-light highlighting organ boundaries and bone silhouettes
-  lights.rim = new THREE.DirectionalLight(0xfff0db, 0.75);
+  // Rim light - subtle back-light highlighting organ boundaries and silhouettes
+  lights.rim = new THREE.DirectionalLight(0xfff2e6, 0.30);
   lights.rim.position.set(10, -25, -65);
   scene.add(lights.rim);
 
-  // Front camera light for crisp anatomical definition
-  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.25);
+  // Front camera light for soft anatomical definition
+  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.20);
   lights.front.position.set(0, 5, 65);
   scene.add(lights.front);
 
   // Hemisphere light for ground-to-sky subtle bounce
-  lights.hemi = new THREE.HemisphereLight(0xfff8ee, 0xd5cfc0, 0.22);
+  lights.hemi = new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 0.35);
   scene.add(lights.hemi);
 
   return lights;
 }
 
 export function updateLightsForSystem(lights, system) {
-  // Adjust lighting based on visible system
+  // Diffuse soft medical studio lighting across all systems (no harsh specular hotspots)
   const configs = {
-    muscular: { key: 1.30, fill: 0.35, ambient: 0.35 },
-    skeletal: { key: 1.35, fill: 0.38, ambient: 0.38 },
-    nervous: { key: 1.20, fill: 0.40, ambient: 0.38 },
-    visceral: { key: 1.35, fill: 0.35, ambient: 0.35 },
-    default: { key: 1.30, fill: 0.38, ambient: 0.36 }
+    muscular: { key: 0.55, fill: 0.40, ambient: 0.95 },
+    skeletal: { key: 0.55, fill: 0.40, ambient: 0.95 },
+    nervous: { key: 0.55, fill: 0.40, ambient: 0.95 },
+    visceral: { key: 0.55, fill: 0.40, ambient: 0.95 },
+    default: { key: 0.55, fill: 0.40, ambient: 0.95 }
   };
 
   const config = configs[system] || configs.default;
