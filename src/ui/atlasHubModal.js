@@ -1,4 +1,4 @@
-﻿// Atlas 2027 Full-Screen Views & Media Hub Controller
+// Atlas 2027 Full-Screen Views & Media Hub Controller
 // Mapped accurately to Visible Body / Human Anatomy Atlas (Atlas 2027) standards
 import { state } from '../state/store.js';
 import { loadModel } from '../viewer/loadModel.js';
@@ -51,7 +51,7 @@ export function initAtlasHub(viewer) {
     hubModalEl.className = 'atlas-hub-modal hidden';
     hubModalEl.innerHTML = `
     <div class="atlas-hub-backdrop" id="atlasHubBackdrop"></div>
-    <div class="atlas-hub-panel" role="dialog" aria-modal="true" aria-label="Trung tÃ¢m gÃ³c nhÃ¬n vÃ  hoáº¡t áº£nh Atlas">
+    <div class="atlas-hub-panel" role="dialog" aria-modal="true" aria-label="Trung tâm góc nhìn và hoạt ảnh Atlas">
       
       <!-- Sleek 1-line Hub Header Frame -->
       <div class="atlas-hub-header">
@@ -60,65 +60,65 @@ export function initAtlasHub(viewer) {
             <span class="brand-cube-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
             </span>
-            <h2 class="atlas-hub-title-1line">ThÆ° Viá»‡n Atlas 3D</h2>
+            <h2 class="atlas-hub-title-1line">Thư Viện Atlas 3D</h2>
           </div>
           <div class="atlas-hub-header-actions">
-            <button type="button" class="btn-hub-theme-toggle" id="btnHubThemeToggle" title="Chuyá»ƒn cháº¿ Ä‘á»™ Ná»n SÃ¡ng / Ná»n Tá»‘i">
-              <span class="theme-icon">â—</span>
-              <span class="theme-label">Giao diá»‡n</span>
+            <button type="button" class="btn-hub-theme-toggle" id="btnHubThemeToggle" title="Chuyển chế độ Nền Sáng / Nền Tối">
+              <span class="theme-icon">◐</span>
+              <span class="theme-label">Giao diện</span>
             </button>
-            <button type="button" class="btn-hub-offline-compact" id="btnHubOpenOffline" title="Táº£i toÃ n bá»™ thÆ° viá»‡n vá» mÃ¡y (DÃ¹ng Offline 100%)">
+            <button type="button" class="btn-hub-offline-compact" id="btnHubOpenOffline" title="Tải toàn bộ thư viện về máy (Dùng Offline 100%)">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span>Táº£i Offline</span>
+              <span>Tải Offline</span>
             </button>
-            <button type="button" class="btn-launch-link-compact" id="btnHubLaunchLink" title="Sao chÃ©p liÃªn káº¿t gÃ³c nhÃ¬n 3D hiá»‡n táº¡i">
+            <button type="button" class="btn-launch-link-compact" id="btnHubLaunchLink" title="Sao chép liên kết góc nhìn 3D hiện tại">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              <span>Chia sáº»</span>
+              <span>Chia sẻ</span>
             </button>
-            <button type="button" class="btn-hub-admin" id="btnHubAdmin" title="Quáº£n trá»‹ Video & Dá»¯ liá»‡u Atlas (Máº­t kháº©u: 123456)">
-              <span class="admin-icon">ðŸ”</span>
-              <span class="admin-label">Quáº£n trá»‹</span>
+            <button type="button" class="btn-hub-admin" id="btnHubAdmin" title="Quản trị Video & Dữ liệu Atlas (Mật khẩu: 123456)">
+              <span class="admin-icon">🔐</span>
+              <span class="admin-label">Quản trị</span>
             </button>
-            <button type="button" class="atlas-hub-close" id="btnAtlasHubClose" aria-label="ÄÃ³ng">&times;</button>
+            <button type="button" class="atlas-hub-close" id="btnAtlasHubClose" aria-label="Đóng">&times;</button>
           </div>
         </div>
 
-        <!-- KHá»I KHUNG 1: Segmented Navigation Control Frame -->
+        <!-- KHỐI KHUNG 1: Segmented Navigation Control Frame -->
         <div class="atlas-hub-segmented-frame">
           <button type="button" class="atlas-main-tab active" data-tab="views" id="tabBtnViews">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            <span>GÃ³c nhÃ¬n 3D</span>
+            <span>Góc nhìn 3D</span>
           </button>
           <button type="button" class="atlas-main-tab" data-tab="media" id="tabBtnMedia">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-            <span>Hoáº¡t áº£nh & Video</span>
+            <span>Hoạt ảnh & Video</span>
           </button>
           <button type="button" class="atlas-main-tab" data-tab="quizzes" id="tabBtnQuizzes">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            <span>Tráº¯c nghiá»‡m 3D</span>
+            <span>Trắc nghiệm 3D</span>
           </button>
         </div>
 
-        <!-- KHá»I KHUNG 2: Search & Filter Toolbox Frame -->
+        <!-- KHỐI KHUNG 2: Search & Filter Toolbox Frame -->
         <div class="atlas-hub-filter-frame">
           <div class="search-input-wrapper">
             <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="atlas-hub-search-input" id="atlasHubSearchInput" placeholder="TÃ¬m nhanh cáº¥u trÃºc (Dá»‹ch nÃ£o tá»§y, TÃºi máº­t, Cá»™t sá»‘ng...)" autocomplete="off">
-            <button type="button" class="hub-voice-mic-btn" id="btnHubVoiceMic" title="TÃ¬m báº±ng giá»ng nÃ³i tiáº¿ng Viá»‡t">
+            <input type="text" class="atlas-hub-search-input" id="atlasHubSearchInput" placeholder="Tìm nhanh cấu trúc (Dịch não tủy, Túi mật, Cột sống...)" autocomplete="off">
+            <button type="button" class="hub-voice-mic-btn" id="btnHubVoiceMic" title="Tìm bằng giọng nói tiếng Việt">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
             </button>
-            <button type="button" class="search-clear-btn hidden" id="btnHubSearchClear" title="XÃ³a tÃ¬m kiáº¿m">&times;</button>
+            <button type="button" class="search-clear-btn hidden" id="btnHubSearchClear" title="Xóa tìm kiếm">&times;</button>
           </div>
           <div class="atlas-subfilter-chips-row" id="atlasSubfilterChips">
-            <span class="subfilter-chips-label">Lá»c theo:</span>
+            <span class="subfilter-chips-label">Lọc theo:</span>
             <div class="atlas-subfilter-chips">
-              <button type="button" class="subchip active" data-sub="all">Táº¥t cáº£</button>
-              <button type="button" class="subchip" data-sub="systems">Há»‡ cÆ¡ quan</button>
-              <button type="button" class="subchip" data-sub="regions">PhÃ¢n vÃ¹ng</button>
-              <button type="button" class="subchip" data-sub="lab">BÃ n má»• (Lab)</button>
-              <button type="button" class="subchip" data-sub="cross_sections">Cáº¯t lá»›p (Cross Sections)</button>
-              <button type="button" class="subchip" data-sub="microanatomy">Vi thá»ƒ & Da (Microanatomy)</button>
-              <button type="button" class="subchip" data-sub="muscle_actions">Chuyá»ƒn Ä‘á»™ng (Muscle Actions)</button>
+              <button type="button" class="subchip active" data-sub="all">Tất cả</button>
+              <button type="button" class="subchip" data-sub="systems">Hệ cơ quan</button>
+              <button type="button" class="subchip" data-sub="regions">Phân vùng</button>
+              <button type="button" class="subchip" data-sub="lab">Bàn mổ (Lab)</button>
+              <button type="button" class="subchip" data-sub="cross_sections">Cắt lớp (Cross Sections)</button>
+              <button type="button" class="subchip" data-sub="microanatomy">Vi thể & Da (Microanatomy)</button>
+              <button type="button" class="subchip" data-sub="muscle_actions">Chuyển động (Muscle Actions)</button>
             </div>
           </div>
         </div>
@@ -212,7 +212,7 @@ function setupHubEvents(viewer) {
   hubVoiceBtn?.addEventListener('click', () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      showToast('âš ï¸ TrÃ¬nh duyá»‡t chÆ°a há»— trá»£ nháº­n diá»‡n giá»ng nÃ³i');
+      showToast('⚠️ Trình duyệt chưa hỗ trợ nhận diện giọng nói');
       return;
     }
     if (!hubRecognition) {
@@ -222,14 +222,14 @@ function setupHubEvents(viewer) {
       hubRecognition.interimResults = false;
       hubRecognition.onstart = () => {
         hubVoiceBtn.classList.add('listening');
-        showToast('ðŸŽ™ï¸ Äang nghe... HÃ£y nÃ³i tÃªn bá»™ pháº­n (VD: "dá»‹ch nÃ£o tá»§y", "tÃºi máº­t")');
+        showToast('🎙️ Đang nghe... Hãy nói tên bộ phận (VD: "dịch não tủy", "túi mật")');
       };
       hubRecognition.onend = () => {
         hubVoiceBtn.classList.remove('listening');
       };
       hubRecognition.onerror = (err) => {
         hubVoiceBtn.classList.remove('listening');
-        if (err.error === 'not-allowed') showToast('âš ï¸ Vui lÃ²ng cáº¥p quyá»n Microphone Ä‘á»ƒ nÃ³i');
+        if (err.error === 'not-allowed') showToast('⚠️ Vui lòng cấp quyền Microphone để nói');
       };
       hubRecognition.onresult = (ev) => {
         const text = ev.results?.[0]?.[0]?.transcript?.trim();
@@ -238,7 +238,7 @@ function setupHubEvents(viewer) {
           searchQuery = text.toLowerCase().trim();
           clearSearchBtn.classList.remove('hidden');
           renderHubContent(viewer);
-          showToast(`ðŸŽ¯ ÄÃ£ tÃ¬m: "${text}"`);
+          showToast(`🎯 Đã tìm: "${text}"`);
         }
       };
     }
@@ -337,10 +337,10 @@ function renderViewsTab(container, viewer) {
         <div class="atlas-view-section matched-structures-section">
           <div class="atlas-view-section-header">
             <div class="section-title-wrap">
-              <span class="system-icon-mini">ðŸ“</span>
-              <h3 class="section-heading">Cáº¥u TrÃºc Giáº£i Pháº«u 3D Khá»›p TÃ¬m Kiáº¿m (${matchedStructures.length})</h3>
+              <span class="system-icon-mini">📍</span>
+              <h3 class="section-heading">Cấu Trúc Giải Phẫu 3D Khớp Tìm Kiếm (${matchedStructures.length})</h3>
             </div>
-            <span class="section-count">Nháº¥n Ä‘á»ƒ xem & Ä‘á»‹nh vá»‹ 3D</span>
+            <span class="section-count">Nhấn để xem & định vị 3D</span>
           </div>
           <div class="atlas-structures-grid">
             ${matchedStructures.map(s => {
@@ -429,7 +429,7 @@ function renderViewsTab(container, viewer) {
               <span class="system-icon-mini">${ICONS[cat.systemKey] || ICONS.skeletal}</span>
               <h3 class="section-heading">${cat.titleVi}</h3>
             </div>
-            <span class="section-count">${cat.cards.length} gÃ³c nhÃ¬n</span>
+            <span class="section-count">${cat.cards.length} góc nhìn</span>
           </div>
           <div class="atlas-cards-grid">
             ${cat.cards.map(card => `
@@ -457,10 +457,10 @@ function renderViewsTab(container, viewer) {
         <div class="atlas-view-section">
           <div class="atlas-view-section-header">
             <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS.crossSection || 'ðŸ“'}</span>
+              <span class="system-icon-mini">${ICONS.crossSection || '📐'}</span>
               <h3 class="section-heading">${group.titleVi}</h3>
             </div>
-            <span class="section-count">${group.cards.length} lÃ¡t cáº¯t</span>
+            <span class="section-count">${group.cards.length} lát cắt</span>
           </div>
           <div class="atlas-cards-grid">
             ${group.cards.map(card => `
@@ -488,10 +488,10 @@ function renderViewsTab(container, viewer) {
         <div class="atlas-view-section">
           <div class="atlas-view-section-header">
             <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS.microanatomy || 'ðŸ”¬'}</span>
+              <span class="system-icon-mini">${ICONS.microanatomy || '🔬'}</span>
               <h3 class="section-heading">${group.titleVi}</h3>
             </div>
-            <span class="section-count">${group.cards.length} vi thá»ƒ</span>
+            <span class="section-count">${group.cards.length} vi thể</span>
           </div>
           <div class="atlas-cards-grid">
             ${group.cards.map(card => `
@@ -519,10 +519,10 @@ function renderViewsTab(container, viewer) {
         <div class="atlas-view-section">
           <div class="atlas-view-section-header">
             <div class="section-title-wrap">
-              <span class="system-icon-mini">${ICONS.muscleAction || 'ðŸ’ª'}</span>
+              <span class="system-icon-mini">${ICONS.muscleAction || '💪'}</span>
               <h3 class="section-heading">${group.titleVi}</h3>
             </div>
-            <span class="section-count">${group.cards.length} chuyá»ƒn Ä‘á»™ng</span>
+            <span class="section-count">${group.cards.length} chuyển động</span>
           </div>
           <div class="atlas-cards-grid">
             ${group.cards.map(card => `
@@ -549,10 +549,10 @@ function renderViewsTab(container, viewer) {
       <div class="atlas-view-section">
         <div class="atlas-view-section-header">
           <div class="section-title-wrap">
-            <span class="system-icon-mini">ðŸ—„ï¸</span>
-            <h3 class="section-heading">BÃ n Pháº«u TÃ­ch Y Khoa (Gross Anatomy Cadaver Lab)</h3>
+            <span class="system-icon-mini">🗄️</span>
+            <h3 class="section-heading">Bàn Phẫu Tích Y Khoa (Gross Anatomy Cadaver Lab)</h3>
           </div>
-          <span class="section-count">${filteredLab.length} gÃ³c má»•</span>
+          <span class="section-count">${filteredLab.length} góc mổ</span>
         </div>
         <div class="atlas-cards-grid">
           ${filteredLab.map(card => `
@@ -579,9 +579,9 @@ function renderViewsTab(container, viewer) {
         <div class="atlas-view-section-header">
           <div class="section-title-wrap">
             <span class="system-icon-mini">${ICONS.regionWhole}</span>
-            <h3 class="section-heading">PhÃ¢n VÃ¹ng CÆ¡ Thá»ƒ</h3>
+            <h3 class="section-heading">Phân Vùng Cơ Thể</h3>
           </div>
-          <span class="section-count">${filteredRegions.length} phÃ¢n vÃ¹ng</span>
+          <span class="section-count">${filteredRegions.length} phân vùng</span>
         </div>
         <div class="atlas-cards-grid">
           ${filteredRegions.map(reg => `
@@ -605,7 +605,7 @@ function renderViewsTab(container, viewer) {
     html = `
       <div class="atlas-empty-state">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p>KhÃ´ng tÃ¬m tháº¥y gÃ³c nhÃ¬n nÃ o phÃ¹ há»£p vá»›i tá»« khÃ³a "<strong>${escapeHtml(searchQuery)}</strong>".</p>
+        <p>Không tìm thấy góc nhìn nào phù hợp với từ khóa "<strong>${escapeHtml(searchQuery)}</strong>".</p>
       </div>
     `;
   }
@@ -619,7 +619,7 @@ function renderViewsTab(container, viewer) {
       if (!partId) return;
       closeAtlasHub();
       const name = cardEl.querySelector('.structure-card-name')?.textContent || partId;
-      showToast(`ðŸŽ¯ Äang Ä‘á»‹nh vá»‹ 3D: ${name}...`);
+      showToast(`🎯 Đang định vị 3D: ${name}...`);
       await selectStructureAnywhere(partId);
     });
   });
@@ -676,15 +676,15 @@ function renderMediaTab(container, viewer) {
   let html = `
     <div class="media-admin-quick-bar">
       <div class="media-admin-bar-info">
-        <span class="media-count-badge">ðŸŽ¬ ${totalCards} Hoáº¡t áº¢nh & Video Y Khoa</span>
-        <span class="media-count-sub">(Äá»“ng bá»™ 12 chuyÃªn Ä‘á» lÃ¢m sÃ ng Atlas)</span>
+        <span class="media-count-badge">🎬 ${totalCards} Hoạt Ảnh & Video Y Khoa</span>
+        <span class="media-count-sub">(Đồng bộ 12 chuyên đề lâm sàng Atlas)</span>
       </div>
       <div class="media-admin-bar-actions">
-        <button type="button" class="btn-media-add-new" id="btnMediaAddNewVideo" title="Gáº¯n hoáº·c thÃªm video má»›i (YouTube hoáº·c MP4 tá»« mÃ¡y)">
-          <span>âž• ThÃªm Video</span>
+        <button type="button" class="btn-media-add-new" id="btnMediaAddNewVideo" title="Gắn hoặc thêm video mới (YouTube hoặc MP4 từ máy)">
+          <span>➕ Thêm Video</span>
         </button>
-        <button type="button" class="btn-media-admin-shortcut" id="btnMediaAdminShortcut" title="Má»Ÿ báº£ng quáº£n trá»‹ Ä‘á»ƒ thÃªm/sá»­a link video">
-          <span>âš™ï¸ Báº£ng Quáº£n Trá»‹</span>
+        <button type="button" class="btn-media-admin-shortcut" id="btnMediaAdminShortcut" title="Mở bảng quản trị để thêm/sửa link video">
+          <span>⚙️ Bảng Quản Trị</span>
         </button>
       </div>
     </div>
@@ -712,7 +712,7 @@ function renderMediaTab(container, viewer) {
             </span>
             <h3 class="section-heading">${cat.titleVi}</h3>
           </div>
-          <span class="section-count">${cat.cards.length} hoáº¡t áº£nh</span>
+          <span class="section-count">${cat.cards.length} hoạt ảnh</span>
         </div>
         <div class="atlas-cards-grid">
           ${cat.cards.map(card => `
@@ -743,7 +743,7 @@ function renderMediaTab(container, viewer) {
     html += `
       <div class="atlas-empty-state">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p>KhÃ´ng tÃ¬m tháº¥y hoáº¡t áº£nh y khoa nÃ o phÃ¹ há»£p vá»›i "<strong>${searchQuery}</strong>".</p>
+        <p>Không tìm thấy hoạt ảnh y khoa nào phù hợp với "<strong>${searchQuery}</strong>".</p>
       </div>
     `;
   }
@@ -757,7 +757,7 @@ function renderMediaTab(container, viewer) {
 
   // Bind Add New Video Button
   container.querySelector('#btnMediaAddNewVideo')?.addEventListener('click', () => {
-    openQuickVideoModal(null, 'ThÆ° Viá»‡n Hoáº¡t áº¢nh', () => {
+    openQuickVideoModal(null, 'Thư Viện Hoạt Ảnh', () => {
       renderMediaCategories(container, getAtlasMediaCategories(), '', viewer);
     });
   });
@@ -786,7 +786,7 @@ function renderQuizzesTab(container, viewer) {
           <span class="system-icon-mini">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           </span>
-          <h3 class="section-heading">Há»‡ Thá»‘ng Tráº¯c Nghiá»‡m & Kiá»ƒm Tra Kiáº¿n Thá»©c 3D</h3>
+          <h3 class="section-heading">Hệ Thống Trắc Nghiệm & Kiểm Tra Kiến Thức 3D</h3>
         </div>
       </div>
       <div class="atlas-cards-grid">
@@ -826,7 +826,7 @@ function renderQuizzesTab(container, viewer) {
 // ACTION: Apply 3D View Preset
 async function applyAtlasView(card, viewer) {
   closeAtlasHub();
-  showToast(`ðŸŽ¯ Äang táº£i gÃ³c nhÃ¬n: ${card.title}...`);
+  showToast(`🎯 Đang tải góc nhìn: ${card.title}...`);
 
   const activeViewer = viewer || state.viewer || window.viewer;
   if (!activeViewer) return;
@@ -934,7 +934,7 @@ async function applyAtlasView(card, viewer) {
     activeViewer.render();
   } catch (err) {
     console.error('Error applying atlas view:', err);
-    showToast(`ÄÃ£ má»Ÿ gÃ³c nhÃ¬n: ${card.title}`);
+    showToast(`Đã mở góc nhìn: ${card.title}`);
   }
 }
 
@@ -960,13 +960,13 @@ async function applyAtlasRegion(reg, viewer) {
     // Toggle OFF: revert to front whole body view!
     currentActiveRegionId = null;
     setView('front', activeViewer);
-    showToast(`ÄÃ£ táº¯t phÃ¢n vÃ¹ng: ${reg.title} - Trá»Ÿ vá» toÃ n thÃ¢n`);
+    showToast(`Đã tắt phân vùng: ${reg.title} - Trở về toàn thân`);
     activeViewer.render();
     return;
   }
 
   currentActiveRegionId = reg.id;
-  showToast(`ðŸŽ¯ Chuyá»ƒn phÃ¢n vÃ¹ng: ${reg.title}...`);
+  showToast(`🎯 Chuyển phân vùng: ${reg.title}...`);
 
   const systemsToLoad = reg.systems || ['skeletal'];
   for (const sys of systemsToLoad) {
@@ -993,12 +993,12 @@ function applyAtlasMedia(media, viewer) {
     disableClipping(activeViewer);
     const popover = document.getElementById('clippingPopover');
     if (popover) popover.classList.add('hidden');
-    showToast(`â–¶ï¸ Äang khá»Ÿi cháº¡y mÃ´ phá»ng 3D: ${media.title}`);
+    showToast(`▶️ Đang khởi chạy mô phỏng 3D: ${media.title}`);
     openMotionPanel(activeViewer, media.motionType);
   } else if (media.type === 'video') {
-    // Giá»¯ nguyÃªn ThÆ° Viá»‡n Atlas Hub bÃªn dÆ°á»›i Ä‘á»ƒ khi xem xong ngÆ°á»i dÃ¹ng Ä‘Ã³ng video sáº½ quay láº¡i Ä‘Ãºng danh má»¥c vÃ  vá»‹ trÃ­ Ä‘ang duyá»‡t
+    // Giữ nguyên Thư Viện Atlas Hub bên dưới để khi xem xong người dùng đóng video sẽ quay lại đúng danh mục và vị trí đang duyệt
     closeMotionPanel();
-    showToast(`ðŸŽ¬ Äang phÃ¡t video y khoa: ${media.title}`);
+    showToast(`🎬 Đang phát video y khoa: ${media.title}`);
     openVideoModal(media.videoUrl, media.title);
   }
 }
@@ -1036,11 +1036,11 @@ function copyLaunchLink() {
   const url = window.location.href;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(url).then(() => {
-      showToast('âœ“ ÄÃ£ sao chÃ©p liÃªn káº¿t gÃ³c nhÃ¬n 3D hiá»‡n táº¡i!');
+      showToast('✓ Đã sao chép liên kết góc nhìn 3D hiện tại!');
     }).catch(() => {
-      prompt('Sao chÃ©p liÃªn káº¿t dÆ°á»›i Ä‘Ã¢y:', url);
+      prompt('Sao chép liên kết dưới đây:', url);
     });
   } else {
-    prompt('Sao chÃ©p liÃªn káº¿t dÆ°á»›i Ä‘Ã¢y:', url);
+    prompt('Sao chép liên kết dưới đây:', url);
   }
 }
