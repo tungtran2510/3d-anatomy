@@ -359,10 +359,10 @@
 
     <!-- Full Information Panel (Visible Body & Medical Atlas Standard) -->
     <div class="selection-card compact-mode hidden" id="selectionCard">
-      <!-- 1. COMPACT MINI-BAR (1 to 2 lines, active by default on selection) -->
+      <!-- 1. COMPACT MINI-BAR (Tối đa 1-2 dòng, mặc định khi chọn/tìm kiếm) -->
       <div class="selection-mini-bar" id="selectionMiniBar">
         <div class="mini-bar-row-top">
-          <div class="mini-bar-title-wrap" id="miniBarExpandTrigger" title="Chạm để xem chi tiết giải phẫu">
+          <div class="mini-bar-title-wrap" id="miniBarExpandTrigger" title="Chạm để mở khung chi tiết giải phẫu">
             <span class="mini-pin">📍</span>
             <span class="mini-title" id="miniCardTitle">Chọn cấu trúc</span>
             <span class="mini-latin" id="miniCardLatin"></span>
@@ -371,19 +371,20 @@
             <button type="button" class="mini-btn-audio" id="btnMiniAudio" title="Nghe phát âm danh pháp" aria-label="Phát âm">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             </button>
-            <button type="button" class="mini-btn-zoom" id="btnMiniZoom" title="Phóng to chi tiết (Zoom closer)">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-              <span>Phóng to</span>
-            </button>
-            <button type="button" class="mini-btn-expand" id="btnMiniExpand" title="Mở rộng xem chi tiết y khoa">
-              <span>Xem thêm</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            <button type="button" class="mini-btn-zoom" id="btnMiniZoom" title="Phóng to chi tiết (Zoom closer)" aria-label="Phóng to">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
             </button>
             <button type="button" class="mini-btn-close" id="btnMiniClose" title="Ẩn thanh (vẫn giữ điểm chỉ 3D)" aria-label="Đóng thanh">&times;</button>
           </div>
         </div>
-        <div class="mini-bar-row-bottom">
-          <p class="mini-desc" id="miniCardDesc">Đang tải tóm tắt cấu trúc giải phẫu...</p>
+        <div class="mini-bar-row-bottom" id="miniBarDescRow">
+          <div class="mini-desc-container">
+            <span class="mini-desc" id="miniCardDesc">Đang tải tóm tắt cấu trúc giải phẫu...</span>
+            <button type="button" class="mini-btn-expand" id="btnMiniExpand" title="Mở rộng xem chi tiết y khoa">
+              <span>Xem thêm</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
         </div>
       </div>
 
