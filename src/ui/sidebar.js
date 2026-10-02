@@ -32,6 +32,7 @@ import { parseVideoUrl } from '../data/atlasMediaManager.js';
 import { initInfoPanel, updateInfoPanelContent, setCompactMode } from './infoPanel.js';
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
+import { suggestOfflineForSystem } from './offlinePrompt.js';
 
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
@@ -292,6 +293,7 @@ export function initSystemsSidebar() {
         } else {
           await ensureSystemLoaded('visceral', group);
           subParts.forEach(id => showPart(id));
+          suggestOfflineForSystem(subType, null, state.viewer || window.viewer);
         }
         return;
       }
@@ -306,6 +308,7 @@ export function initSystemsSidebar() {
       cancelUnload(systemId);
       await ensureSystemLoaded(systemId, group);
       showSystem(systemId);
+      suggestOfflineForSystem(systemId, null, state.viewer || window.viewer);
     });
   });
 }

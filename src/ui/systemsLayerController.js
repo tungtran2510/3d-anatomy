@@ -11,6 +11,7 @@ import { setView, frameRegion } from '../viewer/camera.js';
 import { getSubSystemParts } from './sidebar.js';
 import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
+import { suggestOfflineForSystem } from './offlinePrompt.js';
 
 export const SYSTEM_CONFIGS = [
   { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 4, defaultLevel: 4, baseSystem: 'skeletal' },
@@ -852,6 +853,7 @@ if (typeof window !== 'undefined') {
 
 async function applySystemLevel(systemId, level, viewer) {
   if (loadingSystems.has(systemId)) return;
+  const prevLevel = Number(systemLevels[systemId]) || 0;
   systemLevels[systemId] = level;
 
   // Immediate optimistic UI response
@@ -859,6 +861,11 @@ async function applySystemLevel(systemId, level, viewer) {
 
   const cfg = SYSTEM_CONFIGS.find(s => s.id === systemId);
   const baseSys = cfg?.baseSystem || systemId;
+
+  // Politely suggest downloading offline if user activates/increments a heavy system (cơ, động mạch, tĩnh mạch...)
+  if (level > 0 && prevLevel <= 0) {
+    suggestOfflineForSystem(systemId, cfg?.nameVi || systemId, viewer);
+  }
 
   // 1. If level > 0 and base system not loaded, load it dynamically
   if (level > 0 && !state.loadedSystems.includes(baseSys)) {

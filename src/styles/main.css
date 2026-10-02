@@ -7857,7 +7857,7 @@ body.theme-dark .btn-fullscreen-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1600;
+  z-index: 2500 !important;
   padding: 16px;
 }
 .offline-modal-backdrop.hidden {
@@ -9429,18 +9429,18 @@ body.theme-dark .card-subtitle {
 /* Offline Download Suggestion Banner (LỆNH #10) */
 .offline-prompt-banner {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  max-width: 460px;
+  bottom: 80px;
+  right: 140px;
+  max-width: 420px;
   width: calc(100% - 32px);
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(2, 132, 199, 0.35);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 0 20px rgba(2, 132, 199, 0.15);
+  border: 1px solid rgba(2, 132, 199, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), 0 0 24px rgba(2, 132, 199, 0.2);
   border-radius: 14px;
   padding: 12px 14px;
-  z-index: 2200;
+  z-index: 2400;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -9448,9 +9448,9 @@ body.theme-dark .card-subtitle {
 }
 
 [data-theme="dark"] .offline-prompt-banner {
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(56, 189, 248, 0.25);
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 28px rgba(56, 189, 248, 0.3);
 }
 
 .offline-prompt-banner.animate-in {
@@ -9574,9 +9574,54 @@ body.theme-dark .card-subtitle {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.btn-prompt-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.btn-prompt-close:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+}
+
+[data-theme="dark"] .btn-prompt-close {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .btn-prompt-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+}
+
+.system-cache-item.highlight-target-pulse {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.35), 0 8px 24px rgba(2, 132, 199, 0.2) !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+  animation: targetPulseGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes targetPulseGlow {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.015); }
+}
+
 @media (max-width: 768px) {
   .offline-prompt-banner {
-    bottom: 64px;
+    bottom: 72px;
     left: 12px;
     right: 12px;
     margin: 0 auto;

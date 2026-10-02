@@ -11,7 +11,7 @@ import { triggerManualSync, checkPendingCount, showSyncToast } from '../utils/sy
 let offlineModalEl = null;
 let currentViewer = null;
 
-const SYSTEM_CATALOG = [
+export const SYSTEM_CATALOG = [
   {
     id: 'skeletal',
     nameVi: 'Hệ Xương & Khớp',
@@ -62,7 +62,7 @@ const SYSTEM_CATALOG = [
   }
 ];
 
-export async function openOfflineModal(viewer) {
+export async function openOfflineModal(viewer, targetSystemId = null) {
   currentViewer = viewer;
 
   if (!offlineModalEl) {
@@ -78,7 +78,7 @@ export async function openOfflineModal(viewer) {
   }
 
   offlineModalEl.classList.remove('hidden');
-  await renderModalContent();
+  await renderModalContent(targetSystemId);
 }
 
 export function closeOfflineModal() {
@@ -87,7 +87,7 @@ export function closeOfflineModal() {
   }
 }
 
-async function renderModalContent() {
+async function renderModalContent(targetSystemId = null) {
   if (!offlineModalEl) return;
 
   const storageInfo = await getStorageQuotaEstimate();
@@ -234,6 +234,33 @@ async function renderModalContent() {
   `;
 
   attachModalEvents();
+
+  if (targetSystemId) {
+    const baseMap = {
+      skeletal: 'skeletal',
+      joints: 'skeletal',
+      muscular: 'muscular',
+      nervous: 'nervous',
+      cardiovascular: 'cardiovascular',
+      arterial: 'cardiovascular',
+      venous: 'cardiovascular',
+      visceral: 'visceral',
+      respiratory: 'visceral',
+      digestive: 'visceral',
+      urinary_genital: 'visceral',
+      endocrine: 'visceral',
+      lymphatic: 'lymphatic'
+    };
+    const resolvedId = baseMap[targetSystemId] || targetSystemId;
+    const item = offlineModalEl.querySelector(`.system-cache-item[data-system="${resolvedId}"]`);
+    if (item) {
+      setTimeout(() => {
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        item.classList.add('highlight-target-pulse');
+        setTimeout(() => item.classList.remove('highlight-target-pulse'), 3500);
+      }, 100);
+    }
+  }
 }
 
 function attachModalEvents() {
@@ -316,12 +343,21 @@ async function downloadSingleSystem(sysId) {
     badge.textContent = 'Đang tải...';
   }
 
+const MODELS_CACHE_NAME = 'atlas-models-atlas-v1.0.0';
+
+async function getActiveModelsCache() {
+  if (!('caches' in window)) return null;
+  const keys = await caches.keys();
+  const found = keys.find(k => k.startsWith('atlas-models'));
+  return await caches.open(found || MODELS_CACHE_NAME);
+}
+
   try {
     for (const modelFile of sys.models) {
       const url = asset(`models/${modelFile}`);
       const res = await fetch(url);
-      if ('caches' in window) {
-        const cache = await caches.open('atlas-models-atlas-v6');
+      const cache = await getActiveModelsCache();
+      if (cache) {
         await cache.put(url, res);
       }
     }
@@ -338,8 +374,8 @@ async function deleteSingleSystem(sysId) {
   if (!sys) return;
 
   try {
-    if ('caches' in window) {
-      const cache = await caches.open('atlas-models-atlas-v6');
+    const cache = await getActiveModelsCache();
+    if (cache) {
       for (const modelFile of sys.models) {
         const url = asset(`models/${modelFile}`);
         await cache.delete(url);
@@ -368,6 +404,7 @@ async function downloadAllSystems() {
 
   let completed = 0;
   const total = SYSTEM_CATALOG.length;
+  const cache = await getActiveModelsCache();
 
   for (let i = 0; i < total; i++) {
     const sys = SYSTEM_CATALOG[i];
@@ -380,8 +417,7 @@ async function downloadAllSystems() {
       for (const modelFile of sys.models) {
         const url = asset(`models/${modelFile}`);
         const res = await fetch(url);
-        if ('caches' in window) {
-          const cache = await caches.open('atlas-models-atlas-v6');
+        if (cache) {
           await cache.put(url, res);
         }
       }
@@ -398,8 +434,7 @@ async function downloadAllSystems() {
     for (const jsonFile of ['data/systems.json', 'data/lexicon.json']) {
       const url = asset(jsonFile);
       const res = await fetch(url);
-      if ('caches' in window) {
-        const cache = await caches.open('atlas-models-atlas-v6');
+      if (cache) {
         await cache.put(url, res);
       }
     }
@@ -415,6 +450,7 @@ async function downloadAllSystems() {
     heroBtn.disabled = false;
   }
 
+  localStorage.setItem('offline_all_cached', '1');
   showSyncToast('🎉 Toàn bộ Atlas Giải Phẫu 3D đã sẵn sàng dùng 100% Offline kể cả khi không có mạng!', 'success');
 
   setTimeout(() => {
@@ -422,13 +458,52 @@ async function downloadAllSystems() {
   }, 1200);
 }
 
-async function getCachedUrlsFromSW() {
+export async function getCachedUrlsFromSW() {
   if (!('caches' in window)) return [];
   try {
-    const cache = await caches.open('atlas-models-atlas-v6');
-    const requests = await cache.keys();
-    return requests.map((r) => r.url);
+    const cacheNames = await caches.keys();
+    const urls = [];
+    for (const name of cacheNames) {
+      if (name.includes('models') || name.includes('atlas') || name.includes('static')) {
+        const cache = await caches.open(name);
+        const requests = await cache.keys();
+        requests.forEach(r => urls.push(r.url));
+      }
+    }
+    return urls;
   } catch {
     return [];
+  }
+}
+
+export async function isSystemCached(systemId) {
+  if (typeof window === 'undefined' || !('caches' in window)) return false;
+  if (localStorage.getItem('offline_all_cached') === '1') return true;
+
+  try {
+    const cachedUrls = await getCachedUrlsFromSW();
+    const baseMap = {
+      skeletal: 'skeletal',
+      joints: 'skeletal',
+      muscular: 'muscular',
+      nervous: 'nervous',
+      cardiovascular: 'cardiovascular',
+      arterial: 'cardiovascular',
+      venous: 'cardiovascular',
+      visceral: 'visceral',
+      respiratory: 'visceral',
+      digestive: 'visceral',
+      urinary_genital: 'visceral',
+      endocrine: 'visceral',
+      lymphatic: 'lymphatic'
+    };
+
+    const targetBase = baseMap[systemId] || systemId;
+    const catEntry = SYSTEM_CATALOG.find(s => s.id === targetBase);
+    if (!catEntry) return false;
+
+    return catEntry.models.every(m => cachedUrls.some(u => u.includes(m)));
+  } catch (err) {
+    return false;
   }
 }
