@@ -3030,6 +3030,136 @@ body.theme-dark .mini-desc {
   color: #94a3b8;
 }
 
+/* Specialized Intervertebral Disc Architecture Controls (Tripartite Anatomy) */
+.disc-subunits-section {
+  margin-bottom: 12px;
+}
+
+.disc-subunits-box {
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.95), rgba(224, 242, 254, 0.9));
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 10px rgba(14, 165, 233, 0.08);
+}
+
+[data-theme="dark"] .disc-subunits-box,
+body.theme-dark .disc-subunits-box {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(12, 74, 110, 0.35));
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.disc-subunits-header {
+  margin-bottom: 8px;
+}
+
+.disc-subunits-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #0369a1;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .disc-subunits-title,
+body.theme-dark .disc-subunits-title {
+  color: #38bdf8;
+}
+
+.disc-subunits-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.btn-disc-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(186, 230, 253, 0.9);
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .btn-disc-sub,
+body.theme-dark .btn-disc-sub {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(51, 65, 85, 0.8);
+}
+
+.btn-disc-sub:hover {
+  transform: translateY(-1px);
+  border-color: #0284c7;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.15);
+}
+
+.btn-disc-sub.active {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  border-color: #0284c7;
+  box-shadow: 0 3px 12px rgba(2, 132, 199, 0.35);
+}
+
+.btn-disc-sub.active .disc-sub-name,
+.btn-disc-sub.active .disc-sub-latin {
+  color: #ffffff !important;
+}
+
+.disc-sub-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.disc-sub-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.disc-sub-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .disc-sub-name,
+body.theme-dark .disc-sub-name {
+  color: #f1f5f9;
+}
+
+.disc-sub-latin {
+  font-size: 10px;
+  font-style: italic;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .disc-sub-latin,
+body.theme-dark .disc-sub-latin {
+  color: #94a3b8;
+}
+
+.disc-subunits-note {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #0369a1;
+}
+
+[data-theme="dark"] .disc-subunits-note,
+body.theme-dark .disc-subunits-note {
+  color: #7dd3fc;
+}
+
 @media (min-width: 1025px) {
   .selection-card.compact-mode {
     bottom: 24px;

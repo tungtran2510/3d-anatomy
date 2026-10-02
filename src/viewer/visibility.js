@@ -325,8 +325,26 @@ function restoreMaterial(partId) {
 const GHOST_OPACITY = 0.12;
 let ghostedIds = null;
 
+export function getAnatomicalCompanions(partId) {
+  if (!partId) return [];
+  if (partId.startsWith('Intervertebral disc ')) {
+    const level = partId.slice('Intervertebral disc '.length);
+    return [`Nucleus pulposus ${level}`];
+  }
+  if (partId.startsWith('Nucleus pulposus ')) {
+    const level = partId.slice('Nucleus pulposus '.length);
+    return [`Intervertebral disc ${level}`];
+  }
+  return [];
+}
+
 export function ghostAllExcept(partId) {
   const keep = new Set(withDescendants(partId));
+  const companions = getAnatomicalCompanions(partId);
+  companions.forEach(cid => {
+    withDescendants(cid).forEach(descId => keep.add(descId));
+  });
+
   const ghosted = new Set();
 
   getMeshRegistry().forEach((node, id) => {
@@ -345,7 +363,7 @@ export function ghostAllExcept(partId) {
     ownMeshesOf(id).forEach(mesh => releaseMaterial(mesh, id));
   });
 
-  // The selected structure must read as solid even where it was see-through.
+  // The selected structure and its anatomical companions must read as solid/translucent even where they were see-through.
   keep.forEach(id => restoreMaterial(id));
 
   notify('ghostModeChanged', partId);
@@ -371,36 +389,76 @@ export function clearGhost() {
 // Highlighting only touches `emissive`, so it can be undone without disturbing
 // a transparency the user set.
 export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
+  const isDisc = partId.startsWith('Intervertebral disc ');
+  const isNucleus = partId.startsWith('Nucleus pulposus ');
+
   ownMeshesOf(partId).forEach(mesh => {
     // Materials are shared, so tinting one in place would light up every mesh
     // using it; the highlighted structure gets its own copy instead.
     ownMaterials(mesh).forEach(mat => {
       mat.emissive = new THREE.Color(color);
       mat.emissiveIntensity = intensity;
+      if (isDisc) {
+        mat.transparent = true;
+        mat.opacity = 0.62; // Translucent outer anulus fibrosus so inner nucleus is clearly visible!
+        mat.depthWrite = true;
+      }
       mat.needsUpdate = true;
     });
   });
+
+  // If selecting the Disc, also illuminate its inner companion Nucleus pulposus!
+  if (isDisc) {
+    const level = partId.slice('Intervertebral disc '.length);
+    const nucleusId = `Nucleus pulposus ${level}`;
+    ownMeshesOf(nucleusId).forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.color = new THREE.Color(0x0ea5e9); // Vibrant hydrogel blue
+        mat.emissive = new THREE.Color(0x38bdf8); // Bioluminescent inner nucleus glow
+        mat.emissiveIntensity = 0.9;
+        mat.needsUpdate = true;
+      });
+    });
+  } else if (isNucleus) {
+    // If selecting Nucleus directly, keep its outer Anulus fibrosus visible as a protective translucent ring!
+    const level = partId.slice('Nucleus pulposus '.length);
+    const discId = `Intervertebral disc ${level}`;
+    ownMeshesOf(discId).forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = true;
+        mat.opacity = 0.4; // Gentle translucent boundary
+        mat.emissive = new THREE.Color(0x64748b);
+        mat.emissiveIntensity = 0.25;
+        mat.needsUpdate = true;
+      });
+    });
+  }
 }
 
 export function clearHighlight(partId) {
-  ownMeshesOf(partId).forEach(mesh => {
-    if (!mesh.userData.ownsMaterial) return;
+  const companions = getAnatomicalCompanions(partId);
+  [partId, ...companions].forEach(id => {
+    ownMeshesOf(id).forEach(mesh => {
+      if (!mesh.userData.ownsMaterial) return;
 
-    const opacity = getPartState(partId)?.opacity ?? 1;
+      const opacity = getPartState(id)?.opacity ?? 1;
 
-    // A structure the user made transparent keeps its own material; one that
-    // was only hovered goes back to the shared one.
-    if (opacity < 1) {
-      materialsOf(mesh).forEach(mat => {
-        const base = mesh.userData.baseMaterial;
-        const source = Array.isArray(base) ? base[0] : base;
-        if (source?.emissive) mat.emissive.copy(source.emissive);
-        mat.emissiveIntensity = source?.emissiveIntensity ?? 1;
-        mat.needsUpdate = true;
-      });
-    } else {
-      releaseMaterial(mesh, partId);
-    }
+      // A structure the user made transparent keeps its own material; one that
+      // was only hovered goes back to the shared one.
+      if (opacity < 1) {
+        materialsOf(mesh).forEach(mat => {
+          const base = mesh.userData.baseMaterial;
+          const source = Array.isArray(base) ? base[0] : base;
+          if (source?.emissive) mat.emissive.copy(source.emissive);
+          mat.emissiveIntensity = source?.emissiveIntensity ?? 1;
+          mat.needsUpdate = true;
+        });
+      } else {
+        releaseMaterial(mesh, id);
+      }
+    });
   });
 }
 

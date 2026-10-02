@@ -315,6 +315,9 @@ export function updateInfoPanelContent(part, viewer) {
   // Stop any previous active speech synthesis when changing structure
   stopCurrentSpeech();
 
+  // 2a. Render Interactive Disc Subunits (Vòng sợi & Nhân nhầy)
+  renderDiscSubunitsSection(part, clinical, mainName, viewer);
+
   // 2b. Render Dynamic Flow Pathway (Đường đi & Chu trình giải phẫu - Dịch não tủy, Gan mật tụy, Tim mạch)
   renderDynamicPathway(part, clinical, mainName);
 
@@ -876,4 +879,61 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
       openQuickVideoModal(part.id, mainName, () => updateInfoPanelContent(part, viewer));
     });
   }
+}
+
+function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
+  const container = document.getElementById('cardDiscSubunitsSection');
+  if (!container) return;
+
+  const partId = part?.id || '';
+  const isDisc = partId.startsWith('Intervertebral disc ');
+  const isNucleus = partId.startsWith('Nucleus pulposus ');
+
+  if (!isDisc && !isNucleus) {
+    container.classList.add('hidden');
+    container.innerHTML = '';
+    return;
+  }
+
+  container.classList.remove('hidden');
+  const level = isDisc ? partId.slice('Intervertebral disc '.length) : partId.slice('Nucleus pulposus '.length);
+  const anulusId = `Intervertebral disc ${level}`;
+  const nucleusId = `Nucleus pulposus ${level}`;
+
+  container.innerHTML = `
+    <div class="disc-subunits-box">
+      <div class="disc-subunits-header">
+        <span class="disc-subunits-title">🔬 CẤU TRÚC GIẢI PHẪU ĐĨA ĐỆM TẦNG ${level}:</span>
+      </div>
+      <div class="disc-subunits-buttons">
+        <button type="button" class="btn-disc-sub ${isDisc ? 'active' : ''}" id="btnSelectAnulus" title="Xem Vòng sợi ngoài (Anulus fibrosus)">
+          <span class="disc-sub-icon">⭕</span>
+          <div class="disc-sub-info">
+            <span class="disc-sub-name">Vòng sợi ngoài</span>
+            <span class="disc-sub-latin">Anulus fibrosus (15–25 lá sợi)</span>
+          </div>
+        </button>
+        <button type="button" class="btn-disc-sub ${isNucleus ? 'active' : ''}" id="btnSelectNucleus" title="Xem Nhân nhầy trung tâm (Nucleus pulposus)">
+          <span class="disc-sub-icon">💧</span>
+          <div class="disc-sub-info">
+            <span class="disc-sub-name">Nhân nhầy trung tâm</span>
+            <span class="disc-sub-latin">Nucleus pulposus (Lõi hydrogel 80% nước)</span>
+          </div>
+        </button>
+      </div>
+      <div class="disc-subunits-note">
+        💡 <em>Mô hình 3D hiển thị xuyên thấu: Vòng sợi ngoài bán mờ bọc trọn lấy nhân nhầy phát sáng bên trong. Chạm vào từng phần trên để khảo sát riêng biệt.</em>
+      </div>
+    </div>
+  `;
+
+  container.querySelector('#btnSelectAnulus')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectPartById(anulusId, viewer);
+  });
+
+  container.querySelector('#btnSelectNucleus')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectPartById(nucleusId, viewer);
+  });
 }

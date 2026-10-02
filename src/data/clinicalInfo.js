@@ -211,6 +211,133 @@ export const CLINICAL_DATABASE = {
     videoId: 'yU8C5r4N8w0'
   },
 
+  // === KHỚP GIAN ĐỐT SỐNG & ĐĨA ĐỆM (INTERVERTEBRAL DISCS & NUCLEUS PULPOSUS) ===
+  'Intervertebral disc': {
+    nameVi: 'Đĩa đệm gian đốt sống (Gồm Vòng sợi & Nhân nhầy)',
+    nameLatin: 'Discus intervertebralis (TA2: 1222)',
+    nameEn: 'Intervertebral disc',
+    regionVi: 'Cột sống & Thân mình',
+    systemVi: 'Khớp & Dây chằng (Hệ Vận Động)',
+    description: 'Khớp sụn sợi phức tạp (Symphysis) nằm xen kẽ giữa hai thân đốt sống kế cận. Cấu trúc chuẩn y khoa gồm 3 thành phần không thể tách rời: (1) Vòng sợi ngoài (Anulus fibrosus) gồm 15-25 lá sụn sợi collagen Type I đồng tâm đan chéo so le góc 30°; (2) Nhân nhầy trung tâm (Nucleus pulposus) là khối hydrogel ngậm 80% nước giàu Proteoglycan/Aggrecan chịu nén thủy tĩnh; (3) Mâm sụn trên-dưới (Cartilaginous Endplates) bằng sụn trong hyaline thẩm thấu nuôi dưỡng đĩa đệm (mô vô mạch).',
+    function: 'Hoạt động như ổ bi thủy tĩnh giảm chấn (Hydraulic shock absorber) hấp thu và triệt tiêu xung lực nén ép dọc trục, chuyển hóa lực nén thành lực căng chu vi phân tán đều 360° lên các lá vòng sợi; cho phép các đốt sống uốn gập, ngửa, nghiêng và xoay nhịp nhàng.',
+    clinical: 'Cơ quan chịu áp lực cơ học lớn nhất và thoái hóa sớm nhất cơ thể. Rách vòng sợi (Annular tear) gây đau thắt lưng do đĩa đệm. Thoát vị đĩa đệm (Herniated Nucleus Pulposus - HNP) xảy ra khi nhân nhầy thoát ra qua rách vòng sợi (thường là góc sau - bên do dây chằng dọc sau PLL yếu) chèn ép rễ thần kinh tủy sống gây hội chứng đau rễ (Radiculopathy), đau thần kinh tọa (Sciatica), hoặc hội chứng chùm đuôi ngựa cấp cứu.',
+    relationsText: 'Nằm kẹp giữa hai thân đốt sống kế cận; phía trước được gia cố bởi dây chằng dọc trước (ALL), phía sau tiếp giáp dây chằng dọc sau (PLL), ống sống chứa màng tủy và hai bên là lỗ liên hợp nơi rễ thần kinh thoát ra.',
+    relations: {
+      muscles: 'Cơ dựng sống (Erector spinae), cơ nhiều chân (Multifidus), cơ vuông thắt lưng, cơ thắt lưng chậu.',
+      bones: 'Thân đốt sống phía trên và thân đốt sống phía dưới qua mâm sụn đầu đốt.',
+      nerves: 'Thần kinh xoang đốt sống (Sinuvertebral nerve / Luschka) chi phối 1/3 ngoài vòng sợi; các rễ thần kinh tủy sống thoát ra ngay tại lỗ gian đốt sống tương ứng.',
+      vessels: 'Mô vô mạch hoàn toàn ở người trưởng thành (Avascular); dinh dưỡng thẩm thấu khuếch tán thụ động từ mao mạch màng xương thân đốt qua mâm sụn hyaline.'
+    },
+    lessonLink: '/cot-song/tu-the-va-van-dong',
+    lessonTitle: 'Đĩa Đệm Cột Sống: Cơ Sinh Học, Cấu Trúc Vi Thể & Phòng Ngừa Thoát Vị',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Intervertebral disc L3-L4': {
+    nameVi: 'Đĩa đệm L3-L4 (Gồm Vòng sợi & Nhân nhầy)',
+    nameLatin: 'Discus intervertebralis L3-L4 (TA2: 1222)',
+    nameEn: 'Intervertebral disc L3-L4',
+    regionVi: 'Cột sống thắt lưng',
+    systemVi: 'Khớp & Dây chằng (Hệ Vận Động)',
+    description: 'Đĩa đệm gian đốt sống nằm giữa thân đốt sống thắt lưng L3 và L4. Cấu tạo chuẩn giải phẫu gồm: (1) Vòng sợi ngoài (Anulus fibrosus) với 15-25 lớp lá sợi collagen Type I đồng tâm xếp so le góc 30° dẻo dai bọc lấy chu vi; (2) Nhân nhầy trung tâm (Nucleus pulposus) dạng gel keo ngậm nước (80% nước) giàu Aggrecan nằm lệch về phía sau; (3) Mâm sụn hyaline kẹp trên-dưới tiếp giáp trực tiếp bè xương thân đốt L3 và L4 để thẩm thấu dưỡng chất.',
+    function: 'Hấp thu và phân tán tải trọng cơ thể dồn từ nửa trên cơ thể xuống khung chậu; chuyển lực ép nén dọc trục thành lực căng chu vi; cho phép cột sống thắt lưng gập duỗi và nghiêng linh hoạt.',
+    clinical: 'Thoát vị đĩa đệm L3-L4 thể sau - bên (chiếm khoảng 5-10% các ca thoát vị thắt lưng) thường chèn ép rễ thần kinh L4 (L4 traversing root): gây tê bì, giảm cảm giác mặt trước - trong cẳng chân và trước gối; yếu cơ tứ đầu đùi (Quadriceps) khó duỗi cẳng chân, leo thang khó; giảm hoặc mất phản xạ gân xương bánh chè (Patellar reflex).',
+    relationsText: 'Kẹp giữa thân đốt L3 (ở trên) và L4 (ở dưới); phía trước có dây chằng dọc trước và động mạch chủ bụng; phía sau có dây chằng dọc sau, ống sống chứa chùm đuôi ngựa; hai bên tiếp giáp lỗ liên hợp L3-L4 nơi rễ thần kinh L3 thoát ra ngoài.',
+    relations: {
+      muscles: 'Cơ thắt lưng chậu (Psoas major), cơ nhiều chân thắt lưng (Multifidus), cơ vuông thắt lưng (Quadratus lumborum).',
+      bones: 'Thân đốt sống thắt lưng L3 (phía trên) và thân đốt sống thắt lưng L4 (phía dưới).',
+      nerves: 'Rễ thần kinh L3 (thoát ra lỗ liên hợp L3-L4), rễ thần kinh L4 (băng qua chèn ép khi thoát vị sau bên), chùm đuôi ngựa (Cauda equina).',
+      vessels: 'Các nhánh động mạch thắt lưng (Lumbar arteries) từ động mạch chủ bụng, đám rối tĩnh mạch đốt sống trong (Batson).'
+    },
+    lessonLink: '/cot-song/tu-the-va-van-dong',
+    lessonTitle: 'Đĩa Đệm Thắt Lưng L3-L4: Phân Tích Cơ Học & Rễ Thần Kinh L4',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Intervertebral disc L4-L5': {
+    nameVi: 'Đĩa đệm L4-L5 (Gồm Vòng sợi & Nhân nhầy)',
+    nameLatin: 'Discus intervertebralis L4-L5 (TA2: 1222)',
+    nameEn: 'Intervertebral disc L4-L5',
+    regionVi: 'Cột sống thắt lưng',
+    systemVi: 'Khớp & Dây chằng (Hệ Vận Động)',
+    description: 'Đĩa đệm gian đốt sống chịu áp lực tải trọng cơ học và biên độ vận động lớn nhất vùng thắt lưng. Gồm vỏ bọc vòng sợi (Anulus fibrosus) đan chéo nhiều lớp và nhân nhầy (Nucleus pulposus) lệch tâm phía sau.',
+    function: 'Là tâm điểm uốn gập và xoay của vùng thắt lưng; triệt tiêu lực giằng xé khi nâng vật nặng.',
+    clinical: 'Vị trí có tỷ lệ thoát vị đĩa đệm cao nhất (chiếm 45-50% tổng số ca thoát vị cột sống). Thoát vị thể sau-bên chèn ép rễ L5: gây đau thần kinh tọa lan mặt ngoài đùi xuống cẳng chân, tê bì mu bàn chân và ngón cái; yếu cơ duỗi ngón cái dài (EHL) và cơ chày trước dẫn đến bàn chân rũ (Foot drop).',
+    relationsText: 'Kẹp giữa thân đốt L4 và L5; liên tiếp với dây chằng dọc trước ở mặt trước và dây chằng dọc sau ở mặt sau; sát lỗ liên hợp L4-L5 nơi rễ L4 thoát ra và ống sống nơi rễ L5 đi qua.',
+    relations: {
+      muscles: 'Cơ dựng gai sống, cơ nhiều chân, cơ thắt lưng lớn.',
+      bones: 'Thân đốt sống L4 (ở trên) và thân đốt sống L5 (ở dưới).',
+      nerves: 'Rễ thần kinh L5 (chèn ép phổ biến nhất), rễ L4, chùm đuôi ngựa.',
+      vessels: 'Động mạch thắt lưng thứ 4, tĩnh mạch thắt lưng, đám rối tĩnh mạch ngoài màng cứng.'
+    },
+    lessonLink: '/cot-song/tu-the-va-van-dong',
+    lessonTitle: 'Thoát Vị Đĩa Đệm L4-L5: Cơ Chế Chèn Ép Rễ L5 & Bàn Chân Rũ',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Intervertebral disc L5-S1': {
+    nameVi: 'Đĩa đệm L5-S1 (Gồm Vòng sợi & Nhân nhầy)',
+    nameLatin: 'Discus intervertebralis L5-S1 (TA2: 1222)',
+    nameEn: 'Intervertebral disc L5-S1',
+    regionVi: 'Chuyển đoạn Thắt lưng - Cùng',
+    systemVi: 'Khớp & Dây chằng (Hệ Vận Động)',
+    description: 'Đĩa đệm hình chêm dày nhất nằm tại góc nhô thắt lưng - cùng (Lumbosacral promontory), nối giữa đốt sống di động L5 và khối xương cùng bất động S1.',
+    function: 'Hấp thu lực trượt ra trước (Shear stress) do độ nghiêng xương cùng; truyền toàn bộ trọng lượng thân trên sang khung chậu.',
+    clinical: 'Vị trí thoát vị phổ biến thứ nhì (chiếm 40-45% ca thoát vị). Chèn ép rễ S1: gây đau buốt mặt sau đùi lan xuống bắp chân, gót chân và bờ ngoài bàn chân; yếu cơ tam đầu cẳng chân (không kiễng gót chân được); mất phản xạ gân gót (Achilles reflex).',
+    relationsText: 'Tiếp giáp thân L5 ở trên và mặt trên nền xương cùng S1 ở dưới; phía trước là ngã ba động mạch chủ bụng chia thành hai động mạch chậu chung.',
+    relations: {
+      muscles: 'Cơ nhiều chân cùng, cơ mông lớn, cơ thắt lưng chậu.',
+      bones: 'Thân đốt sống L5 và nền xương cùng S1.',
+      nerves: 'Rễ thần kinh S1 (chèn ép), rễ L5, dây thần kinh tọa, chùm đuôi ngựa.',
+      vessels: 'Động mạch và tĩnh mạch cùng giữa, mạch máu chậu chung.'
+    },
+    lessonLink: '/cot-song/tu-the-va-van-dong',
+    lessonTitle: 'Đĩa Đệm L5-S1: Áp Lực Góc Nhô & Tổn Thương Rễ Thần Kinh S1',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Nucleus pulposus': {
+    nameVi: 'Nhân nhầy đĩa đệm (Lõi hydrogel giảm chấn)',
+    nameLatin: 'Nucleus pulposus (TA2: 1224)',
+    nameEn: 'Nucleus pulposus',
+    regionVi: 'Cột sống & Thân mình',
+    systemVi: 'Khớp & Dây chằng (Hệ Vận Động)',
+    description: 'Lõi chất keo sinh học bán lỏng nằm tại tâm (hơi lệch sau ở thắt lưng) bên trong lòng vòng sợi của đĩa đệm. Cấu tạo từ mạng lưới sợi Collagen Type II mảnh ngâm trong dung dịch Proteoglycan (chủ yếu là Aggrecan) có điện tích âm cao, ngậm giữ 70-85% nước tạo nên áp suất trương nở nội tại.',
+    function: 'Đóng vai trò như ổ bi thủy tĩnh (spherical hydrostatic pivot) và bộ đệm thủy lực giảm xóc: khi chịu tải trọng nén ép dọc trục, nhân nhầy dẹt lại và biến đổi lực nén thành lực căng phân bố đều ra chu vi lên vòng sợi; cho phép các mặt đốt sống trượt và nghiêng êm ái.',
+    clinical: 'Theo tuổi tác, lượng proteoglycan giảm khiến nhân nhầy mất nước (Desiccation), mất tính đàn hồi và giảm chiều cao đĩa đệm (thoái hóa). Khi nhân nhầy bị đùn đẩy qua các khe nứt rách của vòng sợi sẽ tạo nên bệnh cảnh Thoát vị đĩa đệm (Herniation), giải phóng các cytokin tiền viêm (TNF-alpha, IL-1, PGE2) kích thích trực tiếp gây viêm đau dữ dội rễ thần kinh.',
+    relationsText: 'Được bọc kín hoàn toàn 360 độ bởi các lá sụn sợi của vòng sợi (Anulus fibrosus); hai mặt trên dưới tiếp giáp mâm sụn hyaline của thân đốt sống.',
+    relations: {
+      muscles: 'Gián tiếp điều phối tải trọng cùng hệ cơ dựng sống và cơ nhiều chân.',
+      bones: 'Được giới hạn phía trên và dưới bởi thân các đốt sống liên kết.',
+      nerves: 'Bản thân nhân nhầy không có thụ thể thần kinh; nhưng khi thoát vị ra ngoài sẽ chèn ép cơ học và gây viêm hóa học lên rễ thần kinh tủy sống.',
+      vessels: 'Mô hoàn toàn vô mạch; phụ thuộc 100% vào sự khuếch tán dưỡng chất qua mâm sụn.'
+    },
+    lessonLink: '/cot-song/tu-the-va-van-dong',
+    lessonTitle: 'Nhân Nhầy Đĩa Đệm: Cơ Chế Thủy Lực & Quá Trình Thoát Vị Sinh Học',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Nucleus pulposus L3-L4': {
+    nameVi: 'Nhân nhầy đĩa đệm L3-L4',
+    nameLatin: 'Nucleus pulposus L3-L4 (TA2: 1224)',
+    nameEn: 'Nucleus pulposus L3-L4',
+    regionVi: 'Cột sống thắt lưng',
+    systemVi: 'Khớp & Dây chằng (Hệ Vận Động)',
+    description: 'Lõi keo thủy lực giàu Proteoglycan ngậm 80% nước nằm bên trong vòng sợi giữa đốt sống thắt lưng L3 và L4.',
+    function: 'Bộ đệm triệt tiêu xung lực nén ép tại tầng vận động L3-L4; phân bổ áp lực đồng đều lên các lá vòng sợi.',
+    clinical: 'Khi thoát vị ra sau - bên, khối nhân nhầy L3-L4 chèn ép rễ thần kinh L4 gây hội chứng đau rễ L4 (yếu cơ tứ đầu đùi, giảm phản xạ bánh chè, tê mặt trước cẳng chân).',
+    relationsText: 'Nằm trong lòng vòng sợi đĩa đệm L3-L4; tiếp xúc mâm sụn thân đốt L3 ở trên và L4 ở dưới.',
+    relations: {
+      muscles: 'Được trợ lực bởi cơ thắt lưng chậu và cơ nhiều chân.',
+      bones: 'Thân đốt sống thắt lưng L3 và L4.',
+      nerves: 'Tiếp cận rễ thần kinh L4 khi có biến dạng thoát vị ra sau - bên.',
+      vessels: 'Nhận dưỡng chất khuếch tán từ mạch máu xương thân đốt L3-L4.'
+    },
+    lessonLink: '/cot-song/tu-the-va-van-dong',
+    lessonTitle: 'Nhân Nhầy L3-L4: Cơ Chế Biến Dạng & Chèn Ép Rễ L4',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
   'Coccyx': {
     nameVi: 'Xương cụt (Co1 - Co4)',
     nameLatin: 'Os coccygis (TA2: 1068)',
@@ -1197,6 +1324,32 @@ function generateFallbackAcademicData(partId, baseName, passedNom) {
     nerves = 'Được chi phối vận động và cảm giác bởi các sợi thần kinh vận động tương ứng.';
     vessels = 'Được tưới máu dồi dào bởi nhánh động mạch cơ và mạng mao mạch dày đặc.';
     clin = 'Căng rách sợi cơ, co thắt mạn tính hình thành điểm đau (Trigger points), teo cơ do bất động lâu ngày.';
+  } else if (/intervertebral disc|nucleus pulposus|anulus fibrosus|đĩa đệm|nhân nhầy|vòng sợi/i.test(lower) || /discus intervertebralis/i.test(nameLatin)) {
+    systemVi = 'Khớp & Dây chằng (Đĩa Đệm Cột Sống)';
+    const isNucleusOnly = /nucleus pulposus|nhân nhầy/i.test(lower);
+    const isAnulusOnly = /anulus fibrosus|vòng sợi/i.test(lower);
+    const levelMatch = cleanBase.match(/([CLTS]\d+-[CLTS]\d+)/i) || cleanBase.match(/(C[1-7]|T[1-12]|L[1-5]|S1)/i);
+    const levelStr = levelMatch ? levelMatch[0].toUpperCase() : '';
+
+    if (isNucleusOnly) {
+      desc = `Nhân nhầy ${levelStr ? 'tầng ' + levelStr : 'đĩa đệm'} (Nucleus pulposus) là khối hydrogel sinh học dạng keo nhớt nằm ở tâm (lệch sau ở thắt lưng) bên trong lòng vòng sợi của đĩa đệm. Cấu tạo giàu Proteoglycan (Aggrecan) ngậm 70-85% nước và mạng lưới sợi Collagen Type II mảnh.`;
+      func = 'Hoạt động như một đệm thủy lực bán lỏng chịu nén (hydraulic shock absorber), chuyển đổi áp lực nén ép dọc trục thành lực căng chu vi phân tán đều 360 độ lên các lá vòng sợi; đóng vai trò then chốt trong giảm chấn động và hấp thu xung lực khi vận động.';
+      clin = `Thoát vị đĩa đệm (Herniated Nucleus Pulposus - HNP) xảy ra khi nhân nhầy thoát ra ngoài qua vết rách của vòng sợi. Tại ${levelStr || 'cột sống'}, nhân nhầy chèn ép trực tiếp rễ thần kinh tủy sống gây đau rễ (Radiculopathy), tê bì, mất phản xạ gân xương và teo cơ tương ứng.`;
+    } else if (isAnulusOnly) {
+      desc = `Vòng sợi ${levelStr ? 'tầng ' + levelStr : 'đĩa đệm'} (Anulus fibrosus) là vỏ bọc sụn sợi ngoại vi dẻo dai bọc kín nhân nhầy. Cấu tạo từ 15–25 lớp lá sợi collagen đồng tâm (lamellae), các sợi Collagen Type I xếp bắt chéo nhau góc 30°/120° so le qua từng lớp.`;
+      func = 'Chống lại lực xoắn vặn (torsion), lực xé rách (shear) và giữ áp lực nội tại không cho nhân nhầy phòi ra ngoài; liên kết chặt chẽ hai thân đốt sống qua mâm sụn đầu đốt.';
+      clin = `Rách vòng sợi (Annular tear/fissure) là nguồn gốc hàng đầu của đau thắt lưng do đĩa đệm (Discogenic pain) do kích thích mạt thần kinh sinuvertebral. Khi rách hoàn toàn các lớp ngoài, nhân nhầy sẽ thoát vị ra ngoài chèn ép thần kinh.`;
+    } else {
+      desc = `Đĩa đệm gian đốt sống ${levelStr || ''} (Discus intervertebralis) là khớp sụn sợi phức tạp liên kết hai thân đốt sống kế cận. Cấu trúc chuẩn y khoa gồm 3 thành phần không thể tách rời: (1) Vòng sợi ngoài (Anulus fibrosus) gồm 15-25 lá collagen đan chéo; (2) Nhân nhầy trung tâm (Nucleus pulposus) là lõi hydrogel ngậm 80% nước chịu nén; (3) Mâm sụn trên-dưới (Cartilaginous Endplates) thẩm thấu nuôi dưỡng.`;
+      func = 'Triệt tiêu xung lực cơ học dọc trục cột sống, cho phép uốn cong, nghiêng, xoay linh hoạt giữa các đốt sống mà không làm tổn thương bè xương; đóng vai trò ổ bi thủy tĩnh giảm chấn.';
+      clin = `Thoái hóa đĩa đệm (DDD), rách vòng sợi, và thoát vị đĩa đệm (HNP) tại ${levelStr || 'cột sống'}. Thoát vị sau - bên thường chèn ép rễ thần kinh tương ứng gây hội chứng rễ (Radiculopathy), đau rát dọc chi dưới, nặng có thể gây hội chứng chùm đuôi ngựa (Cauda equina).`;
+    }
+
+    relationsText = `Nằm trong khoang gian đốt sống giữa hai thân đốt sống kế tiếp nhau; phía trước được che chở bởi dây chằng dọc trước (ALL), phía sau tiếp giáp dây chằng dọc sau (PLL), ống sống chứa màng tủy, và hai bên là lỗ liên hợp nơi rễ thần kinh thoát ra.`;
+    muscles = 'Được bảo vệ và trợ lực bởi hệ cơ dựng sống (Erector spinae), cơ nhiều chân (Multifidus), cơ thắt lưng chậu và cơ vuông thắt lưng.';
+    bones = `Gắn kết chặt chẽ với mâm sụn của hai thân đốt sống kế cận ${levelStr ? '(' + levelStr + ')' : ''} qua các sợi Sharpey bám sâu vào bè xương.`;
+    nerves = 'Phần ngoài vòng sợi được chi phối cảm giác bởi thần kinh xoang đốt sống (Sinuvertebral nerve / Luschka); khi tổn thương có thể chèn ép trực tiếp rễ thần kinh tủy sống lân cận.';
+    vessels = 'Đĩa đệm người trưởng thành là mô vô mạch hoàn toàn (avascular); việc trao đổi chất dinh dưỡng, glucose và oxy hoàn toàn phụ thuộc vào sự khuếch tán qua mâm sụn đầu đốt (Cartilaginous endplates).';
   } else if (isBoneJoint) {
     systemVi = (nameVi.startsWith('Sụn') || /cartilage|meniscus/i.test(lower)) ? 'Hệ Sụn Khớp' : ((nameVi.startsWith('Dây chằng') || /ligament/i.test(lower)) ? 'Hệ Dây Chằng' : 'Hệ Xương');
     desc = `Cấu trúc xương/sụn vững chắc ${nameVi} (${cleanBase}), cấu tạo từ khung chất nền khoáng hóa và tế bào chuyên biệt.`;
