@@ -48,6 +48,8 @@ function releaseMaterial(mesh, partId) {
 
 // Ghosting touches nearly every mesh at once, so it uses one shared faded
 // variant per source material — 65 of them, not one per mesh.
+// GHOST_OPACITY = 0.035 ensures background structures remain transparent and clear without thick milky haze
+const GHOST_OPACITY = 0.035;
 const ghostVariants = new WeakMap();
 
 function ghostVariantOf(material) {
@@ -322,7 +324,6 @@ function restoreMaterial(partId) {
 // On a 277-piece skeleton an emissive tint on an occluded structure is simply
 // not visible, so selecting also drops everything else back to a ghost. The
 // user's own transparency settings are restored from partStates when it clears.
-const GHOST_OPACITY = 0.12;
 let ghostedIds = null;
 
 export function getAnatomicalCompanions(partId) {

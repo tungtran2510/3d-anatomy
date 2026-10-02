@@ -4,7 +4,7 @@ import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo 
 import { getMeshRegistry, getPickTargets, getStructure } from './loadModel.js';
 import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart, restoreAllParts, setPartTransparency } from './visibility.js';
 import { focusOnMesh, zoomIntoMesh, zoomOutToOverview } from './camera.js';
-import { showCallout, hideCallout } from '../ui/callout.js';
+import { showCallout, hideCallout, isCalloutVisible } from '../ui/callout.js';
 import { loadDefinitions } from '../data/anatomy.js';
 import { handleQuizClick } from '../ui/quiz.js';
 import { addToHistory } from '../state/bookmarks.js';
@@ -144,6 +144,18 @@ function onClick(event) {
       viewer.render();
       return;
     }
+
+    // Toggle callout text when tapping on the structure that is already selected
+    if (state.selectedPart && state.selectedPart.id === partId) {
+      if (isCalloutVisible()) {
+        hideCallout();
+      } else {
+        showCallout(partId, state.selectedPart.displayName, createCalloutActions(viewer));
+      }
+      viewer.render();
+      return;
+    }
+
     selectPart(partId, viewer);
   } else {
     // Clicked on background - deselect
@@ -254,6 +266,17 @@ function onTouchEnd(event) {
       viewer.render();
       return;
     }
+    // Toggle callout text when tapping on the structure that is already selected
+    if (state.selectedPart && state.selectedPart.id === partId) {
+      if (isCalloutVisible()) {
+        hideCallout();
+      } else {
+        showCallout(partId, state.selectedPart.displayName, createCalloutActions(viewer));
+      }
+      viewer.render();
+      return;
+    }
+
     selectPart(partId, viewer);
   } else {
     deselectPart();
@@ -323,6 +346,40 @@ export function notifySelectionHistoryChanged() {
   }
 }
 
+function createCalloutActions(viewer) {
+  return {
+    zoom: () => {
+      zoomIntoCurrentSelection(viewer);
+    },
+    info: () => {
+      const card = document.getElementById('selectionCard');
+      if (card) {
+        card.classList.remove('hidden');
+        window.dispatchEvent(new CustomEvent('expand-selection-card'));
+      }
+    },
+    isolate: id => {
+      pushUndo({
+        type: 'isolate',
+        partId: id,
+        prevIsolated: state.isolatedPart || null
+      });
+      isolatePart(id);
+      viewer?.render();
+    },
+    hide: id => {
+      pushUndo({
+        type: 'hide',
+        partId: id
+      });
+      hidePart(id);
+      deselectPart();
+      viewer?.render();
+    },
+    close: () => hideCallout()
+  };
+}
+
 export function selectPart(partId, viewer, skipHistory = false, skipCamera = false) {
   // Record selection history stack
   if (!skipHistory) {
@@ -370,37 +427,7 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
   // readable, and the camera eases in to answer "where is it".
   ghostAllExcept(partId);
 
-  showCallout(partId, partData.displayName, {
-    zoom: () => {
-      zoomIntoCurrentSelection(viewer);
-    },
-    info: () => {
-      const card = document.getElementById('selectionCard');
-      if (card) {
-        card.classList.remove('hidden');
-        window.dispatchEvent(new CustomEvent('expand-selection-card'));
-      }
-    },
-    isolate: id => {
-      pushUndo({
-        type: 'isolate',
-        partId: id,
-        prevIsolated: state.isolatedPart || null
-      });
-      isolatePart(id);
-      viewer?.render();
-    },
-    hide: id => {
-      pushUndo({
-        type: 'hide',
-        partId: id
-      });
-      hidePart(id);
-      deselectPart();
-      viewer?.render();
-    },
-    close: () => hideCallout()
-  });
+  showCallout(partId, partData.displayName, createCalloutActions(viewer));
 
   // Update part state
   getMeshRegistry().forEach((m, id) => {

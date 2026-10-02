@@ -36,15 +36,11 @@ function build(container) {
       <line class="callout-leader-line" x1="0" y1="0" x2="0" y2="0" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="3 3" />
     </svg>
     <div class="callout" role="status">
-      <div class="callout-header-row" data-callout="info" title="Chạm để mở thông tin">
+      <div class="callout-header-row" data-callout="info" title="Chạm để mở bảng chi tiết">
         <span class="callout-pin-icon">📍</span>
         <span class="callout-name"></span>
       </div>
-      <div class="callout-actions">
-        <button type="button" class="callout-btn callout-zoom" data-callout="zoom" title="Phóng to chi tiết (Zoom closer)">🔍 Phóng to</button>
-        <button type="button" class="callout-btn callout-more" data-callout="info" title="Xem giải thích chi tiết y khoa">📖 Xem thêm</button>
-        <button type="button" class="callout-btn callout-close" data-callout="close" aria-label="Ẩn nhãn chỉ">&times;</button>
-      </div>
+      <button type="button" class="callout-btn-close" data-callout="close" title="Tắt nhãn chữ (giữ nguyên mô hình 3D)" aria-label="Đóng nhãn">✕</button>
     </div>
   `;
   container.appendChild(root);
@@ -117,7 +113,7 @@ function update() {
   let labelX = x + OFFSET_X;
   let labelY = y + OFFSET_Y;
 
-  // Keep within safe viewport boundaries and NEVER overlap the bottom selection card
+  // Keep within safe viewport boundaries and NEVER overlap the bottom selection card or right controls
   let maxBottom = height - box.height - 84;
   if (cardEl && !cardEl.classList.contains('hidden')) {
     const cardRect = cardEl.getBoundingClientRect();
@@ -126,7 +122,10 @@ function update() {
     }
   }
 
-  labelX = Math.min(Math.max(labelX, EDGE_PADDING), width - box.width - EDGE_PADDING);
+  // Right edge safety margin to stay clear of the right control column (34px buttons + padding)
+  const rightSafetyMargin = width < 768 ? 54 : 20;
+  const maxRight = width - box.width - rightSafetyMargin;
+  labelX = Math.min(Math.max(labelX, EDGE_PADDING), Math.max(EDGE_PADDING, maxRight));
   labelY = Math.min(Math.max(labelY, 56), Math.max(56, maxBottom));
 
   label.style.transform = `translate(${Math.round(labelX)}px, ${Math.round(labelY)}px)`;
@@ -149,7 +148,7 @@ export function showCallout(partId, displayName, actions = {}) {
 
   const info = state.partsData?.[partId];
   const nameEl = root.querySelector('.callout-name');
-  nameEl.textContent = `${displayName} (ở đây)`;
+  nameEl.textContent = displayName;
   const isolateBtn = root.querySelector('[data-callout="isolate"]');
   if (isolateBtn) isolateBtn.textContent = translate('isolate');
   const hideBtn = root.querySelector('[data-callout="hide"]');
@@ -170,9 +169,14 @@ export function hideCallout() {
   currentPartId = null;
   if (root) {
     root.classList.remove('is-visible');
+    root.classList.add('is-hidden');
   }
   if (unsubscribeFrame) {
     unsubscribeFrame();
     unsubscribeFrame = null;
   }
+}
+
+export function isCalloutVisible() {
+  return !!(root && root.classList.contains('is-visible') && !root.classList.contains('is-hidden') && label?.style.display !== 'none');
 }

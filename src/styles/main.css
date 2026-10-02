@@ -45,6 +45,7 @@
   --footer-height: 64px;
   --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --ctrl-col-top: max(10px, env(safe-area-inset-top, 10px));
 }
 
 [data-theme="dark"],
@@ -851,15 +852,31 @@ body.theme-dark .depth-control {
   left: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  max-width: min(340px, 60vw);
-  padding: 7px 10px;
+  gap: 8px;
+  max-width: min(340px, 80vw);
+  padding: 6px 8px 6px 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 4px 16px var(--shadow-strong);
-  pointer-events: auto;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 18px var(--shadow-strong);
+  pointer-events: auto !important;
   white-space: nowrap;
+  user-select: none;
+  z-index: 25;
+}
+
+.callout-header-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  min-width: 0;
+  flex: 1;
+}
+
+.callout-pin-icon {
+  font-size: 13px;
+  flex-shrink: 0;
 }
 
 .callout-name {
@@ -868,6 +885,39 @@ body.theme-dark .depth-control {
   color: var(--fg-primary);
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.callout-btn-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  color: var(--fg-secondary);
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.15s ease;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+.callout-btn-close:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: scale(1.08);
+}
+
+.callout-btn-close:active {
+  transform: scale(0.92);
 }
 
 .callout-actions {
@@ -891,12 +941,6 @@ body.theme-dark .depth-control {
 .callout-btn:hover {
   background: var(--bg-hover);
   color: var(--fg-primary);
-}
-
-.callout-close {
-  font-size: 15px;
-  line-height: 1;
-  padding: 2px 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -7422,7 +7466,7 @@ body:has(.selection-card:not(.hidden)) .ai-transparent-toast.has-bar {
    ========================================================================== */
 .btn-fullscreen-toggle {
   position: absolute;
-  top: 10px !important;
+  top: var(--ctrl-col-top) !important;
   right: 10px !important;
   width: 34px !important;
   height: 34px !important;
@@ -7461,6 +7505,13 @@ body:has(.selection-card:not(.hidden)) .ai-transparent-toast.has-bar {
 /* ==========================================================================
    TRUE FULLSCREEN MODE (LỆNH: Ẩn hoàn toàn header ở trên cùng khi full màn)
    ========================================================================== */
+:fullscreen,
+:-webkit-full-screen,
+body.is-fullscreen,
+#app.is-fullscreen {
+  --ctrl-col-top: max(12px, env(safe-area-inset-top, 12px));
+}
+
 :fullscreen .header,
 :-webkit-full-screen .header,
 body.is-fullscreen .header,
@@ -7531,7 +7582,31 @@ body.is-fullscreen .viewer-controls {
 :fullscreen .btn-fullscreen-toggle,
 :-webkit-full-screen .btn-fullscreen-toggle,
 body.is-fullscreen .btn-fullscreen-toggle {
-  top: max(8px, env(safe-area-inset-top)) !important;
+  top: var(--ctrl-col-top) !important;
+}
+
+:fullscreen .floating-top-view-btn,
+:-webkit-full-screen .floating-top-view-btn,
+body.is-fullscreen .floating-top-view-btn {
+  top: calc(var(--ctrl-col-top) + 42px) !important;
+}
+
+:fullscreen .floating-views-quick-nav,
+:-webkit-full-screen .floating-views-quick-nav,
+body.is-fullscreen .floating-views-quick-nav {
+  top: calc(var(--ctrl-col-top) + 84px) !important;
+}
+
+:fullscreen .systems-pull-tab,
+:-webkit-full-screen .systems-pull-tab,
+body.is-fullscreen .systems-pull-tab {
+  top: calc(var(--ctrl-col-top) + 130px) !important;
+}
+
+:fullscreen .depth-control,
+:-webkit-full-screen .depth-control,
+body.is-fullscreen .depth-control {
+  top: calc(var(--ctrl-col-top) + 250px) !important;
 }
 
 
@@ -11153,7 +11228,7 @@ body.theme-dark .btn-tag-action.clear-tags {
 /* 6. Floating Views Quick Nav (Icon Button on Right Edge) */
 .floating-views-quick-nav {
   position: absolute;
-  top: 90px !important;
+  top: calc(var(--ctrl-col-top) + 84px) !important;
   right: 10px !important;
   left: auto !important;
   z-index: 85;
@@ -11285,7 +11360,7 @@ body.theme-dark .btn-tag-action.clear-tags {
 /* 8b. Floating Top View Button (Góc nhìn đỉnh đầu nhân vật) */
 .floating-top-view-btn {
   position: absolute;
-  top: 50px !important;
+  top: calc(var(--ctrl-col-top) + 42px) !important;
   right: 10px !important;
   left: auto !important;
   z-index: 85;
@@ -11464,33 +11539,33 @@ body.theme-dark .btn-tag-action.clear-tags {
 
   /* Right-Side Unified Control Column (Fullscreen -> Top-View -> Views -> AR -> Systems -> Depth) */
   .btn-fullscreen-toggle {
-    top: 10px !important;
+    top: var(--ctrl-col-top) !important;
     right: 10px !important;
   }
 
   .floating-top-view-btn {
-    top: 50px !important;
+    top: calc(var(--ctrl-col-top) + 42px) !important;
     right: 10px !important;
     left: auto !important;
     padding: 0 !important;
   }
 
   .floating-views-quick-nav {
-    top: 90px !important;
+    top: calc(var(--ctrl-col-top) + 84px) !important;
     right: 10px !important;
     left: auto !important;
     padding: 0 !important;
   }
 
   .systems-pull-tab {
-    top: 135px !important;
+    top: calc(var(--ctrl-col-top) + 130px) !important;
     right: 0 !important;
     left: auto !important;
     min-height: 108px !important;
   }
 
   .depth-control {
-    top: 255px !important;
+    top: calc(var(--ctrl-col-top) + 250px) !important;
     right: 8px !important;
     left: auto !important;
   }
