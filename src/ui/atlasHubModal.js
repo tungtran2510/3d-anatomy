@@ -987,16 +987,16 @@ async function applyAtlasRegion(reg, viewer) {
 
 // ACTION: Apply Media (3D Biomechanics Motion or Clinical Video)
 function applyAtlasMedia(media, viewer) {
-  closeAtlasHub();
-
   const activeViewer = viewer || state.viewer || window.viewer;
   if (media.type === 'motion') {
+    closeAtlasHub();
     disableClipping(activeViewer);
     const popover = document.getElementById('clippingPopover');
     if (popover) popover.classList.add('hidden');
     showToast(`▶️ Đang khởi chạy mô phỏng 3D: ${media.title}`);
     openMotionPanel(activeViewer, media.motionType);
   } else if (media.type === 'video') {
+    // Giữ nguyên Thư Viện Atlas Hub bên dưới để khi xem xong người dùng đóng video sẽ quay lại đúng danh mục và vị trí đang duyệt
     closeMotionPanel();
     showToast(`🎬 Đang phát video y khoa: ${media.title}`);
     openVideoModal(media.videoUrl, media.title);

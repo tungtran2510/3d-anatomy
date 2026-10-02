@@ -4396,11 +4396,18 @@ body.theme-dark .quiz-perfect-notice {
 }
 
 /* Video Modal */
+#videoModal {
+  z-index: 10000 !important;
+}
+
 .video-modal-content {
-  max-width: 640px !important;
-  width: 90% !important;
+  max-width: 680px !important;
+  width: 92% !important;
   padding: 0 !important;
   overflow: hidden;
+  border-radius: 14px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 .video-container {
   position: relative;
@@ -4409,7 +4416,8 @@ body.theme-dark .quiz-perfect-notice {
   height: 0;
   background: #000;
 }
-.video-container iframe {
+.video-container iframe,
+.video-container video {
   position: absolute;
   top: 0;
   left: 0;

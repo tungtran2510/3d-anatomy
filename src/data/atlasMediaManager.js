@@ -26,7 +26,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         badge: 'Cơ xương',
         type: 'video',
         image: './images/atlas/med_skeleton.png',
-        videoUrl: 'https://www.youtube.com/embed/rGz9H1hX-3M',
+        videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE',
         desc: 'Bộ khung cơ thể, tạo khoang bảo vệ tạng và tủy xương sinh máu.'
       },
       {
@@ -465,6 +465,21 @@ export function getAtlasMediaCategories() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        // Tự động thay thế link video hệ xương nếu còn lưu link YouTube cũ bị vô hiệu hóa
+        let healed = false;
+        parsed.forEach(cat => {
+          if (cat.cards) {
+            cat.cards.forEach(card => {
+              if (card.videoUrl && card.videoUrl.includes('rGz9H1hX-3M')) {
+                card.videoUrl = 'https://www.youtube.com/embed/rDGqkMHPDqE';
+                healed = true;
+              }
+            });
+          }
+        });
+        if (healed) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed)); } catch {}
+        }
         return parsed;
       }
     }
