@@ -51,22 +51,22 @@ export function initMotionPanel(viewer) {
   dynamicAnatomy.subscribe(updateMotionUI);
 }
 
-export function openMotionPanel(viewer, defaultMotion = MOTIONS.CARDIAC) {
+export async function openMotionPanel(viewer, defaultMotion = MOTIONS.CARDIAC) {
   if (!popoverEl) {
     initMotionPanel(viewer);
   }
 
   popoverEl.style.display = '';
   popoverEl.classList.remove('hidden');
-  popoverEl.classList.remove('minimized');
+  popoverEl.classList.add('minimized');
   document.getElementById('btnToolMotion')?.classList.add('active');
 
   // If a motion is requested, switch to it, otherwise keep current or launch default
   const curState = dynamicAnatomy.getState();
   if (defaultMotion && defaultMotion !== curState.motionId) {
-    dynamicAnatomy.setMotion(defaultMotion);
+    await dynamicAnatomy.setMotion(defaultMotion);
   } else if (!curState.motionId) {
-    dynamicAnatomy.setMotion(defaultMotion || MOTIONS.CARDIAC);
+    await dynamicAnatomy.setMotion(defaultMotion || MOTIONS.CARDIAC);
   } else {
     updateMotionUI(curState);
   }

@@ -59,6 +59,16 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     }
   }
 
+  // Ensure only systems declared in preset are shown
+  const allSystems = ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'];
+  allSystems.forEach(sys => {
+    if (systemsToLoad.includes(sys)) {
+      showSystem(sys);
+    } else {
+      hideSystem(sys);
+    }
+  });
+
   // 3. Reset orientation & table
   setModelOrientation(card.orientation || 'standing', viewer, { showTable: !!card.showTable });
 
@@ -83,7 +93,7 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     disableClipping(viewer);
     document.getElementById('btnToolClipping')?.classList.remove('active');
     import('./radiologicalScout.js').then(({ hideScoutView }) => hideScoutView()).catch(() => {});
-    openMotionPanel(viewer, card.motionId);
+    await openMotionPanel(viewer, card.motionId);
   } else {
     disableClipping(viewer);
     document.getElementById('btnToolClipping')?.classList.remove('active');
@@ -91,13 +101,15 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     closeMotionPanel();
   }
 
-  // 6. Reset System Transparencies to Solid
-  ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'].forEach(s => {
-    setSystemTransparency(s, 1.0);
-  });
+  // 6. Reset System Transparencies to Solid (skip if motionId, which manages its own anatomical isolation)
+  if (!card.motionId) {
+    ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'].forEach(s => {
+      setSystemTransparency(s, 1.0);
+    });
 
-  // 7. Apply Specialized Anatomical Filtering & Ghosting Rules
-  applySpecificViewRules(card.id, systemsToLoad, viewer);
+    // 7. Apply Specialized Anatomical Filtering & Ghosting Rules
+    applySpecificViewRules(card.id, systemsToLoad, viewer);
+  }
 
   // 8. Animate Camera to Precise View Position
   const cameraConfig = getFineCameraConfig(card);

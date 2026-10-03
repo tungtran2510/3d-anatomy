@@ -1544,7 +1544,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Cột sống',
         motionId: 'spine_flexion',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.85, y: 1.15, z: 1.1, targetX: 0, targetY: 1.05, targetZ: 0 },
+        camera: { x: 0.95, y: 1.15, z: 1.35, targetX: 0, targetY: 1.05, targetZ: 0 },
         image: '/images/atlas/musc_torso.png',
         desc: 'Chuyển động gập thân mình quanh trục ngang ở các đốt sống thắt lưng.'
       },
@@ -1555,7 +1555,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Cột sống',
         motionId: 'spine_extension',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.85, y: 1.15, z: 1.1, targetX: 0, targetY: 1.05, targetZ: 0 },
+        camera: { x: 1.25, y: 1.15, z: -1.35, targetX: 0, targetY: 1.05, targetZ: 0 },
         image: '/images/atlas/musc_torso.png',
         desc: 'Chuyển động duỗi cột sống giúp duy trì tư thế đứng thẳng của con người.'
       },
@@ -1566,7 +1566,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Cột sống',
         motionId: 'spine_lat_flexion',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0, y: 1.15, z: 1.45, targetX: 0, targetY: 1.05, targetZ: 0 },
+        camera: { x: 0, y: 1.15, z: 1.65, targetX: 0, targetY: 1.05, targetZ: 0 },
         image: '/images/atlas/musc_torso.png',
         desc: 'Chuyển động nghiêng cột sống trong mặt phẳng đứng ngang.'
       }
@@ -1583,7 +1583,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp háng',
         motionId: 'hip_flexion',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.75, y: 0.75, z: 1.0, targetX: 0.1, targetY: 0.75, targetZ: 0 },
+        camera: { x: 1.25, y: 0.65, z: 1.20, targetX: 0.08, targetY: 0.55, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Chuyển động gập khớp chỏm đùi - ổ cối trong bước đi và chạy.'
       },
@@ -1594,7 +1594,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp háng',
         motionId: 'hip_extension',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.75, y: 0.75, z: 1.0, targetX: 0.1, targetY: 0.75, targetZ: 0 },
+        camera: { x: 1.15, y: 0.65, z: -0.95, targetX: 0.08, targetY: 0.60, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Chuyển động tạo lực đẩy chính khi đứng dậy, leo dốc và chạy nhảy.'
       },
@@ -1605,7 +1605,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp háng',
         motionId: 'hip_rotation',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.35, y: 0.75, z: 1.1, targetX: 0.1, targetY: 0.75, targetZ: 0 },
+        camera: { x: 0.40, y: 0.65, z: 1.45, targetX: 0.08, targetY: 0.60, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Chuyển động xoay trục đùi quanh đường nối từ chỏm đùi đến lồi cầu.'
       }
@@ -1622,7 +1622,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp gối',
         motionId: 'knee_flexion',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.65, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
+        camera: { x: 1.10, y: 0.38, z: 0.85, targetX: 0.08, targetY: 0.32, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Khớp bản lề gối gập cẳng chân lên đùi.'
       },
@@ -1633,7 +1633,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp gối',
         motionId: 'knee_extension',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.65, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
+        camera: { x: 1.10, y: 0.38, z: 0.85, targetX: 0.08, targetY: 0.32, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Khóa khớp gối giúp giữ vững trọng tâm cơ thể khi đứng thẳng.'
       },
@@ -1644,7 +1644,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp gối',
         motionId: 'knee_rotation',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.35, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
+        camera: { x: 0.30, y: 0.38, z: 0.95, targetX: 0.08, targetY: 0.32, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Mở khóa khớp gối khi bắt đầu bước gập chân.'
       }
@@ -1661,7 +1661,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp vai',
         motionId: 'shoulder_flexion',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.65, y: 1.35, z: 0.9, targetX: 0.2, targetY: 1.30, targetZ: 0 },
+        camera: { x: -0.95, y: 1.25, z: 0.85, targetX: -0.18, targetY: 1.20, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Chuyển động nâng cánh tay lên phía trước theo mặt phẳng đứng dọc.'
       },
@@ -1672,7 +1672,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp vai',
         motionId: 'shoulder_extension',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.65, y: 1.35, z: 0.9, targetX: 0.2, targetY: 1.30, targetZ: 0 },
+        camera: { x: -0.95, y: 1.25, z: -0.75, targetX: -0.18, targetY: 1.20, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Chuyển động đưa cánh tay về sau thân mình.'
       },
@@ -1683,7 +1683,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khớp vai',
         motionId: 'shoulder_abduction',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0, y: 1.35, z: 1.3, targetX: 0.15, targetY: 1.30, targetZ: 0 },
+        camera: { x: -0.25, y: 1.25, z: 1.45, targetX: -0.20, targetY: 1.20, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Khớp chỏm cầu ổ chảo dang cánh tay từ 0 đến 90 độ.'
       }
@@ -1700,7 +1700,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khuỷu tay',
         motionId: 'elbow_flexion',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.55, y: 1.10, z: 0.75, targetX: 0.25, targetY: 1.05, targetZ: 0 },
+        camera: { x: -1.05, y: 1.05, z: 0.95, targetX: -0.24, targetY: 0.95, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Chuyển động gập bản lề của khớp cánh tay - trụ và cánh tay - quay.'
       },
@@ -1711,7 +1711,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Khuỷu tay',
         motionId: 'elbow_extension',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.55, y: 1.10, z: 0.75, targetX: 0.25, targetY: 1.05, targetZ: 0 },
+        camera: { x: -1.05, y: 1.05, z: 0.95, targetX: -0.24, targetY: 0.95, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Khóa khớp khuỷu khi đẩy hoặc nâng vật thể.'
       },
@@ -1722,7 +1722,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
         badge: 'Cẳng tay',
         motionId: 'forearm_pronation',
         systems: ['muscular', 'skeletal'],
-        camera: { x: 0.45, y: 1.00, z: 0.65, targetX: 0.25, targetY: 0.95, targetZ: 0 },
+        camera: { x: -0.65, y: 0.95, z: 0.75, targetX: -0.24, targetY: 0.92, targetZ: 0 },
         image: '/images/atlas/musc_limbs.png',
         desc: 'Khớp quay - trụ xoay bàn tay úp xuống dưới.'
       }

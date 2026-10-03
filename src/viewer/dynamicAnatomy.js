@@ -74,10 +74,11 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.4,
-    camera: { x: 0.85, y: 1.15, z: 1.1, targetX: 0, targetY: 1.05, targetZ: 0 },
+    camera: { x: 1.25, y: 1.15, z: 1.45, targetX: 0, targetY: 1.05, targetZ: 0 },
+    agonists: ['rectus abdominis', 'oblique', 'pectoralis'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cột sống thắt lưng gập ra trước (Flexion)' },
-      { from: 0.5, to: 1.0, name: 'Trở về tư thế thẳng đứng giải phẫu' }
+      { from: 0.0, to: 0.5, name: 'Cơ thẳng bụng & cơ chéo bụng co, gập cột sống ra trước' },
+      { from: 0.5, to: 1.0, name: 'Trở về tư thế đứng thẳng giải phẫu' }
     ]
   },
   [MOTIONS.SPINE_EXTENSION]: {
@@ -87,9 +88,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.4,
-    camera: { x: 0.85, y: 1.15, z: 1.1, targetX: 0, targetY: 1.05, targetZ: 0 },
+    camera: { x: 1.25, y: 1.15, z: -1.45, targetX: 0, targetY: 1.05, targetZ: 0 },
+    agonists: ['erector spinae', 'iliocostalis', 'longissimus', 'spinalis', 'latissimus', 'trapezius', 'splenius'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ dựng sống co kéo cột sống ngửa ra sau (Extension)' },
+      { from: 0.0, to: 0.5, name: 'Nhóm cơ dựng sống (Erector spinae) kéo cột sống ngửa ra sau' },
       { from: 0.5, to: 1.0, name: 'Trở về tư thế đứng thẳng' }
     ]
   },
@@ -100,9 +102,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.4,
-    camera: { x: 0, y: 1.15, z: 1.45, targetX: 0, targetY: 1.05, targetZ: 0 },
+    camera: { x: 0, y: 1.15, z: 1.75, targetX: 0, targetY: 1.05, targetZ: 0 },
+    agonists: ['quadratus lumborum', 'oblique', 'intertransversarii'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cột sống nghiêng sang bên (Lateral flexion)' },
+      { from: 0.0, to: 0.5, name: 'Cơ vuông thắt lưng & cơ chéo bụng co nghiêng thân sang bên' },
       { from: 0.5, to: 1.0, name: 'Trở về trục thẳng đứng' }
     ]
   },
@@ -113,10 +116,11 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.2,
-    camera: { x: 0.75, y: 0.75, z: 1.0, targetX: 0.1, targetY: 0.75, targetZ: 0 },
+    camera: { x: 1.25, y: 0.65, z: 1.20, targetX: 0.08, targetY: 0.55, targetZ: 0 },
+    agonists: ['iliopsoas.l', 'psoas.l', 'iliacus.l', 'rectus femoris.l', 'sartorius.l', 'pectineus.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ thắt lưng chậu co nâng đùi ra trước' },
-      { from: 0.5, to: 1.0, name: 'Hạ đùi trở về vị trí giải phẫu' }
+      { from: 0.0, to: 0.5, name: 'Cơ thắt lưng chậu (Iliopsoas) và cơ thẳng đùi co nâng đùi ra trước' },
+      { from: 0.5, to: 1.0, name: 'Hạ đùi trở về tư thế giải phẫu' }
     ]
   },
   [MOTIONS.HIP_EXTENSION]: {
@@ -126,9 +130,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.2,
-    camera: { x: 0.75, y: 0.75, z: 1.0, targetX: 0.1, targetY: 0.75, targetZ: 0 },
+    camera: { x: 1.15, y: 0.65, z: -1.15, targetX: 0.08, targetY: 0.55, targetZ: 0 },
+    agonists: ['gluteus maximus.l', 'biceps femoris.l', 'semitendinosus.l', 'semimembranosus.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ mông lớn kéo đùi ra sau thân mình' },
+      { from: 0.0, to: 0.5, name: 'Cơ mông lớn & nhóm gân kheo kéo đùi ra sau thân mình' },
       { from: 0.5, to: 1.0, name: 'Trở về vị trí đứng thẳng' }
     ]
   },
@@ -139,9 +144,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.2,
-    camera: { x: 0.35, y: 0.75, z: 1.1, targetX: 0.1, targetY: 0.75, targetZ: 0 },
+    camera: { x: 0.40, y: 0.65, z: 1.45, targetX: 0.08, targetY: 0.55, targetZ: 0 },
+    agonists: ['tensor fasciae latae.l', 'gluteus medius.l', 'gluteus minimus.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Xoay trong chỏm đùi vào trong' },
+      { from: 0.0, to: 0.5, name: 'Cơ căng mạc đùi & cơ mông nhỡ xoay đùi vào trong' },
       { from: 0.5, to: 1.0, name: 'Trở về tư thế trung tính' }
     ]
   },
@@ -152,10 +158,11 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.0,
-    camera: { x: 0.65, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
+    camera: { x: 0.85, y: 0.40, z: 0.75, targetX: 0.09, targetY: 0.35, targetZ: 0 },
+    agonists: ['biceps femoris.l', 'semitendinosus.l', 'semimembranosus.l', 'gastrocnemius.l', 'popliteus.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ gân kheo co gập cẳng chân ra sau' },
-      { from: 0.5, to: 1.0, name: 'Duỗi thẳng cẳng chân trở lại' }
+      { from: 0.0, to: 0.5, name: 'Nhóm cơ gân kheo co gập cẳng chân ra sau' },
+      { from: 0.5, to: 1.0, name: 'Duỗi cẳng chân trở lại vị trí ban đầu' }
     ]
   },
   [MOTIONS.KNEE_EXTENSION]: {
@@ -165,22 +172,24 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.0,
-    camera: { x: 0.65, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
+    camera: { x: 0.85, y: 0.40, z: 0.75, targetX: 0.09, targetY: 0.35, targetZ: 0 },
+    agonists: ['rectus femoris.l', 'vastus lateralis.l', 'vastus medialis.l', 'vastus intermedius.l', 'quadriceps.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ tứ đầu đùi co duỗi khóa khớp gối' },
-      { from: 0.5, to: 1.0, name: 'Trở về trạng thái gập nhẹ' }
+      { from: 0.0, to: 0.5, name: 'Cơ tứ đầu đùi co kéo bánh chè duỗi thẳng khóa khớp gối' },
+      { from: 0.5, to: 1.0, name: 'Khớp gối thư giãn về tư thế chuẩn' }
     ]
   },
   [MOTIONS.KNEE_ROTATION]: {
     id: MOTIONS.KNEE_ROTATION,
-    titleVi: 'Xoay Khớp Gối (Knee Rotation)',
-    titleEn: 'Knee Rotation',
+    titleVi: 'Xoay Trong Khớp Gối (Knee Medial Rotation)',
+    titleEn: 'Knee Medial Rotation',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.0,
-    camera: { x: 0.35, y: 0.45, z: 0.9, targetX: 0.1, targetY: 0.45, targetZ: 0 },
+    camera: { x: 0.35, y: 0.40, z: 0.95, targetX: 0.09, targetY: 0.35, targetZ: 0 },
+    agonists: ['popliteus.l', 'semitendinosus.l', 'semimembranosus.l', 'gracilis.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Xoay mở khóa khớp gối' },
+      { from: 0.0, to: 0.5, name: 'Cơ khoeo và cơ bán gân xoay nhẹ cẳng chân vào trong để mở khóa gối' },
       { from: 0.5, to: 1.0, name: 'Trở về tư thế thẳng' }
     ]
   },
@@ -191,10 +200,11 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.2,
-    camera: { x: 0.65, y: 1.35, z: 0.9, targetX: 0.2, targetY: 1.30, targetZ: 0 },
+    camera: { x: -0.95, y: 1.25, z: 0.95, targetX: -0.18, targetY: 1.20, targetZ: 0 },
+    agonists: ['deltoid.r', 'pectoralis major.r', 'biceps brachii.r', 'coracobrachialis.r'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ delta trước nâng cánh tay ra trước' },
-      { from: 0.5, to: 1.0, name: 'Hạ cánh tay xuống cạnh thân' }
+      { from: 0.0, to: 0.5, name: 'Bó trước cơ delta & cơ ngực lớn co nâng cánh tay ra trước' },
+      { from: 0.5, to: 1.0, name: 'Hạ cánh tay xuống dọc theo thân' }
     ]
   },
   [MOTIONS.SHOULDER_EXTENSION]: {
@@ -204,10 +214,11 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.2,
-    camera: { x: 0.65, y: 1.35, z: 0.9, targetX: 0.2, targetY: 1.30, targetZ: 0 },
+    camera: { x: -0.95, y: 1.25, z: -0.95, targetX: -0.18, targetY: 1.20, targetZ: 0 },
+    agonists: ['latissimus dorsi.r', 'teres major.r', 'deltoid.r', 'triceps brachii.r'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ lưng rộng kéo cánh tay ra sau' },
-      { from: 0.5, to: 1.0, name: 'Đưa cánh tay về vị trí tự nhiên' }
+      { from: 0.0, to: 0.5, name: 'Cơ lưng rộng & cơ tròn lớn kéo cánh tay ra sau thân mình' },
+      { from: 0.5, to: 1.0, name: 'Đưa cánh tay về vị trí giải phẫu' }
     ]
   },
   [MOTIONS.SHOULDER_ABDUCTION]: {
@@ -217,9 +228,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.2,
-    camera: { x: 0, y: 1.35, z: 1.3, targetX: 0.15, targetY: 1.30, targetZ: 0 },
+    camera: { x: -0.30, y: 1.25, z: 1.55, targetX: -0.22, targetY: 1.20, targetZ: 0 },
+    agonists: ['deltoid.r', 'supraspinatus.r'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ delta dang cánh tay sang bên' },
+      { from: 0.0, to: 0.5, name: 'Cơ trên gai khởi động dạng, cơ delta kéo cánh tay dang ngang sang bên' },
       { from: 0.5, to: 1.0, name: 'Khép cánh tay áp sát thân mình' }
     ]
   },
@@ -230,9 +242,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.0,
-    camera: { x: 0.55, y: 1.10, z: 0.75, targetX: 0.25, targetY: 1.05, targetZ: 0 },
+    camera: { x: -0.75, y: 1.10, z: 0.85, targetX: -0.22, targetY: 1.02, targetZ: 0 },
+    agonists: ['biceps brachii.r', 'brachialis.r', 'brachioradialis.r'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ nhị đầu gập cẳng tay về phía cánh tay' },
+      { from: 0.0, to: 0.5, name: 'Cơ nhị đầu cánh tay & cơ cánh tay co gập cẳng tay lên' },
       { from: 0.5, to: 1.0, name: 'Duỗi cẳng tay trở lại vị trí ban đầu' }
     ]
   },
@@ -243,9 +256,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.0,
-    camera: { x: 0.55, y: 1.10, z: 0.75, targetX: 0.25, targetY: 1.05, targetZ: 0 },
+    camera: { x: -0.75, y: 1.10, z: 0.85, targetX: -0.22, targetY: 1.02, targetZ: 0 },
+    agonists: ['triceps brachii.r', 'anconeus.r'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ tam đầu co duỗi thẳng cẳng tay' },
+      { from: 0.0, to: 0.5, name: 'Cơ tam đầu cánh tay co kéo mỏm khuỷu duỗi thẳng tay' },
       { from: 0.5, to: 1.0, name: 'Thư giãn cơ khuỷu' }
     ]
   },
@@ -256,9 +270,10 @@ export const MOTION_METADATA = {
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
     defaultDuration: 2.0,
-    camera: { x: 0.45, y: 1.00, z: 0.65, targetX: 0.25, targetY: 0.95, targetZ: 0 },
+    camera: { x: -0.65, y: 0.95, z: 0.75, targetX: -0.24, targetY: 0.92, targetZ: 0 },
+    agonists: ['pronator teres.r', 'pronator quadratus.r'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Xương quay xoay vắt chéo xương trụ (Úp bàn tay)' },
+      { from: 0.0, to: 0.5, name: 'Cơ sấp tròn & sấp vuông xoay xương quay vắt chéo xương trụ (Úp bàn tay)' },
       { from: 0.5, to: 1.0, name: 'Xoay ngửa trở lại tư thế giải phẫu' }
     ]
   }
@@ -369,16 +384,17 @@ class DynamicAnatomyEngine {
   }
 
   buildMotionNodesCache(motionId) {
-    const registry = getMeshRegistry();
     this._cachedMotionNodes = [];
+    if (!this.viewer || !this.viewer.scene) return;
 
     if (motionId === MOTIONS.CARDIAC) {
-      registry.forEach((node, partId) => {
-        const lower = partId.toLowerCase();
-        const isVentricle = lower.includes('ventricle') || lower.includes('papillary') || lower.includes('interventricular');
-        const isAtrium = lower.includes('atrium') || lower.includes('auricle');
-        const isAorta = lower.includes('aorta') || lower.includes('pulmonary trunk');
-        const isHeart = lower.includes('heart') || lower.includes('coronary') || lower.includes('valve') || isVentricle || isAtrium || isAorta;
+      this.viewer.scene.traverse((node) => {
+        if (!node.isMesh || node.parent?.name !== 'Scene') return;
+        const partId = (node.userData?.partId || node.name || '').toLowerCase();
+        const isVentricle = partId.includes('ventricle') || partId.includes('papillary') || partId.includes('interventricular');
+        const isAtrium = partId.includes('atrium') || partId.includes('auricle');
+        const isAorta = partId.includes('aorta') || partId.includes('pulmonary trunk') || partId.includes('pulmonary_trunk');
+        const isHeart = partId.includes('heart') || partId.includes('coronary') || partId.includes('valve') || isVentricle || isAtrium || isAorta;
 
         if (isHeart) {
           const baseRot = node.userData._baseRotation || node.rotation.clone();
@@ -392,15 +408,16 @@ class DynamicAnatomyEngine {
         }
       });
     } else if (motionId === MOTIONS.RESPIRATORY) {
-      registry.forEach((node, partId) => {
-        const lower = partId.toLowerCase();
-        const isLung = lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch');
-        const isRib = lower.includes('rib') || lower.includes('costa') || lower.includes('cartilage');
-        const isSternum = lower.includes('sternum') || lower.includes('xiphoid') || lower.includes('manubrium');
-        const isDiaphragm = lower.includes('diaphragm');
+      this.viewer.scene.traverse((node) => {
+        if (!node.isMesh || node.parent?.name !== 'Scene') return;
+        const partId = (node.userData?.partId || node.name || '').toLowerCase();
+        const isLung = partId.includes('lung') || partId.includes('pulmo') || partId.includes('bronch');
+        const isRib = partId.includes('rib') || partId.includes('costa') || partId.includes('cartilage');
+        const isSternum = partId.includes('sternum') || partId.includes('xiphoid') || partId.includes('manubrium');
+        const isDiaphragm = partId.includes('diaphragm');
 
         if (isLung || isRib || isSternum || isDiaphragm) {
-          const isLeft = lower.endsWith('.l') || lower.includes('left');
+          const isLeft = partId.endsWith('.l') || partId.includes('left') || (node.position.x > 0.01);
           const basePos = node.userData._basePosition || node.position.clone();
           this._cachedMotionNodes.push({
             node,
@@ -413,101 +430,169 @@ class DynamicAnatomyEngine {
         }
       });
     } else {
-      // Kinematic Joint Actions (Spine, Hip, Knee, Shoulder, Elbow, Forearm)
-      let keywords = [];
+      // Kinematic Segment Chains (Unified Multi-Mesh Anatomical Chains)
+      let chainType = '';
       let pivot = new THREE.Vector3(0, 0, 0);
       let axis = new THREE.Vector3(1, 0, 0);
       let maxAngle = 0;
 
       if (motionId === MOTIONS.SPINE_FLEXION) {
-        keywords = ['vertebra c', 'vertebra t', 'rib', 'sternum', 'rectus abdominis', 'pectoralis'];
-        pivot = new THREE.Vector3(0, 1.05, 0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = -Math.PI * 0.18;
+        chainType = 'spine';
+        pivot.set(0, 0.970, -0.030);
+        axis.set(1, 0, 0);
+        maxAngle = 0.22; // ~13 deg forward
       } else if (motionId === MOTIONS.SPINE_EXTENSION) {
-        keywords = ['vertebra c', 'vertebra t', 'rib', 'sternum', 'erector spinae', 'trapezius', 'latissimus'];
-        pivot = new THREE.Vector3(0, 1.05, 0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = Math.PI * 0.14;
+        chainType = 'spine';
+        pivot.set(0, 0.970, -0.030);
+        axis.set(1, 0, 0);
+        maxAngle = -0.18; // ~ -10 deg backward
       } else if (motionId === MOTIONS.SPINE_LAT_FLEXION) {
-        keywords = ['vertebra c', 'vertebra t', 'rib', 'sternum', 'quadratus lumborum', 'oblique'];
-        pivot = new THREE.Vector3(0, 1.05, 0);
-        axis = new THREE.Vector3(0, 0, 1);
-        maxAngle = Math.PI * 0.15;
+        chainType = 'spine';
+        pivot.set(0, 0.970, -0.030);
+        axis.set(0, 0, 1);
+        maxAngle = 0.16; // ~9 deg side
       } else if (motionId === MOTIONS.HIP_FLEXION) {
-        keywords = ['femur.l', 'patella.l', 'tibia.l', 'fibula.l', 'foot.l', 'tars', 'phalang', 'iliopsoas.l', 'rectus femoris.l', 'sartorius.l'];
-        pivot = new THREE.Vector3(-0.09, 0.86, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = -Math.PI * 0.38;
+        chainType = 'left_leg';
+        pivot.set(0.088, 0.865, -0.019);
+        axis.set(1, 0, 0);
+        maxAngle = -0.72; // ~ -41 deg forward
       } else if (motionId === MOTIONS.HIP_EXTENSION) {
-        keywords = ['femur.l', 'patella.l', 'tibia.l', 'fibula.l', 'foot.l', 'gluteus maximus.l', 'biceps femoris.l'];
-        pivot = new THREE.Vector3(-0.09, 0.86, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = Math.PI * 0.22;
+        chainType = 'left_leg';
+        pivot.set(0.088, 0.865, -0.019);
+        axis.set(1, 0, 0);
+        maxAngle = 0.35; // ~ +20 deg backward
       } else if (motionId === MOTIONS.HIP_ROTATION) {
-        keywords = ['femur.l', 'patella.l', 'tibia.l', 'fibula.l', 'foot.l', 'piriformis.l', 'obturator.l'];
-        pivot = new THREE.Vector3(-0.09, 0.86, 0.0);
-        axis = new THREE.Vector3(0, 1, 0);
-        maxAngle = -Math.PI * 0.25;
+        chainType = 'left_leg';
+        pivot.set(0.088, 0.865, -0.019);
+        axis.set(0, 1, 0);
+        maxAngle = 0.32; // ~ +18 deg internal rotation
       } else if (motionId === MOTIONS.KNEE_FLEXION) {
-        keywords = ['tibia.l', 'fibula.l', 'patella.l', 'foot.l', 'tars', 'phalang', 'gastrocnemius.l', 'soleus.l', 'semitendinosus.l', 'biceps femoris.l'];
-        pivot = new THREE.Vector3(-0.08, 0.48, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = Math.PI * 0.65;
+        chainType = 'left_shank';
+        pivot.set(0.093, 0.445, -0.015);
+        axis.set(1, 0, 0);
+        maxAngle = 1.15; // ~ +65 deg backward flexion
       } else if (motionId === MOTIONS.KNEE_EXTENSION) {
-        keywords = ['tibia.l', 'fibula.l', 'patella.l', 'foot.l', 'quadriceps.l', 'rectus femoris.l'];
-        pivot = new THREE.Vector3(-0.08, 0.48, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = -Math.PI * 0.20;
+        chainType = 'left_shank';
+        pivot.set(0.093, 0.445, -0.015);
+        axis.set(1, 0, 0);
+        maxAngle = -0.45; // straightens from flexion
       } else if (motionId === MOTIONS.KNEE_ROTATION) {
-        keywords = ['tibia.l', 'fibula.l', 'foot.l', 'popliteus.l'];
-        pivot = new THREE.Vector3(-0.08, 0.48, 0.0);
-        axis = new THREE.Vector3(0, 1, 0);
-        maxAngle = -Math.PI * 0.16;
+        chainType = 'left_shank';
+        pivot.set(0.093, 0.445, -0.015);
+        axis.set(0, 1, 0);
+        maxAngle = 0.22; // ~ +12 deg internal rotation
       } else if (motionId === MOTIONS.SHOULDER_FLEXION) {
-        keywords = ['humerus.r', 'radius.r', 'ulna.r', 'hand.r', 'carpal', 'deltoid.r', 'pectoralis.r', 'biceps brachii.r'];
-        pivot = new THREE.Vector3(0.18, 1.36, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = -Math.PI * 0.50;
+        chainType = 'right_arm';
+        pivot.set(-0.185, 1.385, -0.028);
+        axis.set(1, 0, 0);
+        maxAngle = -0.95; // ~ -55 deg forward lift
       } else if (motionId === MOTIONS.SHOULDER_EXTENSION) {
-        keywords = ['humerus.r', 'radius.r', 'ulna.r', 'hand.r', 'latissimus.r', 'triceps.r', 'deltoid.r'];
-        pivot = new THREE.Vector3(0.18, 1.36, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = Math.PI * 0.25;
+        chainType = 'right_arm';
+        pivot.set(-0.185, 1.385, -0.028);
+        axis.set(1, 0, 0);
+        maxAngle = 0.45; // ~ +25 deg backward swing
       } else if (motionId === MOTIONS.SHOULDER_ABDUCTION) {
-        keywords = ['humerus.r', 'radius.r', 'ulna.r', 'hand.r', 'deltoid.r', 'supraspinatus.r'];
-        pivot = new THREE.Vector3(0.18, 1.36, 0.0);
-        axis = new THREE.Vector3(0, 0, 1);
-        maxAngle = Math.PI * 0.45;
+        chainType = 'right_arm';
+        pivot.set(-0.185, 1.385, -0.028);
+        axis.set(0, 0, 1);
+        maxAngle = -0.95; // ~ -55 deg outward abduction
       } else if (motionId === MOTIONS.ELBOW_FLEXION) {
-        keywords = ['radius.r', 'ulna.r', 'hand.r', 'carpal', 'metacarp', 'biceps brachii.r', 'brachialis.r', 'brachioradialis.r'];
-        pivot = new THREE.Vector3(0.22, 1.15, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = -Math.PI * 0.60;
+        chainType = 'right_forearm';
+        pivot.set(-0.238, 1.085, -0.028);
+        axis.set(1, 0, 0);
+        maxAngle = -1.15; // ~ -65 deg flexion forward
       } else if (motionId === MOTIONS.ELBOW_EXTENSION) {
-        keywords = ['radius.r', 'ulna.r', 'hand.r', 'triceps.r', 'anconeus.r'];
-        pivot = new THREE.Vector3(0.22, 1.15, 0.0);
-        axis = new THREE.Vector3(1, 0, 0);
-        maxAngle = Math.PI * 0.20;
+        chainType = 'right_forearm';
+        pivot.set(-0.238, 1.085, -0.028);
+        axis.set(1, 0, 0);
+        maxAngle = 0.65; // straightens downward
       } else if (motionId === MOTIONS.FOREARM_PRONATION) {
-        keywords = ['radius.r', 'hand.r', 'carpal', 'metacarp', 'pronator.r'];
-        pivot = new THREE.Vector3(0.25, 1.05, 0.0);
-        axis = new THREE.Vector3(0, 1, 0);
-        maxAngle = Math.PI * 0.50;
+        chainType = 'right_hand_radius';
+        pivot.set(-0.245, 1.00, -0.025);
+        axis.set(0.12, -0.98, -0.12);
+        maxAngle = 1.25; // ~70 deg pronation
       }
 
-      registry.forEach((node, partId) => {
-        const lower = partId.toLowerCase();
-        const matched = keywords.some(k => lower.includes(k));
-        if (matched) {
+      this.viewer.scene.traverse((obj) => {
+        if (!obj.isMesh || obj.parent?.name !== 'Scene' || !obj.geometry) return;
+        const partId = (obj.userData?.partId || obj.name || '').toLowerCase();
+
+        if (!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
+        const b = obj.geometry.boundingBox;
+        const cx = obj.position.x + (b ? (b.min.x + b.max.x) / 2 : 0);
+        const cy = obj.position.y + (b ? (b.min.y + b.max.y) / 2 : 0);
+        const cz = obj.position.z + (b ? (b.min.z + b.max.z) / 2 : 0);
+
+        let inChain = false;
+        let weight = 1.0;
+
+        if (chainType === 'spine') {
+          const isPelvisOrLeg = partId.includes('sacrum') || partId.includes('coccyx') || 
+            partId.includes('hip_bone') || partId.includes('ilium') || partId.includes('ischium') || 
+            partId.includes('pubis') || partId.includes('femur') || partId.includes('gluteus') || 
+            partId.includes('patella') || partId.includes('tibia') || partId.includes('fibula') || 
+            partId.includes('foot') || partId.includes('toe') || partId.includes('psoas') || 
+            partId.includes('iliacus') || partId.includes('trochanter') || partId.includes('acetabul') || 
+            (cy < 0.96 && Math.abs(cx) < 0.15);
+
+          if (!isPelvisOrLeg && (cy >= 0.96 || (Math.abs(cx) >= 0.14 && cy >= 0.58))) {
+            inChain = true;
+            weight = 1.0;
+          }
+        } else if (chainType === 'left_leg') {
+          const isPelvis = partId.includes('sacrum') || partId.includes('coccyx') || 
+            partId.includes('hip_bone') || partId.includes('ilium') || partId.includes('ischium') || 
+            partId.includes('pubis') || partId.includes('vertebra') || partId.includes('spine');
+          if (!isPelvis && cx > 0.01 && cy < 0.875) {
+            inChain = true;
+            weight = 1.0;
+          }
+        } else if (chainType === 'left_shank') {
+          const isThigh = partId.includes('femur') || partId.includes('quadriceps') || partId.includes('sartorius');
+          if (!isThigh && cx > 0.01 && cy < 0.445) {
+            inChain = true;
+            weight = 1.0;
+          }
+        } else if (chainType === 'right_arm') {
+          const isTrunk = partId.includes('clavicle') || partId.includes('scapula') || 
+            partId.includes('rib') || partId.includes('costa') || partId.includes('sternum') || 
+            partId.includes('vertebra') || partId.includes('pectoralis') || partId.includes('latissimus') || 
+            partId.includes('trapezius');
+          if (!isTrunk && cx < -0.13 && cy < 1.385) {
+            inChain = true;
+            weight = 1.0;
+          }
+        } else if (chainType === 'right_forearm') {
+          if (cx < -0.13 && cy < 1.085 && cy > 0.50) {
+            inChain = true;
+            weight = 1.0;
+          }
+        } else if (chainType === 'right_hand_radius') {
+          const isForearmRotator = partId.includes('radius') || partId.includes('hand') || 
+            partId.includes('carpal') || partId.includes('phalanx') || partId.includes('metacarpal') || 
+            partId.includes('digit') || partId.includes('thumb') || partId.includes('pronator');
+          if (cx < -0.15 && cy < 1.085 && isForearmRotator) {
+            inChain = true;
+            weight = 1.0;
+          }
+        }
+
+        if (inChain) {
+          if (!obj.userData._basePosition) {
+            obj.userData._basePosition = obj.position.clone();
+            obj.userData._baseRotation = obj.rotation.clone();
+            obj.userData._baseQuaternion = obj.quaternion.clone();
+            obj.userData._baseScale = obj.scale.clone();
+          }
           this._cachedMotionNodes.push({
-            node,
+            node: obj,
             partId,
             pivot,
             axis,
-            maxAngle
+            maxAngle,
+            weight
           });
-          this.modifiedNodes.add(node);
+          this.modifiedNodes.add(obj);
         }
       });
     }
@@ -543,11 +628,12 @@ class DynamicAnatomyEngine {
   }
 
   cacheBaseTransforms() {
-    const registry = getMeshRegistry();
+    if (!this.viewer || !this.viewer.scene) return;
     const box = new THREE.Box3();
     const center = new THREE.Vector3();
 
-    registry.forEach((node) => {
+    this.viewer.scene.traverse((node) => {
+      if (!node.isMesh) return;
       if (!node.userData._basePosition) {
         node.userData._basePosition = node.position.clone();
         node.userData._baseRotation = node.rotation.clone();
@@ -564,15 +650,6 @@ class DynamicAnatomyEngine {
           node.userData._centroid = node.position.clone();
         }
       }
-
-      node.traverse((child) => {
-        if (child.isMesh && !child.userData._basePosition) {
-          child.userData._basePosition = child.position.clone();
-          child.userData._baseRotation = child.rotation.clone();
-          child.userData._baseQuaternion = child.quaternion.clone();
-          child.userData._baseScale = child.scale.clone();
-        }
-      });
     });
   }
 
@@ -596,83 +673,129 @@ class DynamicAnatomyEngine {
     const basePos = node.userData._basePosition || node.position;
     const baseQuat = node.userData._baseQuaternion || node.quaternion;
 
-    node.position.copy(basePos);
-    node.quaternion.copy(baseQuat);
+    if (Math.abs(angle) < 0.0001) {
+      node.position.copy(basePos);
+      node.quaternion.copy(baseQuat);
+      return;
+    }
 
-    if (Math.abs(angle) < 0.0001) return;
+    const rel = this._scratchRel || (this._scratchRel = new THREE.Vector3());
+    const q = this._scratchQuat || (this._scratchQuat = new THREE.Quaternion());
 
-    const rel = new THREE.Vector3().subVectors(basePos, pivot);
+    rel.subVectors(basePos, pivot);
     rel.applyAxisAngle(axis, angle);
     node.position.copy(pivot).add(rel);
 
-    const q = new THREE.Quaternion().setFromAxisAngle(axis, angle);
+    q.setFromAxisAngle(axis, angle);
     node.quaternion.copy(baseQuat);
     node.quaternion.premultiply(q);
   }
 
   applyMotionIsolation(motionId) {
     this.restoreSystemVisibility();
+    if (!this.viewer || !this.viewer.scene) return;
 
-    const registry = getMeshRegistry();
+    const saveMesh = (mesh) => {
+      if (!this._savedMeshStates.has(mesh)) {
+        this._savedMeshStates.set(mesh, {
+          visible: mesh.visible,
+          opacity: mesh.material?.opacity ?? 1,
+          transparent: mesh.material?.transparent ?? false,
+          depthWrite: mesh.material?.depthWrite ?? true,
+          emissiveHex: mesh.material?.emissive ? mesh.material.emissive.getHex() : 0
+        });
+      }
+    };
 
     if (motionId === MOTIONS.CARDIAC) {
-      // In cardiac: ghost thoracic bones (ribs/sternum) so heart is clearly visible; hide digestive organs & limbs
-      registry.forEach((node, partId) => {
-        const lower = partId.toLowerCase();
+      this.viewer.scene.traverse((mesh) => {
+        if (!mesh.isMesh || mesh.parent?.name !== 'Scene') return;
+        const lower = (mesh.userData?.partId || mesh.name || '').toLowerCase();
         const isThoraxBone = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle');
         const isHeart = lower.includes('heart') || lower.includes('ventricle') || lower.includes('atrium') || lower.includes('aorta') || lower.includes('pulmonary');
-        
-        const meshes = ownMeshesOf(partId);
-        meshes.forEach(mesh => {
-          if (!this._savedMeshStates.has(mesh)) {
-            this._savedMeshStates.set(mesh, {
-              visible: mesh.visible,
-              opacity: mesh.material?.opacity ?? 1,
-              transparent: mesh.material?.transparent ?? false,
-              depthWrite: mesh.material?.depthWrite ?? true
-            });
-          }
 
-          if (isHeart) {
-            mesh.visible = true;
-          } else if (isThoraxBone) {
-            mesh.visible = true;
-            if (mesh.material) {
-              mesh.material.transparent = true;
-              mesh.material.opacity = 0.20;
-              mesh.material.depthWrite = false;
-            }
-          } else {
-            mesh.visible = false;
+        saveMesh(mesh);
+
+        if (isHeart) {
+          mesh.visible = true;
+          if (mesh.material) {
+            mesh.material.transparent = false;
+            mesh.material.opacity = 1.0;
           }
-        });
+        } else if (isThoraxBone) {
+          mesh.visible = true;
+          if (mesh.material) {
+            mesh.material.transparent = true;
+            mesh.material.opacity = 0.20;
+            mesh.material.depthWrite = false;
+          }
+        } else {
+          mesh.visible = false;
+        }
       });
     } else if (motionId === MOTIONS.RESPIRATORY) {
-      // In respiratory: show lungs, bronchi, ribcage; hide digestive organs (stomach, liver, intestines, etc.) and muscles
-      registry.forEach((node, partId) => {
-        const lower = partId.toLowerCase();
+      this.viewer.scene.traverse((mesh) => {
+        if (!mesh.isMesh || mesh.parent?.name !== 'Scene') return;
+        const lower = (mesh.userData?.partId || mesh.name || '').toLowerCase();
         const isResp = lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch') || lower.includes('trachea') || lower.includes('diaphragm');
         const isRibcage = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle') || lower.includes('vertebra');
         const isDigestive = lower.includes('stomach') || lower.includes('liver') || lower.includes('intestine') || lower.includes('colon') || lower.includes('pancreas') || lower.includes('gallbladder') || lower.includes('kidney') || lower.includes('bladder') || lower.includes('spleen');
         const isLimbOrSkull = lower.includes('femur') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('phalang') || lower.includes('tars') || lower.includes('patella') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('carpal') || lower.includes('metacarp') || lower.includes('cranium') || lower.includes('skull') || lower.includes('mandible') || lower.includes('maxilla') || lower.includes('pelvis') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('pubis') || lower.includes('sacrum');
 
-        const meshes = ownMeshesOf(partId);
-        meshes.forEach(mesh => {
-          if (!this._savedMeshStates.has(mesh)) {
-            this._savedMeshStates.set(mesh, {
-              visible: mesh.visible,
-              opacity: mesh.material?.opacity ?? 1,
-              transparent: mesh.material?.transparent ?? false,
-              depthWrite: mesh.material?.depthWrite ?? true
-            });
-          }
+        saveMesh(mesh);
 
-          if (isResp || isRibcage) {
-            mesh.visible = true;
-          } else if (isDigestive || isLimbOrSkull) {
-            mesh.visible = false;
+        if (isResp || isRibcage) {
+          mesh.visible = true;
+        } else if (isDigestive || isLimbOrSkull) {
+          mesh.visible = false;
+        }
+      });
+    } else {
+      // Kinematic Joint Muscle Actions:
+      // Active moving chain + Agonists: solid, opaque, with prime movers glowing
+      // Other surrounding bones/muscles: ghosted at opacity 0.22 for anatomical context
+      // Internal visceral organs: hidden
+      const meta = MOTION_METADATA[motionId];
+      const agonists = meta?.agonists || [];
+      const movingNodesSet = new Set(this._cachedMotionNodes ? this._cachedMotionNodes.map(m => m.node) : []);
+
+      this.viewer.scene.traverse((mesh) => {
+        if (!mesh.isMesh || mesh.parent?.name !== 'Scene') return;
+        const lower = (mesh.userData?.partId || mesh.name || '').toLowerCase();
+        const sys = mesh.userData?.system;
+        const isInternalOrgan = sys === 'visceral' || sys === 'lymphatic' || sys === 'nervous' ||
+          lower.includes('stomach') || lower.includes('liver') || lower.includes('intestine') || 
+          lower.includes('kidney') || lower.includes('bladder') || lower.includes('colon');
+
+        saveMesh(mesh);
+
+        if (isInternalOrgan) {
+          mesh.visible = false;
+          return;
+        }
+
+        const isInMovingChain = movingNodesSet.has(mesh);
+        const isAgonist = agonists.some(a => lower.includes(a));
+
+        if (isInMovingChain || isAgonist) {
+          mesh.visible = true;
+          if (mesh.material) {
+            mesh.material.transparent = false;
+            mesh.material.opacity = 1.0;
+            mesh.material.depthWrite = true;
+            if (isAgonist && mesh.material.emissive) {
+              mesh.material.emissive.setHex(0x550a0a); // Subtle vibrant active red glow
+            }
           }
-        });
+        } else {
+          // Surrounding body: translucent ghost
+          mesh.visible = true;
+          if (mesh.material) {
+            mesh.material.transparent = true;
+            mesh.material.opacity = 0.22;
+            mesh.material.depthWrite = false;
+          }
+        }
       });
     }
   }
@@ -685,6 +808,9 @@ class DynamicAnatomyEngine {
           mesh.material.opacity = saved.opacity;
           mesh.material.transparent = saved.transparent;
           mesh.material.depthWrite = saved.depthWrite;
+          if (mesh.material.emissive && saved.emissiveHex !== undefined) {
+            mesh.material.emissive.setHex(saved.emissiveHex);
+          }
         }
       });
       this._savedMeshStates.clear();
@@ -807,11 +933,16 @@ class DynamicAnatomyEngine {
     if (!nodes || nodes.length === 0) return;
 
     // Smooth sinusoidal movement 0 -> 1 -> 0
-    const cycle = 0.5 - Math.cos(p * Math.PI * 2) / 2;
+    let cycle = 0.5 - Math.cos(p * Math.PI * 2) / 2;
+    if (motionId === MOTIONS.KNEE_EXTENSION || motionId === MOTIONS.ELBOW_EXTENSION) {
+      // Extends from pre-flexed position to straight position and back
+      cycle = 0.5 + Math.cos(p * Math.PI * 2) / 2;
+    }
 
     for (let i = 0; i < nodes.length; i++) {
       const item = nodes[i];
-      const angle = item.maxAngle * cycle;
+      const effWeight = item.weight !== undefined ? item.weight : 1.0;
+      const angle = item.maxAngle * effWeight * cycle;
       this.rotateAroundPivot(item.node, angle, item.axis, item.pivot);
     }
   }
