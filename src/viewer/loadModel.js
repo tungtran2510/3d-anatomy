@@ -47,11 +47,47 @@ export function getPickTargets() {
 }
 
 // The meshes a structure owns directly, i.e. excluding those belonging to a
-// nested structure. 868 of the 2827 structures are descendants of another one,
-// so "every mesh under this node" is not the same thing as "this structure".
+// nested structure. Resilient fallbacks ensure meshes are always returned even for
+// multi-primitive nodes.
 export function ownMeshesOf(partId) {
+  if (!partId) return [];
   const entry = structures.get(partId);
-  return entry ? entry.ownMeshes : [];
+  if (entry && entry.ownMeshes && entry.ownMeshes.length > 0) {
+    return entry.ownMeshes;
+  }
+  // Fallback 1: if entry has node, gather all descendant meshes
+  if (entry?.node) {
+    const meshes = [];
+    if (entry.node.isMesh) meshes.push(entry.node);
+    entry.node.traverse(c => {
+      if (c.isMesh && !meshes.includes(c)) meshes.push(c);
+    });
+    if (meshes.length > 0) {
+      entry.ownMeshes = meshes;
+      return meshes;
+    }
+  }
+  // Fallback 2: search meshRegistry directly or by normalized alphanumeric ID
+  let node = meshRegistry.get(partId);
+  if (!node) {
+    const norm = String(partId).toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const [key, val] of meshRegistry.entries()) {
+      const normKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normKey === norm || normKey.startsWith(norm)) {
+        node = val;
+        break;
+      }
+    }
+  }
+  if (node) {
+    const meshes = [];
+    if (node.isMesh) meshes.push(node);
+    node.traverse(c => {
+      if (c.isMesh && !meshes.includes(c)) meshes.push(c);
+    });
+    return meshes;
+  }
+  return [];
 }
 
 // A structure plus everything nested inside it, in document order.
@@ -154,21 +190,19 @@ async function loadModelOnce(systemId, viewer, options = {}) {
 function processModel(model, systemId, viewer) {
   const nodes = [];
 
-  // The glTF carries the untouched Z-Anatomy name in `za_name`, because the
-  // exporter rewrites object names (spaces, dots) and paired structures would
-  // otherwise collapse onto the same name.
+  // Pass 1: Identify authentic anatomical structures from Z-Anatomy (carried in za_name).
+  // Multi-material meshes exported from Blender have primitive sub-meshes created by GLTFLoader
+  // without za_name. These primitives belong to their parent structure and must NOT be detached
+  // or registered as separate independent structures.
   model.traverse((child) => {
-    const partId = child.userData?.za_name || child.userData?.partId || (child.isMesh && child.name ? child.name : null);
-    if (!partId) return;
+    const isStructure = !!child.userData?.za_name || (child.isMesh && child.name && !findAncestorZaName(child.parent));
+    if (!isStructure) return;
 
+    const partId = child.userData?.za_name || child.name;
     child.userData.partId = partId;
     child.userData.system = systemId;
     child.userData.originalName = partId;
 
-    // The glTF graph is nested: a structure can be the parent of another one.
-    // Record that relation instead of flattening it, because three.js applies
-    // `visible` down the whole subtree and hiding a parent would take its
-    // children with it.
     const parentId = findAncestorPartId(child.parent);
 
     nodes.push(child);
@@ -187,20 +221,18 @@ function processModel(model, systemId, viewer) {
     }
   });
 
-  // A nested structure is often a child of a node that is itself a mesh, so
-  // hiding the parent would hide the child with it. Detach every nested
-  // structure to the model root (attach preserves the world transform): the
-  // anatomical nesting stays recorded above, but visibility becomes
-  // independent per structure.
+  // Only detach genuine nested structures (e.g. brain inside cranium, or nested nerves)
+  // where BOTH parent and child are registered structures.
+  // Primitive sub-meshes of a structure remain securely attached inside their parent node!
   model.updateMatrixWorld(true);
   nodes.forEach(node => {
-    if (structures.get(node.userData.partId).parentId) {
+    const entry = structures.get(node.userData.partId);
+    if (entry?.parentId) {
       model.attach(node);
     }
   });
 
-  // Assign every mesh to the closest structure above it, so a parent structure
-  // never claims the geometry of a nested one.
+  // Pass 2: Assign every mesh to the closest structure above it
   model.traverse((child) => {
     if (!child.isMesh) return;
 
@@ -208,13 +240,31 @@ function processModel(model, systemId, viewer) {
 
     const ownerId = findAncestorPartId(child);
     if (!child.userData.system) child.userData.system = systemId;
-    if (ownerId && !child.userData.partId) child.userData.partId = ownerId;
-    const owner = ownerId && structures.get(ownerId);
-    if (owner) owner.ownMeshes.push(child);
+    if (ownerId) {
+      child.userData.partId = ownerId;
+      const owner = structures.get(ownerId);
+      if (owner && !owner.ownMeshes.includes(child)) {
+        owner.ownMeshes.push(child);
+      }
+      // Also register primitive mesh names as lookup aliases in meshRegistry
+      if (child.name && child.name !== ownerId) {
+        meshRegistry.set(child.name, child);
+      }
+    }
   });
 
   systemRegistry.set(systemId, nodes);
   console.log(`Loaded ${systemId}: ${nodes.length} structures`);
+}
+
+// Walks up to check if any ancestor has a za_name
+function findAncestorZaName(node) {
+  let current = node;
+  while (current) {
+    if (current.userData?.za_name) return current.userData.za_name;
+    current = current.parent;
+  }
+  return null;
 }
 
 // Walks up from `node` (inclusive) to the closest node carrying a partId.

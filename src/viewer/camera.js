@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { state, setAnimating, setCurrentView, notify } from '../state/store.js';
 import { restoreAllParts } from './visibility.js';
+import { ownMeshesOf } from './loadModel.js';
 
 const VIEWS = {
   front: { position: new THREE.Vector3(0, 0, 1), target: new THREE.Vector3(0, 0, 0) },
@@ -110,10 +111,24 @@ function animateCamera(camera, controls, targetPosition, targetTarget, viewer) {
 export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplicitZoom = false) {
   const { camera, controls } = viewer;
 
-  const box = new THREE.Box3().setFromObject(mesh);
-  const center = box.getCenter(new THREE.Vector3());
-  const size = box.getSize(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z, 0.04);
+  const box = new THREE.Box3();
+  const partId = mesh.userData?.partId;
+  const meshes = partId ? ownMeshesOf(partId) : [];
+  if (meshes.length > 0) {
+    meshes.forEach(m => box.expandByObject(m));
+  } else {
+    box.setFromObject(mesh);
+  }
+
+  const center = new THREE.Vector3();
+  if (box.isEmpty()) {
+    mesh.getWorldPosition(center);
+  } else {
+    box.getCenter(center);
+  }
+
+  const size = box.isEmpty() ? new THREE.Vector3(0.08, 0.08, 0.08) : box.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z, 0.05);
 
   let distance;
   // Calculate direction from current camera to target, preserving user's viewing angle
@@ -124,14 +139,14 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplic
 
   if (isExplicitZoom) {
     // Explicit 2nd step: Smooth close-up inspection (Zoom gần khi người dùng ấn nút Phóng to)
-    distance = Math.max(0.42, maxDim * 3.5);
+    distance = Math.max(0.48, maxDim * 4.0);
   } else {
-    // 1st step: Keep wide anatomical context (vẫn ở giải phẫu đó và chỉ vào, KHÔNG zoom quá nhiều)
-    // Cho các đốt sống (C1-C7, T1-T12): khoảng cách 1.15m - 1.35m bao quát cả vùng đầu cổ và ngực trên
-    const idealContextDist = Math.min(Math.max(maxDim * 6.0, 1.15), 1.85);
+    // 1st step: Keep wide anatomical context (chỉ điểm cấu trúc, KHÔNG zoom quá nhiều)
+    // Khoảng cách 2.15m cho phép người dùng thấy rõ vị trí cấu trúc tương quan toàn thân/vùng ngực-cột sống
+    const idealContextDist = 2.15;
     const curDist = camera.position.distanceTo(controls.target);
-    // Nếu khoảng cách hiện tại đã vừa vặn (1.05m - 1.95m), giữ nguyên để tránh giật hình; nếu quá xa/quá gần thì chuyển về context chuẩn
-    if (curDist >= 1.05 && curDist <= 1.95) {
+    // Nếu khoảng cách hiện tại đã ở tầm nhìn bao quát đẹp (1.9m - 2.6m), giữ nguyên để tránh giật hình; nếu quá xa/quá gần thì chuyển về 2.15m
+    if (curDist >= 1.9 && curDist <= 2.6) {
       distance = curDist;
     } else {
       distance = idealContextDist;
@@ -161,9 +176,9 @@ export function zoomOutToOverview(viewer, animate = true) {
   if (!viewer) return Promise.resolve();
   const { camera, controls } = viewer;
   const curDist = camera.position.distanceTo(controls.target);
-  if (curDist >= 1.2) return Promise.resolve(); // already wide
+  if (curDist >= 1.9) return Promise.resolve(); // already wide
   const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
-  const targetPos = controls.target.clone().add(direction.multiplyScalar(1.25));
+  const targetPos = controls.target.clone().add(direction.multiplyScalar(2.15));
   if (animate) {
     return animateCamera(camera, controls, targetPos, controls.target, viewer);
   } else {

@@ -852,17 +852,26 @@ body.theme-dark .depth-control {
   left: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
-  max-width: min(340px, 80vw);
-  padding: 6px 8px 6px 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 18px var(--shadow-strong);
+  gap: 6px;
+  max-width: min(300px, 75vw);
+  padding: 3px 8px 3px 10px;
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
   pointer-events: auto !important;
   white-space: nowrap;
   user-select: none;
   z-index: 25;
+}
+
+[data-theme="dark"] .callout,
+body.theme-dark .callout {
+  background: rgba(15, 23, 42, 0.65) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 12px rgba(59, 130, 246, 0.15) !important;
 }
 
 .callout-header-row {
@@ -875,12 +884,12 @@ body.theme-dark .depth-control {
 }
 
 .callout-pin-icon {
-  font-size: 13px;
+  font-size: 11px;
   flex-shrink: 0;
 }
 
 .callout-name {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--fg-primary);
   overflow: hidden;
@@ -892,13 +901,13 @@ body.theme-dark .depth-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--bg-tertiary);
   color: var(--fg-secondary);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
   cursor: pointer;
   flex-shrink: 0;
@@ -2853,15 +2862,15 @@ body.theme-dark .info-group-title {
   max-width: 480px;
   margin: 0 auto;
   height: auto;
-  min-height: 44px;
-  max-height: 80px;
-  padding: 6px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(30, 64, 175, 0.35);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14), 0 0 16px rgba(30, 64, 175, 0.12);
+  min-height: 38px;
+  max-height: 72px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.68) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 12px rgba(37, 99, 235, 0.12) !important;
   z-index: 1000;
   display: flex !important;
   flex-direction: column;
@@ -2874,9 +2883,9 @@ body.theme-dark .info-group-title {
 
 [data-theme="dark"] .selection-card.compact-mode,
 body.theme-dark .selection-card.compact-mode {
-  background: rgba(15, 23, 42, 0.95) !important;
+  background: rgba(15, 23, 42, 0.68) !important;
   border: 1px solid rgba(59, 130, 246, 0.35) !important;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(59, 130, 246, 0.18) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 14px rgba(59, 130, 246, 0.18) !important;
 }
 
 .selection-card.compact-mode .selection-mini-bar {
@@ -2933,7 +2942,7 @@ body.theme-dark .selection-card.compact-mode {
 }
 
 .mini-title {
-  font-size: 13.5px;
+  font-size: 11.5px !important;
   font-weight: 700;
   color: #1e3a8a;
   white-space: nowrap;
@@ -2948,7 +2957,7 @@ body.theme-dark .mini-title {
 }
 
 .mini-latin {
-  font-size: 11.5px;
+  font-size: 10px !important;
   color: #64748b;
   font-style: italic;
   white-space: nowrap;
@@ -3082,8 +3091,8 @@ body.theme-dark .mini-btn-zoom {
 
 .mini-desc {
   margin: 0;
-  font-size: 11.5px;
-  line-height: 1.35;
+  font-size: 10px !important;
+  line-height: 1.25;
   color: #475569;
   white-space: nowrap;
   overflow: hidden;
@@ -11530,10 +11539,10 @@ body.theme-dark .btn-tag-action.clear-tags {
     width: auto !important;
     max-width: 440px !important;
     height: auto !important;
-    min-height: 44px !important;
-    max-height: 70px !important;
-    padding: 6px 12px !important;
-    border-radius: 16px !important;
+    min-height: 38px !important;
+    max-height: 68px !important;
+    padding: 4px 10px !important;
+    border-radius: 14px !important;
     transform: none !important;
     z-index: 1000 !important;
   }

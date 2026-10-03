@@ -400,7 +400,17 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
     clearHighlight(lastSelectedMesh.userData.partId);
   }
 
-  const mesh = getMeshRegistry().get(partId);
+  let mesh = getMeshRegistry().get(partId);
+  if (!mesh) {
+    const normTarget = String(partId).toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const [id, m] of getMeshRegistry().entries()) {
+      const normId = id.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normId === normTarget || normId.startsWith(normTarget)) {
+        mesh = m;
+        break;
+      }
+    }
+  }
   if (!mesh) return;
 
   // Get structure info
@@ -759,6 +769,20 @@ export function selectPartById(partId, viewer, skipHistory = false, skipCamera =
       if (id.toLowerCase().startsWith(lower)) {
         mesh = m;
         resolvedId = id;
+        break;
+      }
+    }
+  }
+
+  // 4. Normalized Alphanumeric match (ignoring spaces, underscores, periods, and hyphens)
+  // e.g. "Vertebra T5" <-> "Vertebra_T5_1", "Atlas" <-> "Atlas (C1)"
+  if (!mesh) {
+    const normTarget = targetId.toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const [id, m] of registry.entries()) {
+      const normId = id.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normId === normTarget || normId.startsWith(normTarget) || normTarget.startsWith(normId)) {
+        mesh = m;
+        resolvedId = m.userData?.partId || id;
         break;
       }
     }

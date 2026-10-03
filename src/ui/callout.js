@@ -3,7 +3,7 @@
 // in a side panel the eye has to travel to.
 import * as THREE from 'three';
 import { state, translate } from '../state/store.js';
-import { getStructure, ownMeshesOf } from '../viewer/loadModel.js';
+import { getStructure, ownMeshesOf, getMeshRegistry } from '../viewer/loadModel.js';
 
 const OFFSET_X = 96;
 const OFFSET_Y = -64;
@@ -60,15 +60,43 @@ function build(container) {
 // same as the node origin for a group of meshes.
 function computeAnchor(partId) {
   const meshes = ownMeshesOf(partId);
-  if (!meshes.length) {
-    const node = getStructure(partId)?.node;
-    if (node) node.getWorldPosition(anchorWorld);
+  if (meshes && meshes.length > 0) {
+    const box = new THREE.Box3();
+    meshes.forEach(mesh => box.expandByObject(mesh));
+    if (!box.isEmpty()) {
+      box.getCenter(anchorWorld);
+      return;
+    }
+  }
+
+  const node = getStructure(partId)?.node || getMeshRegistry()?.get(partId);
+  if (node) {
+    const box = new THREE.Box3().setFromObject(node);
+    if (!box.isEmpty()) {
+      box.getCenter(anchorWorld);
+      return;
+    }
+    node.getWorldPosition(anchorWorld);
     return;
   }
 
-  const box = new THREE.Box3();
-  meshes.forEach(mesh => box.expandByObject(mesh));
-  box.getCenter(anchorWorld);
+  // Fallback: search by normalized alphanumeric ID in scene or meshRegistry
+  const normTarget = String(partId).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const reg = getMeshRegistry();
+  if (reg) {
+    for (const [id, m] of reg.entries()) {
+      const normId = id.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normId === normTarget || normId.startsWith(normTarget)) {
+        const box = new THREE.Box3().setFromObject(m);
+        if (!box.isEmpty()) {
+          box.getCenter(anchorWorld);
+          return;
+        }
+        m.getWorldPosition(anchorWorld);
+        return;
+      }
+    }
+  }
 }
 
 function update() {
