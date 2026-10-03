@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-  <meta name="description" content="Atlas Giải Phẫu 3D - Human Anatomy Atlas & Chuyển động sinh lý 3D PWA Offline">
-  <title>Atlas Giải Phẫu 3D - Human Anatomy Atlas</title>
+  <meta name="description" content="Atlas Giải Phẫu 3D - Tra cứu giải phẫu học và chuyển động sinh lý 3D tương tác">
+  <title>Atlas Giải Phẫu 3D - Tra Cứu Giải Phẫu Học & Chuyển Động Y Khoa</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="/images/app-icon-192.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -24,7 +24,7 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <button id="systemsOpen" class="btn-icon drawer-open" aria-label="Open systems" title="Hệ cơ quan">
+        <button id="systemsOpen" class="btn-icon drawer-open" aria-label="Mở hệ cơ quan" title="Hệ cơ quan">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <h1 class="logo">
@@ -45,7 +45,7 @@
           <span class="status-text" id="netStatusText">Trực tuyến</span>
         </button>
 
-        <button id="searchOpen" class="btn-icon drawer-open" aria-label="Search" title="Tìm kiếm" aria-expanded="false">
+        <button id="searchOpen" class="btn-icon drawer-open" aria-label="Tìm kiếm" title="Tìm kiếm" aria-expanded="false">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         </button>
         <select id="langSelect" class="lang-select" aria-label="Ngôn ngữ">
@@ -53,8 +53,8 @@
           <option value="en">EN</option>
           <option value="it">IT</option>
         </select>
-        <button id="helpBtn" class="btn-icon" aria-label="Help" title="Help">?</button>
-        <button id="infoOpen" class="btn-icon" aria-label="Open information" title="Information">
+        <button id="helpBtn" class="btn-icon" aria-label="Trợ giúp" title="Trợ giúp">?</button>
+        <button id="infoOpen" class="btn-icon" aria-label="Mở bảng thông tin" title="Thông tin chi tiết">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         </button>
         <button id="mainThemeToggleBtn" class="btn-icon theme-toggle-btn" aria-label="Đổi giao diện Sáng / Tối" title="Chuyển chế độ Nền Sáng / Nền Tối">
@@ -85,7 +85,7 @@
             <button class="sidebar-tab" data-tab="notes">Ghi chú</button>
             <button class="sidebar-tab" data-tab="history">Lịch sử</button>
           </div>
-          <button class="sidebar-toggle" id="systemsToggle" aria-label="Close systems">
+          <button class="sidebar-toggle" id="systemsToggle" aria-label="Đóng hệ cơ quan">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         </div>
@@ -115,10 +115,10 @@
       <section class="viewer-section">
         <div id="viewerContainer" class="viewer-container">
           <canvas id="threeCanvas" tabindex="0" role="application"
-                  aria-label="3D anatomy viewer. Arrow keys orbit, plus and minus zoom."></canvas>
+                  aria-label="Khung xem giải phẫu 3D tương tác. Kéo chuột để xoay, lăn chuột để phóng to thu nhỏ."></canvas>
           <div id="loadingOverlay" class="loading-overlay">
             <div class="loading-spinner"></div>
-            <span class="loading-text">Loading 3D model...</span>
+            <span class="loading-text">Đang tải mô hình 3D...</span>
           </div>
 
           <!-- Preset views float over the canvas (Compact Icon-Only on side) -->
@@ -127,27 +127,27 @@
             <button type="button" class="ctrl-collapse-btn" id="btnToggleControls" title="Ẩn/Hiện thanh góc nhìn 3D" aria-label="Ẩn/Hiện thanh góc nhìn 3D">
               <span class="ctrl-collapse-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
             </button>
-            <button type="button" class="control-btn" id="frontViewBtn" title="Nhìn phía trước (Front)">
+            <button type="button" class="control-btn" id="frontViewBtn" title="Nhìn phía trước">
               <span class="ctrl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg></span>
               <span class="ctrl-text">Trước</span>
             </button>
-            <button type="button" class="control-btn" id="sideViewBtn" title="Nhìn nghiêng (Side)">
+            <button type="button" class="control-btn" id="sideViewBtn" title="Nhìn nghiêng">
               <span class="ctrl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
               <span class="ctrl-text">Nghiêng</span>
             </button>
-            <button type="button" class="control-btn" id="backViewBtn" title="Nhìn phía sau (Back)">
+            <button type="button" class="control-btn" id="backViewBtn" title="Nhìn phía sau">
               <span class="ctrl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M21 21v-5h-5"/></svg></span>
               <span class="ctrl-text">Sau</span>
             </button>
-            <button type="button" class="control-btn" id="topViewBtn" title="Nhìn từ trên (Top)">
+            <button type="button" class="control-btn" id="topViewBtn" title="Nhìn từ trên xuống">
               <span class="ctrl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span>
               <span class="ctrl-text">Trên</span>
             </button>
-            <button type="button" class="control-btn" id="halfBodyBtn" title="Bật/Tắt xem nửa người (Phẫu tích một nửa / Sagittal Cut)">
+            <button type="button" class="control-btn" id="halfBodyBtn" title="Bật/Tắt xem nửa người (Phẫu tích một nửa)">
               <span class="ctrl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/></svg></span>
               <span class="ctrl-text">Nửa người</span>
             </button>
-            <button type="button" class="control-btn" id="resetBtn" title="Đặt lại góc nhìn (Reset)">
+            <button type="button" class="control-btn" id="resetBtn" title="Đặt lại góc nhìn">
               <span class="ctrl-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
               <span class="ctrl-text">Đặt lại</span>
             </button>
@@ -166,11 +166,11 @@
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></svg></span>
               <span class="tool-text">Trợ lý AI</span>
             </button>
-            <button type="button" class="tool-btn highlight-voice" id="btnToolVoice" title="Điều khiển giọng nói tiếng Việt rảnh tay (Hands-free Voice AI)">
+            <button type="button" class="tool-btn highlight-voice" id="btnToolVoice" title="Điều khiển giọng nói tiếng Việt rảnh tay">
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></span>
               <span class="tool-text">Giọng nói</span>
             </button>
-            <button class="tool-btn highlight-halfbody" id="btnToolHalfBody" title="Bật/Tắt nửa người (Half-Body Hemisection)">
+            <button class="tool-btn highlight-halfbody" id="btnToolHalfBody" title="Bật/Tắt xem nửa người (Phẫu tích một nửa)">
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/></svg></span>
               <span class="tool-text">Nửa người</span>
             </button>
@@ -182,7 +182,7 @@
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg></span>
               <span class="tool-text">Nhãn 3D</span>
             </button>
-            <button class="tool-btn" id="btnToolClipping" title="Mặt cắt 3D giải phẫu (Sagittal, Coronal, Axial)">
+            <button class="tool-btn" id="btnToolClipping" title="Mặt cắt 3D giải phẫu (Đứng dọc, Đứng ngang, Cắt ngang)">
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></span>
               <span class="tool-text">Mặt cắt</span>
             </button>
@@ -202,9 +202,9 @@
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
               <span class="tool-text">Chuyển động</span>
             </button>
-            <button type="button" class="tool-btn highlight-offline" id="btnToolOffline" title="Tải mô hình 3D từng hệ & Quản lý ngoại tuyến PWA">
+            <button type="button" class="tool-btn highlight-offline" id="btnToolOffline" title="Tải mô hình 3D từng hệ & Quản lý ngoại tuyến">
               <span class="tool-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
-              <span class="tool-text">Tải Offline</span>
+              <span class="tool-text">Tải Về Máy</span>
             </button>
           </div>
 
@@ -230,9 +230,9 @@
               <button class="popover-close-btn" id="clippingCloseBtn">&times;</button>
             </div>
             <div class="clipping-plane-select">
-              <button type="button" class="plane-btn active" data-plane="sagittal">Đứng dọc (Sagittal)</button>
-              <button type="button" class="plane-btn" data-plane="coronal">Đứng ngang (Coronal)</button>
-              <button type="button" class="plane-btn" data-plane="axial">Ngang (Axial)</button>
+              <button type="button" class="plane-btn active" data-plane="sagittal">Đứng dọc</button>
+              <button type="button" class="plane-btn" data-plane="coronal">Đứng ngang</button>
+              <button type="button" class="plane-btn" data-plane="axial">Cắt ngang</button>
             </div>
             <div class="explode-slider-row">
               <input type="range" id="clippingSlider" min="-0.4" max="0.4" step="0.01" value="0">
@@ -283,7 +283,7 @@
           </div>
 
           <!-- Floating Top View Button (Góc nhìn từ trên đỉnh đầu nhân vật) -->
-          <button type="button" class="floating-top-view-btn" id="btnQuickTopView" title="Góc nhìn từ trên đỉnh đầu nhân vật (Top View)">
+          <button type="button" class="floating-top-view-btn" id="btnQuickTopView" title="Góc nhìn từ trên đỉnh đầu">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="7"/>
               <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
@@ -296,14 +296,14 @@
 
           <!-- Floating Views Quick Nav (<| Views |>) (Visible Body Standard: Top-Left) -->
           <div class="floating-views-quick-nav" id="floatingViewsQuickNav">
-            <button type="button" class="btn-quick-nav-arrow" id="btnQuickNavPrev" title="Góc nhìn trước (&lt;)">
+            <button type="button" class="btn-quick-nav-arrow" id="btnQuickNavPrev" title="Góc nhìn trước">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
-            <button type="button" class="btn-quick-nav-title" id="btnQuickNavTitle" title="Mở danh mục góc nhìn &amp; hoạt ảnh (Views)">
+            <button type="button" class="btn-quick-nav-title" id="btnQuickNavTitle" title="Mở danh mục góc nhìn &amp; hoạt ảnh">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
               <span id="quickNavLabel">Góc nhìn</span>
             </button>
-            <button type="button" class="btn-quick-nav-arrow" id="btnQuickNavNext" title="Góc nhìn tiếp theo (&gt;)">
+            <button type="button" class="btn-quick-nav-arrow" id="btnQuickNavNext" title="Góc nhìn tiếp theo">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
           </div>
@@ -311,11 +311,11 @@
           <!-- Floating Radiological CT/MRI Scout Box (Visible Body Standard: Bottom-Left) -->
           <div class="radiological-scout-box hidden" id="radiologicalScoutBox" title="Ảnh Chẩn Đoán Hình Ảnh (CT / MRI) Đối Chiếu (Chạm để xem chi tiết)">
             <div class="scout-preview-frame">
-              <div class="scout-badge" id="scoutBadgeLabel">CT Scout</div>
+              <div class="scout-badge" id="scoutBadgeLabel">Ảnh định vị CT</div>
               <div class="scout-img-wrapper">
                 <canvas id="scoutCanvas" width="90" height="90"></canvas>
               </div>
-              <div class="scout-level-pill" id="scoutLevelText">Axial CT</div>
+              <div class="scout-level-pill" id="scoutLevelText">Lát cắt ngang CT</div>
             </div>
           </div>
 
@@ -357,7 +357,7 @@
             <button type="button" class="mini-btn-audio" id="btnMiniAudio" title="Nghe phát âm danh pháp" aria-label="Phát âm">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             </button>
-            <button type="button" class="mini-btn-zoom" id="btnMiniZoom" title="Phóng to chi tiết (Zoom closer)" aria-label="Phóng to">
+            <button type="button" class="mini-btn-zoom" id="btnMiniZoom" title="Phóng to chi tiết" aria-label="Phóng to">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
             </button>
             <button type="button" class="mini-btn-close" id="btnMiniClose" title="Ẩn thanh (vẫn giữ điểm chỉ 3D)" aria-label="Đóng thanh">&times;</button>
@@ -379,10 +379,10 @@
         <!-- 1. Header Row (Visible Body Standard: History Navigation & Information Toggle) -->
         <div class="selection-card-header">
         <div class="selection-card-nav-btns">
-          <button type="button" class="btn-selection-nav disabled" id="btnSelectionHistoryBack" title="Quay lại cấu trúc trước (&lt;)">
+          <button type="button" class="btn-selection-nav disabled" id="btnSelectionHistoryBack" title="Quay lại cấu trúc trước">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button type="button" class="btn-selection-nav disabled" id="btnSelectionHistoryForward" title="Đi tiếp cấu trúc sau (&gt;)">
+          <button type="button" class="btn-selection-nav disabled" id="btnSelectionHistoryForward" title="Đi tiếp cấu trúc sau">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
@@ -395,7 +395,7 @@
         </div>
 
         <div class="selection-card-header-btns">
-          <button type="button" class="btn-toggle-zoom-step" id="btnToggleZoomStep" title="Phóng to chi tiết (Zoom closer)">
+          <button type="button" class="btn-toggle-zoom-step" id="btnToggleZoomStep" title="Phóng to chi tiết">
             <svg class="icon-zoom-in" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
             <span class="btn-zoom-step-text">Phóng to</span>
           </button>
@@ -415,7 +415,7 @@
           <div class="selection-structure-names-prominent">
             <div class="names-row">
               <h3 id="cardTitle" class="primary-medical-title">Chọn cấu trúc</h3>
-              <button type="button" class="btn-pronounce-audio" id="btnPronounceAudio" title="Phát âm danh pháp giải phẫu (Audio pronunciation)">
+              <button type="button" class="btn-pronounce-audio" id="btnPronounceAudio" title="Phát âm danh pháp giải phẫu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
               </button>
             </div>
@@ -472,7 +472,7 @@
         <!-- DYNAMIC PHYSIOLOGICAL & ANATOMICAL FLOW PATHWAY (Đường đi & Chu trình giải phẫu trực quan) -->
         <div class="info-section-group hidden" id="cardPathwaySection">
           <div class="info-group-title">
-            <span id="cardPathwayHeaderTitle">Đường đi & Chu trình giải phẫu (Anatomical Pathway)</span>
+            <span id="cardPathwayHeaderTitle">Đường đi & Chu trình giải phẫu sinh lý</span>
           </div>
           <div class="pathway-flow-container" id="cardPathwayContainer">
             <!-- Dynamic interactive step pills injected here -->
@@ -487,20 +487,20 @@
         <!-- BLOCK 2: Adjust the Model (Điều chỉnh mô hình 3D nhanh) -->
         <div class="info-section-group">
           <div class="info-group-title">
-            <span>Điều chỉnh mô hình (Adjust the Model)</span>
+            <span>Điều chỉnh mô hình 3D</span>
           </div>
           <div class="adjust-model-grid">
             <button class="card-action-btn hide" id="cardHideBtn" title="Bóc tách / Ẩn bộ phận này">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              <span>Ẩn đi (Hide)</span>
+              <span>Ẩn đi</span>
             </button>
             <button class="card-action-btn ghost" id="cardGhostBtn" title="Làm mờ bộ phận xung quanh">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>
-              <span>Làm mờ (Fade)</span>
+              <span>Làm mờ</span>
             </button>
             <button class="card-action-btn isolate" id="cardIsolateBtn" title="Chỉ xem một mình bộ phận này">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>Cô lập (Isolate)</span>
+              <span>Cô lập</span>
             </button>
             <button class="card-action-btn radius-blast" id="cardRadiusBlastBtn" title="Bóc tách vùng nổ xung quanh trong bán kính 10cm">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" stroke-dasharray="2 2"/></svg>
@@ -512,7 +512,7 @@
         <!-- BLOCK 3: Anatomical Hierarchy (Cây phân cấp giải phẫu tương tác) -->
         <div class="info-section-group" id="cardHierarchySection">
           <div class="info-group-title">
-            <span>Cây phân cấp giải phẫu (Anatomical Hierarchy)</span>
+            <span>Cây phân cấp giải phẫu</span>
           </div>
           <div class="hierarchy-tree-box" id="cardHierarchyBox">
             <!-- Dynamic 4-way anatomical relations -->
@@ -522,7 +522,7 @@
         <!-- BLOCK 4: CÁC TRƯỜNG PHỤ / MỞ RỘNG (ĐỂ Ở DƯỚI CÙNG THEO YÊU CẦU) -->
         <div class="info-section-group">
           <div class="info-group-title">
-            <span>Tìm hiểu chuyên sâu (Learn More)</span>
+            <span>Tìm hiểu chuyên sâu</span>
           </div>
           <div class="learn-more-row">
             <button class="learn-btn lesson" id="cardLessonBtn" title="Học bài học tương ứng">
@@ -535,7 +535,7 @@
             </button>
             <button class="learn-btn dermatome" id="cardDermatomeBtn" title="Tiết đoạn phân bố thần kinh cảm giác da">
               <span class="learn-icon">🌈</span>
-              <span>Dermatomes</span>
+              <span>Cảm giác da</span>
             </button>
             <button class="learn-btn ai" id="cardAIBtn" title="Hỏi Bác Sĩ AI Giải Phẫu">
               <span class="learn-icon">🤖</span>
@@ -547,16 +547,16 @@
         <!-- Tag Selected Structure (Gắn thẻ nhãn 3D) -->
         <div class="info-section-group" id="cardTagSection">
           <div class="info-group-title">
-            <span>Gắn thẻ nhãn (Tag Selected Structure)</span>
+            <span>Gắn thẻ nhãn mốc</span>
           </div>
           <div class="tag-actions-row">
             <button type="button" class="btn-tag-action add-tag" id="btnAddTagBtn" title="Ghim thẻ tên lên mô hình 3D">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              <span>Add Tag</span>
+              <span>Ghim thẻ</span>
             </button>
             <button type="button" class="btn-tag-action clear-tags" id="btnClearTagsBtn" title="Xóa các thẻ nhãn đã ghim">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              <span>Clear Tags</span>
+              <span>Xóa thẻ</span>
             </button>
           </div>
         </div>
@@ -564,22 +564,22 @@
         <!-- Model Orientation (Tư thế mô hình & Bàn mổ y khoa) -->
         <div class="info-section-group">
           <div class="info-group-title">
-            <span>Tư thế mô hình (Model Orientation)</span>
+            <span>Tư thế mô hình</span>
           </div>
           <div class="orientation-controls-row">
             <button type="button" class="btn-posture active" data-orientation="standing" title="Tư thế giải phẫu đứng thẳng">
               <span class="posture-icon">🧍</span>
               <span>Đứng</span>
             </button>
-            <button type="button" class="btn-posture" data-orientation="supine" title="Tư thế nằm ngửa trên bàn mổ (Supine)">
+            <button type="button" class="btn-posture" data-orientation="supine" title="Tư thế nằm ngửa trên bàn mổ">
               <span class="posture-icon">🛌↑</span>
               <span>Nằm ngửa</span>
             </button>
-            <button type="button" class="btn-posture" data-orientation="prone" title="Tư thế nằm sấp trên bàn mổ (Prone)">
+            <button type="button" class="btn-posture" data-orientation="prone" title="Tư thế nằm sấp trên bàn mổ">
               <span class="posture-icon">🛌↓</span>
               <span>Nằm sấp</span>
             </button>
-            <button type="button" class="btn-table-toggle" id="btnCardTableToggle" title="Bật / Tắt Bàn phẫu tích y khoa (Table)">
+            <button type="button" class="btn-table-toggle" id="btnCardTableToggle" title="Bật / Tắt bàn mổ phẫu tích">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><line x1="5" y1="12" x2="5" y2="20"/><line x1="19" y1="12" x2="19" y2="20"/><line x1="5" y1="16" x2="19" y2="16"/></svg>
               <span>Bàn mổ</span>
             </button>
@@ -589,7 +589,7 @@
         <!-- Related Histology & Media (Nội dung mô học & Video liên quan) -->
         <div class="info-section-group" id="cardRelatedSection">
           <div class="info-group-title">
-            <span>Lát cắt mô học hiển vi & Video (Related Content)</span>
+            <span>Lát cắt mô học hiển vi & Video liên quan</span>
           </div>
           <div class="related-media-scroll" id="cardRelatedMediaScroll">
             <!-- Dynamic histology cross section tiles -->
@@ -612,7 +612,7 @@
       <!-- Compact Mode Bottom Switch Bar (Visible Body Standard) -->
       <div class="compact-mode-bar" id="btnSwitchCompactMode">
         <span class="compact-drag-indicator"></span>
-        <span class="compact-text">Thu gọn bảng (Switch to Compact Mode)</span>
+        <span class="compact-text">Thu gọn bảng thông tin</span>
       </div>
     </div>
 
@@ -651,9 +651,9 @@
     <!-- Atlas 2027 Full-Screen Views & Media Hub Modal (Visible Body Native Standard) -->
     <div class="atlas-hub-modal hidden" id="atlasHubModal">
       <div class="atlas-hub-backdrop" id="atlasHubBackdrop"></div>
-      <div class="atlas-hub-container" role="dialog" aria-modal="true" aria-label="Human Anatomy Atlas Views Hub">
+      <div class="atlas-hub-container" role="dialog" aria-modal="true" aria-label="Danh mục góc nhìn và hoạt ảnh giải phẫu 3D">
         
-        <!-- 1. TOP PRIMARY NAVIGATION BAR (5 Tabs: Views, Search, Media, Quizzes, My Library) -->
+        <!-- 1. TOP PRIMARY NAVIGATION BAR (5 Tabs: Góc nhìn, Tìm kiếm, Đa phương tiện, Trắc nghiệm, Thư viện của tôi) -->
         <header class="atlas-vb-topbar">
           <div class="atlas-vb-tabs">
             <button type="button" class="vb-tab-btn active" data-tab="views" id="tabBtnViews">
@@ -662,7 +662,7 @@
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Views</span>
+              <span class="vb-tab-label">Góc nhìn</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="search" id="tabBtnSearch">
               <div class="vb-tab-icon">
@@ -671,7 +671,7 @@
                   <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Search</span>
+              <span class="vb-tab-label">Tìm kiếm</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="media" id="tabBtnMedia">
               <div class="vb-tab-icon">
@@ -680,7 +680,7 @@
                   <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Media</span>
+              <span class="vb-tab-label">Đa phương tiện</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="quizzes" id="tabBtnQuizzes">
               <div class="vb-tab-icon">
@@ -689,7 +689,7 @@
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Quizzes</span>
+              <span class="vb-tab-label">Trắc nghiệm</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="library" id="tabBtnLibrary">
               <div class="vb-tab-icon">
@@ -698,21 +698,21 @@
                   <polygon points="10 7 11 9 13.5 9.5 11.7 11 12.2 13.5 10 12.2 7.8 13.5 8.3 11 6.5 9.5 9 9" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">My Library</span>
+              <span class="vb-tab-label">Thư viện của tôi</span>
             </button>
           </div>
           <button type="button" class="vb-topbar-close" id="btnAtlasHubClose" title="Quay lại mô hình 3D (Đóng)">&times;</button>
         </header>
 
-        <!-- 2. SUB-CATEGORY BAR (Regions, Systems, Gross Anatomy Lab, Cross Sections, Microanatomy, Muscle Actions) -->
+        <!-- 2. SUB-CATEGORY BAR (Vùng cơ thể, Hệ cơ quan, Bàn phẫu tích, Lát cắt giải phẫu, Giải phẫu vi thể, Chuyển động cơ) -->
         <nav class="atlas-vb-subbar" id="atlasSubCategoryBar">
           <div class="atlas-vb-subnav-scroll">
-            <button type="button" class="vb-sub-item" data-sub="regions">Regions</button>
-            <button type="button" class="vb-sub-item active" data-sub="systems">Systems</button>
-            <button type="button" class="vb-sub-item" data-sub="lab">Gross Anatomy Lab</button>
-            <button type="button" class="vb-sub-item" data-sub="cross_sections">Cross Sections</button>
-            <button type="button" class="vb-sub-item" data-sub="microanatomy">Microanatomy</button>
-            <button type="button" class="vb-sub-item" data-sub="muscle_actions">Muscle Actions</button>
+            <button type="button" class="vb-sub-item" data-sub="regions">Vùng cơ thể</button>
+            <button type="button" class="vb-sub-item active" data-sub="systems">Hệ cơ quan</button>
+            <button type="button" class="vb-sub-item" data-sub="lab">Bàn phẫu tích</button>
+            <button type="button" class="vb-sub-item" data-sub="cross_sections">Lát cắt giải phẫu</button>
+            <button type="button" class="vb-sub-item" data-sub="microanatomy">Giải phẫu vi thể</button>
+            <button type="button" class="vb-sub-item" data-sub="muscle_actions">Chuyển động cơ</button>
           </div>
         </nav>
 
@@ -723,7 +723,7 @@
               <circle cx="11" cy="11" r="8"/>
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <input type="text" class="vb-search-input" id="atlasHubSearchInput" placeholder="Filter results by name..." autocomplete="off">
+            <input type="text" class="vb-search-input" id="atlasHubSearchInput" placeholder="Lọc kết quả theo tên (VD: sọ, tim, mắt)..." autocomplete="off">
             <button type="button" class="vb-voice-btn" id="btnHubVoiceMic" title="Tìm bằng giọng nói tiếng Việt">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
@@ -738,9 +738,9 @@
         <!-- 4. MAIN SCROLLABLE SHELVES CONTENT -->
         <div class="atlas-vb-body" id="atlasHubBody"></div>
 
-        <!-- 5. BOTTOM NAVIGATION BAR (5 Items: Menu, Launch Link, Settings, Help, Store) -->
+        <!-- 5. BOTTOM NAVIGATION BAR (5 Items: Trình đơn, Liên kết, Cài đặt, Trợ giúp, Tải Offline) -->
         <footer class="atlas-vb-bottombar">
-          <button type="button" class="vb-bottom-item" id="btnHubBottomMenu" title="Menu giải phẫu">
+          <button type="button" class="vb-bottom-item" id="btnHubBottomMenu" title="Trình đơn giải phẫu">
             <div class="vb-bottom-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <rect x="3" y="3" width="7" height="7" rx="1.5"/>
@@ -750,9 +750,9 @@
                 <polyline points="18 9 21 12 18 15"/>
               </svg>
             </div>
-            <span>Menu</span>
+            <span>Trình đơn</span>
           </button>
-          <button type="button" class="vb-bottom-item" id="btnHubLaunchLink" title="Sao chép Launch Link góc nhìn">
+          <button type="button" class="vb-bottom-item" id="btnHubLaunchLink" title="Sao chép Liên kết góc nhìn">
             <div class="vb-bottom-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -761,7 +761,7 @@
                 <polyline points="13 15 9 15 9 11"/>
               </svg>
             </div>
-            <span>Launch Link</span>
+            <span>Liên kết</span>
           </button>
           <button type="button" class="vb-bottom-item" id="btnHubBottomSettings" title="Cài đặt giao diện & Quản trị">
             <div class="vb-bottom-icon">
@@ -770,7 +770,7 @@
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
               </svg>
             </div>
-            <span>Settings</span>
+            <span>Cài đặt</span>
           </button>
           <button type="button" class="vb-bottom-item" id="btnHubBottomHelp" title="Hướng dẫn sử dụng">
             <div class="vb-bottom-icon">
@@ -780,9 +780,9 @@
                 <line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
             </div>
-            <span>Help</span>
+            <span>Trợ giúp</span>
           </button>
-          <button type="button" class="vb-bottom-item" id="btnHubBottomStore" title="Tải toàn bộ dữ liệu Offline 100%">
+          <button type="button" class="vb-bottom-item" id="btnHubBottomStore" title="Tải toàn bộ dữ liệu để xem khi không có mạng">
             <div class="vb-bottom-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <circle cx="9" cy="21" r="1"/>
@@ -790,7 +790,7 @@
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
               </svg>
             </div>
-            <span>Store</span>
+            <span>Tải Về Máy</span>
           </button>
         </footer>
       </div>
@@ -804,48 +804,48 @@
       <div class="modal-overlay"></div>
       <div class="modal-content">
         <div class="modal-header">
-          <h3 id="helpTitle" data-i18n="controls_title">Controls</h3>
-          <button class="modal-close" id="helpClose" aria-label="Close">&times;</button>
+          <h3 id="helpTitle" data-i18n="controls_title">Hướng dẫn thao tác</h3>
+          <button class="modal-close" id="helpClose" aria-label="Đóng">&times;</button>
         </div>
         <div class="modal-body">
           <div class="help-section">
-            <h4 data-i18n="help_computer">Computer</h4>
+            <h4 data-i18n="help_computer">Máy tính (Chuột)</h4>
             <ul>
-              <li><kbd data-i18n="help_left_drag">Left drag</kbd> <span data-i18n="help_rotate">Rotate</span></li>
-              <li><kbd data-i18n="help_wheel">Wheel</kbd> <span data-i18n="help_zoom">Zoom</span></li>
-              <li><kbd data-i18n="help_right_drag">Right drag</kbd> <span data-i18n="help_pan">Pan</span></li>
-              <li><kbd data-i18n="help_double_click">Double click</kbd> <span data-i18n="help_frame">Frame structure</span></li>
+              <li><kbd data-i18n="help_left_drag">Kéo chuột trái</kbd> <span data-i18n="help_rotate">Xoay 360°</span></li>
+              <li><kbd data-i18n="help_wheel">Lăn chuột</kbd> <span data-i18n="help_zoom">Phóng to / Thu nhỏ</span></li>
+              <li><kbd data-i18n="help_right_drag">Kéo chuột phải</kbd> <span data-i18n="help_pan">Di chuyển vị trí</span></li>
+              <li><kbd data-i18n="help_double_click">Nhấp đúp</kbd> <span data-i18n="help_frame">Tập trung cấu trúc</span></li>
             </ul>
           </div>
           <div class="help-section">
-            <h4 data-i18n="help_touch">Touch</h4>
+            <h4 data-i18n="help_touch">Màn hình cảm ứng</h4>
             <ul>
-              <li><kbd data-i18n="help_one_finger">One finger</kbd> <span data-i18n="help_rotate">Rotate</span></li>
-              <li><kbd data-i18n="help_pinch">Pinch</kbd> <span data-i18n="help_zoom">Zoom</span></li>
-              <li><kbd data-i18n="help_two_finger">Two-finger drag</kbd> <span data-i18n="help_pan">Pan</span></li>
-              <li><kbd data-i18n="help_tap">Tap</kbd> <span data-i18n="help_select">Select</span></li>
+              <li><kbd data-i18n="help_one_finger">Một ngón tay</kbd> <span data-i18n="help_rotate">Xoay mô hình</span></li>
+              <li><kbd data-i18n="help_pinch">Chụm hai ngón</kbd> <span data-i18n="help_zoom">Phóng to / Thu nhỏ</span></li>
+              <li><kbd data-i18n="help_two_finger">Kéo hai ngón</kbd> <span data-i18n="help_pan">Di chuyển vị trí</span></li>
+              <li><kbd data-i18n="help_tap">Chạm nhẹ</kbd> <span data-i18n="help_select">Chọn cấu trúc</span></li>
             </ul>
           </div>
           <div class="help-section">
-            <h4 data-i18n="help_panels">Panels</h4>
+            <h4 data-i18n="help_panels">Các bảng điều khiển</h4>
             <ul>
-              <li data-i18n="help_left_panel">Left panel: anatomical systems</li>
-              <li data-i18n="help_right_panel">Right panel: structure details</li>
-              <li data-i18n="help_bottom_bar">Bottom bar: actions on the selection</li>
-              <li data-i18n="help_toolbar">Toolbar: preset views</li>
+              <li data-i18n="help_left_panel">Bảng trái: Bật/tắt các hệ giải phẫu & Vùng cơ thể</li>
+              <li data-i18n="help_right_panel">Bảng phải: Chi tiết và kiến thức y khoa</li>
+              <li data-i18n="help_bottom_bar">Thanh đáy: Bóc tách, cô lập, bóng mờ</li>
+              <li data-i18n="help_toolbar">Thanh công cụ: Góc nhìn đặt sẵn & Đo đạc</li>
             </ul>
           </div>
           <div class="help-section">
-            <h4 data-i18n="help_credits">Credits and licences</h4>
+            <h4 data-i18n="help_credits">Bản quyền & Giấy phép nguồn mở</h4>
             <ul>
-              <li><a href="https://lifesciencedb.jp/bp3d/" target="_blank" rel="noopener" style="color: var(--accent);">BodyParts3D</a> anatomical models, CC BY-SA 2.1 Japan</li>
-              <li><a href="https://www.z-anatomy.com/" target="_blank" rel="noopener" style="color: var(--accent);">Z-Anatomy</a> model rework, CC BY-SA 4.0</li>
-              <li><a href="https://en.wikipedia.org/wiki/Wikipedia:Copyrights" target="_blank" rel="noopener" style="color: var(--accent);">Wikipedia</a> structure definitions, CC BY-SA 3.0 and GFDL</li>
-              <li>University of Dundee, CAHID: cranial nerves and foramina, CC BY 4.0</li>
-              <li>University of Dundee: inner ear, CC BY-NC-SA 4.0</li>
-              <li>lissiecowley: kidney, CC BY-NC 4.0</li>
+              <li><a href="https://lifesciencedb.jp/bp3d/" target="_blank" rel="noopener" style="color: var(--accent);">BodyParts3D</a> mô hình giải phẫu, CC BY-SA 2.1 Japan</li>
+              <li><a href="https://www.z-anatomy.com/" target="_blank" rel="noopener" style="color: var(--accent);">Z-Anatomy</a> tinh chỉnh mô hình 3D, CC BY-SA 4.0</li>
+              <li><a href="https://en.wikipedia.org/wiki/Wikipedia:Copyrights" target="_blank" rel="noopener" style="color: var(--accent);">Wikipedia</a> định nghĩa cấu trúc giải phẫu, CC BY-SA 3.0 &amp; GFDL</li>
+              <li>University of Dundee, CAHID: dây thần kinh sọ và các lỗ nền sọ, CC BY 4.0</li>
+              <li>University of Dundee: tai trong, CC BY-NC-SA 4.0</li>
+              <li>lissiecowley: cấu trúc thận, CC BY-NC 4.0</li>
             </ul>
-            <p class="hint" style="margin-top: 12px;">Mixed-licence derivative work, distributed NON-COMMERCIALLY (CC BY-NC-SA 4.0): the NC clause comes from the inner ear and kidney models. Attribution and share-alike are required. See LICENSE and NOTICE in the repository.</p>
+            <p class="hint" style="margin-top: 12px;">Tác phẩm phái sinh hỗn hợp, phát hành PHI THƯƠNG MẠI (CC BY-NC-SA 4.0). Ghi nhận tác giả và chia sẻ tương tự theo quy định.</p>
           </div>
         </div>
       </div>

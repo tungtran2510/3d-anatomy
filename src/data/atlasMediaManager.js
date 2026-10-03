@@ -5,10 +5,11 @@
 export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   {
     id: 'system_overviews_media',
-    titleVi: 'System Overviews (Tổng Quan Các Hệ Thống)',
+    titleVi: 'Tổng Quan Các Hệ Cơ Quan',
     cards: [
       {
         id: 'med_skin',
+        titleVi: '1. Cấu Trúc & Chức Năng Của Hệ Da',
         title: '1. Function of the Skin',
         subtitle: 'Chức năng của da: Bảo vệ, điều hòa thân nhiệt và xúc giác',
         duration: '0:56',
@@ -20,6 +21,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_skeleton',
+        titleVi: '2. Chức Năng Nâng Đỡ Của Hệ Xương',
         title: '2. Function of the Skeleton',
         subtitle: 'Chức năng hệ xương: Khung nâng đỡ, bảo vệ tạng và sinh máu',
         duration: '0:46',
@@ -31,6 +33,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_muscles',
+        titleVi: '3. Phân Loại Các Mô Cơ (Vân, Trơn, Tim)',
         title: '3. Muscle Tissue Types',
         subtitle: 'Các loại mô cơ: Cơ vân, cơ trơn nội tạng và cơ tim',
         duration: '0:43',
@@ -44,10 +47,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'bones_skeletal_muscles_media',
-    titleVi: 'Bones and Skeletal Muscles (Xương & Cơ Vân)',
+    titleVi: 'Hệ Xương & Cơ Bắp',
     cards: [
       {
         id: 'med_paired_muscles',
+        titleVi: '1. Hoạt Động Của Các Cặp Cơ Đối Vận',
         title: '1. Paired Muscle Actions',
         subtitle: 'Cặp cơ đối vận: Cơ chế gấp và duỗi khuỷu tay',
         duration: '1:04',
@@ -60,6 +64,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_ball_socket',
+        titleVi: '2. Khớp Hoạt Dịch Dạng Cầu (Khớp Vai & Háng)',
         title: '2. Joint: Ball and Socket',
         subtitle: 'Khớp chỏm cầu: Vận động đa trục xoay tròn 360 độ',
         duration: '0:07',
@@ -72,6 +77,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_condyloid',
+        titleVi: '3. Khớp Hoạt Dịch Dạng Lồi Cầu (Khớp Gối)',
         title: '3. Joint: Condyloid',
         subtitle: 'Khớp lồi cầu: Chuyển động gập duỗi bản lề của khớp',
         duration: '0:07',
@@ -86,10 +92,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'cells_tissues_media',
-    titleVi: 'Cells and Tissues (Tế Bào & Mô Học)',
+    titleVi: 'Tế Bào & Mô Học',
     cards: [
       {
         id: 'med_cell_types',
+        titleVi: '1. Các Loại Tế Bào Trong Cơ Thể Người',
         title: '1. Types of Cells',
         subtitle: 'Các loại tế bào: Cấu trúc và sự biệt hóa tế bào người',
         duration: '0:48',
@@ -101,6 +108,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_bone_repair',
+        titleVi: '2. Cơ Chế Tự Phục Hồi & Tái Tạo Xương',
         title: '2. Bone Repair',
         subtitle: 'Tiến trình liền xương: Tái tạo can xương sau gãy',
         duration: '0:36',
@@ -112,6 +120,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_soft_tissue',
+        titleVi: '3. Cơ Chế Liền Sẹo & Tái Tạo Mô Mềm',
         title: '3. Soft Tissue Repair',
         subtitle: 'Tái tạo mô mềm: Tăng sinh nguyên bào sợi và collagen',
         duration: '0:52',
@@ -125,10 +134,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'respiration_circulation_media',
-    titleVi: 'Respiration and Circulation (Hô Hấp & Tuần Hoàn)',
+    titleVi: 'Hô Hấp & Tuần Hoàn',
     cards: [
       {
         id: 'med_breathing',
+        titleVi: '1. Cơ Chế Thông Khí Phổi & Hít Thở',
         title: '1. Breathing',
         subtitle: 'Cơ chế thở: Vòm hoành và lồng ngực tạo áp suất âm hút khí',
         duration: '0:57',
@@ -140,6 +150,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_external_respiration',
+        titleVi: '2. Trao Đổi Khí Tại Phế Nang (Hô Hấp Ngoài)',
         title: '2. External Respiration',
         subtitle: 'Hô hấp ngoài: Trao đổi O2 và CO2 qua màng phế nang mao mạch',
         duration: '0:31',
@@ -151,6 +162,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_daltons_law',
+        titleVi: '3. Định Luật Dalton Trong Áp Suất Khí Phổi',
         title: "3. Dalton's Law",
         subtitle: 'Định luật Dalton: Phân áp chất khí trong trao đổi hô hấp',
         duration: '0:41',
@@ -164,10 +176,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'nutrition_elimination_media',
-    titleVi: 'Nutrition and Elimination (Dinh Dưỡng & Bài Tiết)',
+    titleVi: 'Dinh Dưỡng & Bài Tiết',
     cards: [
       {
         id: 'med_chewing_swallowing',
+        titleVi: '1. Cơ Chế Nhai & Phản Xạ Nuốt',
         title: '1. Chewing and Swallowing',
         subtitle: 'Nhai và nuốt: Vận động khoang miệng và nhu động thực quản',
         duration: '0:33',
@@ -179,6 +192,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_epiglottis',
+        titleVi: '2. Chức Năng Của Nắp Thanh Môn Đóng Khí Quản',
         title: '2. Function of the Epiglottis',
         subtitle: 'Chức năng sụn nắp thanh môn: Đóng đường thở khi nuốt',
         duration: '0:43',
@@ -190,6 +204,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_nutrient_absorption',
+        titleVi: '3. Cơ Chế Hấp Thu Dinh Dưỡng Tại Ruột Non',
         title: '3. Nutrient Absorption',
         subtitle: 'Hấp thu dưỡng chất: Nhung mao ruột non đưa chất vào mao mạch',
         duration: '0:43',
@@ -203,10 +218,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'reproductive_media',
-    titleVi: 'Reproductive (Hệ Sinh Sản)',
+    titleVi: 'Hệ Sinh Sản & Phôi Thai',
     cards: [
       {
         id: 'med_female_cells',
+        titleVi: '1. Quá Trình Phát Triển Tế Bào Trứng (Noãn)',
         title: '1. Female Sex Cells',
         subtitle: 'Tế bào sinh dục nữ: Phát triển nang noãn và rụng trứng',
         duration: '0:50',
@@ -218,6 +234,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_male_cells',
+        titleVi: '2. Quá Trình Sinh Tinh & Tế Bào Tinh Trùng',
         title: '2. Male Sex Cells',
         subtitle: 'Tế bào sinh dục nam: Sinh tinh và cấu trúc tinh trùng',
         duration: '0:34',
@@ -229,6 +246,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_fertilization',
+        titleVi: '3. Từ Thụ Tinh Đến Làm Tổ Của Phôi Thai',
         title: '3. Fertilization to Implantation',
         subtitle: 'Thụ tinh đến làm tổ: Hợp tử phân chia và bám vào nội mạc tử cung',
         duration: '0:30',
@@ -242,10 +260,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'endocrine_media',
-    titleVi: 'Endocrine (Hệ Nội Tiết)',
+    titleVi: 'Hệ Nội Tiết & Hormone',
     cards: [
       {
         id: 'med_negative_feedback',
+        titleVi: '1. Vòng Điều Hòa Ngược Âm Tính (Feedback Âm)',
         title: '1. Negative Feedback Loops',
         subtitle: 'Vòng điều hòa ngược âm tính: Trục hạ đồi - tuyến yên - đích',
         duration: '0:55',
@@ -257,6 +276,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_positive_feedback',
+        titleVi: '2. Vòng Điều Hòa Ngược Dương Tính (Feedback Dương)',
         title: '2. Positive Feedback Loops',
         subtitle: 'Vòng điều hòa ngược dương tính: Tác dụng khuếch đại sinh lý',
         duration: '0:50',
@@ -268,6 +288,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_water_soluble',
+        titleVi: '3. Cơ Chế Tác Động Của Hormone Tan Trong Nước',
         title: '3. Water-Soluble Hormone Action',
         subtitle: 'Hormone tan trong nước: Thụ thể màng và chất truyền tin cAMP',
         duration: '0:50',
@@ -281,10 +302,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'special_senses_media',
-    titleVi: 'Special Senses (Các Giác Quan Chuyên Biệt)',
+    titleVi: 'Các Giác Quan Chuyên Biệt',
     cards: [
       {
         id: 'med_hearing',
+        titleVi: '1. Cơ Chế Dẫn Truyền & Cảm Thụ Thính Giác',
         title: '1. Hearing',
         subtitle: 'Thính giác: Cơ chế truyền âm từ màng nhĩ qua chuỗi xương con',
         duration: '0:59',
@@ -296,6 +318,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_sight',
+        titleVi: '2. Đường Dẫn Truyền & Thụ Cảm Thị Giác',
         title: '2. Sight',
         subtitle: 'Thị giác: Quang học mắt và khúc xạ hội tụ lên võng mạc',
         duration: '0:51',
@@ -307,6 +330,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_types_vision',
+        titleVi: '3. Các Dạng Thị Giác & Khúc Xạ Mắt',
         title: '3. Types of Vision',
         subtitle: 'Các loại thị lực: Tật cận thị, viễn thị và điều tiết mắt',
         duration: '0:21',
@@ -320,10 +344,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'resp_circ_pathologies_media',
-    titleVi: 'Respiratory and Circulatory Pathologies (Bệnh Lý Hô Hấp & Tuần Hoàn)',
+    titleVi: 'Bệnh Lý Hô Hấp & Tuần Hoàn',
     cards: [
       {
         id: 'med_pvd',
+        titleVi: '1. Bệnh Lý Mạch Máu Ngoại Biên (PVD)',
         title: '1. Peripheral Vascular Disease',
         subtitle: 'Bệnh mạch máu ngoại biên: Hẹp xơ vữa gây thiếu máu chi',
         duration: '0:20',
@@ -335,6 +360,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_chf',
+        titleVi: '2. Suy Tim Sung Huyết (CHF)',
         title: '2. Congestive Heart Failure',
         subtitle: 'Suy tim ứ huyết: Giảm cung lượng tim và ứ dịch phổi ngoại biên',
         duration: '0:19',
@@ -346,6 +372,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_infarction',
+        titleVi: '3. Nhồi Máu Cơ Tim Cấp Tính',
         title: '3. Infarction',
         subtitle: 'Nhồi máu cơ tim: Tắc động mạch vành gây hoại tử tế bào cơ tim',
         duration: '0:19',
@@ -359,10 +386,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'dig_urin_pathologies_media',
-    titleVi: 'Digestive and Urinary Pathologies (Bệnh Lý Tiêu Hóa & Tiết Niệu)',
+    titleVi: 'Bệnh Lý Tiêu Hóa & Tiết Niệu',
     cards: [
       {
         id: 'med_gerd',
+        titleVi: '1. Bệnh Trào Ngược Dạ Dày Thực Quản (GERD)',
         title: '1. GERD',
         subtitle: 'Trào ngược dạ dày thực quản: Acid dịch vị gây viêm niêm mạc',
         duration: '0:25',
@@ -374,6 +402,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_gallstones',
+        titleVi: '2. Sỏi Túi Mật & Đường Dẫn Mật',
         title: '2. Gallstones',
         subtitle: 'Sỏi túi mật: Tinh thể cholesterol và sỏi tắc ống mật',
         duration: '0:33',
@@ -385,6 +414,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_diverticulitis',
+        titleVi: '3. Viêm Túi Thừa Đại Tràng',
         title: '3. Diverticulitis',
         subtitle: 'Viêm túi thừa đại tràng: Túi phình thành ruột bị nhiễm trùng',
         duration: '0:24',
@@ -398,10 +428,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'muscle_bone_pathologies_media',
-    titleVi: 'Muscle and Bone Pathologies (Bệnh Lý Cơ & Xương)',
+    titleVi: 'Bệnh Lý Cơ Bắp & Xương Khớp',
     cards: [
       {
         id: 'med_acl_tear',
+        titleVi: '1. Đứt Dây Chằng Chéo Trước (ACL)',
         title: '1. ACL tear',
         subtitle: 'Đứt dây chằng chéo trước: Tổn thương mất vững khớp gối',
         duration: '0:15',
@@ -413,6 +444,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_cervical_spondylosis',
+        titleVi: '2. Thoái Hóa Đốt Sống Cổ',
         title: '2. Cervical Spondylosis',
         subtitle: 'Thoái hóa đốt sống cổ: Thoái hóa đĩa đệm và gai xương chèn ép',
         duration: '0:49',
@@ -424,6 +456,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_carpal_tunnel',
+        titleVi: '3. Hội Chứng Ống Cổ Tay (CTS)',
         title: '3. Carpal Tunnel Syndrome Overview',
         subtitle: 'Hội chứng ống cổ tay: Chèn ép thần kinh giữa tại cổ tay',
         duration: '0:22',
@@ -437,10 +470,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   },
   {
     id: 'lymphatic_pathologies_media',
-    titleVi: 'Lymphatic Pathologies (Bệnh Lý Hệ Bạch Huyết)',
+    titleVi: 'Bệnh Lý Hệ Bạch Huyết & Miễn Dịch',
     cards: [
       {
         id: 'med_hiv_aids',
+        titleVi: '1. Cơ Chế Nhiễm & Suy Giảm Miễn Dịch (HIV/AIDS)',
         title: '1. HIV and AIDS',
         subtitle: 'Nhiễm HIV & AIDS: Phá hủy tế bào Lympho T-CD4 suy giảm miễn dịch',
         duration: '1:06',
@@ -454,7 +488,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   }
 ];
 
-const STORAGE_KEY = 'atlas_custom_media_data_v2';
+const STORAGE_KEY = 'atlas_custom_media_data_v3';
 const ADMIN_LOGGED_IN_KEY = 'atlas_admin_logged_in';
 export const ADMIN_DEFAULT_PASS = '123456';
 

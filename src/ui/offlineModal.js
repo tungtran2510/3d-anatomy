@@ -163,9 +163,9 @@ async function renderModalContent(targetSystemId = null) {
             <p class="hero-download-desc">Lưu toàn bộ mô hình vào bộ nhớ máy giúp thao tác siêu mượt và tra cứu 100% không cần Internet.</p>
           </div>
 
-          <button type="button" class="btn-hero-download-all ${allCached ? 'is-complete' : ''}" id="btnHeroDownloadAll">
+          <button type="button" class="btn-hero-download-all ${allCached ? 'is-complete' : ''}" id="btnHeroDownloadAll" title="Bấm để tải về máy toàn bộ dữ liệu 3D">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span id="heroDownloadBtnText">${allCached ? '✓ ĐÃ TẢI TOÀN BỘ (DÙNG OFFLINE 100%)' : `TẢI TẤT CẢ VỀ MÁY (${totalSizeMB} MB)`}</span>
+            <span id="heroDownloadBtnText">${allCached ? '✓ ĐÃ LƯU VỀ MÁY (Bấm để tải lại / cập nhật)' : `TẢI TẤT CẢ VỀ MÁY (${totalSizeMB} MB)`}</span>
           </button>
 
           <div class="download-progress-container hidden" id="masterProgressContainer">
@@ -298,8 +298,10 @@ function attachModalEvents() {
 
   // Download all models
   const handleDownloadAll = async () => {
+    showSyncToast('🚀 Bắt đầu lưu toàn bộ dữ liệu 3D vào máy...', 'info');
     await downloadAllSystems();
   };
+  offlineModalEl.querySelector('#btnHeroDownloadAll')?.addEventListener('click', handleDownloadAll);
   document.getElementById('btnHeroDownloadAll')?.addEventListener('click', handleDownloadAll);
   document.getElementById('btnDownloadAllModels')?.addEventListener('click', handleDownloadAll);
 

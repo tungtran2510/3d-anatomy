@@ -741,9 +741,9 @@ export function initSystemsLayerController(viewer) {
   pullTabEl = document.createElement('button');
   pullTabEl.id = 'systemsPullTab';
   pullTabEl.className = 'systems-pull-tab';
-  pullTabEl.title = 'Hệ cơ quan & Phân lớp giải phẫu (Systems +/-)';
+  pullTabEl.title = 'Hệ cơ quan & Phân lớp giải phẫu (+/-)';
   pullTabEl.innerHTML = `
-    <span class="tab-vertical-text">Systems +/-</span>
+    <span class="tab-vertical-text">Hệ Cơ Quan +/-</span>
     <span class="tab-body-icon">${ICONS.humanAnatomyWithPlus}</span>
   `;
   container.appendChild(pullTabEl);
@@ -765,11 +765,11 @@ export function initSystemsLayerController(viewer) {
       
       <!-- Quick Region Selector: Anterior, Posterior, and More Dots -->
       <div class="stepper-regions-row">
-        <button type="button" class="btn-region-silhouette active" data-region="front" title="Xoay mặt trước (Anterior View)">
+        <button type="button" class="btn-region-silhouette active" data-region="front" title="Xoay mặt trước">
           ${ICONS.silhouetteAnterior}
           <span class="region-sublabel">Trước</span>
         </button>
-        <button type="button" class="btn-region-silhouette" data-region="back" title="Xoay mặt sau (Posterior View)">
+        <button type="button" class="btn-region-silhouette" data-region="back" title="Xoay mặt sau">
           ${ICONS.silhouettePosterior}
           <span class="region-sublabel">Sau</span>
         </button>
@@ -796,10 +796,10 @@ export function initSystemsLayerController(viewer) {
 
     <!-- Bottom Tools: Pelvis, Silhouette Envelope & Sex Switcher -->
     <div class="stepper-drawer-footer">
-      <button type="button" class="btn-drawer-tool" id="btnFocusPelvis" title="Tập trung vùng chậu (Pelvis)">
+      <button type="button" class="btn-drawer-tool" id="btnFocusPelvis" title="Tập trung vùng chậu">
         <span class="drawer-tool-icon">${ICONS.pelvisBox}</span>
       </button>
-      <button type="button" class="btn-drawer-tool active" id="btnToggleEnvelope" title="Lớp phủ mờ cơ thể (Body Silhouette Envelope) - Bật/Tắt">
+      <button type="button" class="btn-drawer-tool active" id="btnToggleEnvelope" title="Lớp mờ bao quanh cơ thể - Bật/Tắt">
         <span class="drawer-tool-icon">${ICONS.humanAnatomyWithPlus}</span>
       </button>
       <button type="button" class="btn-drawer-tool" id="btnToggleGender" title="Mô hình: Nam Y khoa chuẩn (Dữ liệu Nữ đang cập nhật)">

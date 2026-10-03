@@ -53,9 +53,9 @@ export function initAtlasHub(viewer) {
     hubModalEl.className = 'atlas-hub-modal hidden';
     hubModalEl.innerHTML = `
       <div class="atlas-hub-backdrop" id="atlasHubBackdrop"></div>
-      <div class="atlas-hub-container" role="dialog" aria-modal="true" aria-label="Human Anatomy Atlas Views Hub">
+      <div class="atlas-hub-container" role="dialog" aria-modal="true" aria-label="Danh mục góc nhìn và hoạt ảnh giải phẫu 3D">
         
-        <!-- 1. TOP PRIMARY NAVIGATION BAR (5 Tabs: Views, Search, Media, Quizzes, My Library) -->
+        <!-- 1. TOP PRIMARY NAVIGATION BAR (5 Tabs: Góc nhìn, Tìm kiếm, Đa phương tiện, Trắc nghiệm, Thư viện của tôi) -->
         <header class="atlas-vb-topbar">
           <div class="atlas-vb-tabs">
             <button type="button" class="vb-tab-btn active" data-tab="views" id="tabBtnViews">
@@ -64,7 +64,7 @@ export function initAtlasHub(viewer) {
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Views</span>
+              <span class="vb-tab-label">Góc nhìn</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="search" id="tabBtnSearch">
               <div class="vb-tab-icon">
@@ -73,7 +73,7 @@ export function initAtlasHub(viewer) {
                   <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Search</span>
+              <span class="vb-tab-label">Tìm kiếm</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="media" id="tabBtnMedia">
               <div class="vb-tab-icon">
@@ -82,7 +82,7 @@ export function initAtlasHub(viewer) {
                   <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Media</span>
+              <span class="vb-tab-label">Đa phương tiện</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="quizzes" id="tabBtnQuizzes">
               <div class="vb-tab-icon">
@@ -91,7 +91,7 @@ export function initAtlasHub(viewer) {
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Quizzes</span>
+              <span class="vb-tab-label">Trắc nghiệm</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="library" id="tabBtnLibrary">
               <div class="vb-tab-icon">
@@ -100,21 +100,21 @@ export function initAtlasHub(viewer) {
                   <polygon points="10 7 11 9 13.5 9.5 11.7 11 12.2 13.5 10 12.2 7.8 13.5 8.3 11 6.5 9.5 9 9" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">My Library</span>
+              <span class="vb-tab-label">Thư viện của tôi</span>
             </button>
           </div>
           <button type="button" class="vb-topbar-close" id="btnAtlasHubClose" title="Quay lại mô hình 3D (Đóng)">&times;</button>
         </header>
 
-        <!-- 2. SUB-CATEGORY BAR (Regions, Systems, Gross Anatomy Lab, Cross Sections, Microanatomy, Muscle Actions) -->
+        <!-- 2. SUB-CATEGORY BAR (Vùng cơ thể, Hệ cơ quan, Bàn phẫu tích, Lát cắt giải phẫu, Giải phẫu vi thể, Chuyển động cơ) -->
         <nav class="atlas-vb-subbar" id="atlasSubCategoryBar">
           <div class="atlas-vb-subnav-scroll">
-            <button type="button" class="vb-sub-item" data-sub="regions">Regions</button>
-            <button type="button" class="vb-sub-item active" data-sub="systems">Systems</button>
-            <button type="button" class="vb-sub-item" data-sub="lab">Gross Anatomy Lab</button>
-            <button type="button" class="vb-sub-item" data-sub="cross_sections">Cross Sections</button>
-            <button type="button" class="vb-sub-item" data-sub="microanatomy">Microanatomy</button>
-            <button type="button" class="vb-sub-item" data-sub="muscle_actions">Muscle Actions</button>
+            <button type="button" class="vb-sub-item" data-sub="regions">Vùng cơ thể</button>
+            <button type="button" class="vb-sub-item active" data-sub="systems">Hệ cơ quan</button>
+            <button type="button" class="vb-sub-item" data-sub="lab">Bàn phẫu tích</button>
+            <button type="button" class="vb-sub-item" data-sub="cross_sections">Lát cắt giải phẫu</button>
+            <button type="button" class="vb-sub-item" data-sub="microanatomy">Giải phẫu vi thể</button>
+            <button type="button" class="vb-sub-item" data-sub="muscle_actions">Chuyển động cơ</button>
           </div>
         </nav>
 
@@ -125,7 +125,7 @@ export function initAtlasHub(viewer) {
               <circle cx="11" cy="11" r="8"/>
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <input type="text" class="vb-search-input" id="atlasHubSearchInput" placeholder="Filter results by name..." autocomplete="off">
+            <input type="text" class="vb-search-input" id="atlasHubSearchInput" placeholder="Lọc kết quả theo tên (VD: sọ, tim, mắt)..." autocomplete="off">
             <button type="button" class="vb-voice-btn" id="btnHubVoiceMic" title="Tìm bằng giọng nói tiếng Việt">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
@@ -140,9 +140,9 @@ export function initAtlasHub(viewer) {
         <!-- 4. MAIN SCROLLABLE SHELVES CONTENT -->
         <div class="atlas-vb-body" id="atlasHubBody"></div>
 
-        <!-- 5. BOTTOM NAVIGATION BAR (5 Items: Menu, Launch Link, Settings, Help, Store) -->
+        <!-- 5. BOTTOM NAVIGATION BAR (5 Items: Trình đơn, Liên kết, Cài đặt, Trợ giúp, Tải Offline) -->
         <footer class="atlas-vb-bottombar">
-          <button type="button" class="vb-bottom-item" id="btnHubBottomMenu" title="Menu giải phẫu">
+          <button type="button" class="vb-bottom-item" id="btnHubBottomMenu" title="Trình đơn giải phẫu">
             <div class="vb-bottom-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <rect x="3" y="3" width="7" height="7" rx="1.5"/>
@@ -152,9 +152,9 @@ export function initAtlasHub(viewer) {
                 <polyline points="18 9 21 12 18 15"/>
               </svg>
             </div>
-            <span>Menu</span>
+            <span>Trình đơn</span>
           </button>
-          <button type="button" class="vb-bottom-item" id="btnHubLaunchLink" title="Sao chép Launch Link góc nhìn">
+          <button type="button" class="vb-bottom-item" id="btnHubLaunchLink" title="Sao chép Liên kết góc nhìn">
             <div class="vb-bottom-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -163,7 +163,7 @@ export function initAtlasHub(viewer) {
                 <polyline points="13 15 9 15 9 11"/>
               </svg>
             </div>
-            <span>Launch Link</span>
+            <span>Liên kết</span>
           </button>
           <button type="button" class="vb-bottom-item" id="btnHubBottomSettings" title="Cài đặt giao diện & Quản trị">
             <div class="vb-bottom-icon">
@@ -172,7 +172,7 @@ export function initAtlasHub(viewer) {
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
               </svg>
             </div>
-            <span>Settings</span>
+            <span>Cài đặt</span>
           </button>
           <button type="button" class="vb-bottom-item" id="btnHubBottomHelp" title="Hướng dẫn sử dụng">
             <div class="vb-bottom-icon">
@@ -182,9 +182,9 @@ export function initAtlasHub(viewer) {
                 <line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
             </div>
-            <span>Help</span>
+            <span>Trợ giúp</span>
           </button>
-          <button type="button" class="vb-bottom-item" id="btnHubBottomStore" title="Tải toàn bộ dữ liệu Offline 100%">
+          <button type="button" class="vb-bottom-item" id="btnHubBottomStore" title="Tải toàn bộ dữ liệu để xem khi không có mạng">
             <div class="vb-bottom-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <circle cx="9" cy="21" r="1"/>
@@ -192,7 +192,7 @@ export function initAtlasHub(viewer) {
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
               </svg>
             </div>
-            <span>Store</span>
+            <span>Tải Về Máy</span>
           </button>
         </footer>
       </div>
@@ -500,14 +500,14 @@ function renderViewsTab(container, viewer) {
       html += `
         <div class="atlas-carousel-shelf" data-shelf-id="${cat.id}">
           <div class="shelf-header">
-            <h3 class="shelf-title">${escapeHtml(cat.titleEn || cat.titleVi)}</h3>
+            <h3 class="shelf-title">${escapeHtml(cat.titleVi || cat.titleEn)}</h3>
             <button type="button" class="shelf-action-btn" title="Tùy chọn">•••</button>
           </div>
           <div class="shelf-track">
             ${cat.cards.map(card => `
-              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)} (${escapeHtml(card.titleVi || card.subtitle || '')})">
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)} (${escapeHtml(card.subtitle || '')})">
                 <div class="shelf-thumb-box">
-                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/skel_full.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/skel_full.png'" />
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/skel_full.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/skel_full.png'" />
                   <span class="shelf-thumb-dots">•••</span>
                   ${card.hasPlay || card.explode || card.motionId ? `
                     <span class="shelf-thumb-play">
@@ -515,7 +515,7 @@ function renderViewsTab(container, viewer) {
                     </span>
                   ` : ''}
                 </div>
-                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+                <div class="shelf-card-title">${escapeHtml(card.titleVi || card.title)}</div>
               </div>
             `).join('')}
           </div>
@@ -527,23 +527,24 @@ function renderViewsTab(container, viewer) {
     const filteredRegions = ATLAS_REGIONS_CATEGORIES.filter(r =>
       !normQuery ||
       normalise(r.title).includes(normQuery) ||
+      (r.titleVi && normalise(r.titleVi).includes(normQuery)) ||
       (r.subtitle && normalise(r.subtitle).includes(normQuery))
     );
     if (filteredRegions.length > 0) {
       html += `
         <div class="atlas-carousel-shelf">
           <div class="shelf-header">
-            <h3 class="shelf-title">Regional Anatomy Views</h3>
+            <h3 class="shelf-title">Giải Phẫu Theo Vùng Cơ Thể</h3>
             <button type="button" class="shelf-action-btn">•••</button>
           </div>
           <div class="shelf-track">
             ${filteredRegions.map(reg => `
-              <div class="atlas-shelf-card" data-region-id="${reg.id}" title="${escapeHtml(reg.title)}">
+              <div class="atlas-shelf-card" data-region-id="${reg.id}" title="${escapeHtml(reg.titleVi || reg.title)}">
                 <div class="shelf-thumb-box">
-                  <img class="shelf-thumb-img" src="${reg.image || '/images/atlas/reg_head_neck.png'}" alt="${escapeHtml(reg.title)}" loading="lazy" onerror="this.src='/images/atlas/reg_head_neck.png'" />
+                  <img class="shelf-thumb-img" src="${reg.image || '/images/atlas/reg_head_neck.png'}" alt="${escapeHtml(reg.titleVi || reg.title)}" loading="lazy" onerror="this.src='/images/atlas/reg_head_neck.png'" />
                   <span class="shelf-thumb-dots">•••</span>
                 </div>
-                <div class="shelf-card-title">${escapeHtml(reg.title)}</div>
+                <div class="shelf-card-title">${escapeHtml(reg.titleVi || reg.title)}</div>
               </div>
             `).join('')}
           </div>
@@ -555,6 +556,7 @@ function renderViewsTab(container, viewer) {
     const filteredLab = ATLAS_LAB_CATEGORIES.filter(c =>
       !normQuery ||
       normalise(c.title).includes(normQuery) ||
+      (c.titleVi && normalise(c.titleVi).includes(normQuery)) ||
       (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
       (c.desc && normalise(c.desc).includes(normQuery))
     );
@@ -562,17 +564,17 @@ function renderViewsTab(container, viewer) {
       html += `
         <div class="atlas-carousel-shelf">
           <div class="shelf-header">
-            <h3 class="shelf-title">Gross Anatomy Lab (Bàn Phẫu Tích)</h3>
+            <h3 class="shelf-title">Bàn Phẫu Tích Giải Phẫu (Gross Anatomy Lab)</h3>
             <button type="button" class="shelf-action-btn">•••</button>
           </div>
           <div class="shelf-track">
             ${filteredLab.map(card => `
-              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)}">
                 <div class="shelf-thumb-box">
-                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/reg_thorax.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/reg_thorax.png'" />
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/reg_thorax.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/reg_thorax.png'" />
                   <span class="shelf-thumb-dots">•••</span>
                 </div>
-                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+                <div class="shelf-card-title">${escapeHtml(card.titleVi || card.title)}</div>
               </div>
             `).join('')}
           </div>
@@ -585,6 +587,7 @@ function renderViewsTab(container, viewer) {
       const matched = group.cards.filter(c =>
         !normQuery ||
         normalise(c.title).includes(normQuery) ||
+        (c.titleVi && normalise(c.titleVi).includes(normQuery)) ||
         (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
         (c.desc && normalise(c.desc).includes(normQuery)) ||
         normalise(group.titleVi).includes(normQuery)
@@ -601,12 +604,12 @@ function renderViewsTab(container, viewer) {
           </div>
           <div class="shelf-track">
             ${group.cards.map(card => `
-              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)}">
                 <div class="shelf-thumb-box">
-                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/nerv_brain.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/nerv_brain.png'" />
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/nerv_brain.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/nerv_brain.png'" />
                   <span class="shelf-thumb-dots">•••</span>
                 </div>
-                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+                <div class="shelf-card-title">${escapeHtml(card.titleVi || card.title)}</div>
               </div>
             `).join('')}
           </div>
@@ -619,6 +622,7 @@ function renderViewsTab(container, viewer) {
       const matched = group.cards.filter(c =>
         !normQuery ||
         normalise(c.title).includes(normQuery) ||
+        (c.titleVi && normalise(c.titleVi).includes(normQuery)) ||
         (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
         (c.desc && normalise(c.desc).includes(normQuery)) ||
         normalise(group.titleVi).includes(normQuery)
@@ -635,12 +639,12 @@ function renderViewsTab(container, viewer) {
           </div>
           <div class="shelf-track">
             ${group.cards.map(card => `
-              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)}">
                 <div class="shelf-thumb-box">
-                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/med_skin.png'" />
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/med_skin.png'" />
                   <span class="shelf-thumb-dots">•••</span>
                 </div>
-                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+                <div class="shelf-card-title">${escapeHtml(card.titleVi || card.title)}</div>
               </div>
             `).join('')}
           </div>
@@ -653,6 +657,7 @@ function renderViewsTab(container, viewer) {
       const matched = group.cards.filter(c =>
         !normQuery ||
         normalise(c.title).includes(normQuery) ||
+        (c.titleVi && normalise(c.titleVi).includes(normQuery)) ||
         (c.subtitle && normalise(c.subtitle).includes(normQuery)) ||
         (c.desc && normalise(c.desc).includes(normQuery)) ||
         normalise(group.titleVi).includes(normQuery)
@@ -669,15 +674,15 @@ function renderViewsTab(container, viewer) {
           </div>
           <div class="shelf-track">
             ${group.cards.map(card => `
-              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.title)}">
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)}">
                 <div class="shelf-thumb-box">
-                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/musc_torso.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/musc_torso.png'" />
+                  <img class="shelf-thumb-img" src="${card.image || '/images/atlas/musc_torso.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/musc_torso.png'" />
                   <span class="shelf-thumb-dots">•••</span>
                   <span class="shelf-thumb-play">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
                   </span>
                 </div>
-                <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+                <div class="shelf-card-title">${escapeHtml(card.titleVi || card.title)}</div>
               </div>
             `).join('')}
           </div>
@@ -800,16 +805,16 @@ function renderMediaTab(container, viewer) {
         </div>
         <div class="shelf-track">
           ${cat.cards.map(card => `
-            <div class="atlas-shelf-card media-shelf-card" data-media-id="${card.id}" title="${escapeHtml(card.title)}">
+            <div class="atlas-shelf-card media-shelf-card" data-media-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)}">
               <div class="shelf-thumb-box">
-                <img class="shelf-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${escapeHtml(card.title)}" loading="lazy" onerror="this.src='/images/atlas/med_skin.png'" />
+                <img class="shelf-thumb-img" src="${card.image || '/images/atlas/med_skin.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/med_skin.png'" />
                 <span class="shelf-thumb-dots">•••</span>
                 <span class="shelf-thumb-play">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
                 </span>
                 <span class="shelf-duration-pill">${card.duration || '0:30'}</span>
               </div>
-              <div class="shelf-card-title">${escapeHtml(card.title)}</div>
+              <div class="shelf-card-title">${escapeHtml(card.titleVi || card.title)}</div>
             </div>
           `).join('')}
         </div>
@@ -852,17 +857,17 @@ function renderQuizzesTab(container, viewer) {
   let html = `
     <div class="atlas-carousel-shelf">
       <div class="shelf-header">
-        <h3 class="shelf-title">Quizzes & Knowledge Checks (Trắc Nghiệm 3D)</h3>
+        <h3 class="shelf-title">Trắc Nghiệm & Kiểm Tra Kiến Thức 3D</h3>
         <button type="button" class="shelf-action-btn">•••</button>
       </div>
       <div class="shelf-track">
         ${ATLAS_QUIZZES_DATA.map(q => `
-          <div class="atlas-shelf-card quiz-shelf-card" data-quiz-id="${q.id}" title="${escapeHtml(q.title)}">
+          <div class="atlas-shelf-card quiz-shelf-card" data-quiz-id="${q.id}" title="${escapeHtml(q.titleVi || q.title)}">
             <div class="shelf-thumb-box">
-              <img class="shelf-thumb-img" src="${q.image || '/images/atlas/quiz_identify.png'}" alt="${escapeHtml(q.title)}" loading="lazy" onerror="this.src='/images/atlas/quiz_identify.png'" />
+              <img class="shelf-thumb-img" src="${q.image || '/images/atlas/quiz_identify.png'}" alt="${escapeHtml(q.titleVi || q.title)}" loading="lazy" onerror="this.src='/images/atlas/quiz_identify.png'" />
               <span class="shelf-thumb-dots">•••</span>
             </div>
-            <div class="shelf-card-title">${escapeHtml(q.title)}</div>
+            <div class="shelf-card-title">${escapeHtml(q.titleVi || q.title)}</div>
           </div>
         `).join('')}
       </div>
@@ -890,13 +895,13 @@ function renderLibraryTab(container, viewer) {
   let html = `
     <div class="atlas-carousel-shelf">
       <div class="shelf-header">
-        <h3 class="shelf-title">Saved Views & Custom Notes (Thư Viện Của Tôi)</h3>
+        <h3 class="shelf-title">Góc Nhìn Đã Lưu & Ghi Chú (Thư Viện Của Tôi)</h3>
         <button type="button" class="shelf-action-btn">•••</button>
       </div>
       <div class="atlas-library-empty">
         <div class="library-empty-icon">📁</div>
         <h4>Chưa có góc nhìn tùy chỉnh nào được lưu</h4>
-        <p>Khi khám phá mô hình 3D, nhấn nút <strong>Launch Link</strong> hoặc lưu góc nhìn để truy cập nhanh tại đây.</p>
+        <p>Khi khám phá mô hình 3D, nhấn nút <strong>Liên kết góc nhìn</strong> hoặc lưu góc nhìn để truy cập nhanh tại đây.</p>
         <button type="button" class="btn-lib-explore" id="btnLibExploreViews">Khám phá Góc Nhìn Chuẩn</button>
       </div>
     </div>

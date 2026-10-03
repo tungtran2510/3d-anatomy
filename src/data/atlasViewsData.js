@@ -956,6 +956,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
 export const ATLAS_REGIONS_CATEGORIES = [
   {
     id: 'reg_head_neck',
+    titleVi: 'Vùng Đầu & Cổ',
     title: 'Vùng Đầu & Cổ',
     subtitle: 'Hộp sọ, khối mặt và các cơ mạch máu cổ',
     badge: 'Đầu & Cổ',
@@ -965,6 +966,7 @@ export const ATLAS_REGIONS_CATEGORIES = [
   },
   {
     id: 'reg_thorax',
+    titleVi: 'Vùng Lồng Ngực',
     title: 'Vùng Lồng Ngực',
     subtitle: 'Tim, hai lá phổi, trung thất và thành ngực',
     badge: 'Lồng ngực',
@@ -974,6 +976,7 @@ export const ATLAS_REGIONS_CATEGORIES = [
   },
   {
     id: 'reg_abdomen_pelvis',
+    titleVi: 'Vùng Bụng & Chậu',
     title: 'Vùng Bụng & Chậu',
     subtitle: 'Khoang phúc mạc, ruột và tạng chậu hông',
     badge: 'Bụng & Chậu',
@@ -983,6 +986,7 @@ export const ATLAS_REGIONS_CATEGORIES = [
   },
   {
     id: 'reg_spine',
+    titleVi: 'Trục Cột Sống',
     title: 'Trục Cột Sống',
     subtitle: 'Đoạn sống cổ, ngực, thắt lưng và cùng cụt',
     badge: 'Cột sống',
@@ -992,6 +996,7 @@ export const ATLAS_REGIONS_CATEGORIES = [
   },
   {
     id: 'reg_upper_limb',
+    titleVi: 'Vùng Chi Trên',
     title: 'Vùng Chi Trên',
     subtitle: 'Đai vai, cánh tay, cẳng tay và bàn tay',
     badge: 'Chi trên',
@@ -1001,6 +1006,7 @@ export const ATLAS_REGIONS_CATEGORIES = [
   },
   {
     id: 'reg_lower_limb',
+    titleVi: 'Vùng Chi Dưới',
     title: 'Vùng Chi Dưới',
     subtitle: 'Khớp háng, đùi, khớp gối và cẳng bàn chân',
     badge: 'Chi dưới',
@@ -1018,6 +1024,7 @@ export const ATLAS_MEDIA_CATEGORIES = getAtlasMediaCategories();
 export const ATLAS_QUIZZES_DATA = [
   {
     id: 'quiz_identify',
+    titleVi: '1. Trắc Nghiệm Nhận Diện 3D',
     title: '1. Trắc Nghiệm Nhận Diện 3D',
     subtitle: 'Chạm trực tiếp vào đúng cấu trúc được yêu cầu',
     badge: 'Trắc nghiệm 3D',
@@ -1027,6 +1034,7 @@ export const ATLAS_QUIZZES_DATA = [
   },
   {
     id: 'quiz_fsrs',
+    titleVi: '2. Thẻ Ghi Nhớ Thông Minh FSRS',
     title: '2. Thẻ Ghi Nhớ Thông Minh FSRS',
     subtitle: 'Thuật toán ôn tập ngắt quãng khoa học',
     badge: 'Ôn tập FSRS',
@@ -1036,6 +1044,7 @@ export const ATLAS_QUIZZES_DATA = [
   },
   {
     id: 'quiz_clinical_cases',
+    titleVi: '3. Ca Bệnh Lâm Sàng Tương Tác',
     title: '3. Ca Bệnh Lâm Sàng Tương Tác',
     subtitle: 'Tình huống cấp cứu tai nạn và phẫu thuật',
     badge: 'Bác sĩ ảo',
@@ -1049,6 +1058,7 @@ export const ATLAS_QUIZZES_DATA = [
 export const ATLAS_LAB_CATEGORIES = [
   {
     id: 'lab_back',
+    titleVi: '1. Vùng Lưng (Tư Thế Nằm Sấp)',
     title: '1. Vùng Lưng (Back - Nằm sấp)',
     subtitle: 'Cơ thang, cơ lưng rộng và cột sống trên bàn mổ',
     badge: 'Nằm sấp',
@@ -1061,6 +1071,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_upper_limb',
+    titleVi: '2. Chi Trên & Đai Vai',
     title: '2. Chi Trên & Đai Vai (Upper Limb)',
     subtitle: 'Đai vai, cánh tay, cẳng tay và bàn tay',
     badge: 'Nằm ngửa',
@@ -1073,6 +1084,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_thorax',
+    titleVi: '3. Vùng Lồng Ngực',
     title: '3. Lồng Ngực (Thorax)',
     subtitle: 'Khung sườn, cơ liên sườn và cơ ngực lớn',
     badge: 'Nằm ngửa',
@@ -1085,6 +1097,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_heart_lungs',
+    titleVi: '4. Tim & Hai Lá Phổi',
     title: '4. Tim & Phổi (Heart & Lungs)',
     subtitle: 'Trung thất, màng ngoài tim và phế quản',
     badge: 'Nằm ngửa',
@@ -1097,6 +1110,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_abdomen',
+    titleVi: '5. Thành Bụng & Ổ Bụng',
     title: '5. Thành Bụng & Ổ Bụng (Abdomen)',
     subtitle: 'Cơ thẳng bụng, cơ chéo bụng và bao cơ',
     badge: 'Nằm ngửa',
@@ -1109,6 +1123,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_intraperitoneal',
+    titleVi: '6. Các Tạng Trong Phúc Mạc',
     title: '6. Tạng Trong Phúc Mạc (Intraperitoneal)',
     subtitle: 'Dạ dày, gan, ruột non và đại tràng',
     badge: 'Nằm ngửa',
@@ -1121,6 +1136,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_retroperitoneal',
+    titleVi: '7. Các Tạng Sau Phúc Mạc',
     title: '7. Tạng Sau Phúc Mạc (Retroperitoneal)',
     subtitle: 'Hai quả thận, tuyến thượng thận và ĐM chủ bụng',
     badge: 'Nằm ngửa',
@@ -1133,6 +1149,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_pelvis',
+    titleVi: '8. Vùng Chậu & Đáy Chậu',
     title: '8. Vùng Chậu (Pelvis & Perineum)',
     subtitle: 'Bàng quang, trực tràng và đáy chậu',
     badge: 'Nằm ngửa',
@@ -1145,6 +1162,7 @@ export const ATLAS_LAB_CATEGORIES = [
   },
   {
     id: 'lab_lower_limb',
+    titleVi: '9. Vùng Chi Dưới',
     title: '9. Chi Dưới (Lower Limb Regional)',
     subtitle: 'Đùi, khớp gối, cẳng chân và bàn chân',
     badge: 'Nằm ngửa',
@@ -1161,14 +1179,15 @@ export const ATLAS_LAB_CATEGORIES = [
 export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   {
     id: 'cs_group_head_axial',
-    titleVi: 'Vùng Đầu (Head Axial - Cắt ngang)',
+    titleVi: 'Vùng Đầu (Mặt Cắt Ngang)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_head_thalamus',
+        titleVi: '1. Vùng Đầu (Mặt Cắt Đồi Thị & Hạch Nền)',
         title: '1. Head (Thalamus)',
         subtitle: 'Lát cắt ngang qua não thất ba, đồi thị và bao trong',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.62,
         camera: { x: 0, y: 1.88, z: 0.05, targetX: 0, targetY: 1.62, targetZ: 0 },
@@ -1178,9 +1197,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_head_brow',
+        titleVi: '2. Vùng Đầu (Mặt Cắt Cung Mày & Cực Trán)',
         title: '2. Head (Brow)',
         subtitle: 'Lát cắt ngang qua thùy trán, xoang trán và sừng trán não thất bên',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.58,
         camera: { x: 0, y: 1.85, z: 0.05, targetX: 0, targetY: 1.58, targetZ: 0 },
@@ -1190,9 +1210,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_head_orbit_ax',
+        titleVi: '3. Vùng Đầu (Mặt Cắt Ngang Hốc Mắt)',
         title: '3. Head (Orbit) (Axial)',
         subtitle: 'Lát cắt ngang qua nhãn cầu, thần kinh thị giác và xương bướm',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.52,
         camera: { x: 0, y: 1.80, z: 0.05, targetX: 0, targetY: 1.52, targetZ: 0 },
@@ -1204,14 +1225,15 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   },
   {
     id: 'cs_group_head_coronal',
-    titleVi: 'Vùng Đầu (Head Coronal - Cắt trán)',
+    titleVi: 'Vùng Đầu (Mặt Cắt Đứng Ngang)',
     plane: 'coronal',
     cards: [
       {
         id: 'cs_head_orbit_cor',
+        titleVi: '1. Vùng Đầu (Mặt Cắt Đứng Ngang Hốc Mắt)',
         title: '1. Head (Orbit) (Coronal)',
         subtitle: 'Mặt phẳng đứng ngang qua nhãn cầu, xoang trán và xoang hàm trên',
-        badge: 'Coronal',
+        badge: 'Cắt đứng ngang',
         plane: 'coronal',
         offset: 0.06,
         camera: { x: 0, y: 1.55, z: 0.70, targetX: 0, targetY: 1.55, targetZ: 0 },
@@ -1221,9 +1243,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_head_pituitary',
+        titleVi: '2. Vùng Đầu (Mặt Cắt Tuyến Yên & Xoang Hang)',
         title: '2. Head (Pituitary)',
         subtitle: 'Mặt phẳng đứng ngang qua hố yên, tuyến yên và giao thoa thị',
-        badge: 'Coronal',
+        badge: 'Cắt đứng ngang',
         plane: 'coronal',
         offset: 0.00,
         camera: { x: 0, y: 1.55, z: 0.70, targetX: 0, targetY: 1.55, targetZ: 0 },
@@ -1233,9 +1256,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_head_pons',
+        titleVi: '3. Vùng Đầu (Mặt Cắt Cầu Não & Tiểu Não)',
         title: '3. Head (Pons)',
         subtitle: 'Mặt phẳng đứng ngang qua cầu não, não thất tư và bán cầu tiểu não',
-        badge: 'Coronal',
+        badge: 'Cắt đứng ngang',
         plane: 'coronal',
         offset: -0.04,
         camera: { x: 0, y: 1.55, z: 0.70, targetX: 0, targetY: 1.55, targetZ: 0 },
@@ -1247,14 +1271,15 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   },
   {
     id: 'cs_group_head_sagittal',
-    titleVi: 'Vùng Đầu (Head Sagittal - Cắt dọc)',
+    titleVi: 'Vùng Đầu (Mặt Cắt Đứng Dọc)',
     plane: 'sagittal',
     cards: [
       {
         id: 'cs_head_midsagittal',
+        titleVi: '1. Vùng Đầu (Mặt Cắt Đứng Dọc Chính Giữa)',
         title: '1. Head (Midsagittal)',
         subtitle: 'Lát cắt đứng dọc chính giữa qua thể chai, thân não và tủy sống',
-        badge: 'Sagittal',
+        badge: 'Cắt đứng dọc',
         plane: 'sagittal',
         offset: 0.00,
         camera: { x: 0.70, y: 1.55, z: 0.0, targetX: 0, targetY: 1.55, targetZ: 0 },
@@ -1264,9 +1289,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_head_orbit_sag',
+        titleVi: '2. Vùng Đầu (Mặt Cắt Đứng Dọc Hốc Mắt)',
         title: '2. Head (Orbit) (Sagittal)',
         subtitle: 'Lát cắt đứng dọc qua nhãn cầu, thần kinh thị và cơ thẳng trên/dưới',
-        badge: 'Sagittal',
+        badge: 'Cắt đứng dọc',
         plane: 'sagittal',
         offset: 0.05,
         camera: { x: 0.70, y: 1.55, z: 0.05, targetX: 0.05, targetY: 1.55, targetZ: 0.05 },
@@ -1278,14 +1304,15 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   },
   {
     id: 'cs_group_thorax_axial',
-    titleVi: 'Lồng Ngực (Thorax Axial)',
+    titleVi: 'Vùng Lồng Ngực (Mặt Cắt Ngang)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_thorax_t02_t03',
+        titleVi: '1. Lồng Ngực (Đoạn Đốt Sống T2 - T3)',
         title: '1. Thorax (T02-T03)',
         subtitle: 'Lát cắt ngang qua cung động mạch chủ, tĩnh mạch vô danh và khí quản',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.36,
         camera: { x: 0, y: 1.70, z: 0.05, targetX: 0, targetY: 1.36, targetZ: 0 },
@@ -1296,9 +1323,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_thorax_t03_t04',
+        titleVi: '2. Lồng Ngực (Đoạn Đốt Sống T3 - T4)',
         title: '2. Thorax (T03-T04)',
         subtitle: 'Lát cắt ngang qua phế quản gốc, trạc ba khí quản carina và ĐM phổi',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.32,
         camera: { x: 0, y: 1.68, z: 0.05, targetX: 0, targetY: 1.32, targetZ: 0 },
@@ -1309,9 +1337,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_thorax_t04_t05',
+        titleVi: '3. Lồng Ngực (Đoạn Đốt Sống T4 - T5)',
         title: '3. Thorax (T04-T05)',
         subtitle: 'Lát cắt ngang qua 4 buồng tim, nhĩ thất và rãnh liên thất',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.28,
         camera: { x: 0, y: 1.65, z: 0.05, targetX: 0, targetY: 1.28, targetZ: 0 },
@@ -1324,14 +1353,15 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   },
   {
     id: 'cs_group_abdomen_axial',
-    titleVi: 'Ổ Bụng (Abdomen Axial)',
+    titleVi: 'Vùng Ổ Bụng (Mặt Cắt Ngang)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_abdomen_t11_t12',
+        titleVi: '1. Ổ Bụng (Đoạn Đốt Sống T11 - T12)',
         title: '1. Abdomen (T11-T12)',
         subtitle: 'Lát cắt ngang qua thùy gan, phình vị dạ dày, lách và động mạch thân tạng',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.12,
         camera: { x: 0, y: 1.55, z: 0.05, targetX: 0, targetY: 1.12, targetZ: 0 },
@@ -1342,9 +1372,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_abdomen_t12_l01',
+        titleVi: '2. Ổ Bụng (Đoạn Đốt Sống T12 - L1)',
         title: '2. Abdomen (T12-L01)',
         subtitle: 'Lát cắt ngang qua tụy, tá tràng, cuống thận và động mạch mạc treo tràng trên',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.08,
         camera: { x: 0, y: 1.50, z: 0.05, targetX: 0, targetY: 1.08, targetZ: 0 },
@@ -1355,9 +1386,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_abdomen_l01_l02',
+        titleVi: '3. Ổ Bụng (Đoạn Đốt Sống L1 - L2)',
         title: '3. Abdomen (L01-L02)',
         subtitle: 'Lát cắt ngang qua quai ruột non, đại tràng lên/xuống và tĩnh mạch chủ dưới',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 1.04,
         camera: { x: 0, y: 1.48, z: 0.05, targetX: 0, targetY: 1.04, targetZ: 0 },
@@ -1370,14 +1402,15 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
   },
   {
     id: 'cs_group_pelvis_axial',
-    titleVi: 'Vùng Chậu (Pelvis Axial)',
+    titleVi: 'Vùng Chậu Hông (Mặt Cắt Ngang)',
     plane: 'axial',
     cards: [
       {
         id: 'cs_pelvis_s05',
+        titleVi: '1. Vùng Chậu (Mức Đốt Sống Cùng S5)',
         title: '1. Pelvis (S05) (M)',
         subtitle: 'Lát cắt ngang qua khớp cùng chậu, đỉnh bàng quang và bóng trực tràng',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 0.92,
         camera: { x: 0, y: 1.35, z: 0.05, targetX: 0, targetY: 0.92, targetZ: 0 },
@@ -1388,9 +1421,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_pelvis_coccyx',
+        titleVi: '2. Vùng Chậu (Mức Xương Cụt & Sàn Chậu)',
         title: '2. Pelvis (Coccyx) (M)',
         subtitle: 'Lát cắt ngang qua xương cụt, tuyến tiền liệt/tử cung và cơ nâng hậu môn',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 0.87,
         camera: { x: 0, y: 1.30, z: 0.05, targetX: 0, targetY: 0.87, targetZ: 0 },
@@ -1401,9 +1435,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_pelvis_symphysis',
+        titleVi: '3. Vùng Chậu (Mức Khớp Mu & Ổ Cối)',
         title: '3. Pelvis (Symphysis) (M)',
         subtitle: 'Lát cắt ngang qua khớp mu, chỏm xương đùi và củ ngồi',
-        badge: 'Axial',
+        badge: 'Cắt ngang',
         plane: 'axial',
         offset: 0.83,
         camera: { x: 0, y: 1.25, z: 0.05, targetX: 0, targetY: 0.83, targetZ: 0 },
@@ -1414,9 +1449,10 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
       },
       {
         id: 'cs_pelvis_midsagittal',
+        titleVi: '4. Vùng Chậu (Mặt Cắt Đứng Dọc Chính Giữa)',
         title: '4. Pelvis (Midsagittal)',
         subtitle: 'Lát cắt đứng dọc qua bàng quang, trực tràng và sàn chậu',
-        badge: 'Sagittal',
+        badge: 'Cắt đứng dọc',
         plane: 'sagittal',
         offset: 0.00,
         camera: { x: 0.75, y: 0.85, z: 0.0, targetX: 0, targetY: 0.85, targetZ: 0 },
@@ -1433,10 +1469,11 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
 export const ATLAS_MICROANATOMY_CATEGORIES = [
   {
     id: 'micro_group_skin',
-    titleVi: 'Hệ Da & Cắt Lớp Tầng Da (Integumentary System)',
+    titleVi: 'Hệ Da & Cắt Lớp Tầng Da',
     cards: [
       {
         id: 'micro_skin_dark',
+        titleVi: '1. Lát Cắt Da Sắc Tố Đậm (Hắc Tố Melanin)',
         title: '1. Skin (Dark Pigmentation)',
         subtitle: 'Cắt lớp 3D đa tầng: Biểu bì sắc tố Melanin, Trung bì và Mô mỡ dưới da',
         badge: 'Cắt lớp da',
@@ -1447,6 +1484,7 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
       },
       {
         id: 'micro_skin_light',
+        titleVi: '2. Lát Cắt Da Sắc Tố Sáng',
         title: '2. Skin (Light Pigmentation)',
         subtitle: 'Lát cắt da sắc tố sáng: Tế bào đáy sinh sản và vi tuần hoàn mao mạch',
         badge: 'Mô học da',
@@ -1457,6 +1495,7 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
       },
       {
         id: 'micro_hair_follicle',
+        titleVi: '3. Nang Lông & Tuyến Bã Nhờn',
         title: '3. Hair Follicle (Curly Hair)',
         subtitle: 'Nang lông, tuyến bã nhờn, tuyến mồ hôi và cơ dựng lông',
         badge: 'Phụ bì',
@@ -1469,10 +1508,11 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
   },
   {
     id: 'micro_group_senses',
-    titleVi: 'Giác Quan Vi Thể (Senses)',
+    titleVi: 'Giải Phẫu Vi Thể Giác Quan',
     cards: [
       {
         id: 'micro_eye',
+        titleVi: '1. Cấu Trúc Nhãn Cầu 3D',
         title: '1. Eye (Nhãn Cầu 3D)',
         subtitle: 'Giác mạc, củng mạc, màng bồ đào, thể mi, mống mắt và võng mạc',
         badge: 'Thị giác',
@@ -1483,6 +1523,7 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
       },
       {
         id: 'micro_lacrimal',
+        titleVi: '2. Bộ Lệ & Tuyến Lệ',
         title: '2. Lacrimal Apparatus (Bộ Lệ)',
         subtitle: 'Tuyến lệ chính, tiểu quản lệ, túi lệ và ống lệ mũi',
         badge: 'Bộ lệ',
@@ -1493,6 +1534,7 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
       },
       {
         id: 'micro_lens_zonule',
+        titleVi: '3. Thể Thủy Tinh & Dây Chằng Zinn',
         title: '3. Lens and Zonular Fibers',
         subtitle: 'Thể thủy tinh hai mặt lồi và dây chằng treo Zinn điều tiết',
         badge: 'Khúc xạ',
@@ -1505,10 +1547,11 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
   },
   {
     id: 'micro_group_skeletal',
-    titleVi: 'Hệ Xương Vi Thể (Skeletal System)',
+    titleVi: 'Giải Phẫu Vi Thể Hệ Xương',
     cards: [
       {
         id: 'micro_femur_section',
+        titleVi: '1. Mặt Cắt Xương Đùi & Bè Xương Xốp',
         title: '1. Sectioned Femur (Mặt Cắt Xương Đùi)',
         subtitle: 'Vỏ xương đặc ngoài, bè xương xốp xốp và khoang tủy xương',
         badge: 'Mô học xương',
@@ -1519,6 +1562,7 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
       },
       {
         id: 'micro_osteon',
+        titleVi: '2. Đơn Vị Xương Vi Thể Havers (Osteon)',
         title: '2. Osteon (Đơn Vị Xương Vi Thể Havers)',
         subtitle: 'Ống Havers trung tâm, các lá xương đồng tâm và tế bào xương Osteocyte',
         badge: 'Vi thể',
@@ -1535,10 +1579,11 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
 export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   {
     id: 'act_group_spine',
-    titleVi: 'Cột Sống & Lưng (Spine and Back)',
+    titleVi: 'Chuyển Động Cột Sống & Lưng',
     cards: [
       {
         id: 'act_spine_flex',
+        titleVi: '1. Gập Cột Sống',
         title: '1. Spine Flexion (Gập Cột Sống)',
         subtitle: 'Cơ thẳng bụng co, cột sống thắt lưng gập ra trước',
         badge: 'Cột sống',
@@ -1550,6 +1595,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_spine_ext',
+        titleVi: '2. Duỗi Cột Sống',
         title: '2. Spine Extension (Duỗi Cột Sống)',
         subtitle: 'Nhóm cơ dựng sống (Erector spinae) kéo cột sống ngửa ra sau',
         badge: 'Cột sống',
@@ -1561,6 +1607,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_spine_lat',
+        titleVi: '3. Nghiêng Cột Sống Sang Bên',
         title: '3. Spine Lateral Flexion (Nghiêng Cột Sống)',
         subtitle: 'Cơ vuông thắt lưng và cơ chéo bụng co nghiêng thân sang bên',
         badge: 'Cột sống',
@@ -1574,10 +1621,11 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   },
   {
     id: 'act_group_pelvis',
-    titleVi: 'Khung Chậu & Khớp Háng (Pelvis and Hip)',
+    titleVi: 'Chuyển Động Khung Chậu & Khớp Háng',
     cards: [
       {
         id: 'act_hip_flex',
+        titleVi: '1. Gập Khớp Háng',
         title: '1. Hip Flexion (Gập Khớp Háng)',
         subtitle: 'Cơ thắt lưng chậu (Iliopsoas) và cơ thẳng đùi nâng đùi ra trước',
         badge: 'Khớp háng',
@@ -1589,6 +1637,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_hip_ext',
+        titleVi: '2. Duỗi Khớp Háng',
         title: '2. Hip Extension (Duỗi Khớp Háng)',
         subtitle: 'Cơ mông lớn (Gluteus maximus) và gân kheo kéo đùi ra sau',
         badge: 'Khớp háng',
@@ -1600,6 +1649,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_hip_rot',
+        titleVi: '3. Xoay Trong Khớp Háng',
         title: '3. Hip Medial Rotation (Xoay Trong Khớp Háng)',
         subtitle: 'Cơ căng mạc đùi và cơ mông nhỡ xoay đùi vào trong',
         badge: 'Khớp háng',
@@ -1613,10 +1663,11 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   },
   {
     id: 'act_group_lower_limbs',
-    titleVi: 'Chi Dưới & Khớp Gối (Lower Limbs)',
+    titleVi: 'Chuyển Động Chi Dưới & Khớp Gối',
     cards: [
       {
         id: 'act_knee_flex',
+        titleVi: '1. Gập Khớp Gối',
         title: '1. Knee Flexion (Gập Khớp Gối)',
         subtitle: 'Nhóm cơ gân kheo (Hamstrings) co gập cẳng chân ra sau',
         badge: 'Khớp gối',
@@ -1628,6 +1679,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_knee_ext',
+        titleVi: '2. Duỗi Khớp Gối',
         title: '2. Knee Extension (Duỗi Khớp Gối)',
         subtitle: 'Cơ tứ đầu đùi (Quadriceps) kéo bánh chè duỗi thẳng cẳng chân',
         badge: 'Khớp gối',
@@ -1639,6 +1691,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_knee_rot',
+        titleVi: '3. Xoay Trong Khớp Gối',
         title: '3. Knee Medial Rotation (Xoay Trong Khớp Gối)',
         subtitle: 'Cơ khoeo và cơ bán gân xoay nhẹ cẳng chân vào trong',
         badge: 'Khớp gối',
@@ -1652,10 +1705,11 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   },
   {
     id: 'act_group_shoulder',
-    titleVi: 'Khớp Vai (Shoulder)',
+    titleVi: 'Chuyển Động Khớp Vai',
     cards: [
       {
         id: 'act_shoulder_flex',
+        titleVi: '1. Gập Khớp Vai',
         title: '1. Shoulder Flexion (Gập Khớp Vai)',
         subtitle: 'Bó trước cơ delta và cơ ngực lớn nâng cánh tay ra trước',
         badge: 'Khớp vai',
@@ -1667,6 +1721,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_shoulder_ext',
+        titleVi: '2. Duỗi Khớp Vai',
         title: '2. Shoulder Extension (Duỗi Khớp Vai)',
         subtitle: 'Cơ lưng rộng, cơ tròn lớn và bó sau cơ delta kéo tay ra sau',
         badge: 'Khớp vai',
@@ -1678,6 +1733,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_shoulder_abd',
+        titleVi: '3. Dang Ngang Khớp Vai',
         title: '3. Shoulder Horizontal Abduction (Dang Ngang Vai)',
         subtitle: 'Cơ delta và cơ trên gai dang cánh tay sang bên',
         badge: 'Khớp vai',
@@ -1691,10 +1747,11 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   },
   {
     id: 'act_group_upper_limbs',
-    titleVi: 'Chi Trên & Khớp Khuỷu (Upper Limbs)',
+    titleVi: 'Chuyển Động Chi Trên & Khớp Khuỷu',
     cards: [
       {
         id: 'act_elbow_flex',
+        titleVi: '1. Gập Khớp Khuỷu',
         title: '1. Elbow Flexion (Gập Khớp Khuỷu)',
         subtitle: 'Cơ nhị đầu cánh tay (Biceps) và cơ cánh tay gập cẳng tay',
         badge: 'Khuỷu tay',
@@ -1706,6 +1763,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_elbow_ext',
+        titleVi: '2. Duỗi Khớp Khuỷu',
         title: '2. Elbow Extension (Duỗi Khớp Khuỷu)',
         subtitle: 'Cơ tam đầu cánh tay (Triceps) kéo mỏm khuỷu duỗi thẳng tay',
         badge: 'Khuỷu tay',
@@ -1717,6 +1775,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_forearm_pro',
+        titleVi: '3. Sấp Cẳng Tay',
         title: '3. Forearm Pronation (Sấp Cẳng Tay)',
         subtitle: 'Cơ sấp tròn và cơ sấp vuông xoay xương quay vắt chéo xương trụ',
         badge: 'Cẳng tay',
@@ -1730,10 +1789,11 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
   },
   {
     id: 'act_group_thorax',
-    titleVi: 'Lồng Ngực & Hô Hấp (Thorax & Respiration)',
+    titleVi: 'Chuyển Động Lồng Ngực & Hô Hấp',
     cards: [
       {
         id: 'act_ribs_elev',
+        titleVi: '1. Nâng Khung Sườn (Hít Vào)',
         title: '1. Ribs Elevation (Nâng Khung Sườn - Hít Vào)',
         subtitle: 'Cơ liên sườn ngoài nâng khung sườn làm tăng thể tích lồng ngực',
         badge: 'Hô hấp',
@@ -1745,6 +1805,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_ribs_dep',
+        titleVi: '2. Hạ Khung Sườn (Thở Ra)',
         title: '2. Ribs Depression (Hạ Khung Sườn - Thở Ra)',
         subtitle: 'Khung sườn hạ xuống xẹp lại, phổi co hồi thụ động đẩy khí ra ngoài',
         badge: 'Hô hấp',
@@ -1756,6 +1817,7 @@ export const ATLAS_MUSCLE_ACTIONS_CATEGORIES = [
       },
       {
         id: 'act_cardiac',
+        titleVi: '3. Chu Kỳ Co Bóp Tim (Tâm Thu & Tâm Trương)',
         title: '3. Cardiac Cycle (Chu Kỳ Co Bóp Tim)',
         subtitle: 'Tâm thu tống máu vào động mạch và tâm trương giãn nở hút máu về',
         badge: 'Tuần hoàn',

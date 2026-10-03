@@ -21,11 +21,11 @@ export function initRadiologicalScout(viewer) {
     scoutBoxEl.title = 'Ảnh Chẩn Đoán Hình Ảnh (CT / MRI) Đối Chiếu (Chạm để xem chi tiết)';
     scoutBoxEl.innerHTML = `
       <div class="scout-preview-frame">
-        <div class="scout-badge" id="scoutBadgeLabel">CT Scout</div>
+        <div class="scout-badge" id="scoutBadgeLabel">Ảnh định vị CT</div>
         <div class="scout-img-wrapper">
           <canvas id="scoutCanvas" width="90" height="90"></canvas>
         </div>
-        <div class="scout-level-pill" id="scoutLevelText">Axial CT</div>
+        <div class="scout-level-pill" id="scoutLevelText">Lát cắt ngang CT</div>
       </div>
     `;
     container.appendChild(scoutBoxEl);
@@ -49,11 +49,11 @@ export function showScoutView(card, plane = 'axial', offset = 1.0) {
   const levelText = scoutBoxEl.querySelector('#scoutLevelText');
 
   if (badge) {
-    badge.textContent = currentPlane === 'axial' ? 'CT Scout' : currentPlane === 'coronal' ? 'Coronal MRI' : 'Sagittal MRI';
+    badge.textContent = currentPlane === 'axial' ? 'Ảnh định vị CT' : currentPlane === 'coronal' ? 'Lát cắt đứng ngang MRI' : 'Lát cắt đứng dọc MRI';
   }
 
   if (levelText) {
-    levelText.textContent = card?.scoutLabel || `${currentPlane.toUpperCase()} ${(currentOffset * 100).toFixed(0)}cm`;
+    levelText.textContent = card?.scoutLabel || `${currentPlane === 'axial' ? 'CẮT NGANG' : currentPlane === 'coronal' ? 'CẮT ĐỨNG NGANG' : 'CẮT ĐỨNG DỌC'} ${(currentOffset * 100).toFixed(0)}cm`;
   }
 
   drawScoutGraphic();
@@ -167,9 +167,9 @@ function openScoutDetailModal() {
   const existing = document.getElementById('scoutDetailModal');
   if (existing) existing.remove();
 
-  const title = currentCard?.title || 'Lát Cắt Chẩn Đoán Hình Ảnh (CT / MRI)';
+  const title = currentCard?.titleVi || currentCard?.title || 'Lát Cắt Chẩn Đoán Hình Ảnh (CT / MRI)';
   const subtitle = currentCard?.subtitle || 'Đối chiếu giải phẫu 3D và phim cắt lớp vi tính y khoa';
-  const scoutLabel = currentCard?.scoutLabel || `${currentPlane.toUpperCase()} ${(currentOffset * 100).toFixed(1)} cm`;
+  const scoutLabel = currentCard?.scoutLabel || `${currentPlane === 'axial' ? 'CẮT NGANG' : currentPlane === 'coronal' ? 'CẮT ĐỨNG NGANG' : 'CẮT ĐỨNG DỌC'} ${(currentOffset * 100).toFixed(1)} cm`;
 
   const modal = document.createElement('div');
   modal.id = 'scoutDetailModal';
@@ -192,7 +192,7 @@ function openScoutDetailModal() {
         <div style="background:#020617;padding:16px;border-radius:12px;border:1px solid #1e293b;display:inline-block;width:100%;box-sizing:border-box;">
           <img src="${currentCard?.image || '/images/atlas/nerv_brain.png'}" alt="Scout Detail" style="max-height:180px;object-fit:contain;filter:contrast(1.15) brightness(0.95);" />
           <div style="margin-top:8px;font-family:monospace;font-size:11.5px;color:#3b82f6;letter-spacing:1px;">
-            LEVEL: ${(currentOffset * 100).toFixed(1)} cm | PLANE: ${currentPlane.toUpperCase()} | P-THICKNESS: 1.0mm
+            ĐỘ CAO: ${(currentOffset * 100).toFixed(1)} cm | MẶT PHẲNG: ${currentPlane === 'axial' ? 'CẮT NGANG' : currentPlane === 'coronal' ? 'CẮT ĐỨNG NGANG' : 'CẮT ĐỨNG DỌC'} | ĐỘ DÀY: 1.0mm
           </div>
         </div>
       </div>
