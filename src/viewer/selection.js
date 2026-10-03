@@ -733,9 +733,23 @@ export function selectPartById(partId, viewer, skipHistory = false, skipCamera =
   const ALIAS_MAP = {
     'atlas': 'Atlas (C1)',
     'axis': 'Axis (C2)',
+    'sternum': 'Body of sternum',
     'lumbar vertebra': 'Vertebra L3',
     'lumbar vertebrae': 'Vertebra L3',
-    'ilium': 'Hip bone.l'
+    'ilium': 'Hip bone.l',
+    'pelvis': 'Hip bone.l',
+    'rib 5': 'Fifth rib.l',
+    'rib 1': 'First rib.l',
+    'rib 2': 'Second rib.l',
+    'rib 3': 'Third rib.l',
+    'rib 4': 'Fourth rib.l',
+    'rib 6': 'Sixth rib.l',
+    'rib 7': 'Seventh rib.l',
+    'rib 8': 'Eighth rib.l',
+    'rib 9': 'Ninth rib.l',
+    'rib 10': 'Tenth rib.l',
+    'rib 11': 'Eleventh rib.l',
+    'rib 12': 'Twelfth rib.l'
   };
 
   let targetId = partId;
