@@ -30,16 +30,16 @@ export const MOTIONS = {
 export const MOTION_METADATA = {
   [MOTIONS.CARDIAC]: {
     id: MOTIONS.CARDIAC,
-    titleVi: 'Nhịp Tim & Chu kỳ Tim (Cardiac Cycle)',
+    titleVi: 'Nhịp Tim & Chu kỳ Tim',
     titleEn: 'Cardiac Cycle',
     systemRequired: 'cardiovascular',
     secondarySystem: 'skeletal',
     defaultDuration: 0.85,
     camera: { x: 0.05, y: 1.28, z: 0.65, targetX: 0.02, targetY: 1.28, targetZ: 0.03 },
     phases: [
-      { from: 0.0, to: 0.38, name: 'Tâm thu (Systole) — Tâm thất co bóp tống máu vào ĐM chủ & ĐM phổi' },
-      { from: 0.38, to: 0.85, name: 'Tâm trương (Diastole) — Các buồng tim giãn ra, máu đổ đầy tâm thất' },
-      { from: 0.85, to: 1.0, name: 'Tiền tâm thu (Atrial Kick) — Tâm nhĩ co bóp tống nốt lượng máu cuối vào thất' }
+      { from: 0.0, to: 0.38, name: 'Tâm thu — Tâm thất co bóp tống máu vào ĐM chủ & ĐM phổi' },
+      { from: 0.38, to: 0.85, name: 'Tâm trương — Các buồng tim giãn ra, máu đổ đầy tâm thất' },
+      { from: 0.85, to: 1.0, name: 'Tiền tâm thu — Tâm nhĩ co bóp tống nốt lượng máu cuối vào thất' }
     ],
     keyParts: [
       { id: 'heart_all', nameVi: 'Toàn bộ tim & mạch lớn' },
@@ -50,15 +50,15 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.RESPIRATORY]: {
     id: MOTIONS.RESPIRATORY,
-    titleVi: 'Cơ Chế Hô Hấp (Respiratory Mechanics)',
+    titleVi: 'Cơ Chế Hô Hấp',
     titleEn: 'Respiratory Cycle',
     systemRequired: 'visceral',
     secondarySystem: 'skeletal',
     defaultDuration: 3.6,
     camera: { x: 0, y: 1.28, z: 0.95, targetX: 0, targetY: 1.28, targetZ: 0.01 },
     phases: [
-      { from: 0.0, to: 0.45, name: 'Hít vào (Inspiration) — Lồng ngực dãn nở, xương sườn nâng lên, phổi nở rộng' },
-      { from: 0.45, to: 1.0, name: 'Thở ra (Expiration) — Lồng ngực hạ xuống xẹp lại, phổi co hồi thụ động' }
+      { from: 0.0, to: 0.45, name: 'Hít vào — Lồng ngực dãn nở, xương sườn nâng lên, phổi nở rộng' },
+      { from: 0.45, to: 1.0, name: 'Thở ra — Lồng ngực hạ xuống xẹp lại, phổi co hồi thụ động' }
     ],
     keyParts: [
       { id: 'lungs_all', nameVi: 'Hai lá phổi & Phế quản' },
@@ -69,7 +69,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.SPINE_FLEXION]: {
     id: MOTIONS.SPINE_FLEXION,
-    titleVi: 'Gập Cột Sống (Spine Flexion)',
+    titleVi: 'Gập Cột Sống',
     titleEn: 'Spine Flexion',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -83,7 +83,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.SPINE_EXTENSION]: {
     id: MOTIONS.SPINE_EXTENSION,
-    titleVi: 'Duỗi Cột Sống (Spine Extension)',
+    titleVi: 'Duỗi Cột Sống',
     titleEn: 'Spine Extension',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -91,13 +91,13 @@ export const MOTION_METADATA = {
     camera: { x: 1.25, y: 1.15, z: -1.45, targetX: 0, targetY: 1.05, targetZ: 0 },
     agonists: ['erector spinae', 'iliocostalis', 'longissimus', 'spinalis', 'latissimus', 'trapezius', 'splenius'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Nhóm cơ dựng sống (Erector spinae) kéo cột sống ngửa ra sau' },
+      { from: 0.0, to: 0.5, name: 'Nhóm cơ dựng sống kéo cột sống ngửa ra sau' },
       { from: 0.5, to: 1.0, name: 'Trở về tư thế đứng thẳng' }
     ]
   },
   [MOTIONS.SPINE_LAT_FLEXION]: {
     id: MOTIONS.SPINE_LAT_FLEXION,
-    titleVi: 'Nghiêng Cột Sống (Spine Lateral Flexion)',
+    titleVi: 'Nghiêng Cột Sống',
     titleEn: 'Spine Lateral Flexion',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -111,7 +111,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.HIP_FLEXION]: {
     id: MOTIONS.HIP_FLEXION,
-    titleVi: 'Gập Khớp Háng (Hip Flexion)',
+    titleVi: 'Gập Khớp Háng',
     titleEn: 'Hip Flexion',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -119,13 +119,13 @@ export const MOTION_METADATA = {
     camera: { x: 1.25, y: 0.65, z: 1.20, targetX: 0.08, targetY: 0.55, targetZ: 0 },
     agonists: ['iliopsoas.l', 'psoas.l', 'iliacus.l', 'rectus femoris.l', 'sartorius.l', 'pectineus.l'],
     phases: [
-      { from: 0.0, to: 0.5, name: 'Cơ thắt lưng chậu (Iliopsoas) và cơ thẳng đùi co nâng đùi ra trước' },
+      { from: 0.0, to: 0.5, name: 'Cơ thắt lưng chậu và cơ thẳng đùi co nâng đùi ra trước' },
       { from: 0.5, to: 1.0, name: 'Hạ đùi trở về tư thế giải phẫu' }
     ]
   },
   [MOTIONS.HIP_EXTENSION]: {
     id: MOTIONS.HIP_EXTENSION,
-    titleVi: 'Duỗi Khớp Háng (Hip Extension)',
+    titleVi: 'Duỗi Khớp Háng',
     titleEn: 'Hip Extension',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -139,7 +139,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.HIP_ROTATION]: {
     id: MOTIONS.HIP_ROTATION,
-    titleVi: 'Xoay Trong Khớp Háng (Hip Medial Rotation)',
+    titleVi: 'Xoay Trong Khớp Háng',
     titleEn: 'Hip Medial Rotation',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -153,7 +153,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.KNEE_FLEXION]: {
     id: MOTIONS.KNEE_FLEXION,
-    titleVi: 'Gập Khớp Gối (Knee Flexion)',
+    titleVi: 'Gập Khớp Gối',
     titleEn: 'Knee Flexion',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -167,7 +167,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.KNEE_EXTENSION]: {
     id: MOTIONS.KNEE_EXTENSION,
-    titleVi: 'Duỗi Khớp Gối (Knee Extension)',
+    titleVi: 'Duỗi Khớp Gối',
     titleEn: 'Knee Extension',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -181,7 +181,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.KNEE_ROTATION]: {
     id: MOTIONS.KNEE_ROTATION,
-    titleVi: 'Xoay Trong Khớp Gối (Knee Medial Rotation)',
+    titleVi: 'Xoay Trong Khớp Gối',
     titleEn: 'Knee Medial Rotation',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -195,7 +195,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.SHOULDER_FLEXION]: {
     id: MOTIONS.SHOULDER_FLEXION,
-    titleVi: 'Gập Khớp Vai (Shoulder Flexion)',
+    titleVi: 'Gập Khớp Vai',
     titleEn: 'Shoulder Flexion',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -209,7 +209,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.SHOULDER_EXTENSION]: {
     id: MOTIONS.SHOULDER_EXTENSION,
-    titleVi: 'Duỗi Khớp Vai (Shoulder Extension)',
+    titleVi: 'Duỗi Khớp Vai',
     titleEn: 'Shoulder Extension',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -223,7 +223,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.SHOULDER_ABDUCTION]: {
     id: MOTIONS.SHOULDER_ABDUCTION,
-    titleVi: 'Dang Ngang Khớp Vai (Shoulder Abduction)',
+    titleVi: 'Dang Ngang Khớp Vai',
     titleEn: 'Shoulder Abduction',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -237,7 +237,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.ELBOW_FLEXION]: {
     id: MOTIONS.ELBOW_FLEXION,
-    titleVi: 'Gập Khớp Khuỷu (Elbow Flexion)',
+    titleVi: 'Gập Khớp Khuỷu',
     titleEn: 'Elbow Flexion',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -251,7 +251,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.ELBOW_EXTENSION]: {
     id: MOTIONS.ELBOW_EXTENSION,
-    titleVi: 'Duỗi Khớp Khuỷu (Elbow Extension)',
+    titleVi: 'Duỗi Khớp Khuỷu',
     titleEn: 'Elbow Extension',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',
@@ -265,7 +265,7 @@ export const MOTION_METADATA = {
   },
   [MOTIONS.FOREARM_PRONATION]: {
     id: MOTIONS.FOREARM_PRONATION,
-    titleVi: 'Sấp Cẳng Tay (Forearm Pronation)',
+    titleVi: 'Sấp Cẳng Tay',
     titleEn: 'Forearm Pronation',
     systemRequired: 'muscular',
     secondarySystem: 'skeletal',

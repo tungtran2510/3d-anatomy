@@ -195,7 +195,7 @@ function renderStudyStep(viewer) {
           <div class="flashcard-title-row">
             <div class="flashcard-name-wrap">
               <h3 class="flashcard-name">${clinical.nameVi}</h3>
-              <span class="flashcard-latin">${clinical.nameLatin} (${clinical.nameEn || ''})</span>
+              <span class="flashcard-latin">${clinical.nameLatin}</span>
             </div>
             <span class="flashcard-tag">${clinical.systemVi}</span>
           </div>

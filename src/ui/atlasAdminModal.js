@@ -91,7 +91,7 @@ function renderAdminLogin() {
 
       <form class="admin-login-form" id="adminLoginForm">
         <div class="admin-form-row">
-          <label for="adminPassInput" class="admin-form-label">Mật khẩu Quản trị (Admin Password):</label>
+          <label for="adminPassInput" class="admin-form-label">Mật khẩu Quản trị:</label>
           <div class="admin-password-input-wrap">
             <input type="password" id="adminPassInput" class="admin-input" placeholder="Nhập mật khẩu (123456)" autocomplete="current-password" autofocus />
             <button type="button" class="btn-toggle-pass-visibility" id="btnTogglePassEye" title="Hiện/Ẩn mật khẩu">👁️</button>
@@ -453,7 +453,7 @@ function openEditDrawer(itemData) {
 
       <form class="admin-drawer-form" id="adminDrawerForm">
         <div class="admin-drawer-field">
-          <label>Danh mục (Category):</label>
+          <label>Danh mục:</label>
           <select id="drawerCategorySelect" class="admin-input">
             ${categories.map(c => `
               <option value="${c.id}" ${c.id === selectedCatId ? 'selected' : ''}>${c.titleVi}</option>
@@ -462,28 +462,28 @@ function openEditDrawer(itemData) {
         </div>
 
         <div class="admin-drawer-field">
-          <label>Tiêu đề video (Title):</label>
-          <input type="text" id="drawerTitleInput" class="admin-input" value="${card.title || ''}" placeholder="VD: 1. Function of the Skin (Chức năng của da)" required />
+          <label>Tiêu đề video:</label>
+          <input type="text" id="drawerTitleInput" class="admin-input" value="${card.title || ''}" placeholder="VD: 1. Cấu trúc và chức năng của hệ da" required />
         </div>
 
         <div class="admin-drawer-field">
-          <label>Mô tả ngắn / Chú thích (Subtitle):</label>
+          <label>Mô tả ngắn / Chú thích:</label>
           <input type="text" id="drawerSubtitleInput" class="admin-input" value="${card.subtitle || ''}" placeholder="VD: Cấu trúc 3 tầng: Biểu bì, thân bì và hạ bì" />
         </div>
 
         <div class="admin-drawer-row-2">
           <div class="admin-drawer-field">
-            <label>Thời lượng (Duration):</label>
+            <label>Thời lượng:</label>
             <input type="text" id="drawerDurationInput" class="admin-input" value="${card.duration || '0:45'}" placeholder="0:56" />
           </div>
           <div class="admin-drawer-field">
-            <label>Nhãn thẻ (Badge):</label>
+            <label>Nhãn thẻ:</label>
             <input type="text" id="drawerBadgeInput" class="admin-input" value="${card.badge || 'Video'}" placeholder="VD: Tim mạch, Cơ xương..." />
           </div>
         </div>
 
         <div class="admin-drawer-field">
-          <label>Đường dẫn Video (YouTube / MP4 URL):</label>
+          <label>Đường dẫn Video (YouTube hoặc link file MP4):</label>
           <div class="admin-input-btn-wrap">
             <input type="text" id="drawerUrlInput" class="admin-input" value="${card.videoUrl || ''}" placeholder="Dán link YouTube (watch, embed, youtu.be, shorts) hoặc link .mp4" />
             <button type="button" class="btn-test-url" id="btnDrawerTestUrl" title="Kiểm tra phát thử link này ngay">▶️ Thử link</button>
@@ -499,7 +499,7 @@ function openEditDrawer(itemData) {
         </div>
 
         <div class="admin-drawer-field">
-          <label>Ảnh Thumbnail xem trước:</label>
+          <label>Ảnh đại diện xem trước:</label>
           <input type="text" id="drawerImageInput" class="admin-input" value="${card.image || './images/atlas/med_skin.png'}" placeholder="./images/atlas/med_skin.png hoặc link ảnh online" />
           <div class="admin-preset-thumbs">
             <span style="font-size:11px;opacity:0.8;">Chọn ảnh mẫu có sẵn:</span>

@@ -10,7 +10,7 @@ let planeHelper = null;
 
 const PLANE_DEFAULTS = {
   sagittal: {
-    nameVi: 'Mặt phẳng đứng dọc (Sagittal)',
+    nameVi: 'Mặt phẳng đứng dọc',
     normal: new THREE.Vector3(1, 0, 0),
     min: -0.4,
     max: 0.4,
@@ -18,7 +18,7 @@ const PLANE_DEFAULTS = {
     defaultVal: 0.0
   },
   coronal: {
-    nameVi: 'Mặt phẳng đứng ngang (Coronal)',
+    nameVi: 'Mặt phẳng đứng ngang',
     normal: new THREE.Vector3(0, 0, 1),
     min: -0.3,
     max: 0.3,
@@ -26,7 +26,7 @@ const PLANE_DEFAULTS = {
     defaultVal: 0.0
   },
   axial: {
-    nameVi: 'Mặt phẳng nằm ngang (Axial / Transverse)',
+    nameVi: 'Mặt phẳng cắt ngang',
     normal: new THREE.Vector3(0, 1, 0),
     min: 0.0,
     max: 1.8,

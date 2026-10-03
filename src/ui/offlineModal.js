@@ -234,20 +234,20 @@ async function renderModalContent(targetSystemId = null) {
         <div class="storage-footer-card">
           <div class="storage-stats-bar">
             <div class="stat-pill">
-              <span class="stat-label">Cache 3D:</span>
+              <span class="stat-label">Bộ nhớ đệm 3D:</span>
               <strong class="stat-val">${storageInfo.usageMB} MB</strong>
             </div>
             <div class="stat-pill">
-              <span class="stat-label">RAM WebGL:</span>
+              <span class="stat-label">Bộ nhớ đồ họa:</span>
               <strong class="stat-val">${heapInfo.usedMB ? heapInfo.usedMB + ' MB' : 'Tối ưu'}</strong>
             </div>
           </div>
           <div class="storage-footer-actions">
-            <button type="button" class="btn-footer-tool" id="btnPurgeRAM" title="Giải phóng RAM WebGL">
-              🧹 Dọn RAM
+            <button type="button" class="btn-footer-tool" id="btnPurgeRAM" title="Giải phóng bộ nhớ đồ họa">
+              🧹 Dọn bộ nhớ
             </button>
-            <button type="button" class="btn-footer-tool danger" id="btnClearAllCache" title="Xóa toàn bộ Cache">
-              🗑️ Xóa Cache
+            <button type="button" class="btn-footer-tool danger" id="btnClearAllCache" title="Xóa toàn bộ bộ nhớ đệm">
+              🗑️ Xóa bộ nhớ đệm
             </button>
           </div>
         </div>
@@ -337,7 +337,7 @@ function attachModalEvents() {
   // Purge RAM
   document.getElementById('btnPurgeRAM')?.addEventListener('click', () => {
     triggerMemoryCleanup(currentViewer);
-    showSyncToast('🧹 Đã giải phóng bộ nhớ RAM, shaders và WebGL render lists!', 'info');
+    showSyncToast('🧹 Đã giải phóng bộ nhớ đồ họa và làm mới hiển thị 3D!', 'info');
     renderModalContent();
   });
 
@@ -351,7 +351,7 @@ function attachModalEvents() {
         const keys = await caches.keys();
         await Promise.all(keys.map((k) => caches.delete(k)));
       }
-      showSyncToast('🗑️ Đã xóa toàn bộ cache ngoại tuyến.', 'warning');
+      showSyncToast('🗑️ Đã xóa toàn bộ bộ nhớ đệm ngoại tuyến.', 'warning');
       await renderModalContent();
     }
   });
@@ -396,7 +396,7 @@ async function deleteSingleSystem(sysId) {
         await cache.delete(url);
       }
     }
-    showSyncToast(`✓ Đã xóa cache của ${sys.nameVi}`, 'info');
+    showSyncToast(`✓ Đã xóa bộ nhớ đệm của ${sys.nameVi}`, 'info');
   } catch (err) {
     console.error('Delete error:', err);
   }

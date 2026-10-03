@@ -505,7 +505,7 @@ function renderViewsTab(container, viewer) {
           </div>
           <div class="shelf-track">
             ${cat.cards.map(card => `
-              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)} (${escapeHtml(card.subtitle || '')})">
+              <div class="atlas-shelf-card" data-view-id="${card.id}" title="${escapeHtml(card.titleVi || card.title)}${card.subtitle ? ' - ' + escapeHtml(card.subtitle) : ''}">
                 <div class="shelf-thumb-box">
                   <img class="shelf-thumb-img" src="${card.image || '/images/atlas/skel_full.png'}" alt="${escapeHtml(card.titleVi || card.title)}" loading="lazy" onerror="this.src='/images/atlas/skel_full.png'" />
                   <span class="shelf-thumb-dots">•••</span>
@@ -564,7 +564,7 @@ function renderViewsTab(container, viewer) {
       html += `
         <div class="atlas-carousel-shelf">
           <div class="shelf-header">
-            <h3 class="shelf-title">Bàn Phẫu Tích Giải Phẫu (Gross Anatomy Lab)</h3>
+            <h3 class="shelf-title">Bàn Phẫu Tích Giải Phẫu</h3>
             <button type="button" class="shelf-action-btn">•••</button>
           </div>
           <div class="shelf-track">
@@ -895,7 +895,7 @@ function renderLibraryTab(container, viewer) {
   let html = `
     <div class="atlas-carousel-shelf">
       <div class="shelf-header">
-        <h3 class="shelf-title">Góc Nhìn Đã Lưu & Ghi Chú (Thư Viện Của Tôi)</h3>
+        <h3 class="shelf-title">Góc Nhìn Đã Lưu & Ghi Chú</h3>
         <button type="button" class="shelf-action-btn">•••</button>
       </div>
       <div class="atlas-library-empty">
@@ -968,7 +968,7 @@ async function applyAtlasView(card, viewer) {
     await applyAtlasPreset(card, activeViewer);
   } catch (err) {
     console.error('Error applying atlas view:', err);
-    showToast(`Đã mở góc nhìn: ${card.title}`);
+    showToast(`Đã mở góc nhìn: ${card.titleVi || card.title}`);
   }
 }
 
@@ -997,7 +997,7 @@ async function applyAtlasRegion(reg, viewer) {
   }
 
   currentActiveRegionId = reg.id;
-  showToast(`🎯 Chuyển phân vùng: ${reg.title}...`);
+  showToast(`🎯 Chuyển phân vùng: ${reg.titleVi || reg.title}...`);
 
   const systemsToLoad = reg.systems || ['skeletal'];
   for (const sys of systemsToLoad) {
@@ -1022,12 +1022,12 @@ function applyAtlasMedia(media, viewer) {
   if (media.type === 'motion') {
     closeAtlasHub();
     disableClipping(activeViewer);
-    showToast(`▶️ Đang khởi chạy mô phỏng 3D: ${media.title}`);
+    showToast(`▶️ Đang khởi chạy mô phỏng 3D: ${media.titleVi || media.title}`);
     openMotionPanel(activeViewer, media.motionType);
   } else if (media.type === 'video') {
     closeMotionPanel();
-    showToast(`🎬 Đang phát video y khoa: ${media.title}`);
-    openVideoModal(media.videoUrl, media.title);
+    showToast(`🎬 Đang phát video y khoa: ${media.titleVi || media.title}`);
+    openVideoModal(media.videoUrl, media.titleVi || media.title);
   }
 }
 

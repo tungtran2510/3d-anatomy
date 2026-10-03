@@ -673,7 +673,7 @@ export function handleHalfBodyToggle(viewer) {
   if (btnTool) btnTool.classList.toggle('active', active);
   if (pill) pill.classList.toggle('hidden', !active);
 
-  showToast(active ? 'Chế độ Nửa Người: ĐÃ BẬT (Mặt cắt đứng dọc Sagittal)' : 'Chế độ Nửa Người: ĐÃ TẮT');
+  showToast(active ? 'Chế độ Nửa Người: ĐÃ BẬT (Mặt cắt đứng dọc)' : 'Chế độ Nửa Người: ĐÃ TẮT');
 }
 
 export function handleHalfBodyFlip(viewer) {

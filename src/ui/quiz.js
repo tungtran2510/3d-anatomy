@@ -7,70 +7,70 @@ import { recordMistake, recordCorrect, getWeakStructures } from '../state/learni
 
 export const EXAM_QUESTION_BANK = [
   {
-    title: 'Xương bánh chè (Patella)',
+    title: 'Xương bánh chè',
     latin: 'Patella (TA2: 1152)',
     targetIds: ['Patella.l', 'Patella.r'],
     hint: 'Xương vừng hình tam giác dẹt ở mặt trước khớp gối.',
     category: 'Chi dưới'
   },
   {
-    title: 'Xương đùi (Femur)',
+    title: 'Xương đùi',
     latin: 'Os femoris (TA2: 1133)',
     targetIds: ['Femur.l', 'Femur.r'],
     hint: 'Xương dài nhất và chịu lực khỏe nhất trong cơ thể con người.',
     category: 'Chi dưới'
   },
   {
-    title: 'Xương chày (Tibia)',
+    title: 'Xương chày',
     latin: 'Tibia (TA2: 1156)',
     targetIds: ['Tibia.l', 'Tibia.r'],
     hint: 'Xương lớn chịu 85% tải trọng nằm ở phía trong cẳng chân.',
     category: 'Chi dưới'
   },
   {
-    title: 'Xương mác (Fibula)',
+    title: 'Xương mác',
     latin: 'Fibula (TA2: 1172)',
     targetIds: ['Fibula.l', 'Fibula.r'],
     hint: 'Xương mảnh nằm ở phía ngoài cẳng chân, tạo nên mắt cá ngoài.',
     category: 'Chi dưới'
   },
   {
-    title: 'Xương gót chân (Calcaneus)',
+    title: 'Xương gót chân',
     latin: 'Calcaneus (TA2: 1184)',
     targetIds: ['Calcaneus.l', 'Calcaneus.r'],
     hint: 'Xương lớn nhất cổ chân, là điểm bám của gân gót Achilles.',
     category: 'Bàn chân'
   },
   {
-    title: 'Đốt sống cổ C1 (Đốt đội - Atlas)',
+    title: 'Đốt sống cổ C1 (Đốt đội)',
     latin: 'Atlas (Vertebra cervicalis I)',
     targetIds: ['Atlas'],
     hint: 'Đốt sống cổ đầu tiên dạng vòng tròn không có thân, nâng đỡ hộp sọ.',
     category: 'Cột sống'
   },
   {
-    title: 'Đốt sống cổ C2 (Đốt trục - Axis)',
+    title: 'Đốt sống cổ C2 (Đốt trục)',
     latin: 'Axis (Vertebra cervicalis II)',
     targetIds: ['Axis'],
     hint: 'Đốt sống có mỏm răng nhô thẳng lên tạo trục xoay cho cổ.',
     category: 'Cột sống'
   },
   {
-    title: 'Đốt sống thắt lưng (Lumbar vertebra)',
+    title: 'Đốt sống thắt lưng',
     latin: 'Vertebrae lumbales (TA2: 1045)',
     targetIds: ['Lumbar vertebra I', 'Lumbar vertebra II', 'Lumbar vertebra III', 'Lumbar vertebra IV', 'Lumbar vertebra V'],
     hint: '5 đốt sống lớn nhất chịu tải trọng chính của nửa trên cơ thể.',
     category: 'Cột sống'
   },
   {
-    title: 'Xương cùng (Sacrum)',
+    title: 'Xương cùng',
     latin: 'Os sacrum (TA2: 1056)',
     targetIds: ['Sacrum'],
     hint: 'Khối xương hình tam giác lớn nối giữa hai xương cánh chậu.',
     category: 'Cột sống'
   },
   {
-    title: 'Xương cụt (Coccyx)',
+    title: 'Xương cụt',
     latin: 'Os coccygis (TA2: 1068)',
     targetIds: ['Coccyx'],
     hint: 'Đoạn xương nhỏ ở tận cùng phía dưới của cột sống.',
@@ -84,56 +84,56 @@ export const EXAM_QUESTION_BANK = [
     category: 'Chi trên'
   },
   {
-    title: 'Xương bả vai (Scapula)',
+    title: 'Xương bả vai',
     latin: 'Scapula (TA2: 1102)',
     targetIds: ['Scapula.l', 'Scapula.r'],
     hint: 'Xương dẹt phẳng hình tam giác nằm ở mặt sau trên lồng ngực.',
     category: 'Chi trên'
   },
   {
-    title: 'Xương cánh tay (Humerus)',
+    title: 'Xương cánh tay',
     latin: 'Humerus (TA2: 1118)',
     targetIds: ['Humerus.l', 'Humerus.r'],
     hint: 'Xương dài lớn nhất chi trên, nối từ vai xuống khuỷu.',
     category: 'Chi trên'
   },
   {
-    title: 'Xương quay (Radius)',
+    title: 'Xương quay',
     latin: 'Radius (TA2: 1127)',
     targetIds: ['Radius.l', 'Radius.r'],
     hint: 'Xương cẳng tay nằm phía ngoài (ngón tay cái), thực hiện sấp ngửa.',
     category: 'Chi trên'
   },
   {
-    title: 'Xương trụ (Ulna)',
+    title: 'Xương trụ',
     latin: 'Ulna (TA2: 1122)',
     targetIds: ['Ulna.l', 'Ulna.r'],
     hint: 'Xương cẳng tay nằm phía ngón út, có mỏm khuỷu rất to ở trên.',
     category: 'Chi trên'
   },
   {
-    title: 'Thân xương ức (Sternum)',
+    title: 'Thân xương ức',
     latin: 'Corpus sterni (TA2: 1079)',
     targetIds: ['Body of sternum'],
     hint: 'Xương dẹt phẳng ở đường giữa ngực khớp với các sụn sườn.',
     category: 'Lồng ngực'
   },
   {
-    title: 'Xương trán (Frontal bone)',
+    title: 'Xương trán',
     latin: 'Os frontale (TA2: 890)',
     targetIds: ['Frontal bone'],
     hint: 'Xương sọ bảo vệ thùy trán, tạo nên trán và trần ổ mắt.',
     category: 'Đầu mặt'
   },
   {
-    title: 'Xương hàm dưới (Mandible)',
+    title: 'Xương hàm dưới',
     latin: 'Mandibula (TA2: 953)',
     targetIds: ['Mandible'],
     hint: 'Xương duy nhất cử động được trong khối đầu mặt, thực hiện động tác nhai.',
     category: 'Đầu mặt'
   },
   {
-    title: 'Xương chậu (Hip bone)',
+    title: 'Xương chậu',
     latin: 'Os coxae (TA2: 1111)',
     targetIds: ['Hip bone.l', 'Hip bone.r', 'Ilium.l', 'Ilium.r'],
     hint: 'Khung xương lớn nâng đỡ thân mình và tạo ổ cối tiếp khớp với xương đùi.',
@@ -200,7 +200,7 @@ export function startAdaptiveQuiz(viewer) {
     const matched = EXAM_QUESTION_BANK.filter(q => q.targetIds.some(t => weakPartIds.includes(t)));
     const others = EXAM_QUESTION_BANK.filter(q => !matched.includes(q)).sort(() => 0.5 - Math.random());
     currentQuestions = [...matched, ...others].slice(0, 5);
-    showToast(`🎯 Bắt đầu Quiz Thích Ứng: Ôn ${matched.length} cấu trúc bạn hay sai!`);
+    showToast(`🎯 Bắt đầu Kiểm Tra Thích Ứng: Ôn ${matched.length} cấu trúc bạn hay sai!`);
   } else {
     currentQuestions = [...EXAM_QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 5);
     showToast('🎯 Chưa có câu sai! Bắt đầu bài kiểm tra thích ứng ngẫu nhiên');

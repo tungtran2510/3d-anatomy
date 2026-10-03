@@ -732,7 +732,7 @@ ${clinical.clinical}
       - 👁️ **Bóc tách nhiều lớp:** Gõ *"ẩn cơ để xem thần kinh"*, *"chỉ xem xương"*...
       - ⚖️ **So sánh đối xứng:** Gõ *"so sánh xương đùi trái-phải"*...
       - 📚 **Hỏi đáp giải phẫu học:** Hỏi chức năng, thần kinh, mạch máu của bất kỳ bộ phận nào đang chọn.
-      - 🎯 **Ôn luyện điểm yếu:** Gõ *"ôn lại cấu trúc hay sai"* để mở quiz thích ứng.
+      - 🎯 **Ôn luyện điểm yếu:** Gõ *"ôn lại cấu trúc hay sai"* để mở bài kiểm tra thích ứng.
     `.trim()
   };
 }

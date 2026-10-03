@@ -82,7 +82,7 @@ export function initInfoPanel(viewer) {
       showToast('🔄 Trở về góc nhìn chính diện');
     } else {
       setView('top', viewer);
-      showToast('⬇️ Góc nhìn từ trên đỉnh đầu (Top View)');
+      showToast('⬇️ Góc nhìn từ trên đỉnh đầu');
     }
   });
 
@@ -396,7 +396,7 @@ export function updateInfoPanelContent(part, viewer) {
       {
         id: 'dermatome_map',
         title: 'Tiết đoạn cảm giác',
-        badge: 'Dermatome',
+        badge: 'Cảm giác da',
         icon: '🌈',
         desc: 'Bản đồ chi phối cảm giác rễ thần kinh tủy sống',
         action: () => showDermatomeInfo()
@@ -414,7 +414,7 @@ export function updateInfoPanelContent(part, viewer) {
       {
         id: 'vascular_angio',
         title: 'Mạch máu cấp dưỡng',
-        badge: 'Angio 3D',
+        badge: 'Mạch máu 3D',
         icon: '🩸',
         desc: 'Mạng lưới vi mạch động mạch và tĩnh mạch hồi lưu',
         action: () => {
@@ -493,7 +493,7 @@ export function updateZoomStepButtonUI() {
   if (textEl) {
     textEl.textContent = isZoomedIn ? 'Toàn cảnh' : 'Phóng to';
   }
-  btn.title = isZoomedIn ? 'Thu nhỏ toàn cảnh (Overview)' : 'Phóng to chi tiết (Zoom closer)';
+  btn.title = isZoomedIn ? 'Thu nhỏ toàn cảnh' : 'Phóng to chi tiết';
   btn.classList.toggle('active', isZoomedIn);
   const zoomInIcon = btn.querySelector('.icon-zoom-in');
   if (zoomInIcon) {
@@ -595,7 +595,7 @@ function speakCurrentStructure() {
 const ANATOMICAL_PATHWAYS = [
   {
     id: 'csf_pathway',
-    title: '🌊 Chu Trình Tuần Hoàn Dịch Não Tủy (CSF Flow)',
+    title: '🌊 Chu Trình Tuần Hoàn Dịch Não Tủy',
     match: (partId, nameVi, lower) =>
       (/ventricle|choroid|aqueduct|spinal dura|dura|csf/i.test(partId) && !/left ventricle|right ventricle|cordis/i.test(partId)) ||
       lower.includes('não thất') || lower.includes('dịch não tủy') || lower.includes('cống não') || lower.includes('màng mạch') || lower.includes('màng cứng'),
@@ -611,7 +611,7 @@ const ANATOMICAL_PATHWAYS = [
   },
   {
     id: 'biliary_pathway',
-    title: '🌿 Chu Trình Dòng Chảy Mật & Dịch Tụy (Biliary-Pancreatic)',
+    title: '🌿 Chu Trình Dòng Chảy Mật & Dịch Tụy',
     match: (partId, nameVi, lower) =>
       /liver|gall|pancrea|bile|chole|cystic|ductus/i.test(partId) ||
       lower.includes('gan') || lower.includes('mật') || lower.includes('tụy') || lower.includes('túi mật'),
@@ -701,7 +701,7 @@ function handleRadiusBlast(viewer) {
   const part = state.selectedPart;
   if (!part) return;
 
-  showToast('💥 Đang bóc tách vùng bán kính lân cận (Radius Blast)...');
+  showToast('💥 Đang bóc tách vùng bán kính lân cận...');
   setPartTransparency(0.2);
   viewer?.render?.();
 }
@@ -746,7 +746,7 @@ function showDermatomeInfo() {
   const part = state.selectedPart;
   if (!part) return;
   const clinical = getClinicalData(part.id);
-  showToast(`🌈 Tiết đoạn Dermatome chi phối: ${clinical.relations?.nerves || 'Rễ thần kinh ngoại biên tương ứng'}`);
+  showToast(`🌈 Tiết đoạn cảm giác da chi phối: ${clinical.relations?.nerves || 'Rễ thần kinh ngoại biên tương ứng'}`);
 }
 
 function showHistologyPreview(structureName, title) {

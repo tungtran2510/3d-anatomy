@@ -15,7 +15,7 @@ export function initFullscreenController(viewer) {
   fsBtnEl = document.createElement('button');
   fsBtnEl.id = 'btnFullscreenToggle';
   fsBtnEl.className = 'btn-fullscreen-toggle';
-  fsBtnEl.title = 'Bật / Tắt Toàn Màn Hình (Fullscreen)';
+  fsBtnEl.title = 'Bật / Tắt Toàn Màn Hình';
   fsBtnEl.innerHTML = `<span class="fs-icon">${ICONS.fullscreen}</span>`;
 
   container.appendChild(fsBtnEl);
