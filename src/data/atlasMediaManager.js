@@ -494,6 +494,9 @@ export const ADMIN_DEFAULT_PASS = '123456';
 
 // Lấy danh sách danh mục Media (ưu tiên LocalStorage nếu Admin đã tùy biến)
 export function getAtlasMediaCategories() {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+    return JSON.parse(JSON.stringify(DEFAULT_ATLAS_MEDIA_CATEGORIES));
+  }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
@@ -527,6 +530,7 @@ export function getAtlasMediaCategories() {
 // Lưu dữ liệu danh mục Media mới do Admin cập nhật
 export function saveAtlasMediaCategories(categories) {
   if (!Array.isArray(categories)) return false;
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return false;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(categories));
     window.dispatchEvent(new CustomEvent('atlas-media-updated', { detail: categories }));
@@ -539,6 +543,7 @@ export function saveAtlasMediaCategories(categories) {
 
 // Khôi phục về danh mục 12 nhóm mặc định gốc
 export function resetAtlasMediaCategories() {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return false;
   try {
     localStorage.removeItem(STORAGE_KEY);
     window.dispatchEvent(new CustomEvent('atlas-media-updated', { detail: DEFAULT_ATLAS_MEDIA_CATEGORIES }));
@@ -622,15 +627,23 @@ export function verifyAdminPassword(inputPass) {
 }
 
 export function isAdminLoggedIn() {
-  return sessionStorage.getItem(ADMIN_LOGGED_IN_KEY) === 'true';
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(ADMIN_LOGGED_IN_KEY) === 'true';
+  } catch {
+    return false;
+  }
 }
 
 export function setAdminLoggedIn(status) {
-  if (status) {
-    sessionStorage.setItem(ADMIN_LOGGED_IN_KEY, 'true');
-  } else {
-    sessionStorage.removeItem(ADMIN_LOGGED_IN_KEY);
-  }
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return;
+  try {
+    if (status) {
+      sessionStorage.setItem(ADMIN_LOGGED_IN_KEY, 'true');
+    } else {
+      sessionStorage.removeItem(ADMIN_LOGGED_IN_KEY);
+    }
+  } catch {}
 }
 
 // -----------------------------------------------------------------------------
@@ -643,14 +656,16 @@ export function getPartVideo(partId) {
   const clean = String(partId).replace(/[\._](l|r)$/i, '').replace(/\s*\((l|r|left|right)\)$/i, '').trim();
 
   // 1. Kiểm tra cấu hình do Admin đã tự gắn trực tiếp vào bộ phận này
-  try {
-    const raw = localStorage.getItem(PART_VIDEOS_KEY);
-    if (raw) {
-      const map = JSON.parse(raw);
-      if (map[partId]) return map[partId];
-      if (map[clean]) return map[clean];
-    }
-  } catch {}
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(PART_VIDEOS_KEY);
+      if (raw) {
+        const map = JSON.parse(raw);
+        if (map[partId]) return map[partId];
+        if (map[clean]) return map[clean];
+      }
+    } catch {}
+  }
 
   // 2. Tự động liên kết thông minh với các video mẫu chuẩn có sẵn theo hệ cơ quan
   const lower = clean.toLowerCase();

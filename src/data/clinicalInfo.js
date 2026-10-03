@@ -1170,6 +1170,11 @@ export function getClinicalData(partId, baseName) {
   // 1. Direct hit on clinical database (by full partId, baseName, or cleanBase)
   let matched = CLINICAL_DATABASE[partId] || (baseName && CLINICAL_DATABASE[baseName]) || CLINICAL_DATABASE[nom.cleanBase];
 
+  // Specific anatomical series resolution (e.g. Vertebra L1-L5 -> Lumbar vertebra)
+  if (!matched && partId && /^Vertebra L[1-5]$/i.test(partId.trim())) {
+    matched = CLINICAL_DATABASE['Lumbar vertebra'];
+  }
+
   // 2. Keyword substring hit
   if (!matched) {
     const target = `${partId} ${baseName || ''} ${nom.cleanBase}`.toLowerCase();

@@ -719,13 +719,30 @@ export function selectPartById(partId, viewer, skipHistory = false, skipCamera =
   const targetViewer = viewer || state.viewer || window.viewer;
   const registry = getMeshRegistry();
 
+  // Anatomical alias map for standardized resolution
+  const ALIAS_MAP = {
+    'atlas': 'Atlas (C1)',
+    'axis': 'Axis (C2)',
+    'lumbar vertebra': 'Vertebra L3',
+    'lumbar vertebrae': 'Vertebra L3',
+    'ilium': 'Hip bone.l'
+  };
+
+  let targetId = partId;
+  const lowerInput = partId.toLowerCase().trim();
+  if (ALIAS_MAP[lowerInput]) {
+    targetId = ALIAS_MAP[lowerInput];
+  } else if (lowerInput.includes('lumbar')) {
+    targetId = 'Vertebra L3';
+  }
+
   // 1. Direct match
-  let mesh = registry.get(partId);
-  let resolvedId = partId;
+  let mesh = registry.get(targetId);
+  let resolvedId = targetId;
 
   // 2. Case-insensitive match
   if (!mesh) {
-    const lower = partId.toLowerCase();
+    const lower = targetId.toLowerCase();
     for (const [id, m] of registry.entries()) {
       if (id.toLowerCase() === lower) {
         mesh = m;
@@ -737,7 +754,7 @@ export function selectPartById(partId, viewer, skipHistory = false, skipCamera =
 
   // 3. Prefix match (e.g. "Hip bone" -> "Hip bone.l", "Femur" -> "Femur.l")
   if (!mesh) {
-    const lower = partId.toLowerCase();
+    const lower = targetId.toLowerCase();
     for (const [id, m] of registry.entries()) {
       if (id.toLowerCase().startsWith(lower)) {
         mesh = m;

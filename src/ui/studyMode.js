@@ -13,7 +13,7 @@ export const STUDY_MODULES = [
     color: '#1e3a8a',
     bgGradient: 'linear-gradient(135deg, rgba(30, 58, 138, 0.16) 0%, rgba(59, 130, 246, 0.06) 100%)',
     iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><rect x="9" y="3.5" width="6" height="3" rx="1.5"/><rect x="8" y="8.5" width="8" height="3" rx="1.5"/><rect x="7" y="13.5" width="10" height="3.5" rx="1.5"/><path d="M10 20.5l2 1.5 2-1.5"/></svg>`,
-    items: ['Atlas', 'Axis', 'Lumbar vertebra', 'Sacrum', 'Coccyx']
+    items: ['Atlas (C1)', 'Axis (C2)', 'Vertebra L3', 'Sacrum', 'Coccyx']
   },
   {
     id: 'lower_limb',
@@ -135,13 +135,41 @@ export function openStudyModulePicker(viewer) {
   });
 }
 
-export function startStudyModule(module, viewer) {
-  activeModule = module;
+export function startStudyModule(moduleOrId, viewer) {
+  if (!modalEl) initStudyModeUI(viewer);
+
+  if (typeof moduleOrId === 'string') {
+    activeModule = STUDY_MODULES.find(m => m.id === moduleOrId) || STUDY_MODULES[0];
+  } else {
+    activeModule = moduleOrId || STUDY_MODULES[0];
+  }
+
   currentIndex = 0;
   isStudyCollapsed = false;
   showStudyDetails = false;
-  if (modalEl) modalEl.classList.add('step-mode');
+  if (modalEl) {
+    modalEl.classList.remove('hidden');
+    modalEl.classList.add('step-mode');
+  }
   renderStudyStep(viewer);
+}
+
+export function nextStudyStep(viewer) {
+  if (!activeModule) return;
+  if (currentIndex < activeModule.items.length - 1) {
+    currentIndex++;
+    renderStudyStep(viewer);
+  } else {
+    showCompletionCard(viewer);
+  }
+}
+
+export function prevStudyStep(viewer) {
+  if (!activeModule) return;
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderStudyStep(viewer);
+  }
 }
 
 function renderStudyStep(viewer) {

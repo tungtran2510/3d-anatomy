@@ -395,10 +395,17 @@ export function clearGhost() {
 // Highlighting only touches `emissive`, so it can be undone without disturbing
 // a transparency the user set.
 export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
-  const isDisc = partId.startsWith('Intervertebral disc ');
-  const isNucleus = partId.startsWith('Nucleus pulposus ');
+  if (!partId) return;
 
-  ownMeshesOf(partId).forEach(mesh => {
+  let resolvedPartId = partId;
+  if (partId === 'Atlas') resolvedPartId = 'Atlas (C1)';
+  else if (partId === 'Axis') resolvedPartId = 'Axis (C2)';
+  else if (partId.startsWith('Lumbar vertebra')) resolvedPartId = 'Vertebra L3';
+
+  const isDisc = resolvedPartId.startsWith('Intervertebral disc ');
+  const isNucleus = resolvedPartId.startsWith('Nucleus pulposus ');
+
+  ownMeshesOf(resolvedPartId).forEach(mesh => {
     // Materials are shared, so tinting one in place would light up every mesh
     // using it; the highlighted structure gets its own copy instead.
     ownMaterials(mesh).forEach(mat => {
@@ -415,7 +422,7 @@ export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
 
   // If selecting the Disc, also illuminate its inner companion Nucleus pulposus!
   if (isDisc) {
-    const level = partId.slice('Intervertebral disc '.length);
+    const level = resolvedPartId.slice('Intervertebral disc '.length);
     const nucleusId = `Nucleus pulposus ${level}`;
     ownMeshesOf(nucleusId).forEach(mesh => {
       ownMaterials(mesh).forEach(mat => {
@@ -429,7 +436,7 @@ export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
     });
   } else if (isNucleus) {
     // If selecting Nucleus directly, keep its outer Anulus fibrosus visible as a protective translucent ring!
-    const level = partId.slice('Nucleus pulposus '.length);
+    const level = resolvedPartId.slice('Nucleus pulposus '.length);
     const discId = `Intervertebral disc ${level}`;
     ownMeshesOf(discId).forEach(mesh => {
       ownMaterials(mesh).forEach(mat => {
@@ -444,8 +451,15 @@ export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
 }
 
 export function clearHighlight(partId) {
-  const companions = getAnatomicalCompanions(partId);
-  [partId, ...companions].forEach(id => {
+  if (!partId) return;
+
+  let resolvedPartId = partId;
+  if (partId === 'Atlas') resolvedPartId = 'Atlas (C1)';
+  else if (partId === 'Axis') resolvedPartId = 'Axis (C2)';
+  else if (partId.startsWith('Lumbar vertebra')) resolvedPartId = 'Vertebra L3';
+
+  const companions = getAnatomicalCompanions(resolvedPartId);
+  [resolvedPartId, ...companions].forEach(id => {
     ownMeshesOf(id).forEach(mesh => {
       if (!mesh.userData.ownsMaterial) return;
 

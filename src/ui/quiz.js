@@ -44,21 +44,21 @@ export const EXAM_QUESTION_BANK = [
   {
     title: 'Đốt sống cổ C1 (Đốt đội)',
     latin: 'Atlas (Vertebra cervicalis I)',
-    targetIds: ['Atlas'],
+    targetIds: ['Atlas (C1)', 'Atlas'],
     hint: 'Đốt sống cổ đầu tiên dạng vòng tròn không có thân, nâng đỡ hộp sọ.',
     category: 'Cột sống'
   },
   {
     title: 'Đốt sống cổ C2 (Đốt trục)',
     latin: 'Axis (Vertebra cervicalis II)',
-    targetIds: ['Axis'],
+    targetIds: ['Axis (C2)', 'Axis'],
     hint: 'Đốt sống có mỏm răng nhô thẳng lên tạo trục xoay cho cổ.',
     category: 'Cột sống'
   },
   {
     title: 'Đốt sống thắt lưng',
     latin: 'Vertebrae lumbales (TA2: 1045)',
-    targetIds: ['Lumbar vertebra I', 'Lumbar vertebra II', 'Lumbar vertebra III', 'Lumbar vertebra IV', 'Lumbar vertebra V'],
+    targetIds: ['Vertebra L1', 'Vertebra L2', 'Vertebra L3', 'Vertebra L4', 'Vertebra L5', 'Lumbar vertebra'],
     hint: '5 đốt sống lớn nhất chịu tải trọng chính của nửa trên cơ thể.',
     category: 'Cột sống'
   },
@@ -380,7 +380,12 @@ export function handleQuizClick(partId, viewer) {
   if (!q) return false;
 
   const isCorrect = q.targetIds.some(target => {
-    return partId === target || partId.startsWith(target.replace(/\.(l|r)$/, ''));
+    if (partId === target) return true;
+    if (partId.startsWith(target.replace(/\.(l|r)$/, ''))) return true;
+    if (target.startsWith('Vertebra L') && partId.startsWith('Vertebra L')) return true;
+    if ((target === 'Atlas' || target === 'Atlas (C1)') && partId.startsWith('Atlas')) return true;
+    if ((target === 'Axis' || target === 'Axis (C2)') && partId.startsWith('Axis')) return true;
+    return false;
   });
 
   if (isCorrect) {
