@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { state } from '../state/store.js';
 import { loadModel } from '../viewer/loadModel.js';
-import { showSystem, hideSystem, restoreAllParts, setSystemTransparency, setStructureVisible } from '../viewer/visibility.js';
+import { showSystem, hideSystem, restoreAllParts, setSystemTransparency, setStructureVisible, highlightMesh } from '../viewer/visibility.js';
 import { deselectPart } from '../viewer/selection.js';
 import { setBodyEnvelopeVisible, setBodyEnvelopeTone } from '../viewer/bodyEnvelope.js';
 import { setModelOrientation } from '../viewer/orientationManager.js';
@@ -133,7 +133,12 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     animateCameraTo(viewer.camera, viewer.controls, cameraConfig.pos, cameraConfig.target);
   }
 
-    // 5. Handle Skin Tone for Microanatomy Skin views
+  // 9. Highlight primary structure if designated in card
+  if (card.highlight) {
+    highlightMesh(card.highlight, 0xf97316, 0.85);
+  }
+
+  // 10. Handle Skin Tone for Microanatomy Skin views
   if (card.id === 'micro_skin_dark') {
     setBodyEnvelopeTone(0x6b4226, 0.94, viewer);
   } else if (card.id === 'micro_skin_light') {
@@ -154,10 +159,8 @@ function getFineCameraConfig(card) {
     case 'skel_1_full':
       return { pos: { x: 0, y: 0.86, z: 2.6 }, target: { x: 0, y: 0.86, z: 0 } };
     case 'skel_2_skull':
-      // Exact match for Card 2: Posterior view of Skull + Cervical spine C1-C7
       return { pos: { x: 0, y: 1.58, z: -0.55 }, target: { x: 0, y: 1.54, z: 0 } };
     case 'skel_3_cranial_fossae':
-      // Exact match for Card 3: Superior-posterior view looking down into skull base cavity
       return { pos: { x: 0, y: 1.85, z: -0.32 }, target: { x: 0, y: 1.58, z: 0.02 } };
     case 'skel_4_skull_sagittal':
       return { pos: { x: 0.55, y: 1.60, z: 0.05 }, target: { x: 0, y: 1.58, z: 0 } };
@@ -174,6 +177,7 @@ function getFineCameraConfig(card) {
     case 'skel_10_thoracic_cavity':
       return { pos: { x: 0, y: 1.25, z: 0.90 }, target: { x: 0, y: 1.25, z: 0 } };
     case 'skel_11_pelvic_girdle':
+    case 'skel_12_pelvic_section':
       return { pos: { x: 0, y: 0.88, z: 0.95 }, target: { x: 0, y: 0.85, z: 0 } };
     case 'skel_13_spine_lateral':
       return { pos: { x: 0.95, y: 1.15, z: 0 }, target: { x: 0, y: 1.10, z: 0 } };
@@ -188,6 +192,7 @@ function getFineCameraConfig(card) {
     case 'circ_2_simplified':
       return { pos: { x: 0, y: 1.25, z: 1.05 }, target: { x: 0, y: 1.25, z: 0 } };
     case 'circ_3_location_heart':
+    case 'circ_8_heart_section':
       return { pos: { x: 0, y: 1.28, z: 0.78 }, target: { x: 0, y: 1.28, z: 0 } };
     case 'circ_4_vasculature_brain':
       return { pos: { x: 0.42, y: 1.62, z: 0.52 }, target: { x: 0, y: 1.58, z: 0 } };
@@ -198,52 +203,89 @@ function getFineCameraConfig(card) {
     case 'circ_7_pulmonary':
       return { pos: { x: 0, y: 1.28, z: 0.75 }, target: { x: 0, y: 1.26, z: 0 } };
     case 'circ_9_azygos_system':
-      return { pos: { x: 0, y: 1.22, z: -0.75 }, target: { x: 0, y: 1.22, z: 0 } };
+      return { pos: { x: 0.28, y: 1.25, z: -0.75 }, target: { x: 0, y: 1.25, z: 0 } };
+    case 'circ_10_vagus':
+      return { pos: { x: 0.15, y: 1.35, z: 0.65 }, target: { x: 0, y: 1.32, z: 0 } };
     case 'circ_11_liver_circulation':
-      return { pos: { x: 0.15, y: 1.10, z: 0.75 }, target: { x: 0, y: 1.08, z: 0 } };
+      return { pos: { x: -0.1, y: 1.15, z: 0.78 }, target: { x: 0, y: 1.12, z: 0 } };
+    case 'circ_12_lower_digestive':
+      return { pos: { x: 0, y: 1.02, z: 0.88 }, target: { x: 0, y: 1.02, z: 0 } };
+    case 'circ_13_pelvic_circulation':
+      return { pos: { x: 0, y: 0.86, z: 0.75 }, target: { x: 0, y: 0.84, z: 0 } };
 
-    // Nervous Views
+    // Nervous System Views
     case 'nerv_1_full':
       return { pos: { x: 0, y: 0.95, z: 2.3 }, target: { x: 0, y: 0.95, z: 0 } };
     case 'nerv_2_simplified':
-      return { pos: { x: 0, y: 1.15, z: 1.6 }, target: { x: 0, y: 1.15, z: 0 } };
+      return { pos: { x: 0, y: 1.25, z: 1.35 }, target: { x: 0, y: 1.25, z: 0 } };
     case 'nerv_3_brain':
-      return { pos: { x: 0.35, y: 1.65, z: 0.48 }, target: { x: 0, y: 1.60, z: 0 } };
+    case 'nerv_4_brain_blood':
+      return { pos: { x: 0.38, y: 1.62, z: 0.52 }, target: { x: 0, y: 1.58, z: 0 } };
+    case 'nerv_5_limbic_system':
+    case 'nerv_6_thalamus':
+      return { pos: { x: 0.28, y: 1.60, z: 0.45 }, target: { x: 0, y: 1.58, z: 0 } };
     case 'nerv_7_cranial_nerves':
-      return { pos: { x: 0, y: 1.48, z: 0.42 }, target: { x: 0, y: 1.58, z: 0 } };
+      return { pos: { x: 0.22, y: 1.56, z: 0.45 }, target: { x: 0, y: 1.54, z: 0 } };
+    case 'nerv_8_vagus_nerve':
+      return { pos: { x: 0.2, y: 1.35, z: 0.7 }, target: { x: 0, y: 1.32, z: 0 } };
+    case 'nerv_9_phrenic_nerves':
+      return { pos: { x: 0.15, y: 1.32, z: 0.65 }, target: { x: 0, y: 1.3, z: 0 } };
     case 'nerv_10_brachial_plexus':
-      return { pos: { x: 0.35, y: 1.40, z: 0.58 }, target: { x: 0.18, y: 1.36, z: 0 } };
+      return { pos: { x: 0.35, y: 1.38, z: 0.6 }, target: { x: 0.18, y: 1.35, z: 0 } };
     case 'nerv_11_lumbosacral':
-      return { pos: { x: 0, y: 0.95, z: 0.85 }, target: { x: 0, y: 0.92, z: 0 } };
+      return { pos: { x: 0, y: 0.92, z: 0.8 }, target: { x: 0, y: 0.9, z: 0 } };
     case 'nerv_12_sciatic_nerve':
-      return { pos: { x: 0.25, y: 0.80, z: -0.9 }, target: { x: 0.12, y: 0.75, z: 0 } };
+      return { pos: { x: 0.15, y: 0.65, z: -1.1 }, target: { x: 0.1, y: 0.65, z: 0 } };
+    case 'nerv_13_autonomic':
+      return { pos: { x: 0.3, y: 1.18, z: 0.75 }, target: { x: 0, y: 1.18, z: 0 } };
 
     // Respiratory Views
     case 'resp_1_upper':
-      return { pos: { x: 0.28, y: 1.54, z: 0.52 }, target: { x: 0, y: 1.50, z: 0 } };
+    case 'resp_4_pharynx_larynx':
+    case 'resp_6_laryngeal_muscles':
+      return { pos: { x: 0.25, y: 1.48, z: 0.45 }, target: { x: 0, y: 1.46, z: 0 } };
+    case 'resp_2_nasal_cavity':
+    case 'resp_3_eustachian':
+      return { pos: { x: 0.3, y: 1.55, z: 0.4 }, target: { x: 0, y: 1.54, z: 0 } };
+    case 'resp_5_trachea_carotids':
+      return { pos: { x: 0.18, y: 1.38, z: 0.58 }, target: { x: 0, y: 1.36, z: 0 } };
     case 'resp_7_location_lungs':
-      return { pos: { x: 0, y: 1.25, z: 0.90 }, target: { x: 0, y: 1.25, z: 0 } };
     case 'resp_8_hilum':
-      return { pos: { x: 0.25, y: 1.26, z: 0.55 }, target: { x: 0.05, y: 1.25, z: 0 } };
+    case 'resp_12_pulmonary_circ':
+      return { pos: { x: 0, y: 1.28, z: 0.82 }, target: { x: 0, y: 1.28, z: 0 } };
+    case 'resp_9_inhalation_muscles':
+    case 'resp_10_exhalation_muscles':
+    case 'resp_11_respiratory_innervation':
+      return { pos: { x: 0, y: 1.24, z: 0.88 }, target: { x: 0, y: 1.24, z: 0 } };
 
-    // Microanatomy Views: comfortable, unclipped anatomical framing without violent close-up zoom
-    case 'micro_eye':
-      return { pos: { x: 0.16, y: 1.60, z: 0.52 }, target: { x: 0.03, y: 1.59, z: 0.06 } };
-    case 'micro_lacrimal':
-      return { pos: { x: 0.14, y: 1.60, z: 0.48 }, target: { x: 0.02, y: 1.58, z: 0.06 } };
-    case 'micro_lens_zonule':
-      return { pos: { x: 0.12, y: 1.59, z: 0.42 }, target: { x: 0.03, y: 1.59, z: 0.06 } };
-    case 'micro_skin_dark':
-    case 'micro_skin_light':
-      return { pos: { x: 0, y: 1.25, z: 1.65 }, target: { x: 0, y: 1.15, z: 0 } };
-    case 'micro_hair_follicle':
-      return { pos: { x: 0, y: 1.65, z: 0.70 }, target: { x: 0, y: 1.60, z: 0 } };
-    case 'micro_femur_section':
-      return { pos: { x: 0.18, y: 0.62, z: 1.25 }, target: { x: 0.09, y: 0.62, z: 0 } };
-    case 'micro_osteon':
-      return { pos: { x: 0.10, y: 0.62, z: 0.55 }, target: { x: 0.09, y: 0.62, z: 0 } };
+    // Muscular Views
+    case 'musc_1_expression':
+      return { pos: { x: 0, y: 1.58, z: 0.42 }, target: { x: 0, y: 1.55, z: 0 } };
+    case 'musc_2_mastication':
+      return { pos: { x: 0.35, y: 1.56, z: 0.4 }, target: { x: 0.05, y: 1.54, z: 0 } };
+    case 'musc_3_laryngeal':
+    case 'musc_8_mandible_depression':
+      return { pos: { x: 0, y: 1.48, z: 0.45 }, target: { x: 0, y: 1.46, z: 0 } };
+    case 'musc_4_lateral_flexion':
+    case 'musc_5_head_rotation':
+    case 'musc_6_head_neck_ext':
+    case 'musc_7_head_flexion':
+      return { pos: { x: 0.32, y: 1.5, z: 0.5 }, target: { x: 0, y: 1.48, z: 0 } };
+    case 'musc_9_inhalation':
+    case 'musc_10_exhalation':
+      return { pos: { x: 0, y: 1.25, z: 0.88 }, target: { x: 0, y: 1.24, z: 0 } };
+    case 'musc_11_shoulder':
+      return { pos: { x: 0.35, y: 1.38, z: 0.65 }, target: { x: 0.18, y: 1.34, z: 0 } };
+    case 'musc_12_elbow':
+      return { pos: { x: 0.42, y: 1.15, z: 0.55 }, target: { x: 0.28, y: 1.12, z: 0 } };
+    case 'musc_13_wrist_hand':
+      return { pos: { x: 0.45, y: 0.88, z: 0.45 }, target: { x: 0.35, y: 0.85, z: 0 } };
+    case 'musc_14_upper_back':
+      return { pos: { x: 0, y: 1.32, z: -0.95 }, target: { x: 0, y: 1.3, z: 0 } };
+    case 'musc_15_lower_back':
+      return { pos: { x: 0, y: 1.05, z: -0.85 }, target: { x: 0, y: 1.05, z: 0 } };
 
-    // Digestive System Views (100% match with Atlas Cards & thumbnails)
+    // Digestive Views
     case 'dig_1_upper':
       return { pos: { x: 0, y: 1.25, z: 0.95 }, target: { x: 0, y: 1.22, z: 0 } };
     case 'dig_2_lower':
@@ -252,6 +294,8 @@ function getFineCameraConfig(card) {
       return { pos: { x: 0, y: 1.08, z: 1.05 }, target: { x: 0, y: 1.08, z: 0 } };
     case 'dig_4_salivary_glands':
       return { pos: { x: 0.32, y: 1.54, z: 0.42 }, target: { x: 0, y: 1.52, z: 0 } };
+    case 'dig_5_teeth':
+      return { pos: { x: 0, y: 1.54, z: 0.35 }, target: { x: 0, y: 1.52, z: 0 } };
     case 'dig_6_laryngopharynx':
       return { pos: { x: 0.25, y: 1.48, z: 0.42 }, target: { x: 0, y: 1.46, z: 0 } };
     case 'dig_7_alimentary_canal':
@@ -263,21 +307,50 @@ function getFineCameraConfig(card) {
     case 'dig_10_accessory_organs':
       return { pos: { x: -0.05, y: 1.16, z: 0.72 }, target: { x: 0, y: 1.14, z: 0 } };
     case 'dig_11_regional_vasculature':
-      return { pos: { x: 0.1, y: 1.12, z: 0.85 }, target: { x: 0, y: 1.10, z: 0 } };
+      return { pos: { x: 0.1, y: 1.12, z: 0.85 }, target: { x: 0, y: 1.1, z: 0 } };
     case 'dig_12_intestines':
       return { pos: { x: 0, y: 0.96, z: 0.95 }, target: { x: 0, y: 0.96, z: 0 } };
 
-    // Lymphatic System Views
+    // Lymphatic Views
     case 'lymph_spleen':
       return { pos: { x: 0.25, y: 1.15, z: 0.78 }, target: { x: 0.08, y: 1.15, z: 0 } };
     case 'lymph_nodes_system':
       return { pos: { x: 0, y: 1.18, z: 1.35 }, target: { x: 0, y: 1.15, z: 0 } };
 
-    // Urinary System Views
+    // Urinary Views
     case 'urin_system':
       return { pos: { x: 0, y: 1.05, z: 0.88 }, target: { x: 0, y: 1.05, z: 0 } };
     case 'urin_pelvic':
       return { pos: { x: 0, y: 0.88, z: 0.75 }, target: { x: 0, y: 0.88, z: 0 } };
+
+    // Microanatomy Views
+    case 'micro_skin_dark':
+    case 'micro_skin_light':
+      return { pos: { x: 0, y: 1.25, z: 1.8 }, target: { x: 0, y: 1.2, z: 0 } };
+    case 'micro_hair_follicle':
+      return { pos: { x: 0, y: 1.62, z: 0.45 }, target: { x: 0, y: 1.6, z: 0 } };
+    case 'micro_eye':
+    case 'micro_lacrimal':
+    case 'micro_lens_zonule':
+      return { pos: { x: 0, y: 1.65, z: 0.7 }, target: { x: 0, y: 1.6, z: 0 } };
+    case 'micro_femur_section':
+      return { pos: { x: 0.18, y: 0.62, z: 1.25 }, target: { x: 0.09, y: 0.62, z: 0 } };
+    case 'micro_osteon':
+      return { pos: { x: 0.1, y: 0.62, z: 0.55 }, target: { x: 0.09, y: 0.62, z: 0 } };
+
+    // Regional Views
+    case 'reg_head_neck':
+      return { pos: { x: 0, y: 1.55, z: 0.85 }, target: { x: 0, y: 1.52, z: 0 } };
+    case 'reg_thorax':
+      return { pos: { x: 0, y: 1.26, z: 1.05 }, target: { x: 0, y: 1.26, z: 0 } };
+    case 'reg_abdomen_pelvis':
+      return { pos: { x: 0, y: 0.98, z: 1.05 }, target: { x: 0, y: 0.98, z: 0 } };
+    case 'reg_spine':
+      return { pos: { x: 0.8, y: 1.15, z: 0 }, target: { x: 0, y: 1.15, z: 0 } };
+    case 'reg_upper_limb':
+      return { pos: { x: 0.45, y: 1.1, z: 1.1 }, target: { x: 0.35, y: 1.1, z: 0 } };
+    case 'reg_lower_limb':
+      return { pos: { x: 0.25, y: 0.45, z: 1.35 }, target: { x: 0.15, y: 0.45, z: 0 } };
 
     default:
       if (card.camera) {
@@ -302,8 +375,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     return node.material;
   }
 
-  // First, traverse all meshes in scene:
-  // Hide any mesh that does not belong to the allowed systems of this preset
+  // Pre-filter meshes by allowed systems and specific preset views
   viewer.scene.traverse(node => {
     if (node.isMesh) {
       const sys = node.userData?.system;
@@ -321,12 +393,10 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
 
         case 'skel_2_skull':
-          // Keep skull and cervical spine C1-C7
           node.visible = REGEX_SKULL_AND_CERVICAL.test(name);
           break;
 
         case 'skel_3_cranial_fossae':
-          // Keep skull base + cervical, hide calvaria
           if (REGEX_CALVARIA_REMOVAL.test(name)) {
             node.visible = false;
           } else {
@@ -335,14 +405,17 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
 
         case 'skel_7_arches':
-          node.visible = /maxilla|mandible|tooth|teeth|dental/i.test(name);
+        case 'dig_5_teeth':
+          node.visible = /maxilla|mandible|tooth|teeth|dental|incisor|canine|premolar|molar/i.test(name);
           break;
 
         case 'skel_9_thoracic_cage':
+        case 'skel_10_thoracic_cavity':
           node.visible = REGEX_THORACIC_CAGE.test(name);
           break;
 
         case 'skel_11_pelvic_girdle':
+        case 'skel_12_pelvic_section':
           node.visible = REGEX_PELVIS.test(name);
           break;
 
@@ -356,13 +429,12 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
 
         case 'circ_2_simplified':
-          // Torso & head vessels, hide distal limbs
           node.visible = !REGEX_LIMB_VESSELS.test(name);
           break;
 
         case 'circ_3_location_heart':
+        case 'circ_8_heart_section':
           if (sys === 'skeletal') {
-            // Keep ribcage, sternum, clavicle, spine
             node.visible = /rib|sternum|costal|vertebra|clavicle/i.test(name);
           } else if (sys === 'cardiovascular') {
             const isHeart = REGEX_HEART_AND_GREAT_VESSELS.test(name);
@@ -386,13 +458,46 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           node.visible = /cerebral|carotid|basilar|vertebral|communicating|ophthalmic|choroidal|willis/i.test(name);
           break;
 
+        case 'circ_6_carotid_jugular':
+          node.visible = /carotid|jugular|vertebral|brachiocephalic|subclavian/i.test(name);
+          break;
+
+        case 'circ_7_pulmonary':
+          node.visible = /pulmonary|heart|ventricle|atrium/i.test(name);
+          break;
+
+        case 'circ_9_azygos_system':
+          node.visible = /azygos|hemiazygos|intercostal.*vein|cava/i.test(name);
+          break;
+
+        case 'circ_10_vagus':
+          if (sys === 'cardiovascular') {
+            node.visible = REGEX_HEART_AND_GREAT_VESSELS.test(name);
+          } else if (sys === 'nervous') {
+            node.visible = /vagus|cranial.*x/i.test(name);
+          } else {
+            node.visible = /vertebra|rib|sternum/i.test(name);
+          }
+          break;
+
+        case 'circ_11_liver_circulation':
+          node.visible = /portal|hepatic|celiac|splenic|mesenteric|cava/i.test(name);
+          break;
+
+        case 'circ_12_lower_digestive':
+          node.visible = /mesenteric|colic|ileal|jejunal|rectal|portal|splenic|aorta/i.test(name);
+          break;
+
+        case 'circ_13_pelvic_circulation':
+          node.visible = /iliac|sacral|pudendal|gluteal|vesical|uterine|ovarian|obturator|aorta|cava/i.test(name);
+          break;
+
         // --- NERVOUS SYSTEM VIEWS ---
         case 'nerv_1_full':
           node.visible = true;
           break;
 
         case 'nerv_2_simplified':
-          // Keep brain, spinal cord, sympathetic chains, plexuses; hide distal fingertips & toes
           node.visible = !REGEX_DISTAL_NERVES.test(name);
           break;
 
@@ -400,16 +505,89 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           node.visible = REGEX_BRAIN_AND_CRANIAL.test(name);
           break;
 
+        case 'nerv_4_brain_blood':
+          if (sys === 'cardiovascular') {
+            node.visible = /cerebral|carotid|basilar|vertebral|willis/i.test(name);
+          } else if (sys === 'nervous') {
+            node.visible = REGEX_BRAIN_AND_CRANIAL.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.25;
+              mat.depthWrite = false;
+            }
+          }
+          break;
+
+        case 'nerv_5_limbic_system':
+          node.visible = /hippocamp|fornix|amygdala|mammillary|cingulate|dentate|parahippocamp|septum|thalam/i.test(name);
+          break;
+
+        case 'nerv_6_thalamus':
+          node.visible = /thalam|hypothalam|caudate|putamen|pallidus|striatum|subthalam/i.test(name);
+          break;
+
         case 'nerv_7_cranial_nerves':
           node.visible = /olfactory|optic|oculomotor|trochlear|trigeminal|abducens|facial|vestibulocochlear|glossopharyngeal|vagus|accessory|hypoglossal|cranial/i.test(name);
           break;
 
+        case 'nerv_8_vagus_nerve':
+          node.visible = /vagus|cranial.*x|laryngeal.*nerve|ganglion.*vagus/i.test(name);
+          break;
+
+        case 'nerv_9_phrenic_nerves':
+          node.visible = /phrenic|c3|c4|c5/i.test(name);
+          break;
+
+        case 'nerv_10_brachial_plexus':
+          node.visible = /brachial.*plexus|radial.*nerve|ulnar.*nerve|median.*nerve|musculocutaneous|axillary.*nerve|suprascapular|c5|c6|c7|c8|t1/i.test(name);
+          break;
+
+        case 'nerv_11_lumbosacral':
+          node.visible = /lumbar.*plexus|sacral.*plexus|femoral.*nerve|obturator.*nerve|sciatic|gluteal.*nerve|ilioinguinal|genitofemoral|l1|l2|l3|l4|l5|s1|s2|s3/i.test(name);
+          break;
+
+        case 'nerv_12_sciatic_nerve':
+          node.visible = /sciatic|tibial.*nerve|common.*fibular|peroneal|sural|plantar.*nerve/i.test(name);
+          break;
+
+        case 'nerv_13_autonomic':
+          node.visible = /sympathetic|ganglion|splanchnic|vagus|plexus.*coeliac|plexus.*cardiac|plexus.*hypogastric/i.test(name);
+          break;
+
         // --- RESPIRATORY VIEWS ---
         case 'resp_1_upper':
+        case 'resp_4_pharynx_larynx':
           node.visible = REGEX_RESPIRATORY_AIRWAYS.test(name) || /vertebra_c|hyoid/i.test(name);
           break;
 
+        case 'resp_2_nasal_cavity':
+        case 'resp_3_eustachian':
+          node.visible = /nasal|concha|septum|pharynx|eustachian|auditory|sphenoid|ethmoid/i.test(name);
+          break;
+
+        case 'resp_5_trachea_carotids':
+          if (sys === 'visceral') {
+            node.visible = /trachea|bronch|laryng|thyroid/i.test(name);
+          } else if (sys === 'cardiovascular') {
+            node.visible = /carotid|jugular|brachiocephalic|aorta/i.test(name);
+          } else {
+            node.visible = /cervical|sternum|clavicle/i.test(name);
+          }
+          break;
+
+        case 'resp_6_laryngeal_muscles':
+          if (sys === 'muscular') {
+            node.visible = /cricothyroid|arytenoid|thyrohyoid|vocalis|cricoarytenoid/i.test(name);
+          } else if (sys === 'visceral') {
+            node.visible = /laryng|epiglott|cartilage|vocal/i.test(name);
+          } else {
+            node.visible = /hyoid/i.test(name);
+          }
+          break;
+
         case 'resp_7_location_lungs':
+        case 'resp_8_hilum':
           if (sys === 'skeletal') {
             node.visible = REGEX_THORACIC_CAGE.test(name);
           } else if (sys === 'visceral') {
@@ -429,12 +607,125 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           }
           break;
 
+        case 'resp_9_inhalation_muscles':
+        case 'musc_9_inhalation':
+          if (sys === 'muscular') {
+            node.visible = /diaphragm|intercostal.*external|external intercostal|scalene|pectoralis minor|serratus anterior/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = REGEX_THORACIC_CAGE.test(name);
+          }
+          break;
+
+        case 'resp_10_exhalation_muscles':
+        case 'musc_10_exhalation':
+          if (sys === 'muscular') {
+            node.visible = /intercostal.*internal|internal intercostal|transversus abdominis|internal oblique|external oblique|rectus abdominis/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /rib|costal|pelvi|ilium|pubis|vertebra_l/i.test(name);
+          }
+          break;
+
+        case 'resp_11_respiratory_innervation':
+          if (sys === 'nervous') {
+            node.visible = /phrenic|vagus|intercostal.*nerve/i.test(name);
+          } else if (sys === 'visceral') {
+            node.visible = /lung|trachea|diaphragm/i.test(name);
+          } else {
+            node.visible = REGEX_THORACIC_CAGE.test(name);
+          }
+          break;
+
+        case 'resp_12_pulmonary_circ':
+          if (sys === 'cardiovascular') {
+            node.visible = /pulmonary|heart|ventricle|atrium/i.test(name);
+          } else if (sys === 'visceral') {
+            node.visible = /trachea|bronch/i.test(name);
+          }
+          break;
+
+        // --- MUSCULAR SYSTEM VIEWS ---
+        case 'musc_1_expression':
+          if (sys === 'muscular') {
+            node.visible = /orbicular|frontalis|occipitofrontalis|epicranial|zygomatic|risorius|buccinator|depressor|levator labii|levator anguli|mentalis|nasalis|procerus|corrugator|auricular/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /skull|frontal|parietal|temporal|maxilla|mandible|zygomatic|nasal/i.test(name);
+          }
+          break;
+
+        case 'musc_2_mastication':
+          if (sys === 'muscular') {
+            node.visible = /masseter|temporalis|pterygoid/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /mandible|maxilla|zygomatic|temporal|sphenoid/i.test(name);
+          }
+          break;
+
+        case 'musc_3_laryngeal':
+        case 'musc_8_mandible_depression':
+          if (sys === 'muscular') {
+            node.visible = /hyoid|thyrohyoid|cricothyroid|arytenoid|omohyoid|sternohyoid|sternothyroid|digastric|mylohyoid|geniohyoid|platysma/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /hyoid|cricoid|thyroid|mandible|vertebra_c/i.test(name);
+          }
+          break;
+
+        case 'musc_4_lateral_flexion':
+        case 'musc_5_head_rotation':
+        case 'musc_6_head_neck_ext':
+        case 'musc_7_head_flexion':
+          if (sys === 'muscular') {
+            node.visible = /sternocleidomastoid|scalen|splenius|longus capitis|longus colli|rectus capitis|semispinalis|trapezius|levator scapulae/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /skull|vertebra_c|c1|c2|c3|c4|c5|c6|c7|clavicle|sternum/i.test(name);
+          }
+          break;
+
+        case 'musc_11_shoulder':
+          if (sys === 'muscular') {
+            node.visible = /deltoid|supraspinatus|infraspinatus|teres|subscapularis|coracobrachialis|pectoralis major/i.test(name) && !/femor|pedis|cruris/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /scapula|clavicle|humerus|rib|sternum/i.test(name);
+          }
+          break;
+
+        case 'musc_12_elbow':
+          if (sys === 'muscular') {
+            node.visible = /biceps brachii|brachialis|brachioradialis|triceps brachii|anconeus/i.test(name) && !/femor/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /humerus|radius|ulna/i.test(name);
+          }
+          break;
+
+        case 'musc_13_wrist_hand':
+          if (sys === 'muscular') {
+            node.visible = /flexor carpi|extensor carpi|pronator|supinator|palmaris|abductor pollicis|flexor pollicis|extensor pollicis|lumbrical|interossei|abductor digiti|flexor digiti/i.test(name) && !/femor|pedis|plantar|toe|hallucis/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /radius|ulna|scaphoid|lunate|triquetrum|pisiform|trapezium|trapezoid|capitate|hamate|metacarpal|phalanx.*finger/i.test(name);
+          }
+          break;
+
+        case 'musc_14_upper_back':
+          if (sys === 'muscular') {
+            node.visible = /trapezius|latissimus|rhomboid|levator scapulae|serratus posterior superior|splenius/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /vertebra_t|vertebra_c|scapula|rib/i.test(name);
+          }
+          break;
+
+        case 'musc_15_lower_back':
+          if (sys === 'muscular') {
+            node.visible = /erector spinae|iliocostalis|longissimus|spinalis|multifidus|quadratus lumborum|serratus posterior inferior/i.test(name) && !/colli|capitis/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /vertebra_l|sacrum|pelvi|ilium|rib/i.test(name);
+          }
+          break;
+
         // --- MICROANATOMY VIEWS ---
         case 'micro_skin_dark': {
           if (sys === 'integumentary') {
             node.visible = true;
             const mat = prepareMeshMaterial(node);
-            mat.color.setHex(0x5c3826); // Rich melanin dark tone
+            mat.color.setHex(0x5c3826);
             mat.transparent = false;
             mat.opacity = 1.0;
             mat.roughness = 0.65;
@@ -449,7 +740,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           if (sys === 'integumentary') {
             node.visible = true;
             const mat = prepareMeshMaterial(node);
-            mat.color.setHex(0xe8beac); // Natural fair light tone
+            mat.color.setHex(0xe8beac);
             mat.transparent = false;
             mat.opacity = 1.0;
             mat.roughness = 0.65;
@@ -544,14 +835,14 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             mat.transparent = false;
             mat.opacity = 1.0;
             mat.depthWrite = true;
-            mat.color.setHex(0xf97316); // Vibrant amber coral highlight
+            mat.color.setHex(0xf97316);
             if (mat.emissive) mat.emissive.setHex(0x551100);
           } else if (isEyeGlobe) {
             node.visible = true;
             node.renderOrder = 4;
             const mat = prepareMeshMaterial(node);
             mat.transparent = true;
-            mat.opacity = 0.40;
+            mat.opacity = 0.4;
             mat.depthWrite = false;
           } else if (isFacialBone) {
             node.visible = true;
@@ -579,7 +870,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             const mat = prepareMeshMaterial(node);
             mat.transparent = true;
             mat.opacity = 0.88;
-            mat.color.setHex(0x38bdf8); // Refractive cyan
+            mat.color.setHex(0x38bdf8);
             if (mat.emissive) mat.emissive.setHex(0x0369a1);
           } else if (isZonule) {
             node.visible = true;
@@ -587,7 +878,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             const mat = prepareMeshMaterial(node);
             mat.transparent = false;
             mat.opacity = 1.0;
-            mat.color.setHex(0xfbbf24); // Amber golden fibers
+            mat.color.setHex(0xfbbf24);
           } else if (isOuterWall) {
             node.visible = true;
             node.renderOrder = 2;
@@ -644,7 +935,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
 
         // --- DIGESTIVE SYSTEM VIEWS ---
         case 'dig_1_upper': {
-          // Card 1: Upper Digestive (Esophagus, Stomach, Liver, Gallbladder, Bile duct, Duodenum)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -653,7 +943,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             node.visible = true;
           } else if (sys === 'visceral') {
             if (REGEX_LUNG_TISSUE.test(name)) {
-              // Semi-transparent aerated lungs (matching thumbnail dig_upper.png)
               node.visible = true;
               node.renderOrder = 3;
               const mat = prepareMeshMaterial(node);
@@ -663,7 +952,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             } else if (/kidney|renal|ureter|bladder|prostate|urethra/i.test(name)) {
               node.visible = false;
             } else {
-              // Esophagus, Stomach, Duodenum, Liver, Gallbladder, Bile duct, Pancreas, Intestines solid
               node.visible = true;
             }
           }
@@ -671,7 +959,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'dig_2_lower': {
-          // Card 2: Lower Digestive (Small intestine, Large intestine, Appendix)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -682,7 +969,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             if (REGEX_LUNG_TISSUE.test(name) || /trachea|bronch|oesophagus|esophagus|thyroid/i.test(name)) {
               node.visible = false;
             } else if (/liver|gan/i.test(name)) {
-              // Faded liver context so intestines pop (matching thumbnail dig_lower.png)
               node.visible = true;
               node.renderOrder = 3;
               const mat = prepareMeshMaterial(node);
@@ -692,7 +978,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             } else if (/kidney|renal|ureter/i.test(name)) {
               node.visible = false;
             } else {
-              // Intestines, stomach, duodenum solid
               node.visible = true;
             }
           }
@@ -700,7 +985,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'dig_3_peritoneum': {
-          // Card 3: Peritoneum & Omentum
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -725,7 +1009,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'dig_4_salivary_glands': {
-          // Card 4: Salivary Glands (Parotid, Submandibular, Sublingual & ducts)
           if (sys === 'skeletal') {
             node.visible = /mandible|maxilla|skull|temporal|zygomatic|hyoid|teeth|tooth/i.test(name);
             if (node.visible) {
@@ -758,7 +1041,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'dig_7_alimentary_canal': {
-          // Card 7: Alimentary Canal (mouth to rectum continuous digestive tract)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -792,7 +1074,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'dig_10_accessory_organs': {
-          // Card 10: Hepatobiliary & Pancreatic (Liver, Gallbladder, Bile duct, Pancreas, Duodenum, Spleen)
           if (sys === 'visceral') {
             const isAccessory = /liver|gallbladder|bile duct|pancreas|duodenum|spleen/i.test(name);
             node.visible = isAccessory;
@@ -819,7 +1100,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'dig_12_intestines': {
-          // Card 12: Intestines (small & large intestine, appendix)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -838,7 +1118,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
 
         // --- LYMPHATIC SYSTEM VIEWS ---
         case 'lymph_spleen': {
-          // Card 1: Spleen & Lymphatics (Spleen, stomach context, lymph nodes)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -857,7 +1136,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'lymph_nodes_system': {
-          // Card 2: Full Lymphatic Nodes Network (White/glass skeleton, glowing green nodes)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -875,7 +1153,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
 
         // --- URINARY SYSTEM VIEWS ---
         case 'urin_system': {
-          // Card 1: Urinary System (Kidneys, Ureters, Bladder, Adrenals)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -897,7 +1174,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         }
 
         case 'urin_pelvic': {
-          // Card 2: Pelvic Organs (Urinary bladder, Prostate, Urethra)
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -918,6 +1194,35 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
+        // --- REGIONAL ANATOMY VIEWS ---
+        case 'reg_head_neck':
+          node.visible = /skull|cervical|c1|c2|c3|c4|c5|c6|c7|facial|head|neck|brain|pharynx|larynx|thyroid|carotid|jugular/i.test(name) && !/thorac|lumbar|sacr|femor|tibia|ulna|radius/i.test(name);
+          break;
+
+        case 'reg_thorax':
+          node.visible = /thorac|rib|costal|sternum|lung|heart|bronch|aorta|esophagus|oesophagus|intercostal/i.test(name) && !/skull|lumbar|pelvi|femor|tibia/i.test(name);
+          break;
+
+        case 'reg_abdomen_pelvis':
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          node.visible = /lumbar|pelvi|sacrum|stomach|liver|duodenum|pancreas|spleen|kidney|ureter|bladder|intestine|colon|caecum|mesenter|iliac/i.test(name) && !/skull|rib.*(1|2|3|4|5|6)|lung|heart|brain/i.test(name);
+          break;
+
+        case 'reg_spine':
+          node.visible = REGEX_SPINE_FULL.test(name) && !/rib|sternum|maxilla|mandible|frontal|temporal|parietal/i.test(name);
+          break;
+
+        case 'reg_upper_limb':
+          node.visible = /clavicle|scapula|humerus|radius|ulna|carpal|metacarpal|phalanx.*finger|biceps|triceps|brachial|deltoid/i.test(name) && !/femor|pedis|cruris/i.test(name);
+          break;
+
+        case 'reg_lower_limb':
+          node.visible = /femur|patella|tibia|fibula|tarsal|metatarsal|phalanx.*foot|quadriceps|gastrocnemius|soleus|tibialis/i.test(name) && !/skull|rib|cervical/i.test(name);
+          break;
+
         default:
           node.visible = true;
           break;
@@ -925,11 +1230,13 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     }
   });
 
-  // Apply Ghosting Translucency if required
-  if (viewId === 'circ_3_location_heart') {
+  // Apply Ghosting Translucency for context structures
+  if (viewId === 'circ_3_location_heart' || viewId === 'circ_8_heart_section') {
     setSystemTransparency('skeletal', 0.16);
   } else if (viewId === 'resp_7_location_lungs') {
     setSystemTransparency('skeletal', 0.16);
+  } else if (viewId.startsWith('musc_')) {
+    setSystemTransparency('skeletal', 0.22);
   } else if (viewId === 'dig_1_upper' || viewId === 'dig_2_lower' || viewId === 'dig_3_peritoneum' || viewId === 'dig_7_alimentary_canal' || viewId === 'dig_12_intestines') {
     setSystemTransparency('skeletal', 0.14);
   } else if (viewId === 'lymph_spleen') {

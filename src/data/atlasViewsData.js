@@ -83,7 +83,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/skel_skull.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 1.54, z: 0.35, targetX: 0, targetY: 1.52, targetZ: 0 },
-        highlight: 'Maxilla',
+        highlight: 'Maxilla.l',
         desc: 'Cung răng hàm trên gắn xương hàm trên, cung răng hàm dưới gắn xương hàm dưới.'
       },
       {
@@ -105,7 +105,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/skel_spine.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 1.25, z: 0.85, targetX: 0, targetY: 1.25, targetZ: 0 },
-        highlight: 'Sternum',
+        highlight: 'Body of sternum',
         desc: 'Khung xương lồng ngực bảo vệ tim phổi và tham gia động học hô hấp.'
       },
       {
@@ -240,7 +240,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/circ_heart_thorax.png',
         systems: ['cardiovascular', 'skeletal'],
         camera: { x: 0.25, y: 1.48, z: 0.55, targetX: 0, targetY: 1.45, targetZ: 0 },
-        highlight: 'Common carotid artery.l',
+        highlight: 'Left common carotid artery',
         desc: 'Động mạch cảnh chung và tĩnh mạch cảnh trong vận chuyển máu nuôi đầu mặt cổ.'
       },
       {
@@ -374,7 +374,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/nerv_csf.png',
         systems: ['nervous'],
         camera: { x: 0.28, y: 1.60, z: 0.45, targetX: 0, targetY: 1.58, targetZ: 0 },
-        highlight: 'Hippocampus',
+        highlight: 'Hippocampus.l',
         desc: 'Trung tâm cảm xúc, động lực hành vi và củng cố trí nhớ dài hạn.'
       },
       {
@@ -385,7 +385,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/nerv_brain.png',
         systems: ['nervous'],
         camera: { x: 0.25, y: 1.60, z: 0.42, targetX: 0, targetY: 1.58, targetZ: 0 },
-        highlight: 'Thalamus',
+        highlight: 'Thalamus.l',
         desc: 'Trạm chuyển tiếp mọi đường dẫn truyền cảm giác (trừ khứu giác) lên vỏ não.'
       },
       {
@@ -619,7 +619,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/musc_head.png',
         systems: ['muscular', 'skeletal'],
         camera: { x: 0.45, y: 1.58, z: 0.40, targetX: 0, targetY: 1.56, targetZ: 0 },
-        highlight: 'Masseter',
+        highlight: 'Superficial part of masseter.l',
         desc: 'Tạo lực cắn nghiền thức ăn mạnh mẽ ở khớp thái dương hàm.'
       },
       {
@@ -768,7 +768,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/dig_upper.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.35, y: 1.45, z: 0.55, targetX: 0, targetY: 1.40, targetZ: 0 },
-        highlight: 'Esophagus',
+        highlight: 'Oesophagus',
         desc: 'Ống dẫn thức ăn từ miệng qua thực quản xuống dạ dày.'
       },
       {
@@ -810,7 +810,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         image: '/images/atlas/skel_skull.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 1.54, z: 0.35, targetX: 0, targetY: 1.52, targetZ: 0 },
-        highlight: 'Maxilla',
+        highlight: 'Maxilla.l',
         desc: 'Bộ phận cơ học cắn xé và nghiền nhỏ thức ăn trước khi nuốt.'
       },
       {

@@ -154,10 +154,17 @@ function initDesktopShortcuts(targetViewer) {
     } else if (e.key === 'r' || e.key === 'R') {
       import('./viewer/camera.js').then(({ resetView }) => resetView(targetViewer));
     } else if (e.key === 'Escape') {
+      document.getElementById('btnAtlasHubClose')?.click();
+      document.getElementById('btnAIQuickClose')?.click();
       document.getElementById('offlineCloseBtn')?.click();
       document.getElementById('motionCloseBtn')?.click();
       document.getElementById('aiCloseBtn')?.click();
       document.getElementById('cardCloseBtn')?.click();
+      document.getElementById('helpClose')?.click();
+      document.getElementById('videoModalClose')?.click();
+      document.getElementById('btnQuizClose')?.click();
+      document.getElementById('studyClosePickerBtn')?.click();
+      document.getElementById('studyExitBtn')?.click();
     } else if (e.key === 'f' || e.key === 'F') {
       if (state.selectedPart) {
         import('./viewer/camera.js').then(({ frameRegion }) => frameRegion(state.selectedPart.id, targetViewer));
