@@ -647,14 +647,14 @@ function enhanceMaterialForOrgan(mesh, systemId) {
     }
   } else if (systemId === 'joints') {
     if (partName.includes('cartilage') || partName.includes('meniscus') || partName.includes('discus') || partName.includes('articular') || matName.includes('cartilage')) {
-      // Joint articular cartilage & meniscus: sophisticated luxury Navy (màu Navi sang, matte)
+      // Joint articular cartilage & meniscus: sophisticated luminous medical cerulean blue (màu xanh thiên thanh y khoa sang trọng, bán trong)
       applyCustomProps(mesh, {
         name: 'PBR_JointCartilage',
-        color: 0x1E3E6D,
-        roughness: 0.72,
-        metalness: 0.0,
+        color: 0x3897E6,
+        roughness: 0.52,
+        metalness: 0.05,
         transparent: true,
-        opacity: 0.90,
+        opacity: 0.88,
         depthWrite: true,
         renderOrder: 2
       });
@@ -696,26 +696,26 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       partName.includes('thyroid');
 
     if (isIntervertebralDisc) {
-      // Intervertebral disc fibrocartilage: deep refined Navy (chuẩn màu Navi sang, matte)
+      // Intervertebral disc fibrocartilage: elegant sapphire medical azure (chuẩn đĩa đệm xanh sang, rõ nét)
       applyCustomProps(mesh, {
         name: 'PBR_IntervertebralDisc',
-        color: 0x183050,
-        roughness: 0.75,
-        metalness: 0.0,
+        color: 0x2774BA,
+        roughness: 0.58,
+        metalness: 0.05,
         transparent: true,
-        opacity: 0.94,
+        opacity: 0.92,
         depthWrite: true,
         renderOrder: 2
       });
     } else if (isCartilage) {
-      // Costal, articular, and nasal cartilage: sophisticated luxurious Navy (chuẩn màu Navi sang, matte)
+      // Costal, articular, and nasal cartilage: sophisticated luminous medical cerulean blue (chuẩn sụn trong hyaline sang trọng)
       applyCustomProps(mesh, {
         name: 'PBR_HyalineCartilage',
-        color: 0x1E3E6D,
-        roughness: 0.72,
-        metalness: 0.0,
+        color: 0x3897E6,
+        roughness: 0.52,
+        metalness: 0.05,
         transparent: true,
-        opacity: 0.90,
+        opacity: 0.88,
         depthWrite: true,
         renderOrder: 2
       });
