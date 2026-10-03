@@ -11,7 +11,7 @@ import { state } from '../state/store.js';
 import { loadModel } from '../viewer/loadModel.js';
 import { showSystem, hideSystem, restoreAllParts, setSystemTransparency, setStructureVisible } from '../viewer/visibility.js';
 import { deselectPart } from '../viewer/selection.js';
-import { setBodyEnvelopeVisible } from '../viewer/bodyEnvelope.js';
+import { setBodyEnvelopeVisible, setBodyEnvelopeTone } from '../viewer/bodyEnvelope.js';
 import { setModelOrientation } from '../viewer/orientationManager.js';
 import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
 import { setExplodeFactor, resetExplode } from '../viewer/explodedView.js';
@@ -49,6 +49,17 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
   restoreAllParts();
   setBodyEnvelopeVisible(false);
 
+  // Restore any previous custom cloned materials to avoid cross-view material pollution
+  viewer.scene?.traverse(node => {
+    if (node.isMesh && node.userData.__origMaterial) {
+      if (node.material && node.material !== node.userData.__origMaterial) {
+        node.material.dispose();
+      }
+      node.material = node.userData.__origMaterial;
+      delete node.userData.__origMaterial;
+    }
+  });
+
   // 2. Identify target systems
   const systemsToLoad = card.systems || ['skeletal'];
 
@@ -60,7 +71,7 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
   }
 
   // Ensure only systems declared in preset are shown
-  const allSystems = ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'];
+  const allSystems = ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral', 'integumentary'];
   allSystems.forEach(sys => {
     if (systemsToLoad.includes(sys)) {
       showSystem(sys);
@@ -103,7 +114,7 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
 
   // 6. Reset System Transparencies to Solid (skip if motionId, which manages its own anatomical isolation)
   if (!card.motionId) {
-    ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'].forEach(s => {
+    ['skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral', 'integumentary'].forEach(s => {
       setSystemTransparency(s, 1.0);
     });
 
@@ -115,6 +126,13 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
   const cameraConfig = getFineCameraConfig(card);
   if (cameraConfig) {
     animateCameraTo(viewer.camera, viewer.controls, cameraConfig.pos, cameraConfig.target);
+  }
+
+    // 5. Handle Skin Tone for Microanatomy Skin views
+  if (card.id === 'micro_skin_dark') {
+    setBodyEnvelopeTone(0x6b4226, 0.94, viewer);
+  } else if (card.id === 'micro_skin_light') {
+    setBodyEnvelopeTone(0xfcd34d, 0.94, viewer);
   }
 
   viewer.render();
@@ -203,13 +221,22 @@ function getFineCameraConfig(card) {
     case 'resp_8_hilum':
       return { pos: { x: 0.25, y: 1.26, z: 0.55 }, target: { x: 0.05, y: 1.25, z: 0 } };
 
-    // Microanatomy Eye
+    // Microanatomy Views: comfortable, unclipped anatomical framing without violent close-up zoom
     case 'micro_eye':
-      return { pos: { x: 0.08, y: 1.58, z: 0.26 }, target: { x: 0.03, y: 1.58, z: 0.04 } };
+      return { pos: { x: 0.16, y: 1.60, z: 0.52 }, target: { x: 0.03, y: 1.59, z: 0.06 } };
     case 'micro_lacrimal':
-      return { pos: { x: 0.06, y: 1.60, z: 0.22 }, target: { x: 0.03, y: 1.60, z: 0.04 } };
+      return { pos: { x: 0.14, y: 1.60, z: 0.48 }, target: { x: 0.02, y: 1.58, z: 0.06 } };
     case 'micro_lens_zonule':
-      return { pos: { x: 0.05, y: 1.58, z: 0.18 }, target: { x: 0.03, y: 1.58, z: 0.04 } };
+      return { pos: { x: 0.12, y: 1.59, z: 0.42 }, target: { x: 0.03, y: 1.59, z: 0.06 } };
+    case 'micro_skin_dark':
+    case 'micro_skin_light':
+      return { pos: { x: 0, y: 1.25, z: 1.65 }, target: { x: 0, y: 1.15, z: 0 } };
+    case 'micro_hair_follicle':
+      return { pos: { x: 0, y: 1.65, z: 0.70 }, target: { x: 0, y: 1.60, z: 0 } };
+    case 'micro_femur_section':
+      return { pos: { x: 0.18, y: 0.62, z: 1.25 }, target: { x: 0.09, y: 0.62, z: 0 } };
+    case 'micro_osteon':
+      return { pos: { x: 0.10, y: 0.62, z: 0.55 }, target: { x: 0.09, y: 0.62, z: 0 } };
 
     default:
       if (card.camera) {
@@ -226,6 +253,14 @@ function getFineCameraConfig(card) {
  * Surgical Anatomical Mesh Filtering & Layer Translucency
  */
 function applySpecificViewRules(viewId, allowedSystems, viewer) {
+  function prepareMeshMaterial(node) {
+    if (!node.userData.__origMaterial) {
+      node.userData.__origMaterial = node.material;
+    }
+    node.material = node.userData.__origMaterial.clone();
+    return node.material;
+  }
+
   // First, traverse all meshes in scene:
   // Hide any mesh that does not belong to the allowed systems of this preset
   viewer.scene.traverse(node => {
@@ -354,17 +389,217 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
 
         // --- MICROANATOMY VIEWS ---
-        case 'micro_eye':
-          node.visible = REGEX_EYE_MICRO.test(name);
+        case 'micro_skin_dark': {
+          if (sys === 'integumentary') {
+            node.visible = true;
+            const mat = prepareMeshMaterial(node);
+            mat.color.setHex(0x5c3826); // Rich melanin dark tone
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.roughness = 0.65;
+            mat.metalness = 0.05;
+          } else {
+            node.visible = false;
+          }
           break;
+        }
 
-        case 'micro_lacrimal':
-          node.visible = REGEX_LACRIMAL_MICRO.test(name);
+        case 'micro_skin_light': {
+          if (sys === 'integumentary') {
+            node.visible = true;
+            const mat = prepareMeshMaterial(node);
+            mat.color.setHex(0xe8beac); // Natural fair light tone
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.roughness = 0.65;
+            mat.metalness = 0.05;
+          } else {
+            node.visible = false;
+          }
           break;
+        }
 
-        case 'micro_lens_zonule':
-          node.visible = REGEX_LENS_MICRO.test(name);
+        case 'micro_hair_follicle': {
+          if (sys === 'integumentary') {
+            node.visible = true;
+            const mat = prepareMeshMaterial(node);
+            mat.color.setHex(0xcca38a);
+            mat.transparent = true;
+            mat.opacity = 0.85;
+          } else if (sys === 'skeletal') {
+            node.visible = /skull|frontal|parietal|temporal|zygomatic|maxilla/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.25;
+              mat.depthWrite = false;
+            }
+          } else {
+            node.visible = false;
+          }
           break;
+        }
+
+        case 'micro_eye': {
+          const lower = name.toLowerCase();
+          const isLeftEye = lower.endsWith('l') || lower.includes('.l') || lower.includes('_l');
+          const isEyeActive = isLeftEye && (lower.includes('cornea') || lower.includes('sclera') || lower.includes('lens') || lower.includes('retina') || lower.includes('chamber') || lower.includes('optic nerve') || lower.includes('suspensory'));
+          const isEyeMuscle = isLeftEye && (lower.includes('rectus muscle') || lower.includes('oblique muscle') || lower.includes('levator palpebrae'));
+          const isOrbitBone = isLeftEye && (lower.includes('frontal') || lower.includes('zygomatic') || lower.includes('maxilla') || lower.includes('lacrimal') || lower.includes('sphenoid') || lower.includes('ethmoid'));
+
+          if (isEyeActive) {
+            node.visible = true;
+            node.renderOrder = 10;
+            const mat = prepareMeshMaterial(node);
+            if (lower.includes('cornea')) {
+              mat.transparent = true;
+              mat.opacity = 0.65;
+              mat.depthWrite = false;
+            } else if (lower.includes('sclera')) {
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              mat.color.setHex(0xf8fafc);
+            } else if (lower.includes('optic nerve')) {
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.color.setHex(0xfacc15);
+            } else {
+              mat.transparent = false;
+              mat.opacity = 1.0;
+            }
+          } else if (isEyeMuscle) {
+            node.visible = true;
+            node.renderOrder = 8;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.depthWrite = true;
+            mat.color.setHex(0xc2410c);
+          } else if (isOrbitBone) {
+            node.visible = true;
+            node.renderOrder = 2;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.22;
+            mat.depthWrite = false;
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'micro_lacrimal': {
+          const lower = name.toLowerCase();
+          const isLeftEye = lower.endsWith('l') || lower.includes('.l') || lower.includes('_l');
+          const isLacrimal = isLeftEye && (lower.includes('lacrimal gland') || lower.includes('lacrimal sac') || lower.includes('nasolacrimal') || lower.includes('lacrimal canaliculus') || lower.includes('lacrimal bone'));
+          const isEyeGlobe = isLeftEye && (lower.includes('cornea') || lower.includes('sclera'));
+          const isFacialBone = isLeftEye && (lower.includes('maxilla') || lower.includes('nasal') || lower.includes('frontal') || lower.includes('zygomatic'));
+
+          if (isLacrimal) {
+            node.visible = true;
+            node.renderOrder = 12;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.depthWrite = true;
+            mat.color.setHex(0xf97316); // Vibrant amber coral highlight
+            if (mat.emissive) mat.emissive.setHex(0x551100);
+          } else if (isEyeGlobe) {
+            node.visible = true;
+            node.renderOrder = 4;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.40;
+            mat.depthWrite = false;
+          } else if (isFacialBone) {
+            node.visible = true;
+            node.renderOrder = 2;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.25;
+            mat.depthWrite = false;
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'micro_lens_zonule': {
+          const lower = name.toLowerCase();
+          const isLeftEye = lower.endsWith('l') || lower.includes('.l') || lower.includes('_l');
+          const isLens = isLeftEye && (lower.includes('lens') || lower.includes('cristallin'));
+          const isZonule = isLeftEye && (lower.includes('suspensory') || lower.includes('zonul') || lower.includes('ciliar') || lower.includes('iris'));
+          const isOuterWall = isLeftEye && (lower.includes('sclera') || lower.includes('cornea'));
+
+          if (isLens) {
+            node.visible = true;
+            node.renderOrder = 14;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.88;
+            mat.color.setHex(0x38bdf8); // Refractive cyan
+            if (mat.emissive) mat.emissive.setHex(0x0369a1);
+          } else if (isZonule) {
+            node.visible = true;
+            node.renderOrder = 12;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.color.setHex(0xfbbf24); // Amber golden fibers
+          } else if (isOuterWall) {
+            node.visible = true;
+            node.renderOrder = 2;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.15;
+            mat.depthWrite = false;
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'micro_femur_section': {
+          const lower = name.toLowerCase();
+          const isFemur = lower.includes('femur') || lower.includes('patella');
+          const isContext = lower.includes('pelvi') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('sacrum') || lower.includes('tibia');
+          if (isFemur) {
+            node.visible = true;
+            node.renderOrder = 8;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.depthWrite = true;
+            mat.color.setHex(0xf5edd6);
+          } else if (isContext) {
+            node.visible = true;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.18;
+            mat.depthWrite = false;
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'micro_osteon': {
+          const lower = name.toLowerCase();
+          const isFemur = lower.includes('femur');
+          if (isFemur) {
+            node.visible = true;
+            node.renderOrder = 10;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = false;
+            mat.opacity = 1.0;
+            mat.depthWrite = true;
+            mat.color.setHex(0xfaf3e0);
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
 
         default:
           node.visible = true;

@@ -191,3 +191,20 @@ export function updateBodyEnvelopeAuto(viewer = state.viewer || window.viewer) {
   const shouldShow = isSkelLoaded && !muscIsSolid && !skinIsSolid;
   setBodyEnvelopeVisible(shouldShow, viewer);
 }
+
+export function setBodyEnvelopeTone(colorHex, opacity = 0.85, viewer = state.viewer || window.viewer) {
+  if (!bodyEnvelopeGroup && viewer?.scene) {
+    bodyEnvelopeGroup = viewer.scene.getObjectByName('bodyEnvelopeGroup');
+  }
+  if (!bodyEnvelopeGroup) return;
+  bodyEnvelopeGroup.traverse(node => {
+    if (node.isMesh && node.material?.uniforms) {
+      if (node.material.uniforms.color) node.material.uniforms.color.value.setHex(colorHex);
+      if (node.material.uniforms.rimColor) node.material.uniforms.rimColor.value.setHex(colorHex);
+      if (node.material.uniforms.baseOpacity) node.material.uniforms.baseOpacity.value = opacity;
+    }
+  });
+  setBodyEnvelopeVisible(true, viewer);
+  viewer?.render?.();
+}
+

@@ -1438,11 +1438,11 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
       {
         id: 'micro_skin_dark',
         title: '1. Skin (Dark Pigmentation)',
-        subtitle: 'Cắt lớp 3D đa tầng: Biểu bì, Trung bì và Mô mỡ dưới da',
+        subtitle: 'Cắt lớp 3D đa tầng: Biểu bì sắc tố Melanin, Trung bì và Mô mỡ dưới da',
         badge: 'Cắt lớp da',
-        systems: ['visceral', 'skeletal'],
-        camera: { x: 0.15, y: 1.15, z: 0.35, targetX: 0.05, targetY: 1.12, targetZ: 0 },
-        image: '/images/atlas/med_skin.png',
+        systems: ['integumentary'],
+        camera: { x: 0, y: 1.25, z: 1.65, targetX: 0, targetY: 1.15, targetZ: 0 },
+        image: '/images/atlas/micro_skin_dark.jpg',
         desc: 'Mô hình cắt lớp 3D tầng da: lớp sừng, lớp gai, lớp hạt, lớp đáy hắc tố Melanin, collagen và mỡ hạ bì.'
       },
       {
@@ -1450,9 +1450,9 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '2. Skin (Light Pigmentation)',
         subtitle: 'Lát cắt da sắc tố sáng: Tế bào đáy sinh sản và vi tuần hoàn mao mạch',
         badge: 'Mô học da',
-        systems: ['visceral', 'skeletal'],
-        camera: { x: 0.12, y: 1.15, z: 0.30, targetX: 0.05, targetY: 1.12, targetZ: 0 },
-        image: '/images/atlas/med_skin.png',
+        systems: ['integumentary'],
+        camera: { x: 0, y: 1.25, z: 1.65, targetX: 0, targetY: 1.15, targetZ: 0 },
+        image: '/images/atlas/micro_skin_light.jpg',
         desc: 'Chi tiết mô học vi thể các lớp tế bào sừng hóa và mạng lưới sợi đàn hồi elastin nâng đỡ.'
       },
       {
@@ -1460,9 +1460,9 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '3. Hair Follicle (Curly Hair)',
         subtitle: 'Nang lông, tuyến bã nhờn, tuyến mồ hôi và cơ dựng lông',
         badge: 'Phụ bì',
-        systems: ['visceral', 'skeletal'],
-        camera: { x: 0.10, y: 1.18, z: 0.28, targetX: 0.05, targetY: 1.15, targetZ: 0 },
-        image: '/images/atlas/med_soft_tissue.png',
+        systems: ['integumentary', 'skeletal'],
+        camera: { x: 0.22, y: 1.62, z: 0.48, targetX: 0.05, targetY: 1.60, targetZ: 0 },
+        image: '/images/atlas/micro_hair_follicle.jpg',
         desc: 'Đơn vị nang lông tuyến bã: bóng chân lông, cơ dựng lông arrector pili và tuyến tiết bã nhờn.'
       }
     ]
@@ -1476,8 +1476,8 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '1. Eye (Nhãn Cầu 3D)',
         subtitle: 'Giác mạc, củng mạc, màng bồ đào, thể mi, mống mắt và võng mạc',
         badge: 'Thị giác',
-        systems: ['nervous'],
-        camera: { x: 0.08, y: 1.58, z: 0.26, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
+        systems: ['nervous', 'skeletal', 'muscular'],
+        camera: { x: 0.16, y: 1.60, z: 0.52, targetX: 0.03, targetY: 1.59, targetZ: 0.06 },
         image: '/images/atlas/micro_eye.jpg',
         desc: 'Mặt cắt cấu trúc nhãn cầu thể hiện đường truyền ánh sáng và võng mạc thụ cảm.'
       },
@@ -1486,8 +1486,8 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '2. Lacrimal Apparatus (Bộ Lệ)',
         subtitle: 'Tuyến lệ chính, tiểu quản lệ, túi lệ và ống lệ mũi',
         badge: 'Bộ lệ',
-        systems: ['nervous'],
-        camera: { x: 0.06, y: 1.60, z: 0.22, targetX: 0.03, targetY: 1.60, targetZ: 0.04 },
+        systems: ['nervous', 'skeletal'],
+        camera: { x: 0.14, y: 1.60, z: 0.48, targetX: 0.02, targetY: 1.58, targetZ: 0.06 },
         image: '/images/atlas/micro_lacrimal.jpg',
         desc: 'Hệ thống tiết và dẫn lưu nước mắt giữ ẩm và bảo vệ bề mặt giác mạc.'
       },
@@ -1496,8 +1496,8 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         title: '3. Lens and Zonular Fibers',
         subtitle: 'Thể thủy tinh hai mặt lồi và dây chằng treo Zinn điều tiết',
         badge: 'Khúc xạ',
-        systems: ['nervous'],
-        camera: { x: 0.05, y: 1.58, z: 0.18, targetX: 0.03, targetY: 1.58, targetZ: 0.04 },
+        systems: ['nervous', 'skeletal'],
+        camera: { x: 0.12, y: 1.59, z: 0.42, targetX: 0.03, targetY: 1.59, targetZ: 0.06 },
         image: '/images/atlas/micro_lens_zonule.jpg',
         desc: 'Dây chằng Zinn treo thể thủy tinh vào thể mi phục vụ điều tiết thị lực gần xa.'
       }
@@ -1513,8 +1513,8 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         subtitle: 'Vỏ xương đặc ngoài, bè xương xốp xốp và khoang tủy xương',
         badge: 'Mô học xương',
         systems: ['skeletal'],
-        camera: { x: 0.25, y: 0.65, z: 0.45, targetX: 0.15, targetY: 0.65, targetZ: 0 },
-        image: '/images/atlas/med_skeleton.png',
+        camera: { x: 0.40, y: 0.62, z: 0.85, targetX: 0.10, targetY: 0.60, targetZ: 0 },
+        image: '/images/atlas/micro_femur_section.jpg',
         desc: 'Cấu trúc giải phẫu vi thể xương đùi với hệ thống bè xương xốp chịu lực nén tối ưu.'
       },
       {
@@ -1523,8 +1523,8 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         subtitle: 'Ống Havers trung tâm, các lá xương đồng tâm và tế bào xương Osteocyte',
         badge: 'Vi thể',
         systems: ['skeletal'],
-        camera: { x: 0.20, y: 0.65, z: 0.35, targetX: 0.15, targetY: 0.65, targetZ: 0 },
-        image: '/images/atlas/med_bone_repair.png',
+        camera: { x: 0.35, y: 0.62, z: 0.65, targetX: 0.10, targetY: 0.60, targetZ: 0 },
+        image: '/images/atlas/micro_osteon.jpg',
         desc: 'Đơn vị cấu tạo chức năng cơ bản của xương đặc, dẫn truyền mạch máu và thần kinh nuôi xương.'
       }
     ]
