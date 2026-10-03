@@ -38,6 +38,11 @@ const REGEX_EYE_MICRO = /eyeball|cornea|iris|lens|retina|sclera|optic.*nerve|opt
 const REGEX_LACRIMAL_MICRO = /lacrimal|nasolacrimal|eyeball|cornea/i;
 const REGEX_LENS_MICRO = /lens|ciliary|zonul|iris/i;
 
+const REGEX_GENITALIA = /penis|cavernosum|spongiosum|testis|epididymis|ductus deferens|ejaculatory|seminal gland/i;
+const REGEX_LUNG_TISSUE = /lung|pleura/i;
+const REGEX_SALIVARY = /parotid|sublingual|submandibular/i;
+const REGEX_URINARY_ORGANS = /kidney|renal|ureter|urinary bladder|suprarenal/i;
+
 /**
  * Apply 3D View Preset with 100% Fidelity to the Reference Atlas Card
  */
@@ -237,6 +242,42 @@ function getFineCameraConfig(card) {
       return { pos: { x: 0.18, y: 0.62, z: 1.25 }, target: { x: 0.09, y: 0.62, z: 0 } };
     case 'micro_osteon':
       return { pos: { x: 0.10, y: 0.62, z: 0.55 }, target: { x: 0.09, y: 0.62, z: 0 } };
+
+    // Digestive System Views (100% match with Atlas Cards & thumbnails)
+    case 'dig_1_upper':
+      return { pos: { x: 0, y: 1.25, z: 0.95 }, target: { x: 0, y: 1.22, z: 0 } };
+    case 'dig_2_lower':
+      return { pos: { x: 0, y: 0.96, z: 1.05 }, target: { x: 0, y: 0.96, z: 0 } };
+    case 'dig_3_peritoneum':
+      return { pos: { x: 0, y: 1.08, z: 1.05 }, target: { x: 0, y: 1.08, z: 0 } };
+    case 'dig_4_salivary_glands':
+      return { pos: { x: 0.32, y: 1.54, z: 0.42 }, target: { x: 0, y: 1.52, z: 0 } };
+    case 'dig_6_laryngopharynx':
+      return { pos: { x: 0.25, y: 1.48, z: 0.42 }, target: { x: 0, y: 1.46, z: 0 } };
+    case 'dig_7_alimentary_canal':
+      return { pos: { x: 0, y: 1.15, z: 1.45 }, target: { x: 0, y: 1.15, z: 0 } };
+    case 'dig_8_stomach_vasculature':
+      return { pos: { x: 0.12, y: 1.15, z: 0.75 }, target: { x: 0, y: 1.12, z: 0 } };
+    case 'dig_9_sphincters':
+      return { pos: { x: 0, y: 1.08, z: 0.75 }, target: { x: 0, y: 1.08, z: 0 } };
+    case 'dig_10_accessory_organs':
+      return { pos: { x: -0.05, y: 1.16, z: 0.72 }, target: { x: 0, y: 1.14, z: 0 } };
+    case 'dig_11_regional_vasculature':
+      return { pos: { x: 0.1, y: 1.12, z: 0.85 }, target: { x: 0, y: 1.10, z: 0 } };
+    case 'dig_12_intestines':
+      return { pos: { x: 0, y: 0.96, z: 0.95 }, target: { x: 0, y: 0.96, z: 0 } };
+
+    // Lymphatic System Views
+    case 'lymph_spleen':
+      return { pos: { x: 0.25, y: 1.15, z: 0.78 }, target: { x: 0.08, y: 1.15, z: 0 } };
+    case 'lymph_nodes_system':
+      return { pos: { x: 0, y: 1.18, z: 1.35 }, target: { x: 0, y: 1.15, z: 0 } };
+
+    // Urinary System Views
+    case 'urin_system':
+      return { pos: { x: 0, y: 1.05, z: 0.88 }, target: { x: 0, y: 1.05, z: 0 } };
+    case 'urin_pelvic':
+      return { pos: { x: 0, y: 0.88, z: 0.75 }, target: { x: 0, y: 0.88, z: 0 } };
 
     default:
       if (card.camera) {
@@ -601,6 +642,282 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
+        // --- DIGESTIVE SYSTEM VIEWS ---
+        case 'dig_1_upper': {
+          // Card 1: Upper Digestive (Esophagus, Stomach, Liver, Gallbladder, Bile duct, Duodenum)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            if (REGEX_LUNG_TISSUE.test(name)) {
+              // Semi-transparent aerated lungs (matching thumbnail dig_upper.png)
+              node.visible = true;
+              node.renderOrder = 3;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.32;
+              mat.depthWrite = false;
+            } else if (/kidney|renal|ureter|bladder|prostate|urethra/i.test(name)) {
+              node.visible = false;
+            } else {
+              // Esophagus, Stomach, Duodenum, Liver, Gallbladder, Bile duct, Pancreas, Intestines solid
+              node.visible = true;
+            }
+          }
+          break;
+        }
+
+        case 'dig_2_lower': {
+          // Card 2: Lower Digestive (Small intestine, Large intestine, Appendix)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            if (REGEX_LUNG_TISSUE.test(name) || /trachea|bronch|oesophagus|esophagus|thyroid/i.test(name)) {
+              node.visible = false;
+            } else if (/liver|gan/i.test(name)) {
+              // Faded liver context so intestines pop (matching thumbnail dig_lower.png)
+              node.visible = true;
+              node.renderOrder = 3;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.22;
+              mat.depthWrite = false;
+            } else if (/kidney|renal|ureter/i.test(name)) {
+              node.visible = false;
+            } else {
+              // Intestines, stomach, duodenum solid
+              node.visible = true;
+            }
+          }
+          break;
+        }
+
+        case 'dig_3_peritoneum': {
+          // Card 3: Peritoneum & Omentum
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            if (REGEX_LUNG_TISSUE.test(name)) {
+              node.visible = true;
+              node.renderOrder = 3;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.32;
+              mat.depthWrite = false;
+            } else if (/kidney|renal|ureter|bladder|prostate/i.test(name)) {
+              node.visible = false;
+            } else {
+              node.visible = true;
+            }
+          }
+          break;
+        }
+
+        case 'dig_4_salivary_glands': {
+          // Card 4: Salivary Glands (Parotid, Submandibular, Sublingual & ducts)
+          if (sys === 'skeletal') {
+            node.visible = /mandible|maxilla|skull|temporal|zygomatic|hyoid|teeth|tooth/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.38;
+              mat.depthWrite = false;
+            }
+          } else if (sys === 'visceral') {
+            const isSalivary = REGEX_SALIVARY.test(name) || /tongue|gingiva/i.test(name);
+            node.visible = isSalivary;
+            if (isSalivary) {
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          }
+          break;
+        }
+
+        case 'dig_6_laryngopharynx': {
+          if (sys === 'skeletal') {
+            node.visible = /vertebra_c|c1|c2|c3|c4|c5|c6|c7|hyoid|mandible|maxilla|skull/i.test(name);
+          } else if (sys === 'visceral') {
+            node.visible = /pharynx|laryng|epiglott|soft palate|uvula|tongue|trachea|oesophagus|esophagus/i.test(name);
+          }
+          break;
+        }
+
+        case 'dig_7_alimentary_canal': {
+          // Card 7: Alimentary Canal (mouth to rectum continuous digestive tract)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            if (REGEX_LUNG_TISSUE.test(name) || /kidney|renal|ureter|bladder/i.test(name)) {
+              node.visible = false;
+            } else {
+              node.visible = true;
+            }
+          }
+          break;
+        }
+
+        case 'dig_8_stomach_vasculature': {
+          if (sys === 'visceral') {
+            node.visible = /stomach|duodenum|oesophagus|esophagus|liver|spleen|pancreas/i.test(name);
+          } else if (sys === 'cardiovascular') {
+            node.visible = /celiac|gastric|splenic|hepatic|mesenteric|aorta/i.test(name);
+          }
+          break;
+        }
+
+        case 'dig_9_sphincters': {
+          if (sys === 'visceral') {
+            node.visible = /stomach|duodenum|oesophagus|esophagus|caecum|colon|appendix/i.test(name);
+          }
+          break;
+        }
+
+        case 'dig_10_accessory_organs': {
+          // Card 10: Hepatobiliary & Pancreatic (Liver, Gallbladder, Bile duct, Pancreas, Duodenum, Spleen)
+          if (sys === 'visceral') {
+            const isAccessory = /liver|gallbladder|bile duct|pancreas|duodenum|spleen/i.test(name);
+            node.visible = isAccessory;
+            if (isAccessory) {
+              node.renderOrder = 6;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_11_regional_vasculature': {
+          if (sys === 'visceral') {
+            node.visible = /stomach|duodenum|liver|pancreas|colon|jejunum/i.test(name);
+          } else if (sys === 'cardiovascular') {
+            node.visible = /mesenteric|portal|splenic|hepatic|celiac|aorta|cava/i.test(name);
+          }
+          break;
+        }
+
+        case 'dig_12_intestines': {
+          // Card 12: Intestines (small & large intestine, appendix)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            if (REGEX_LUNG_TISSUE.test(name) || /kidney|renal|ureter|bladder|liver|stomach|trachea/i.test(name)) {
+              node.visible = false;
+            } else {
+              node.visible = /colon|jejunum|ileum|caecum|appendix|taenia|duodenum/i.test(name);
+            }
+          }
+          break;
+        }
+
+        // --- LYMPHATIC SYSTEM VIEWS ---
+        case 'lymph_spleen': {
+          // Card 1: Spleen & Lymphatics (Spleen, stomach context, lymph nodes)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'lymphatic') {
+            node.visible = true;
+            if (/spleen|lá lách/i.test(name)) {
+              node.renderOrder = 8;
+            }
+          } else if (sys === 'visceral') {
+            node.visible = /stomach|colon|spleen/i.test(name);
+          }
+          break;
+        }
+
+        case 'lymph_nodes_system': {
+          // Card 2: Full Lymphatic Nodes Network (White/glass skeleton, glowing green nodes)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'lymphatic') {
+            node.visible = true;
+            node.renderOrder = 6;
+          } else if (sys === 'visceral') {
+            node.visible = /spleen|thymus/i.test(name);
+          }
+          break;
+        }
+
+        // --- URINARY SYSTEM VIEWS ---
+        case 'urin_system': {
+          // Card 1: Urinary System (Kidneys, Ureters, Bladder, Adrenals)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            const isUrinary = REGEX_URINARY_ORGANS.test(name);
+            node.visible = isUrinary;
+            if (isUrinary) {
+              node.renderOrder = 6;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          }
+          break;
+        }
+
+        case 'urin_pelvic': {
+          // Card 2: Pelvic Organs (Urinary bladder, Prostate, Urethra)
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = /ilium|ischium|pubis|pelvi|sacrum|coccyx|femur.*head|femur.*neck|acetabul|vertebra_l5/i.test(name);
+          } else if (sys === 'visceral') {
+            const isPelvicUrinary = /bladder|prostate|urethra/i.test(name);
+            node.visible = isPelvicUrinary;
+            if (isPelvicUrinary) {
+              node.renderOrder = 6;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          }
+          break;
+        }
+
         default:
           node.visible = true;
           break;
@@ -613,6 +930,16 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     setSystemTransparency('skeletal', 0.16);
   } else if (viewId === 'resp_7_location_lungs') {
     setSystemTransparency('skeletal', 0.16);
+  } else if (viewId === 'dig_1_upper' || viewId === 'dig_2_lower' || viewId === 'dig_3_peritoneum' || viewId === 'dig_7_alimentary_canal' || viewId === 'dig_12_intestines') {
+    setSystemTransparency('skeletal', 0.14);
+  } else if (viewId === 'lymph_spleen') {
+    setSystemTransparency('skeletal', 0.15);
+  } else if (viewId === 'lymph_nodes_system') {
+    setSystemTransparency('skeletal', 0.18);
+  } else if (viewId === 'urin_system') {
+    setSystemTransparency('skeletal', 0.14);
+  } else if (viewId === 'urin_pelvic') {
+    setSystemTransparency('skeletal', 0.28);
   }
 }
 

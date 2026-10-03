@@ -170,6 +170,10 @@ export function isolatePart(partId) {
   if (!getMeshRegistry().has(partId)) return;
 
   const keep = new Set(withDescendants(partId));
+  const companions = getAnatomicalCompanions(partId);
+  companions.forEach(cid => {
+    withDescendants(cid).forEach(descId => keep.add(descId));
+  });
 
   batchPartStates(() => {
     getMeshRegistry().forEach((node, id) => {
@@ -189,6 +193,29 @@ export function isolatePart(partId) {
       if (opacity < 1) applyTransparency(id, opacity);
     });
   });
+
+  // Apply context opacity for hepatobiliary unit if isolating Gallbladder or Bile duct
+  const isBiliary = partId === 'Gallbladder' || partId === 'Bile duct';
+  if (isBiliary) {
+    withDescendants('Liver').forEach(descId => {
+      ownMeshesOf(descId).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          mat.transparent = true;
+          mat.opacity = 0.35;
+          mat.depthWrite = false;
+          mat.needsUpdate = true;
+        });
+      });
+    });
+    ownMeshesOf('Duodenum').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = true;
+        mat.opacity = 0.28;
+        mat.depthWrite = false;
+        mat.needsUpdate = true;
+      });
+    });
+  }
 
   setIsolatedPart(partId);
   notify('partIsolated', partId);
@@ -333,13 +360,32 @@ let ghostedIds = null;
 
 export function getAnatomicalCompanions(partId) {
   if (!partId) return [];
-  if (partId.startsWith('Intervertebral disc ')) {
+  const lower = partId.toLowerCase();
+  if (lower.startsWith('intervertebral disc ')) {
     const level = partId.slice('Intervertebral disc '.length);
     return [`Nucleus pulposus ${level}`];
   }
-  if (partId.startsWith('Nucleus pulposus ')) {
+  if (lower.startsWith('nucleus pulposus ')) {
     const level = partId.slice('Nucleus pulposus '.length);
     return [`Intervertebral disc ${level}`];
+  }
+  // Biliary system: Gallbladder is intimately bound to the biliary tree, liver fossa, and duodenum
+  if (lower === 'gallbladder' || lower.includes('túi mật') || lower.includes('vesica biliaris')) {
+    return ['Bile duct', 'Liver', 'Duodenum'];
+  }
+  if (lower === 'bile duct' || lower.includes('ống mật') || lower.includes('ductus choledochus')) {
+    return ['Gallbladder', 'Liver', 'Duodenum', 'Pancreatic duct'];
+  }
+  if (lower === 'pancreas' || lower.includes('tụy')) {
+    return ['Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Bile duct', 'Spleen'];
+  }
+  if (lower.startsWith('kidney') || lower.includes('thận') || lower.includes('ren ')) {
+    const isLeft = lower.includes('.l') || lower.includes('left') || lower.includes('trái');
+    const side = isLeft ? '.l' : '.r';
+    return [`Renal pelvis${side}`, `Ureter${side}`, `Suprarenal gland${side}`, 'Urinary bladder'];
+  }
+  if (lower.includes('urinary bladder') || lower.includes('bàng quang')) {
+    return ['Ureter.l', 'Ureter.r', 'Prostate', 'Urethra'];
   }
   return [];
 }
@@ -371,6 +417,41 @@ export function ghostAllExcept(partId) {
 
   // The selected structure and its anatomical companions must read as solid/translucent even where they were see-through.
   keep.forEach(id => restoreMaterial(id));
+
+  // Specialized context transparency for anatomical companions:
+  // When Gallbladder or Bile duct is selected, ensure the entire hepatobiliary unit is legible
+  const isBiliary = partId === 'Gallbladder' || partId === 'Bile duct';
+  if (isBiliary) {
+    // Bile duct must be 100% solid, fully visible pipe connecting gallbladder to duodenum!
+    ownMeshesOf('Bile duct').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
+        mat.needsUpdate = true;
+      });
+    });
+    // Liver: elegant translucent bed (35% opacity) showing gallbladder resting under right lobe
+    withDescendants('Liver').forEach(descId => {
+      ownMeshesOf(descId).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          mat.transparent = true;
+          mat.opacity = 0.35;
+          mat.depthWrite = false;
+          mat.needsUpdate = true;
+        });
+      });
+    });
+    // Duodenum: subtle context translucency (28% opacity) showing terminal duct entry
+    ownMeshesOf('Duodenum').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = true;
+        mat.opacity = 0.28;
+        mat.depthWrite = false;
+        mat.needsUpdate = true;
+      });
+    });
+  }
 
   notify('ghostModeChanged', partId);
 }
@@ -419,6 +500,31 @@ export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
       mat.needsUpdate = true;
     });
   });
+
+  // If selecting Gallbladder, also illuminate Bile duct so the pipeline is visible!
+  if (resolvedPartId === 'Gallbladder') {
+    ownMeshesOf('Bile duct').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
+        mat.emissive = new THREE.Color(0x22c55e); // Emerald biliary glow
+        mat.emissiveIntensity = 0.65;
+        mat.needsUpdate = true;
+      });
+    });
+  } else if (resolvedPartId === 'Bile duct') {
+    ownMeshesOf('Gallbladder').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
+        mat.emissive = new THREE.Color(0x22c55e);
+        mat.emissiveIntensity = 0.65;
+        mat.needsUpdate = true;
+      });
+    });
+  }
 
   // If selecting the Disc, also illuminate its inner companion Nucleus pulposus!
   if (isDisc) {
