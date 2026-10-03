@@ -8,7 +8,8 @@
 // Layer 5: Deepest skeleton framework (Lớp 5: Khung xương cốt lõi)
 
 import { state, translate, batchPartStates } from '../state/store.js';
-import { showSystem, hideSystem, setStructureVisible } from '../viewer/visibility.js';
+import { showSystem, hideSystem, setStructureVisible, ghostAllExcept } from '../viewer/visibility.js';
+import { loadModel } from '../viewer/loadModel.js';
 import { getMuscleLayers, systemLevels, updateItemUI } from './systemsLayerController.js';
 
 export const DISSECTION_STAGES = [
@@ -28,10 +29,27 @@ export function applyDepth(stage) {
   stage = Math.max(0, Math.min(5, Math.round(Number(stage) || 0)));
   currentStage = stage;
 
+  // Ensure skeletal system is loaded as core foundation
+  if (!state.loadedSystems?.includes('skeletal')) {
+    loadModel('skeletal', state.viewer).then(() => {
+      batchPartStates(() => {
+        showSystem('skeletal');
+        systemLevels.skeletal = 4.0;
+        updateItemUI('skeletal');
+      });
+      state.viewer?.render?.();
+    }).catch(err => console.error('[depthSlider] Failed to load skeletal:', err));
+  }
+
   // Single atomic batch: ZERO intermediate main-thread stalls
   batchPartStates(() => {
     const loaded = state.loadedSystems || [];
     const { superficial, intermediate, deep } = getMuscleLayers();
+
+    // Fundamental rule: Skeleton is ALWAYS 100% visible and anchored across all dissection stages
+    showSystem('skeletal');
+    systemLevels.skeletal = 4.0;
+    updateItemUI('skeletal');
 
     // STAGE 0: All active systems fully visible (Muscular Level 4)
     if (stage === 0) {
@@ -54,7 +72,6 @@ export function applyDepth(stage) {
       if (loaded.includes('lymphatic')) showSystem('lymphatic');
       if (loaded.includes('visceral')) showSystem('visceral');
       if (loaded.includes('joints')) showSystem('joints');
-      if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
     // STAGE 1: Dissect superficial muscles & fascia, reveal intermediate & deep musculature (Muscular Level 2.0)
@@ -72,7 +89,6 @@ export function applyDepth(stage) {
       if (loaded.includes('lymphatic')) showSystem('lymphatic');
       if (loaded.includes('visceral')) showSystem('visceral');
       if (loaded.includes('joints')) showSystem('joints');
-      if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
     // STAGE 2: Dissect intermediate muscles, reveal deep layer only (Muscular Level 1.0)
@@ -90,7 +106,6 @@ export function applyDepth(stage) {
       if (loaded.includes('lymphatic')) showSystem('lymphatic');
       if (loaded.includes('visceral')) showSystem('visceral');
       if (loaded.includes('joints')) showSystem('joints');
-      if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
     // STAGE 3: Dissect entire muscular system, reveal neurovascular, lymphatic & viscera
@@ -105,7 +120,6 @@ export function applyDepth(stage) {
       if (loaded.includes('lymphatic')) showSystem('lymphatic');
       if (loaded.includes('visceral')) showSystem('visceral');
       if (loaded.includes('joints')) showSystem('joints');
-      if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
     // STAGE 4: Dissect neurovascular, lymphatic & viscera, reveal skeletal framework & joints
@@ -126,7 +140,6 @@ export function applyDepth(stage) {
       if (loaded.includes('lymphatic')) hideSystem('lymphatic');
       if (loaded.includes('visceral')) hideSystem('visceral');
       if (loaded.includes('joints')) showSystem('joints');
-      if (loaded.includes('skeletal')) showSystem('skeletal');
     }
 
     // STAGE 5: Dissect articular joints, reveal pristine core skeleton
@@ -147,9 +160,17 @@ export function applyDepth(stage) {
       if (loaded.includes('lymphatic')) hideSystem('lymphatic');
       if (loaded.includes('visceral')) hideSystem('visceral');
       if (loaded.includes('joints')) hideSystem('joints');
-      if (loaded.includes('skeletal')) showSystem('skeletal');
     }
   });
+
+  // Preserve highlight / ghosting if a structure is currently selected (e.g. Rib 7)
+  if (state.selectedPart?.id) {
+    try {
+      ghostAllExcept(state.selectedPart.id);
+    } catch {
+      // Ignore if not applicable
+    }
+  }
 
   // Update state stage
   currentStage = stage;

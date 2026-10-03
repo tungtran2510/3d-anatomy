@@ -1103,6 +1103,24 @@ async function applySystemLevel(systemId, level, viewer) {
     }
   }
 
+  // Muscular system requires the skeletal framework as structural anchor
+  if (systemId === 'muscular' && level > 0) {
+    if (!state.loadedSystems.includes('skeletal')) {
+      try {
+        await loadModel('skeletal', viewer);
+        systemLevels.skeletal = 4.0;
+        showSystem('skeletal');
+        updateItemUI('skeletal');
+      } catch (err) {
+        console.error('[systemsLayer] Failed to load skeletal anchor for muscular:', err);
+      }
+    } else if ((Number(systemLevels.skeletal) || 0) <= 0) {
+      systemLevels.skeletal = 4.0;
+      showSystem('skeletal');
+      updateItemUI('skeletal');
+    }
+  }
+
   // 2. Adjust visibility with solid, crisp, authentic medical colors (NO alpha transparency lag!)
   batchPartStates(() => {
     if (cfg?.baseSystem === 'visceral') {
@@ -1167,6 +1185,11 @@ async function applySystemLevel(systemId, level, viewer) {
       if (level <= 0) {
         hideSystem('muscular');
       } else {
+        if ((Number(systemLevels.skeletal) || 0) <= 0) {
+          systemLevels.skeletal = 4.0;
+          showSystem('skeletal');
+          updateItemUI('skeletal');
+        }
         showSystem('muscular');
         const { superficial, intermediate, deep } = getMuscleLayers();
         if (level <= 1.0) {

@@ -29,39 +29,115 @@ export function getTableVisibility() {
   return isTableVisible;
 }
 
+let tableTrayMat = null;
+let tableRimMat = null;
+let tableLegMat = null;
+let tableCasterMat = null;
+
+export function updateDissectionTableTheme(isDarkParam, scene) {
+  const isDark = isDarkParam !== undefined ? isDarkParam : (typeof document !== 'undefined' && (document.documentElement.getAttribute('data-theme') === 'dark' || document.body?.classList?.contains('theme-dark')));
+
+  if (tableTrayMat) {
+    if (isDark) {
+      tableTrayMat.color.setHex(0x1e293b);
+      tableTrayMat.metalness = 0.35;
+      tableTrayMat.roughness = 0.42;
+    } else {
+      tableTrayMat.color.setHex(0xe2e8f0);
+      tableTrayMat.metalness = 0.22;
+      tableTrayMat.roughness = 0.42;
+    }
+    tableTrayMat.needsUpdate = true;
+  }
+
+  if (tableRimMat) {
+    if (isDark) {
+      tableRimMat.color.setHex(0x334155);
+      tableRimMat.metalness = 0.38;
+      tableRimMat.roughness = 0.35;
+    } else {
+      tableRimMat.color.setHex(0xcbd5e1);
+      tableRimMat.metalness = 0.25;
+      tableRimMat.roughness = 0.35;
+    }
+    tableRimMat.needsUpdate = true;
+  }
+
+  if (tableLegMat) {
+    if (isDark) {
+      tableLegMat.color.setHex(0x475569);
+      tableLegMat.metalness = 0.40;
+      tableLegMat.roughness = 0.38;
+    } else {
+      tableLegMat.color.setHex(0x94a3b8);
+      tableLegMat.metalness = 0.28;
+      tableLegMat.roughness = 0.38;
+    }
+    tableLegMat.needsUpdate = true;
+  }
+
+  if (tableCasterMat) {
+    if (isDark) {
+      tableCasterMat.color.setHex(0x0f172a);
+      tableCasterMat.metalness = 0.30;
+      tableCasterMat.roughness = 0.60;
+    } else {
+      tableCasterMat.color.setHex(0x64748b);
+      tableCasterMat.metalness = 0.20;
+      tableCasterMat.roughness = 0.60;
+    }
+    tableCasterMat.needsUpdate = true;
+  }
+
+  // Ensure all table children remain visible when table is visible
+  if (dissectionTableMesh && isTableVisible) {
+    dissectionTableMesh.traverse(child => {
+      if (child.isMesh) child.visible = true;
+    });
+  }
+
+  const targetViewer = state.viewer || window.viewer;
+  targetViewer?.render?.();
+  targetViewer?.invalidate?.(5);
+}
+
 // Procedural Stainless Steel Cadaver Dissection Table (Chuẩn Bàn Mổ Y Khoa)
 export function createDissectionTable(scene) {
   if (dissectionTableMesh) return dissectionTableMesh;
 
+  const isDark = typeof document !== 'undefined' && (document.documentElement.getAttribute('data-theme') === 'dark' || document.body?.classList?.contains('theme-dark'));
+
   const tableGroup = new THREE.Group();
   tableGroup.name = 'dissectionTableGroup';
+  tableGroup.userData.isDissectionTable = true;
 
-  // Materials
-  const trayMat = new THREE.MeshStandardMaterial({
-    color: 0x334155,
-    metalness: 0.85,
-    roughness: 0.28,
+  // Materials: Adaptive Medical Brushed Stainless Steel
+  tableTrayMat = new THREE.MeshStandardMaterial({
+    color: isDark ? 0x1e293b : 0xe2e8f0,
+    metalness: isDark ? 0.35 : 0.22,
+    roughness: 0.42,
     name: 'DissectionTableTray'
   });
 
-  const rimMat = new THREE.MeshStandardMaterial({
-    color: 0x475569,
-    metalness: 0.90,
-    roughness: 0.20,
+  tableRimMat = new THREE.MeshStandardMaterial({
+    color: isDark ? 0x334155 : 0xcbd5e1,
+    metalness: isDark ? 0.38 : 0.25,
+    roughness: 0.35,
     name: 'DissectionTableRim'
   });
 
-  const legMat = new THREE.MeshStandardMaterial({
-    color: 0x94a3b8,
-    metalness: 0.92,
-    roughness: 0.18,
+  tableLegMat = new THREE.MeshStandardMaterial({
+    color: isDark ? 0x475569 : 0x94a3b8,
+    metalness: isDark ? 0.40 : 0.28,
+    roughness: 0.38,
     name: 'DissectionTableLegs'
   });
 
-  const casterMat = new THREE.MeshStandardMaterial({
-    color: 0x1e293b,
-    metalness: 0.5,
-    roughness: 0.5
+  tableCasterMat = new THREE.MeshStandardMaterial({
+    color: isDark ? 0x0f172a : 0x64748b,
+    metalness: isDark ? 0.30 : 0.20,
+    roughness: 0.60,
+    name: 'DissectionTableCasters'
   });
 
   // Table Top Dimensions (metres)
@@ -72,8 +148,9 @@ export function createDissectionTable(scene) {
 
   // 1. Main Tray
   const trayGeo = new THREE.BoxGeometry(width, thickness, length);
-  const tray = new THREE.Mesh(trayGeo, trayMat);
+  const tray = new THREE.Mesh(trayGeo, tableTrayMat);
   tray.position.set(0, tableHeight - thickness / 2, 0);
+  tray.userData.isDissectionTable = true;
   tableGroup.add(tray);
 
   // 2. Raised Perimeter Rim (Gờ chống tràn dịch mổ xung quanh)
@@ -82,22 +159,26 @@ export function createDissectionTable(scene) {
 
   // Left & Right Rims
   const longRimGeo = new THREE.BoxGeometry(rimThick, rimHeight, length);
-  const leftRim = new THREE.Mesh(longRimGeo, rimMat);
+  const leftRim = new THREE.Mesh(longRimGeo, tableRimMat);
   leftRim.position.set(-(width / 2) + rimThick / 2, tableHeight + rimHeight / 2, 0);
+  leftRim.userData.isDissectionTable = true;
   tableGroup.add(leftRim);
 
-  const rightRim = new THREE.Mesh(longRimGeo, rimMat);
+  const rightRim = new THREE.Mesh(longRimGeo, tableRimMat);
   rightRim.position.set((width / 2) - rimThick / 2, tableHeight + rimHeight / 2, 0);
+  rightRim.userData.isDissectionTable = true;
   tableGroup.add(rightRim);
 
   // Head & Foot Rims
   const shortRimGeo = new THREE.BoxGeometry(width, rimHeight, rimThick);
-  const headRim = new THREE.Mesh(shortRimGeo, rimMat);
+  const headRim = new THREE.Mesh(shortRimGeo, tableRimMat);
   headRim.position.set(0, tableHeight + rimHeight / 2, -(length / 2) + rimThick / 2);
+  headRim.userData.isDissectionTable = true;
   tableGroup.add(headRim);
 
-  const footRim = new THREE.Mesh(shortRimGeo, rimMat);
+  const footRim = new THREE.Mesh(shortRimGeo, tableRimMat);
   footRim.position.set(0, tableHeight + rimHeight / 2, (length / 2) - rimThick / 2);
+  footRim.userData.isDissectionTable = true;
   tableGroup.add(footRim);
 
   // 3. Four Tubular Stainless Steel Legs
@@ -115,14 +196,16 @@ export function createDissectionTable(scene) {
   ];
 
   legPositions.forEach(([x, z]) => {
-    const leg = new THREE.Mesh(legGeo, legMat);
+    const leg = new THREE.Mesh(legGeo, tableLegMat);
     leg.position.set(x, legHeight / 2, z);
+    leg.userData.isDissectionTable = true;
     tableGroup.add(leg);
 
     // Caster wheel at base
-    const caster = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.04, 12), casterMat);
+    const caster = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.04, 12), tableCasterMat);
     caster.rotation.z = Math.PI / 2;
     caster.position.set(x, 0.02, z);
+    caster.userData.isDissectionTable = true;
     tableGroup.add(caster);
   });
 
@@ -132,21 +215,24 @@ export function createDissectionTable(scene) {
 
   // Longitudinal Bars
   const longBarGeo = new THREE.CylinderGeometry(barRadius, barRadius, legZ * 2, 12);
-  const leftBar = new THREE.Mesh(longBarGeo, legMat);
+  const leftBar = new THREE.Mesh(longBarGeo, tableLegMat);
   leftBar.rotation.x = Math.PI / 2;
   leftBar.position.set(-legX, barY, 0);
+  leftBar.userData.isDissectionTable = true;
   tableGroup.add(leftBar);
 
-  const rightBar = new THREE.Mesh(longBarGeo, legMat);
+  const rightBar = new THREE.Mesh(longBarGeo, tableLegMat);
   rightBar.rotation.x = Math.PI / 2;
   rightBar.position.set(legX, barY, 0);
+  rightBar.userData.isDissectionTable = true;
   tableGroup.add(rightBar);
 
   // Transverse Center Crossbar
   const transBarGeo = new THREE.CylinderGeometry(barRadius, barRadius, legX * 2, 12);
-  const centerBar = new THREE.Mesh(transBarGeo, legMat);
+  const centerBar = new THREE.Mesh(transBarGeo, tableLegMat);
   centerBar.rotation.z = Math.PI / 2;
   centerBar.position.set(0, barY, 0);
+  centerBar.userData.isDissectionTable = true;
   tableGroup.add(centerBar);
 
   tableGroup.visible = false;
@@ -178,6 +264,9 @@ export function setModelOrientation(orientation, viewer, options = {}) {
 
   if (dissectionTableMesh) {
     dissectionTableMesh.visible = isTableVisible;
+    if (isTableVisible) {
+      updateDissectionTableTheme(undefined, targetViewer.scene);
+    }
   }
 
   const { controls, camera } = targetViewer;

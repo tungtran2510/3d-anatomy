@@ -378,6 +378,11 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
   // Pre-filter meshes by allowed systems and specific preset views
   viewer.scene.traverse(node => {
     if (node.isMesh) {
+      // Never hide or filter procedural dissection table parts
+      if (node.userData?.isDissectionTable || node.parent?.userData?.isDissectionTable || node.name === 'dissectionTableGroup' || node.parent?.name === 'dissectionTableGroup') {
+        return;
+      }
+
       const sys = node.userData?.system;
       if (!sys || !allowedSystems.includes(sys)) {
         node.visible = false;
@@ -1223,6 +1228,81 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           node.visible = /femur|patella|tibia|fibula|tarsal|metatarsal|phalanx.*foot|quadriceps|gastrocnemius|soleus|tibialis/i.test(name) && !/skull|rib|cervical/i.test(name);
           break;
 
+        // --- GROSS ANATOMY LAB VIEWS (Phòng Thực Tập Giải Phẫu Thi Thể / Bàn Mổ) ---
+        case 'lab_back':
+          if (sys === 'muscular') {
+            node.visible = /trapezius|latissimus|rhomboid|levator scapulae|splenius|erector spinae|iliocostalis|longissimus|spinalis|multifidus|semispinalis|serratus posterior|gluteus|infraspinatus|supraspinatus|teres|suboccipital/i.test(name) && !/pectoralis major|rectus abdominis/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /vertebra|sacrum|coccyx|rib|costal|scapula|pelvi|ilium|occipital/i.test(name);
+          }
+          break;
+
+        case 'lab_upper_limb':
+          if (sys === 'muscular') {
+            node.visible = /deltoid|supraspinatus|infraspinatus|teres|subscapularis|coracobrachialis|biceps|brachialis|triceps|pronator|supinator|flexor carpi|extensor carpi|palmaris|brachioradialis|lumbrical|interossei|abductor|opponens/i.test(name) && !/femor|tibial|gastrocnemius|soleus/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /clavicle|scapula|humerus|radius|ulna|carpal|scaphoid|lunate|triquetrum|pisiform|trapezium|trapezoid|capitate|hamate|metacarpal|phalanx.*finger|rib/i.test(name);
+          } else if (sys === 'nervous') {
+            node.visible = /brachial plexus|radial nerve|median nerve|ulnar nerve|musculocutaneous|axillary nerve/i.test(name);
+          }
+          break;
+
+        case 'lab_thorax':
+          if (sys === 'muscular') {
+            node.visible = /pectoralis|intercostal|subclavius|serratus anterior|transversus thoracis|diaphragm/i.test(name) && !/femor|tibial|soleus/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /rib|costal|sternum|manubrium|xiphoid|vertebra_t|clavicle/i.test(name);
+          }
+          break;
+
+        case 'lab_heart_lungs':
+          if (sys === 'skeletal') {
+            node.visible = /rib|costal|sternum|vertebra_t|clavicle/i.test(name);
+          }
+          break;
+
+        case 'lab_abdomen':
+          if (sys === 'muscular') {
+            node.visible = /rectus abdominis|external oblique|internal oblique|transversus abdominis|pyramidalis|quadratus lumborum|psoas|iliacus/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /rib|costal|vertebra_l|pelvi|ilium|ischium|pubis|sacrum/i.test(name);
+          } else if (sys === 'visceral') {
+            node.visible = /stomach|gastric|liver|hepatic|gallbladder|bile|pancreas|pancreatic|duodenum|jejunum|ileum|colon|appendix|caecum|rectum|spleen|kidney|renal/i.test(name);
+          }
+          break;
+
+        case 'lab_intraperitoneal':
+          if (sys === 'skeletal') {
+            node.visible = /vertebra_l|vertebra_t|rib.*(10|11|12)|pelvi|ilium|sacrum/i.test(name);
+          }
+          break;
+
+        case 'lab_retroperitoneal':
+          if (sys === 'skeletal') {
+            node.visible = /vertebra_t|vertebra_l|rib.*(11|12)|pelvi|ilium|sacrum/i.test(name);
+          }
+          break;
+
+        case 'lab_pelvis':
+          if (sys === 'muscular') {
+            node.visible = /levator ani|coccygeus|piriformis|obturator|sphincter ani|gluteus|iliacus|psoas/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /pelvi|ilium|ischium|pubis|sacrum|coccyx|vertebra_l|femur.*head|femur.*neck|greater trochanter/i.test(name);
+          } else if (sys === 'visceral') {
+            node.visible = /bladder|ureter|urethra|prostate|seminal|rectum|uterus|vagina|ovary/i.test(name);
+          }
+          break;
+
+        case 'lab_lower_limb':
+          if (sys === 'muscular') {
+            node.visible = /gluteus|tensor fasciae|piriformis|obturator|quadriceps|rectus femoris|vastus|sartorius|gracilis|pectineus|adductor|biceps femoris|semitendinosus|semimembranosus|tibialis|extensor digitorum.*pedis|extensor hallucis|fibularis|peroneus|gastrocnemius|soleus|plantaris|popliteus|flexor digitorum.*pedis|flexor hallucis|abductor hallucis|flexor digitorum brevis|interossei.*pedis|lumbrical.*pedis/i.test(name) && !/brachial|deltoid|pectoralis/i.test(name);
+          } else if (sys === 'skeletal') {
+            node.visible = /pelvi|ilium|ischium|pubis|femur|patella|tibia|fibula|talus|calcaneus|navicular|cuboid|cuneiform|metatarsal|phalanx.*toe/i.test(name);
+          } else if (sys === 'nervous') {
+            node.visible = /femoral nerve|sciatic nerve|tibial nerve|fibular nerve|peroneal nerve|saphenous nerve|sural nerve|plantar nerve/i.test(name);
+          }
+          break;
+
         default:
           node.visible = true;
           break;
@@ -1235,6 +1315,10 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     setSystemTransparency('skeletal', 0.16);
   } else if (viewId === 'resp_7_location_lungs') {
     setSystemTransparency('skeletal', 0.16);
+  } else if (viewId === 'lab_heart_lungs') {
+    setSystemTransparency('skeletal', 0.16);
+  } else if (viewId === 'lab_intraperitoneal' || viewId === 'lab_retroperitoneal') {
+    setSystemTransparency('skeletal', 0.18);
   } else if (viewId.startsWith('musc_')) {
     setSystemTransparency('skeletal', 0.22);
   } else if (viewId === 'dig_1_upper' || viewId === 'dig_2_lower' || viewId === 'dig_3_peritoneum' || viewId === 'dig_7_alimentary_canal' || viewId === 'dig_12_intestines') {

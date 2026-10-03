@@ -1,6 +1,7 @@
 // Theme Manager - Synchronizes Light / Dark theme across HTML UI and 3D Canvas
 import * as THREE from 'three';
 import { state } from '../state/store.js';
+import { updateDissectionTableTheme } from '../viewer/orientationManager.js';
 
 export function getAppTheme() {
   if (typeof localStorage === 'undefined') return 'light';
@@ -35,7 +36,14 @@ export function setAppTheme(theme, viewer = state.viewer || window.viewer) {
     }
   }
 
-  // 4. Update all UI theme toggle buttons
+  // 4. Update Dissection Table materials if active
+  try {
+    updateDissectionTableTheme(isDark, targetViewer?.scene);
+  } catch (e) {
+    // Graceful fallback
+  }
+
+  // 5. Update all UI theme toggle buttons
   updateThemeButtons(isDark);
 
   return isDark;

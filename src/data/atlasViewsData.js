@@ -1116,7 +1116,7 @@ export const ATLAS_LAB_CATEGORIES = [
     badge: 'Nằm ngửa',
     orientation: 'supine',
     showTable: true,
-    systems: ['muscular', 'visceral'],
+    systems: ['skeletal', 'muscular', 'visceral'],
     camera: { x: 0.50, y: 1.40, z: 0.45, targetX: 0, targetY: 0.82, targetZ: 0.05 },
     image: '/images/atlas/reg_abdomen_pelvis.png',
     desc: 'Mở thành bụng trước bộc lộ lá phúc mạc thành và mạc nối lớn.'
@@ -1129,7 +1129,7 @@ export const ATLAS_LAB_CATEGORIES = [
     badge: 'Nằm ngửa',
     orientation: 'supine',
     showTable: true,
-    systems: ['visceral'],
+    systems: ['skeletal', 'visceral'],
     camera: { x: 0.40, y: 1.35, z: 0.35, targetX: 0, targetY: 0.82, targetZ: 0.05 },
     image: '/images/atlas/reg_abdomen_pelvis.png',
     desc: 'Hệ tiêu hóa trong ổ bụng, mạc treo ruột và phân bố mạch mạc treo tràng trên.'
