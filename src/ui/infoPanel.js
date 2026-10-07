@@ -964,6 +964,10 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     headerTitle = `🧠 ĐA GIÁC WILLIS NÃO`;
   } else if (deck.id === 'concept_hepatobiliary_pancreas') {
     headerTitle = `🧪 GAN – MẬT – TUYẾN TỤY`;
+  } else if (deck.id === 'concept_knee_joint_ligaments') {
+    headerTitle = `🦴 KHỚP GỐI & DÂY CHẰNG CHÉO`;
+  } else if (deck.id === 'concept_gastrointestinal_tract') {
+    headerTitle = `🥣 HỆ TIÊU HÓA LIÊN TỤC`;
   }
 
   container.innerHTML = `
