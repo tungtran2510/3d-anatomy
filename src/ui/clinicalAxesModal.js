@@ -148,12 +148,15 @@ function renderFloatingHud() {
 
       <!-- Row 2: 4 Flow Chips -->
       <div class="hud-flow-chips">
-        ${a.chainSteps.map((step, idx) => `
-          <button type="button" class="hud-step-chip ${idx === currentStepIdx ? 'active' : ''}" data-step-idx="${idx}">
-            <span class="step-chip-num">${step.step}</span>
-            <span class="step-chip-name">${step.shortTitle || step.title.split('(')[0].trim()}</span>
-          </button>
-        `).join('<span class="hud-flow-arrow">➔</span>')}
+        ${a.chainSteps.map((step, idx) => {
+          const cleanName = (step.shortTitle || step.title.split('(')[0].trim()).replace(/^\d+[\.\s\-]+/, '');
+          return `
+            <button type="button" class="hud-step-chip ${idx === currentStepIdx ? 'active' : ''}" data-step-idx="${idx}">
+              <span class="step-chip-num">${step.step}</span>
+              <span class="step-chip-name">${cleanName}</span>
+            </button>
+          `;
+        }).join('<span class="hud-flow-arrow">➔</span>')}
       </div>
 
       <!-- Row 3: Single-line Concise Note (< 15 words) -->

@@ -252,20 +252,26 @@ export function toggleAIAssistant(viewer) {
 export async function handleCompactAISubmit(text, viewer) {
   showAIToast(`Đang tìm kiếm & điều khiển 3D: "${text}"...`, false);
 
-  // Kiểm tra nếu câu lệnh hỏi về Trục lâm sàng (e.g. "trục não ruột", "gan mật tụy")
+  // Kiểm tra nếu câu lệnh hỏi về Trục lâm sàng (e.g. "trục não ruột", "gan mật tụy", "12 dây thần kinh")
   const lower = text.toLowerCase();
-  if (lower.includes('trục') || lower.includes('truc') || lower.includes('gan mật') || lower.includes('não ruột')) {
-    try {
+  try {
+    const { CLINICAL_AXES } = await import('../data/clinicalAxesData.js');
+    const matchedAxis = CLINICAL_AXES.find(axis => {
+      return axis.keywords.some(k => lower.includes(k.toLowerCase()));
+    });
+
+    if (matchedAxis || lower.includes('trục') || lower.includes('truc') || lower.includes('gan mật') || lower.includes('não ruột')) {
       const { openClinicalAxesModal } = await import('./clinicalAxesModal.js');
-      if (lower.includes('gan') || lower.includes('mật') || lower.includes('tụy')) {
-        await openClinicalAxesModal('axis_hepatobiliary_pancreas', viewer);
-      } else {
-        await openClinicalAxesModal('axis_gut_brain', viewer);
-      }
-      showAIToast(`🧬 Đã kích hoạt hiển thị trực quan toàn bộ trục 3D!`, true);
+      const targetAxisId = matchedAxis ? matchedAxis.id : (
+        (lower.includes('gan') || lower.includes('mật') || lower.includes('tụy'))
+          ? 'axis_hepatobiliary_pancreas'
+          : 'axis_gut_brain'
+      );
+      await openClinicalAxesModal(targetAxisId, viewer);
+      showAIToast(`🧬 Đã kích hoạt 3D: ${matchedAxis ? matchedAxis.titleVi.split('(')[0].trim() : 'Trục Lâm Sàng'}!`, true);
       return;
-    } catch {}
-  }
+    }
+  } catch {}
 
   const interpreted = interpretAIQuery(text, state.selectedPart);
 

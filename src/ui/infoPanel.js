@@ -18,6 +18,7 @@ import { getVisualDeckForPart } from '../data/anatomyConcepts.js';
 import { dynamicAnatomy, MOTIONS } from '../viewer/dynamicAnatomy.js';
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { openClinicalAxesModal } from './clinicalAxesModal.js';
+import { openImageZoomModal } from './imageZoomModal.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -973,9 +974,10 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
 
   const deckHtml = slides.length > 0 ? `
     <div class="disc-visual-deck">
-      <div class="deck-slide-frame" id="deckSlideFrame" title="Chạm để chuyển slide">
+      <div class="deck-slide-frame" id="deckSlideFrame" title="Chạm để phóng to xem chi tiết vi thể">
         <img src="${slides[0].image}" class="deck-slide-img" id="deckSlideImg" alt="${slides[0].title}" />
         <span class="deck-slide-badge" id="deckSlideBadge">${slides[0].badge}</span>
+        <span class="deck-slide-zoom-hint">🔍 Chạm phóng to</span>
         ${deck.video ? `<button type="button" class="btn-deck-video" id="btnDeckVideo">▶ Video 3D</button>` : ''}
       </div>
       <div class="deck-nav-pills" id="deckPills">
@@ -1095,10 +1097,16 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
   container.querySelector('#deckSlideFrame')?.addEventListener('click', (e) => {
     if (e.target.closest('#btnDeckVideo')) return;
     e.stopPropagation();
-    if (slides.length > 1) {
-      const nextIdx = (currentSlide + 1) % slides.length;
-      setSlide(nextIdx);
-    }
+    openImageZoomModal({
+      src: slides[currentSlide]?.image,
+      title: slides[currentSlide]?.title,
+      subtitle: slides[currentSlide]?.badge,
+      slides: slides,
+      currentIndex: currentSlide,
+      onSlideChange: (newIdx) => {
+        setSlide(newIdx);
+      }
+    });
   });
 
   container.querySelector('#btnDeckVideo')?.addEventListener('click', (e) => {
