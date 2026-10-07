@@ -7281,9 +7281,9 @@ body.theme-dark .tab-vertical-text {
   left: 0 !important;
   right: auto !important;
   bottom: auto !important;
-  height: 406px !important;
-  max-height: 406px !important;
-  min-height: 406px !important;
+  height: 448px !important;
+  max-height: 448px !important;
+  min-height: 448px !important;
   width: 126px;
   max-width: 42vw;
   z-index: 1200;
@@ -12009,6 +12009,7 @@ body.theme-dark .floating-top-view-btn {
   /* Automatically hide elements that collide with open selection card */
   body:has(.selection-card:not(.hidden)) #floatingAIBubble,
   body:has(.selection-card:not(.hidden)) .pwa-install-prompt-banner,
+  body:has(.selection-card:not(.hidden)) .offline-prompt-banner,
   body:has(.selection-card:not(.hidden)) .floating-top-view-btn,
   body:has(.selection-card:not(.hidden)) .floating-views-quick-nav,
   body:has(.selection-card:not(.hidden)) .depth-control {
@@ -12020,7 +12021,8 @@ body.theme-dark .floating-top-view-btn {
   /* Automatically hide elements that collide with open systems drawer */
   body:has(.systems-stepper-drawer.open) #floatingAIBubble,
   body:has(.systems-stepper-drawer.open) .floating-views-quick-nav,
-  body:has(.systems-stepper-drawer.open) .pwa-install-prompt-banner {
+  body:has(.systems-stepper-drawer.open) .pwa-install-prompt-banner,
+  body:has(.systems-stepper-drawer.open) .offline-prompt-banner {
     display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;
