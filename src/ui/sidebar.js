@@ -1747,18 +1747,133 @@ export function initLanguageSelector() {
   }
 }
 
+export function renderQuickModulesTray(results, input) {
+  if (!results || !input) return;
+  results.innerHTML = `
+    <div class="quick-modules-tray" id="quickModulesTray">
+      <div class="tray-header">
+        <span class="tray-title-badge">⚡ CHỌN NHANH MÔ ĐUN ỨNG DỤNG</span>
+        <span class="tray-subtitle">Chạm để mở 3D</span>
+      </div>
+      <div class="tray-grid">
+        <button type="button" class="tray-item" data-action="axis" data-id="axis_gut_brain">
+          <span class="tray-icon">🧠</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Trục Não – Ruột</strong>
+            <span class="tray-desc">Thần kinh & Tiêu hóa</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="axis" data-id="axis_hepatobiliary_pancreas">
+          <span class="tray-icon">🌿</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Hệ Gan – Mật – Tụy</strong>
+            <span class="tray-desc">Dòng mật & Cơ Oddi</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="axis" data-id="axis_cranial_nerves">
+          <span class="tray-icon">⚡</span>
+          <div class="tray-texts">
+            <strong class="tray-name">12 Dây TK Sọ</strong>
+            <span class="tray-desc">Giác quan & Vận động</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="axis" data-id="axis_brain_spine_sciatic">
+          <span class="tray-icon">🏃</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Thần Kinh Tọa</strong>
+            <span class="tray-desc">Rễ L4-L5 & Chi dưới</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="axis" data-id="axis_cardiopulmonary">
+          <span class="tray-icon">❤️</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Tim – Phổi</strong>
+            <span class="tray-desc">Tuần hoàn trao đổi khí</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="part" data-part="Intervertebral disc L4-L5">
+          <span class="tray-icon">🦴</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Thoát Vị Đĩa Đệm</strong>
+            <span class="tray-desc">Mô phỏng 4 cấp độ</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="part" data-part="Anterior cruciate ligament of knee.l">
+          <span class="tray-icon">🦵</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Dây Chằng Gối</strong>
+            <span class="tray-desc">ACL, PCL & Sụn chêm</span>
+          </div>
+        </button>
+        <button type="button" class="tray-item" data-action="part" data-part="Lateral ventricle.l">
+          <span class="tray-icon">🌊</span>
+          <div class="tray-texts">
+            <strong class="tray-name">Dịch Não Tủy CSF</strong>
+            <span class="tray-desc">Não thất & Dòng chảy</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  `;
+  results.classList.add('show');
+
+  results.querySelectorAll('.tray-item').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+      const part = btn.dataset.part;
+
+      input.value = '';
+      results.innerHTML = '';
+      results.classList.remove('show');
+      document.querySelector('.header')?.classList.remove('search-open');
+      document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+      input.blur();
+
+      if (action === 'axis') {
+        openClinicalAxesModal(id);
+      } else if (action === 'part' && part) {
+        await selectStructureAnywhere(part);
+        const card = document.getElementById('selectionCard');
+        if (card) {
+          card.classList.remove('hidden');
+          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+        }
+      }
+    });
+  });
+}
+
 // Search functionality
 export function initSearch() {
   const input = document.getElementById('searchInput');
   const results = document.getElementById('searchResults');
+  const clearBtn = document.getElementById('btnSearchClear');
 
   if (!input || !results) return;
+
+  // Show Quick Modules Tray on focus if query is empty
+  input.addEventListener('focus', () => {
+    if (input.value.trim().length < 2) {
+      renderQuickModulesTray(results, input);
+    }
+  });
+
+  clearBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    input.value = '';
+    results.innerHTML = '';
+    results.classList.remove('show');
+    document.querySelector('.header')?.classList.remove('search-open');
+    document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+    input.blur();
+  });
 
   input.addEventListener('input', debounce((e) => {
     const query = e.target.value.toLowerCase().trim();
     if (query.length < 2) {
-      results.innerHTML = '';
-      results.classList.remove('show');
+      renderQuickModulesTray(results, input);
       return;
     }
 
@@ -2193,18 +2308,34 @@ function initMobileSearch() {
   const button = document.getElementById('searchOpen');
   const header = document.querySelector('.header');
   const input = document.getElementById('searchInput');
+  const results = document.getElementById('searchResults');
   if (!button || !header || !input) return;
 
   button.addEventListener('click', () => {
     const open = header.classList.toggle('search-open');
     button.setAttribute('aria-expanded', String(open));
-    if (open) input.focus();
+    if (open) {
+      input.focus();
+      if (input.value.trim().length < 2 && results) {
+        renderQuickModulesTray(results, input);
+      }
+    } else {
+      if (results) {
+        results.innerHTML = '';
+        results.classList.remove('show');
+      }
+      input.blur();
+    }
   });
 
   input.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       header.classList.remove('search-open');
       button.setAttribute('aria-expanded', 'false');
+      if (results) {
+        results.innerHTML = '';
+        results.classList.remove('show');
+      }
       input.blur();
     }
   });

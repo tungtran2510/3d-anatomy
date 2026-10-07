@@ -166,7 +166,7 @@ body {
 
 .search-input {
   width: 100%;
-  padding: 8px 12px 8px 40px;
+  padding: 8px 36px 8px 40px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -174,6 +174,45 @@ body {
   font-size: 14px;
   font-family: inherit;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 19px;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-hover, rgba(0, 0, 0, 0.08));
+  color: var(--fg-secondary, #64748b);
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition-fast, 0.15s ease);
+  z-index: 2;
+}
+
+.search-clear-btn:hover {
+  background: var(--border, #cbd5e1);
+  color: var(--fg-primary, #0f172a);
+}
+
+[data-theme="dark"] .search-clear-btn,
+body.theme-dark .search-clear-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .search-clear-btn:hover,
+body.theme-dark .search-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
 }
 
 .search-input::placeholder {
@@ -1880,16 +1919,18 @@ body.theme-dark .control-btn {
   .header.search-open .header-center {
     display: block;
     position: absolute;
-    top: calc(var(--header-height) + 8px);
-    left: 16px;
-    right: 16px;
+    top: calc(var(--header-height) + 6px);
+    left: 8px;
+    right: 8px;
+    margin: 0 !important;
     max-width: none;
     z-index: 100;
     background: var(--bg-secondary);
-    padding: 12px;
+    padding: 10px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border);
     box-shadow: 0 8px 24px var(--shadow-strong);
+    box-sizing: border-box;
   }
 
   .search-results {
@@ -3900,6 +3941,188 @@ body.theme-dark .concept-chip {
   color: #ffffff !important;
   border-color: #0b2559;
   transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   QUICK CLINICAL MODULES TRAY (CHỌN NHANH MÔ ĐUN ỨNG DỤNG)
+   ========================================================================== */
+.quick-modules-tray {
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tray-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 6px 4px;
+  border-bottom: 1px dashed rgba(148, 163, 184, 0.3);
+}
+
+.tray-title-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #0284c7;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tray-subtitle {
+  font-size: 10.5px;
+  color: var(--fg-muted, #64748b);
+  font-weight: 500;
+}
+
+.tray-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  max-height: 52vh;
+  overflow-y: auto;
+  padding: 2px 1px 4px 1px;
+}
+
+@media (max-width: 350px) {
+  .tray-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tray-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 9px;
+  background: var(--bg-tertiary, #f8fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 9px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  min-height: 48px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tray-item:hover,
+.tray-item:active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.tray-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary, #ffffff);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.tray-texts {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tray-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--fg-primary, #0f172a);
+  line-height: 1.25;
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tray-desc {
+  font-size: 10px;
+  color: var(--fg-secondary, #64748b);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tray-arrow {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #0284c7;
+  background: rgba(2, 132, 199, 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Dark Theme Overrides for Quick Modules Tray */
+[data-theme="dark"] .quick-modules-tray,
+body.theme-dark .quick-modules-tray {
+  background: transparent;
+}
+
+[data-theme="dark"] .tray-header,
+body.theme-dark .tray-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .tray-title-badge,
+body.theme-dark .tray-title-badge {
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .tray-subtitle,
+body.theme-dark .tray-subtitle {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .tray-item,
+body.theme-dark .tray-item {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .tray-item:hover,
+[data-theme="dark"] .tray-item:active,
+body.theme-dark .tray-item:hover,
+body.theme-dark .tray-item:active {
+  background: rgba(30, 58, 138, 0.45);
+  border-color: #38bdf8;
+}
+
+[data-theme="dark"] .tray-icon,
+body.theme-dark .tray-icon {
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .tray-name,
+body.theme-dark .tray-name {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .tray-desc,
+body.theme-dark .tray-desc {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .tray-arrow,
+body.theme-dark .tray-arrow {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
 }
 
 @media (min-width: 1025px) {
@@ -8094,6 +8317,7 @@ body.theme-dark .ai-sparkle-dot {
   align-items: center;
   gap: 8px;
   padding: 4px 8px 4px 14px;
+  z-index: 120;
   transition: bottom 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 

@@ -21,7 +21,7 @@ export function initAIAssistantUI(viewer) {
   aiBarEl.id = 'compactAIBar';
   aiBarEl.className = 'compact-ai-bar hidden';
   aiBarEl.innerHTML = `
-    <input type="text" class="input-ai-cmd" id="inputAIQuickCmd" placeholder="Nói hoặc nhập câu hỏi (VD: trục não ruột, tìm gan, xương chậu...)" autocomplete="off">
+    <input type="text" class="input-ai-cmd" id="inputAIQuickCmd" placeholder="Hỏi AI hoặc chạm Micro để nói..." autocomplete="off">
     <button type="button" class="btn-ai-mic" id="btnAIQuickMic" title="Chạm để nói câu hỏi bằng giọng nói">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
     </button>
@@ -128,14 +128,10 @@ function createSpeechRecognition(viewer) {
       const inputEl = aiBarEl?.querySelector('#inputAIQuickCmd');
       const sendBtn = aiBarEl?.querySelector('#btnAIQuickSend');
 
-      // 1. GÁN TRỰC TIẾP LỜI NÓI VÀO KHUNG CHAT
+      // 1. GÁN TRỰC TIẾP LỜI NÓI VÀO KHUNG CHAT ĐỂ NGƯỜI DÙNG THẤY NGAY
       if (inputEl && activeText) {
         inputEl.value = activeText;
         sendBtn?.classList.add('has-text');
-      }
-
-      if (activeText) {
-        showAIToast(`🎙️ "${activeText}"`, false);
       }
 
       // 2. KHI NÓI XONG CÂU HOÀN CHỈNH
@@ -145,11 +141,14 @@ function createSpeechRecognition(viewer) {
         if (autoSubmitTimer) clearTimeout(autoSubmitTimer);
         // Chờ 1.2 giây để người dùng nhìn thấy câu hỏi đã hiện lên khung chat, sau đó tự động gửi
         autoSubmitTimer = setTimeout(() => {
-          if (inputEl && inputEl.value.trim() === finalTranscript.trim()) {
-            handleCompactAISubmit(finalTranscript.trim(), viewer);
-            inputEl.value = '';
-            sendBtn?.classList.remove('has-text');
-            closeAIAssistant();
+          if (inputEl) {
+            const queryToSend = inputEl.value.trim() || finalTranscript.trim();
+            if (queryToSend) {
+              handleCompactAISubmit(queryToSend, viewer);
+              inputEl.value = '';
+              sendBtn?.classList.remove('has-text');
+              closeAIAssistant();
+            }
           }
         }, 1200);
       }
@@ -196,8 +195,12 @@ function toggleVoiceRecording(viewer) {
       recognition.start();
       isRecording = true;
       const micBtn = aiBarEl?.querySelector('#btnAIQuickMic');
+      const inputEl = aiBarEl?.querySelector('#inputAIQuickCmd');
       micBtn?.classList.add('recording');
-      showAIToast('🎙️ Đang lắng nghe... Hãy nói câu hỏi hoặc lệnh', false);
+      if (inputEl) {
+        inputEl.placeholder = '🎙️ Đang nghe... Hãy nói ngay';
+        inputEl.classList.add('listening');
+      }
     } catch {
       stopVoiceRecording();
     }
@@ -207,7 +210,12 @@ function toggleVoiceRecording(viewer) {
 function stopVoiceRecording() {
   isRecording = false;
   const micBtn = aiBarEl?.querySelector('#btnAIQuickMic');
+  const inputEl = aiBarEl?.querySelector('#inputAIQuickCmd');
   micBtn?.classList.remove('recording');
+  if (inputEl) {
+    inputEl.placeholder = 'Hỏi AI hoặc chạm Micro để nói...';
+    inputEl.classList.remove('listening');
+  }
 }
 
 export function openAIAssistant(viewer, initialPrompt = null) {
