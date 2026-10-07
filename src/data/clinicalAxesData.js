@@ -1,7 +1,7 @@
 /**
  * CLINICAL AXES & APPLIED ANATOMY DATA
  * Dữ liệu Giải Phẫu Ứng Dụng Theo Chuỗi & Trục Chức Năng Lâm Sàng
- * Phục vụ học tập thông minh, hiểu sâu cơ chế bệnh sinh và liên kết các cơ quan trong cơ thể.
+ * Phục vụ học tập thông minh, hiểu sâu cơ chế bệnh sinh và liên kết trực quan các cơ quan trên 3D.
  */
 
 export const CLINICAL_AXES = [
@@ -12,8 +12,8 @@ export const CLINICAL_AXES = [
     category: 'Thần kinh – Tiêu hóa – Tâm thể',
     badge: 'Trục Tương Tác 2 Chiều',
     icon: '🧠⚡🥣',
-    summary: 'Mạng lưới truyền tín hiệu 2 chiều giữa hệ thần kinh trung ương và hệ tiêu hóa, giải thích tại sao căng thẳng lại gây đau dạ dày và rối loạn tiêu hóa.',
-    primarySystems: ['nervous', 'visceral'],
+    summary: 'Mạng lưới truyền tín hiệu 2 chiều giữa hệ thần kinh trung ương và hệ tiêu hóa, giải thích tại sao căng thẳng lo âu lại gây đau dạ dày và rối loạn tiêu hóa.',
+    primarySystems: ['nervous', 'visceral', 'skeletal'],
     defaultPartId: 'Stomach',
     keywords: [
       'trục não ruột', 'truc nao ruot', 'gut brain', 'vagus', 'dây thần kinh x', 'than kinh 10',
@@ -23,29 +23,41 @@ export const CLINICAL_AXES = [
       {
         step: 1,
         title: 'Não bộ & Vùng dưới đồi',
-        partId: 'Brain',
+        shortTitle: '1. Não bộ',
+        partId: 'Hypothalamus',
+        partIds: ['Hypothalamus', 'Midbrain.l', 'Midbrain.r', 'Pons.l', 'Pons.r', 'Medulla oblongata.l', 'Medulla oblongata.r'],
         system: 'nervous',
+        shortNote: 'Tiếp nhận stress, phát tín hiệu báo động đến hệ thần kinh tự chủ.',
         note: 'Tiếp nhận căng thẳng (stress), phát tín hiệu báo động đến hệ thần kinh tự chủ.'
       },
       {
         step: 2,
-        title: 'Dây thần kinh X (Lang thang)',
-        partId: 'Vagus nerve.l',
+        title: 'Dây thần kinh X (Phế vị / Lang thang)',
+        shortTitle: '2. Dây X',
+        partId: 'Vagus nerve (X).l',
+        partIds: ['Vagus nerve (X).l', 'Vagus nerve (X).r'],
         system: 'nervous',
+        shortNote: 'Dây sọ dài nhất, dẫn xung động từ thân não xuống dạ dày và ruột.',
         note: 'Dây thần kinh sọ dài nhất cơ thể, dẫn truyền xung động từ thân não xuống tim, dạ dày và ruột.'
       },
       {
         step: 3,
         title: 'Dạ dày & Tuyến dịch vị',
+        shortTitle: '3. Dạ dày',
         partId: 'Stomach',
+        partIds: ['Stomach'],
         system: 'visceral',
+        shortNote: 'Tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc.',
         note: 'Bị kích thích tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc gây đau cồn cào.'
       },
       {
         step: 4,
-        title: 'Đại tràng & Hệ vi sinh đường ruột',
-        partId: 'Stomach',
+        title: 'Ruột & Hệ vi sinh đường ruột',
+        shortTitle: '4. Ruột già',
+        partId: 'Transverse colon',
+        partIds: ['Duodenum', 'Jejunum', 'Transverse colon', 'Ascending colon', 'Descending colon', 'Sigmoid colon'],
         system: 'visceral',
+        shortNote: 'Co bóp gây ruột kích thích; sản xuất 90% Serotonin điều hòa não.',
         note: 'Co bóp bất thường gây hội chứng ruột kích thích (IBS); tổng hợp 90% Serotonin điều hòa tâm trạng ngược lên não.'
       }
     ],
@@ -74,7 +86,7 @@ export const CLINICAL_AXES = [
     badge: 'Ngã Ba Dịch Tiêu Hóa',
     icon: '🟡🟢🔴',
     summary: 'Chuỗi sản xuất, cô đặc mật và men tiêu hóa hợp lưu tại cơ vòng Oddi đổ vào tá tràng để tiêu hóa mỡ và protein.',
-    primarySystems: ['visceral'],
+    primarySystems: ['visceral', 'skeletal'],
     defaultPartId: 'Gallbladder',
     keywords: [
       'gan mật tụy', 'gan mat tuy', 'túi mật', 'tui mat', 'tuyến tụy', 'tuyen tuy', 'sỏi mật',
@@ -84,30 +96,42 @@ export const CLINICAL_AXES = [
       {
         step: 1,
         title: 'Nhu mô Gan',
+        shortTitle: '1. Gan',
         partId: 'Liver',
+        partIds: ['Liver'],
         system: 'visceral',
+        shortNote: 'Sản xuất liên tục 800 - 1000ml dịch mật nhũ hóa chất béo.',
         note: 'Sản xuất liên tục 800 - 1000ml dịch mật mỗi ngày để nhũ hóa chất béo.'
       },
       {
         step: 2,
-        title: 'Túi mật',
+        title: 'Túi mật & Đường mật',
+        shortTitle: '2. Túi mật',
         partId: 'Gallbladder',
+        partIds: ['Gallbladder', 'Bile duct'],
         system: 'visceral',
+        shortNote: 'Dự trữ, cô đặc mật gấp 10 lần và tống mật qua ống mật chủ.',
         note: 'Dự trữ và cô đặc dịch mật gấp 10 lần, co bóp tống mật khi thức ăn dầu mỡ xuống tá tràng.'
       },
       {
         step: 3,
         title: 'Tuyến tụy (Tụy tạng)',
+        shortTitle: '3. Tuyến tụy',
         partId: 'Pancreas',
+        partIds: ['Pancreas'],
         system: 'visceral',
+        shortNote: 'Tiết men tiêu hóa cực mạnh (Lipase, Protease) ở dạng bất hoạt.',
         note: 'Tiết các men tiêu hóa cực mạnh (Amylase, Lipase, Trypsinogen) ở dạng bất hoạt để bảo vệ chính nó.'
       },
       {
         step: 4,
-        title: 'Cơ vòng Oddi & Bóng Vater (Tá tràng)',
-        partId: 'Gallbladder',
+        title: 'Cơ vòng Oddi & Tá tràng',
+        shortTitle: '4. Tá tràng',
+        partId: 'Duodenum',
+        partIds: ['Duodenum'],
         system: 'visceral',
-        note: 'Ngã ba chung nơi ống mật chủ và ống tụy chính đổ dịch vào tá tràng D2.'
+        shortNote: 'Ngã ba chung đổ mật và dịch tụy vào ruột; vị trí kẹt sỏi mật.',
+        note: 'Ngã ba chung nơi ống mật chủ và ống tụy chính đổ dịch vào tá tràng D2; vị trí sỏi mật dễ kẹt gây viêm tụy cấp.'
       }
     ],
     clinicalInsights: [
@@ -135,8 +159,8 @@ export const CLINICAL_AXES = [
     badge: 'Mạng Lưới Thần Kinh Sọ',
     icon: '⚡👁️👂',
     summary: 'Mạng lưới thần kinh khởi phát trực tiếp từ não bộ và thân não, điều khiển toàn bộ giác quan, vận động nét mặt và nội tạng.',
-    primarySystems: ['nervous'],
-    defaultPartId: 'Brain',
+    primarySystems: ['nervous', 'skeletal'],
+    defaultPartId: 'Pons.l',
     keywords: [
       '12 dây thần kinh', '12 day than kinh so', 'cranial nerves', 'liệt dây 7', 'méo miệng',
       'dây 5', 'đau dây 5', 'dây x', 'phế vị', 'thần kinh thị giác', 'thần kinh sọ'
@@ -144,30 +168,42 @@ export const CLINICAL_AXES = [
     chainSteps: [
       {
         step: 1,
-        title: 'Não bộ & Thân não (Cầu não - Hành não)',
-        partId: 'Brain',
+        title: 'Não bộ & Thân não (Cầu - Hành não)',
+        shortTitle: '1. Thân não',
+        partId: 'Pons.l',
+        partIds: ['Midbrain.l', 'Midbrain.r', 'Pons.l', 'Pons.r', 'Medulla oblongata.l', 'Medulla oblongata.r'],
         system: 'nervous',
+        shortNote: 'Chứa các nhân nguyên ủy của 12 đôi dây thần kinh sọ.',
         note: 'Chứa các nhân nguyên ủy của 12 đôi dây thần kinh sọ.'
       },
       {
         step: 2,
         title: 'Dây thần kinh V (Tam thoa / Sinh ba)',
-        partId: 'Brain',
+        shortTitle: '2. Dây V',
+        partId: 'Trigeminal nerve (V).l',
+        partIds: ['Trigeminal nerve (V).l', 'Trigeminal nerve (V).r'],
         system: 'nervous',
+        shortNote: 'Cảm giác mặt và cơ nhai; tổn thương gây đau buốt như điện giật.',
         note: 'Chi phối cảm giác toàn bộ khuôn mặt, răng miệng và cơ nhai. Tổn thương gây cơn đau buốt mặt như điện giật.'
       },
       {
         step: 3,
         title: 'Dây thần kinh VII (Thần kinh mặt)',
-        partId: 'Brain',
+        shortTitle: '3. Dây VII',
+        partId: 'Facial nerve (VII).l',
+        partIds: ['Facial nerve (VII).l', 'Facial nerve (VII).r'],
         system: 'nervous',
+        shortNote: 'Vận động cơ mặt; nhiễm lạnh gây liệt mặt Bell méo miệng.',
         note: 'Chi phối toàn bộ cơ biểu cảm khuôn mặt. Khi bị lạnh/phù nề trong ống xương đá gây liệt Bell méo miệng, mắt nhắm không kín.'
       },
       {
         step: 4,
         title: 'Dây thần kinh X (Phế vị / Lang thang)',
-        partId: 'Vagus nerve.l',
+        shortTitle: '4. Dây X',
+        partId: 'Vagus nerve (X).l',
+        partIds: ['Vagus nerve (X).l', 'Vagus nerve (X).r'],
         system: 'nervous',
+        shortNote: 'Chi phối nhịp tim, phế quản và nhu động ống tiêu hóa.',
         note: 'Dây sọ dài nhất, điều hòa nhịp tim, co bóp phế quản phổi và nhu động dạ dày ruột.'
       }
     ],
@@ -196,7 +232,7 @@ export const CLINICAL_AXES = [
     badge: 'Đường Truyền Lực Vận Động',
     icon: '🧠🦴⚡',
     summary: 'Trục dẫn truyền xung động vận động từ vỏ não qua tủy sống và rễ thần kinh thắt lưng xuống chi dưới, giải thích đau lưng lan xuống chân.',
-    primarySystems: ['nervous', 'skeletal', 'joints'],
+    primarySystems: ['nervous', 'joints', 'skeletal'],
     defaultPartId: 'Intervertebral disc L4-L5',
     keywords: [
       'trục não tủy', 'não tủy', 'tủy sống', 'thoát vị đĩa đệm', 'thần kinh tọa',
@@ -205,30 +241,42 @@ export const CLINICAL_AXES = [
     chainSteps: [
       {
         step: 1,
-        title: 'Vỏ não vận động (Thùy trán)',
-        partId: 'Brain',
+        title: 'Vỏ não & Thân não vận động',
+        shortTitle: '1. Não bộ',
+        partId: 'Midbrain.l',
+        partIds: ['Midbrain.l', 'Midbrain.r', 'Pons.l', 'Pons.r', 'Medulla oblongata.l', 'Medulla oblongata.r'],
         system: 'nervous',
+        shortNote: 'Phát xung vận động, bắt chéo tháp sang bên đối diện tại hành não.',
         note: 'Phát lệnh vận động cử động cơ thể, bắt chéo tháp sang bên đối diện tại hành não.'
       },
       {
         step: 2,
-        title: 'Tủy sống (Đoạn cổ - ngực - thắt lưng)',
-        partId: 'Spinal cord',
+        title: 'Tủy sống (Trục dẫn truyền)',
+        shortTitle: '2. Tủy sống',
+        partId: 'White matter of spinal cord',
+        partIds: ['White matter of spinal cord', 'Anterior horn of spinal cord', 'Posterior horn of spinal cord'],
         system: 'nervous',
+        shortNote: 'Cáp quang sinh học trong ống sống truyền tín hiệu thần kinh.',
         note: 'Cáp quang sinh học chạy bên trong ống sống đốt sống, chia các đôi rễ thần kinh tủy gai.'
       },
       {
         step: 3,
-        title: 'Khớp Đĩa đệm Cột sống L4-L5 & L5-S1',
+        title: 'Đĩa đệm L4-L5 & Khớp sống',
+        shortTitle: '3. Đĩa đệm',
         partId: 'Intervertebral disc L4-L5',
+        partIds: ['Intervertebral disc L4-L5', 'Nucleus pulposus L4-L5'],
         system: 'joints',
+        shortNote: 'Chịu tải trọng lớn nhất; nhân nhầy dễ thoát vị chèn rễ thần kinh.',
         note: 'Khu vực chịu tải trọng lớn nhất cơ thể, nơi nhân nhầy dễ thoát vị ra sau chèn ép rễ tủy.'
       },
       {
         step: 4,
         title: 'Dây thần kinh Tọa (Thần kinh ngồi)',
+        shortTitle: '4. Dây Tọa',
         partId: 'Sciatic nerve.l',
+        partIds: ['Sciatic nerve.l', 'Sciatic nerve.r'],
         system: 'nervous',
+        shortNote: 'Dây lớn nhất cơ thể, chạy dọc mông xuống chân gây đau tê rát.',
         note: 'Dây thần kinh to nhất cơ thể, hợp lưu từ các rễ L4-S3 chạy qua mông dọc xuống tận gót và ngón chân.'
       }
     ],
@@ -257,8 +305,8 @@ export const CLINICAL_AXES = [
     badge: 'Vòng Sinh Mệnh Trao Đổi Khí',
     icon: '❤️🫁🩸',
     summary: 'Sự phối hợp nhịp nhàng giữa Tim và 2 lá Phổi: Máu nghèo oxy được bơm lên phổi lấy dưỡng khí rồi quay về tim để đi nuôi toàn bộ tế bào cơ thể.',
-    primarySystems: ['cardiovascular', 'visceral'],
-    defaultPartId: 'Stomach',
+    primarySystems: ['cardiovascular', 'visceral', 'skeletal'],
+    defaultPartId: 'Right ventricle',
     keywords: [
       'tim phổi', 'tim phoi', 'tuần hoàn', 'tuan hoan', 'động mạch phổi', 'khó thở suy tim',
       'phế nang', 'trao đổi khí', 'huyết áp', 'nhồi máu cơ tim'
@@ -266,30 +314,42 @@ export const CLINICAL_AXES = [
     chainSteps: [
       {
         step: 1,
-        title: 'Tâm thất phải (Tim phải)',
-        partId: 'Brain',
+        title: 'Tâm thất Tim (Bơm máu)',
+        shortTitle: '1. Tâm thất',
+        partId: 'Right ventricle',
+        partIds: ['Right ventricle', 'Left ventricle'],
         system: 'cardiovascular',
+        shortNote: 'Thất phải bơm máu lên phổi, thất trái bơm máu đi nuôi cơ thể.',
         note: 'Tiếp nhận máu nghèo oxy từ cơ thể trở về và bơm qua Động mạch phổi.'
       },
       {
         step: 2,
-        title: 'Mao mạch Phế nang 2 lá Phổi',
-        partId: 'Brain',
+        title: 'Mao mạch Phổi (Trao đổi khí)',
+        shortTitle: '2. Hai lá phổi',
+        partId: 'Superior lobe of left lung',
+        partIds: ['Superior lobe of left lung', 'Inferior lobe of left lung', 'Superior lobe of right lung', 'Middle lobe of right lung', 'Inferior lobe of right lung'],
         system: 'visceral',
+        shortNote: 'Thải CO2 và hấp thụ O2 qua màng phế nang mỏng 0.5 micromet.',
         note: 'Nơi hồng cầu nhả khí CO2 và hấp thụ khí O2 qua màng phế nang mao mạch mỏng 0.5 micromet.'
       },
       {
         step: 3,
-        title: 'Tĩnh mạch phổi về Tâm nhĩ & Thất trái',
-        partId: 'Brain',
+        title: 'Tâm nhĩ Tim (Hồi lưu)',
+        shortTitle: '3. Tâm nhĩ',
+        partId: 'Left atrium',
+        partIds: ['Left atrium', 'Right atrium'],
         system: 'cardiovascular',
+        shortNote: 'Đón nhận máu giàu oxy từ phổi và máu nghèo oxy từ tĩnh mạch.',
         note: 'Đưa máu đỏ tươi giàu oxy trở về buồng tim trái với áp lực cao.'
       },
       {
         step: 4,
         title: 'Quai Động mạch chủ (Aorta)',
-        partId: 'Brain',
+        shortTitle: '4. ĐM Chủ',
+        partId: 'Ascending aorta',
+        partIds: ['Ascending aorta', 'Thoracic aorta'],
         system: 'cardiovascular',
+        shortNote: 'Động mạch lớn nhất cơ thể phân nhánh nuôi toàn bộ mô tế bào.',
         note: 'Động mạch lớn nhất cơ thể, phân nhánh bơm máu nuôi não, tim và toàn bộ cơ quan nội tạng.'
       }
     ],
@@ -318,7 +378,7 @@ export const CLINICAL_AXES = [
     badge: 'Chuỗi Tải Trọng Động Học',
     icon: '🚶‍♂️⚖️🦴',
     summary: 'Chuỗi liên kết tải lực liên hoàn từ đầu cổ, thắt lưng đến khớp háng và khớp gối, lý giải nguyên nhân đau mỏi của dân văn phòng và người thoái hóa khớp.',
-    primarySystems: ['skeletal', 'joints', 'muscular'],
+    primarySystems: ['skeletal', 'joints'],
     defaultPartId: 'Intervertebral disc L4-L5',
     keywords: [
       'chuỗi động học', 'chuoi dong hoc', 'tư thế', 'gù lưng', 'cổ rùa', 'đau vai gáy',
@@ -327,30 +387,42 @@ export const CLINICAL_AXES = [
     chainSteps: [
       {
         step: 1,
-        title: 'Cột sống cổ & Hộp sọ (Tư thế Cổ rùa)',
-        partId: 'Intervertebral disc L4-L5',
+        title: 'Cột sống cổ C1-C2 (Tư thế Cổ rùa)',
+        shortTitle: '1. Cột sống cổ',
+        partId: 'Atlas (C1)',
+        partIds: ['Atlas (C1)', 'Axis (C2)'],
         system: 'skeletal',
+        shortNote: 'Cúi đầu 45-60° làm tăng tải trọng lên đốt sống cổ tới 27kg.',
         note: 'Đầu người nặng ~5kg. Khi cúi 45-60° xem điện thoại, áp lực lên đốt sống cổ tăng vọt lên 22-27kg.'
       },
       {
         step: 2,
-        title: 'Lồng ngực & Đốt sống ngực (Gù lưng trên)',
-        partId: 'Intervertebral disc L4-L5',
+        title: 'Lồng ngực & Cột sống ngực (Gù lưng)',
+        shortTitle: '2. Lưng trên',
+        partId: 'Vertebra L3',
+        partIds: ['Vertebra L3'],
         system: 'skeletal',
+        shortNote: 'Gù lưng trên làm co rút cơ ngực và gây đau mỏi cơ vai gáy.',
         note: 'Cơ ngực bị co rút ngắn lại, cơ lưng trên và cơ trám bị kéo dãn yếu ớt gây mỏi vai gáy âm ỉ.'
       },
       {
         step: 3,
-        title: 'Đốt sống Thắt lưng & Xương chậu (Võng lưng)',
+        title: 'Đốt sống Thắt lưng & Đĩa đệm L4-L5',
+        shortTitle: '3. Thắt lưng',
         partId: 'Intervertebral disc L4-L5',
-        system: 'skeletal',
+        partIds: ['Intervertebral disc L4-L5', 'Nucleus pulposus L4-L5'],
+        system: 'joints',
+        shortNote: 'Võng lưng ép nén rìa sau đĩa đệm, tăng nguy cơ thoái hóa.',
         note: 'Khung chậu xoay trước (Anterior Pelvic Tilt) làm tăng độ ưỡn thắt lưng, ép nén rìa sau đĩa đệm.'
       },
       {
         step: 4,
-        title: 'Khớp háng & Khớp gối chịu tải',
-        partId: 'Intervertebral disc L4-L5',
+        title: 'Khớp chậu háng (Chịu lực động)',
+        shortTitle: '4. Khớp háng',
+        partId: 'Acetabular labrum.l',
+        partIds: ['Acetabular labrum.l', 'Acetabular labrum.r'],
         system: 'joints',
+        shortNote: 'Cơ mông yếu làm gối vẹo trong, mòn sụn chêm và đau khớp.',
         note: 'Cơ mông bị ức chế khiến khớp gối bị vặn trục vào trong (Knee valgus), tăng lực ma sát mòn sụn chêm.'
       }
     ],

@@ -19,6 +19,13 @@ const MIME = {
   '.woff2': 'font/woff2'
 };
 
+process.on('uncaughtException', (err) => {
+  console.error('[serve-dist] uncaughtException:', err.message);
+});
+process.on('unhandledRejection', (err) => {
+  console.error('[serve-dist] unhandledRejection:', err);
+});
+
 const server = http.createServer((req, res) => {
   let urlPath = req.url.split('?')[0];
   if (urlPath === '/') urlPath = '/index.html';
@@ -49,3 +56,6 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Server listening on http://127.0.0.1:${PORT}`);
 });
+
+// Giữ process luôn sống
+setInterval(() => {}, 1000 * 60 * 60);

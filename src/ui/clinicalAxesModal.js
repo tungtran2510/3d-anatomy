@@ -1,12 +1,20 @@
 /**
- * CLINICAL AXES MODAL (Mô Đun Giải Phẫu Ứng Dụng Theo Chuỗi & Trục)
- * Thiết kế chuẩn Apple Health Luxury: Kính mờ siêu sâu, phông chữ tinh tế, sơ đồ liên hoàn trực quan.
+ * CLINICAL AXES FLOATING HUD & SMART MECHANISM SHEET
+ * Giao diện Trục Giải Phẫu Ứng Dụng Lâm Sàng
+ * Thiết kế chuẩn Apple Health Luxury:
+ * - 3D Canvas chiếm 85% màn hình, không bị che khuất
+ * - Thanh điều khiển nổi siêu tinh gọn (Floating HUD cao ~78px) ở đáy
+ * - 4 Chip mắt xích dòng chảy trực quan: Chạm chip nào 3D zoom & highlight cơ quan đó
+ * - Đúng 1 dòng chú giải tinh hoa (<15 chữ)
+ * - Nút [📖 Cơ chế] mở Bottom Sheet khi người dùng thực sự muốn đọc sâu
  */
 
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
-import { selectStructureAnywhere, showToast } from './sidebar.js';
+import { activateClinicalAxis3D, focusAxisStep, deactivateClinicalAxis3D } from '../viewer/clinicalAxisViewer.js';
+import { showToast } from './sidebar.js';
 
-let modalEl = null;
+let hudEl = null;
+let sheetEl = null;
 let currentAxis = null;
 let currentStepIdx = 0;
 let isSpeaking = false;
@@ -55,7 +63,10 @@ function speakText(text, btnEl) {
   showToast('🔊 Đang đọc giải phẫu ứng dụng...');
 }
 
-export function openClinicalAxesModal(axisId = null, viewer = window.viewer) {
+/**
+ * Mở thanh HUD Trục Lâm Sàng và kích hoạt 3D Multi-Organ Isolation
+ */
+export async function openClinicalAxesModal(axisId = null, viewer = window.viewer) {
   let matched = CLINICAL_AXES.find(a => a.id === axisId);
   if (!matched) {
     matched = CLINICAL_AXES[0];
@@ -63,193 +74,263 @@ export function openClinicalAxesModal(axisId = null, viewer = window.viewer) {
   currentAxis = matched;
   currentStepIdx = 0;
 
-  if (!modalEl) {
-    modalEl = document.createElement('div');
-    modalEl.id = 'clinicalAxesModal';
-    modalEl.className = 'clinical-axes-modal-backdrop';
-    document.body.appendChild(modalEl);
+  // 1. Tạo thanh Floating HUD nếu chưa có
+  if (!hudEl) {
+    hudEl = document.createElement('div');
+    hudEl.id = 'clinicalAxisHud';
+    hudEl.className = 'clinical-axis-hud-island';
+    document.body.appendChild(hudEl);
   }
 
-  renderModalUI();
-  modalEl.classList.remove('hidden');
-
-  // Trigger 3D focus for default organ in this axis
-  if (currentAxis.defaultPartId) {
-    selectStructureAnywhere(currentAxis.defaultPartId);
+  // 2. Tạo Mechanism Sheet nếu chưa có
+  if (!sheetEl) {
+    sheetEl = document.createElement('div');
+    sheetEl.id = 'clinicalAxisSheet';
+    sheetEl.className = 'clinical-axis-sheet-backdrop hidden';
+    document.body.appendChild(sheetEl);
   }
+
+  // 3. Render HUD UI
+  renderFloatingHud();
+  hudEl.classList.remove('hidden');
+
+  // Đóng sheet nếu đang mở
+  closeMechanismSheet();
+
+  // 4. Kích hoạt toàn bộ chuỗi trục trên không gian 3D
+  await activateClinicalAxis3D(currentAxis.id, viewer);
 }
 
-export function closeClinicalAxesModal() {
+/**
+ * Đóng thanh HUD và khôi phục 3D
+ */
+export function closeClinicalAxesModal(viewer = window.viewer) {
   stopSpeech();
-  if (modalEl) {
-    modalEl.classList.add('hidden');
-  }
+  if (hudEl) hudEl.classList.add('hidden');
+  closeMechanismSheet();
+  deactivateClinicalAxis3D(viewer);
 }
 
-function renderModalUI() {
-  if (!modalEl || !currentAxis) return;
-
+/**
+ * Render thanh điều khiển nổi siêu tinh gọn (Floating HUD)
+ */
+function renderFloatingHud() {
+  if (!hudEl || !currentAxis) return;
   const a = currentAxis;
   const currentStep = a.chainSteps[currentStepIdx] || a.chainSteps[0];
 
-  modalEl.innerHTML = `
-    <div class="clinical-axes-dialog" role="dialog" aria-modal="true">
-      <!-- Header -->
-      <div class="axes-header">
-        <div class="axes-header-info">
-          <div class="axes-badge-row">
-            <span class="axes-pill-badge">${a.badge}</span>
-            <span class="axes-category-text">${a.category}</span>
-          </div>
-          <h2 class="axes-title">${a.titleVi}</h2>
-          <span class="axes-latin-name">${a.latin}</span>
+  hudEl.innerHTML = `
+    <div class="hud-inner-container">
+      <!-- Row 1: Header + Tools -->
+      <div class="hud-top-row">
+        <div class="hud-title-wrap">
+          <span class="hud-axis-icon">${a.icon.slice(0, 2)}</span>
+          <span class="hud-axis-title">${a.titleVi.split('(')[0].trim()}</span>
+          <span class="hud-axis-badge">${a.badge}</span>
         </div>
-        <button type="button" class="axes-close-btn" id="axesCloseBtn" aria-label="Đóng">&times;</button>
-      </div>
-
-      <!-- Axes Carousel Tabs -->
-      <div class="axes-tabs-scroller">
-        ${CLINICAL_AXES.map(item => `
-          <button type="button" class="axes-tab-btn ${item.id === a.id ? 'active' : ''}" data-axis="${item.id}">
-            <span class="tab-btn-icon">${item.icon}</span>
-            <span class="tab-btn-title">${item.titleVi.split('(')[0].trim()}</span>
+        <div class="hud-actions">
+          <button type="button" class="btn-hud-detail" id="btnOpenMechanismSheet" title="Xem cơ chế bệnh sinh chi tiết">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Cơ chế</span>
           </button>
-        `).join('')}
+          <button type="button" class="btn-hud-switch" id="btnSwitchAxis" title="Đổi sang trục khác">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+          </button>
+          <button type="button" class="btn-hud-close" id="btnCloseClinicalHud" title="Đóng trục">
+            &times;
+          </button>
+        </div>
       </div>
 
-      <!-- Body Scrollable Content -->
-      <div class="axes-content-body">
-        <!-- Summary Box -->
-        <div class="axes-summary-card">
-          <p class="axes-summary-text">${a.summary}</p>
-          <button type="button" class="btn-axes-listen" id="btnAxesListen" title="Nghe đọc tóm tắt giải phẫu ứng dụng">
+      <!-- Row 2: 4 Flow Chips -->
+      <div class="hud-flow-chips">
+        ${a.chainSteps.map((step, idx) => `
+          <button type="button" class="hud-step-chip ${idx === currentStepIdx ? 'active' : ''}" data-step-idx="${idx}">
+            <span class="step-chip-num">${step.step}</span>
+            <span class="step-chip-name">${step.shortTitle || step.title.split('(')[0].trim()}</span>
+          </button>
+        `).join('<span class="hud-flow-arrow">➔</span>')}
+      </div>
+
+      <!-- Row 3: Single-line Concise Note (< 15 words) -->
+      <div class="hud-note-row">
+        <span class="hud-note-bullet">💡</span>
+        <span class="hud-note-text">${currentStep.shortNote || currentStep.note}</span>
+      </div>
+    </div>
+
+    <!-- Dropdown Menu đổi trục nhanh -->
+    <div class="hud-axis-dropdown hidden" id="hudAxisDropdown">
+      ${CLINICAL_AXES.map(item => `
+        <button type="button" class="hud-dropdown-item ${item.id === a.id ? 'active' : ''}" data-select-axis="${item.id}">
+          <span class="dropdown-item-icon">${item.icon}</span>
+          <span class="dropdown-item-title">${item.titleVi}</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+
+  // Gắn sự kiện tương tác
+  bindFloatingHudEvents();
+}
+
+/**
+ * Gắn sự kiện cho thanh Floating HUD
+ */
+function bindFloatingHudEvents() {
+  if (!hudEl) return;
+
+  // 1. Chạm vào mắt xích nào -> 3D camera zoom & highlight mắt xích đó
+  hudEl.querySelectorAll('[data-step-idx]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const idx = parseInt(chip.dataset.stepIdx, 10);
+      currentStepIdx = idx;
+
+      // Cập nhật class active
+      hudEl.querySelectorAll('.hud-step-chip').forEach((c, i) => {
+        c.classList.toggle('active', i === idx);
+      });
+
+      // Cập nhật dòng chú thích duy nhất
+      const noteEl = hudEl.querySelector('.hud-note-text');
+      const step = currentAxis.chainSteps[idx];
+      if (noteEl && step) {
+        noteEl.textContent = step.shortNote || step.note;
+      }
+
+      // Kích hoạt 3D Focus & Highlight
+      focusAxisStep(currentAxis.id, idx, window.viewer, true);
+    });
+  });
+
+  // 2. Mở Mechanism Sheet
+  const btnDetail = hudEl.querySelector('#btnOpenMechanismSheet');
+  if (btnDetail) {
+    btnDetail.addEventListener('click', () => {
+      openMechanismSheet();
+    });
+  }
+
+  // 3. Đổi trục nhanh (Dropdown)
+  const btnSwitch = hudEl.querySelector('#btnSwitchAxis');
+  const dropdown = hudEl.querySelector('#hudAxisDropdown');
+  if (btnSwitch && dropdown) {
+    btnSwitch.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('hidden');
+    });
+  }
+
+  hudEl.querySelectorAll('[data-select-axis]').forEach(item => {
+    item.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown?.classList.add('hidden');
+      const nextAxisId = item.dataset.selectAxis;
+      await openClinicalAxesModal(nextAxisId, window.viewer);
+    });
+  });
+
+  // 4. Đóng HUD
+  const btnClose = hudEl.querySelector('#btnCloseClinicalHud');
+  if (btnClose) {
+    btnClose.addEventListener('click', () => {
+      closeClinicalAxesModal(window.viewer);
+    });
+  }
+}
+
+/**
+ * Mở Bottom Sheet xem chi tiết cơ chế bệnh sinh
+ */
+function openMechanismSheet() {
+  if (!sheetEl || !currentAxis) return;
+  const a = currentAxis;
+
+  sheetEl.innerHTML = `
+    <div class="clinical-sheet-card" role="dialog" aria-modal="true">
+      <div class="sheet-drag-handle"></div>
+
+      <div class="sheet-header">
+        <div class="sheet-title-group">
+          <span class="sheet-pill-badge">${a.badge}</span>
+          <h3 class="sheet-title">${a.titleVi}</h3>
+          <span class="sheet-latin">${a.latin}</span>
+        </div>
+        <button type="button" class="btn-sheet-close" id="btnCloseMechanismSheet">&times;</button>
+      </div>
+
+      <div class="sheet-body-scroll">
+        <!-- Summary Box with Voice -->
+        <div class="sheet-summary-box">
+          <p class="sheet-summary-p">${a.summary}</p>
+          <button type="button" class="btn-sheet-voice" id="btnSheetVoice">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            <span>Nghe đọc</span>
+            <span>Nghe giải thích</span>
           </button>
         </div>
 
-        <!-- Interactive Flow Chain -->
-        <div class="axes-chain-section">
-          <div class="section-label-row">
-            <span class="section-badge-icon">⛓️</span>
-            <span class="section-label-title">CHUỖI LIÊN HOÀN CÁC MẮT XÍCH (CHẠM ĐỂ XEM 3D):</span>
-          </div>
-
-          <div class="axes-flow-steps">
-            ${a.chainSteps.map((st, idx) => `
-              <button type="button" class="flow-step-btn ${idx === currentStepIdx ? 'active' : ''}" data-step="${idx}">
-                <span class="step-num">${st.step}</span>
-                <span class="step-title">${st.title}</span>
-              </button>
-            `).join('<span class="flow-arrow">→</span>')}
-          </div>
-
-          <!-- Active Step Detail Box -->
-          <div class="step-detail-card">
-            <div class="step-detail-header">
-              <span class="step-marker">Mắt xích #${currentStep.step}:</span>
-              <strong class="step-name">${currentStep.title}</strong>
+        <!-- 4 Steps Overview -->
+        <div class="sheet-steps-list">
+          <h4 class="sheet-section-title">4 MẮT XÍCH LIÊN KẾT:</h4>
+          ${a.chainSteps.map((st, i) => `
+            <div class="sheet-step-item ${i === currentStepIdx ? 'highlighted' : ''}">
+              <div class="step-item-badge">#${st.step}</div>
+              <div class="step-item-content">
+                <div class="step-item-title">${st.title}</div>
+                <div class="step-item-desc">${st.note}</div>
+              </div>
             </div>
-            <p class="step-note">${currentStep.note}</p>
-            <button type="button" class="btn-focus-step-3d" id="btnFocusStep3D">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-              <span>Phóng to ${currentStep.title.split('&')[0].trim()} trên mô hình 3D</span>
-            </button>
-          </div>
+          `).join('')}
         </div>
 
         <!-- Clinical Insights Q&A -->
-        <div class="axes-insights-section">
-          <div class="section-label-row">
-            <span class="section-badge-icon">💡</span>
-            <span class="section-label-title">HIỂU SÂU BỆNH HỌC LÂM SÀNG THỰC TẾ:</span>
-          </div>
-          <div class="insights-list">
-            ${a.clinicalInsights.map(qa => `
-              <div class="insight-card">
-                <div class="insight-q">
-                  <span class="q-icon">❓</span>
-                  <span class="q-text">${qa.question}</span>
-                </div>
-                <div class="insight-a">
-                  <span class="a-icon">🩺</span>
-                  <p class="a-text">${qa.explanation}</p>
-                </div>
+        <div class="sheet-qa-list">
+          <h4 class="sheet-section-title">CƠ CHẾ LÂM SÀNG THỰC TẾ:</h4>
+          ${a.clinicalInsights.map(qa => `
+            <div class="sheet-qa-card">
+              <div class="sheet-qa-question">
+                <span class="qa-q-icon">❓</span>
+                <span>${qa.question}</span>
               </div>
-            `).join('')}
-          </div>
+              <div class="sheet-qa-answer">
+                <span class="qa-a-icon">🩺</span>
+                <span>${qa.explanation}</span>
+              </div>
+            </div>
+          `).join('')}
         </div>
 
-        <!-- Lifestyle & Ergonomic Tips -->
-        <div class="axes-tips-section">
-          <div class="section-label-row">
-            <span class="section-badge-icon">🛡️</span>
-            <span class="section-label-title">LỜI KHUYÊN & PHÁC ĐỒ BẢO VỆ CHỦ ĐỘNG:</span>
-          </div>
-          <ul class="tips-ul">
-            ${a.lifestyleTips.map(tip => `
-              <li class="tip-li">
-                <span class="tip-bullet">✓</span>
-                <span class="tip-text">${tip}</span>
-              </li>
-            `).join('')}
+        <!-- Lifestyle Tips -->
+        <div class="sheet-tips-box">
+          <h4 class="sheet-section-title">LỜI KHUYÊN THỰC HÀNH Y KHOA:</h4>
+          <ul class="sheet-tips-ul">
+            ${a.lifestyleTips.map(tip => `<li>${tip}</li>`).join('')}
           </ul>
         </div>
       </div>
     </div>
   `;
 
-  // Attach event handlers
-  modalEl.querySelector('#axesCloseBtn')?.addEventListener('click', closeClinicalAxesModal);
+  sheetEl.classList.remove('hidden');
 
-  // Tabs
-  modalEl.querySelectorAll('.axes-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const axisId = btn.dataset.axis;
-      const matched = CLINICAL_AXES.find(it => it.id === axisId);
-      if (matched) {
-        stopSpeech();
-        currentAxis = matched;
-        currentStepIdx = 0;
-        renderModalUI();
-        if (matched.defaultPartId) {
-          selectStructureAnywhere(matched.defaultPartId);
-        }
-      }
-    });
+  // Gắn sự kiện đóng sheet
+  const btnClose = sheetEl.querySelector('#btnCloseMechanismSheet');
+  if (btnClose) {
+    btnClose.addEventListener('click', closeMechanismSheet);
+  }
+  sheetEl.addEventListener('click', (e) => {
+    if (e.target === sheetEl) closeMechanismSheet();
   });
 
-  // Steps
-  modalEl.querySelectorAll('.flow-step-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.step, 10) || 0;
-      currentStepIdx = idx;
-      renderModalUI();
-      const targetStep = a.chainSteps[idx];
-      if (targetStep?.partId) {
-        selectStructureAnywhere(targetStep.partId);
-      }
-    });
-  });
-
-  // Focus button
-  modalEl.querySelector('#btnFocusStep3D')?.addEventListener('click', () => {
-    closeClinicalAxesModal();
-    if (currentStep?.partId) {
-      selectStructureAnywhere(currentStep.partId);
-    }
-  });
-
-  // TTS Listen
-  const listenBtn = modalEl.querySelector('#btnAxesListen');
-  listenBtn?.addEventListener('click', () => {
-    const fullText = `${a.titleVi}. ${a.summary}. Các mắt xích liên hoàn gồm: ${a.chainSteps.map(s => s.title).join(', ')}. Cơ chế lâm sàng: ${a.clinicalInsights.map(c => c.question + ' ' + c.explanation).join(' ')}`;
-    speakText(fullText, listenBtn);
-  });
+  // Gắn voice
+  const btnVoice = sheetEl.querySelector('#btnSheetVoice');
+  if (btnVoice) {
+    const textToRead = `${a.titleVi}. ${a.summary} ${a.clinicalInsights.map(q => q.question + ' ' + q.explanation).join(' ')}`;
+    btnVoice.addEventListener('click', () => speakText(textToRead, btnVoice));
+  }
 }
 
-// Global exposure
-if (typeof window !== 'undefined') {
-  window.openClinicalAxesModal = openClinicalAxesModal;
-  window.closeClinicalAxesModal = closeClinicalAxesModal;
+function closeMechanismSheet() {
+  stopSpeech();
+  if (sheetEl) sheetEl.classList.add('hidden');
 }

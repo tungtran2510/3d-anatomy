@@ -377,7 +377,7 @@ export function getSystemVisibilityState(systemId) {
 
 // Restoring is now "point back at the shared material" rather than copying a
 // dozen properties back one by one.
-function restoreMaterial(partId) {
+export function restoreMaterial(partId) {
   ghostedIds?.delete(partId);
   ownMeshesOf(partId).forEach(mesh => releaseMaterial(mesh, partId));
 }
