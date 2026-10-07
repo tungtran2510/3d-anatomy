@@ -7281,21 +7281,19 @@ body.theme-dark .tab-vertical-text {
   left: 0 !important;
   right: auto !important;
   bottom: auto !important;
-  height: 58vh !important;
-  max-height: 495px;
-  min-height: 420px;
+  height: 406px !important;
+  max-height: 406px !important;
+  min-height: 406px !important;
   width: 126px;
   max-width: 42vw;
   z-index: 1200;
-  background: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
   border-left: none !important;
   border-radius: 0 14px 14px 0 !important;
-  box-shadow: 4px 6px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 4px 6px 28px rgba(0, 0, 0, 0.25);
   padding: 8px 6px;
   display: flex;
   flex-direction: column;
@@ -7319,7 +7317,7 @@ body.theme-dark .tab-vertical-text {
   flex-direction: column;
   gap: 4px;
   padding-bottom: 5px;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 .stepper-header-title {
   display: flex;
@@ -7330,7 +7328,7 @@ body.theme-dark .tab-vertical-text {
 .stepper-views-title {
   font-size: 11px;
   font-weight: 800;
-  color: #f1f5f9;
+  color: #0f172a;
   letter-spacing: 0.3px;
 }
 .btn-stepper-nav {

@@ -727,9 +727,7 @@ export function initSystemsLayerController(viewer) {
   drawerEl.innerHTML = `
     <div class="stepper-drawer-header">
       <div class="stepper-header-title">
-        <button type="button" class="btn-stepper-nav" id="btnViewPrev" title="Góc nhìn trước">‹</button>
-        <span class="stepper-views-title">Góc nhìn</span>
-        <button type="button" class="btn-stepper-nav" id="btnViewNext" title="Góc nhìn tiếp theo">›</button>
+        <span class="stepper-views-title">HỆ CƠ QUAN</span>
         <button type="button" class="btn-stepper-close" id="btnStepperClose" title="Đóng bảng">✕</button>
       </div>
       
