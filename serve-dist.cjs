@@ -44,10 +44,14 @@ const server = http.createServer((req, res) => {
         res.end('Server Error');
         return;
       }
-      res.writeHead(200, {
+      const headers = {
         'Content-Type': contentType,
         'Access-Control-Allow-Origin': '*'
-      });
+      };
+      if (ext === '.html' || urlPath.endsWith('sw.js')) {
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+      }
+      res.writeHead(200, headers);
       res.end(content);
     });
   });

@@ -19,6 +19,7 @@ import { dynamicAnatomy, MOTIONS } from '../viewer/dynamicAnatomy.js';
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openImageZoomModal } from './imageZoomModal.js';
+import { getConstituentsForPart } from '../data/anatomyConstituents.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -221,45 +222,6 @@ export function initInfoPanel(viewer) {
     handleRadiusBlast(viewer);
   });
 
-  // 7. 3D Structure Tagging (Visible Body Standard: Add Tag / Clear Tags)
-  document.getElementById('btnAddTagBtn')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const part = state.selectedPart;
-    if (!part) return;
-    const clinical = getClinicalData(part.id);
-    const tagName = clinical.nameVi || part.displayName || part.id;
-    addCustomTag(part.id, tagName, viewer);
-    showToast(`🏷️ Đã ghim thẻ nhãn 3D: ${tagName}`);
-  });
-
-  document.getElementById('btnClearTagsBtn')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    clearCustomTags(viewer);
-    showToast('🗑️ Đã xóa toàn bộ thẻ nhãn 3D');
-  });
-
-  // 8. Learn More (Giáo trình, Lâm sàng, Dermatomes, AI)
-  document.getElementById('cardLessonBtn')?.addEventListener('click', () => {
-    const part = state.selectedPart;
-    if (part) openLesson(part.id);
-  });
-
-  document.getElementById('cardClinicalBtn')?.addEventListener('click', () => {
-    showClinicalModal();
-  });
-
-  document.getElementById('cardDermatomeBtn')?.addEventListener('click', () => {
-    showDermatomeInfo();
-  });
-
-  document.getElementById('cardAIBtn')?.addEventListener('click', () => {
-    const part = state.selectedPart;
-    if (part) {
-      openAIAssistant(viewer, `Giải thích chi tiết giải phẫu học, cấu tạo, chức năng và ý nghĩa lâm sàng của ${part.displayName || part.id}`);
-    }
-  });
-
-
   // Synchronize history buttons initial state
   notifySelectionHistoryChanged();
 }
@@ -315,14 +277,21 @@ export function updateInfoPanelContent(part, viewer) {
     miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Xem thêm" để đọc chi tiết giải phẫu.';
   }
 
-  // 2. Core Anatomical Explanation (Là gì, Ý nghĩa là gì, Liên kết ra sao - Ưu tiên ở trên đầu)
+  // 2. Core Anatomical Explanation (Ngắn gọn 1-2 câu ứng dụng thực tế, không lý thuyết dài dòng)
   const explainDesc = document.getElementById('cardExplainDesc');
   const explainFunc = document.getElementById('cardExplainFunc');
   const explainRel = document.getElementById('cardExplainRel');
 
-  if (explainDesc) explainDesc.textContent = clinical.description || 'Đang cập nhật thông tin giải phẫu học...';
-  if (explainFunc) explainFunc.textContent = clinical.function || 'Đang cập nhật chức năng sinh lý & cơ học...';
-  if (explainRel) explainRel.textContent = clinical.relationsText || 'Đang cập nhật liên kết giải phẫu...';
+  if (explainDesc) {
+    const raw = clinical.description || 'Đang cập nhật thông tin giải phẫu học...';
+    explainDesc.textContent = raw.split(/[\.\!\?]\s+/)[0] + '.';
+  }
+  if (explainFunc) {
+    const raw = clinical.function || clinical.clinical || 'Đang cập nhật chức năng sinh lý & cơ học...';
+    explainFunc.textContent = raw.split(/[\.\!\?]\s+/)[0] + '.';
+  }
+  const relBlock = document.querySelector('.explain-rel');
+  if (relBlock) relBlock.style.display = 'none';
 
   // Stop any previous active speech synthesis when changing structure
   // 2a.0 Render One-Tap Axis Link if part belongs to a clinical axis
@@ -345,7 +314,7 @@ export function updateInfoPanelContent(part, viewer) {
   isZoomedIn = false;
   updateZoomStepButtonUI();
 
-  // 3. Render Interactive Anatomical Hierarchy Tree (Visible Body Standard: Photo 5)
+  // 3. Render Interactive Anatomical Hierarchy Tree (Gọn gàng, tinh tế)
   const hierarchyBox = document.getElementById('cardHierarchyBox');
   if (hierarchyBox) {
     const systemDisplayName = clinical.systemVi || 'Hệ Giải Phẫu';
@@ -370,25 +339,6 @@ export function updateInfoPanelContent(part, viewer) {
           </div>
         </div>
       </div>
-
-      <div class="relations-summary-grid">
-        <div class="rel-mini-item">
-          <span class="rel-tag muscle">🔴 Cơ</span>
-          <span class="rel-text">${clinical.relations?.muscles || 'Liên kết với các bó cơ sâu và màng cơ cục bộ quanh vùng giải phẫu.'}</span>
-        </div>
-        <div class="rel-mini-item">
-          <span class="rel-tag bone">🦴 Xương</span>
-          <span class="rel-text">${clinical.relations?.bones || 'Khớp nối hoặc bám tận vào mạc, mấu xương kế cận.'}</span>
-        </div>
-        <div class="rel-mini-item">
-          <span class="rel-tag nerve">⚡ Thần kinh</span>
-          <span class="rel-text">${clinical.relations?.nerves || 'Được chi phối bởi các nhánh thần kinh ngoại biên tương ứng theo từng tiết đoạn.'}</span>
-        </div>
-        <div class="rel-mini-item">
-          <span class="rel-tag vessel">🩸 Mạch máu</span>
-          <span class="rel-text">${clinical.relations?.vessels || 'Được cấp máu bởi các nhánh động mạch khu vực và mạng lưới mao mạch nuôi dưỡng.'}</span>
-        </div>
-      </div>
     `;
 
     // Bind hierarchy navigation
@@ -402,65 +352,11 @@ export function updateInfoPanelContent(part, viewer) {
     });
   }
 
-  // 4. Render Related Histology & Media Cards (Visible Body Standard: Photo 5)
-  const relatedScroll = document.getElementById('cardRelatedMediaScroll');
-  if (relatedScroll) {
-    const histologyTiles = [
-      {
-        id: 'histology_he',
-        title: 'Lát cắt mô học (HE)',
-        badge: 'Mô học 40x',
-        icon: '🔬',
-        desc: 'Cấu trúc vi thể tế bào và mô liên kết nhuộm Hematoxylin-Eosin',
-        action: () => showHistologyPreview(mainName, 'Lát cắt mô học HE 40x')
-      },
-      {
-        id: 'dermatome_map',
-        title: 'Tiết đoạn cảm giác',
-        badge: 'Cảm giác da',
-        icon: '🌈',
-        desc: 'Bản đồ chi phối cảm giác rễ thần kinh tủy sống',
-        action: () => showDermatomeInfo()
-      },
-      {
-        id: 'biomechanics',
-        title: 'Cơ sinh học chuyển động',
-        badge: 'Sinh học',
-        icon: '🦴',
-        desc: 'Trục chịu lực, biên độ vận động và gân bám',
-        action: () => {
-          document.getElementById('btnToolMotion')?.click();
-        }
-      },
-      {
-        id: 'vascular_angio',
-        title: 'Mạch máu cấp dưỡng',
-        badge: 'Mạch máu 3D',
-        icon: '🩸',
-        desc: 'Mạng lưới vi mạch động mạch và tĩnh mạch hồi lưu',
-        action: () => {
-          showToast(`🩸 Mạng vi mạch cấp máu cho ${mainName}`);
-        }
-      }
-    ];
+  // 4. Render Cấu tạo chi tiết & Các bộ phận trực quan (Interactive Subparts Chips)
+  renderAnatomyConstituents(part, clinical, mainName, viewer);
 
-    relatedScroll.innerHTML = histologyTiles.map(tile => `
-      <div class="related-tile" data-tile-id="${tile.id}" title="${tile.desc}">
-        <div class="tile-icon-box">${tile.icon}</div>
-        <div class="tile-texts">
-          <span class="tile-badge">${tile.badge}</span>
-          <strong class="tile-title">${tile.title}</strong>
-        </div>
-      </div>
-    `).join('');
-
-    relatedScroll.querySelectorAll('.related-tile').forEach(tileEl => {
-      tileEl.addEventListener('click', () => {
-        const found = histologyTiles.find(t => t.id === tileEl.dataset.tileId);
-        if (found?.action) found.action();
-      });
-    });
-  }
+  // 5. Render Hình ảnh giải phẫu cấu tạo độ phân giải cao (High-Res Visual Diagram with Fullscreen Zoom)
+  renderAnatomyPhotoSection(part, clinical, mainName);
 
   // Update history buttons state
   notifySelectionHistoryChanged();
@@ -727,77 +623,107 @@ function handleRadiusBlast(viewer) {
   viewer?.render?.();
 }
 
-function showClinicalModal() {
-  const part = state.selectedPart;
-  if (!part) return;
-  const clinical = getClinicalData(part.id);
+// -----------------------------------------------------------------------------
+// RENDER CẤU TẠO CHI TIẾT & BỘ PHẬN TRỰC QUAN (INTERACTIVE SUBPARTS CHIPS)
+// -----------------------------------------------------------------------------
+function renderAnatomyConstituents(part, clinical, mainName, viewer) {
+  const section = document.getElementById('cardConstituentsSection');
+  const grid = document.getElementById('cardConstituentsGrid');
+  const titleEl = document.getElementById('constituentsHeaderTitle');
+  if (!section || !grid) return;
 
-  const modalHtml = `
-    <div class="atlas-hub-modal" id="clinicalDetailModal">
-      <div class="atlas-hub-backdrop" id="clinicalBackdrop"></div>
-      <div class="study-dialog" style="max-width: 500px; padding: 20px;">
-        <div class="study-dialog-header">
-          <div>
-            <h3>🩺 Ứng Dụng Lâm Sàng & Bệnh Học</h3>
-            <p style="color: #64748b; font-size: 13px;">${clinical.nameVi} (${clinical.nameLatin})</p>
-          </div>
-          <button type="button" class="dialog-close-btn" id="clinicalCloseBtn">&times;</button>
+  const constituents = getConstituentsForPart(
+    part.id,
+    mainName,
+    clinical?.systemVi || '',
+    clinical?.regionVi || ''
+  );
+
+  if (!constituents || !constituents.subparts || constituents.subparts.length === 0) {
+    section.classList.add('hidden');
+    grid.innerHTML = '';
+    return;
+  }
+
+  section.classList.remove('hidden');
+  if (titleEl) {
+    titleEl.textContent = `🧩 ${constituents.title || 'Cấu tạo chi tiết & Các bộ phận'}`;
+  }
+
+  grid.innerHTML = constituents.subparts.map((sub) => {
+    return `
+      <button type="button" class="constituent-chip" data-search="${sub.searchQuery || sub.name}" data-name="${sub.name}" title="Chạm để định vị 3D: ${sub.name}">
+        <span class="chip-icon">${sub.icon || '🔹'}</span>
+        <div class="chip-text-wrap">
+          <span class="chip-name">${sub.name}</span>
+          ${sub.latin ? `<span class="chip-latin">${sub.latin}</span>` : ''}
         </div>
-        <div style="margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: #334155;">
-          ${clinical.symptoms ? `<p><strong>Triệu chứng thường gặp:</strong> ${clinical.symptoms}</p>` : ''}
-          <div style="margin-top: 10px; padding: 12px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
-            <strong style="color: #166534;">🩺 Bệnh lý & Ý nghĩa lâm sàng y khoa:</strong>
-            <p style="margin: 6px 0 0; color: #15803d; line-height: 1.6;">${clinical.clinical || 'Cột mốc giải phẫu quan trọng trong thăm khám, chẩn đoán hình ảnh (X-quang, MRI) và phẫu thuật tiếp cận an toàn.'}</p>
-          </div>
-        </div>
+      </button>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('.constituent-chip').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const q = btn.dataset.search || btn.dataset.name;
+      showToast(`🎯 Định vị 3D: ${btn.dataset.name}`);
+      try {
+        await selectStructureAnywhere(q);
+      } catch (err) {
+        console.warn('Cannot focus subpart:', err);
+      }
+    });
+  });
+}
+
+// -----------------------------------------------------------------------------
+// RENDER HÌNH ẢNH GIẢI PHẪU CẤU TẠO & PHÓNG TO TOÀN MÀN HÌNH (HIGH-RES LIGHTBOX)
+// -----------------------------------------------------------------------------
+function renderAnatomyPhotoSection(part, clinical, mainName) {
+  const section = document.getElementById('cardAnatomyPhotoSection');
+  const container = document.getElementById('cardAnatomyPhotoContainer');
+  if (!section || !container) return;
+
+  const constituents = getConstituentsForPart(
+    part.id,
+    mainName,
+    clinical?.systemVi || '',
+    clinical?.regionVi || ''
+  );
+
+  if (!constituents || !constituents.diagram) {
+    section.classList.add('hidden');
+    container.innerHTML = '';
+    return;
+  }
+
+  section.classList.remove('hidden');
+  container.innerHTML = `
+    <div class="anatomy-photo-card" id="btnZoomAnatomyPhoto" title="Chạm để phóng to xem chi tiết toàn màn hình">
+      <div class="photo-img-wrap">
+        <img src="${constituents.diagram}" alt="${constituents.diagramCaption || mainName}" class="anatomy-photo-img" loading="lazy" />
+        <span class="photo-zoom-badge">🔍 Chạm phóng to 2 ngón tay</span>
+      </div>
+      <div class="photo-caption-bar">
+        <span class="photo-caption-text">${constituents.diagramCaption || constituents.title || mainName}</span>
+        <button type="button" class="btn-fullscreen-diagram" aria-label="Xem toàn màn hình">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        </button>
       </div>
     </div>
   `;
 
-  const container = document.createElement('div');
-  container.innerHTML = modalHtml;
-  document.body.appendChild(container);
+  const zoomHandler = (e) => {
+    e.stopPropagation();
+    openImageZoomModal({
+      src: constituents.diagram,
+      title: constituents.title || mainName,
+      subtitle: constituents.diagramCaption || `Ảnh giải phẫu cấu tạo chi tiết: ${mainName}`
+    });
+  };
 
-  const close = () => container.remove();
-  container.querySelector('#clinicalCloseBtn')?.addEventListener('click', close);
-  container.querySelector('#clinicalBackdrop')?.addEventListener('click', close);
-}
-
-function showDermatomeInfo() {
-  const part = state.selectedPart;
-  if (!part) return;
-  const clinical = getClinicalData(part.id);
-  showToast(`🌈 Tiết đoạn cảm giác da chi phối: ${clinical.relations?.nerves || 'Rễ thần kinh ngoại biên tương ứng'}`);
-}
-
-function showHistologyPreview(structureName, title) {
-  const modalHtml = `
-    <div class="atlas-hub-modal" id="histologyPreviewModal">
-      <div class="atlas-hub-backdrop" id="histologyBackdrop"></div>
-      <div class="study-dialog" style="max-width: 520px; padding: 20px; text-align: center;">
-        <div class="study-dialog-header">
-          <h3 style="margin: 0; font-size: 16px;">🔬 ${title}</h3>
-          <button type="button" class="dialog-close-btn" id="histologyCloseBtn">&times;</button>
-        </div>
-        <p style="color: #1e3a8a; font-weight: 600; font-size: 13px; margin: 6px 0 14px;">${structureName}</p>
-        <div style="width: 100%; height: 260px; border-radius: 12px; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid #334155;">
-          <div style="color: #94a3b8; font-size: 13px; padding: 20px; line-height: 1.6;">
-            <span style="font-size: 36px; display: block; margin-bottom: 8px;">🔬</span>
-            <strong>Hình ảnh vi thể kính hiển vi quang học (Nhuộm HE 40x)</strong>
-            <p style="margin: 6px 0 0; color: #64748b; font-size: 12px;">Hiển thị nguyên bào sợi, chất căn bản ngoại bào và các bó sợi collagen đan xen.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  const container = document.createElement('div');
-  container.innerHTML = modalHtml;
-  document.body.appendChild(container);
-
-  const close = () => container.remove();
-  container.querySelector('#histologyCloseBtn')?.addEventListener('click', close);
-  container.querySelector('#histologyBackdrop')?.addEventListener('click', close);
+  container.querySelector('#btnZoomAnatomyPhoto')?.addEventListener('click', zoomHandler);
+  container.querySelector('.btn-fullscreen-diagram')?.addEventListener('click', zoomHandler);
 }
 
 // -----------------------------------------------------------------------------

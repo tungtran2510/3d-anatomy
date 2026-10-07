@@ -14225,8 +14225,17 @@ body:has(#clinicalAxisHud:not(.hidden)) #floatingAIBubble {
   font-weight: 700;
   padding: 1px 6px;
   border-radius: 99px;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .lightbox-subtitle-badge {
+    display: none !important;
+  }
 }
 
 /* Controls */
@@ -14411,6 +14420,252 @@ body:has(#clinicalAxisHud:not(.hidden)) #floatingAIBubble {
   .step-chip-name {
     font-size: 10.5px !important;
   }
+}
+
+/* =========================================================================
+   ANATOMY CONSTITUENTS & HIGH-RES PHOTO LIGHTBOX (Atlas 2027 Standard)
+   ========================================================================= */
+
+.constituents-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 7px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+@media (max-width: 480px) {
+  .constituents-chips-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+}
+
+.constituent-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.constituent-chip:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.12);
+}
+
+.constituent-chip:active {
+  transform: scale(0.97);
+}
+
+[data-theme="dark"] .constituent-chip,
+body.theme-dark .constituent-chip {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .constituent-chip:hover,
+body.theme-dark .constituent-chip:hover {
+  background: rgba(30, 58, 138, 0.35);
+  border-color: #60a5fa;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.constituent-chip .chip-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.constituent-chip .chip-text-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.constituent-chip .chip-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.constituent-chip .chip-latin {
+  font-size: 9.5px;
+  color: #64748b;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+[data-theme="dark"] .constituent-chip .chip-latin,
+body.theme-dark .constituent-chip .chip-latin {
+  color: #94a3b8;
+}
+
+/* High-Resolution Anatomy Photo Card */
+.anatomy-photo-container {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.anatomy-photo-card {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.anatomy-photo-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15);
+}
+
+.anatomy-photo-card:active {
+  transform: scale(0.99);
+}
+
+[data-theme="dark"] .anatomy-photo-card,
+body.theme-dark .anatomy-photo-card {
+  background: #090d16;
+  border-color: #1e293b;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .anatomy-photo-card:hover,
+body.theme-dark .anatomy-photo-card:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.2);
+}
+
+.anatomy-photo-card .photo-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .anatomy-photo-card .photo-img-wrap,
+body.theme-dark .anatomy-photo-card .photo-img-wrap {
+  background: #020617;
+}
+
+.anatomy-photo-card .anatomy-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+
+.anatomy-photo-card:hover .anatomy-photo-img {
+  transform: scale(1.03);
+}
+
+.anatomy-photo-card .photo-zoom-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #38bdf8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.anatomy-photo-card .photo-caption-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .anatomy-photo-card .photo-caption-bar,
+body.theme-dark .anatomy-photo-card .photo-caption-bar {
+  background: #0f172a;
+  border-top-color: #1e293b;
+}
+
+.anatomy-photo-card .photo-caption-text {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.35;
+  flex: 1;
+}
+
+[data-theme="dark"] .anatomy-photo-card .photo-caption-text,
+body.theme-dark .anatomy-photo-card .photo-caption-text {
+  color: #94a3b8;
+}
+
+.anatomy-photo-card .btn-fullscreen-diagram {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: all 0.15s;
+}
+
+.anatomy-photo-card .btn-fullscreen-diagram:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+[data-theme="dark"] .anatomy-photo-card .btn-fullscreen-diagram,
+body.theme-dark .anatomy-photo-card .btn-fullscreen-diagram {
+  background: #1e293b;
+  border-color: #334155;
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .anatomy-photo-card .btn-fullscreen-diagram:hover,
+body.theme-dark .anatomy-photo-card .btn-fullscreen-diagram:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
 }
 
 

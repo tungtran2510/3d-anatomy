@@ -3,7 +3,7 @@
  * PWA Offline First, Per-System 3D Model Caching & Background Sync
  */
 
-const CACHE_VERSION = 'atlas-v1.0.5';
+const CACHE_VERSION = 'atlas-v1.0.6';
 const STATIC_CACHE = `atlas-static-${CACHE_VERSION}`;
 const MODELS_CACHE = `atlas-models-${CACHE_VERSION}`;
 const DATA_CACHE = `atlas-data-${CACHE_VERSION}`;
@@ -140,6 +140,11 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('message', async (event) => {
   const { type, payload } = event.data || {};
   const client = event.source;
+
+  if (type === 'SKIP_WAITING') {
+    self.skipWaiting();
+    return;
+  }
 
   if (type === 'PRECACHE_MODEL') {
     const { modelUrl, systemId } = payload;

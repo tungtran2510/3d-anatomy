@@ -498,80 +498,23 @@
           </div>
         </div>
 
-        <!-- BLOCK 4: CÁC TRƯỜNG PHỤ / MỞ RỘNG (ĐỂ Ở DƯỚI CÙNG THEO YÊU CẦU) -->
-        <div class="info-section-group">
+        <!-- CẤU TẠO CHI TIẾT & BỘ PHẬN TRỰC QUAN (Interactive Anatomy Constituents & Subparts) -->
+        <div class="info-section-group anatomy-constituents-section" id="cardConstituentsSection">
           <div class="info-group-title">
-            <span>Tìm hiểu chuyên sâu</span>
+            <span id="constituentsHeaderTitle">🧩 Cấu tạo chi tiết & Các bộ phận</span>
           </div>
-          <div class="learn-more-row">
-            <button class="learn-btn lesson" id="cardLessonBtn" title="Học bài học tương ứng">
-              <span class="learn-icon">📖</span>
-              <span>Giáo trình</span>
-            </button>
-            <button class="learn-btn clinical" id="cardClinicalBtn" title="Bệnh lý lâm sàng và cơ chế">
-              <span class="learn-icon">🩺</span>
-              <span>Lâm sàng</span>
-            </button>
-            <button class="learn-btn dermatome" id="cardDermatomeBtn" title="Tiết đoạn phân bố thần kinh cảm giác da">
-              <span class="learn-icon">🌈</span>
-              <span>Cảm giác da</span>
-            </button>
-            <button class="learn-btn ai" id="cardAIBtn" title="Hỏi Bác Sĩ AI Giải Phẫu">
-              <span class="learn-icon">🤖</span>
-              <span>Bác sĩ AI</span>
-            </button>
+          <div class="constituents-chips-grid" id="cardConstituentsGrid">
+            <!-- Dynamic subparts chips injected here -->
           </div>
         </div>
 
-        <!-- Tag Selected Structure (Gắn thẻ nhãn 3D) -->
-        <div class="info-section-group" id="cardTagSection">
+        <!-- ẢNH GIẢI PHẪU CẤU TẠO & MINH HỌA TRỰC QUAN (High-Resolution Visual Diagram with Fullscreen Zoom) -->
+        <div class="info-section-group anatomy-photo-section" id="cardAnatomyPhotoSection">
           <div class="info-group-title">
-            <span>Gắn thẻ nhãn mốc</span>
+            <span>📸 Hình ảnh giải phẫu cấu tạo</span>
           </div>
-          <div class="tag-actions-row">
-            <button type="button" class="btn-tag-action add-tag" id="btnAddTagBtn" title="Ghim thẻ tên lên mô hình 3D">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              <span>Ghim thẻ</span>
-            </button>
-            <button type="button" class="btn-tag-action clear-tags" id="btnClearTagsBtn" title="Xóa các thẻ nhãn đã ghim">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              <span>Xóa thẻ</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Model Orientation (Tư thế mô hình & Bàn mổ y khoa) -->
-        <div class="info-section-group">
-          <div class="info-group-title">
-            <span>Tư thế mô hình</span>
-          </div>
-          <div class="orientation-controls-row">
-            <button type="button" class="btn-posture active" data-orientation="standing" title="Tư thế giải phẫu đứng thẳng">
-              <span class="posture-icon">🧍</span>
-              <span>Đứng</span>
-            </button>
-            <button type="button" class="btn-posture" data-orientation="supine" title="Tư thế nằm ngửa trên bàn mổ">
-              <span class="posture-icon">🛌↑</span>
-              <span>Nằm ngửa</span>
-            </button>
-            <button type="button" class="btn-posture" data-orientation="prone" title="Tư thế nằm sấp trên bàn mổ">
-              <span class="posture-icon">🛌↓</span>
-              <span>Nằm sấp</span>
-            </button>
-            <button type="button" class="btn-table-toggle" id="btnCardTableToggle" title="Bật / Tắt bàn mổ phẫu tích">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><line x1="5" y1="12" x2="5" y2="20"/><line x1="19" y1="12" x2="19" y2="20"/><line x1="5" y1="16" x2="19" y2="16"/></svg>
-              <span>Bàn mổ</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Related Histology & Media (Nội dung mô học & Video liên quan) -->
-        <div class="info-section-group" id="cardRelatedSection">
-          <div class="info-group-title">
-            <span>Lát cắt mô học hiển vi & Video liên quan</span>
-          </div>
-          <div class="related-media-scroll" id="cardRelatedMediaScroll">
-            <!-- Dynamic histology cross section tiles -->
+          <div class="anatomy-photo-container" id="cardAnatomyPhotoContainer">
+            <!-- Injected dynamically with zoom lightbox trigger -->
           </div>
         </div>
 

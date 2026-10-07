@@ -59,10 +59,14 @@ function build(container) {
 // The anchor is the centre of the structure's own geometry, which is not the
 // same as the node origin for a group of meshes.
 function computeAnchor(partId) {
+  if (!partId) return;
   const meshes = ownMeshesOf(partId);
   if (meshes && meshes.length > 0) {
     const box = new THREE.Box3();
-    meshes.forEach(mesh => box.expandByObject(mesh));
+    meshes.forEach(mesh => {
+      mesh.updateWorldMatrix?.(true, false);
+      box.expandByObject(mesh);
+    });
     if (!box.isEmpty()) {
       box.getCenter(anchorWorld);
       return;
@@ -71,6 +75,7 @@ function computeAnchor(partId) {
 
   const node = getStructure(partId)?.node || getMeshRegistry()?.get(partId);
   if (node) {
+    node.updateWorldMatrix?.(true, false);
     const box = new THREE.Box3().setFromObject(node);
     if (!box.isEmpty()) {
       box.getCenter(anchorWorld);
@@ -87,6 +92,7 @@ function computeAnchor(partId) {
     for (const [id, m] of reg.entries()) {
       const normId = id.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (normId === normTarget || normId.startsWith(normTarget)) {
+        m.updateWorldMatrix?.(true, false);
         const box = new THREE.Box3().setFromObject(m);
         if (!box.isEmpty()) {
           box.getCenter(anchorWorld);
@@ -101,6 +107,10 @@ function computeAnchor(partId) {
 
 function update() {
   if (!currentPartId || !state.viewer) return;
+
+  // Real-time anchor tracking: dynamically recompute anchor coordinate
+  // to ensure pin always precisely matches current mesh transformation
+  computeAnchor(currentPartId);
 
   const { camera, canvas } = state.viewer;
   projected.copy(anchorWorld).project(camera);

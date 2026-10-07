@@ -6,7 +6,18 @@
 export function initPWAUpdateBanner() {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) {
+      refreshing = true;
+      window.location.reload();
+    }
+  });
+
   navigator.serviceWorker.ready.then((registration) => {
+    // Proactively check for new version on app launch
+    registration.update().catch(() => {});
+
     registration.addEventListener('updatefound', () => {
       const newWorker = registration.installing;
       if (!newWorker) return;
