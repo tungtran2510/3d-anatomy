@@ -49,20 +49,59 @@ function releaseMaterial(mesh, partId) {
 
 // Ghosting touches nearly every mesh at once, so it uses one shared faded
 // variant per source material — 65 of them, not one per mesh.
-// GHOST_OPACITY = 0.035 ensures background structures remain transparent and clear without thick milky haze
-const GHOST_OPACITY = 0.035;
+// Dynamic theme-aware opacity: Dark mode ~0.045 (crystal glass), Light mode ~0.125 (soft anatomical silhouette)
+const GHOST_OPACITY_DARK = 0.045;
+const GHOST_OPACITY_LIGHT = 0.125;
 const ghostVariants = new WeakMap();
+const activeGhostMaterials = new Set();
+
+function isCurrentThemeDark() {
+  if (typeof document === 'undefined') return true;
+  return document.documentElement.getAttribute('data-theme') === 'dark' || document.body?.classList?.contains('theme-dark');
+}
+
+export function getGhostOpacity() {
+  return isCurrentThemeDark() ? GHOST_OPACITY_DARK : GHOST_OPACITY_LIGHT;
+}
 
 function ghostVariantOf(material) {
   let ghost = ghostVariants.get(material);
+  const isDark = isCurrentThemeDark();
+  const targetOpacity = isDark ? GHOST_OPACITY_DARK : GHOST_OPACITY_LIGHT;
+
   if (!ghost) {
     ghost = material.clone();
     ghost.transparent = true;
-    ghost.opacity = GHOST_OPACITY;
+    ghost.opacity = targetOpacity;
     ghost.depthWrite = false;
+
+    // In light mode, enhance silhouette contrast against bright white background
+    if (ghost.color) {
+      ghost.userData.darkColor = ghost.color.clone();
+      ghost.userData.lightColor = ghost.color.clone().lerp(new THREE.Color(0x64748b), 0.32);
+      ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
+    }
+
+    activeGhostMaterials.add(ghost);
     ghostVariants.set(material, ghost);
+  } else {
+    ghost.opacity = targetOpacity;
+    if (ghost.color && ghost.userData.darkColor) {
+      ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
+    }
   }
   return ghost;
+}
+
+export function syncGhostMaterialsTheme(isDark) {
+  const targetOpacity = isDark ? GHOST_OPACITY_DARK : GHOST_OPACITY_LIGHT;
+  activeGhostMaterials.forEach(ghost => {
+    ghost.opacity = targetOpacity;
+    if (ghost.color && ghost.userData.darkColor) {
+      ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
+    }
+    ghost.needsUpdate = true;
+  });
 }
 
 // High-performance shared opacity variant cache for whole systems.

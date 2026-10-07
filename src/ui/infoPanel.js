@@ -292,8 +292,15 @@ export function updateInfoPanelContent(part, viewer) {
 
   if (cardTitle) cardTitle.textContent = mainName;
   if (cardCompactLabel) cardCompactLabel.textContent = 'Chi tiết giải phẫu';
+
+  let cleanLatin = (latinName || '').trim();
+  cleanLatin = cleanLatin.replace(/\s*\((TA2:[^)]+)\)/i, ' · $1');
+  if (cleanLatin.startsWith('(') && cleanLatin.endsWith(')')) {
+    cleanLatin = cleanLatin.slice(1, -1).trim();
+  }
+
   if (cardSubtitle) {
-    cardSubtitle.textContent = latinName ? `${latinName} • ${systemName}` : systemName;
+    cardSubtitle.textContent = cleanLatin ? `${cleanLatin} • ${systemName}` : systemName;
   }
 
   // Populate 1-to-2 line Mini-Bar
@@ -301,7 +308,7 @@ export function updateInfoPanelContent(part, viewer) {
   const miniLatin = document.getElementById('miniCardLatin');
   const miniDesc = document.getElementById('miniCardDesc');
   if (miniTitle) miniTitle.textContent = mainName;
-  if (miniLatin) miniLatin.textContent = latinName ? `(${latinName})` : '';
+  if (miniLatin) miniLatin.textContent = cleanLatin ? `(${cleanLatin})` : '';
   if (miniDesc) {
     const rawDesc = clinical.description || '';
     const firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;

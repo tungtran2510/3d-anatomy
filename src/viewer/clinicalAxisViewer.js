@@ -23,18 +23,50 @@ let pulseAnimationFrameId = null;
 
 // Ghost material cache for clinical axis background
 const axisGhostVariants = new WeakMap();
-const GHOST_OPACITY = 0.04;
+const activeAxisGhostMaterials = new Set();
+
+function isCurrentThemeDark() {
+  if (typeof document === 'undefined') return true;
+  return document.documentElement.getAttribute('data-theme') === 'dark' || document.body?.classList?.contains('theme-dark');
+}
 
 function getGhostMaterial(material) {
   let ghost = axisGhostVariants.get(material);
+  const isDark = isCurrentThemeDark();
+  const targetOpacity = isDark ? 0.045 : 0.125;
+
   if (!ghost) {
     ghost = material.clone();
     ghost.transparent = true;
-    ghost.opacity = GHOST_OPACITY;
+    ghost.opacity = targetOpacity;
     ghost.depthWrite = false;
+
+    if (ghost.color) {
+      ghost.userData.darkColor = ghost.color.clone();
+      ghost.userData.lightColor = ghost.color.clone().lerp(new THREE.Color(0x64748b), 0.32);
+      ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
+    }
+
+    activeAxisGhostMaterials.add(ghost);
     axisGhostVariants.set(material, ghost);
+  } else {
+    ghost.opacity = targetOpacity;
+    if (ghost.color && ghost.userData.darkColor) {
+      ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
+    }
   }
   return ghost;
+}
+
+export function syncAxisGhostMaterialsTheme(isDark) {
+  const targetOpacity = isDark ? 0.045 : 0.125;
+  activeAxisGhostMaterials.forEach(ghost => {
+    ghost.opacity = targetOpacity;
+    if (ghost.color && ghost.userData.darkColor) {
+      ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
+    }
+    ghost.needsUpdate = true;
+  });
 }
 
 function applyGhostToMesh(mesh) {

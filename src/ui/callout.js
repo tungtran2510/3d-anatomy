@@ -128,8 +128,12 @@ function update() {
   dot?.setAttribute('cy', y);
 
   const cardEl = document.getElementById('selectionCard');
-  if (cardEl && !cardEl.classList.contains('hidden') && !cardEl.classList.contains('compact-mode')) {
-    // When full sheet is expanded, hide floating callout tooltip to prevent overlap
+  const axisSheet = document.getElementById('clinicalAxisSheet');
+  const isSheetOpen = axisSheet && !axisSheet.classList.contains('hidden');
+  const isCardExpanded = cardEl && !cardEl.classList.contains('hidden') && !cardEl.classList.contains('compact-mode');
+
+  if (isSheetOpen || isCardExpanded) {
+    // When full sheet or mechanism sheet is open, hide floating callout to prevent overlap
     label.style.display = 'none';
     line.style.display = 'none';
   } else {

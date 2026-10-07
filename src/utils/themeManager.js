@@ -30,6 +30,20 @@ export function setAppTheme(theme, viewer = state.viewer || window.viewer) {
   const targetViewer = viewer || state.viewer || window.viewer;
   if (targetViewer?.scene) {
     targetViewer.scene.background = new THREE.Color(isDark ? 0x0d1117 : 0xf8fafc);
+
+    // Sync ghost materials contrast & opacity between Dark & Light themes
+    import('../viewer/visibility.js').then(({ syncGhostMaterialsTheme }) => {
+      syncGhostMaterialsTheme?.(isDark);
+      targetViewer.invalidate?.(5);
+      targetViewer.render?.();
+    }).catch(() => {});
+
+    import('../viewer/clinicalAxisViewer.js').then(({ syncAxisGhostMaterialsTheme }) => {
+      syncAxisGhostMaterialsTheme?.(isDark);
+      targetViewer.invalidate?.(5);
+      targetViewer.render?.();
+    }).catch(() => {});
+
     targetViewer.invalidate?.(5);
     if (typeof targetViewer.render === 'function') {
       targetViewer.render();

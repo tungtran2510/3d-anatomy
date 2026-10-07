@@ -3,7 +3,7 @@
  * PWA Offline First, Per-System 3D Model Caching & Background Sync
  */
 
-const CACHE_VERSION = 'atlas-v1.0.0';
+const CACHE_VERSION = 'atlas-v1.0.5';
 const STATIC_CACHE = `atlas-static-${CACHE_VERSION}`;
 const MODELS_CACHE = `atlas-models-${CACHE_VERSION}`;
 const DATA_CACHE = `atlas-data-${CACHE_VERSION}`;
@@ -104,7 +104,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. APP SHELL & STATIC ASSETS: Stale-While-Revalidate
+  // 3. NAVIGATION REQUESTS (HTML): Network-First (ensures fresh app updates on launch)
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            caches.open(STATIC_CACHE).then((cache) => cache.put(request, networkResponse.clone()));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match('./index.html') || caches.match('/'))
+    );
+    return;
+  }
+
+  // 4. APP SHELL & STATIC ASSETS: Stale-While-Revalidate
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       const fetchPromise = fetch(request).then((networkResponse) => {
@@ -113,9 +128,6 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch((err) => {
-        if (request.mode === 'navigate') {
-          return caches.match('./index.html') || caches.match('/');
-        }
         throw err;
       });
 
