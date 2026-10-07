@@ -779,7 +779,12 @@
       <div class="modal-content video-modal-content">
         <div class="modal-header">
           <h3 id="videoModalTitle">Video Bài Giảng Giải Phẫu</h3>
-          <button class="modal-close" id="videoModalClose" aria-label="Đóng">&times;</button>
+          <div class="video-modal-actions" style="display: flex; align-items: center; gap: 8px;">
+            <a id="videoModalExternalLink" class="btn-video-external" href="#" target="_blank" rel="noopener noreferrer" title="Mở toàn màn hình trên YouTube" style="display: none; font-size: 11px; font-weight: 600; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 6px; padding: 3px 8px; text-decoration: none; align-items: center; gap: 4px;">
+              <span>YouTube</span> ↗
+            </a>
+            <button class="modal-close" id="videoModalClose" aria-label="Đóng">&times;</button>
+          </div>
         </div>
         <div class="modal-body">
           <div class="video-container" id="videoFrameContainer"></div>

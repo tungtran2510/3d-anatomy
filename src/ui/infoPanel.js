@@ -734,89 +734,57 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
   if (!section) return;
 
   const video = getPartVideo(part.id);
+  if (!video) {
+    section.classList.add('hidden');
+    section.innerHTML = '';
+    return;
+  }
+
   const isAdmin = isAdminLoggedIn();
+  section.classList.remove('hidden');
 
-  if (video) {
-    section.classList.remove('hidden');
-    section.innerHTML = `
-      <div class="part-video-card">
-        <div class="part-video-header">
-          <span class="part-video-tag">🎬 Video Minh Họa Y Khoa</span>
-          <span class="part-video-duration">${video.duration || '0:45'}</span>
+  section.innerHTML = `
+    <div class="info-group-title">
+      <span>🎬 Video hoạt ảnh 3D y khoa</span>
+    </div>
+    <div class="part-microvideo-row" id="btnPlayPartVideo" title="Chạm để phát video hoạt ảnh 3D">
+      <div class="microvideo-thumb-box">
+        <img src="${video.thumbnail || './images/atlas/med_skin.png'}" class="microvideo-img" alt="${video.title}" loading="lazy" />
+        <div class="microvideo-play-btn-circle">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         </div>
-        <div class="part-video-preview" id="btnPlayPartVideo" title="Chạm để phát video">
-          <div class="part-video-poster" style="background-image: url('${video.thumbnail || './images/atlas/med_skin.png'}')"></div>
-          <div class="part-video-play-overlay">
-            <div class="play-circle">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <span class="play-label">Chạm để phát video</span>
-          </div>
-        </div>
-        <div class="part-video-title">${video.title}</div>
-        <div class="part-video-toolbar">
-          <button type="button" class="btn-video-watch" id="btnWatchPartVideo">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            <span>Phát Video</span>
-          </button>
-          <button type="button" class="btn-video-edit-admin" id="btnAdminEditVideo" title="Đổi hoặc gắn video mới">
-            <span>⚙️ Đổi Video</span>
-          </button>
-          ${video.isDefault ? '' : `
-            <button type="button" class="btn-video-remove-admin" id="btnAdminRemoveVideo" title="Gỡ video khỏi bộ phận này">
-              <span>🗑️ Gỡ</span>
-            </button>
-          `}
-        </div>
+        <span class="microvideo-duration">${video.duration || '0:40'}</span>
       </div>
-    `;
-
-    const playAction = async (e) => {
-      e?.stopPropagation();
-      let playUrl = video.videoUrl;
-      if (video.localVideoId) {
-        const blobUrl = await getLocalVideoBlobUrl(video.localVideoId);
-        if (blobUrl) playUrl = blobUrl;
-      }
-      openVideoModal(playUrl, video.title);
-    };
-
-    section.querySelector('#btnPlayPartVideo')?.addEventListener('click', playAction);
-    section.querySelector('#btnWatchPartVideo')?.addEventListener('click', playAction);
-
-    section.querySelector('#btnAdminEditVideo')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openQuickVideoModal(part.id, mainName, () => updateInfoPanelContent(part, viewer));
-    });
-
-    section.querySelector('#btnAdminRemoveVideo')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (confirm(`Gỡ video khỏi bộ phận ${mainName}?`)) {
-        removePartVideo(part.id);
-        showToast(`✓ Đã gỡ video khỏi ${mainName}`);
-        updateInfoPanelContent(part, viewer);
-      }
-    });
-
-  } else {
-    // Chưa có video gắn cho bộ phận này
-    section.classList.remove('hidden');
-    section.innerHTML = `
-      <div class="part-video-card empty-card">
-        <div class="empty-video-info">
-          <span class="empty-icon">🎬</span>
-          <div class="empty-text-wrap">
-            <strong class="empty-title">Chưa có video cho ${mainName}</strong>
-            <span class="empty-desc">Gắn link YouTube hoặc tải video MP4 từ máy để học tập trực quan.</span>
-          </div>
+      <div class="microvideo-details">
+        <div class="microvideo-badge-row">
+          <span class="microvideo-category-badge">${video.badge || 'Giải phẫu 3D'}</span>
+          <span class="microvideo-tap-hint">Chạm xem ➔</span>
         </div>
-        <button type="button" class="btn-add-organ-video" id="btnAdminAddOrganVideo" title="Thêm video YouTube hoặc file MP4 từ máy">
-          <span>➕ Gắn Video Cho Bộ Phận Này</span>
+        <div class="microvideo-title-text">${video.title}</div>
+        <div class="microvideo-desc-text">${video.desc || video.subtitle}</div>
+      </div>
+      ${isAdmin ? `
+        <button type="button" class="btn-microvideo-admin-edit" id="btnAdminEditVideo" title="Quản trị: Đổi video">
+          ⚙️
         </button>
-      </div>
-    `;
+      ` : ''}
+    </div>
+  `;
 
-    section.querySelector('#btnAdminAddOrganVideo')?.addEventListener('click', (e) => {
+  const playAction = async (e) => {
+    e?.stopPropagation();
+    let playUrl = video.videoUrl;
+    if (video.localVideoId) {
+      const blobUrl = await getLocalVideoBlobUrl(video.localVideoId);
+      if (blobUrl) playUrl = blobUrl;
+    }
+    openVideoModal(playUrl, video.title);
+  };
+
+  section.querySelector('#btnPlayPartVideo')?.addEventListener('click', playAction);
+
+  if (isAdmin) {
+    section.querySelector('#btnAdminEditVideo')?.addEventListener('click', (e) => {
       e.stopPropagation();
       openQuickVideoModal(part.id, mainName, () => updateInfoPanelContent(part, viewer));
     });

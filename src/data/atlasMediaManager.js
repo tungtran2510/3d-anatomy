@@ -651,8 +651,161 @@ export function setAdminLoggedIn(status) {
 // -----------------------------------------------------------------------------
 const PART_VIDEOS_KEY = 'atlas_part_videos_v2';
 
+export const BUILTIN_CLINICAL_VIDEOS = {
+  hepatobiliary: {
+    id: 'vid_hepatobiliary',
+    title: 'Hoạt Ảnh 3D: Dòng Chảy Mật & Cơ Vòng Oddi',
+    subtitle: 'Hệ Gan - Mật - Tuyến Tụy',
+    desc: 'Mô phỏng 3D dòng chảy dịch mật từ gan và túi mật hòa cùng men tụy tại bóng Vater đổ vào tá tràng D2.',
+    videoUrl: 'https://www.youtube.com/embed/jGme7BRkpuQ',
+    thumbnail: './images/atlas/dig_peritoneum.png',
+    duration: '10:50',
+    badge: 'Gan mật tụy'
+  },
+  spine_disc: {
+    id: 'vid_spine_disc',
+    title: 'Hoạt Ảnh 3D: Thoát Vị Đĩa Đệm L4-L5 & Chèn Ép Tủy',
+    subtitle: 'Cột Sống & Đĩa Đệm',
+    desc: 'Mô phỏng 3D tải trọng nén làm rách bao xơ (Annulus), nhân nhầy (Nucleus) thoát vị chèn ép rễ thần kinh tọa.',
+    videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+    thumbnail: './images/atlas/skel_spine.png',
+    duration: '10:38',
+    badge: 'Cột sống'
+  },
+  heart_valves: {
+    id: 'vid_heart_valves',
+    title: 'Hoạt Ảnh 3D: Chu Chuyển Tim & Chuyển Động Van',
+    subtitle: '4 Buồng Tim & Hệ Thống Van',
+    desc: 'Chuyển động đóng mở của van 2 lá, 3 lá và chu kỳ tống máu nhịp nhàng qua động mạch chủ và ĐM phổi.',
+    videoUrl: 'https://www.youtube.com/embed/X9ZZ6tcxArI',
+    thumbnail: './images/atlas/circ_simplified.png',
+    duration: '10:36',
+    badge: 'Tim mạch'
+  },
+  stomach_gi: {
+    id: 'vid_stomach_gi',
+    title: 'Hoạt Ảnh 3D: Nhu Động Dạ Dày & Cơ Vòng Môn Vị',
+    subtitle: 'Dạ Dày & Ống Tiêu Hóa',
+    desc: 'Sóng nhu động 3 lớp cơ co bóp nhào trộn nhũ trấp và mở nhịp nhàng cơ thắt môn vị tống thức ăn xuống tá tràng.',
+    videoUrl: 'https://www.youtube.com/embed/p9VdK1_7pQw',
+    thumbnail: './images/atlas/dig_upper.png',
+    duration: '10:37',
+    badge: 'Dạ dày'
+  },
+  intestine_absorption: {
+    id: 'vid_intestine_absorption',
+    title: 'Hoạt Ảnh 3D: Nhu Động Ruột & Hấp Thu Nhung Mao',
+    subtitle: 'Ruột Non, Đại Tràng & Ruột Thừa',
+    desc: 'Mô phỏng 3D hệ thống vi nhung mao ruột non tăng diện tích tiếp xúc hấp thu chất dinh dưỡng vào mao mạch.',
+    videoUrl: 'https://www.youtube.com/embed/jGme7BRkpuQ',
+    thumbnail: './images/atlas/dig_lower.png',
+    duration: '10:50',
+    badge: 'Ống tiêu hóa'
+  },
+  knee_ligaments: {
+    id: 'vid_knee_ligaments',
+    title: 'Hoạt Ảnh 3D: Cơ Học Khớp Gối & Dây Chằng Chéo',
+    subtitle: 'Khớp Gối, Dây Chằng & Sụn Chêm',
+    desc: 'Động học trượt xoay của lồi cầu đùi trên mâm chày và cơ chế giữ vững khớp gối của dây chằng chéo.',
+    videoUrl: 'https://www.youtube.com/embed/DLxYDoN634c',
+    thumbnail: './images/atlas/reg_lower_limb.png',
+    duration: '09:20',
+    badge: 'Khớp gối'
+  },
+  respiratory_alveoli: {
+    id: 'vid_respiratory_alveoli',
+    title: 'Hoạt Ảnh 3D: Trao Đổi Khí O₂/CO₂ Tại Phế Nang Phổi',
+    subtitle: 'Hệ Hô Hấp & Phế Nang',
+    desc: 'Cơ chế khuếch tán khí qua màng phế nang - mao mạch theo chênh lệch phân áp giữa máu và không khí.',
+    videoUrl: 'https://www.youtube.com/embed/bLZPzL_K2rI',
+    thumbnail: './images/atlas/resp_lungs.png',
+    duration: '09:22',
+    badge: 'Hô hấp'
+  },
+  kidney_nephron: {
+    id: 'vid_kidney_nephron',
+    title: 'Hoạt Ảnh 3D: Quá Trình Siêu Lọc Máu Tại Cầu Thận',
+    subtitle: 'Thận & Đơn Vị Nephron',
+    desc: 'Mô phỏng 3D dòng máu qua tiểu cầu thận, quá trình lọc huyết tương và tái hấp thu các chất thiết yếu.',
+    videoUrl: 'https://www.youtube.com/embed/85tZk4MpwTI',
+    thumbnail: './images/atlas/urinary_anatomy.svg',
+    duration: '10:18',
+    badge: 'Hệ tiết niệu'
+  },
+  brain_csf: {
+    id: 'vid_brain_csf',
+    title: 'Hoạt Ảnh 3D: Dòng Chảy Dịch Não Tủy & Não Thất',
+    subtitle: 'Não Bộ & Hệ Thần Kinh',
+    desc: 'Dòng chảy dịch não tủy từ đám rối màng mạch qua các buồng não thất ra khoang dưới nhện bao bọc não - tủy sống.',
+    videoUrl: 'https://www.youtube.com/embed/qPix_X-9t7E',
+    thumbnail: './images/atlas/nerv_brain.png',
+    duration: '10:36',
+    badge: 'Thần kinh'
+  },
+  shoulder_rotator_cuff: {
+    id: 'vid_shoulder_rotator_cuff',
+    title: 'Hoạt Ảnh 3D: Động Học Khớp Vai & 4 Cơ Chóp Xoay',
+    subtitle: 'Khớp Vai & Cơ Chóp Xoay',
+    desc: 'Chuyển động đa trục chỏm cầu của khớp vai và sự phối hợp giữ vững của cơ trên gai, dưới gai, tròn bé và dưới vai.',
+    videoUrl: 'https://www.youtube.com/embed/DLxYDoN634c',
+    thumbnail: './images/atlas/med_ball_socket.png',
+    duration: '09:20',
+    badge: 'Khớp vai'
+  },
+  carpal_tunnel: {
+    id: 'vid_carpal_tunnel',
+    title: 'Hoạt Ảnh 3D: Hội Chứng Ống Cổ Tay & TK Giữa',
+    subtitle: 'Cổ Tay & Đám Rối Thần Kinh',
+    desc: 'Tăng áp lực trong khoang ống cổ tay chèn ép dây thần kinh giữa gây tê bì và yếu cơ bàn tay.',
+    videoUrl: 'https://www.youtube.com/embed/DLxYDoN634c',
+    thumbnail: './images/atlas/reg_upper_limb.png',
+    duration: '09:20',
+    badge: 'Chi trên'
+  },
+  ear_hearing: {
+    id: 'vid_ear_hearing',
+    title: 'Hoạt Ảnh 3D: Cơ Chế Cảm Thụ Thính Giác & Tiền Đình',
+    subtitle: 'Tai Trong & Ốc Tai',
+    desc: 'Chuyển đổi dao động sóng âm qua màng nhĩ và chuỗi xương con thành xung thần kinh tại ốc tai.',
+    videoUrl: 'https://www.youtube.com/embed/PeSteAXN454',
+    thumbnail: './images/atlas/skel_skull.png',
+    duration: '0:59',
+    badge: 'Thính giác'
+  },
+  eye_sight: {
+    id: 'vid_eye_sight',
+    title: 'Hoạt Ảnh 3D: Quang Học Nhãn Cầu & Dẫn Truyền Thị Giác',
+    subtitle: 'Mắt & Hốc Mắt',
+    desc: 'Đường đi của ánh sáng qua giác mạc và thể thủy tinh hội tụ lên hoàng điểm võng mạc truyền về vỏ não thị giác.',
+    videoUrl: 'https://www.youtube.com/embed/o0DYP-DV9rA',
+    thumbnail: './images/atlas/skel_cranial_fossae.png',
+    duration: '0:51',
+    badge: 'Thị giác'
+  },
+  skeletal_support: {
+    id: 'vid_skeletal_support',
+    title: 'Hoạt Ảnh 3D: Chức Năng Nâng Đỡ & Cơ Học Khung Xương',
+    subtitle: 'Khung Xương Toàn Thân',
+    desc: 'Bộ khung cơ thể, tạo khoang bảo vệ các tạng quan trọng và phân phối tải trọng vận động.',
+    videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+    thumbnail: './images/atlas/med_skeleton.png',
+    duration: '10:38',
+    badge: 'Hệ xương'
+  },
+  muscular_contraction: {
+    id: 'vid_muscular_contraction',
+    title: 'Hoạt Ảnh 3D: Hoạt Động Của Cặp Cơ Đối Vận Gấp - Duỗi',
+    subtitle: 'Hệ Cơ Bắp Vận Động',
+    desc: 'Cơ chế cơ chủ vận co rút kết hợp cơ đối vận giãn dài tạo lực đòn bẩy cử động các khớp xương.',
+    videoUrl: 'https://www.youtube.com/embed/Ktv-CaOt6UQ',
+    thumbnail: './images/atlas/med_paired_muscles.png',
+    duration: '10:53',
+    badge: 'Hệ cơ'
+  }
+};
+
 export function getPartVideo(partId) {
-  if (!partId) return null;
+  if (!partId) return BUILTIN_CLINICAL_VIDEOS.skeletal_support;
   const clean = String(partId).replace(/[\._](l|r)$/i, '').replace(/\s*\((l|r|left|right)\)$/i, '').trim();
 
   // 1. Kiểm tra cấu hình do Admin đã tự gắn trực tiếp vào bộ phận này
@@ -667,60 +820,131 @@ export function getPartVideo(partId) {
     } catch {}
   }
 
-  // 2. Tự động liên kết thông minh với các video mẫu chuẩn có sẵn theo hệ cơ quan
+  // 2. Tự động liên kết thông minh với thư viện video 3D y khoa chuẩn theo từ khóa giải phẫu
   const lower = clean.toLowerCase();
-  const categories = getAtlasMediaCategories();
-  for (const cat of categories) {
-    if (!cat.cards) continue;
-    for (const card of cat.cards) {
-      const cardTitleLower = (card.title + ' ' + (card.subtitle || '') + ' ' + (card.desc || '')).toLowerCase();
 
-      if (
-        (lower.includes('heart') || lower.includes('tim') || lower.includes('atrium') || lower.includes('ventricle')) &&
-        (card.id.includes('heart') || cardTitleLower.includes('heart') || cardTitleLower.includes('tim'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-      if (
-        (lower.includes('femur') || lower.includes('đùi') || lower.includes('hip') || lower.includes('háng')) &&
-        (card.id.includes('ball_socket') || cardTitleLower.includes('ball and socket'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-      if (
-        (lower.includes('knee') || lower.includes('gối') || lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('chéo')) &&
-        (card.id.includes('condyloid') || cardTitleLower.includes('gối') || cardTitleLower.includes('condyloid'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-      if (
-        (lower.includes('skin') || lower.includes('da')) &&
-        (card.id.includes('skin') || cardTitleLower.includes('da'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-      if (
-        (lower.includes('biceps') || lower.includes('triceps') || lower.includes('nhị đầu') || lower.includes('tam đầu')) &&
-        (card.id.includes('paired_muscles') || cardTitleLower.includes('cơ đối vận'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-      if (
-        (lower.includes('lung') || lower.includes('phổi') || lower.includes('trachea') || lower.includes('khí quản')) &&
-        (card.id.includes('gas_exchange') || cardTitleLower.includes('khí') || cardTitleLower.includes('phổi'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-      if (
-        (lower.includes('vertebra') || lower.includes('spine') || lower.includes('đốt sống') || lower.includes('cột sống')) &&
-        (card.id.includes('skeleton') || cardTitleLower.includes('xương'))
-      ) {
-        return { ...card, isDefault: true };
-      }
-    }
+  // 1. GAN - MẬT - TỤY
+  if (
+    lower.includes('liver') || lower.includes('hepar') || lower.includes('gall') || lower.includes('chole') ||
+    lower.includes('bile') || lower.includes('pancrea') || lower.includes('oddi') || lower.includes('vater') ||
+    lower.includes('gan') || lower.includes('mật') || lower.includes('tụy') || lower.includes('túi mật')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.hepatobiliary, isDefault: true };
   }
 
-  return null;
+  // 2. CỘT SỐNG & ĐĨA ĐỆM
+  if (
+    lower.includes('vertebra') || lower.includes('spine') || lower.includes('disc') || lower.includes('discus') ||
+    lower.includes('pulposus') || lower.includes('fibrosus') || lower.includes('đốt sống') || lower.includes('cột sống') ||
+    lower.includes('đĩa đệm') || lower.includes('thắt lưng') || lower.includes('tủy sống') || lower.includes('l4') ||
+    lower.includes('l5') || lower.includes('c5') || lower.includes('c6') || lower.includes('c3') || lower.includes('t1')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.spine_disc, isDefault: true };
+  }
+
+  // 3. TIM MẠCH & VAN TIM
+  if (
+    lower.includes('heart') || lower.includes('cardio') || lower.includes('atrium') || lower.includes('ventricle') ||
+    lower.includes('mitral') || lower.includes('tricuspid') || lower.includes('aort') || lower.includes('tim') ||
+    lower.includes('tâm thất') || lower.includes('tâm nhĩ') || lower.includes('van tim')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.heart_valves, isDefault: true };
+  }
+
+  // 4. DẠ DÀY & ỐNG TIÊU HÓA TRÊN
+  if (
+    lower.includes('stomach') || lower.includes('gastr') || lower.includes('pylor') || lower.includes('cardia') ||
+    lower.includes('fundus') || lower.includes('esophag') || lower.includes('dạ dày') || lower.includes('thực quản')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.stomach_gi, isDefault: true };
+  }
+
+  // 5. RUỘT & ỐNG TIÊU HÓA DƯỚI
+  if (
+    lower.includes('intestin') || lower.includes('duoden') || lower.includes('jejun') || lower.includes('ileum') ||
+    lower.includes('colon') || lower.includes('caecum') || lower.includes('cecum') || lower.includes('appendix') ||
+    lower.includes('ruột') || lower.includes('manh tràng') || lower.includes('đại tràng') || lower.includes('trực tràng')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.intestine_absorption, isDefault: true };
+  }
+
+  // 6. KHỚP GỐI, DÂY CHẰNG & SỤN CHÊM
+  if (
+    lower.includes('knee') || lower.includes('patella') || lower.includes('cruciate') || lower.includes('meniscus') ||
+    lower.includes('tibia') || lower.includes('gối') || lower.includes('bánh chè') || lower.includes('chày') ||
+    lower.includes('dây chằng') || lower.includes('sụn chêm')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.knee_ligaments, isDefault: true };
+  }
+
+  // 7. PHỔI & HÔ HẤP
+  if (
+    lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch') || lower.includes('trachea') ||
+    lower.includes('alveol') || lower.includes('phổi') || lower.includes('khí quản') || lower.includes('phế quản')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.respiratory_alveoli, isDefault: true };
+  }
+
+  // 8. THẬN & HỆ TIẾT NIỆU
+  if (
+    lower.includes('kidney') || lower.includes('ren') || lower.includes('nephr') || lower.includes('ureter') ||
+    lower.includes('bladder') || lower.includes('glomerul') || lower.includes('thận') || lower.includes('niệu quản') ||
+    lower.includes('bàng quang')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.kidney_nephron, isDefault: true };
+  }
+
+  // 9. NÃO BỘ & DỊCH NÃO TỦY
+  if (
+    lower.includes('brain') || lower.includes('cerebr') || lower.includes('cerebell') || lower.includes('encephalon') ||
+    lower.includes('choroid') || lower.includes('dura') || lower.includes('não') || lower.includes('màng não')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.brain_csf, isDefault: true };
+  }
+
+  // 10. KHỚP VAI & CHÓP XOAY
+  if (
+    lower.includes('shoulder') || lower.includes('scapula') || lower.includes('humerus') || lower.includes('glenoid') ||
+    lower.includes('supraspinatus') || lower.includes('rotator') || lower.includes('vai') || lower.includes('bả vai')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.shoulder_rotator_cuff, isDefault: true };
+  }
+
+  // 11. CỔ TAY & CHI TRÊN
+  if (
+    lower.includes('wrist') || lower.includes('carpal') || lower.includes('median') || lower.includes('radial') ||
+    lower.includes('ulnar') || lower.includes('cổ tay') || lower.includes('bàn tay') || lower.includes('ngón tay')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.carpal_tunnel, isDefault: true };
+  }
+
+  // 12. TAI & THÍNH GIÁC
+  if (
+    lower.includes('ear') || lower.includes('tympan') || lower.includes('cochlea') || lower.includes('vestibul') ||
+    lower.includes('tai') || lower.includes('màng nhĩ') || lower.includes('ốc tai')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.ear_hearing, isDefault: true };
+  }
+
+  // 13. MẮT & THỊ GIÁC
+  if (
+    lower.includes('eye') || lower.includes('ocul') || lower.includes('cornea') || lower.includes('retina') ||
+    lower.includes('lens') || lower.includes('optic') || lower.includes('mắt') || lower.includes('giác mạc') ||
+    lower.includes('võng mạc')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.eye_sight, isDefault: true };
+  }
+
+  // 14. HỆ CƠ BẮP
+  if (
+    lower.includes('muscle') || lower.includes('muscul') || lower.includes('cơ') || lower.includes('biceps') ||
+    lower.includes('triceps') || lower.includes('pectoralis') || lower.includes('deltoid') || lower.includes('gluteus')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.muscular_contraction, isDefault: true };
+  }
+
+  // 15. DEFAULT HỆ XƯƠNG
+  return { ...BUILTIN_CLINICAL_VIDEOS.skeletal_support, isDefault: true };
 }
 
 export function setPartVideo(partId, videoData) {

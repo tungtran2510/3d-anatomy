@@ -1029,10 +1029,22 @@ export function openVideo(videoIdOrUrl, videoTitle) {
   const modal = document.getElementById('videoModal');
   const title = document.getElementById('videoModalTitle');
   const container = document.getElementById('videoFrameContainer');
+  const extLink = document.getElementById('videoModalExternalLink');
   if (!modal || !container) return;
 
   const parsed = parseVideoUrl(videoIdOrUrl);
   if (title) title.textContent = videoTitle || 'Video Bài Giảng Giải Phẫu';
+
+  if (extLink) {
+    if (parsed.type === 'youtube') {
+      const match = parsed.url.match(/embed\/([a-zA-Z0-9_-]+)/);
+      const ytId = match ? match[1] : '';
+      extLink.href = ytId ? `https://www.youtube.com/watch?v=${ytId}` : parsed.url;
+      extLink.style.display = 'inline-flex';
+    } else {
+      extLink.style.display = 'none';
+    }
+  }
 
   if (parsed.type === 'video') {
     container.innerHTML = `
@@ -1060,8 +1072,10 @@ export const openVideoModal = openVideo;
 export function closeVideo() {
   const modal = document.getElementById('videoModal');
   const container = document.getElementById('videoFrameContainer');
+  const extLink = document.getElementById('videoModalExternalLink');
   if (modal) modal.classList.add('hidden');
   if (container) container.innerHTML = '';
+  if (extLink) extLink.style.display = 'none';
 }
 
 export function initVideoModal() {
