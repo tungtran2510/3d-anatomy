@@ -1735,6 +1735,11 @@ export function initSearch() {
         document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
         input.blur();
         await selectStructureAnywhere(partId);
+        const card = document.getElementById('selectionCard');
+        if (card) {
+          card.classList.remove('hidden');
+          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+        }
       };
 
       results.querySelectorAll('.search-result-item').forEach(item => {
@@ -1744,10 +1749,10 @@ export function initSearch() {
         });
       });
 
-      results.querySelectorAll('.concept-card-top, .concept-chip').forEach(el => {
+      results.querySelectorAll('.search-concept-card, .concept-card-top, .concept-chip').forEach(el => {
         el.addEventListener('click', (clickEvent) => {
           clickEvent.stopPropagation();
-          const targetPart = el.dataset.part;
+          const targetPart = el.dataset.part || el.querySelector('[data-part]')?.dataset.part;
           if (targetPart) choose(targetPart);
         });
       });

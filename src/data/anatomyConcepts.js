@@ -195,12 +195,12 @@ export const ANATOMY_CONCEPTS = [
     subtitle: 'Khớp chịu tải lớn nhất & 4 trụ cột dây chằng giữ vững',
     thumbnail: '/images/atlas/knee_anatomy.svg',
     system: 'joints',
-    primaryPartId: 'Anterior cruciate ligament',
+    primaryPartId: 'Anterior cruciate ligament.r',
     subunits: [
-      { label: '⚡ Chéo trước (ACL)', partId: 'Anterior cruciate ligament', note: 'Khóa trượt mâm chày ra trước, trụ cột khi nhảy & tiếp đất' },
-      { label: '🛡️ Chéo sau (PCL)', partId: 'Posterior cruciate ligament', note: 'Bó sợi to khỏe gấp 2 lần ACL, ngăn mâm chày thụt ra sau' },
-      { label: '🌙 Sụn chêm (Meniscus)', partId: 'Medial meniscus', note: 'Đệm sợi bán nguyệt hấp thu 70% phản lực chấn động' },
-      { label: '🧱 Dây chằng bên (MCL/LCL)', partId: 'Fibular collateral ligament', note: 'Ổn định trục ngang, chống vẹo gối trong và ngoài' }
+      { label: '⚡ Chéo trước (ACL)', partId: 'Anterior cruciate ligament.r', note: 'Khóa trượt mâm chày ra trước, trụ cột khi nhảy & tiếp đất' },
+      { label: '🛡️ Chéo sau (PCL)', partId: 'Posterior cruciate ligament.r', note: 'Bó sợi to khỏe gấp 2 lần ACL, ngăn mâm chày thụt ra sau' },
+      { label: '🌙 Sụn chêm (Meniscus)', partId: 'Medial meniscus.r', note: 'Đệm sợi bán nguyệt hấp thu 70% phản lực chấn động' },
+      { label: '🧱 Dây chằng bên (MCL/LCL)', partId: 'Fibular collateral ligament.r', note: 'Ổn định trục ngang, chống vẹo gối trong và ngoài' }
     ],
     slides: [
       {

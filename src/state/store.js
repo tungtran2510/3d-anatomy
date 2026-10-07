@@ -216,8 +216,17 @@ export function isPartVisible(partId) {
 }
 
 export function getStructureInfo(partId) {
-  if (!state.partsData) return null;
-  return state.partsData[partId] || null;
+  if (!state.partsData || !partId) return null;
+  if (state.partsData[partId]) return state.partsData[partId];
+  if (state.partsData[`${partId}.r`]) return state.partsData[`${partId}.r`];
+  if (state.partsData[`${partId}.l`]) return state.partsData[`${partId}.l`];
+  const lower = partId.toLowerCase();
+  for (const [k, v] of Object.entries(state.partsData)) {
+    if (k.toLowerCase() === lower || k.toLowerCase() === `${lower}.r` || k.toLowerCase() === `${lower}.l`) {
+      return v;
+    }
+  }
+  return null;
 }
 
 export function translate(key, lang = state.language) {
