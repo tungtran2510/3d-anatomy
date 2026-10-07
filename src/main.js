@@ -6,9 +6,6 @@ import { initSelection } from './viewer/selection.js';
 import { initUI, selectStructureAnywhere } from './ui/sidebar.js';
 import { state, setViewer, setPartsData, setSystemsData, setTranslations, setSearchIndex, subscribe } from './state/store.js';
 
-window.state = state;
-window.selectStructureAnywhere = selectStructureAnywhere;
-window.selectPartById = selectPartById;
 import { readState, storedState, applyState, scheduleStateWrite } from './state/urlState.js';
 import { loadModel } from './viewer/loadModel.js';
 import { selectPartById } from './viewer/selection.js';
@@ -19,6 +16,10 @@ import { dynamicAnatomy } from './viewer/dynamicAnatomy.js';
 import { getVietnameseSynonyms } from './data/vietnamese.js';
 import { initTheme, toggleAppTheme } from './utils/themeManager.js';
 import { engineManager } from './viewer/engineManager.js';
+
+window.state = state;
+window.selectStructureAnywhere = selectStructureAnywhere;
+window.selectPartById = selectPartById;
 
 setTranslations({ vi: translationsVi, en: translationsEn, it: translationsIt });
 
