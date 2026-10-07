@@ -78,8 +78,8 @@ export const ANATOMY_CONCEPTS = [
     primaryPartId: 'Basilar artery',
     subunits: [
       { label: '🔴 ĐM Thân nền', partId: 'Basilar artery', note: 'Hợp lưu từ 2 ĐM đốt sống nuôi thân não' },
-      { label: '🔴 ĐM Cảnh trong', partId: 'Internal carotid artery right', note: 'Trụ cột cấp máu chính cho 2 bán cầu' },
-      { label: '🔵 ĐM Não giữa', partId: 'Internal carotid artery right', note: 'Nhánh hay bị tắc gây đột quỵ liệt nửa người' },
+      { label: '🔴 ĐM Cảnh trong', partId: 'Internal carotid artery.r', note: 'Trụ cột cấp máu chính cho 2 bán cầu' },
+      { label: '🔵 ĐM Não giữa', partId: 'Internal carotid artery.r', note: 'Nhánh hay bị tắc gây đột quỵ liệt nửa người' },
       { label: '⚡ ĐM Thông trước', partId: 'Basilar artery', note: 'Cầu nối huyết động học bàng hệ 2 bên' }
     ],
     slides: [
@@ -315,12 +315,12 @@ export const ANATOMY_CONCEPTS = [
     subtitle: 'Giải phẫu 4 buồng tim, chu trình tâm thu/tâm trương & 4 van tim',
     thumbnail: '/images/atlas/cardiac_anatomy.svg',
     system: 'cardiovascular',
-    primaryPartId: 'Heart',
+    primaryPartId: 'Left ventricle',
     subunits: [
-      { label: '🫀 Tâm thất trái', partId: 'Heart', note: 'Buồng bơm máu chính áp lực 120mmHg đi nuôi cơ thể' },
-      { label: '🩸 Van 2 lá', partId: 'Heart', note: 'Van ngăn trào ngược giữa nhĩ trái và thất trái' },
-      { label: '🔴 Van ĐM chủ', partId: 'Aorta', note: 'Van một chiều mở thì tâm thu tống máu vào tuần hoàn lớn' },
-      { label: '🫁 Vách tim', partId: 'Heart', note: 'Vách liên thất và liên nhĩ ngăn máu giàu/nghèo Oxy' }
+      { label: '🫀 Tâm thất trái', partId: 'Left ventricle', note: 'Buồng bơm máu chính áp lực 120mmHg đi nuôi cơ thể' },
+      { label: '🩸 Van 2 lá', partId: 'Left ventricle', note: 'Van ngăn trào ngược giữa nhĩ trái và thất trái' },
+      { label: '🔴 Van ĐM chủ', partId: 'Ascending aorta', note: 'Van một chiều mở thì tâm thu tống máu vào tuần hoàn lớn' },
+      { label: '🫁 Vách tim', partId: 'Right ventricle', note: 'Vách liên thất và liên nhĩ ngăn máu giàu/nghèo Oxy' }
     ],
     slides: [
       {
@@ -373,13 +373,13 @@ export const ANATOMY_CONCEPTS = [
     latin: 'Systema respiratorium / Pulmones (TA2: 3100)',
     subtitle: 'Cây khí phế quản 23 thế hệ, chùm phế nang mao mạch & trao đổi khí',
     thumbnail: '/images/atlas/respiratory_anatomy.svg',
-    system: 'respiratory',
-    primaryPartId: 'Lung.l',
+    system: 'visceral',
+    primaryPartId: 'Superior lobe of left lung',
     subunits: [
-      { label: '🫁 Phổi & Phế nang', partId: 'Lung.l', note: '300 triệu phế nang diện tích 70–100m² trao đổi khí' },
-      { label: '🌬️ Cây phế quản', partId: 'Lung.r', note: '23 thế hệ phân nhánh dẫn và sưởi ấm không khí' },
+      { label: '🫁 Phổi & Phế nang', partId: 'Superior lobe of left lung', note: '300 triệu phế nang diện tích 70–100m² trao đổi khí' },
+      { label: '🌬️ Cây phế quản', partId: 'Trachea', note: '23 thế hệ phân nhánh dẫn và sưởi ấm không khí' },
       { label: '💨 Cơ hoành', partId: 'Diaphragm', note: 'Cơ hô hấp chính tạo chênh lệch áp suất lồng ngực' },
-      { label: '🛡️ Màng phổi', partId: 'Lung.l', note: 'Lá thành và lá tạng chứa dịch giảm ma sát hô hấp' }
+      { label: '🛡️ Màng phổi', partId: 'Superior lobe of right lung', note: 'Lá thành và lá tạng chứa dịch giảm ma sát hô hấp' }
     ],
     slides: [
       {
@@ -422,13 +422,23 @@ export const ANATOMY_CONCEPTS = [
   }
 ];
 
+export function normaliseConceptText(str) {
+  if (!str) return '';
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().trim();
+}
+
 export function findAnatomyConcept(query) {
   if (!query || typeof query !== 'string') return null;
   const clean = query.toLowerCase().trim();
   if (clean.length < 2) return null;
+  const norm = normaliseConceptText(clean);
 
   return ANATOMY_CONCEPTS.find(concept => {
-    return concept.keywords.some(kw => clean.includes(kw) || kw.includes(clean));
+    return concept.keywords.some(kw => {
+      const kwLower = kw.toLowerCase().trim();
+      const kwNorm = normaliseConceptText(kw);
+      return clean.includes(kwLower) || kwLower.includes(clean) || norm.includes(kwNorm) || kwNorm.includes(norm);
+    });
   }) || null;
 }
 

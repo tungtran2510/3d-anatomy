@@ -33,7 +33,8 @@ import { initInfoPanel, updateInfoPanelContent, setCompactMode } from './infoPan
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
-import { findAnatomyConcept } from '../data/anatomyConcepts.js';
+import { findAnatomyConcept, getVisualDeckForPart } from '../data/anatomyConcepts.js';
+import { openAtlasAdmin } from './atlasAdminModal.js';
 
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
@@ -1871,7 +1872,8 @@ function onSelectionChange(part) {
 
     if (card) {
       card.classList.remove('hidden');
-      setCompactMode(true);
+      const hasDeck = getVisualDeckForPart(part.id);
+      setCompactMode(!hasDeck);
       updateInfoPanelContent(part, state.viewer);
     }
 
@@ -2052,6 +2054,14 @@ export async function initUI(viewer) {
   initInfoPanel(viewer);
   initViewsQuickNav(viewer);
   initRadiologicalScout(viewer);
+
+  // Wire Topbar Actions
+  document.getElementById('classroomBtn')?.addEventListener('click', () => {
+    openStudyModulePicker(viewer);
+  });
+  document.getElementById('adminPortalBtn')?.addEventListener('click', () => {
+    openAtlasAdmin(viewer);
+  });
 }
 
 // Under 1024px the search field is hidden; this button is the only way to it.

@@ -264,6 +264,11 @@ export function initInfoPanel(viewer) {
 export function updateInfoPanelContent(part, viewer) {
   if (!part) return;
 
+  // Stop previous text-to-speech audio to prevent audio overlap
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+
   const cardBody = document.getElementById('selectionCardBody');
   if (cardBody) {
     cardBody.scrollTop = 0;
@@ -1049,6 +1054,10 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     }
   });
 
+  ['pointerdown', 'touchstart', 'touchmove', 'mousedown'].forEach(evt => {
+    range?.addEventListener(evt, e => e.stopPropagation(), { passive: true });
+  });
+
   container.querySelectorAll('.sub-chip-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1202,6 +1211,10 @@ function renderJointKinematicsSection(part, clinical, mainName, viewer) {
     dynamicAnatomy.pause();
     dynamicAnatomy.seek(pct);
     if (playBtn) playBtn.innerHTML = '▶ Chạy 3D';
+  });
+
+  ['pointerdown', 'touchstart', 'touchmove', 'mousedown'].forEach(evt => {
+    range?.addEventListener(evt, e => e.stopPropagation(), { passive: true });
   });
 
   playBtn?.addEventListener('click', async (e) => {

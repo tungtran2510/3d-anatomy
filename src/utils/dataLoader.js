@@ -131,8 +131,18 @@ function buildSearchIndex() {
   setSearchIndex([...rows.values()]);
 }
 
-function scoreRow(row, query, tokens) {
+function scoreRow(row, query, tokens, rawQuery = '') {
   let best = 0;
+  const rawLower = rawQuery ? rawQuery.toLowerCase().trim() : '';
+
+  // 1. Direct Exact & Accented Vietnamese matches (Ưu tiên tuyệt đối từ chuẩn y khoa)
+  if (rawLower && row.label) {
+    const labelLower = row.label.toLowerCase();
+    if (labelLower === rawLower) best = 150;
+    else if (labelLower.startsWith(rawLower)) best = 120;
+    else if (labelLower.split(/[\s(),.-]+/).some(word => word === rawLower)) best = 110;
+    else if (labelLower.includes(rawLower)) best = 95;
+  }
 
   for (const term of row.terms) {
     if (term === query) best = Math.max(best, 100);
@@ -169,7 +179,7 @@ export function searchStructures(query, limit = 30) {
   const scored = [];
 
   for (const row of state.searchIndex) {
-    const score = scoreRow(row, normalised, tokens);
+    const score = scoreRow(row, normalised, tokens, query);
     if (score > 0) scored.push({ row, score });
   }
 
