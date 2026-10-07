@@ -187,6 +187,178 @@ async function loadModelOnce(systemId, viewer, options = {}) {
   return { systemId, model, meshCount: systemRegistry.get(systemId)?.length || 0 };
 }
 
+let cachedAnulusTexture = null;
+function createAnulusConcentricTexture() {
+  if (cachedAnulusTexture) return cachedAnulusTexture;
+  if (typeof document === 'undefined') return null;
+
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    // Neutral grey baseline for bump map
+    ctx.fillStyle = '#808080';
+    ctx.fillRect(0, 0, 256, 256);
+
+    const cx = 128;
+    const cy = 128;
+
+    // 15-20 Concentric lamellae rings (vòng sợi đồng tâm)
+    for (let r = 14; r < 122; r += 5) {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r * 1.08, r * 0.88, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = (r % 10 === 0) ? '#a8a8a8' : '#646464';
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+    }
+
+    // Interlaced cross-hatched collagen fiber striations (đan chéo 30 độ)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+    ctx.lineWidth = 0.8;
+    for (let i = -256; i < 512; i += 14) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i + 140, 256);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i - 140, 256);
+      ctx.stroke();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.needsUpdate = true;
+    cachedAnulusTexture = texture;
+    return cachedAnulusTexture;
+  } catch (e) {
+    console.warn('[loadModel] Could not create anulus texture:', e);
+    return null;
+  }
+}
+
+function setupIntervertebralDiscs(model, systemId, viewer, nodes) {
+  const anulusTexture = createAnulusConcentricTexture();
+  const discMeshes = [];
+
+  model.traverse((child) => {
+    if (child.isMesh && child.name && /intervertebral[ _]disc/i.test(child.name)) {
+      discMeshes.push(child);
+    }
+  });
+
+  discMeshes.forEach((mesh) => {
+    const rawId = mesh.userData?.partId || mesh.name.replace(/_/g, ' ');
+    const match = rawId.match(/intervertebral disc\s+([A-Za-z0-9-]+)/i);
+    const level = match ? match[1] : '';
+    const discPartId = level ? `Intervertebral disc ${level}` : rawId;
+    const nucleusPartId = level ? `Nucleus pulposus ${level}` : `Nucleus pulposus`;
+
+    // 1. Style the outer mesh as Anulus Fibrosus (Vòng sợi ngoài)
+    mesh.userData.partId = discPartId;
+    mesh.userData.isAnulusFibrosus = true;
+    mesh.userData.discLevel = level;
+
+    applyCustomProps(mesh, {
+      name: 'PBR_AnulusFibrosus',
+      color: 0xDCD5C6, // Natural ivory fibrocartilage tone (chuẩn Visible Body)
+      roughness: 0.52,
+      metalness: 0.01,
+      clearcoat: 0.38,
+      clearcoatRoughness: 0.25,
+      sheen: 0.45,
+      sheenColor: 0xe2e8f0,
+      transparent: true,
+      opacity: 0.68, // Translucent fibrocartilage so inner nucleus is visible!
+      depthWrite: true,
+      renderOrder: 1,
+      bumpMap: anulusTexture,
+      bumpScale: 0.003
+    });
+    mesh.userData.baseMaterial = mesh.material;
+
+    // 2. Generate the inner 3D Nucleus Pulposus (Nhân nhầy) mesh
+    if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+    const bbox = mesh.geometry.boundingBox;
+    const size = new THREE.Vector3();
+    bbox.getSize(size);
+    const center = new THREE.Vector3();
+    bbox.getCenter(center);
+
+    // Scale inner nucleus hydrogel core (~52% disc footprint, ~82% disc height)
+    const radiusX = Math.max(0.004, size.x * 0.26);
+    const radiusZ = Math.max(0.004, size.z * 0.26);
+    const heightY = Math.max(0.002, size.y * 0.82);
+
+    const nucleusGeom = new THREE.CylinderGeometry(radiusX, radiusX, heightY, 24, 1);
+    if (radiusZ !== radiusX) {
+      nucleusGeom.scale(1, 1, radiusZ / radiusX);
+    }
+    if (nucleusGeom.computeBoundsTree) {
+      nucleusGeom.computeBoundsTree();
+    }
+
+    // PBR Hydrogel Material (Xanh lam ngọc mọng nước, phát quang sinh học)
+    const nucleusMat = new THREE.MeshPhysicalMaterial({
+      name: 'PBR_NucleusPulposus',
+      color: new THREE.Color(0x0ea5e9), // Lam ngọc mọng nước
+      emissive: new THREE.Color(0x0284c7), // Phát quang sinh học
+      emissiveIntensity: 0.45,
+      roughness: 0.12,
+      metalness: 0.0,
+      clearcoat: 0.92,
+      clearcoatRoughness: 0.08,
+      transmission: 0.55,
+      ior: 1.48,
+      transparent: true,
+      opacity: 0.96,
+      depthWrite: true
+    });
+
+    const nucleusMesh = new THREE.Mesh(nucleusGeom, nucleusMat);
+    // Offset slightly posterior (-Z * 0.08) matching anatomical position towards spinal canal
+    nucleusMesh.position.set(center.x, center.y, center.z - (size.z * 0.08));
+    nucleusMesh.name = `Nucleus_pulposus_${level}`;
+    nucleusMesh.renderOrder = 2;
+    nucleusMesh.userData = {
+      partId: nucleusPartId,
+      za_name: nucleusPartId,
+      system: systemId,
+      isNucleusPulposus: true,
+      parentDiscId: discPartId,
+      baseMaterial: nucleusMat
+    };
+
+    // Attach nucleus to mesh as child so it moves and rotates with disc
+    mesh.add(nucleusMesh);
+
+    // Register in structures and meshRegistry
+    meshRegistry.set(nucleusPartId, nucleusMesh);
+    meshRegistry.set(nucleusMesh.name, nucleusMesh);
+    structures.set(nucleusPartId, {
+      node: nucleusMesh,
+      systemId,
+      parentId: discPartId,
+      childIds: [],
+      ownMeshes: [nucleusMesh]
+    });
+
+    const discStruct = structures.get(discPartId);
+    if (discStruct && !discStruct.childIds.includes(nucleusPartId)) {
+      discStruct.childIds.push(nucleusPartId);
+    }
+
+    if (nodes && !nodes.includes(nucleusMesh)) {
+      nodes.push(nucleusMesh);
+    }
+  });
+}
+
 function processModel(model, systemId, viewer) {
   const nodes = [];
 
@@ -252,6 +424,10 @@ function processModel(model, systemId, viewer) {
       }
     }
   });
+
+  if (systemId === 'joints') {
+    setupIntervertebralDiscs(model, systemId, viewer, nodes);
+  }
 
   systemRegistry.set(systemId, nodes);
   console.log(`Loaded ${systemId}: ${nodes.length} structures`);
@@ -735,7 +911,24 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       });
     }
   } else if (systemId === 'joints') {
-    if (partName.includes('cartilage') || partName.includes('meniscus') || partName.includes('discus') || partName.includes('articular') || matName.includes('cartilage')) {
+    const isIntervertebral = partName.includes('intervertebral') || partName.includes('đĩa đệm') || (partName.includes('disc') && !partName.includes('temporomandibular') && !partName.includes('sternoclavicular') && !partName.includes('radio-ulnar') && !partName.includes('acromioclavicular'));
+    if (isIntervertebral) {
+      // Intervertebral disc anulus fibrosus: authentic fibrocartilaginous ivory tone with concentric collagen sheen
+      applyCustomProps(mesh, {
+        name: 'PBR_AnulusFibrosus',
+        color: 0xDCD5C6,
+        roughness: 0.52,
+        metalness: 0.01,
+        clearcoat: 0.38,
+        clearcoatRoughness: 0.25,
+        sheen: 0.45,
+        sheenColor: 0xe2e8f0,
+        transparent: true,
+        opacity: 0.68,
+        depthWrite: true,
+        renderOrder: 1
+      });
+    } else if (partName.includes('cartilage') || partName.includes('meniscus') || partName.includes('discus') || partName.includes('articular') || matName.includes('cartilage')) {
       // Joint articular cartilage & meniscus: sophisticated luminous medical cerulean blue
       applyCustomProps(mesh, {
         name: 'PBR_JointCartilage',
