@@ -138,6 +138,55 @@ export const EXAM_QUESTION_BANK = [
     targetIds: ['Hip bone.l', 'Hip bone.r', 'Ilium.l', 'Ilium.r'],
     hint: 'Khung xương lớn nâng đỡ thân mình và tạo ổ cối tiếp khớp với xương đùi.',
     category: 'Khung chậu'
+  },
+  {
+    title: 'Lá Gan',
+    latin: 'Hepar (TA2: 2470)',
+    targetIds: ['Liver'],
+    hint: 'Cơ quan nội tạng lớn nhất, nằm ở hạ sườn phải dưới vòm hoành.',
+    category: 'Nội tạng'
+  },
+  {
+    title: 'Túi mật',
+    latin: 'Vesica biliaris (TA2: 2490)',
+    targetIds: ['Gallbladder'],
+    hint: 'Túi nhỏ hình quả lê nằm áp vào mặt dưới gan, dự trữ dịch mật.',
+    category: 'Nội tạng'
+  },
+  {
+    title: 'Tuyến tụy',
+    latin: 'Pancreas (TA2: 2505)',
+    targetIds: ['Pancreas'],
+    hint: 'Tuyến nội - ngoại tiết vắt ngang sau dạ dày, tiết insulin & men tụy.',
+    category: 'Nội tạng'
+  },
+  {
+    title: 'Dạ dày',
+    latin: 'Gaster (TA2: 2435)',
+    targetIds: ['Stomach'],
+    hint: 'Túi tiêu hóa hình chữ J nằm ở thượng vị và hạ sườn trái.',
+    category: 'Nội tạng'
+  },
+  {
+    title: 'Trái Tim',
+    latin: 'Cor (TA2: 2540)',
+    targetIds: ['Heart'],
+    hint: 'Khối cơ 4 buồng nằm trong trung thất giữa bơm máu toàn thân.',
+    category: 'Tuần hoàn'
+  },
+  {
+    title: 'Lá Phổi',
+    latin: 'Pulmo (TA2: 2360)',
+    targetIds: ['Lung.l', 'Lung.r'],
+    hint: 'Cơ quan xốp đàn hồi nằm hai bên lồng ngực thực hiện trao đổi O2/CO2.',
+    category: 'Hô hấp'
+  },
+  {
+    title: 'Dây chằng chéo trước (ACL)',
+    latin: 'Ligamentum cruciatum anterius',
+    targetIds: ['Anterior cruciate ligament of knee.l', 'Anterior cruciate ligament of knee.r'],
+    hint: 'Dây chằng then chốt giữ mâm chày không bị trượt ra trước ở khớp gối.',
+    category: 'Khớp gối'
   }
 ];
 
@@ -294,6 +343,13 @@ function renderQuizUI(viewer) {
     return;
   }
 
+  // Đảm bảo hệ cơ quan tương ứng được hiển thị trên 3D để người học chạm được
+  if (q.targetIds && q.targetIds[0]) {
+    import('./sidebar.js').then(({ selectStructureAnywhere }) => {
+      selectStructureAnywhere(q.targetIds[0]);
+    }).catch(() => {});
+  }
+
   startTimer(viewer);
 
   // Tự động ẩn selection card phía dưới để giải phóng tối đa diện tích quan sát 3D
@@ -367,6 +423,13 @@ function renderQuizUI(viewer) {
     const hintBox = document.getElementById('quizHintBox');
     if (hintBox) {
       hintBox.classList.toggle('hidden');
+    }
+    // Gợi ý thông minh: chớp nhẹ vị trí để định hướng người học
+    if (q.targetIds && q.targetIds[0]) {
+      highlightMesh(q.targetIds[0], 0x38bdf8, 0.7);
+      setTimeout(() => {
+        clearHighlight(q.targetIds[0]);
+      }, 1500);
     }
   });
 }

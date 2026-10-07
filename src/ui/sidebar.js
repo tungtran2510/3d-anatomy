@@ -2109,11 +2109,18 @@ function onSelectionChange(part) {
     const item = document.querySelector(`.structure-item[data-part="${part.id}"]`);
     if (item) item.classList.add('selected');
 
+    const isStudyMode = document.getElementById('studyModeModal')?.classList.contains('step-mode');
+    const isQuizActive = document.body.classList.contains('quiz-active');
+
     if (card) {
-      card.classList.remove('hidden');
-      const hasDeck = getVisualDeckForPart(part.id);
-      setCompactMode(!hasDeck);
-      updateInfoPanelContent(part, state.viewer);
+      if (isStudyMode || isQuizActive) {
+        card.classList.add('hidden');
+      } else {
+        card.classList.remove('hidden');
+        const hasDeck = getVisualDeckForPart(part.id);
+        setCompactMode(!hasDeck);
+        updateInfoPanelContent(part, state.viewer);
+      }
     }
 
     updateBookmarkButton(part.id);

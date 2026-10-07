@@ -2,7 +2,7 @@
 // Curated high-yield modules with 4-way anatomical relations and auto-focus
 import { selectPartById, deselectPart } from '../viewer/selection.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
-import { openLesson, openVideo } from './sidebar.js';
+import { openLesson, openVideo, selectStructureAnywhere } from './sidebar.js';
 import { startQuiz } from './quiz.js';
 
 export const STUDY_MODULES = [
@@ -14,6 +14,33 @@ export const STUDY_MODULES = [
     bgGradient: 'linear-gradient(135deg, rgba(30, 58, 138, 0.16) 0%, rgba(59, 130, 246, 0.06) 100%)',
     iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><rect x="9" y="3.5" width="6" height="3" rx="1.5"/><rect x="8" y="8.5" width="8" height="3" rx="1.5"/><rect x="7" y="13.5" width="10" height="3.5" rx="1.5"/><path d="M10 20.5l2 1.5 2-1.5"/></svg>`,
     items: ['Atlas (C1)', 'Axis (C2)', 'Vertebra L3', 'Sacrum', 'Coccyx']
+  },
+  {
+    id: 'digestive',
+    title: 'Hệ Gan – Mật – Tụy',
+    focus: 'Gan • Túi mật • Tuyến tụy • Dạ dày • Tá tràng',
+    color: '#0284c7',
+    bgGradient: 'linear-gradient(135deg, rgba(2, 132, 199, 0.16) 0%, rgba(56, 189, 248, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>`,
+    items: ['Liver', 'Gallbladder', 'Pancreas', 'Stomach', 'Duodenum']
+  },
+  {
+    id: 'cardio',
+    title: 'Hệ Tim Mạch',
+    focus: 'Tim 4 buồng • Quai ĐM chủ • ĐM phổi',
+    color: '#dc2626',
+    bgGradient: 'linear-gradient(135deg, rgba(220, 38, 38, 0.16) 0%, rgba(248, 113, 113, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
+    items: ['Heart', 'Ascending aorta', 'Pulmonary trunk']
+  },
+  {
+    id: 'nervous',
+    title: 'Thần Kinh & Não Bộ',
+    focus: 'Đại não • Dây thần kinh X • Thần kinh tọa',
+    color: '#8b5cf6',
+    bgGradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.16) 0%, rgba(196, 181, 253, 0.06) 100%)',
+    iconSvg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.5V14h4V9.5c1.2-.7 2-2 2-3.5a4 4 0 0 0-4-4Z"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
+    items: ['Brain', 'Lateral ventricle.l', 'Sciatic nerve.l']
   },
   {
     id: 'lower_limb',
@@ -44,7 +71,7 @@ export const STUDY_MODULES = [
   },
   {
     id: 'cranium',
-    title: 'Hộp Sọ & Đầu Mặt Cổ',
+    title: 'Hộp Sọ & Đầu Mặt',
     focus: 'Vòm sọ • Xương hàm dưới • Khớp TD-hàm',
     color: '#7c3aed',
     bgGradient: 'linear-gradient(135deg, rgba(124, 58, 237, 0.16) 0%, rgba(167, 139, 250, 0.06) 100%)',
@@ -88,7 +115,7 @@ export function openStudyModulePicker(viewer) {
         <div class="study-dialog-header-left">
           <div class="study-dialog-badge-row">
             <span class="study-dialog-pill">Định hướng lâm sàng</span>
-            <span class="study-dialog-pill secondary">4 hệ giải phẫu</span>
+            <span class="study-dialog-pill secondary">8 chuyên đề trọng tâm</span>
           </div>
           <h3 class="study-dialog-title">Chuyên Đề Tự Học Trọng Tâm</h3>
           <p class="study-dialog-sub">Chọn chuyên đề để khám phá cấu trúc &amp; cơ sinh học</p>
@@ -178,8 +205,12 @@ function renderStudyStep(viewer) {
   const partId = activeModule.items[currentIndex];
   const clinical = getClinicalData(partId);
 
-  // Focus and select structure in 3D
-  selectPartById(partId, viewer);
+  // Focus and select structure in 3D (ensuring system is loaded and visible)
+  selectStructureAnywhere(partId).then(() => {
+    selectPartById(partId, viewer);
+  }).catch(() => {
+    selectPartById(partId, viewer);
+  });
 
   // Hide selectionCard to avoid overlap with flashcard navigation
   const selCard = document.getElementById('selectionCard');

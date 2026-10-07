@@ -114,6 +114,15 @@ function computeAnchor(partId) {
 function update() {
   if (!currentPartId || !state.viewer) return;
 
+  // In Quiz mode, never show callout pin to avoid revealing target structure answer
+  if (document.body.classList.contains('quiz-active')) {
+    if (root) {
+      root.classList.remove('is-visible');
+      root.classList.add('is-hidden');
+    }
+    return;
+  }
+
   // Real-time anchor tracking: dynamically recompute anchor coordinate
   // to ensure pin always precisely matches current mesh transformation
   computeAnchor(currentPartId);
@@ -169,6 +178,13 @@ function update() {
       maxBottom = Math.min(maxBottom, cardRect.top - box.height - 12);
     }
   }
+  const studyPanel = document.querySelector('.study-step-panel');
+  if (studyPanel && !studyPanel.closest('.hidden')) {
+    const studyRect = studyPanel.getBoundingClientRect();
+    if (studyRect.top > 80 && studyRect.top < height) {
+      maxBottom = Math.min(maxBottom, studyRect.top - box.height - 12);
+    }
+  }
 
   // Right edge safety margin to stay clear of the right control column (34px buttons + padding)
   const rightSafetyMargin = width < 768 ? 54 : 20;
@@ -187,6 +203,10 @@ function update() {
 }
 
 export function showCallout(partId, displayName, actions = {}) {
+  // If in quiz mode, never show callout to avoid spoiling answers
+  if (document.body.classList.contains('quiz-active')) {
+    return;
+  }
   const container = document.getElementById('viewerContainer');
   if (!container) return;
 

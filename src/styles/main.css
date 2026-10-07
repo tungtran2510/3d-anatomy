@@ -5621,6 +5621,11 @@ body.theme-dark .clip-action-btn {
 .study-mode-modal.step-mode .study-step-container {
   pointer-events: auto !important;
 }
+
+body:has(.study-mode-modal.step-mode:not(.hidden)) #selectionCard,
+body.quiz-active #selectionCard {
+  display: none !important;
+}
 .study-dialog {
   background: #ffffff;
   border: 1px solid rgba(226, 232, 240, 0.95);
@@ -5782,7 +5787,9 @@ body.theme-dark .study-module-card:hover {
   font-weight: 700;
   color: #0f172a;
   margin: 0;
-  white-space: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.25;
 }
 [data-theme="dark"] .module-card-title,
