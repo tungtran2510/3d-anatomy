@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1329" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="boneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+    <radialGradient id="hydroGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background Card -->
+  <rect width="600" height="380" rx="16" fill="url(#bgGrad2)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 28)">
+    <rect width="215" height="26" rx="6" fill="#047857" fill-opacity="0.25" stroke="#10b981" stroke-width="1" />
+    <text x="12" y="17" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12" font-weight="700" letter-spacing="0.5">CƠ SINH HỌC &amp; VẬN ĐỘNG</text>
+  </g>
+  <text x="24" y="74" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Cơ Chế Thủy Lực Giảm Chấn Của Đĩa Đệm</text>
+  <text x="24" y="92" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12">Chuyển hóa lực nén dọc trục thành lực căng 360° phân tán đều</text>
+
+  <!-- Left: Đứng Thẳng Chịu Tải Trục (Axial Compression) -->
+  <g transform="translate(150, 220)">
+    <!-- Upper Vertebra -->
+    <rect x="-80" y="-105" width="160" height="50" rx="8" fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="0" y="-76" fill="#334155" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">Thân đốt sống trên</text>
+
+    <!-- Axial Load Arrows (Lực nén dọc trục) -->
+    <g stroke="#ef4444" stroke-width="2.5" fill="#ef4444">
+      <line x1="0" y1="-135" x2="0" y2="-112" />
+      <polygon points="0,-110 -5,-120 5,-120" />
+      <line x1="-50" y1="-135" x2="-50" y2="-112" />
+      <polygon points="-50,-110 -55,-120 -45,-120" />
+      <line x1="50" y1="-135" x2="50" y2="-112" />
+      <polygon points="50,-110 45,-120 55,-120" />
+    </g>
+    <text x="0" y="-140" fill="#f87171" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">LỰC NÉN DỌC TRỤC (F)</text>
+
+    <!-- Intervertebral Disc -->
+    <!-- Outer Anulus Fibrosus -->
+    <rect x="-82" y="-50" width="164" height="42" rx="10" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    
+    <!-- Central Nucleus Pulposus (Hydraulic Ball) -->
+    <ellipse cx="0" cy="-29" rx="35" ry="16" fill="url(#hydroGlow)" stroke="#38bdf8" stroke-width="2"/>
+    <text x="0" y="-25" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700" text-anchor="middle">Nhân nhầy</text>
+
+    <!-- Radial Pressure Arrows (Áp lực thủy tĩnh phân tán ngang) -->
+    <g stroke="#38bdf8" stroke-width="2" fill="#38bdf8">
+      <line x1="-36" y1="-29" x2="-68" y2="-29" />
+      <polygon points="-72,-29 -64,-33 -64,-25" />
+      <line x1="36" y1="-29" x2="68" y2="-29" />
+      <polygon points="72,-29 64,-33 64,-25" />
+    </g>
+
+    <!-- Lower Vertebra -->
+    <rect x="-80" y="-4" width="160" height="50" rx="8" fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="0" y="26" fill="#334155" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">Thân đốt sống dưới</text>
+
+    <!-- Caption -->
+    <text x="0" y="66" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">Tư thế đứng thẳng (Phân bổ đều)</text>
+    <text x="0" y="80" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" text-anchor="middle">Áp suất thủy tĩnh triệt tiêu 100% phản lực</text>
+  </g>
+
+  <!-- Right: Cúi Gập Lưng (Flexion - Dồn Lực Về Phía Sau) -->
+  <g transform="translate(430, 220)">
+    <!-- Tilted Upper Vertebra (Góc nghiêng gập trước) -->
+    <g transform="rotate(-8)">
+      <rect x="-80" y="-105" width="160" height="50" rx="8" fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="0" y="-76" fill="#334155" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">Đốt trên nghiêng gập</text>
+    </g>
+
+    <!-- Wedge-shaped compressed disc -->
+    <!-- Front compressed, Back opened -->
+    <path d="M-82,-42 L78,-58 L78,-6 L-82,-6 Z" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+
+    <!-- Displaced Nucleus Pulposus (Đùn về phía sau) -->
+    <ellipse cx="28" cy="-30" rx="34" ry="16" fill="url(#hydroGlow)" stroke="#f59e0b" stroke-width="2.5"/>
+    <text x="28" y="-26" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" font-weight="700" text-anchor="middle">Lệch tâm sau</text>
+
+    <!-- Posterior Thrust Arrow -->
+    <g stroke="#f59e0b" stroke-width="2.5" fill="#f59e0b">
+      <line x1="30" y1="-30" x2="68" y2="-30" />
+      <polygon points="73,-30 63,-34 63,-26" />
+    </g>
+
+    <!-- Lower Vertebra -->
+    <rect x="-80" y="-4" width="160" height="50" rx="8" fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="0" y="26" fill="#334155" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">Thân đốt sống dưới</text>
+
+    <!-- Caption -->
+    <text x="0" y="66" fill="#fbbf24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" text-anchor="middle">Khi cúi gập lưng / Bê vật nặng</text>
+    <text x="0" y="80" fill="#f87171" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" text-anchor="middle">Nhân nhầy bị dồn ra sau ép rách vòng sợi</text>
+  </g>
+</svg>

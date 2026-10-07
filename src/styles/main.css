@@ -3274,15 +3274,334 @@ body.theme-dark .disc-sub-latin {
   color: #94a3b8;
 }
 
-.disc-subunits-note {
-  font-size: 11px;
-  line-height: 1.4;
-  color: #172554;
+/* Visual Micro-Deck Carousel & Slide Viewer */
+.disc-visual-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-[data-theme="dark"] .disc-subunits-note,
-body.theme-dark .disc-subunits-note {
+.deck-slide-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9.5;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0f172a;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.deck-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.deck-slide-frame:hover .deck-slide-img {
+  transform: scale(1.02);
+}
+
+.deck-slide-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.btn-deck-video {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.btn-deck-video:active {
+  transform: scale(0.96);
+}
+
+.deck-nav-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.deck-nav-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.deck-pill {
+  flex: 1;
+  padding: 6px 4px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(241, 245, 249, 0.85);
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .deck-pill,
+body.theme-dark .deck-pill {
+  background: rgba(30, 41, 59, 0.7);
+  color: #cbd5e1;
+  border-color: rgba(71, 85, 105, 0.5);
+}
+
+.deck-pill.active {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff !important;
+  border-color: #38bdf8;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+}
+
+/* Interactive Herniation Simulator */
+.herniation-simulator-box {
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+[data-theme="dark"] .herniation-simulator-box,
+body.theme-dark .herniation-simulator-box {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(51, 65, 85, 0.6);
+}
+
+.herniation-sim-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.herniation-sim-title {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+[data-theme="dark"] .herniation-sim-title,
+body.theme-dark .herniation-sim-title {
+  color: #e2e8f0;
+}
+
+.herniation-sim-status {
+  font-weight: 800;
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(2, 132, 199, 0.15);
+  color: #0284c7;
+}
+
+.herniation-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.herniation-range {
+  width: 100%;
+  accent-color: #0284c7;
+  cursor: pointer;
+  margin: 0;
+}
+
+.herniation-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+[data-theme="dark"] .herniation-ticks,
+body.theme-dark .herniation-ticks {
+  color: #94a3b8;
+}
+
+.herniation-ticks .text-danger {
+  color: #ef4444 !important;
+  font-weight: 700;
+}
+
+.herniation-desc-pill {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #475569;
+  background: rgba(226, 232, 240, 0.5);
+  padding: 4px 8px;
+  border-radius: 6px;
+  border-left: 2.5px solid #0284c7;
+}
+
+[data-theme="dark"] .herniation-desc-pill,
+body.theme-dark .herniation-desc-pill {
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.5);
+  border-left-color: #38bdf8;
+}
+
+/* Search Concept Card in Dropdown */
+.search-concept-card {
+  margin: 6px 8px 10px;
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.98), rgba(224, 242, 254, 0.95));
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: default;
+}
+
+[data-theme="dark"] .search-concept-card,
+body.theme-dark .search-concept-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(12, 74, 110, 0.45));
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.concept-card-top {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.concept-card-thumb {
+  width: 64px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  flex-shrink: 0;
+}
+
+.concept-card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.concept-card-badge {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0284c7;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+
+[data-theme="dark"] .concept-card-badge,
+body.theme-dark .concept-card-badge {
+  color: #38bdf8;
+}
+
+.concept-card-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .concept-card-title,
+body.theme-dark .concept-card-title {
+  color: #f8fafc;
+}
+
+.concept-card-latin {
+  font-size: 10.5px;
+  font-style: italic;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+[data-theme="dark"] .concept-card-latin,
+body.theme-dark .concept-card-latin {
+  color: #94a3b8;
+}
+
+.concept-card-desc {
+  font-size: 10.5px;
+  color: #334155;
+  line-height: 1.3;
+}
+
+[data-theme="dark"] .concept-card-desc,
+body.theme-dark .concept-card-desc {
+  color: #cbd5e1;
+}
+
+.concept-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.concept-chip {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: #ffffff;
+  color: #0369a1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+[data-theme="dark"] .concept-chip,
+body.theme-dark .concept-chip {
+  background: rgba(30, 41, 59, 0.85);
   color: #7dd3fc;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.concept-chip:active,
+.concept-chip:hover {
+  background: #0284c7;
+  color: #ffffff !important;
+  border-color: #0284c7;
+  transform: translateY(-1px);
 }
 
 @media (min-width: 1025px) {

@@ -14,6 +14,7 @@ import { getPartVideo, removePartVideo, isAdminLoggedIn } from '../data/atlasMed
 import { getLocalVideoBlobUrl } from '../data/videoStore.js';
 import { openQuickVideoModal } from './quickVideoModal.js';
 import { openVideoModal } from './sidebar.js';
+import { getVisualDeckForPart } from '../data/anatomyConcepts.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -895,11 +896,63 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
   const anulusId = `Intervertebral disc ${level}`;
   const nucleusId = `Nucleus pulposus ${level}`;
 
+  const deck = getVisualDeckForPart(partId);
+  const slides = deck?.slides || [];
+
+  const HERNIATION_STAGES = [
+    { level: 'Cấp 0: Bình thường', desc: 'Đĩa đệm nguyên vẹn, lõi nhân nhầy giữ trọn 80% nước, mâm sụn dinh dưỡng tốt.' },
+    { level: 'Cấp 1: Phình đĩa đệm (Degeneration)', desc: 'Mất nước nhẹ, vòng sợi suy yếu và phình đều chu vi, chưa rách vỏ sợi.' },
+    { level: 'Cấp 2: Lồi đĩa đệm (Prolapse)', desc: 'Rách bán phần các lá sợi bên trong, nhân nhầy dịch chuyển ra sau nhưng còn vỏ bao bọc.' },
+    { level: 'Cấp 3: Thoát vị chèn rễ (Extrusion)', desc: 'Rách đứt toàn bộ vòng sợi, khối nhân trào vào ống sống đè bẹp rễ thần kinh tủy sống.' }
+  ];
+
+  let currentSlide = 0;
+
+  const deckHtml = slides.length > 0 ? `
+    <div class="disc-visual-deck">
+      <div class="deck-slide-frame" id="deckSlideFrame" title="Chạm để chuyển slide">
+        <img src="${slides[0].image}" class="deck-slide-img" id="deckSlideImg" alt="${slides[0].title}" />
+        <span class="deck-slide-badge" id="deckSlideBadge">${slides[0].badge}</span>
+        ${deck?.video ? `<button type="button" class="btn-deck-video" id="btnDeckVideo">▶ Video 3D</button>` : ''}
+      </div>
+      <div class="deck-nav-pills" id="deckPills">
+        ${slides.map((s, idx) => `
+          <button type="button" class="deck-pill ${idx === 0 ? 'active' : ''}" data-slide="${idx}">
+            ${s.title}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  const simHtml = `
+    <div class="herniation-simulator-box">
+      <div class="herniation-sim-header">
+        <span class="herniation-sim-title">⚡ MÔ PHỎNG TIẾN TRIỂN THOÁT VỊ:</span>
+        <span class="herniation-sim-status" id="herniationStageLabel">${HERNIATION_STAGES[0].level}</span>
+      </div>
+      <div class="herniation-slider-wrap">
+        <input type="range" min="0" max="3" value="0" step="1" class="herniation-range" id="herniationRange" />
+        <div class="herniation-ticks">
+          <span>Bình thường</span>
+          <span>Phình</span>
+          <span>Lồi</span>
+          <span class="text-danger">Thoát vị</span>
+        </div>
+      </div>
+      <div class="herniation-desc-pill" id="herniationStageDesc">
+        ${HERNIATION_STAGES[0].desc}
+      </div>
+    </div>
+  `;
+
   container.innerHTML = `
     <div class="disc-subunits-box">
       <div class="disc-subunits-header">
         <span class="disc-subunits-title">🔬 CẤU TRÚC GIẢI PHẪU ĐĨA ĐỆM TẦNG ${level}:</span>
       </div>
+      ${deckHtml}
+      ${simHtml}
       <div class="disc-subunits-buttons">
         <button type="button" class="btn-disc-sub ${isDisc ? 'active' : ''}" id="btnSelectAnulus" title="Xem Vòng sợi ngoài (Anulus fibrosus)">
           <span class="disc-sub-icon">⭕</span>
@@ -912,15 +965,66 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
           <span class="disc-sub-icon">💧</span>
           <div class="disc-sub-info">
             <span class="disc-sub-name">Nhân nhầy trung tâm</span>
-            <span class="disc-sub-latin">Nucleus pulposus (Lõi hydrogel 80% nước)</span>
+            <span class="disc-sub-latin">Nucleus pulposus (Lõi hydrogel)</span>
           </div>
         </button>
       </div>
-      <div class="disc-subunits-note">
-        💡 <em>Mô hình 3D hiển thị xuyên thấu: Vòng sợi ngoài bán mờ bọc trọn lấy nhân nhầy phát sáng bên trong. Chạm vào từng phần trên để khảo sát riêng biệt.</em>
-      </div>
     </div>
   `;
+
+  // Attach event listeners
+  const imgEl = container.querySelector('#deckSlideImg');
+  const badgeEl = container.querySelector('#deckSlideBadge');
+  const pills = container.querySelectorAll('.deck-pill');
+
+  function setSlide(index) {
+    if (!slides[index]) return;
+    currentSlide = index;
+    if (imgEl) imgEl.src = slides[index].image;
+    if (badgeEl) badgeEl.textContent = slides[index].badge;
+    pills.forEach((p, idx) => {
+      p.classList.toggle('active', idx === index);
+    });
+  }
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(pill.dataset.slide, 10);
+      setSlide(idx);
+    });
+  });
+
+  container.querySelector('#deckSlideFrame')?.addEventListener('click', (e) => {
+    if (e.target.closest('#btnDeckVideo')) return;
+    e.stopPropagation();
+    if (slides.length > 1) {
+      const nextIdx = (currentSlide + 1) % slides.length;
+      setSlide(nextIdx);
+    }
+  });
+
+  container.querySelector('#btnDeckVideo')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (deck?.video) {
+      openVideoModal(deck.video.url, deck.video.title);
+    }
+  });
+
+  const range = container.querySelector('#herniationRange');
+  const stageLabel = container.querySelector('#herniationStageLabel');
+  const stageDesc = container.querySelector('#herniationStageDesc');
+
+  range?.addEventListener('input', (e) => {
+    const val = parseInt(e.target.value, 10);
+    const stage = HERNIATION_STAGES[val] || HERNIATION_STAGES[0];
+    if (stageLabel) stageLabel.textContent = stage.level;
+    if (stageDesc) stageDesc.textContent = stage.desc;
+    // Automatically switch to slide index 2 (Bệnh học 4 cấp độ thoát vị) if user moves slider
+    if (slides.length >= 3 && currentSlide !== 2) {
+      setSlide(2);
+    }
+  });
 
   container.querySelector('#btnSelectAnulus')?.addEventListener('click', (e) => {
     e.stopPropagation();

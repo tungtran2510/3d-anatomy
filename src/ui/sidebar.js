@@ -33,6 +33,7 @@ import { initInfoPanel, updateInfoPanelContent, setCompactMode } from './infoPan
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
+import { findAnatomyConcept } from '../data/anatomyConcepts.js';
 
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
@@ -1671,30 +1672,59 @@ export function initSearch() {
       return;
     }
 
+    const concept = findAnatomyConcept(query);
     const matches = searchStructures(query);
-    if (matches.length > 0) {
+
+    if (concept || matches.length > 0) {
       const lang = state.language || 'it';
 
-      results.innerHTML = matches.map((row, index) => {
-        // Paired structures are one row with a side chip each, instead of two
-        // near-identical rows.
-        const sides = ['left', 'right']
-          .filter(side => row.sides[side])
-          .map(side => `<button type="button" class="result-side" data-part="${escapeHtml(row.sides[side])}" title="${translate(side === 'left' ? 'side_left' : 'side_right')}">${translate(side === 'left' ? 'side_left_short' : 'side_right_short')}</button>`)
-          .join('');
-
-        const target = row.sides.none || row.sides.right || row.sides.left;
-        const pending = state.loadedSystems.includes(row.system) ? '' : ' is-pending';
-
-        return `
-          <div class="search-result-item${pending}" role="option" id="search-option-${index}" aria-selected="false" data-part="${escapeHtml(target)}">
-            <span class="result-name">${escapeHtml(row.label)}</span>
-            <span class="result-sides">${sides}</span>
-            <span class="result-system">${escapeHtml(systemLabel(row.system, lang))}</span>
+      let html = '';
+      if (concept) {
+        html += `
+          <div class="search-concept-card" id="searchConceptCard">
+            <div class="concept-card-top" data-part="${escapeHtml(concept.primaryPartId)}">
+              <img src="${concept.thumbnail}" class="concept-card-thumb" alt="${escapeHtml(concept.titleVi)}" />
+              <div class="concept-card-info">
+                <span class="concept-card-badge">Cụm Khái Niệm Giải Phẫu Chuyên Sâu</span>
+                <span class="concept-card-title">${escapeHtml(concept.titleVi)}</span>
+                <span class="concept-card-latin">${escapeHtml(concept.latin)}</span>
+                <span class="concept-card-desc">${escapeHtml(concept.subtitle)}</span>
+              </div>
+            </div>
+            <div class="concept-chips-row">
+              ${concept.subunits.map(sub => `
+                <button type="button" class="concept-chip" data-part="${escapeHtml(sub.partId)}" title="${escapeHtml(sub.note)}">
+                  ${escapeHtml(sub.label)}
+                </button>
+              `).join('')}
+            </div>
           </div>
         `;
-      }).join('');
+      }
 
+      if (matches.length > 0) {
+        html += matches.map((row, index) => {
+          // Paired structures are one row with a side chip each, instead of two
+          // near-identical rows.
+          const sides = ['left', 'right']
+            .filter(side => row.sides[side])
+            .map(side => `<button type="button" class="result-side" data-part="${escapeHtml(row.sides[side])}" title="${translate(side === 'left' ? 'side_left' : 'side_right')}">${translate(side === 'left' ? 'side_left_short' : 'side_right_short')}</button>`)
+            .join('');
+
+          const target = row.sides.none || row.sides.right || row.sides.left;
+          const pending = state.loadedSystems.includes(row.system) ? '' : ' is-pending';
+
+          return `
+            <div class="search-result-item${pending}" role="option" id="search-option-${index}" aria-selected="false" data-part="${escapeHtml(target)}">
+              <span class="result-name">${escapeHtml(row.label)}</span>
+              <span class="result-sides">${sides}</span>
+              <span class="result-system">${escapeHtml(systemLabel(row.system, lang))}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      results.innerHTML = html;
       results.classList.add('show');
 
       const choose = async (partId) => {
@@ -1711,6 +1741,14 @@ export function initSearch() {
         item.addEventListener('click', (clickEvent) => {
           const side = clickEvent.target.closest('.result-side');
           choose(side ? side.dataset.part : item.dataset.part);
+        });
+      });
+
+      results.querySelectorAll('.concept-card-top, .concept-chip').forEach(el => {
+        el.addEventListener('click', (clickEvent) => {
+          clickEvent.stopPropagation();
+          const targetPart = el.dataset.part;
+          if (targetPart) choose(targetPart);
         });
       });
     } else {
