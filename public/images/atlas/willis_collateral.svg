@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="collateralBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09132b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="flowNormal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <linearGradient id="flowCompensate" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#collateralBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <g transform="translate(24, 24)">
+    <rect width="210" height="26" rx="6" fill="#047857" fill-opacity="0.3" stroke="#10b981" stroke-width="1" />
+    <text x="12" y="17" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">HUYẾT ĐỘNG HỌC BÀNG HỆ</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Cơ Chế Bù Trừ Cấp Máu Bàng Hệ Khi Tắc Mạch</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Dòng máu qua ACom &amp; PCom đảo chiều cứu sống bán cầu não bị thiếu máu</text>
+
+  <!-- Left: Occluded ICA side vs Right: Normal Donor side -->
+  <g transform="translate(300, 220)">
+    <!-- Basilar &amp; Vertebral Trunk (Normal supply) -->
+    <path d="M0,110 L0,20" stroke="#10b981" stroke-width="8" stroke-linecap="round" />
+    <path d="M-30,140 C-20,125 -10,120 0,110 C10,120 20,125 30,140" fill="none" stroke="#059669" stroke-width="6" stroke-linecap="round" />
+
+    <!-- PCA Branches -->
+    <path d="M0,20 C-30,15 -65,10 -115,25" fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round" />
+    <path d="M0,20 C30,15 65,10 115,25" fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round" />
+
+    <!-- Right Side Normal Donor ICA -->
+    <circle cx="65" cy="-60" r="10" fill="#10b981" stroke="#a7f3d0" stroke-width="2.5" />
+    <path d="M65,-60 C95,-60 130,-55 170,-45" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" />
+    <path d="M65,-60 C50,-85 30,-98 16,-102 L16,-135" fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round" />
+
+    <!-- Left Side: OCCLUDED ICA (TẮC HOÀN TOÀN) -->
+    <circle cx="-65" cy="-60" r="10" fill="#475569" stroke="#94a3b8" stroke-width="2" />
+    <!-- Occlusion X mark -->
+    <line x1="-72" y1="-67" x2="-58" y2="-53" stroke="#ef4444" stroke-width="3" />
+    <line x1="-58" y1="-67" x2="-72" y2="-53" stroke="#ef4444" stroke-width="3" />
+
+    <!-- ACom Bridge Compensating Flow (From Right to Left) -->
+    <path d="M16,-102 L-16,-102" stroke="#38bdf8" stroke-width="7" stroke-linecap="round" />
+    <polygon points="-8,-106 -18,-102 -8,-98" fill="#38bdf8" />
+
+    <!-- Flow into Left ACA &amp; Retrograde into Left MCA -->
+    <path d="M-16,-102 C-30,-98 -50,-85 -65,-60" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linecap="round" />
+    <polygon points="-58,-68 -68,-63 -60,-58" fill="#38bdf8" />
+
+    <!-- Rescued Left MCA -->
+    <path d="M-65,-60 C-95,-60 -130,-55 -170,-45" fill="none" stroke="#38bdf8" stroke-width="7" stroke-linecap="round" />
+    <polygon points="-125,-60 -135,-57 -125,-54" fill="#38bdf8" />
+
+    <!-- PCom Bridge (Basilar to Left Hemispheric Compensation) -->
+    <path d="M-55,14 C-65,-15 -68,-40 -65,-60" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="6 2" stroke-linecap="round" />
+    <polygon points="-68,-30 -65,-40 -62,-30" fill="#38bdf8" />
+  </g>
+
+  <!-- Left Callout: Occlusion Warning -->
+  <g transform="translate(30, 130)">
+    <rect width="165" height="54" rx="8" fill="#1e1b4b" fill-opacity="0.9" stroke="#ef4444" stroke-width="1.5" />
+    <text x="10" y="20" fill="#f87171" font-size="11" font-weight="700">❌ Tắc ĐM Cảnh Trong T</text>
+    <text x="10" y="36" fill="#cbd5e1" font-size="9.5">Mất dòng máu chính nuôi</text>
+    <text x="10" y="48" fill="#cbd5e1" font-size="9.5">bán cầu đại não bên trái</text>
+  </g>
+
+  <!-- Top Center Callout: ACom Rescue Flow -->
+  <g transform="translate(200, 105)">
+    <rect width="200" height="42" rx="8" fill="#0f172a" fill-opacity="0.95" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="10" y="18" fill="#38bdf8" font-size="10.5" font-weight="700">🌊 Dòng Cứu Trợ Qua ACom</text>
+    <text x="10" y="32" fill="#e2e8f0" font-size="9.5">Máu từ ĐM Cảnh Phải tràn sang cứu bán cầu T</text>
+  </g>
+
+  <!-- Right Callout: Healthy Side -->
+  <g transform="translate(425, 130)">
+    <rect width="145" height="54" rx="8" fill="#064e3b" fill-opacity="0.75" stroke="#10b981" stroke-width="1.2" />
+    <text x="10" y="20" fill="#34d399" font-size="11" font-weight="700">✅ Bên Cấp Máu Bù</text>
+    <text x="10" y="36" fill="#cbd5e1" font-size="9.5">Tăng áp lực tưới máu</text>
+    <text x="10" y="48" fill="#cbd5e1" font-size="9.5">ngăn nhồi máu não cấp</text>
+  </g>
+
+  <!-- Bottom Insight -->
+  <g transform="translate(30, 320)">
+    <rect width="540" height="42" rx="8" fill="#0f172a" fill-opacity="0.8" stroke="#334155" stroke-width="1" />
+    <text x="14" y="18" fill="#38bdf8" font-size="10.5" font-weight="700">💡 GIÁ TRỊ SINH HỌC CỦA ĐA GIÁC WILLIS:</text>
+    <text x="14" y="32" fill="#94a3b8" font-size="9.5">Vòng khép kín này là "van an toàn" bảo hiểm mạng sống. Nếu đa giác Willis toàn vẹn, tắc 1 ĐM cảnh vẫn có thể không bị liệt.</text>
+  </g>
+</svg>

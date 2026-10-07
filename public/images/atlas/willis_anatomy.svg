@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="willisBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1026" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <!-- Artery Red Glow -->
+    <linearGradient id="arteryRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="50%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+
+    <!-- Communicating Branch Light -->
+    <linearGradient id="commGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <filter id="glowArtery" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="380" rx="16" fill="url(#willisBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Header Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="230" height="26" rx="6" fill="#0369a1" fill-opacity="0.35" stroke="#38bdf8" stroke-width="1" />
+    <text x="12" y="17" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">TUẦN HOÀN MẠCH MÁU NÃO</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Đa Giác Willis (Circulus Arteriosus Cerebri)</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Mạng lưới nối thông giữa Hệ Cảnh trong và Hệ Sống - Thân nền</text>
+
+  <!-- Central Circle of Willis Diagram -->
+  <g transform="translate(300, 220)">
+    <!-- Base shadow glow of circle -->
+    <ellipse cx="0" cy="-25" rx="90" ry="75" fill="none" stroke="#ef4444" stroke-opacity="0.12" stroke-width="24" filter="url(#glowArtery)"/>
+
+    <!-- 1. BASILAR ARTERY (ĐM Thân nền) -->
+    <path d="M0,110 L0,20" stroke="#f43f5e" stroke-width="9" stroke-linecap="round" />
+    <path d="M0,110 L0,20" stroke="#fecdd3" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Vertebral Arteries (ĐM Đốt sống) -->
+    <path d="M-35,145 C-25,130 -10,120 0,110 C10,120 25,130 35,145" fill="none" stroke="#e11d48" stroke-width="7" stroke-linecap="round" />
+
+    <!-- 2. POSTERIOR CEREBRAL ARTERIES (PCA - ĐM Não sau) -->
+    <path d="M0,20 C-30,15 -65,10 -115,25" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" />
+    <path d="M0,20 C30,15 65,10 115,25" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" />
+
+    <!-- 3. POSTERIOR COMMUNICATING ARTERIES (PCom - ĐM Thông sau) -->
+    <path d="M-55,14 C-65,-15 -68,-40 -65,-60" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8 2" stroke-linecap="round" />
+    <path d="M55,14 C65,-15 68,-40 65,-60" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="8 2" stroke-linecap="round" />
+
+    <!-- 4. INTERNAL CAROTID ARTERY (ICA - ĐM Cảnh trong 2 bên) -->
+    <circle cx="-65" cy="-60" r="9" fill="#f43f5e" stroke="#ffe4e6" stroke-width="2.5" />
+    <circle cx="65" cy="-60" r="9" fill="#f43f5e" stroke="#ffe4e6" stroke-width="2.5" />
+
+    <!-- 5. MIDDLE CEREBRAL ARTERIES (MCA - ĐM Não giữa 2 bên) -->
+    <path d="M-65,-60 C-95,-60 -130,-55 -170,-45" fill="none" stroke="#f43f5e" stroke-width="8" stroke-linecap="round" />
+    <path d="M65,-60 C95,-60 130,-55 170,-45" fill="none" stroke="#f43f5e" stroke-width="8" stroke-linecap="round" />
+
+    <!-- 6. ANTERIOR CEREBRAL ARTERIES (ACA - ĐM Não trước) -->
+    <path d="M-65,-60 C-50,-85 -30,-98 -16,-102" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" />
+    <path d="M65,-60 C50,-85 30,-98 16,-102" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" />
+    <path d="M-16,-102 L-16,-140" stroke="#ef4444" stroke-width="6" stroke-linecap="round" />
+    <path d="M16,-102 L16,-140" stroke="#ef4444" stroke-width="6" stroke-linecap="round" />
+
+    <!-- 7. ANTERIOR COMMUNICATING ARTERY (ACom - ĐM Thông trước) -->
+    <path d="M-16,-102 L16,-102" stroke="#38bdf8" stroke-width="6" stroke-linecap="round" />
+
+    <!-- Flow Arrows -->
+    <polygon points="0,-12 6,-2 -6,-2" fill="#ffffff" transform="translate(0, 50)" />
+    <polygon points="0,-10 5,0 -5,0" fill="#38bdf8" transform="translate(-16, -118)" />
+    <polygon points="0,-10 5,0 -5,0" fill="#38bdf8" transform="translate(16, -118)" />
+  </g>
+
+  <!-- Anatomical Callouts &amp; Labels -->
+  <!-- Top Left: ACA &amp; ACom -->
+  <g transform="translate(40, 115)">
+    <rect width="145" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#38bdf8" stroke-width="1.2" />
+    <text x="8" y="18" fill="#38bdf8" font-size="10.5" font-weight="700">ĐM Thông Trước (ACom)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Cầu nối 2 nhánh não trước</text>
+    <line x1="145" y1="21" x2="280" y2="118" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Mid Left: MCA -->
+  <g transform="translate(24, 185)">
+    <rect width="140" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#f43f5e" stroke-width="1.2" />
+    <text x="8" y="18" fill="#f43f5e" font-size="10.5" font-weight="700">ĐM Não Giữa (MCA)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Cấp máu 80% bán cầu não</text>
+    <line x1="140" y1="21" x2="160" y2="180" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Top Right: ICA -->
+  <g transform="translate(420, 115)">
+    <rect width="155" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#f43f5e" stroke-width="1.2" />
+    <text x="8" y="18" fill="#f43f5e" font-size="10.5" font-weight="700">ĐM Cảnh Trong (ICA)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Trụ cột cấp máu não trước</text>
+    <line x1="0" y1="25" x2="-55" y2="45" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Mid Right: PCom &amp; PCA -->
+  <g transform="translate(425, 195)">
+    <rect width="150" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#38bdf8" stroke-width="1.2" />
+    <text x="8" y="18" fill="#38bdf8" font-size="10.5" font-weight="700">ĐM Thông Sau (PCom)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Nối hệ cảnh &amp; hệ thân nền</text>
+    <line x1="0" y1="20" x2="-60" y2="10" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Bottom: Basilar Artery -->
+  <g transform="translate(370, 310)">
+    <rect width="165" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#e11d48" stroke-width="1.2" />
+    <text x="8" y="18" fill="#f43f5e" font-size="10.5" font-weight="700">ĐM Thân Nền (Basilar)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Hợp lưu từ 2 ĐM đốt sống</text>
+    <line x1="0" y1="20" x2="-70" y2="-20" stroke="#e11d48" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+</svg>

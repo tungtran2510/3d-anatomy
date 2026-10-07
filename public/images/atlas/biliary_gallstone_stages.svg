@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gallstoneBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a121d" />
+      <stop offset="100%" stop-color="#18181b" />
+    </linearGradient>
+
+    <!-- Stage Gradients -->
+    <linearGradient id="colStage0" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="colStage1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#854d0e" />
+      <stop offset="100%" stop-color="#422006" />
+    </linearGradient>
+    <linearGradient id="colStage2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9a3412" />
+      <stop offset="100%" stop-color="#431407" />
+    </linearGradient>
+    <linearGradient id="colStage3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#4c0519" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#gallstoneBg)" stroke="#27272a" stroke-width="1.5" />
+
+  <g transform="translate(24, 24)">
+    <rect width="230" height="26" rx="6" fill="#be123c" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1" />
+    <text x="12" y="17" fill="#fb7185" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">TIẾN TRIỂN BỆNH HỌC GAN MẬT TỤY</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">4 Giai Đoạn Sỏi Mật &amp; Biến Chứng Viêm Tụy Cấp</text>
+  <text x="24" y="88" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Sự di chuyển của viên sỏi từ đáy túi mật xuống ngã ba bóng Vater</text>
+
+  <!-- 4 Columns -->
+  <!-- STAGE 0 -->
+  <g transform="translate(20, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#colStage0)" stroke="#059669" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#059669" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 0</text>
+    <text x="10" y="48" fill="#34d399" font-size="12" font-weight="700">Bình Thường</text>
+
+    <!-- Normal Gallbladder -->
+    <g transform="translate(65, 100)">
+      <ellipse cx="0" cy="0" rx="20" ry="28" fill="#10b981" stroke="#34d399" stroke-width="2"/>
+      <path d="M0,-28 L0,-45" stroke="#10b981" stroke-width="5" stroke-linecap="round"/>
+    </g>
+
+    <text x="10" y="160" fill="#e2e8f0" font-size="10" font-weight="600">• Mật vàng trong vắt</text>
+    <text x="10" y="176" fill="#cbd5e1" font-size="9.5">• Không có sỏi cặn</text>
+    <text x="10" y="192" fill="#cbd5e1" font-size="9.5">• Oddi co bóp nhịp nhàng</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#065f46" />
+    <text x="35" y="229" fill="#a7f3d0" font-size="9.5" font-weight="700">Khỏe mạnh</text>
+  </g>
+
+  <!-- STAGE 1 -->
+  <g transform="translate(162, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#colStage1)" stroke="#ca8a04" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#ca8a04" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 1</text>
+    <text x="10" y="48" fill="#facc15" font-size="12" font-weight="700">Sỏi Trong Túi Mật</text>
+
+    <!-- Stones at bottom of gallbladder -->
+    <g transform="translate(65, 100)">
+      <ellipse cx="0" cy="0" rx="20" ry="28" fill="#047857" stroke="#10b981" stroke-width="2"/>
+      <path d="M0,-28 L0,-45" stroke="#10b981" stroke-width="5" stroke-linecap="round"/>
+      <!-- Stones -->
+      <circle cx="-6" cy="12" r="4.5" fill="#facc15" stroke="#713f12" stroke-width="1"/>
+      <circle cx="6" cy="10" r="4" fill="#facc15" stroke="#713f12" stroke-width="1"/>
+      <circle cx="0" cy="18" r="3.5" fill="#fbbf24" stroke="#713f12" stroke-width="1"/>
+    </g>
+
+    <text x="10" y="160" fill="#e2e8f0" font-size="10" font-weight="600">• Lắng đọng cholesterol</text>
+    <text x="10" y="176" fill="#cbd5e1" font-size="9.5">• Sỏi nằm dưới đáy</text>
+    <text x="10" y="192" fill="#cbd5e1" font-size="9.5">• Thường chưa đau</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#854d0e" />
+    <text x="25" y="229" fill="#fef08a" font-size="9.5" font-weight="700">Theo dõi siêu âm</text>
+  </g>
+
+  <!-- STAGE 2 -->
+  <g transform="translate(304, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#colStage2)" stroke="#ea580c" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#ea580c" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 2</text>
+    <text x="10" y="48" fill="#fb923c" font-size="12" font-weight="700">Kẹt Cổ Túi Mật</text>
+
+    <!-- Stone impacted in neck -->
+    <g transform="translate(65, 100)">
+      <ellipse cx="0" cy="0" rx="22" ry="30" fill="#b91c1c" stroke="#ef4444" stroke-width="2"/>
+      <path d="M0,-30 L0,-45" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+      <!-- Stone blocking neck -->
+      <circle cx="0" cy="-25" r="6" fill="#facc15" stroke="#dc2626" stroke-width="2"/>
+      <!-- Lightning exclamation -->
+      <path d="M12,-25 L20,-32 L16,-20 L24,-24" stroke="#facc15" stroke-width="2" fill="none"/>
+    </g>
+
+    <text x="10" y="160" fill="#e2e8f0" font-size="10" font-weight="600">• Kẹt tại phễu Hartmann</text>
+    <text x="10" y="176" fill="#cbd5e1" font-size="9.5">• Túi mật ứ căng to</text>
+    <text x="10" y="192" fill="#cbd5e1" font-size="9.5">• Đau quặn hạ sườn P</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#9a3412" />
+    <text x="22" y="229" fill="#ffedd5" font-size="9.5" font-weight="700">Viêm túi mật cấp</text>
+  </g>
+
+  <!-- STAGE 3 -->
+  <g transform="translate(446, 110)">
+    <rect width="134" height="245" rx="10" fill="url(#colStage3)" stroke="#e11d48" stroke-width="1.5" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#e11d48" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 3</text>
+    <text x="10" y="48" fill="#fda4af" font-size="12" font-weight="700">Kẹt Oddi / Tụy Cấp</text>
+
+    <!-- Stone blocking Oddi at bottom -->
+    <g transform="translate(67, 100)">
+      <path d="M-15,-40 L0,-15 L0,25" stroke="#dc2626" stroke-width="6" fill="none"/>
+      <path d="M25,0 L0,25" stroke="#f59e0b" stroke-width="4" fill="none"/>
+      <!-- Stone at junction -->
+      <circle cx="0" cy="25" r="7" fill="#facc15" stroke="#be123c" stroke-width="2"/>
+      <!-- Explosion/inflammation burst -->
+      <circle cx="0" cy="25" r="14" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="3 2"/>
+    </g>
+
+    <text x="10" y="160" fill="#ffffff" font-size="10" font-weight="700">• Ứ ngược men vào tụy</text>
+    <text x="10" y="176" fill="#fecdd3" font-size="9.5">• Tự tiêu hủy mô tụy</text>
+    <text x="10" y="192" fill="#fecdd3" font-size="9.5">• Vàng da, sốt cao rét run</text>
+    <rect x="8" y="215" width="118" height="20" rx="4" fill="#be123c" />
+    <text x="18" y="229" fill="#ffffff" font-size="9.5" font-weight="800">🚨 VIÊM TỤY NGUY CẤP</text>
+  </g>
+</svg>

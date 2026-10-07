@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="physioBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1820" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="bileFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+
+    <linearGradient id="pancreaFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#physioBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <g transform="translate(24, 24)">
+    <rect width="240" height="26" rx="6" fill="#047857" fill-opacity="0.3" stroke="#34d399" stroke-width="1" />
+    <text x="12" y="17" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">SINH LÝ TIẾT MẬT &amp; ENZYME TỤY</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Cơ Chế Tiêu Hóa Thức Ăn Dầu Mỡ &amp; Đạm</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Hormone Cholecystokinin (CCK) kích thích bóp túi mật và giãn mở Cơ vòng Oddi</text>
+
+  <!-- Flow Comparison Boxes -->
+  <g transform="translate(30, 115)">
+    <!-- Bile Function Box -->
+    <rect width="255" height="180" rx="12" fill="#064e3b" fill-opacity="0.5" stroke="#10b981" stroke-width="1.5" />
+    <g transform="translate(16, 16)">
+      <circle cx="16" cy="16" r="16" fill="#10b981" />
+      <text x="11" y="22" fill="#ffffff" font-size="16">💧</text>
+      <text x="44" y="15" fill="#34d399" font-size="13" font-weight="700">DỊCH MẬT (BILE JUICE)</text>
+      <text x="44" y="28" fill="#a7f3d0" font-size="10">Độ pH: 7.5 – 8.5 (Muối mật, Cholesterol)</text>
+
+      <path d="M0,45 L220,45" stroke="#047857" stroke-width="1" />
+
+      <text x="0" y="65" fill="#f8fafc" font-size="11" font-weight="600">🎯 Chức năng sinh học cốt lõi:</text>
+      <text x="0" y="85" fill="#cbd5e1" font-size="10">• <tspan fill="#34d399" font-weight="700">Nhũ hóa chất béo:</tspan> Xé nhỏ hạt lipid lớn</text>
+      <text x="12" y="98" fill="#cbd5e1" font-size="10">thành các hạt micelle siêu nhỏ cho lipase ngấm.</text>
+      <text x="0" y="118" fill="#cbd5e1" font-size="10">• Hấp thu vitamin tan trong dầu (A, D, E, K).</text>
+      <text x="0" y="138" fill="#cbd5e1" font-size="10">• Đào thải sắc tố mật (Bilirubin) ra phân.</text>
+    </g>
+  </g>
+
+  <g transform="translate(315, 115)">
+    <!-- Pancreatic Juice Box -->
+    <rect width="255" height="180" rx="12" fill="#78350f" fill-opacity="0.4" stroke="#f59e0b" stroke-width="1.5" />
+    <g transform="translate(16, 16)">
+      <circle cx="16" cy="16" r="16" fill="#f59e0b" />
+      <text x="10" y="22" fill="#ffffff" font-size="16">⚡</text>
+      <text x="44" y="15" fill="#fbbf24" font-size="13" font-weight="700">DỊCH TỤY (PANCREATIC ENZYMES)</text>
+      <text x="44" y="28" fill="#fef08a" font-size="10">Giàu Bicarbonate trung hòa acid dạ dày</text>
+
+      <path d="M0,45 L220,45" stroke="#92400e" stroke-width="1" />
+
+      <text x="0" y="65" fill="#f8fafc" font-size="11" font-weight="600">🎯 Các men tiêu hóa năng lượng cực lớn:</text>
+      <text x="0" y="85" fill="#cbd5e1" font-size="10">• <tspan fill="#fbbf24" font-weight="700">Lipase:</tspan> Phân cắt chất béo thành acid béo.</text>
+      <text x="0" y="105" fill="#cbd5e1" font-size="10">• <tspan fill="#fbbf24" font-weight="700">Amylase:</tspan> Tiêu hóa tinh bột thành đường đôi.</text>
+      <text x="0" y="125" fill="#cbd5e1" font-size="10">• <tspan fill="#fbbf24" font-weight="700">Trypsinogen:</tspan> Cắt đạm (Chỉ hoạt hóa khi</text>
+      <text x="12" y="138" fill="#fca5a5" font-size="10">ra ngoài tá tràng để tránh tự tiêu hủy tụy!).</text>
+    </g>
+  </g>
+
+  <!-- Bottom Harmonization Banner -->
+  <g transform="translate(30, 310)">
+    <rect width="540" height="46" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.2" />
+    <text x="16" y="20" fill="#38bdf8" font-size="11" font-weight="700">🔄 ĐIỀU HÒA NHỊP NHÀNG KHI ĂN DẦU MỠ:</text>
+    <text x="16" y="35" fill="#cbd5e1" font-size="9.5">Thức ăn chạm tá tràng ➔ Tiết hormon CCK ➔ Túi mật co bóp tống mật + Oddi mở ra đón dòng dịch tụy để tiêu hóa trọn vẹn thức ăn.</text>
+  </g>
+</svg>

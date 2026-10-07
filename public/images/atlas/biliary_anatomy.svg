@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="biliaryBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#08151f" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Liver Gradient -->
+    <linearGradient id="liverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#991b1b" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0.6" />
+    </linearGradient>
+
+    <!-- Gallbladder Green -->
+    <linearGradient id="gallbladderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Pancreas Amber -->
+    <linearGradient id="pancreasGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+
+    <!-- Duodenum Pink/Beige -->
+    <linearGradient id="duodenumGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbcfe8" />
+      <stop offset="100%" stop-color="#f472b6" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#biliaryBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="240" height="26" rx="6" fill="#047857" fill-opacity="0.3" stroke="#10b981" stroke-width="1" />
+    <text x="12" y="17" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">HỆ TIÊU HÓA &amp; NỘI TẠNG TẦNG TRÊN</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Giải Phẫu Ngã Ba Gan – Mật – Tụy – Tá Tràng</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Sự hợp lưu giữa Ống mật chủ và Ống tụy chính tại Cơ vòng Oddi</text>
+
+  <!-- Central Anatomy Graphic -->
+  <g transform="translate(290, 215)">
+    <!-- 1. Liver silhouette in background -->
+    <path d="M-190,-80 C-120,-110 50,-120 180,-70 C190,-50 160,-10 110,10 C50,20 -120,0 -190,-80 Z" fill="url(#liverGrad)" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="4 2"/>
+
+    <!-- 2. Duodenum (C-loop Tá tràng D1, D2, D3) -->
+    <path d="M-50,-20 C20,-30 75,-20 85,20 C95,65 95,95 65,120 C35,135 -40,135 -60,115" 
+          fill="none" stroke="url(#duodenumGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <path d="M-50,-20 C20,-30 75,-20 85,20 C95,65 95,95 65,120 C35,135 -40,135 -60,115" 
+          fill="none" stroke="#be185d" stroke-width="2" stroke-dasharray="3 3"/>
+
+    <!-- 3. Pancreas (Tuyến tụy nằm lọt trong lòng chữ C tá tràng) -->
+    <!-- Head, Body, Tail -->
+    <path d="M50,45 C-10,40 -90,20 -170,10 C-185,8 -190,22 -170,28 C-90,45 -10,75 55,75 C70,75 75,45 50,45 Z" 
+          fill="url(#pancreasGrad)" stroke="#b45309" stroke-width="1.5"/>
+
+    <!-- Main Pancreatic Duct (Ống Wirsung màu trắng xuyên tâm tụy) -->
+    <path d="M-160,18 C-90,32 -15,55 58,58" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- 4. Gallbladder (Túi mật hình quả lê nằm dưới gan) -->
+    <path d="M-135,-30 C-175,-35 -195,-60 -185,-85 C-175,-100 -145,-100 -125,-75 C-115,-60 -115,-40 -110,-25" 
+          fill="url(#gallbladderGrad)" stroke="#059669" stroke-width="2"/>
+
+    <!-- Cystic Duct (Ống túi mật xoắn Heister) -->
+    <path d="M-110,-25 C-100,-15 -95,-10 -80,-15" fill="none" stroke="#10b981" stroke-width="4.5" stroke-linecap="round"/>
+
+    <!-- Hepatic Ducts (Ống gan P &amp; T hợp lưu Ống gan chung) -->
+    <path d="M-90,-60 L-80,-35" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+    <path d="M-70,-60 L-80,-35" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+    <path d="M-80,-35 L-80,-15" stroke="#10b981" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- 5. Common Bile Duct (Ống mật chủ - CBD chạy xuống cắm vào tá tràng) -->
+    <path d="M-80,-15 C-60,-5 -20,10 50,52" fill="none" stroke="#10b981" stroke-width="5.5" stroke-linecap="round"/>
+
+    <!-- 6. Ampulla of Vater &amp; Sphincter of Oddi (Ngã ba phồng lên cắm vào D2) -->
+    <ellipse cx="58" cy="58" rx="6" ry="6" fill="#f43f5e" stroke="#ffe4e6" stroke-width="1.5"/>
+  </g>
+
+  <!-- Anatomical Callouts -->
+  <!-- Top Left: Gallbladder -->
+  <g transform="translate(30, 115)">
+    <rect width="145" height="42" rx="7" fill="#064e3b" fill-opacity="0.85" stroke="#10b981" stroke-width="1.2" />
+    <text x="8" y="18" fill="#34d399" font-size="10.5" font-weight="700">Túi Mật (Gallbladder)</text>
+    <text x="8" y="32" fill="#e2e8f0" font-size="9.5">Cô đặc &amp; dự trữ dịch mật</text>
+    <line x1="145" y1="20" x2="160" y2="135" stroke="#10b981" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Mid Left: Liver -->
+  <g transform="translate(20, 185)">
+    <rect width="140" height="42" rx="7" fill="#450a0a" fill-opacity="0.85" stroke="#ef4444" stroke-width="1.2" />
+    <text x="8" y="18" fill="#f87171" font-size="10.5" font-weight="700">Nhu Mô Gan (Liver)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Sản xuất 800ml mật/ngày</text>
+  </g>
+
+  <!-- Top Right: Common Bile Duct -->
+  <g transform="translate(425, 115)">
+    <rect width="150" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#10b981" stroke-width="1.2" />
+    <text x="8" y="18" fill="#34d399" font-size="10.5" font-weight="700">Ống Mật Chủ (CBD)</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Dài 7-8cm, đường kính &lt;6mm</text>
+    <line x1="0" y1="25" x2="-80" y2="80" stroke="#10b981" stroke-width="1.2" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Mid Right: Sphincter of Oddi -->
+  <g transform="translate(415, 195)">
+    <rect width="165" height="46" rx="7" fill="#1e1b4b" fill-opacity="0.9" stroke="#f43f5e" stroke-width="1.5" />
+    <text x="8" y="18" fill="#fb7185" font-size="10.5" font-weight="700">Cơ Vòng Oddi &amp; Bóng Vater</text>
+    <text x="8" y="32" fill="#cbd5e1" font-size="9.5">Ngã ba sinh tử: Sỏi kẹt tại đây</text>
+    <text x="8" y="42" fill="#f43f5e" font-size="9" font-weight="700">➔ Gây Viêm tụy cấp hoại tử!</text>
+    <line x1="0" y1="25" x2="-65" y2="75" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3 2" />
+  </g>
+
+  <!-- Bottom: Pancreas &amp; Duodenum -->
+  <g transform="translate(180, 315)">
+    <rect width="250" height="42" rx="7" fill="#0f172a" fill-opacity="0.9" stroke="#f59e0b" stroke-width="1.2" />
+    <text x="10" y="18" fill="#fbbf24" font-size="10.5" font-weight="700">Tuyến Tụy (Pancreas) &amp; Ống Wirsung</text>
+    <text x="10" y="32" fill="#cbd5e1" font-size="9.5">Tiết enzym tiêu hóa amylase, lipase và insulin</text>
+  </g>
+</svg>

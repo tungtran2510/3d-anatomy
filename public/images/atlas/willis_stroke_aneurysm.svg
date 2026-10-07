@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pathoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d1a" />
+      <stop offset="100%" stop-color="#18181b" />
+    </linearGradient>
+
+    <!-- Stage 0 Green -->
+    <linearGradient id="cardStage0" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+
+    <!-- Stage 1 Yellow -->
+    <linearGradient id="cardStage1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#713f12" />
+      <stop offset="100%" stop-color="#422006" />
+    </linearGradient>
+
+    <!-- Stage 2 Orange -->
+    <linearGradient id="cardStage2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7c2d12" />
+      <stop offset="100%" stop-color="#431407" />
+    </linearGradient>
+
+    <!-- Stage 3 Crimson -->
+    <linearGradient id="cardStage3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#4c0519" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#pathoBg)" stroke="#27272a" stroke-width="1.5" />
+
+  <g transform="translate(24, 24)">
+    <rect width="210" height="26" rx="6" fill="#be123c" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1" />
+    <text x="12" y="17" fill="#fb7185" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">TIẾN TRIỂN BỆNH HỌC NÃO</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">4 Giai Đoạn Phình Mạch &amp; Đột Quỵ Đa Giác Willis</text>
+  <text x="24" y="88" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Từ vi phình mạch không triệu chứng đến đột quỵ xuất huyết nguy kịch</text>
+
+  <!-- 4 Stage Columns -->
+  <!-- STAGE 0 -->
+  <g transform="translate(20, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#cardStage0)" stroke="#059669" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#059669" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 0</text>
+    <text x="10" y="48" fill="#34d399" font-size="12" font-weight="700">Bình Thường</text>
+
+    <!-- Normal Vessel Graphic -->
+    <g transform="translate(65, 100)">
+      <path d="M-40,0 C-10,0 0,-25 0,-45" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
+      <path d="M40,0 C10,0 0,-25 0,-45" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
+      <line x1="-20" y1="-45" x2="20" y2="-45" stroke="#10b981" stroke-width="6" stroke-linecap="round"/>
+    </g>
+
+    <text x="10" y="160" fill="#e2e8f0" font-size="10" font-weight="600">• Lòng mạch trơn nhẵn</text>
+    <text x="10" y="176" fill="#cbd5e1" font-size="9.5">• Huyết áp ổn định</text>
+    <text x="10" y="192" fill="#cbd5e1" font-size="9.5">• Không túi phình</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#065f46" />
+    <text x="35" y="229" fill="#a7f3d0" font-size="9.5" font-weight="700">An toàn 100%</text>
+  </g>
+
+  <!-- STAGE 1 -->
+  <g transform="translate(162, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#cardStage1)" stroke="#ca8a04" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#ca8a04" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 1</text>
+    <text x="10" y="48" fill="#facc15" font-size="12" font-weight="700">Túi Phình 3-5mm</text>
+
+    <!-- Small Aneurysm Graphic -->
+    <g transform="translate(65, 100)">
+      <path d="M-40,0 C-10,0 0,-25 0,-45" fill="none" stroke="#eab308" stroke-width="7" stroke-linecap="round"/>
+      <path d="M40,0 C10,0 0,-25 0,-45" fill="none" stroke="#eab308" stroke-width="7" stroke-linecap="round"/>
+      <!-- Saccular Aneurysm Berry Outpouching -->
+      <circle cx="0" cy="-45" r="11" fill="#f87171" stroke="#facc15" stroke-width="2"/>
+    </g>
+
+    <text x="10" y="160" fill="#e2e8f0" font-size="10" font-weight="600">• Phình ngã ba ACom</text>
+    <text x="10" y="176" fill="#cbd5e1" font-size="9.5">• Thành mạch mỏng dần</text>
+    <text x="10" y="192" fill="#cbd5e1" font-size="9.5">• Không triệu chứng</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#854d0e" />
+    <text x="25" y="229" fill="#fef08a" font-size="9.5" font-weight="700">Theo dõi định kỳ</text>
+  </g>
+
+  <!-- STAGE 2 -->
+  <g transform="translate(304, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#cardStage2)" stroke="#ea580c" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#ea580c" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 2</text>
+    <text x="10" y="48" fill="#fb923c" font-size="12" font-weight="700">Hẹp Nặng ĐM Não</text>
+
+    <!-- Stenosis / Clot Graphic -->
+    <g transform="translate(65, 100)">
+      <path d="M-45,0 L-10,0" stroke="#f97316" stroke-width="8" stroke-linecap="round"/>
+      <!-- Narrowing -->
+      <path d="M-10,0 L10,0" stroke="#ef4444" stroke-width="2.5"/>
+      <path d="M10,0 L45,0" stroke="#f97316" stroke-width="8" stroke-linecap="round"/>
+      <!-- Thrombus Clot -->
+      <rect x="-8" y="-7" width="16" height="14" rx="3" fill="#7f1d1d" stroke="#f87171" stroke-width="1"/>
+    </g>
+
+    <text x="10" y="160" fill="#e2e8f0" font-size="10" font-weight="600">• Hẹp >70% ĐM Não giữa</text>
+    <text x="10" y="176" fill="#cbd5e1" font-size="9.5">• Thiếu máu thoáng qua</text>
+    <text x="10" y="192" fill="#cbd5e1" font-size="9.5">• Yếu nửa người nhẹ</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#9a3412" />
+    <text x="25" y="229" fill="#ffedd5" font-size="9.5" font-weight="700">Cảnh báo Đột quỵ</text>
+  </g>
+
+  <!-- STAGE 3 -->
+  <g transform="translate(446, 110)">
+    <rect width="134" height="245" rx="10" fill="url(#cardStage3)" stroke="#e11d48" stroke-width="1.5" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#e11d48" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">CẤP 3</text>
+    <text x="10" y="48" fill="#fda4af" font-size="12" font-weight="700">Vỡ Túi Phình (SAH)</text>
+
+    <!-- Ruptured Aneurysm Graphic -->
+    <g transform="translate(67, 100)">
+      <path d="M-40,0 C-10,0 0,-25 0,-45" fill="none" stroke="#f43f5e" stroke-width="6"/>
+      <path d="M40,0 C10,0 0,-25 0,-45" fill="none" stroke="#f43f5e" stroke-width="6"/>
+      <!-- Bursting Star Burst -->
+      <circle cx="0" cy="-45" r="14" fill="#ef4444" opacity="0.8"/>
+      <path d="M-8,-55 L8,-35 M-8,-35 L8,-55 M-16,-45 L16,-45" stroke="#ffffff" stroke-width="2"/>
+    </g>
+
+    <text x="10" y="160" fill="#ffffff" font-size="10" font-weight="700">• Xuất huyết khoang nhện</text>
+    <text x="10" y="176" fill="#fecdd3" font-size="9.5">• Đau đầu sét đánh</text>
+    <text x="10" y="192" fill="#fecdd3" font-size="9.5">• Hôn mê, đe dọa tử vong</text>
+    <rect x="8" y="215" width="118" height="20" rx="4" fill="#be123c" />
+    <text x="18" y="229" fill="#ffffff" font-size="9.5" font-weight="800">🚨 CẤP CỨU KHẨN</text>
+  </g>
+</svg>
