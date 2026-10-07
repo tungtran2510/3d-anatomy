@@ -3,8 +3,12 @@ import './styles/main.css';
 import { createScene } from './viewer/createScene.js';
 import { loadSystems, getMeshRegistry } from './viewer/loadModel.js';
 import { initSelection } from './viewer/selection.js';
-import { initUI } from './ui/sidebar.js';
+import { initUI, selectStructureAnywhere } from './ui/sidebar.js';
 import { state, setViewer, setPartsData, setSystemsData, setTranslations, setSearchIndex, subscribe } from './state/store.js';
+
+window.state = state;
+window.selectStructureAnywhere = selectStructureAnywhere;
+window.selectPartById = selectPartById;
 import { readState, storedState, applyState, scheduleStateWrite } from './state/urlState.js';
 import { loadModel } from './viewer/loadModel.js';
 import { selectPartById } from './viewer/selection.js';
