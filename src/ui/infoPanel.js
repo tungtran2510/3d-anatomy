@@ -16,6 +16,8 @@ import { openQuickVideoModal } from './quickVideoModal.js';
 import { openVideoModal } from './sidebar.js';
 import { getVisualDeckForPart } from '../data/anatomyConcepts.js';
 import { dynamicAnatomy, MOTIONS } from '../viewer/dynamicAnatomy.js';
+import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
+import { openClinicalAxesModal } from './clinicalAxesModal.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -315,7 +317,8 @@ export function updateInfoPanelContent(part, viewer) {
   if (explainRel) explainRel.textContent = clinical.relationsText || 'Đang cập nhật liên kết giải phẫu...';
 
   // Stop any previous active speech synthesis when changing structure
-  stopCurrentSpeech();
+  // 2a.0 Render One-Tap Axis Link if part belongs to a clinical axis
+  renderClinicalAxisOneTap(part, viewer);
 
   // 2a. Render Interactive Disc Subunits (Vòng sợi & Nhân nhầy)
   renderDiscSubunitsSection(part, clinical, mainName, viewer);
@@ -883,6 +886,60 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
       e.stopPropagation();
       openQuickVideoModal(part.id, mainName, () => updateInfoPanelContent(part, viewer));
     });
+  }
+}
+
+function renderClinicalAxisOneTap(part, viewer) {
+  let container = document.getElementById('cardAxisOneTapBox');
+  if (!container) {
+    const subtitleEl = document.getElementById('cardSubtitle');
+    if (subtitleEl) {
+      container = document.createElement('div');
+      container.id = 'cardAxisOneTapBox';
+      container.className = 'card-axis-onetap-box';
+      subtitleEl.insertAdjacentElement('afterend', container);
+    }
+  }
+  if (!container) return;
+
+  const partId = part?.id || '';
+  const partIdLower = partId.toLowerCase();
+  let matchedAxis = null;
+
+  for (const axis of CLINICAL_AXES) {
+    const inSteps = axis.chainSteps.some(step => {
+      if (step.partIds && step.partIds.some(p => p.toLowerCase() === partIdLower)) return true;
+      if (step.partId && step.partId.toLowerCase() === partIdLower) return true;
+      return false;
+    });
+    if (inSteps) {
+      matchedAxis = axis;
+      break;
+    }
+    if (axis.keywords.some(k => partIdLower.includes(k) || k.includes(partIdLower))) {
+      matchedAxis = axis;
+      break;
+    }
+  }
+
+  if (matchedAxis) {
+    container.innerHTML = `
+      <button type="button" class="btn-one-tap-axis" id="btnOneTapAxis" title="Kích hoạt xem toàn bộ chuỗi trục ${matchedAxis.titleVi} trên 3D">
+        <span class="onetap-icon">${matchedAxis.icon.slice(0, 2)}</span>
+        <span class="onetap-text">Xem Trục: <strong>${matchedAxis.titleVi.split('(')[0].trim()}</strong></span>
+        <span class="onetap-arrow">➔ 3D</span>
+      </button>
+    `;
+    container.style.display = 'block';
+
+    const btn = container.querySelector('#btnOneTapAxis');
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openClinicalAxesModal(matchedAxis.id, viewer);
+    });
+  } else {
+    container.style.display = 'none';
+    container.innerHTML = '';
   }
 }
 

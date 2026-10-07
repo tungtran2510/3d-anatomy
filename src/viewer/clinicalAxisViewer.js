@@ -6,6 +6,7 @@
  * 2. Làm mờ (ghost) toàn bộ các cơ quan/khung xương nền xung quanh thành khối pha lê trong suốt (opacity ~0.04).
  * 3. Tự động đóng khung Camera (Auto Multi-Mesh Framing) bao quát trọn vẹn toàn bộ trục từ trên xuống dưới.
  * 4. Chuyển đổi mượt mà giữa các mắt xích với hiệu ứng phát sáng (emissive highlight) khi chạm chip.
+ * 5. Hiệu ứng xung điện / dòng chảy chuyển động (Animated Flow Pulse) truyền nhịp nhàng qua từng mắt xích theo thời gian thực.
  */
 
 import * as THREE from 'three';
@@ -18,7 +19,7 @@ let activeAxisId = null;
 let activeStepIndex = 0;
 let highlightedPartIds = new Set();
 let axisPartIdsCache = new Set();
-let previousGhostState = null;
+let pulseAnimationFrameId = null;
 
 // Ghost material cache for clinical axis background
 const axisGhostVariants = new WeakMap();
@@ -74,6 +75,7 @@ export async function activateClinicalAxis3D(axisId, viewer = window.viewer) {
   const axis = CLINICAL_AXES.find(a => a.id === axisId);
   if (!axis) return;
 
+  stopAxisPulseAnimation();
   activeAxisId = axisId;
   activeStepIndex = 0;
 
@@ -127,6 +129,9 @@ export async function activateClinicalAxis3D(axisId, viewer = window.viewer) {
 
   // 5. Mặc định kích hoạt mắt xích đầu tiên
   focusAxisStep(axisId, 0, activeViewer, false);
+
+  // 6. Khởi động hiệu ứng xung điện chuyển động (Animated Flow Pulse)
+  startAxisPulseAnimation(axis, activeViewer);
 
   notify('clinicalAxisActivated', { axisId });
   activeViewer.render();
@@ -196,7 +201,7 @@ export function focusAxisStep(axisId, stepIdx, viewer = window.viewer, zoomClose
       const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       mats.forEach(mat => {
         mat.emissive = new THREE.Color(0xfacc15); // Vàng ngọc ánh kim rực rỡ
-        mat.emissiveIntensity = 0.75;
+        mat.emissiveIntensity = 0.85;
         mat.needsUpdate = true;
       });
     });
@@ -223,7 +228,7 @@ export function focusAxisStep(axisId, stepIdx, viewer = window.viewer, zoomClose
       const direction = new THREE.Vector3().subVectors(activeViewer.camera.position, activeViewer.controls.target).normalize();
       if (direction.lengthSq() < 0.001) direction.set(0.2, 0.1, 0.96).normalize();
 
-      // Giữ khoảng cách vừa phải (không zoom sát rạt) để vẫn thấy liên kết với các cơ quan khác trong trục
+      // Giữ khoảng cách vừa phải để vẫn thấy tương quan với chuỗi cơ quan
       const dist = Math.max(1.35, maxDim * 3.5);
       const targetPos = stepCenter.clone().add(direction.multiplyScalar(dist));
 
@@ -233,6 +238,67 @@ export function focusAxisStep(axisId, stepIdx, viewer = window.viewer, zoomClose
 
   notify('clinicalAxisStepChanged', { axisId, stepIdx });
   activeViewer.render();
+}
+
+/**
+ * Hiệu ứng xung điện / dòng truyền tín hiệu chuyển động nhịp nhàng (Animated Flow Pulse)
+ */
+function startAxisPulseAnimation(axis, viewer) {
+  stopAxisPulseAnimation();
+
+  let lastPulseTime = performance.now();
+  const pulseDuration = 2400; // ms cho 1 chu kỳ truyền từ mắt xích 1 -> 4
+  const numSteps = axis.chainSteps.length;
+
+  function pulseLoop() {
+    if (!activeAxisId) return;
+
+    const now = performance.now();
+    const elapsed = (now - lastPulseTime) % pulseDuration;
+    const progress = elapsed / pulseDuration; // 0.0 -> 1.0
+
+    // Xác định mắt xích nào đang nhận xung sóng
+    const activeStepFloat = progress * numSteps;
+    const currentPulseStepIdx = Math.floor(activeStepFloat);
+    const stepLocalProgress = activeStepFloat - currentPulseStepIdx;
+
+    axis.chainSteps.forEach((st, idx) => {
+      // Bỏ qua mắt xích đang được chọn vì nó có glow riêng cố định
+      if (idx === activeStepIndex) return;
+
+      const pIds = st.partIds || [st.partId];
+      let intensity = 0.05;
+
+      if (idx === currentPulseStepIdx) {
+        // Đang ở đỉnh sóng
+        intensity = 0.15 + Math.sin(stepLocalProgress * Math.PI) * 0.45;
+      }
+
+      pIds.forEach(pId => {
+        ownMeshesOf(pId).forEach(mesh => {
+          if (mesh.userData.ownsMaterial && !highlightedPartIds.has(pId)) {
+            const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+            mats.forEach(m => {
+              m.emissive = new THREE.Color(0x38bdf8); // Ánh sáng xung điện xanh lam sinh học
+              m.emissiveIntensity = intensity;
+            });
+          }
+        });
+      });
+    });
+
+    viewer?.render();
+    pulseAnimationFrameId = requestAnimationFrame(pulseLoop);
+  }
+
+  pulseAnimationFrameId = requestAnimationFrame(pulseLoop);
+}
+
+function stopAxisPulseAnimation() {
+  if (pulseAnimationFrameId) {
+    cancelAnimationFrame(pulseAnimationFrameId);
+    pulseAnimationFrameId = null;
+  }
 }
 
 /**
@@ -264,6 +330,7 @@ export function deactivateClinicalAxis3D(viewer = window.viewer) {
   const activeViewer = viewer || state.viewer || window.viewer;
   if (!activeViewer) return;
 
+  stopAxisPulseAnimation();
   clearCurrentStepHighlight();
   activeAxisId = null;
   axisPartIdsCache.clear();

@@ -94,8 +94,12 @@ export async function openClinicalAxesModal(axisId = null, viewer = window.viewe
   renderFloatingHud();
   hudEl.classList.remove('hidden');
 
-  // Đóng sheet nếu đang mở
+  // Đóng sheet nếu đang mở & ẩn selectionCard để nhường toàn bộ không gian cho Trục 3D
   closeMechanismSheet();
+  const selCard = document.getElementById('selectionCard');
+  if (selCard) {
+    selCard.classList.add('hidden');
+  }
 
   // 4. Kích hoạt toàn bộ chuỗi trục trên không gian 3D
   await activateClinicalAxis3D(currentAxis.id, viewer);

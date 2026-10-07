@@ -9,6 +9,7 @@ let aiToastEl = null;
 let recognition = null;
 let isRecording = false;
 let toastTimeout = null;
+let autoSubmitTimer = null;
 
 export function initAIAssistantUI(viewer) {
   if (aiBarEl) return;
@@ -20,11 +21,11 @@ export function initAIAssistantUI(viewer) {
   aiBarEl.id = 'compactAIBar';
   aiBarEl.className = 'compact-ai-bar hidden';
   aiBarEl.innerHTML = `
-    <input type="text" class="input-ai-cmd" id="inputAIQuickCmd" placeholder="Nói hoặc nhập lệnh (VD: tìm khung chậu, cơ delta...)" autocomplete="off">
-    <button type="button" class="btn-ai-mic" id="btnAIQuickMic" title="Chạm để nói lệnh giọng nói (VD: tìm khung chậu)">
+    <input type="text" class="input-ai-cmd" id="inputAIQuickCmd" placeholder="Nói hoặc nhập câu hỏi (VD: trục não ruột, tìm gan, xương chậu...)" autocomplete="off">
+    <button type="button" class="btn-ai-mic" id="btnAIQuickMic" title="Chạm để nói câu hỏi bằng giọng nói">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
     </button>
-    <button type="button" class="btn-ai-send" id="btnAIQuickSend" title="Gửi lệnh">
+    <button type="button" class="btn-ai-send" id="btnAIQuickSend" title="Gửi câu hỏi cho AI">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
     </button>
     <button type="button" class="btn-ai-close" id="btnAIQuickClose" title="Thu gọn">&times;</button>
@@ -55,6 +56,10 @@ function setupBarEvents(viewer) {
   const toastClose = aiToastEl.querySelector('#aiToastClose');
 
   const submitQuery = () => {
+    if (autoSubmitTimer) {
+      clearTimeout(autoSubmitTimer);
+      autoSubmitTimer = null;
+    }
     const q = inputEl.value.trim();
     if (q) {
       handleCompactAISubmit(q, viewer);
@@ -97,21 +102,56 @@ function setupBarEvents(viewer) {
 }
 
 function createSpeechRecognition(viewer) {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
   if (!SpeechRecognition) return null;
 
   try {
     const rec = new SpeechRecognition();
     rec.lang = 'vi-VN';
     rec.continuous = false;
-    rec.interimResults = false;
+    rec.interimResults = true; // HIỆN THỰC THỜI GIAN THỰC LỜI NÓI LÊN Ô CHAT KHI ĐANG NÓI
 
     rec.onresult = (event) => {
-      const transcript = event.results?.[0]?.[0]?.transcript;
-      if (transcript) {
-        showAIToast(`🎙️ "${transcript}"`, false);
-        handleCompactAISubmit(transcript, viewer);
-        closeAIAssistant();
+      let interimTranscript = '';
+      let finalTranscript = '';
+
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        const item = event.results[i];
+        if (item.isFinal) {
+          finalTranscript += item[0].transcript;
+        } else {
+          interimTranscript += item[0].transcript;
+        }
+      }
+
+      const activeText = (finalTranscript || interimTranscript).trim();
+      const inputEl = aiBarEl?.querySelector('#inputAIQuickCmd');
+      const sendBtn = aiBarEl?.querySelector('#btnAIQuickSend');
+
+      // 1. GÁN TRỰC TIẾP LỜI NÓI VÀO KHUNG CHAT
+      if (inputEl && activeText) {
+        inputEl.value = activeText;
+        sendBtn?.classList.add('has-text');
+      }
+
+      if (activeText) {
+        showAIToast(`🎙️ "${activeText}"`, false);
+      }
+
+      // 2. KHI NÓI XONG CÂU HOÀN CHỈNH
+      if (finalTranscript) {
+        stopVoiceRecording();
+
+        if (autoSubmitTimer) clearTimeout(autoSubmitTimer);
+        // Chờ 1.2 giây để người dùng nhìn thấy câu hỏi đã hiện lên khung chat, sau đó tự động gửi
+        autoSubmitTimer = setTimeout(() => {
+          if (inputEl && inputEl.value.trim() === finalTranscript.trim()) {
+            handleCompactAISubmit(finalTranscript.trim(), viewer);
+            inputEl.value = '';
+            sendBtn?.classList.remove('has-text');
+            closeAIAssistant();
+          }
+        }, 1200);
       }
     };
 
@@ -120,6 +160,8 @@ function createSpeechRecognition(viewer) {
       stopVoiceRecording();
       if (e.error === 'not-allowed') {
         showAIToast('⚠️ Cần cấp quyền Microphone trong trình duyệt để nói', true);
+      } else if (e.error !== 'no-speech') {
+        showAIToast('⚠️ Không nhận diện được âm thanh, hãy thử nói lại', true);
       }
     };
 
@@ -155,7 +197,7 @@ function toggleVoiceRecording(viewer) {
       isRecording = true;
       const micBtn = aiBarEl?.querySelector('#btnAIQuickMic');
       micBtn?.classList.add('recording');
-      showAIToast('🎙️ Đang lắng nghe... Hãy nói lệnh (VD: "tìm khung chậu", "chỉ cơ delta")', false);
+      showAIToast('🎙️ Đang lắng nghe... Hãy nói câu hỏi hoặc lệnh', false);
     } catch {
       stopVoiceRecording();
     }
@@ -173,13 +215,14 @@ export function openAIAssistant(viewer, initialPrompt = null) {
 
   aiBarEl.classList.remove('hidden');
   document.getElementById('floatingAIBubble')?.classList.add('ai-bar-active');
-  // CRITICAL MOBILE UX FIX:
-  // Do NOT automatically focus inputEl! On mobile devices, auto-focus pops open the software
-  // keyboard (Laban Key, Gboard, etc.) covering half the screen.
-  // The panel now opens cleanly so the user can easily tap the prominent Mic button to speak.
-  // The input field remains fully interactive if the user explicitly chooses to tap and type.
+
+  const inputEl = aiBarEl.querySelector('#inputAIQuickCmd');
+  if (inputEl) {
+    inputEl.focus();
+  }
 
   if (initialPrompt) {
+    if (inputEl) inputEl.value = initialPrompt;
     handleCompactAISubmit(initialPrompt, viewer);
     closeAIAssistant();
   }
@@ -190,6 +233,10 @@ export function closeAIAssistant() {
     aiBarEl.classList.add('hidden');
     document.getElementById('floatingAIBubble')?.classList.remove('ai-bar-active');
     stopVoiceRecording();
+    if (autoSubmitTimer) {
+      clearTimeout(autoSubmitTimer);
+      autoSubmitTimer = null;
+    }
   }
 }
 
@@ -204,6 +251,21 @@ export function toggleAIAssistant(viewer) {
 
 export async function handleCompactAISubmit(text, viewer) {
   showAIToast(`Đang tìm kiếm & điều khiển 3D: "${text}"...`, false);
+
+  // Kiểm tra nếu câu lệnh hỏi về Trục lâm sàng (e.g. "trục não ruột", "gan mật tụy")
+  const lower = text.toLowerCase();
+  if (lower.includes('trục') || lower.includes('truc') || lower.includes('gan mật') || lower.includes('não ruột')) {
+    try {
+      const { openClinicalAxesModal } = await import('./clinicalAxesModal.js');
+      if (lower.includes('gan') || lower.includes('mật') || lower.includes('tụy')) {
+        await openClinicalAxesModal('axis_hepatobiliary_pancreas', viewer);
+      } else {
+        await openClinicalAxesModal('axis_gut_brain', viewer);
+      }
+      showAIToast(`🧬 Đã kích hoạt hiển thị trực quan toàn bộ trục 3D!`, true);
+      return;
+    } catch {}
+  }
 
   const interpreted = interpretAIQuery(text, state.selectedPart);
 
