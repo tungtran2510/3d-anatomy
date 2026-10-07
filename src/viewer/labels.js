@@ -177,11 +177,11 @@ export function addCustomTag(partId, name, viewer) {
 
   const badge = document.createElement('div');
   badge.className = 'landmark-pin custom-tag-pin';
-  badge.style.borderColor = '#0d9488';
-  badge.style.background = 'rgba(13, 148, 136, 0.9)';
+  badge.style.borderColor = '#0b2559';
+  badge.style.background = 'rgba(11, 37, 89, 0.92)';
   badge.style.color = '#fff';
   badge.innerHTML = `
-    <span class="pin-dot" style="background:#2dd4bf;"></span>
+    <span class="pin-dot" style="background:#1d72b8;"></span>
     <span class="pin-text">${name}</span>
   `;
   badge.addEventListener('click', (e) => {

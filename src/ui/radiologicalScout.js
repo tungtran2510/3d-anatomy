@@ -182,7 +182,7 @@ function openScoutDetailModal() {
           <span style="font-size:22px;">🩻</span>
           <div>
             <h3 style="margin:0;font-size:16.5px;font-weight:700;color:#0f172a;">${title}</h3>
-            <span style="font-size:13px;color:#0d9488;font-weight:600;">Mặt phẳng: ${scoutLabel}</span>
+            <span style="font-size:13px;color:#0b2559;font-weight:700;">Mặt phẳng: ${scoutLabel}</span>
           </div>
         </div>
         <button type="button" class="dialog-close-btn" id="scoutModalClose">&times;</button>
