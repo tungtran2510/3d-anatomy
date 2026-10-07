@@ -419,6 +419,125 @@ export const ANATOMY_CONCEPTS = [
       url: 'https://www.youtube.com/embed/bHZsvBdUC2I',
       duration: '1:05'
     }
+  },
+  {
+    id: 'concept_urinary_nephron',
+    keywords: [
+      'thận', 'than', 'kidney', 'tiết niệu', 'tiet nieu', 'urinary',
+      'cầu thận', 'cau than', 'nephron', 'bowman', 'bàng quang', 'bang quang',
+      'bladder', 'niệu quản', 'nieu quan', 'ureter', 'sỏi thận', 'soi than',
+      'suy thận', 'suy than', 'ckd', 'egfr', 'nước tiểu', 'lọc máu'
+    ],
+    titleVi: 'Hệ Tiết Niệu & Cầu Thận',
+    latin: 'Systema urinarium / Ren (TA2: 3348)',
+    subtitle: '1 triệu Nephron lọc 180 lít máu mỗi ngày & bài xuất nước tiểu',
+    thumbnail: '/images/atlas/urinary_anatomy.svg',
+    system: 'visceral',
+    primaryPartId: 'Kidney.l',
+    subunits: [
+      { label: '🩺 Thận trái & Vỏ thận', partId: 'Kidney.l', note: '1 triệu đơn vị Nephron lọc 180L máu mỗi ngày' },
+      { label: '🩺 Thận phải', partId: 'Kidney.r', note: 'Nằm thấp hơn do gan đè, đài bể thận tống xuất nước tiểu' },
+      { label: '🟡 Niệu quản', partId: 'Ureter.l', note: 'Ống dẫn nhu động dài 25-30cm đưa nước tiểu xuống bàng quang' },
+      { label: '💧 Bàng quang', partId: 'Urinary bladder', note: 'Dung tích 300–500ml co bóp tống nước tiểu qua niệu đạo' }
+    ],
+    slides: [
+      {
+        id: 'anatomy',
+        title: 'Cấu tạo',
+        badge: 'Hệ Tiết niệu & 2 Thận',
+        image: '/images/atlas/urinary_anatomy.svg',
+        caption: 'Toàn cảnh 2 thận, đài bể thận, 2 niệu quản và bàng quang chứa nước tiểu.'
+      },
+      {
+        id: 'physiology',
+        title: 'Sinh lý',
+        badge: 'Màng lọc Nephron',
+        image: '/images/atlas/nephron_filtration.svg',
+        caption: 'Búi mao mạch cầu thận lọc 180L máu/ngày, tái hấp thu 99% dưỡng chất.'
+      },
+      {
+        id: 'pathology',
+        title: '4 Cấp độ',
+        badge: 'Sỏi thận & Suy thận (CKD)',
+        image: '/images/atlas/ckd_kidney_stones.svg',
+        caption: 'Tiến triển từ sỏi đài bể thận, cơn đau quặn thận đến suy thận giai đoạn cuối.'
+      }
+    ],
+    simulator: {
+      title: '🩺 BỆNH LÝ TIẾT NIỆU & CHỨC NĂNG THẬN:',
+      ticks: ['Bình thường', 'Sỏi thận', 'Ứ nước', 'Suy thận GĐ cuối'],
+      stages: [
+        { level: 'Cấp 0: Bình thường (eGFR > 90)', desc: 'Thận hồng hào, lọc 180L máu, Creatinin 60-110 µmol/L bình thường.' },
+        { level: 'Cấp 1: Sỏi đài thận (eGFR 60-89)', desc: 'Sỏi đài bể thận 4-8mm, đau mỏi thắt lưng, tiểu buốt rắt nhẹ.' },
+        { level: 'Cấp 2: Kẹt niệu quản (eGFR 30-59)', desc: 'Cơn đau quặn thận dữ dội, dãn ứ nước đài bể thận, nhu mô thận mỏng.' },
+        { level: 'Cấp 3: Suy thận mạn (eGFR < 15)', desc: 'Thận teo xơ chai, hội chứng Ure máu cao, chỉ định chạy thận nhân tạo.' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cấu Tạo Thận & Cơ Chế Hoạt Động Của Nephron',
+      url: 'https://www.youtube.com/embed/fWzXn3v_W9A',
+      duration: '1:08'
+    }
+  },
+  {
+    id: 'concept_brachial_plexus',
+    keywords: [
+      'đám rối', 'dam roi', 'cánh tay', 'canh tay', 'brachial plexus', 'plexus',
+      'dây giữa', 'day giua', 'median nerve', 'thần kinh giữa', 'than kinh giua',
+      'dây trụ', 'day tru', 'ulnar nerve', 'thần kinh trụ', 'than kinh tru',
+      'dây quay', 'day quay', 'radial nerve', 'thần kinh quay', 'than kinh quay',
+      'ống cổ tay', 'ong co tay', 'carpal tunnel', 'cts', 'tê tay', 'teo cơ mô cái'
+    ],
+    titleVi: 'Đám Rối Thần Kinh Cánh Tay',
+    latin: 'Plexus brachialis (TA2: 4578)',
+    subtitle: '5 rễ (C5-T1), 3 thân, 6 ngành, 3 bó chi phối toàn bộ chi trên & bàn tay',
+    thumbnail: '/images/atlas/brachial_plexus_anatomy.svg',
+    system: 'nervous',
+    primaryPartId: 'Median nerve.r',
+    subunits: [
+      { label: '⚡ Dây TK Giữa', partId: 'Median nerve.r', note: 'Chi phối cảm giác ngón 1-2-3 và đối chiếu ngón cái' },
+      { label: '⚡ Dây TK Quay', partId: 'Radial nerve.r', note: 'Dây lớn nhất chi phối duỗi cổ tay và cảm giác mu tay' },
+      { label: '⚡ Dây TK Trụ', partId: 'Ulnar nerve.r', note: 'Chi phối ngón út, nửa ngón nhẫn và cơ gian cốt bàn tay' },
+      { label: '⚡ Bó sau đám rối', partId: 'Posterior cord of brachial plexus.r', note: 'Hợp lưu từ các ngành sau rễ C5-T1 nuôi cơ delta, tam đầu' }
+    ],
+    slides: [
+      {
+        id: 'anatomy',
+        title: 'Cấu tạo',
+        badge: '5 Rễ • 3 Thân • 3 Bó',
+        image: '/images/atlas/brachial_plexus_anatomy.svg',
+        caption: 'Mạng lưới thần kinh từ rễ cổ C5-T1 phân nhánh cấp phát cho toàn bộ cánh tay.'
+      },
+      {
+        id: 'physiology',
+        title: 'Chi phối',
+        badge: 'Cảm giác 3 Dây TK',
+        image: '/images/atlas/radial_median_ulnar_nerves.svg',
+        caption: 'Bản đồ chi phối cảm giác gan tay và mu tay của TK Giữa, Trụ và Quay.'
+      },
+      {
+        id: 'pathology',
+        title: '4 Cấp độ',
+        badge: 'Hội chứng Ống Cổ Tay (CTS)',
+        image: '/images/atlas/carpal_tunnel_syndrome.svg',
+        caption: 'Tiến triển từ tê thoáng qua về đêm đến teo cơ mô cái và liệt bàn tay khỉ.'
+      }
+    ],
+    simulator: {
+      title: '⚡ HỘI CHỨNG ỐNG CỔ TAY (CTS):',
+      ticks: ['Bình thường', 'Tê thoáng qua', 'Teo mô cái', 'Bàn tay khỉ'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Dây thần kinh giữa trơn láng, áp lực ống cổ tay < 10 mmHg bình thường.' },
+        { level: 'Cấp 1: Chèn ép sớm', desc: 'Tê rần châm chích ngón 1-3 về đêm, vẩy tay đỡ tê, test Tinel (+/-).' },
+        { level: 'Cấp 2: Hẹp nặng & Teo cơ', desc: 'Tê buốt cả ngày, rơi đũa chén, teo cơ mô cái rõ rệt, dẫn truyền chậm.' },
+        { level: 'Cấp 3: Mất chức năng', desc: 'Bàn tay khỉ (Ape hand), xơ hóa sợi trục, mất đối chiếu ngón cái vĩnh viễn.' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cấu Tạo Đám Rối Cánh Tay & Hội Chứng Ống Cổ Tay',
+      url: 'https://www.youtube.com/embed/rP6eX1Y7e8o',
+      duration: '1:12'
+    }
   }
 ];
 
@@ -545,6 +664,38 @@ export function getVisualDeckForPart(partId) {
     lower.includes('cơ hoành')
   ) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_respiratory_alveoli');
+  }
+
+  // 8. Urinary System & Nephron
+  if (
+    lower.includes('kidney') ||
+    lower.includes('renal') ||
+    lower.includes('nephron') ||
+    lower.includes('ureter') ||
+    lower.includes('bladder') ||
+    lower.includes('thận') ||
+    lower.includes('niệu quản') ||
+    lower.includes('bàng quang') ||
+    lower.includes('tiết niệu')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_urinary_nephron');
+  }
+
+  // 9. Brachial Plexus & Hand Nerves
+  if (
+    lower.includes('brachial') ||
+    lower.includes('plexus') ||
+    lower.includes('median nerve') ||
+    lower.includes('radial nerve') ||
+    lower.includes('ulnar nerve') ||
+    lower.includes('carpal') ||
+    lower.includes('đám rối') ||
+    lower.includes('thần kinh giữa') ||
+    lower.includes('thần kinh trụ') ||
+    lower.includes('thần kinh quay') ||
+    lower.includes('cánh tay')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_brachial_plexus');
   }
 
   return null;

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071326"/>
+      <stop offset="100%" stop-color="#0b2247"/>
+    </linearGradient>
+    <linearGradient id="bowmanGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <radialGradient id="glomerulusGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="70%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="480" height="300" fill="url(#bgGrad2)" rx="10"/>
+
+  <!-- Title Badge -->
+  <rect x="20" y="16" width="230" height="26" rx="6" fill="#0f2b5c" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="32" y="33" fill="#f8fafc" font-size="12" font-weight="700" font-family="Inter, sans-serif">NEPHRON &amp; MÀNG LỌC CẦU THẬN</text>
+
+  <rect x="260" y="16" width="200" height="26" rx="6" fill="rgba(30, 64, 175, 0.4)" stroke="#60a5fa" stroke-width="1"/>
+  <text x="270" y="33" fill="#93c5fd" font-size="11" font-weight="600" font-family="Inter, sans-serif">1 Triệu Nephron / Thận • eGFR > 90</text>
+
+  <!-- LEFT PANEL: Bowman's Capsule & Glomerulus Magnification -->
+  <g transform="translate(110, 150)">
+    <!-- Outer Bowman Capsule (Bọc Bowman) -->
+    <path d="M -40 -50 C -80 -10, -80 40, -40 70 C -10 90, 40 85, 65 50 L 50 40 C 30 65, -5 68, -25 50 C -55 25, -55 -10, -25 -35 C -5 -50, 25 -45, 45 -20 L 60 -30 C 35 -65, -15 -70, -40 -50 Z" fill="url(#bowmanGrad)" stroke="#38bdf8" stroke-width="2"/>
+
+    <!-- Afferent & Efferent Arterioles (Tiểu ĐM đến & Tiểu ĐM đi) -->
+    <!-- Afferent (đến - rộng hơn) -->
+    <path d="M -90 -45 L -20 -15" stroke="#ef4444" stroke-width="7" stroke-linecap="round"/>
+    <text x="-95" y="-55" fill="#fca5a5" font-size="9" font-weight="700">Tiểu ĐM Đến</text>
+
+    <!-- Efferent (đi - hẹp hơn tạo áp lực lọc 55mmHg) -->
+    <path d="M -90 15 L -20 0" stroke="#f87171" stroke-width="4.5" stroke-linecap="round"/>
+    <text x="-95" y="32" fill="#fca5a5" font-size="9" font-weight="700">Tiểu ĐM Đi</text>
+
+    <!-- Glomerular Capillaries (Búi mao mạch cầu thận) -->
+    <circle cx="0" cy="5" r="30" fill="url(#glomerulusGrad)" stroke="#f87171" stroke-width="2"/>
+    <path d="M -15 -10 C -5 -20, 15 -15, 10 0 C 5 15, -10 10, -10 20 C -10 25, 15 25, 20 15" stroke="#fee2e2" stroke-width="2.5" fill="none"/>
+
+    <!-- Filtration Arrows (Áp lực lọc siêu vi 180L/ngày) -->
+    <path d="M 15 -5 L 35 -10" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 25 15 L 45 20" stroke="#fbbf24" stroke-width="2"/>
+    <path d="M 10 30 L 25 45" stroke="#fbbf24" stroke-width="2"/>
+    <text x="50" y="5" fill="#fde047" font-size="9" font-weight="700">Dịch lọc sơ cấp</text>
+    <text x="50" y="16" fill="#fef08a" font-size="8">180 Lít/ngày</text>
+  </g>
+
+  <!-- RIGHT PANEL: Full Nephron Tubule Diagram (Ống lượn gần -> Quai Henle -> Ống lượn xa -> Ống góp) -->
+  <g transform="translate(260, 65)">
+    <!-- Background Region Divider (Vỏ thận vs Tủy thận) -->
+    <rect x="0" y="0" width="200" height="90" fill="rgba(59, 130, 246, 0.08)" rx="4"/>
+    <text x="8" y="18" fill="#93c5fd" font-size="9" font-weight="700">VÙNG VỎ THẬN (Cortex)</text>
+
+    <rect x="0" y="95" width="200" height="125" fill="rgba(239, 68, 68, 0.08)" rx="4"/>
+    <text x="8" y="112" fill="#fca5a5" font-size="9" font-weight="700">VÙNG TỦY THẬN (Medulla)</text>
+
+    <!-- Proximal Convoluted Tubule (Ống lượn gần - Tái hấp thu 65% nước & Na+) -->
+    <path d="M 25 40 C 35 25, 55 25, 60 45 C 65 65, 80 65, 85 45 C 90 30, 105 35, 110 55 L 110 95" stroke="#38bdf8" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <text x="35" y="78" fill="#38bdf8" font-size="8.5" font-weight="600">Ống lượn gần</text>
+
+    <!-- Loop of Henle (Quai Henle cắm sâu tủy thận - Cô đặc nước tiểu) -->
+    <path d="M 110 95 L 110 185 C 110 205, 130 205, 130 185 L 130 95" stroke="#f59e0b" stroke-width="3.5" fill="none"/>
+    <text x="120" y="215" fill="#fbbf24" font-size="9" font-weight="700" text-anchor="middle">Quai Henle</text>
+
+    <!-- Distal Convoluted Tubule (Ống lượn xa) -->
+    <path d="M 130 95 C 130 75, 145 70, 150 85 C 155 95, 165 95, 170 85 L 175 85" stroke="#38bdf8" stroke-width="4" fill="none"/>
+    <text x="140" y="60" fill="#38bdf8" font-size="8.5" font-weight="600">Ống lượn xa</text>
+
+    <!-- Collecting Duct (Ống góp lớn -> Bể thận) -->
+    <path d="M 175 35 L 175 210" stroke="#10b981" stroke-width="7" stroke-linecap="round"/>
+    <text x="180" y="125" fill="#34d399" font-size="9" font-weight="700" transform="rotate(90, 180, 125)" text-anchor="middle">ỐNG GÓP (Nước tiểu 1.5L)</text>
+  </g>
+
+  <!-- Reabsorption & Secretion Indicators (Tái hấp thu & Bài tiết) -->
+  <g transform="translate(30, 245)">
+    <rect width="420" height="38" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <circle cx="20" cy="19" r="6" fill="#38bdf8"/>
+    <text x="32" y="23" fill="#cbd5e1" font-size="10"><tspan font-weight="700" fill="#38bdf8">Tái hấp thu 99%:</tspan> Nước, Glucose, Acid amin, Na+, K+ trở lại tuần hoàn máu.</text>
+    <circle cx="270" cy="19" r="6" fill="#ef4444"/>
+    <text x="282" y="23" fill="#cbd5e1" font-size="10"><tspan font-weight="700" fill="#ef4444">Đào thải:</tspan> Ure, Creatinin, H+, độc chất.</text>
+  </g>
+</svg>

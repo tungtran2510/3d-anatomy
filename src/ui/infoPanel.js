@@ -981,6 +981,10 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     headerTitle = `🫀 TIM MẠCH & 4 BUỒNG TIM`;
   } else if (deck.id === 'concept_respiratory_alveoli') {
     headerTitle = `🫁 HỆ HÔ HẤP & PHẾ NANG`;
+  } else if (deck.id === 'concept_urinary_nephron') {
+    headerTitle = `🩺 HỆ TIẾT NIỆU & CẦU THẬN`;
+  } else if (deck.id === 'concept_brachial_plexus') {
+    headerTitle = `⚡ ĐÁM RỐI THẦN KINH CÁNH TAY`;
   }
 
   container.innerHTML = `
