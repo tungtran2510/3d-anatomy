@@ -7272,9 +7272,9 @@ body.theme-dark .tab-vertical-text {
   left: 0 !important;
   right: auto !important;
   bottom: auto !important;
-  height: 48vh !important;
-  max-height: 440px;
-  min-height: 350px;
+  height: 58vh !important;
+  max-height: 495px;
+  min-height: 420px;
   width: 126px;
   max-width: 42vw;
   z-index: 1200;
