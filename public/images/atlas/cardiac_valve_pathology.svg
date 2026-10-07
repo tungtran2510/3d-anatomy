@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pathoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070e1e" />
+      <stop offset="100%" stop-color="#0b172e" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#pathoBg)" stroke="#1e3a8a" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 22)">
+    <rect width="225" height="26" rx="6" fill="#be123c" fill-opacity="0.35" stroke="#f43f5e" stroke-width="1" />
+    <text x="12" y="17" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" letter-spacing="0.5">⚠️ BỆNH HỌC LÂM SÀNG TIM</text>
+  </g>
+  <text x="24" y="68" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="15.5" font-weight="700">4 Giai Đoạn Hẹp Hở Van Tim &amp; Suy Thất Trái</text>
+  <text x="24" y="86" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Từ dòng hở nhẹ van 2 lá đến phì đại buồng thất và phù phổi cấp nguy kịch</text>
+
+  <!-- 4 Step Boxes Across Screen -->
+  <!-- Level 0: Bình thường -->
+  <g transform="translate(24, 115)">
+    <rect width="130" height="225" rx="10" fill="#0f172a" stroke="#1e3a8a" stroke-width="1.5" />
+    <rect width="130" height="28" rx="8" fill="#1e293b" />
+    <text x="65" y="18" fill="#93c5fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="800" text-anchor="middle">CẤP 0: BÌNH THƯỜNG</text>
+
+    <!-- Normal Valve Icon -->
+    <circle cx="65" cy="72" r="30" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.5" />
+    <line x1="65" y1="42" x2="65" y2="102" stroke="#38bdf8" stroke-width="2" />
+    <text x="65" y="76" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="800" text-anchor="middle">ĐÓNG KÍN</text>
+
+    <text x="65" y="125" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700" text-anchor="middle">Lá van thanh mảnh</text>
+    <text x="12" y="145" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Không trào ngược</text>
+    <text x="12" y="160" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Phân suất EF &gt; 60%</text>
+    <text x="12" y="175" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Áp lực nhĩ ổn định</text>
+    <rect x="12" y="195" width="106" height="20" rx="4" fill="#166534" fill-opacity="0.3" stroke="#22c55e" stroke-width="1" />
+    <text x="65" y="209" fill="#86efac" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">Khỏe mạnh</text>
+  </g>
+
+  <!-- Level 1: Sa van tim nhẹ -->
+  <g transform="translate(165, 115)">
+    <rect width="130" height="225" rx="10" fill="#0f172a" stroke="#ca8a04" stroke-width="1.5" />
+    <rect width="130" height="28" rx="8" fill="#713f12" />
+    <text x="65" y="18" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="800" text-anchor="middle">CẤP 1: SA VAN TIM</text>
+
+    <!-- Prolapse Valve Icon -->
+    <circle cx="65" cy="72" r="30" fill="#ca8a04" fill-opacity="0.2" stroke="#facc15" stroke-width="1.5" />
+    <path d="M50,72 C55,55 75,55 80,72" fill="none" stroke="#facc15" stroke-width="2.5" />
+    <text x="65" y="92" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" font-weight="800" text-anchor="middle">LỎI VÀO NHĨ</text>
+
+    <text x="65" y="125" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700" text-anchor="middle">Lá van võng ngược</text>
+    <text x="12" y="145" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Tiếng Click tâm thu</text>
+    <text x="12" y="160" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Dây chằng chùng nhẹ</text>
+    <text x="12" y="175" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Chưa suy tim</text>
+    <rect x="12" y="195" width="106" height="20" rx="4" fill="#854d0e" fill-opacity="0.3" stroke="#eab308" stroke-width="1" />
+    <text x="65" y="209" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">Theo dõi định kỳ</text>
+  </g>
+
+  <!-- Level 2: Hẹp hở van thực thể -->
+  <g transform="translate(306, 115)">
+    <rect width="130" height="225" rx="10" fill="#0f172a" stroke="#ea580c" stroke-width="1.5" />
+    <rect width="130" height="28" rx="8" fill="#7c2d12" />
+    <text x="65" y="18" fill="#fed7aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="800" text-anchor="middle">CẤP 2: HỞ VAN VỪA</text>
+
+    <!-- Regurgitation Flow Icon -->
+    <circle cx="65" cy="72" r="30" fill="#ea580c" fill-opacity="0.2" stroke="#fb923c" stroke-width="1.5" />
+    <path d="M55,60 L75,60 M55,84 L75,84" stroke="#fb923c" stroke-width="2" />
+    <path d="M65,95 L65,50" stroke="#f43f5e" stroke-width="3" stroke-dasharray="3,2" />
+    <text x="65" y="76" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="800" text-anchor="middle">TRÀO NGƯỢC</text>
+
+    <text x="65" y="125" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700" text-anchor="middle">Máu phụt ngược nhĩ</text>
+    <text x="12" y="145" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Thất trái dãn phì đại</text>
+    <text x="12" y="160" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Khó thở khi gắng sức</text>
+    <text x="12" y="175" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Rung nhĩ nguy cơ</text>
+    <rect x="12" y="195" width="106" height="20" rx="4" fill="#9a3412" fill-opacity="0.3" stroke="#f97316" stroke-width="1" />
+    <text x="65" y="209" fill="#fed7aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">Điều trị nội khoa</text>
+  </g>
+
+  <!-- Level 3: Suy tim cấp & Phù phổi -->
+  <g transform="translate(447, 115)">
+    <rect width="130" height="225" rx="10" fill="#0f172a" stroke="#dc2626" stroke-width="2" />
+    <rect width="130" height="28" rx="8" fill="#991b1b" />
+    <text x="65" y="18" fill="#fecaca" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="900" text-anchor="middle">CẤP 3: SUY TIM CẤP</text>
+
+    <!-- Heart Failure Icon -->
+    <circle cx="65" cy="72" r="32" fill="#7f1d1d" fill-opacity="0.4" stroke="#ef4444" stroke-width="2" />
+    <path d="M50,72 L80,72 M65,57 L65,87" stroke="#ef4444" stroke-width="2.5" />
+    <text x="65" y="76" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" font-weight="900" text-anchor="middle">EF &lt; 35%</text>
+
+    <text x="65" y="125" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700" text-anchor="middle">Ứ máu phổi cấp tính</text>
+    <text x="12" y="145" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Phù phổi cấp (bọt hồng)</text>
+    <text x="12" y="160" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Khó thở kịch phát</text>
+    <text x="12" y="175" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Tụt huyết áp choáng</text>
+    <rect x="12" y="195" width="106" height="20" rx="4" fill="#b91c1c" fill-opacity="0.4" stroke="#ef4444" stroke-width="1" />
+    <text x="65" y="209" fill="#fecaca" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="800" text-anchor="middle">Cấp cứu / Mổ van</text>
+  </g>
+</svg>

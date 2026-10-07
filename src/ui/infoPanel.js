@@ -15,6 +15,7 @@ import { getLocalVideoBlobUrl } from '../data/videoStore.js';
 import { openQuickVideoModal } from './quickVideoModal.js';
 import { openVideoModal } from './sidebar.js';
 import { getVisualDeckForPart } from '../data/anatomyConcepts.js';
+import { dynamicAnatomy, MOTIONS } from '../viewer/dynamicAnatomy.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -313,6 +314,9 @@ export function updateInfoPanelContent(part, viewer) {
 
   // 2a. Render Interactive Disc Subunits (Vòng sợi & Nhân nhầy)
   renderDiscSubunitsSection(part, clinical, mainName, viewer);
+
+  // 2a.1 Render 3D Joint Kinematics & Range of Motion (Choice 2)
+  renderJointKinematicsSection(part, clinical, mainName, viewer);
 
   // 2b. Render Dynamic Flow Pathway (Đường đi & Chu trình giải phẫu - Dịch não tủy, Gan mật tụy, Tim mạch)
   renderDynamicPathway(part, clinical, mainName);
@@ -968,6 +972,10 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     headerTitle = `🦴 KHỚP GỐI & DÂY CHẰNG CHÉO`;
   } else if (deck.id === 'concept_gastrointestinal_tract') {
     headerTitle = `🥣 HỆ TIÊU HÓA LIÊN TỤC`;
+  } else if (deck.id === 'concept_cardiac_valves') {
+    headerTitle = `🫀 TIM MẠCH & 4 BUỒNG TIM`;
+  } else if (deck.id === 'concept_respiratory_alveoli') {
+    headerTitle = `🫁 HỆ HÔ HẤP & PHẾ NANG`;
   }
 
   container.innerHTML = `
@@ -1049,5 +1057,168 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
         selectPartById(targetId, viewer);
       }
     });
+  });
+}
+
+// =========================================================================
+// 2a.1 3D Joint Kinematics & Range of Motion (ROM) Controller (Choice 2)
+// =========================================================================
+const JOINT_KINEMATICS_MAP = [
+  {
+    match: ['knee', 'cruciate', 'meniscus', 'patella', 'tibia', 'gối', 'chày', 'bánh chè'],
+    motionId: MOTIONS.KNEE_FLEXION,
+    title: '🏃 ĐỘNG HỌC KHỚP GỐI',
+    actionName: 'Gập gối',
+    minAngle: 0,
+    maxAngle: 140,
+    agonist: 'Nhóm cơ gân kheo (Hamstrings)',
+    note: 'Biên độ gập 0° (duỗi thẳng) đến 140° (gập sâu)'
+  },
+  {
+    match: ['shoulder', 'humerus', 'scapula', 'glenoid', 'vai', 'cánh tay', 'bả vai'],
+    motionId: MOTIONS.SHOULDER_ABDUCTION,
+    title: '🏃 ĐỘNG HỌC KHỚP VAI',
+    actionName: 'Dạng vai',
+    minAngle: 0,
+    maxAngle: 180,
+    agonist: 'Cơ delta & Cơ trên gai (Deltoid & Supraspinatus)',
+    note: 'Dạng cánh tay từ 0° đến 180° qua đầu'
+  },
+  {
+    match: ['hip', 'pelvis', 'acetabulum', 'háng', 'xương chậu', 'ổ cối'],
+    motionId: MOTIONS.HIP_FLEXION,
+    title: '🏃 ĐỘNG HỌC KHỚP HÁNG',
+    actionName: 'Gập háng',
+    minAngle: 0,
+    maxAngle: 120,
+    agonist: 'Cơ thắt lưng chậu (Iliopsoas) & Cơ thẳng đùi',
+    note: 'Nâng đùi ra trước từ 0° đến 120°'
+  },
+  {
+    match: ['elbow', 'radius', 'ulna', 'khuỷu', 'xương quay', 'xương trụ'],
+    motionId: MOTIONS.ELBOW_FLEXION,
+    title: '🏃 ĐỘNG HỌC KHỚP KHUỶU',
+    actionName: 'Gập khuỷu',
+    minAngle: 0,
+    maxAngle: 145,
+    agonist: 'Cơ nhị đầu cánh tay (Biceps) & Cơ cánh tay',
+    note: 'Gấp cẳng tay từ 0° đến 145° chạm vai'
+  },
+  {
+    match: ['spine', 'vertebra', 'cột sống', 'đốt sống', 'l4', 'l5', 'c5', 'c6'],
+    motionId: MOTIONS.SPINE_FLEXION,
+    title: '🏃 ĐỘNG HỌC CỘT SỐNG',
+    actionName: 'Cúi gập thân',
+    minAngle: 0,
+    maxAngle: 80,
+    agonist: 'Cơ thẳng bụng & Cơ chéo bụng (Abdominals)',
+    note: 'Cúi gập thân mình ra trước từ 0° đến 80°'
+  }
+];
+
+let kinematicsUnsub = null;
+
+function renderJointKinematicsSection(part, clinical, mainName, viewer) {
+  const container = document.getElementById('cardJointKinematicsSection');
+  if (!container) return;
+
+  const partId = String(part?.id || '').toLowerCase();
+  const nameVi = String(clinical?.nameVi || mainName || '').toLowerCase();
+  const searchStr = `${partId} ${nameVi}`;
+
+  const kin = JOINT_KINEMATICS_MAP.find(k => k.match.some(m => searchStr.includes(m)));
+
+  if (!kin) {
+    container.classList.add('hidden');
+    container.innerHTML = '';
+    if (kinematicsUnsub) {
+      kinematicsUnsub();
+      kinematicsUnsub = null;
+    }
+    return;
+  }
+
+  container.classList.remove('hidden');
+
+  container.innerHTML = `
+    <div class="joint-kinematics-box">
+      <div class="joint-kinematics-header">
+        <span class="joint-kinematics-title">${kin.title}</span>
+        <span class="joint-kinematics-angle-badge" id="jointKinAngleBadge">${kin.actionName}: 0° / ${kin.maxAngle}°</span>
+      </div>
+      <div class="joint-kinematics-controls">
+        <button type="button" class="btn-joint-play" id="btnJointKinPlay" title="Chạy mô phỏng chuyển động 3D">
+          ▶ Chạy 3D
+        </button>
+        <div class="joint-slider-wrap">
+          <input type="range" min="0" max="100" value="0" step="1" class="joint-rom-range" id="jointRomRange" />
+          <div class="joint-rom-ticks">
+            <span>0° (Duỗi)</span>
+            <span>${Math.round(kin.maxAngle / 2)}°</span>
+            <span>${kin.maxAngle}° (Gập)</span>
+          </div>
+        </div>
+        <button type="button" class="btn-joint-reset" id="btnJointKinReset" title="Đặt lại tư thế giải phẫu">
+          ↺
+        </button>
+      </div>
+      <div class="joint-kinematics-desc">
+        <span class="agonist-label">Cơ chủ vận:</span> ${kin.agonist} (${kin.note})
+      </div>
+    </div>
+  `;
+
+  const range = container.querySelector('#jointRomRange');
+  const playBtn = container.querySelector('#btnJointKinPlay');
+  const resetBtn = container.querySelector('#btnJointKinReset');
+  const badge = container.querySelector('#jointKinAngleBadge');
+
+  if (kinematicsUnsub) {
+    kinematicsUnsub();
+    kinematicsUnsub = null;
+  }
+
+  // Subscribe to dynamicAnatomy state updates to sync UI when playing
+  kinematicsUnsub = dynamicAnatomy.subscribe((st) => {
+    if (st.motionId === kin.motionId) {
+      if (range && !range.matches(':active')) {
+        range.value = Math.round(st.progress * 100);
+      }
+      const angle = Math.round(st.progress * kin.maxAngle);
+      if (badge) badge.textContent = `${kin.actionName}: ${angle}° / ${kin.maxAngle}°`;
+      if (playBtn) playBtn.innerHTML = st.isPlaying ? '⏸ Dừng' : '▶ Chạy 3D';
+    }
+  });
+
+  range?.addEventListener('input', async (e) => {
+    const pct = parseFloat(e.target.value) / 100;
+    const currentAngle = Math.round(pct * kin.maxAngle);
+    if (badge) badge.textContent = `${kin.actionName}: ${currentAngle}° / ${kin.maxAngle}°`;
+
+    const cur = dynamicAnatomy.getState();
+    if (cur.motionId !== kin.motionId) {
+      await dynamicAnatomy.setMotion(kin.motionId);
+    }
+    dynamicAnatomy.pause();
+    dynamicAnatomy.seek(pct);
+    if (playBtn) playBtn.innerHTML = '▶ Chạy 3D';
+  });
+
+  playBtn?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const cur = dynamicAnatomy.getState();
+    if (cur.motionId !== kin.motionId) {
+      await dynamicAnatomy.setMotion(kin.motionId);
+    }
+    dynamicAnatomy.togglePlay();
+  });
+
+  resetBtn?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    dynamicAnatomy.pause();
+    dynamicAnatomy.seek(0);
+    if (range) range.value = 0;
+    if (badge) badge.textContent = `${kin.actionName}: 0° / ${kin.maxAngle}°`;
+    if (playBtn) playBtn.innerHTML = '▶ Chạy 3D';
   });
 }

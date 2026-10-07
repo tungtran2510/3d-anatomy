@@ -3478,7 +3478,186 @@ body.theme-dark .herniation-ticks {
 body.theme-dark .herniation-desc-pill {
   color: #94a3b8;
   background: rgba(30, 41, 59, 0.5);
+}
+
+/* Joint Kinematics & Range of Motion (ROM) Box (Choice 2) */
+.joint-kinematics-section {
+  margin-bottom: 10px;
+}
+
+.joint-kinematics-box {
+  background: linear-gradient(135deg, #f8faff 0%, #edf4fe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 8px 10px;
+  box-shadow: 0 2px 8px rgba(11, 37, 89, 0.05);
+}
+
+[data-theme="dark"] .joint-kinematics-box,
+body.theme-dark .joint-kinematics-box {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(16, 42, 92, 0.35));
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.joint-kinematics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.joint-kinematics-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: #0b2559;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .joint-kinematics-title,
+body.theme-dark .joint-kinematics-title {
+  color: #93c5fd;
+}
+
+.joint-kinematics-angle-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #e8f0fe;
+  color: #0b2559;
+  border: 1px solid #bfdbfe;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .joint-kinematics-angle-badge,
+body.theme-dark .joint-kinematics-angle-badge {
+  background: rgba(30, 58, 138, 0.35);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.joint-kinematics-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.btn-joint-play {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  background: #0f2b5c;
+  color: #ffffff;
+  border: 1px solid #0b2559;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(15, 43, 92, 0.3);
+}
+
+.btn-joint-play:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+
+.btn-joint-reset {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  background: #ffffff;
+  color: #0b2559;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-joint-reset:hover {
+  background: #eff6ff;
+  border-color: #1e40af;
+  color: #1e40af;
+}
+
+[data-theme="dark"] .btn-joint-reset,
+body.theme-dark .btn-joint-reset {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(51, 65, 85, 0.8);
+  color: #93c5fd;
+}
+
+.joint-slider-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.joint-rom-range {
+  width: 100%;
+  accent-color: #0f2b5c;
+  cursor: pointer;
+  margin: 0;
+  height: 4px;
+}
+
+.joint-rom-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .joint-rom-ticks,
+body.theme-dark .joint-rom-ticks {
+  color: #94a3b8;
+}
+
+.joint-kinematics-desc {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #334155;
+  background: rgba(226, 232, 240, 0.45);
+  padding: 3px 6px;
+  border-radius: 5px;
+  border-left: 2.5px solid #0f2b5c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .joint-kinematics-desc,
+body.theme-dark .joint-kinematics-desc {
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.5);
   border-left-color: #3b82f6;
+}
+
+.joint-kinematics-desc .agonist-label {
+  font-weight: 800;
+  color: #0b2559;
+}
+
+[data-theme="dark"] .joint-kinematics-desc .agonist-label,
+body.theme-dark .joint-kinematics-desc .agonist-label {
+  color: #93c5fd;
 }
 
 /* Search Concept Card in Dropdown */

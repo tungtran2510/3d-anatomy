@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cycleBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070e1e" />
+      <stop offset="100%" stop-color="#0b172e" />
+    </linearGradient>
+
+    <linearGradient id="systoleRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+
+    <linearGradient id="diastoleBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#cycleBg)" stroke="#1e3a8a" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 22)">
+    <rect width="210" height="26" rx="6" fill="#1e40af" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1" />
+    <text x="12" y="17" fill="#93c5fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" letter-spacing="0.5">SINH LÝ HUYẾT ĐỘNG TIM</text>
+  </g>
+  <text x="24" y="68" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="15.5" font-weight="700">Chu Trình Tâm Thu &amp; Tâm Trương (0.8 Giây)</text>
+  <text x="24" y="86" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Sự phối hợp co bóp tống máu thất trái và giãn cơ tim đổ đầy buồng thất</text>
+
+  <!-- Two Comparative Chambers Side-by-Side -->
+  <!-- Phase 1: Tâm Thu (Systole - Co bóp tống máu) -->
+  <g transform="translate(160, 215)">
+    <!-- Muscle Wall Contracting (Thick) -->
+    <circle cx="0" cy="0" r="75" fill="none" stroke="url(#systoleRed)" stroke-width="18" stroke-dasharray="14,4" />
+    <!-- Blood being ejected up -->
+    <path d="M-15,30 L-10,-45 L-25,-40 L0,-75 L25,-40 L10,-45 L15,30 Z" fill="#ef4444" />
+    <circle cx="0" cy="0" r="38" fill="#450a0a" opacity="0.6" />
+
+    <text x="0" y="-85" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12" font-weight="800" text-anchor="middle">GIAI ĐOẠN TÂM THU (0.3s)</text>
+    <text x="0" y="5" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">CO BÓP</text>
+    <text x="0" y="22" fill="#fed7aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">P = 120 mmHg</text>
+
+    <!-- Subtext box -->
+    <rect x="-85" y="85" width="170" height="38" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1" />
+    <text x="0" y="100" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" font-weight="700" text-anchor="middle">• Van 2 lá đóng chặt (T1)</text>
+    <text x="0" y="114" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" text-anchor="middle">• Van ĐM chủ mở, tống 70ml máu</text>
+  </g>
+
+  <!-- Phase 2: Tâm Trương (Diastole - Giãn buồng tim đổ đầy) -->
+  <g transform="translate(440, 215)">
+    <!-- Muscle Wall Relaxing (Thin, expanded) -->
+    <circle cx="0" cy="0" r="82" fill="none" stroke="url(#diastoleBlue)" stroke-width="10" stroke-dasharray="16,3" />
+    <!-- Blood entering from atrium down -->
+    <path d="M-15,-60 L-10,15 L-25,10 L0,45 L25,10 L10,15 L15,-60 Z" fill="#38bdf8" />
+    <circle cx="0" cy="0" r="52" fill="#0c4a6e" opacity="0.6" />
+
+    <text x="0" y="-85" fill="#7dd3fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12" font-weight="800" text-anchor="middle">GIAI ĐOẠN TÂM TRƯƠNG (0.5s)</text>
+    <text x="0" y="5" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">GIÃN NỞ</text>
+    <text x="0" y="22" fill="#bae6fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">P = 80 mmHg</text>
+
+    <!-- Subtext box -->
+    <rect x="-85" y="85" width="170" height="38" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1" />
+    <text x="0" y="100" fill="#7dd3fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" font-weight="700" text-anchor="middle">• Van ĐM chủ đóng kín (T2)</text>
+    <text x="0" y="114" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" text-anchor="middle">• Van 2 lá mở, hút máu từ nhĩ</text>
+  </g>
+</svg>

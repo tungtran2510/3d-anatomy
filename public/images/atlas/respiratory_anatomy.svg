@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="respBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#04121a" />
+      <stop offset="100%" stop-color="#082032" />
+    </linearGradient>
+
+    <!-- Trachea Cartilage Rings Cyan -->
+    <linearGradient id="cartilageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Lung Parenchyma Pinkish Mauve -->
+    <linearGradient id="lungGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6" />
+      <stop offset="100%" stop-color="#be185d" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#respBg)" stroke="#0e7490" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 22)">
+    <rect width="215" height="26" rx="6" fill="#0e7490" fill-opacity="0.35" stroke="#06b6d4" stroke-width="1" />
+    <text x="12" y="17" fill="#67e8f9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" letter-spacing="0.5">🫁 HỆ HÔ HẤP &amp; PHỔI Y KHOA</text>
+  </g>
+  <text x="24" y="68" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="15.5" font-weight="700">Cây Khí Phế Quản &amp; Hai Lá Phổi</text>
+  <text x="24" y="86" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Hệ thống 23 thế hệ phân nhánh dẫn khí từ Khí quản đến tiểu phế quản tận</text>
+
+  <!-- Central Respiratory Tree Graphic -->
+  <g transform="translate(300, 220)">
+    <!-- 1. Right Lung (3 Lobes) -->
+    <path d="M-40,-85 C-105,-85 -145,-40 -145,25 C-145,85 -105,105 -35,95 C-35,65 -30,0 -40,-85 Z" 
+          fill="url(#lungGrad)" opacity="0.35" stroke="#f472b6" stroke-width="2" />
+    <text x="-95" y="15" fill="#fbcfe8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">PHỔI PHẢI</text>
+    <text x="-95" y="32" fill="#f472b6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">(3 Thùy)</text>
+
+    <!-- 2. Left Lung (2 Lobes with Cardiac Notch) -->
+    <path d="M40,-85 C105,-85 145,-40 145,25 C145,85 105,105 35,95 C35,70 55,45 50,15 C45,-15 30,0 40,-85 Z" 
+          fill="url(#lungGrad)" opacity="0.35" stroke="#f472b6" stroke-width="2" />
+    <text x="95" y="15" fill="#fbcfe8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">PHỔI TRÁI</text>
+    <text x="95" y="32" fill="#f472b6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">(2 Thùy + Khuyết tim)</text>
+
+    <!-- 3. Trachea (Khí quản) -->
+    <path d="M-10,-130 L-10,-55 L10,-55 L10,-130 Z" fill="#082f49" stroke="#38bdf8" stroke-width="2" />
+    <!-- Cartilage Rings -->
+    <line x1="-10" y1="-115" x2="10" y2="-115" stroke="#38bdf8" stroke-width="1.8" />
+    <line x1="-10" y1="-100" x2="10" y2="-100" stroke="#38bdf8" stroke-width="1.8" />
+    <line x1="-10" y1="-85" x2="10" y2="-85" stroke="#38bdf8" stroke-width="1.8" />
+    <line x1="-10" y1="-70" x2="10" y2="-70" stroke="#38bdf8" stroke-width="1.8" />
+    <text x="0" y="-140" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">KHÍ QUẢN (TRACHEA)</text>
+
+    <!-- Carina (Ngã ba phế quản) -->
+    <path d="M-10,-55 L-65,-15 L-55,-5 L-3,-45 L3,-45 L55,-5 L65,-15 L10,-55 Z" fill="#082f49" stroke="#38bdf8" stroke-width="2" />
+    <circle cx="0" cy="-48" r="3" fill="#facc15" />
+
+    <!-- Bronchi Branching Tree (Phế quản gốc & phân thùy) -->
+    <!-- Right branches -->
+    <path d="M-60,-10 L-95,15 M-75,5 L-90,45 M-65,0 L-60,55" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Left branches -->
+    <path d="M60,-10 L95,15 M75,5 L90,45 M65,0 L60,55" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Diaphragm Curve Bottom (Cơ hoành) -->
+    <path d="M-160,115 Q0,75 160,115" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="6,3" />
+    <text x="0" y="112" fill="#f59e0b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="800" text-anchor="middle">CƠ HOÀNH (DIAPHRAGM)</text>
+  </g>
+
+  <!-- Side Callouts -->
+  <g transform="translate(24, 275)">
+    <rect width="135" height="50" rx="6" fill="#0f172a" stroke="#06b6d4" stroke-width="1" />
+    <text x="8" y="16" fill="#67e8f9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="800">16–20 Vòng Sụn C</text>
+    <text x="8" y="30" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9">• Giữ đường thở luôn mở</text>
+    <text x="8" y="42" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Biểu mô lông chuyển đẩy nhầy</text>
+  </g>
+
+  <g transform="translate(440, 275)">
+    <rect width="135" height="50" rx="6" fill="#0f172a" stroke="#f472b6" stroke-width="1" />
+    <text x="8" y="16" fill="#f472b6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="800">300 Triệu Phế Nang</text>
+    <text x="8" y="30" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9">• Diện tích 70–100 m²</text>
+    <text x="8" y="42" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Màng phế nang mao mạch mỏng</text>
+  </g>
+</svg>

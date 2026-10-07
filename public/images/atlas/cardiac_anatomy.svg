@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cardiacBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070e1e" />
+      <stop offset="100%" stop-color="#0b172e" />
+    </linearGradient>
+
+    <!-- Oxygenated Blood Red Gradient -->
+    <linearGradient id="o2Red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#be123c" />
+    </linearGradient>
+
+    <!-- Deoxygenated Blood Blue Gradient -->
+    <linearGradient id="deoxBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+
+    <!-- Valve Fibrous Ring Ivory -->
+    <linearGradient id="valveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#eab308" />
+    </linearGradient>
+
+    <!-- Myocardium Muscle Wall -->
+    <linearGradient id="myoWall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#991b1b" />
+      <stop offset="100%" stop-color="#450a0a" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#cardiacBg)" stroke="#1e3a8a" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 22)">
+    <rect width="215" height="26" rx="6" fill="#1e40af" fill-opacity="0.35" stroke="#3b82f6" stroke-width="1" />
+    <text x="12" y="17" fill="#93c5fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" letter-spacing="0.5">🫀 TIM MẠCH &amp; 4 BUỒNG TIM</text>
+  </g>
+  <text x="24" y="68" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="15.5" font-weight="700">Giải Phẫu 4 Buồng Tim &amp; Hệ Thống 4 Van</text>
+  <text x="24" y="86" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Tâm thất trái thành dày chịu áp lực cao &amp; dòng tuần hoàn van 1 chiều</text>
+
+  <!-- Central Heart 4-Chamber Schematic Section -->
+  <g transform="translate(300, 225)">
+    <!-- Myocardium Outer Wall -->
+    <path d="M-115,-70 C-115,-120 -40,-130 0,-95 C40,-130 115,-120 115,-70 C115,10 65,85 0,120 C-65,85 -115,10 -115,-70 Z" 
+          fill="url(#myoWall)" stroke="#dc2626" stroke-width="2.5" />
+
+    <!-- Aorta Arch Top Outflow (Red) -->
+    <path d="M-10,-95 C-10,-140 30,-155 55,-130 C75,-110 65,-90 60,-80" 
+          fill="none" stroke="url(#o2Red)" stroke-width="18" stroke-linecap="round" />
+    <!-- Pulmonary Artery Outflow (Blue cross) -->
+    <path d="M-35,-85 C-45,-120 -15,-135 10,-135" 
+          fill="none" stroke="url(#deoxBlue)" stroke-width="14" stroke-linecap="round" opacity="0.9" />
+
+    <!-- Interventricular Septum (Vách liên thất) -->
+    <path d="M-6,-25 L-6,112 L10,110 L10,-25 Z" fill="#7f1d1d" stroke="#ef4444" stroke-width="1" />
+    <text x="2" y="55" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5" font-weight="700" text-anchor="middle" transform="rotate(-90, 2, 55)">VÁCH LIÊN THẤT</text>
+
+    <!-- Right Atrium (Tâm nhĩ phải - deoxBlue) -->
+    <path d="M-100,-70 C-100,-95 -50,-95 -15,-70 C-15,-35 -50,-35 -100,-35 Z" fill="url(#deoxBlue)" opacity="0.85" />
+    <text x="-58" y="-55" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="800" text-anchor="middle">NHĨ PHẢI (RA)</text>
+
+    <!-- Left Atrium (Tâm nhĩ trái - o2Red) -->
+    <path d="M15,-70 C50,-95 100,-95 100,-70 C100,-35 50,-35 15,-35 Z" fill="url(#o2Red)" opacity="0.85" />
+    <text x="58" y="-55" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="800" text-anchor="middle">NHĨ TRÁI (LA)</text>
+
+    <!-- Right Ventricle (Tâm thất phải - áp lực vừa) -->
+    <path d="M-95,-25 C-95,15 -70,60 -15,85 L-15,-25 Z" fill="url(#deoxBlue)" opacity="0.9" />
+    <text x="-55" y="25" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">THẤT PHẢI (RV)</text>
+
+    <!-- Left Ventricle (Tâm thất trái - thành dày cơ bắp chịu 120mmHg) -->
+    <path d="M15,-25 L15,85 C70,60 90,15 90,-25 Z" fill="url(#o2Red)" opacity="0.9" />
+    <text x="52" y="25" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800" text-anchor="middle">THẤT TRÁI (LV)</text>
+
+    <!-- Valvular Markers (4 Van tim chính) -->
+    <!-- Van 3 lá (Tricuspid) -->
+    <g transform="translate(-55, -28)">
+      <ellipse cx="0" cy="0" rx="14" ry="4.5" fill="url(#valveGrad)" stroke="#78350f" stroke-width="1.2" />
+      <line x1="-8" y1="0" x2="8" y2="0" stroke="#000" stroke-width="1.5" />
+    </g>
+
+    <!-- Van 2 lá (Mitral - Bicuspid) -->
+    <g transform="translate(52, -28)">
+      <ellipse cx="0" cy="0" rx="14" ry="4.5" fill="url(#valveGrad)" stroke="#78350f" stroke-width="1.2" />
+      <line x1="-8" y1="0" x2="8" y2="0" stroke="#000" stroke-width="1.5" />
+    </g>
+
+    <!-- Callout Left: Van 3 lá & Thất phải -->
+    <g transform="translate(-200, -35)">
+      <rect width="118" height="52" rx="6" fill="#0f172a" fill-opacity="0.95" stroke="#38bdf8" stroke-width="1" />
+      <text x="8" y="16" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="800">Van 3 Lá (Tricuspid)</text>
+      <text x="8" y="31" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9">• Ngăn máu trào ngược</text>
+      <text x="8" y="44" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Áp lực thấp thất phải</text>
+      <line x1="118" y1="26" x2="145" y2="10" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="2,2" />
+    </g>
+
+    <!-- Callout Right: Van 2 lá & Van ĐM chủ -->
+    <g transform="translate(100, -40)">
+      <rect width="125" height="56" rx="6" fill="#0f172a" fill-opacity="0.95" stroke="#f43f5e" stroke-width="1" />
+      <text x="8" y="16" fill="#f43f5e" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="800">Van 2 Lá &amp; ĐM Chủ</text>
+      <text x="8" y="31" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9">• Chịu áp lực tâm thu 120</text>
+      <text x="8" y="44" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="8.5">• Dễ tổn thương thoái hóa</text>
+      <line x1="0" y1="28" x2="-35" y2="15" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2" />
+    </g>
+  </g>
+
+  <!-- Bottom Legend Bar -->
+  <g transform="translate(24, 342)">
+    <rect width="552" height="24" rx="6" fill="#0f172a" stroke="#1e3a8a" stroke-width="1" />
+    <circle cx="16" cy="12" r="5" fill="#f43f5e" />
+    <text x="26" y="15.5" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5">Máu giàu Oxy (O2) • Thất trái đi toàn thân</text>
+    <circle cx="215" cy="12" r="5" fill="#38bdf8" />
+    <text x="225" y="15.5" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5">Máu nghèo Oxy (CO2) • Thất phải lên phổi</text>
+    <circle cx="430" cy="12" r="5" fill="#eab308" />
+    <text x="440" y="15.5" fill="#fef08a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5">Hệ 4 Van Tim Một Chiều</text>
+  </g>
+</svg>

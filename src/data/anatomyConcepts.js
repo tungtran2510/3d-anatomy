@@ -301,6 +301,124 @@ export const ANATOMY_CONCEPTS = [
       url: 'https://www.youtube.com/embed/z13P_zZvZ4U',
       duration: '0:58'
     }
+  },
+  {
+    id: 'concept_cardiac_valves',
+    keywords: [
+      'tim', 'heart', 'tâm thất', 'tam that', 'tâm nhĩ', 'tam nhi',
+      'ventricle', 'atrium', 'van tim', 'van 2 lá', 'van 3 lá', 'van đm chủ',
+      'mitral', 'tricuspid', 'aortic valve', 'pulmonary valve', 'động mạch chủ',
+      'suy tim', 'hở van', 'hẹp van', 'nhồi máu cơ tim'
+    ],
+    titleVi: 'Hệ Tim Mạch & 4 Buồng Tim',
+    latin: 'Cor / Apparatus cardiovascularis (TA2: 3672)',
+    subtitle: 'Giải phẫu 4 buồng tim, chu trình tâm thu/tâm trương & 4 van tim',
+    thumbnail: '/images/atlas/cardiac_anatomy.svg',
+    system: 'cardiovascular',
+    primaryPartId: 'Heart',
+    subunits: [
+      { label: '🫀 Tâm thất trái', partId: 'Heart', note: 'Buồng bơm máu chính áp lực 120mmHg đi nuôi cơ thể' },
+      { label: '🩸 Van 2 lá', partId: 'Heart', note: 'Van ngăn trào ngược giữa nhĩ trái và thất trái' },
+      { label: '🔴 Van ĐM chủ', partId: 'Aorta', note: 'Van một chiều mở thì tâm thu tống máu vào tuần hoàn lớn' },
+      { label: '🫁 Vách tim', partId: 'Heart', note: 'Vách liên thất và liên nhĩ ngăn máu giàu/nghèo Oxy' }
+    ],
+    slides: [
+      {
+        id: 'anatomy',
+        title: 'Cấu tạo',
+        badge: '4 Buồng tim & Van',
+        image: '/images/atlas/cardiac_anatomy.svg',
+        caption: 'Mặt cắt bộc lộ Nhĩ phải, Thất phải, Nhĩ trái, Thất trái và 4 van tim một chiều.'
+      },
+      {
+        id: 'physiology',
+        title: 'Huyết động',
+        badge: 'Tâm thu & Tâm trương',
+        image: '/images/atlas/cardiac_cycle.svg',
+        caption: 'Chu trình co bóp 0.8s tống máu nuôi toàn thân và hút máu hồi lưu.'
+      },
+      {
+        id: 'pathology',
+        title: '4 Cấp độ',
+        badge: 'Hẹp hở van & Suy tim',
+        image: '/images/atlas/cardiac_valve_pathology.svg',
+        caption: 'Tiến triển từ sa van nhẹ, dòng trào ngược đến suy tim và phù phổi cấp.'
+      }
+    ],
+    simulator: {
+      title: '🫀 BỆNH LÝ VAN TIM & CƠ TIM:',
+      ticks: ['Bình thường', 'Sa van', 'Hở van', 'Suy tim'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: '4 van đóng kín hoàn toàn, phân suất tống máu EF > 60%.' },
+        { level: 'Cấp 1: Sa van tim', desc: 'Lá van võng ngược vào buồng nhĩ, có tiếng Click tâm thu nhẹ.' },
+        { level: 'Cấp 2: Hở van vừa', desc: 'Dòng máu phụt ngược thất trái, tim phì đại bù trừ, khó thở khi gắng sức.' },
+        { level: 'Cấp 3: Suy tim cấp', desc: 'EF < 35%, ứ máu mao mạch phổi gây phù phổi cấp nguy kịch.' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cấu Tạo Tim & Chu Trình Hoạt Động Của Van Tim',
+      url: 'https://www.youtube.com/embed/7XaftdE_h60',
+      duration: '1:10'
+    }
+  },
+  {
+    id: 'concept_respiratory_alveoli',
+    keywords: [
+      'phổi', 'phoi', 'lung', 'khí quản', 'khi quan', 'trachea',
+      'phế quản', 'phe quan', 'bronchus', 'bronchial', 'phế nang', 'phe nang',
+      'alveoli', 'alveolus', 'màng phổi', 'mang phoi', 'cơ hoành', 'co hoanh',
+      'hô hấp', 'ho hap', 'respiratory', 'hen suyễn', 'copd', 'khó thở'
+    ],
+    titleVi: 'Hệ Hô Hấp & Phế Nang',
+    latin: 'Systema respiratorium / Pulmones (TA2: 3100)',
+    subtitle: 'Cây khí phế quản 23 thế hệ, chùm phế nang mao mạch & trao đổi khí',
+    thumbnail: '/images/atlas/respiratory_anatomy.svg',
+    system: 'respiratory',
+    primaryPartId: 'Lung.l',
+    subunits: [
+      { label: '🫁 Phổi & Phế nang', partId: 'Lung.l', note: '300 triệu phế nang diện tích 70–100m² trao đổi khí' },
+      { label: '🌬️ Cây phế quản', partId: 'Lung.r', note: '23 thế hệ phân nhánh dẫn và sưởi ấm không khí' },
+      { label: '💨 Cơ hoành', partId: 'Diaphragm', note: 'Cơ hô hấp chính tạo chênh lệch áp suất lồng ngực' },
+      { label: '🛡️ Màng phổi', partId: 'Lung.l', note: 'Lá thành và lá tạng chứa dịch giảm ma sát hô hấp' }
+    ],
+    slides: [
+      {
+        id: 'anatomy',
+        title: 'Cấu tạo',
+        badge: 'Cây khí phế quản',
+        image: '/images/atlas/respiratory_anatomy.svg',
+        caption: 'Hệ thống đường dẫn khí từ Khí quản, Phế quản gốc đến 2 lá phổi.'
+      },
+      {
+        id: 'physiology',
+        title: 'Sinh lý',
+        badge: 'Trao đổi khí O2/CO2',
+        image: '/images/atlas/respiratory_alveoli_gas_exchange.svg',
+        caption: 'Khuếch tán qua màng phế nang mao mạch 0.5 µm nuôi dưỡng hồng cầu.'
+      },
+      {
+        id: 'pathology',
+        title: '4 Cấp độ',
+        badge: 'Co thắt hen & COPD',
+        image: '/images/atlas/respiratory_copd_asthma.svg',
+        caption: 'Từ co thắt phế quản nhẹ, nút nhầy bít tắc đến xẹp phế nang và suy hô hấp.'
+      }
+    ],
+    simulator: {
+      title: '🫁 ĐƯỜNG THỞ & PHẾ NANG:',
+      ticks: ['Bình thường', 'Co thắt nhẹ', 'Tắc nhầy', 'Suy hô hấp'],
+      stages: [
+        { level: 'Cấp 0: Thông thoáng', desc: 'Đường thở sạch, niêm mạc mỏng, SpO2 98–100% thở êm dịu.' },
+        { level: 'Cấp 1: Co thắt nhẹ', desc: 'Cơ trơn phế quản co hẹp, xuất hiện tiếng rít nhẹ thì thở ra.' },
+        { level: 'Cấp 2: Tắc nghẽn nhầy', desc: 'Tăng tiết đờm đặc quánh, bẫy khí trong phổi, SpO2 tụt 90–93%.' },
+        { level: 'Cấp 3: Suy hô hấp', desc: 'Bít tắc hoàn toàn, xẹp phế nang lan tỏa, tím tái đe dọa tính mạng.' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cơ Chế Hít Thở & Trao Đổi Khí Tại Phế Nang',
+      url: 'https://www.youtube.com/embed/bHZsvBdUC2I',
+      duration: '1:05'
+    }
   }
 ];
 
@@ -387,6 +505,36 @@ export function getVisualDeckForPart(partId) {
     lower.includes('đại tràng')
   ) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_gastrointestinal_tract');
+  }
+
+  // 6. Cardiac System & Valvular Cycle
+  if (
+    lower.includes('heart') ||
+    lower.includes('cardiac') ||
+    lower.includes('ventricle') ||
+    lower.includes('atrium') ||
+    lower.includes('aorta') ||
+    lower.includes('mitral') ||
+    lower.includes('tricuspid') ||
+    lower.includes('tim')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_cardiac_valves');
+  }
+
+  // 7. Respiratory System & Alveoli
+  if (
+    lower.includes('lung') ||
+    lower.includes('pulmon') ||
+    lower.includes('trachea') ||
+    lower.includes('bronch') ||
+    lower.includes('alveol') ||
+    lower.includes('diaphragm') ||
+    lower.includes('phổi') ||
+    lower.includes('khí quản') ||
+    lower.includes('phế quản') ||
+    lower.includes('cơ hoành')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_respiratory_alveoli');
   }
 
   return null;

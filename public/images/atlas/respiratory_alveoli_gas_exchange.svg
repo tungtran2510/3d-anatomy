@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="alveoliBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#04121a" />
+      <stop offset="100%" stop-color="#082032" />
+    </linearGradient>
+
+    <!-- Alveolar Cell Light Gradient -->
+    <linearGradient id="alvCell" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4ff" />
+      <stop offset="100%" stop-color="#f5d0fe" />
+    </linearGradient>
+
+    <!-- Capillary Vessel Red-Blue Gradient -->
+    <linearGradient id="capillaryFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#alveoliBg)" stroke="#0e7490" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 22)">
+    <rect width="210" height="26" rx="6" fill="#0e7490" fill-opacity="0.35" stroke="#06b6d4" stroke-width="1" />
+    <text x="12" y="17" fill="#67e8f9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700" letter-spacing="0.5">VI THỂ &amp; SINH LÝ TRAO ĐỔI KHÍ</text>
+  </g>
+  <text x="24" y="68" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="15.5" font-weight="700">Màng Phế Nang – Mao Mạch &amp; Khuếch Tán O2/CO2</text>
+  <text x="24" y="86" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Độ dày siêu mỏng 0.5 µm giúp hồng cầu nhận O2 và đào thải CO2 trong 0.25 giây</text>
+
+  <!-- Central Alveolus Schematic -->
+  <g transform="translate(300, 220)">
+    <!-- Alveolar Sac Circle -->
+    <circle cx="0" cy="-20" r="95" fill="url(#alvCell)" fill-opacity="0.15" stroke="#f472b6" stroke-width="3" stroke-dasharray="18,4" />
+    <text x="0" y="-45" fill="#fbcfe8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="13" font-weight="900" text-anchor="middle">LÒNG PHẾ NANG</text>
+    <text x="0" y="-28" fill="#f472b6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700" text-anchor="middle">PO2 = 104 mmHg • PCO2 = 40 mmHg</text>
+
+    <!-- Surfactant Layer Indicator Inside -->
+    <circle cx="0" cy="-20" r="84" fill="none" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8" />
+    <text x="0" y="5" fill="#67e8f9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700" text-anchor="middle">Lớp chất hoạt diện (Surfactant) chống xẹp</text>
+
+    <!-- Capillary Vessel Wrapping Below -->
+    <path d="M-150,75 C-70,55 0,55 0,75 C0,95 70,95 150,75" fill="none" stroke="url(#capillaryFlow)" stroke-width="26" stroke-linecap="round" />
+    
+    <!-- Red Blood Cells (Hồng cầu di chuyển) -->
+    <ellipse cx="-110" cy="72" rx="10" ry="6" fill="#38bdf8" />
+    <ellipse cx="-45" cy="62" rx="10" ry="6" fill="#818cf8" />
+    <ellipse cx="20" cy="80" rx="10" ry="6" fill="#c084fc" />
+    <ellipse cx="85" cy="85" rx="10" ry="6" fill="#f43f5e" />
+    <ellipse cx="135" cy="75" rx="10" ry="6" fill="#ef4444" />
+
+    <!-- Oxygen Diffusion Arrow (Down: Alveolus -> Capillary) -->
+    <g transform="translate(-40, 20)">
+      <line x1="0" y1="-10" x2="0" y2="35" stroke="#ef4444" stroke-width="3" />
+      <polygon points="-5,30 5,30 0,40" fill="#ef4444" />
+      <text x="12" y="15" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="900">O2 ↓</text>
+    </g>
+
+    <!-- Carbon Dioxide Diffusion Arrow (Up: Capillary -> Alveolus) -->
+    <g transform="translate(40, 20)">
+      <line x1="0" y1="35" x2="0" y2="-10" stroke="#38bdf8" stroke-width="3" />
+      <polygon points="-5,-5 5,-5 0,-15" fill="#38bdf8" />
+      <text x="12" y="15" fill="#7dd3fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="900">CO2 ↑</text>
+    </g>
+  </g>
+
+  <!-- Bottom Labels -->
+  <g transform="translate(24, 342)">
+    <rect width="552" height="24" rx="6" fill="#0f172a" stroke="#0e7490" stroke-width="1" />
+    <circle cx="16" cy="12" r="5" fill="#38bdf8" />
+    <text x="26" y="15.5" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5">Máu từ ĐM phổi (PO2 = 40, tím thẫm)</text>
+    <circle cx="215" cy="12" r="5" fill="#a855f7" />
+    <text x="225" y="15.5" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5">Khuếch tán qua màng 0.5 µm</text>
+    <circle cx="395" cy="12" r="5" fill="#ef4444" />
+    <text x="405" y="15.5" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5">Máu về TM phổi (PO2 = 100, đỏ tươi)</text>
+  </g>
+</svg>
