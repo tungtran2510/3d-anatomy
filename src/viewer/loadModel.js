@@ -349,8 +349,11 @@ function setupIntervertebralDiscs(model, systemId, viewer, nodes) {
     });
 
     const discStruct = structures.get(discPartId);
-    if (discStruct && !discStruct.childIds.includes(nucleusPartId)) {
-      discStruct.childIds.push(nucleusPartId);
+    if (discStruct) {
+      if (!discStruct.childIds) discStruct.childIds = [];
+      if (!discStruct.childIds.includes(nucleusPartId)) {
+        discStruct.childIds.push(nucleusPartId);
+      }
     }
 
     if (nodes && !nodes.includes(nucleusMesh)) {

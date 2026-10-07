@@ -217,6 +217,35 @@ export function isolatePart(partId) {
     });
   }
 
+  // Intervertebral disc & Nucleus Pulposus: ensure both maintain their distinct PBR materials and opacities
+  const isDisc = /^intervertebral[ _]disc/i.test(partId) || /^nucleus[ _]pulposus/i.test(partId);
+  if (isDisc) {
+    const level = partId.replace(/^(intervertebral[ _]disc|nucleus[ _]pulposus)[ _]/i, '');
+    const discKeys = [`Intervertebral_disc_${level}`, `Nucleus_pulposus_${level}`, `Intervertebral disc ${level}`, `Nucleus pulposus ${level}`];
+    discKeys.forEach(id => {
+      setStructureVisible(id, true);
+      restoreMaterial(id);
+      ownMeshesOf(id).forEach(mesh => {
+        mesh.visible = true;
+        ownMaterials(mesh).forEach(mat => {
+          if (mesh.userData.isNucleusPulposus) {
+            mat.transparent = true;
+            mat.opacity = 0.96;
+            mat.transmission = 0.55;
+            mat.depthWrite = true;
+            mat.needsUpdate = true;
+          } else {
+            mat.transparent = true;
+            mat.opacity = 0.68;
+            mat.roughness = 0.52;
+            mat.depthWrite = true;
+            mat.needsUpdate = true;
+          }
+        });
+      });
+    });
+  }
+
   setIsolatedPart(partId);
   notify('partIsolated', partId);
 }
@@ -361,13 +390,13 @@ let ghostedIds = null;
 export function getAnatomicalCompanions(partId) {
   if (!partId) return [];
   const lower = partId.toLowerCase();
-  if (lower.startsWith('intervertebral disc ')) {
-    const level = partId.slice('Intervertebral disc '.length);
-    return [`Nucleus pulposus ${level}`];
+  if (/^intervertebral[ _]disc/i.test(partId)) {
+    const level = partId.replace(/^intervertebral[ _]disc[ _]/i, '');
+    return [`Nucleus pulposus ${level}`, `Nucleus_pulposus_${level}`];
   }
-  if (lower.startsWith('nucleus pulposus ')) {
-    const level = partId.slice('Nucleus pulposus '.length);
-    return [`Intervertebral disc ${level}`];
+  if (/^nucleus[ _]pulposus/i.test(partId)) {
+    const level = partId.replace(/^nucleus[ _]pulposus[ _]/i, '');
+    return [`Intervertebral disc ${level}`, `Intervertebral_disc_${level}`];
   }
   // Biliary system: Gallbladder is intimately bound to the biliary tree, liver fossa, and duodenum
   if (lower === 'gallbladder' || lower.includes('túi mật') || lower.includes('vesica biliaris')) {
@@ -449,6 +478,33 @@ export function ghostAllExcept(partId) {
         mat.opacity = 0.28;
         mat.depthWrite = false;
         mat.needsUpdate = true;
+      });
+    });
+  }
+
+  // Intervertebral disc & Nucleus Pulposus: ensure both maintain their distinct PBR materials and opacities
+  const isDisc = /^intervertebral[ _]disc/i.test(partId) || /^nucleus[ _]pulposus/i.test(partId);
+  if (isDisc) {
+    const level = partId.replace(/^(intervertebral[ _]disc|nucleus[ _]pulposus)[ _]/i, '');
+    const discKeys = [`Intervertebral_disc_${level}`, `Nucleus_pulposus_${level}`, `Intervertebral disc ${level}`, `Nucleus pulposus ${level}`];
+    discKeys.forEach(id => {
+      restoreMaterial(id);
+      ownMeshesOf(id).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          if (mesh.userData.isNucleusPulposus) {
+            mat.transparent = true;
+            mat.opacity = 0.96;
+            mat.transmission = 0.55;
+            mat.depthWrite = true;
+            mat.needsUpdate = true;
+          } else {
+            mat.transparent = true;
+            mat.opacity = 0.68;
+            mat.roughness = 0.52;
+            mat.depthWrite = true;
+            mat.needsUpdate = true;
+          }
+        });
       });
     });
   }
