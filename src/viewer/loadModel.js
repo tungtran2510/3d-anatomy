@@ -285,12 +285,42 @@ function getOrganicBumpMap() {
 function applyCustomProps(mesh, props) {
   if (!mesh.material) return;
   const current = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
-  if (!current || !current.isMeshStandardMaterial) return;
+  if (!current || (!current.isMeshStandardMaterial && !current.isMeshPhysicalMaterial)) return;
 
-  const m = current.clone();
+  // Upgrade to MeshPhysicalMaterial for cinema-grade medical PBR realism (clearcoat, sheen, IOR)
+  const m = new THREE.MeshPhysicalMaterial();
+  if (current.color) m.color.copy(current.color);
+  m.roughness = current.roughness !== undefined ? current.roughness : 0.7;
+  m.metalness = current.metalness !== undefined ? current.metalness : 0.0;
+  if (current.map) m.map = current.map;
+  if (current.normalMap) {
+    m.normalMap = current.normalMap;
+    if (current.normalScale && m.normalScale) m.normalScale.copy(current.normalScale);
+  }
+  if (current.roughnessMap) m.roughnessMap = current.roughnessMap;
+  if (current.metalnessMap) m.metalnessMap = current.metalnessMap;
+  if (current.aoMap) {
+    m.aoMap = current.aoMap;
+    m.aoMapIntensity = current.aoMapIntensity;
+  }
+  m.transparent = !!current.transparent;
+  m.opacity = current.opacity !== undefined ? current.opacity : 1.0;
+  m.depthWrite = current.depthWrite !== undefined ? current.depthWrite : true;
+  if (current.side !== undefined) m.side = current.side;
+  if (current.wireframe !== undefined) m.wireframe = current.wireframe;
+
   if (props.color !== undefined) m.color.set(props.color);
   if (props.roughness !== undefined) m.roughness = props.roughness;
   if (props.metalness !== undefined) m.metalness = props.metalness;
+  if (props.clearcoat !== undefined) m.clearcoat = props.clearcoat;
+  if (props.clearcoatRoughness !== undefined) m.clearcoatRoughness = props.clearcoatRoughness;
+  if (props.sheen !== undefined) m.sheen = props.sheen;
+  if (props.sheenRoughness !== undefined) m.sheenRoughness = props.sheenRoughness;
+  if (props.sheenColor !== undefined) m.sheenColor = new THREE.Color(props.sheenColor);
+  if (props.specularIntensity !== undefined) m.specularIntensity = props.specularIntensity;
+  if (props.specularColor !== undefined) m.specularColor = new THREE.Color(props.specularColor);
+  if (props.ior !== undefined) m.ior = props.ior;
+  if (props.transmission !== undefined) m.transmission = props.transmission;
   if (props.transparent !== undefined) m.transparent = props.transparent;
   if (props.opacity !== undefined) m.opacity = props.opacity;
   if (props.depthWrite !== undefined) m.depthWrite = props.depthWrite;
@@ -338,16 +368,24 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Liver',
         color: 0x5C1E1C,
-        roughness: 0.40,
-        metalness: 0.03
+        roughness: 0.38,
+        metalness: 0.02,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.22,
+        sheen: 0.35,
+        sheenColor: 0x991b1b
       });
     } else if (partName.includes('gallbladder') || partName.includes('túi mật')) {
       // Gallbladder: deep olive-teal cystic organ with smooth moist peritoneal surface
       applyCustomProps(mesh, {
         name: 'PBR_Gallbladder',
         color: 0x2E6456,
-        roughness: 0.36,
-        metalness: 0.04
+        roughness: 0.32,
+        metalness: 0.03,
+        clearcoat: 0.55,
+        clearcoatRoughness: 0.16,
+        sheen: 0.50,
+        sheenColor: 0x34d399
       });
     } else if (partName.includes('bile duct') || partName.includes('cystic duct') || partName.includes('hepatic duct') || partName.includes('ống mật')) {
       // Bile ducts: smooth delicate green-teal ductal conduit
@@ -751,24 +789,32 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       partName.includes('thyroid');
 
     if (isIntervertebralDisc) {
-      // Intervertebral disc fibrocartilage: elegant sapphire medical azure (chuẩn đĩa đệm xanh sang, rõ nét)
+      // Intervertebral disc fibrocartilage: elegant sapphire medical azure with hydrated collagen sheen
       applyCustomProps(mesh, {
         name: 'PBR_IntervertebralDisc',
         color: 0x367ea8,
-        roughness: 0.44,
-        metalness: 0.04,
+        roughness: 0.38,
+        metalness: 0.03,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.20,
+        sheen: 0.70,
+        sheenColor: 0x60a5fa,
         transparent: true,
         opacity: 0.94,
         depthWrite: true,
         renderOrder: 2
       });
     } else if (isCartilage) {
-      // Costal, articular, and nasal cartilage: sophisticated luminous medical cerulean blue (chuẩn sụn trong hyaline sang trọng)
+      // Costal, articular, and nasal cartilage: sophisticated luminous hyaline cartilage with subsurface edge glow
       applyCustomProps(mesh, {
         name: 'PBR_HyalineCartilage',
         color: 0x3897E6,
-        roughness: 0.46,
-        metalness: 0.04,
+        roughness: 0.40,
+        metalness: 0.03,
+        clearcoat: 0.40,
+        clearcoatRoughness: 0.22,
+        sheen: 0.75,
+        sheenColor: 0x93c5fd,
         transparent: true,
         opacity: 0.88,
         depthWrite: true,
@@ -796,93 +842,133 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         name: 'PBR_TeethEnamel',
         color: 0xFAF6EA,
         roughness: 0.32,
-        metalness: 0.03
+        metalness: 0.03,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.20
       });
     } else {
       // Warm authentic natural aged-ivory bone tone (màu xương ngà ánh vàng ấm chuẩn Visible Body)
       applyCustomProps(mesh, {
         name: 'PBR_Bone',
         color: 0xD8CFBC,
-        roughness: 0.68,
-        metalness: 0.02
+        roughness: 0.65,
+        metalness: 0.01,
+        clearcoat: 0.12,
+        clearcoatRoughness: 0.50,
+        sheen: 0.25,
+        sheenColor: 0xfef3c7
       });
     }
   } else if (systemId === 'cardiovascular') {
-    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-    mats.forEach(m => {
-      if (m && m.isMeshStandardMaterial) {
-        const mName = m.name || '';
-        if (mName.includes('Artery') || partName.includes('artery') || partName.includes('aorta') || partName.includes('động mạch') || partName.includes('dong mach')) {
-          m.name = 'PBR_Artery';
-          m.roughness = 0.38;
-          m.metalness = 0.04;
-          m.color.set(0xBF1820);
-        } else if (mName.includes('Vein') || partName.includes('vein') || partName.includes('tĩnh mạch') || partName.includes('tinh mach') || partName.includes('cava')) {
-          m.name = 'PBR_Vein';
-          m.roughness = 0.35;
-          m.metalness = 0.03;
-          m.color.set(0x1E4C8A);
-        } else if (mName.includes('Trapezius') || partName.includes('heart') || partName.includes('myocard') || partName.includes('tim') || partName.includes('ventric') || partName.includes('atrium')) {
-          m.name = 'PBR_Heart';
-          m.roughness = 0.45;
-          m.metalness = 0.02;
-          m.color.set(0x84201E);
-        } else if (partName.includes('valve') || partName.includes('van tim')) {
-          m.name = 'PBR_HeartValve';
-          m.roughness = 0.42;
-          m.metalness = 0.03;
-          m.color.set(0xD4CDC0);
-          m.transparent = true;
-          m.opacity = 0.90;
-        }
-      }
-    });
+    const mName = (mesh.material?.name || '').toLowerCase();
+    if (mName.includes('artery') || partName.includes('artery') || partName.includes('aorta') || partName.includes('động mạch') || partName.includes('dong mach')) {
+      applyCustomProps(mesh, {
+        name: 'PBR_Artery',
+        color: 0xBF1820,
+        roughness: 0.35,
+        metalness: 0.03,
+        clearcoat: 0.52,
+        clearcoatRoughness: 0.18,
+        sheen: 0.55,
+        sheenColor: 0xf87171
+      });
+    } else if (mName.includes('vein') || partName.includes('vein') || partName.includes('tĩnh mạch') || partName.includes('tinh mach') || partName.includes('cava')) {
+      applyCustomProps(mesh, {
+        name: 'PBR_Vein',
+        color: 0x1E4C8A,
+        roughness: 0.34,
+        metalness: 0.02,
+        clearcoat: 0.48,
+        clearcoatRoughness: 0.20,
+        sheen: 0.45,
+        sheenColor: 0x60a5fa
+      });
+    } else if (mName.includes('trapezius') || partName.includes('heart') || partName.includes('myocard') || partName.includes('tim') || partName.includes('ventric') || partName.includes('atrium')) {
+      applyCustomProps(mesh, {
+        name: 'PBR_Heart',
+        color: 0x84201E,
+        roughness: 0.40,
+        metalness: 0.02,
+        clearcoat: 0.42,
+        clearcoatRoughness: 0.24,
+        sheen: 0.40,
+        sheenColor: 0xb91c1c
+      });
+    } else if (partName.includes('valve') || partName.includes('van tim')) {
+      applyCustomProps(mesh, {
+        name: 'PBR_HeartValve',
+        color: 0xD4CDC0,
+        roughness: 0.40,
+        metalness: 0.02,
+        clearcoat: 0.40,
+        clearcoatRoughness: 0.20,
+        transparent: true,
+        opacity: 0.90
+      });
+    }
   } else if (systemId === 'nervous') {
-    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-    mats.forEach(m => {
-      if (m && m.isMeshStandardMaterial) {
-        const mName = m.name || '';
-        if (partName.includes('ventricle') || partName.includes('aqueduct')) {
-          // Ventricular cavities (CSF fluid stream): sophisticated luxury royal navy translucency
-          m.name = 'PBR_VentricleCSF';
-          m.roughness = 0.15;
-          m.metalness = 0.0;
-          m.color.set(0x1E40AF); // Luxurious Royal Navy
-          m.transparent = true;
-          m.opacity = 0.82;
-          m.depthWrite = true;
-          mesh.renderOrder = 2;
-        } else if (partName.includes('choroid')) {
-          // Choroid plexus (CSF vascular factory): crimson-orange capillary fronds
-          m.name = 'PBR_ChoroidPlexus';
-          m.roughness = 0.45;
-          m.metalness = 0.02;
-          m.color.set(0xEA580C);
-          m.transparent = false;
-          m.opacity = 1.0;
-        } else if (partName.includes('dura')) {
-          // Spinal & cranial dura mater: protective pearlescent-silver sheath
-          m.name = 'PBR_DuraMater';
-          m.roughness = 0.45;
-          m.metalness = 0.04;
-          m.color.set(0xD9E2EC);
-          m.transparent = true;
-          m.opacity = 0.55;
-          m.depthWrite = false;
-          mesh.renderOrder = 3;
-        } else if (mName.includes('Brain') || mName.includes('Frontal') || mName.includes('Cerebell') || partName.includes('brain') || partName.includes('falx') || partName.includes('tentorium') || partName.includes('não') || partName.includes('nao')) {
-          m.name = 'PBR_BrainTissue';
-          m.roughness = 0.52;
-          m.metalness = 0.02;
-          m.color.set(0xDFB8A2);
-        } else if (mName.includes('Nerve') || partName.includes('nerve') || partName.includes('thần kinh') || partName.includes('than kinh') || partName.includes('plexus')) {
-          m.name = 'PBR_Nerve';
-          m.roughness = 0.40;
-          m.metalness = 0.02;
-          m.color.set(0xECC236);
-        }
-      }
-    });
+    const mName = (mesh.material?.name || '').toLowerCase();
+    if (partName.includes('ventricle') || partName.includes('aqueduct')) {
+      // Ventricular cavities (CSF fluid stream): sophisticated luxury royal navy translucency
+      applyCustomProps(mesh, {
+        name: 'PBR_VentricleCSF',
+        color: 0x1E40AF,
+        roughness: 0.15,
+        metalness: 0.0,
+        clearcoat: 0.60,
+        clearcoatRoughness: 0.10,
+        transparent: true,
+        opacity: 0.82,
+        depthWrite: true,
+        renderOrder: 2
+      });
+    } else if (partName.includes('choroid')) {
+      // Choroid plexus (CSF vascular factory): crimson-orange capillary fronds
+      applyCustomProps(mesh, {
+        name: 'PBR_ChoroidPlexus',
+        color: 0xEA580C,
+        roughness: 0.45,
+        metalness: 0.02,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.25
+      });
+    } else if (partName.includes('dura')) {
+      // Spinal & cranial dura mater: protective pearlescent-silver sheath
+      applyCustomProps(mesh, {
+        name: 'PBR_DuraMater',
+        color: 0xD9E2EC,
+        roughness: 0.45,
+        metalness: 0.04,
+        clearcoat: 0.30,
+        clearcoatRoughness: 0.30,
+        transparent: true,
+        opacity: 0.55,
+        depthWrite: false,
+        renderOrder: 3
+      });
+    } else if (mName.includes('brain') || mName.includes('frontal') || mName.includes('cerebell') || partName.includes('brain') || partName.includes('falx') || partName.includes('tentorium') || partName.includes('não') || partName.includes('nao')) {
+      applyCustomProps(mesh, {
+        name: 'PBR_BrainTissue',
+        color: 0xDFB8A2,
+        roughness: 0.50,
+        metalness: 0.01,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.35,
+        sheen: 0.30,
+        sheenColor: 0xfecdd3
+      });
+    } else if (mName.includes('nerve') || partName.includes('nerve') || partName.includes('thần kinh') || partName.includes('than kinh') || partName.includes('plexus')) {
+      applyCustomProps(mesh, {
+        name: 'PBR_Nerve',
+        color: 0xECC236,
+        roughness: 0.38,
+        metalness: 0.02,
+        clearcoat: 0.32,
+        clearcoatRoughness: 0.25,
+        sheen: 0.80,
+        sheenColor: 0xfef08a
+      });
+    }
   }
 }
 

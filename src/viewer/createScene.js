@@ -247,11 +247,11 @@ function createLights(scene) {
   const lights = {};
 
   // Medical Studio Ambient Light - balanced fill so crevices and anatomical contours retain physiological depth
-  lights.ambient = new THREE.AmbientLight(0xffffff, 0.45);
+  lights.ambient = new THREE.AmbientLight(0xffffff, 0.42);
   scene.add(lights.ambient);
 
   // Key directional light - clinical examination light from upper front-right
-  lights.key = new THREE.DirectionalLight(0xfff8f2, 0.75);
+  lights.key = new THREE.DirectionalLight(0xfff8f2, 0.85);
   lights.key.position.set(28, 65, 45);
   scene.add(lights.key);
 
@@ -260,10 +260,17 @@ function createLights(scene) {
   lights.fill.position.set(-30, 25, -25);
   scene.add(lights.fill);
 
-  // Rim light - subtle back-light highlighting organ boundaries, tissue silhouettes, and anatomical edges
-  lights.rim = new THREE.DirectionalLight(0xfff2e6, 0.45);
-  lights.rim.position.set(10, -25, -65);
-  scene.add(lights.rim);
+  // Dual Studio Rim Lights - crisp edge separation for tissue silhouettes, bones, and organs
+  lights.rimLeft = new THREE.DirectionalLight(0xe0f2fe, 0.65);
+  lights.rimLeft.position.set(-25, 45, -55);
+  scene.add(lights.rimLeft);
+
+  lights.rimRight = new THREE.DirectionalLight(0xffedd5, 0.55);
+  lights.rimRight.position.set(25, 45, -55);
+  scene.add(lights.rimRight);
+
+  // Backward-compatible rim reference
+  lights.rim = lights.rimLeft;
 
   // Front camera light for soft anatomical definition
   lights.front = new THREE.DirectionalLight(0xfffbf5, 0.25);
