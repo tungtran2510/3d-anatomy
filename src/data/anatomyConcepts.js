@@ -46,7 +46,7 @@ export const ANATOMY_CONCEPTS = [
       }
     ],
     simulator: {
-      title: '⚡ MÔ PHỎNG THOÁT VỊ:',
+      title: '⚡ THOÁT VỊ ĐĨA ĐỆM:',
       ticks: ['Bình thường', 'Phình', 'Lồi', 'Thoát vị'],
       stages: [
         { level: 'Cấp 0: Bình thường', desc: 'Đĩa đệm nguyên vẹn, lõi nhân giữ trọn 80% nước.' },
@@ -106,7 +106,7 @@ export const ANATOMY_CONCEPTS = [
       }
     ],
     simulator: {
-      title: '🧠 TIẾN TRIỂN ĐỘT QUỴ:',
+      title: '🧠 ĐỘT QUỴ ĐM NÃO:',
       ticks: ['Bình thường', 'Phình mạch', 'Hẹp ĐM', 'Vỡ / Đột quỵ'],
       stages: [
         { level: 'Cấp 0: Bình thường', desc: 'Thành mạch mềm mại, tưới máu não cân đối 2 bên.' },
@@ -165,7 +165,7 @@ export const ANATOMY_CONCEPTS = [
       }
     ],
     simulator: {
-      title: '🧪 TIẾN TRIỂN SỎI MẬT:',
+      title: '🧪 BỆNH LÝ MẬT - TỤY:',
       ticks: ['Bình thường', 'Sỏi túi mật', 'Kẹt cổ túi', 'Kẹt Oddi / Tụy'],
       stages: [
         { level: 'Cấp 0: Bình thường', desc: 'Dịch mật lưu thông êm dịu, Oddi mở nhịp nhàng vào tá tràng.' },
@@ -226,7 +226,7 @@ export const ANATOMY_CONCEPTS = [
       }
     ],
     simulator: {
-      title: '⚡ MÔ PHỎNG CHẤN THƯƠNG GỐI:',
+      title: '⚡ CHẤN THƯƠNG GỐI:',
       ticks: ['Bình thường', 'Giãn Độ 1', 'Rách Độ 2', 'Đứt Độ 3'],
       stages: [
         { level: 'Cấp 0: Bình thường', desc: 'Dây chằng căng chắc, sụn chêm trơn láng, khớp gối vững vàng 100%.' },
@@ -287,7 +287,7 @@ export const ANATOMY_CONCEPTS = [
       }
     ],
     simulator: {
-      title: '🔬 TIẾN TRIỂN BỆNH LÝ TIÊU HÓA:',
+      title: '🔬 BỆNH LÝ TIÊU HÓA:',
       ticks: ['Bình thường', 'Viêm trợt', 'Loét sâu', 'Biến chứng cấp'],
       stages: [
         { level: 'Cấp 0: Bình thường', desc: 'Hàng rào nhầy bảo vệ nguyên vẹn, niêm mạc hồng hào trơn bóng.' },

@@ -282,7 +282,7 @@ export function updateInfoPanelContent(part, viewer) {
   const systemName = clinical.systemVi || part.system || '';
 
   if (cardTitle) cardTitle.textContent = mainName;
-  if (cardCompactLabel) cardCompactLabel.textContent = mainName;
+  if (cardCompactLabel) cardCompactLabel.textContent = 'Chi tiết giải phẫu';
   if (cardSubtitle) {
     cardSubtitle.textContent = latinName ? `${latinName} • ${systemName}` : systemName;
   }

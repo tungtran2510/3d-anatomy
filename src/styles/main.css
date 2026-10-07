@@ -2256,14 +2256,14 @@ body.theme-dark .mobile-bottom-bar {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 1px;
   background: transparent;
   border: none;
   color: #475569;
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 4px 6px;
-  flex: 1;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 1px;
+  flex: 1 1 0;
   min-width: 0;
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -2273,10 +2273,19 @@ body.theme-dark .mobile-bottom-bar {
 }
 
 .mobile-bottom-bar .nav-item span {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: -0.35px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.mobile-bottom-bar .nav-item svg {
+  width: 20px;
+  height: 20px;
 }
 
 [data-theme="dark"] .mobile-bottom-bar .nav-item,
@@ -3380,17 +3389,17 @@ body.theme-dark .herniation-simulator-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 4px;
   white-space: nowrap;
 }
 
 .herniation-sim-title {
   font-weight: 700;
-  font-size: 10.5px;
+  font-size: 11px;
   color: #1e293b;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
   flex: 1;
 }
 
@@ -11957,36 +11966,66 @@ body.theme-dark .floating-top-view-btn {
 
 /* 9. Mobile Responsive Refinements */
 @media (max-width: 768px) {
-  /* Selection Card docked safely on left/center, NEVER overlapping right-side controls */
+  /* Selection Card docked safely on mobile */
   .selection-card:not(.compact-mode) {
     position: fixed !important;
     left: 10px !important;
-    right: 52px !important; /* Critical 52px safety zone for right controls */
+    right: 10px !important;
     width: auto !important;
-    max-width: 440px !important;
-    bottom: 64px !important;
-    max-height: 52vh !important;
+    max-width: 480px !important;
+    bottom: 58px !important;
+    max-height: 64vh !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45) !important;
-    z-index: 1000 !important;
+    z-index: 1500 !important;
     transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .selection-card:not(.compact-mode) .selection-card-body {
+    max-height: calc(64vh - 46px) !important;
+    overflow-y: auto !important;
+    padding-bottom: 24px !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .selection-card.compact-mode {
     position: fixed !important;
     left: 10px !important;
-    right: 52px !important;
-    bottom: 64px !important;
+    right: 10px !important;
+    bottom: 58px !important;
     top: auto !important;
     width: auto !important;
-    max-width: 440px !important;
+    max-width: 480px !important;
     height: auto !important;
     min-height: 38px !important;
     max-height: 68px !important;
     padding: 4px 10px !important;
     border-radius: 14px !important;
     transform: none !important;
-    z-index: 1000 !important;
+    z-index: 1500 !important;
+  }
+
+  /* Automatically hide elements that collide with open selection card */
+  body:has(.selection-card:not(.hidden)) #floatingAIBubble,
+  body:has(.selection-card:not(.hidden)) .pwa-install-prompt-banner,
+  body:has(.selection-card:not(.hidden)) .floating-top-view-btn,
+  body:has(.selection-card:not(.hidden)) .floating-views-quick-nav,
+  body:has(.selection-card:not(.hidden)) .depth-control {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Automatically hide elements that collide with open systems drawer */
+  body:has(.systems-stepper-drawer.open) #floatingAIBubble,
+  body:has(.systems-stepper-drawer.open) .floating-views-quick-nav,
+  body:has(.systems-stepper-drawer.open) .pwa-install-prompt-banner {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   /* Right-Side Unified Control Column (Fullscreen -> Top-View -> Views -> AR -> Systems -> Depth) */
