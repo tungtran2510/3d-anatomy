@@ -941,32 +941,29 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
   `;
 
   const subunitsHtml = (deck.subunits && deck.subunits.length > 0) ? `
-    <div class="disc-subunits-buttons">
+    <div class="disc-subunits-chips">
       ${deck.subunits.slice(0, 4).map(sub => {
         const isActive = sub.partId === partId;
         return `
-          <button type="button" class="btn-disc-sub ${isActive ? 'active' : ''}" data-part="${sub.partId}" title="${sub.note}">
-            <div class="disc-sub-info">
-              <span class="disc-sub-name">${sub.label}</span>
-              <span class="disc-sub-latin">${sub.note}</span>
-            </div>
+          <button type="button" class="sub-chip-btn ${isActive ? 'active' : ''}" data-part="${sub.partId}" title="${sub.note}">
+            <span>${sub.label}</span>
           </button>
         `;
       }).join('')}
     </div>
   ` : '';
 
-  // Dynamic Header Title
-  let headerTitle = `🔬 CẤU TRÚC GIẢI PHẪU & BỆNH HỌC CHUYÊN SÂU:`;
+  // Dynamic Header Title (Strict 1-line)
+  let headerTitle = `🔬 CẤU TRÚC GIẢI PHẪU CHUYÊN SÂU`;
   if (deck.id === 'concept_intervertebral_disc') {
     const isDisc = partId.startsWith('Intervertebral disc ');
     const isNucleus = partId.startsWith('Nucleus pulposus ');
     const level = isDisc ? partId.slice('Intervertebral disc '.length) : (isNucleus ? partId.slice('Nucleus pulposus '.length) : 'L4-L5');
-    headerTitle = `🔬 CẤU TRÚC GIẢI PHẪU ĐĨA ĐỆM TẦNG ${level}:`;
+    headerTitle = `🔬 ĐĨA ĐỆM CỘT SỐNG ${level}`;
   } else if (deck.id === 'concept_circle_of_willis') {
-    headerTitle = `🧠 MẠCH MÁU NÃO & ĐA GIÁC WILLIS:`;
+    headerTitle = `🧠 ĐA GIÁC WILLIS NÃO`;
   } else if (deck.id === 'concept_hepatobiliary_pancreas') {
-    headerTitle = `🧪 PHỨC HỢP GAN – TÚI MẬT – TUYẾN TỤY:`;
+    headerTitle = `🧪 GAN – MẬT – TUYẾN TỤY`;
   }
 
   container.innerHTML = `
@@ -979,6 +976,12 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
       ${subunitsHtml}
     </div>
   `;
+
+  // Reset scroll container to top to prevent cutting off top of slide
+  const cardBody = document.getElementById('selectionCardBody');
+  if (cardBody) {
+    cardBody.scrollTop = 0;
+  }
 
   // Attach event listeners
   const imgEl = container.querySelector('#deckSlideImg');
@@ -1034,7 +1037,7 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     }
   });
 
-  container.querySelectorAll('.btn-disc-sub').forEach(btn => {
+  container.querySelectorAll('.sub-chip-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const targetId = btn.dataset.part;

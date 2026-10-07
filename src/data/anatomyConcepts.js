@@ -10,50 +10,49 @@ export const ANATOMY_CONCEPTS = [
       'thần kinh tọa', 'than kinh toa', 'đau thần kinh tọa',
       'tê chân', 'l4-l5', 'l5-s1', 'c5-c6', 'cột sống'
     ],
-    titleVi: 'ĐĨA ĐỆM CỘT SỐNG (GỒM VÒNG SỢI & NHÂN NHẦY)',
+    titleVi: 'Đĩa Đệm Cột Sống',
     latin: 'Discus intervertebralis (TA2: 1222)',
-    subtitle: 'Khớp sụn sợi giảm chấn thủy lực gồm 3 tầng lớp liên kết sinh học',
+    subtitle: 'Khớp sụn sợi giảm chấn thủy lực 3 tầng liên kết',
     thumbnail: '/images/atlas/disc_cross_section.svg',
     system: 'joints',
     primaryPartId: 'Intervertebral disc L4-L5',
     subunits: [
-      { label: '⭕ Vòng sợi ngoài (15–25 lá)', partId: 'Intervertebral disc L4-L5', note: 'Collagen Type I xếp chéo góc 30° dẻo dai' },
-      { label: '💧 Nhân nhầy (80% nước)', partId: 'Nucleus pulposus L4-L5', note: 'Lõi hydrogel giàu Aggrecan chịu nén thủy tĩnh' },
-      { label: '⚡ Thoát vị L4-L5 (Rễ L5)', partId: 'Intervertebral disc L4-L5', note: 'Chèn rễ L5 gây đau thần kinh tọa, tê mu bàn chân' },
-      { label: '⚡ Thoát vị L5-S1 (Rễ S1)', partId: 'Intervertebral disc L5-S1', note: 'Chèn rễ S1 gây đau lan gót chân, yếu cơ bắp chân' },
-      { label: 'Đĩa đệm cổ C5-C6', partId: 'Intervertebral disc C5-C6', note: 'Thoát vị cổ phổ biến nhất gây tê bì ngón tay cái' }
+      { label: '⭕ Vòng sợi ngoài', partId: 'Intervertebral disc L4-L5', note: '15–25 lá sợi collagen góc 30° dẻo dai' },
+      { label: '💧 Nhân nhầy', partId: 'Nucleus pulposus L4-L5', note: 'Lõi hydrogel ngậm 80% nước chịu nén' },
+      { label: '⚡ Thoát vị L4-L5', partId: 'Intervertebral disc L4-L5', note: 'Chèn rễ L5 gây đau thần kinh tọa' },
+      { label: '⚡ Thoát vị L5-S1', partId: 'Intervertebral disc L5-S1', note: 'Chèn rễ S1 gây tê lan gót chân' }
     ],
     slides: [
       {
         id: 'cross_section',
-        title: 'Lát Cắt Vi Thể',
+        title: 'Cấu tạo',
         badge: 'Cấu tạo 3 lớp',
         image: '/images/atlas/disc_cross_section.svg',
-        caption: 'Mặt cắt ngang bộc lộ Vòng sợi (15-25 lá collagen góc 30°) ôm trọn Nhân nhầy hydrogel ở tâm.'
+        caption: 'Mặt cắt ngang bộc lộ Vòng sợi ôm trọn Nhân nhầy hydrogel ở tâm.'
       },
       {
         id: 'biomechanics',
-        title: 'Cơ Sinh Học',
+        title: 'Cơ học',
         badge: 'Giảm chấn thủy lực',
         image: '/images/atlas/disc_biomechanics.svg',
-        caption: 'Chuyển hóa lực nén ép dọc trục thành lực căng chu vi 360°, bảo vệ tủy sống khi vận động.'
+        caption: 'Chuyển hóa lực nén dọc trục thành lực căng chu vi 360°.'
       },
       {
         id: 'pathology',
-        title: '4 Cấp Độ Thoát Vị',
-        badge: 'Bệnh học lâm sàng',
+        title: '4 Cấp độ',
+        badge: 'Tiến triển thoát vị',
         image: '/images/atlas/disc_herniation_levels.svg',
-        caption: 'Từ thoái hóa mất nước đến nứt rách vòng sợi, nhân nhầy trào ra chèn bẹp rễ thần kinh tủy sống.'
+        caption: 'Từ thoái hóa mất nước đến nứt rách bao xơ chèn rễ tủy sống.'
       }
     ],
     simulator: {
-      title: '⚡ MÔ PHỎNG TIẾN TRIỂN THOÁT VỊ:',
+      title: '⚡ MÔ PHỎNG THOÁT VỊ:',
       ticks: ['Bình thường', 'Phình', 'Lồi', 'Thoát vị'],
       stages: [
-        { level: 'Cấp 0: Bình thường', desc: 'Đĩa đệm nguyên vẹn, lõi nhân nhầy giữ trọn 80% nước, mâm sụn dinh dưỡng tốt.' },
-        { level: 'Cấp 1: Phình đĩa đệm (Degeneration)', desc: 'Mất nước nhẹ, vòng sợi suy yếu và phình đều chu vi, chưa rách vỏ sợi.' },
-        { level: 'Cấp 2: Lồi đĩa đệm (Prolapse)', desc: 'Rách bán phần các lá sợi bên trong, nhân nhầy dịch chuyển ra sau nhưng còn vỏ bao bọc.' },
-        { level: 'Cấp 3: Thoát vị chèn rễ (Extrusion)', desc: 'Rách đứt toàn bộ vòng sợi, khối nhân trào vào ống sống đè bẹp rễ thần kinh tủy sống.' }
+        { level: 'Cấp 0: Bình thường', desc: 'Đĩa đệm nguyên vẹn, lõi nhân giữ trọn 80% nước.' },
+        { level: 'Cấp 1: Phình đĩa đệm', desc: 'Mất nước nhẹ, vòng sợi suy yếu và dãn phình.' },
+        { level: 'Cấp 2: Lồi đĩa đệm', desc: 'Rách bán phần lá sợi, nhân dịch chuyển ra sau.' },
+        { level: 'Cấp 3: Thoát vị chèn rễ', desc: 'Rách đứt bao xơ, nhân trào chèn bẹp rễ thần kinh.' }
       ]
     },
     video: {
@@ -71,49 +70,49 @@ export const ANATOMY_CONCEPTS = [
       'aneurysm', 'stroke', 'basilar', 'thân nền', 'than nen', 'cảnh trong', 'canh trong',
       'não giữa', 'nao giua', 'mca', 'aca', 'pca', 'não trước', 'não sau'
     ],
-    titleVi: 'ĐA GIÁC WILLIS (TUẦN HOÀN MẠCH MÁU NÃO)',
+    titleVi: 'Đa Giác Willis Não',
     latin: 'Circulus arteriosus cerebri (TA2: 4488)',
-    subtitle: 'Mạng lưới nối thông động mạch khép kín cấp máu nuôi toàn bộ não bộ',
+    subtitle: 'Vòng nối thông cấp máu nuôi toàn bộ não bộ',
     thumbnail: '/images/atlas/willis_anatomy.svg',
     system: 'cardiovascular',
     primaryPartId: 'Basilar artery',
     subunits: [
-      { label: '🔴 ĐM Thân nền (Basilar)', partId: 'Basilar artery', note: 'Hợp lưu từ 2 ĐM đốt sống nuôi thân não và tiểu não' },
-      { label: '🔴 ĐM Cảnh trong (ICA)', partId: 'Internal carotid artery right', note: 'Trụ cột cấp máu chính cho 2 bán cầu đại não' },
-      { label: '🔵 ĐM Não giữa (MCA)', partId: 'Internal carotid artery right', note: 'Vùng cấp máu lớn nhất, nhánh hay bị tắc gây đột quỵ liệt nửa người' },
-      { label: '⚡ ĐM Thông trước (ACom)', partId: 'Basilar artery', note: 'Cầu nối huyết động học bàng hệ giữa 2 bán cầu' }
+      { label: '🔴 ĐM Thân nền', partId: 'Basilar artery', note: 'Hợp lưu từ 2 ĐM đốt sống nuôi thân não' },
+      { label: '🔴 ĐM Cảnh trong', partId: 'Internal carotid artery right', note: 'Trụ cột cấp máu chính cho 2 bán cầu' },
+      { label: '🔵 ĐM Não giữa', partId: 'Internal carotid artery right', note: 'Nhánh hay bị tắc gây đột quỵ liệt nửa người' },
+      { label: '⚡ ĐM Thông trước', partId: 'Basilar artery', note: 'Cầu nối huyết động học bàng hệ 2 bên' }
     ],
     slides: [
       {
         id: 'willis_anatomy',
-        title: 'Mạng Lưới Đa Giác',
-        badge: 'Giải phẫu động mạch',
+        title: 'Mạng lưới',
+        badge: 'Đa giác đáy não',
         image: '/images/atlas/willis_anatomy.svg',
-        caption: 'Mạng lưới nối thông giữa hệ Động mạch Cảnh trong và hệ Động mạch Sống - Thân nền tại đáy não.'
+        caption: 'Nối thông giữa hệ ĐM Cảnh trong và hệ Sống - Thân nền.'
       },
       {
         id: 'willis_collateral',
-        title: 'Tuần Hoàn Bàng Hệ',
-        badge: 'Huyết động học bù trừ',
+        title: 'Bàng hệ',
+        badge: 'Bù trừ cấp máu',
         image: '/images/atlas/willis_collateral.svg',
-        caption: 'Cơ chế đảo chiều dòng máu qua ACom & PCom cứu sống bán cầu não khi một nhánh động mạch cảnh bị tắc.'
+        caption: 'Đảo chiều dòng máu qua ACom & PCom cứu sống bán cầu não.'
       },
       {
         id: 'willis_stroke_aneurysm',
-        title: '4 Cấp Độ Đột Quỵ',
-        badge: 'Phình mạch & Tai biến',
+        title: '4 Cấp độ',
+        badge: 'Đột quỵ & Phình mạch',
         image: '/images/atlas/willis_stroke_aneurysm.svg',
-        caption: 'Từ túi phình vi thể không triệu chứng đến đột quỵ thiếu máu cục bộ và vỡ phình xuất huyết khoang dưới nhện (SAH).'
+        caption: 'Từ túi phình vi thể đến đột quỵ xuất huyết nguy kịch.'
       }
     ],
     simulator: {
-      title: '🧠 MÔ PHỎNG PHÌNH MẠCH & ĐỘT QUỴ NÃO:',
+      title: '🧠 TIẾN TRIỂN ĐỘT QUỴ:',
       ticks: ['Bình thường', 'Phình mạch', 'Hẹp ĐM', 'Vỡ / Đột quỵ'],
       stages: [
-        { level: 'Cấp 0: Bình thường', desc: 'Thành động mạch trơn láng, đàn hồi tốt, dòng máu tưới đều 2 bán cầu não.' },
-        { level: 'Cấp 1: Phình động mạch (Aneurysm 3-5mm)', desc: 'Thành mạch mỏng phình hình quả dâu tại ngã ba ACom, thường không triệu chứng.' },
-        { level: 'Cấp 2: Hẹp ĐM Não giữa (MCA Stenosis >70%)', desc: 'Mảng xơ vữa làm hẹp nặng lòng mạch, gây cơn thiếu máu não thoáng qua (TIA).' },
-        { level: 'Cấp 3: Vỡ túi phình / Đột quỵ diện rộng', desc: 'Vỡ túi phình gây xuất huyết dưới nhện (SAH), đau đầu sét đánh, hôn mê nguy kịch.' }
+        { level: 'Cấp 0: Bình thường', desc: 'Thành mạch mềm mại, tưới máu não cân đối 2 bên.' },
+        { level: 'Cấp 1: Phình mạch 3-5mm', desc: 'Túi phình mỏng ngã ba ACom, chưa triệu chứng.' },
+        { level: 'Cấp 2: Hẹp nặng ĐM Não', desc: 'Hẹp >70% ĐM Não giữa, cơn thiếu máu não thoáng qua.' },
+        { level: 'Cấp 3: Vỡ phình / Đột quỵ', desc: 'Vỡ túi phình gây xuất huyết dưới nhện (SAH) nguy kịch.' }
       ]
     },
     video: {
@@ -130,49 +129,49 @@ export const ANATOMY_CONCEPTS = [
       'viêm tụy', 'viem tuy', 'vàng da', 'vang da', 'ống mật chủ', 'ong mat chu',
       'oddi', 'vater', 'wirsung', 'gallbladder', 'pancreas', 'liver', 'mật', 'mat'
     ],
-    titleVi: 'PHỨC HỢP GAN – TÚI MẬT – TUYẾN TỤY',
+    titleVi: 'Gan – Mật – Tuyến Tụy',
     latin: 'Systema hepatobiliare et pancreas (TA2: 3000)',
-    subtitle: 'Ngã ba tiêu hóa giải phẫu tiết mật & enzym tiêu hóa thức ăn dầu mỡ',
+    subtitle: 'Ngã ba tiêu hóa tiết mật & men tiêu hóa thức ăn',
     thumbnail: '/images/atlas/biliary_anatomy.svg',
     system: 'visceral',
     primaryPartId: 'Gallbladder',
     subunits: [
-      { label: '🟢 Túi mật (Gallbladder)', partId: 'Gallbladder', note: 'Cô đặc và dự trữ 50ml dịch mật sẵn sàng tống xuất' },
-      { label: '🟡 Tuyến tụy (Pancreas)', partId: 'Pancreas', note: 'Tiết các men tiêu hóa cực mạnh (Amylase, Lipase, Trypsin)' },
-      { label: '🔴 Nhu mô gan (Liver)', partId: 'Liver', note: 'Nhà máy sinh hóa sản xuất 800ml dịch mật mỗi ngày' },
-      { label: '⚡ Cơ vòng Oddi & Bóng Vater', partId: 'Gallbladder', note: 'Ngã ba sinh tử hợp lưu giữa ống mật chủ và ống tụy chính' }
+      { label: '🟢 Túi mật', partId: 'Gallbladder', note: 'Dự trữ & cô đặc 50ml dịch mật sẵn sàng tống xuất' },
+      { label: '🟡 Tuyến tụy', partId: 'Pancreas', note: 'Tiết men tiêu hóa cực mạnh (Lipase, Amylase, Trypsin)' },
+      { label: '🔴 Nhu mô gan', partId: 'Liver', note: 'Sản xuất 800ml dịch mật sinh hóa mỗi ngày' },
+      { label: '⚡ Cơ vòng Oddi', partId: 'Gallbladder', note: 'Ngã ba cắm vào tá tràng D2, nơi sỏi hay kẹt lại' }
     ],
     slides: [
       {
         id: 'biliary_anatomy',
-        title: 'Ngã Ba Mật Tụy',
-        badge: 'Cấu trúc giải phẫu',
+        title: 'Cấu tạo',
+        badge: 'Ngã ba mật tụy',
         image: '/images/atlas/biliary_anatomy.svg',
-        caption: 'Hợp lưu giữa Ống mật chủ và Ống tụy chính Wirsung cắm vào thành tá tràng qua Cơ vòng Oddi.'
+        caption: 'Ống mật chủ và ống tụy chính cắm vào tá tràng qua Oddi.'
       },
       {
         id: 'biliary_physiology',
-        title: 'Sinh Lý Tiết Mật',
-        badge: 'Hòa hợp tiêu hóa',
+        title: 'Sinh lý',
+        badge: 'Men tiêu hóa',
         image: '/images/atlas/biliary_physiology.svg',
-        caption: 'Muối mật nhũ hóa chất béo kết hợp men tụy lipase phân cắt thức ăn, điều hòa bởi hormone CCK.'
+        caption: 'Muối mật nhũ hóa lipid kết hợp men tụy phân cắt thức ăn.'
       },
       {
         id: 'biliary_gallstone_stages',
-        title: '4 Cấp Độ Sỏi Mật',
-        badge: 'Bệnh lý & Biến chứng',
+        title: '4 Cấp độ',
+        badge: 'Tiến triển sỏi mật',
         image: '/images/atlas/biliary_gallstone_stages.svg',
-        caption: 'Sự di chuyển nguy hiểm của sỏi từ túi mật xuống kẹt tại cơ vòng Oddi gây viêm tụy cấp hoại tử.'
+        caption: 'Sỏi di chuyển kẹt Oddi gây viêm tụy cấp hoại tử.'
       }
     ],
     simulator: {
-      title: '🧪 MÔ PHỎNG TIẾN TRIỂN SỎI MẬT & VIÊM TỤY:',
+      title: '🧪 TIẾN TRIỂN SỎI MẬT:',
       ticks: ['Bình thường', 'Sỏi túi mật', 'Kẹt cổ túi', 'Kẹt Oddi / Tụy'],
       stages: [
-        { level: 'Cấp 0: Bình thường', desc: 'Dịch mật lưu thông êm dịu, cơ vòng Oddi co bóp nhịp nhàng vào tá tràng.' },
-        { level: 'Cấp 1: Sỏi trong túi mật (Cholelithiasis)', desc: 'Lắng đọng bùn và sỏi cholesterol dưới đáy túi mật, thường chưa gây tắc nghẽn.' },
-        { level: 'Cấp 2: Kẹt cổ túi mật (Cystic duct obstruction)', desc: 'Sỏi kẹt tại phễu Hartmann gây ứ căng túi mật, đau quặn dữ dội hạ sườn phải.' },
-        { level: 'Cấp 3: Sỏi kẹt Cơ vòng Oddi / Viêm tụy cấp', desc: 'Trào ngược dịch mật kích hoạt enzyme tự tiêu hủy nhu mô tụy, vàng da tắc mật nguy kịch.' }
+        { level: 'Cấp 0: Bình thường', desc: 'Dịch mật lưu thông êm dịu, Oddi mở nhịp nhàng vào tá tràng.' },
+        { level: 'Cấp 1: Sỏi túi mật', desc: 'Lắng đọng cholesterol đáy túi mật, chưa tắc nghẽn.' },
+        { level: 'Cấp 2: Kẹt cổ túi mật', desc: 'Sỏi kẹt phễu Hartmann gây đau quặn hạ sườn phải.' },
+        { level: 'Cấp 3: Sỏi kẹt Oddi / Tụy', desc: 'Trào ngược mật gây viêm tụy cấp hoại tử nguy kịch, vàng da.' }
       ]
     },
     video: {

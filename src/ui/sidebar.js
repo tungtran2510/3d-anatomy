@@ -1685,7 +1685,7 @@ export function initSearch() {
             <div class="concept-card-top" data-part="${escapeHtml(concept.primaryPartId)}">
               <img src="${concept.thumbnail}" class="concept-card-thumb" alt="${escapeHtml(concept.titleVi)}" />
               <div class="concept-card-info">
-                <span class="concept-card-badge">Cụm Khái Niệm Giải Phẫu Chuyên Sâu</span>
+                <span class="concept-card-badge">Khái Niệm Chuyên Sâu</span>
                 <span class="concept-card-title">${escapeHtml(concept.titleVi)}</span>
                 <span class="concept-card-latin">${escapeHtml(concept.latin)}</span>
                 <span class="concept-card-desc">${escapeHtml(concept.subtitle)}</span>
