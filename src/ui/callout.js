@@ -60,11 +60,16 @@ function build(container) {
 // same as the node origin for a group of meshes.
 function computeAnchor(partId) {
   if (!partId) return;
+
+  // Refresh scene matrices to guarantee accurate positions even when rotated/posed
+  state.viewer?.scene?.updateMatrixWorld?.(true);
+
   const meshes = ownMeshesOf(partId);
   if (meshes && meshes.length > 0) {
     const box = new THREE.Box3();
     meshes.forEach(mesh => {
-      mesh.updateWorldMatrix?.(true, false);
+      if (mesh.userData?.isDissectionTable) return;
+      mesh.updateWorldMatrix?.(true, true);
       box.expandByObject(mesh);
     });
     if (!box.isEmpty()) {
@@ -74,8 +79,8 @@ function computeAnchor(partId) {
   }
 
   const node = getStructure(partId)?.node || getMeshRegistry()?.get(partId);
-  if (node) {
-    node.updateWorldMatrix?.(true, false);
+  if (node && !node.userData?.isDissectionTable) {
+    node.updateWorldMatrix?.(true, true);
     const box = new THREE.Box3().setFromObject(node);
     if (!box.isEmpty()) {
       box.getCenter(anchorWorld);
@@ -90,9 +95,10 @@ function computeAnchor(partId) {
   const reg = getMeshRegistry();
   if (reg) {
     for (const [id, m] of reg.entries()) {
+      if (m.userData?.isDissectionTable) continue;
       const normId = id.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (normId === normTarget || normId.startsWith(normTarget)) {
-        m.updateWorldMatrix?.(true, false);
+        m.updateWorldMatrix?.(true, true);
         const box = new THREE.Box3().setFromObject(m);
         if (!box.isEmpty()) {
           box.getCenter(anchorWorld);

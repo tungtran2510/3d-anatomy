@@ -533,11 +533,11 @@ const ANATOMICAL_PATHWAYS = [
       /liver|gall|pancrea|bile|chole|cystic|ductus/i.test(partId) ||
       lower.includes('gan') || lower.includes('mật') || lower.includes('tụy') || lower.includes('túi mật'),
     steps: [
-      { num: '1', name: 'Gan (Nhu mô gan)', partId: 'Liver', subtitle: 'Sản xuất dịch mật' },
-      { num: '2', name: 'Túi mật & Ống túi mật', partId: 'Gallbladder', subtitle: 'Cô đặc & dự trữ mật' },
+      { num: '1', name: 'Gan', partId: 'Liver', subtitle: 'Sản xuất dịch mật' },
+      { num: '2', name: 'Túi mật', partId: 'Gallbladder', subtitle: 'Cô đặc & dự trữ mật' },
       { num: '3', name: 'Ống mật chủ', partId: 'Bile duct', fallbackId: 'Gallbladder', subtitle: 'Dẫn mật xuống ruột' },
-      { num: '4', name: 'Tuyến tụy & Ống tụy', partId: 'Pancreas', subtitle: 'Tiết men tiêu hóa & Insulin' },
-      { num: '5', name: 'Tá tràng (Bóng Vater)', partId: 'Duodenum', subtitle: 'Hòa trộn nhũ trấp thức ăn' }
+      { num: '4', name: 'Tuyến tụy', partId: 'Pancreas', subtitle: 'Tiết men tiêu hóa & Insulin' },
+      { num: '5', name: 'Tá tràng', partId: 'Duodenum', subtitle: 'Hòa trộn nhũ trấp thức ăn' }
     ],
     note: '💡 Mật từ gan qua túi mật hòa cùng dịch tụy tại bóng Vater đổ vào tá tràng để tiêu hóa lipid chất béo.'
   },
@@ -548,12 +548,12 @@ const ANATOMICAL_PATHWAYS = [
       (/ventricle|atrium|aort|pulmonary/i.test(partId) && !/lateral|third|fourth/i.test(partId)) ||
       lower.includes('tâm thất') || lower.includes('tâm nhĩ') || lower.includes('động mạch chủ') || lower.includes('van tim'),
     steps: [
-      { num: '1', name: 'Tâm nhĩ phải', partId: 'Right atrium', subtitle: 'Nhận máu tĩnh mạch nghèo O₂' },
-      { num: '2', name: 'Tâm thất phải', partId: 'Right ventricle', subtitle: 'Bơm máu lên động mạch phổi' },
-      { num: '3', name: 'Thân ĐM phổi', partId: 'Pulmonary trunk', subtitle: 'Trao đổi khí tại phế nang' },
-      { num: '4', name: 'Tâm nhĩ trái', partId: 'Left atrium', subtitle: 'Nhận máu giàu O₂ từ phổi' },
-      { num: '5', name: 'Tâm thất trái', partId: 'Left ventricle', subtitle: 'Buồng bóp áp lực cao nhất' },
-      { num: '6', name: 'Cung ĐM chủ', partId: 'Aorta', subtitle: 'Phân phối máu đi nuôi toàn thân' }
+      { num: '1', name: 'Nhĩ phải', partId: 'Right atrium', subtitle: 'Nhận máu tĩnh mạch nghèo O₂' },
+      { num: '2', name: 'Thất phải', partId: 'Right ventricle', subtitle: 'Bơm máu lên ĐM phổi' },
+      { num: '3', name: 'ĐM phổi', partId: 'Pulmonary trunk', subtitle: 'Trao đổi khí phế nang' },
+      { num: '4', name: 'Nhĩ trái', partId: 'Left atrium', subtitle: 'Nhận máu giàu O₂ từ phổi' },
+      { num: '5', name: 'Thất trái', partId: 'Left ventricle', subtitle: 'Buồng bóp áp lực cao nhất' },
+      { num: '6', name: 'ĐM chủ', partId: 'Aorta', subtitle: 'Phân phối máu toàn thân' }
     ],
     note: '💡 Chu chuyển tim co bóp nhịp nhàng 60-80 lần/phút tống máu qua 2 vòng tiểu tuần hoàn phổi và đại tuần hoàn toàn thân.'
   }
@@ -828,7 +828,7 @@ function renderClinicalAxisOneTap(part, viewer) {
     container.innerHTML = `
       <button type="button" class="btn-one-tap-axis" id="btnOneTapAxis" title="Kích hoạt xem toàn bộ chuỗi trục ${matchedAxis.titleVi} trên 3D">
         <span class="onetap-icon">${matchedAxis.icon.slice(0, 2)}</span>
-        <span class="onetap-text">Xem Trục: <strong>${matchedAxis.titleVi.split('(')[0].trim()}</strong></span>
+        <span class="onetap-text">Trục: <strong>${matchedAxis.titleVi.split('(')[0].trim()}</strong></span>
         <span class="onetap-arrow">➔ 3D</span>
       </button>
     `;
@@ -852,7 +852,9 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
   const partId = part?.id || '';
   const deck = getVisualDeckForPart(partId);
 
-  if (!deck) {
+  // Exclusively dedicate this specialized micro-deck/simulator block to Intervertebral Discs & Herniation
+  // All other organs use the cleaner, streamlined Constituents + Micro-Video + High-Res Photo blocks
+  if (!deck || deck.id !== 'concept_intervertebral_disc') {
     container.classList.add('hidden');
     container.innerHTML = '';
     return;
@@ -959,7 +961,7 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
       ${subunitsHtml}
       <div class="deck-quick-tools-row">
         <button type="button" class="btn-deck-axis-tool" id="btnDeckClinicalAxis" title="Xem chuỗi mắt xích & trục giải phẫu ứng dụng liên quan">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
           <span>🧬 Trục Giải Phẫu Ứng Dụng Liên Quan</span>
         </button>
       </div>

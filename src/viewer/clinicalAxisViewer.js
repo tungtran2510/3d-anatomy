@@ -33,7 +33,7 @@ function isCurrentThemeDark() {
 function getGhostMaterial(material) {
   let ghost = axisGhostVariants.get(material);
   const isDark = isCurrentThemeDark();
-  const targetOpacity = isDark ? 0.045 : 0.125;
+  const targetOpacity = isDark ? 0.045 : 0.185;
 
   if (!ghost) {
     ghost = material.clone();
@@ -43,7 +43,7 @@ function getGhostMaterial(material) {
 
     if (ghost.color) {
       ghost.userData.darkColor = ghost.color.clone();
-      ghost.userData.lightColor = ghost.color.clone().lerp(new THREE.Color(0x64748b), 0.32);
+      ghost.userData.lightColor = ghost.color.clone().lerp(new THREE.Color(0x334155), 0.38);
       ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
     }
 
@@ -59,7 +59,7 @@ function getGhostMaterial(material) {
 }
 
 export function syncAxisGhostMaterialsTheme(isDark) {
-  const targetOpacity = isDark ? 0.045 : 0.125;
+  const targetOpacity = isDark ? 0.045 : 0.185;
   activeAxisGhostMaterials.forEach(ghost => {
     ghost.opacity = targetOpacity;
     if (ghost.color && ghost.userData.darkColor) {

@@ -44,6 +44,12 @@ export function setAppTheme(theme, viewer = state.viewer || window.viewer) {
       targetViewer.render?.();
     }).catch(() => {});
 
+    import('../viewer/bodyEnvelope.js').then(({ syncBodyEnvelopeTheme }) => {
+      syncBodyEnvelopeTheme?.(isDark, targetViewer);
+      targetViewer.invalidate?.(5);
+      targetViewer.render?.();
+    }).catch(() => {});
+
     targetViewer.invalidate?.(5);
     if (typeof targetViewer.render === 'function') {
       targetViewer.render();

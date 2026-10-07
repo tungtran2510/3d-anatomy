@@ -49,9 +49,9 @@ function releaseMaterial(mesh, partId) {
 
 // Ghosting touches nearly every mesh at once, so it uses one shared faded
 // variant per source material — 65 of them, not one per mesh.
-// Dynamic theme-aware opacity: Dark mode ~0.045 (crystal glass), Light mode ~0.125 (soft anatomical silhouette)
+// Dynamic theme-aware opacity: Dark mode ~0.045 (crystal glass), Light mode ~0.185 (soft anatomical silhouette with boosted contrast)
 const GHOST_OPACITY_DARK = 0.045;
-const GHOST_OPACITY_LIGHT = 0.125;
+const GHOST_OPACITY_LIGHT = 0.185;
 const ghostVariants = new WeakMap();
 const activeGhostMaterials = new Set();
 
@@ -78,7 +78,7 @@ function ghostVariantOf(material) {
     // In light mode, enhance silhouette contrast against bright white background
     if (ghost.color) {
       ghost.userData.darkColor = ghost.color.clone();
-      ghost.userData.lightColor = ghost.color.clone().lerp(new THREE.Color(0x64748b), 0.32);
+      ghost.userData.lightColor = ghost.color.clone().lerp(new THREE.Color(0x334155), 0.38);
       ghost.color.copy(isDark ? ghost.userData.darkColor : ghost.userData.lightColor);
     }
 

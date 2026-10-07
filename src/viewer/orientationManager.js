@@ -315,6 +315,9 @@ export function setModelOrientation(orientation, viewer, options = {}) {
     }
   }
 
+  // Force world matrix refresh across all descendant structures and callout pins
+  root.updateMatrixWorld(true);
+
   // Update UI indicators
   updateOrientationUI();
   targetViewer.render?.();

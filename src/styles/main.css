@@ -2396,14 +2396,13 @@ body.theme-dark .selection-card-header {
 }
 
 #cardTitle {
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 700;
   color: #0f172a;
   margin: 0;
-  line-height: 1.25;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.3;
+  white-space: normal;
+  word-break: break-word;
 }
 
 [data-theme="dark"] #cardTitle,
@@ -2414,11 +2413,11 @@ body.theme-dark #cardTitle {
 #cardSubtitle {
   font-size: 11.5px;
   color: #1e3a8a;
-  margin: 0;
+  margin: 3px 0 0;
   font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.35;
+  word-break: break-word;
   font-style: italic;
 }
 
@@ -3207,26 +3206,25 @@ body.theme-dark .disc-subunits-title {
 
 .disc-subunits-chips {
   display: flex;
-  gap: 5px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 6px;
 }
 
-.disc-subunits-chips::-webkit-scrollbar {
-  display: none;
-}
-
 .sub-chip-btn {
-  flex: 1;
-  min-width: 0;
-  padding: 4px 6px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  white-space: nowrap;
+  flex: 1 1 calc(50% - 6px);
+  min-width: calc(50% - 6px);
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
   border: 1px solid #bfdbfe;
   background: #ffffff;
   color: #0b2559;
@@ -3462,22 +3460,22 @@ body.theme-dark .herniation-ticks {
 }
 
 .herniation-desc-pill {
-  font-size: 10px;
-  line-height: 1.3;
-  color: #334155;
-  background: rgba(226, 232, 240, 0.5);
-  padding: 3px 6px;
-  border-radius: 5px;
-  border-left: 2.5px solid #0f2b5c;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 11px;
+  line-height: 1.42;
+  color: #1e293b;
+  background: rgba(226, 232, 240, 0.6);
+  padding: 6px 9px;
+  border-radius: 6px;
+  border-left: 3px solid #0284c7;
+  white-space: normal;
+  word-break: break-word;
 }
 
 [data-theme="dark"] .herniation-desc-pill,
 body.theme-dark .herniation-desc-pill {
-  color: #94a3b8;
-  background: rgba(30, 41, 59, 0.5);
+  color: #cbd5e1;
+  background: rgba(30, 41, 59, 0.7);
+  border-left-color: #38bdf8;
 }
 
 /* Joint Kinematics & Range of Motion (ROM) Box (Choice 2) */
@@ -3631,16 +3629,15 @@ body.theme-dark .joint-rom-ticks {
 }
 
 .joint-kinematics-desc {
-  font-size: 10px;
-  line-height: 1.35;
+  font-size: 10.5px;
+  line-height: 1.4;
   color: #334155;
   background: rgba(226, 232, 240, 0.45);
-  padding: 3px 6px;
-  border-radius: 5px;
+  padding: 4px 7px;
+  border-radius: 6px;
   border-left: 2.5px solid #0f2b5c;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
 }
 
 [data-theme="dark"] .joint-kinematics-desc,
@@ -13541,18 +13538,34 @@ body:not(.theme-dark) .btn-pwa-dismiss:hover {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: rgba(14, 165, 233, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #38bdf8;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  color: #0284c7;
   padding: 8px 12px;
   border-radius: 10px;
   font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.16s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-deck-axis-tool:hover {
-  background: rgba(14, 165, 233, 0.25);
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #38bdf8;
+}
+
+[data-theme="dark"] .btn-deck-axis-tool,
+body.theme-dark .btn-deck-axis-tool {
+  background: rgba(14, 165, 233, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .btn-deck-axis-tool:hover,
+body.theme-dark .btn-deck-axis-tool:hover {
+  background: rgba(14, 165, 233, 0.28);
   color: #ffffff;
   border-color: #38bdf8;
 }
@@ -14135,11 +14148,15 @@ body:has(#clinicalAxisHud:not(.hidden)) #floatingAIBubble {
 .onetap-text {
   flex: 1;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.35;
+  word-break: break-word;
 }
 .onetap-text strong {
+  color: #0369a1;
+}
+[data-theme="dark"] .onetap-text strong,
+body.theme-dark .onetap-text strong {
   color: #f0f9ff;
 }
 .onetap-arrow {
@@ -14210,12 +14227,15 @@ body:has(#clinicalAxisHud:not(.hidden)) #floatingAIBubble {
   flex-shrink: 0;
 }
 .lightbox-title {
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 700;
   color: #f8fafc;
-  white-space: nowrap;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
 }
 .lightbox-subtitle-badge {
   background: rgba(56, 189, 248, 0.16);
@@ -14495,21 +14515,25 @@ body.theme-dark .constituent-chip:hover {
 }
 
 .constituent-chip .chip-name {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
-  white-space: nowrap;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .constituent-chip .chip-latin {
-  font-size: 9.5px;
+  font-size: 9px;
   color: #64748b;
   font-style: italic;
-  white-space: nowrap;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1.2;
 }
 
@@ -14813,13 +14837,15 @@ body.theme-dark .microvideo-category-badge {
 }
 
 .microvideo-title-text {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: #0f172a;
-  white-space: nowrap;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 [data-theme="dark"] .microvideo-title-text,
@@ -14853,6 +14879,17 @@ body.theme-dark .microvideo-desc-text {
   cursor: pointer;
   flex-shrink: 0;
 }
+
+/* Mobile Sheet Clean View: Hide left systems pull tab when full info sheet is open */
+@media (max-width: 768px) {
+  body:has(#selectionCard:not(.hidden):not(.compact-mode)) .systems-pull-tab {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(-100%) !important;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+}
+
 
 
 

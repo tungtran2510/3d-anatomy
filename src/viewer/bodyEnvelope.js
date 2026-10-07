@@ -17,15 +17,21 @@ let userDisabled = false;
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath(asset('draco/'));
 
+function isCurrentThemeDark() {
+  if (typeof document === 'undefined') return false;
+  return document.documentElement.getAttribute('data-theme') === 'dark' || document.body?.classList?.contains('theme-dark');
+}
+
 // Custom Medical Fresnel Rim Silhouette Shader
 function createFresnelMaterial() {
+  const isDark = isCurrentThemeDark();
   return new THREE.ShaderMaterial({
     uniforms: {
-      color: { value: new THREE.Color(0xf1f5f9) },
-      rimColor: { value: new THREE.Color(0xffffff) },
-      rimPower: { value: 3.2 },
-      rimIntensity: { value: 0.55 },
-      baseOpacity: { value: 0.03 }
+      color: { value: new THREE.Color(isDark ? 0x0f172a : 0x94a3b8) },
+      rimColor: { value: new THREE.Color(isDark ? 0x38bdf8 : 0x0284c7) },
+      rimPower: { value: isDark ? 3.2 : 2.8 },
+      rimIntensity: { value: isDark ? 0.55 : 0.75 },
+      baseOpacity: { value: isDark ? 0.035 : 0.075 }
     },
     vertexShader: `
       varying vec3 vNormal;
@@ -207,4 +213,23 @@ export function setBodyEnvelopeTone(colorHex, opacity = 0.85, viewer = state.vie
   setBodyEnvelopeVisible(true, viewer);
   viewer?.render?.();
 }
+
+export function syncBodyEnvelopeTheme(isDark, viewer = state.viewer || window.viewer) {
+  if (!bodyEnvelopeGroup && viewer?.scene) {
+    bodyEnvelopeGroup = viewer.scene.getObjectByName('bodyEnvelopeGroup');
+  }
+  if (!bodyEnvelopeGroup) return;
+  bodyEnvelopeGroup.traverse(node => {
+    if (node.isMesh && node.material?.uniforms) {
+      if (node.material.uniforms.color) node.material.uniforms.color.value.setHex(isDark ? 0x0f172a : 0x94a3b8);
+      if (node.material.uniforms.rimColor) node.material.uniforms.rimColor.value.setHex(isDark ? 0x38bdf8 : 0x0284c7);
+      if (node.material.uniforms.rimPower) node.material.uniforms.rimPower.value = isDark ? 3.2 : 2.8;
+      if (node.material.uniforms.rimIntensity) node.material.uniforms.rimIntensity.value = isDark ? 0.55 : 0.75;
+      if (node.material.uniforms.baseOpacity) node.material.uniforms.baseOpacity.value = isDark ? 0.035 : 0.075;
+    }
+  });
+  viewer?.invalidate?.(3);
+  viewer?.render?.();
+}
+
 
