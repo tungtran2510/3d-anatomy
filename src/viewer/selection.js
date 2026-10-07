@@ -12,6 +12,7 @@ import { getClinicalData } from '../data/clinicalInfo.js';
 import { openLesson, openVideo } from '../ui/sidebar.js';
 import { isMeasurementActive, handleMeasurementClick } from './measurement.js';
 import { getNote, saveNote } from '../state/notes.js';
+import { triggerHaptic } from './engineManager.js';
 
 // Distinguishes a tap from the end of an orbit gesture.
 const TAP_MAX_MOVE_PX = 10;
@@ -381,6 +382,8 @@ function createCalloutActions(viewer) {
 }
 
 export function selectPart(partId, viewer, skipHistory = false, skipCamera = false) {
+  triggerHaptic('light');
+
   // Record selection history stack
   if (!skipHistory) {
     recordSelectionHistory(partId);

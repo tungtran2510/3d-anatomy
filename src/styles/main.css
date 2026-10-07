@@ -691,6 +691,9 @@ body {
   position: relative;
   background: var(--bg-primary);
   overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Depth control ------------------------------------------------------------ */

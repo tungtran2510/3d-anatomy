@@ -14,6 +14,7 @@ import { translationsVi, translationsEn, translationsIt } from './data/translati
 import { dynamicAnatomy } from './viewer/dynamicAnatomy.js';
 import { getVietnameseSynonyms } from './data/vietnamese.js';
 import { initTheme, toggleAppTheme } from './utils/themeManager.js';
+import { engineManager } from './viewer/engineManager.js';
 
 setTranslations({ vi: translationsVi, en: translationsEn, it: translationsIt });
 
@@ -107,6 +108,9 @@ async function init() {
       document.getElementById('mainThemeToggleBtn')?.addEventListener('click', () => {
         toggleAppTheme(viewer);
       });
+      document.getElementById('netStatusBadge')?.addEventListener('click', () => {
+        engineManager.toggleTelemetryHUD();
+      });
       await initUI(viewer);
       initSelection(viewer);
       trackViewState(viewer);
@@ -195,4 +199,5 @@ document.addEventListener('visibilitychange', () => {
 
 window.selectPartById = (id) => selectPartById(id, viewer);
 window.getLoadedPartIds = () => Array.from(getMeshRegistry().keys());
-window.ZAnatomy = { viewer, loadSystems, selectPartById: (id) => selectPartById(id, viewer), getLoadedPartIds: () => Array.from(getMeshRegistry().keys()), dynamicAnatomy };
+window.engineManager = engineManager;
+window.ZAnatomy = { viewer, loadSystems, selectPartById: (id) => selectPartById(id, viewer), getLoadedPartIds: () => Array.from(getMeshRegistry().keys()), dynamicAnatomy, engine: engineManager };

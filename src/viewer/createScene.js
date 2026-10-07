@@ -1,6 +1,7 @@
 // Three.js Viewer - Scene Creation
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { engineManager } from './engineManager.js';
 
 console.log('[createScene] Module loaded');
 
@@ -36,8 +37,7 @@ export function createScene() {
     alpha: true,
     powerPreference: 'high-performance'
   });
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (typeof window !== 'undefined' && window.innerWidth <= 768);
-  const basePixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.25) : Math.min(window.devicePixelRatio, 1.75);
+  const basePixelRatio = engineManager.drs.nativeRatio;
   renderer.setPixelRatio(basePixelRatio);
   // updateStyle = false: only the drawing buffer, the stylesheet owns the box.
   renderer.setSize(Math.max(initialSize.width, 1), Math.max(initialSize.height, 1), false);
@@ -212,13 +212,14 @@ export function createScene() {
     scene.clear();
   }
 
-  return {
+  const viewerObj = {
     scene,
     camera,
     renderer,
     controls,
     lights,
     canvas,
+    engine: engineManager,
     startRenderLoop,
     stopRenderLoop,
     render,
@@ -227,6 +228,10 @@ export function createScene() {
     dispose,
     onResize
   };
+
+  engineManager.attachViewer(viewerObj);
+
+  return viewerObj;
 }
 
 function createLights(scene) {

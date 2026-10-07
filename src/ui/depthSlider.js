@@ -11,6 +11,7 @@ import { state, translate, batchPartStates } from '../state/store.js';
 import { showSystem, hideSystem, setStructureVisible, ghostAllExcept } from '../viewer/visibility.js';
 import { loadModel } from '../viewer/loadModel.js';
 import { getMuscleLayers, systemLevels, updateItemUI } from './systemsLayerController.js';
+import { triggerHaptic } from '../viewer/engineManager.js';
 
 export const DISSECTION_STAGES = [
   { level: 0, title: 'Toàn bộ cấu trúc (Cơ tầng nông)', short: 'Lớp 0: Đầy đủ' },
@@ -27,6 +28,9 @@ let currentStage = 0;
 
 export function applyDepth(stage) {
   stage = Math.max(0, Math.min(5, Math.round(Number(stage) || 0)));
+  if (stage !== currentStage) {
+    triggerHaptic('light');
+  }
   currentStage = stage;
 
   // Ensure skeletal system is loaded as core foundation

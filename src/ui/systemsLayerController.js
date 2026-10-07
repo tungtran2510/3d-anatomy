@@ -13,6 +13,7 @@ import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
 import { toggleBodyEnvelope, isBodyEnvelopeVisible, setBodyEnvelopeVisible, updateBodyEnvelopeAuto } from '../viewer/bodyEnvelope.js';
+import { triggerHaptic } from '../viewer/engineManager.js';
 
 export const SYSTEM_CONFIGS = [
   { id: 'skeletal', icon: ICONS.skeletal, nameVi: 'Hệ Xương', shortNameVi: 'XƯƠNG', maxLevels: 4, defaultLevel: 4, baseSystem: 'skeletal' },
@@ -1067,6 +1068,9 @@ if (typeof window !== 'undefined') {
 async function applySystemLevel(systemId, level, viewer) {
   if (loadingSystems.has(systemId)) return;
   const prevLevel = Number(systemLevels[systemId]) || 0;
+  if (level !== prevLevel) {
+    triggerHaptic('light');
+  }
   systemLevels[systemId] = level;
 
   // Immediate optimistic UI response
