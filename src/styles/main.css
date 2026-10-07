@@ -4222,13 +4222,13 @@ body.theme-dark .tool-btn {
   border-color: #ff9800;
   color: #ff9800;
 }
-.tool-btn.highlight-ar {
-  border-color: rgba(163, 113, 247, 0.5);
+.tool-btn.highlight-consult {
+  border-color: rgba(56, 189, 248, 0.5);
 }
-.tool-btn.highlight-ar.active {
-  background: rgba(163, 113, 247, 0.25);
-  border-color: #a371f7;
-  color: #a371f7;
+.tool-btn.highlight-consult.active {
+  background: rgba(14, 165, 233, 0.25);
+  border-color: #38bdf8;
+  color: #38bdf8;
 }
 .tool-btn.highlight-offline {
   border-color: rgba(59, 130, 246, 0.5);
@@ -6580,16 +6580,16 @@ body.theme-dark .step-nav-btn.prev {
   color: #fff;
 }
 
-.tool-btn.highlight-ar {
-  background: linear-gradient(135deg, rgba(163, 113, 247, 0.22), rgba(88, 166, 255, 0.22));
-  border-color: rgba(163, 113, 247, 0.5);
-  color: #a371f7;
+.tool-btn.highlight-consult {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(30, 64, 175, 0.25));
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
 }
-.tool-btn.highlight-ar:hover,
-.tool-btn.highlight-ar.active {
-  background: linear-gradient(135deg, rgba(163, 113, 247, 0.4), rgba(88, 166, 255, 0.4));
-  border-color: #a371f7;
-  box-shadow: 0 0 14px rgba(163, 113, 247, 0.35);
+.tool-btn.highlight-consult:hover,
+.tool-btn.highlight-consult.active {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.45), rgba(30, 64, 175, 0.45));
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
   color: #fff;
 }
 
@@ -12154,7 +12154,7 @@ body.theme-dark .floating-top-view-btn {
 /* 9. Mobile Responsive Refinements */
 @media (max-width: 768px) {
   /* Selection Card docked safely on mobile */
-  .selection-card:not(.compact-mode) {
+  .selection-card:not(.compact-mode):not(.hidden) {
     position: fixed !important;
     left: 10px !important;
     right: 10px !important;
@@ -12169,6 +12169,12 @@ body.theme-dark .floating-top-view-btn {
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
+  }
+
+  .selection-card.hidden,
+  .selection-card.compact-mode.hidden,
+  .selection-card:not(.compact-mode).hidden {
+    display: none !important;
   }
 
   .selection-card:not(.compact-mode) .selection-card-body {
@@ -13059,3 +13065,401 @@ body:not(.theme-dark) .btn-pwa-dismiss:hover {
   background: rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
 }
+
+/* ==========================================================================
+   PATIENT CONSULTATION MODAL (CHẾ ĐỘ BÁC SĨ TƯ VẤN 30 GIÂY - LUXURY NAVY)
+   ========================================================================== */
+.patient-consult-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  animation: fadeInConsult 0.2s ease-out;
+}
+.patient-consult-modal-backdrop.hidden {
+  display: none !important;
+}
+
+@keyframes fadeInConsult {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.patient-consult-dialog {
+  background: #071326;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 24px rgba(30, 64, 175, 0.35);
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #e8f0fe;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.consult-dialog-header {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #0b2559 0%, #071326 100%);
+  border-bottom: 1px solid rgba(30, 64, 175, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.consult-header-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  margin-bottom: 4px;
+}
+.consult-header-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.consult-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94a3b8;
+  font-size: 20px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.consult-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.consult-disease-tabs-scroll {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #050d1a;
+  border-bottom: 1px solid rgba(30, 64, 175, 0.3);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+.consult-tab-btn {
+  background: #0b2559;
+  border: 1px solid rgba(30, 64, 175, 0.6);
+  color: #93c5fd;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.consult-tab-btn:hover {
+  background: #1e40af;
+  color: #ffffff;
+}
+.consult-tab-btn.active {
+  background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.consult-dialog-body {
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.consult-patient-question-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.patient-q-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.patient-q-text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #fef3c7;
+}
+
+.consult-doctor-explain-card {
+  background: #0b2559;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.doctor-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.doctor-badge-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+.btn-consult-tts {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-consult-tts:hover, .btn-consult-tts.is-speaking {
+  background: #0284c7;
+  color: #ffffff;
+}
+.doctor-card-body {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #e8f0fe;
+}
+
+.consult-stages-card {
+  background: #050e1d;
+  border: 1px solid rgba(30, 64, 175, 0.4);
+  border-radius: 12px;
+  padding: 12px;
+}
+.consult-stages-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.stages-header-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #93c5fd;
+}
+.stages-stage-pill {
+  font-size: 11px;
+  font-weight: 700;
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.15);
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.consult-range-wrap {
+  margin-bottom: 10px;
+}
+.consult-range {
+  width: 100%;
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+.consult-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: #64748b;
+  margin-top: 4px;
+}
+.consult-stage-desc {
+  background: #071326;
+  border: 1px solid rgba(30, 64, 175, 0.5);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.consult-advice-card {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.advice-card-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 6px;
+}
+.advice-line {
+  margin: 3px 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #d1fae5;
+}
+
+.consult-toolbar-card {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn-consult-action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+}
+.btn-consult-action.primary {
+  background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+}
+.btn-consult-action.primary:hover {
+  background: #0284c7;
+}
+.btn-consult-action.secondary {
+  background: #0b2559;
+  color: #93c5fd;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+.btn-consult-action.secondary:hover {
+  background: #1e40af;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   CLIPPING POPOVER (LUXURY NAVY BLUE & MOBILE OPTIMIZED)
+   ========================================================================== */
+.clipping-popover {
+  background: rgba(7, 19, 38, 0.95) !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(30, 64, 175, 0.3) !important;
+  border-radius: 14px !important;
+  color: #e8f0fe !important;
+}
+.clipping-popover .explode-popover-header {
+  color: #38bdf8 !important;
+  border-bottom: 1px solid rgba(30, 64, 175, 0.3);
+  padding-bottom: 8px;
+}
+.clipping-plane-select {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.clipping-plane-select .plane-btn {
+  flex: 1;
+  background: #0b2559 !important;
+  border: 1px solid rgba(30, 64, 175, 0.6) !important;
+  color: #93c5fd !important;
+  padding: 6px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.clipping-plane-select .plane-btn.active {
+  background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%) !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4) !important;
+}
+.clipping-popover .clip-action-btn {
+  background: #0b2559 !important;
+  border: 1px solid rgba(30, 64, 175, 0.5) !important;
+  color: #93c5fd !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.clipping-popover .clip-action-btn:hover {
+  background: #1e40af !important;
+  color: #ffffff !important;
+}
+.clipping-popover .clip-action-btn.reset-btn {
+  color: #f87171 !important;
+}
+@media (max-width: 768px) {
+  .clipping-popover {
+    position: fixed !important;
+    bottom: 78px !important;
+    left: 14px !important;
+    right: 14px !important;
+    max-width: calc(100vw - 28px) !important;
+    margin: 0 auto !important;
+    z-index: 900 !important;
+  }
+}
+
+/* ==========================================================================
+   DECK QUICK TOOLS ROW (INSPECT INSIDE & CONSULT BUTTONS)
+   ========================================================================== */
+.deck-quick-tools-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.btn-deck-clip-tool, .btn-deck-consult-tool {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #0b2559;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #93c5fd;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-deck-clip-tool:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+.btn-deck-consult-tool:hover {
+  background: #1e40af;
+  color: #ffffff;
+}
+

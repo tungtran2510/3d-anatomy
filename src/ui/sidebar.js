@@ -1426,12 +1426,29 @@ export function initFloatingTools(viewer) {
     btn.addEventListener('click', () => {
       planeButtons.forEach(b => b.classList.toggle('active', b === btn));
       const plane = btn.dataset.plane;
-      setClippingPlane(plane, viewer);
       if (clippingSlider) {
-        clippingSlider.value = 0;
-        if (clippingValue) clippingValue.textContent = '0.0 cm';
+        if (plane === 'axial') {
+          clippingSlider.min = 0.0;
+          clippingSlider.max = 1.8;
+          clippingSlider.step = 0.01;
+          clippingSlider.value = 1.0;
+          if (clippingValue) clippingValue.textContent = '100.0 cm';
+        } else if (plane === 'coronal') {
+          clippingSlider.min = -0.3;
+          clippingSlider.max = 0.3;
+          clippingSlider.step = 0.005;
+          clippingSlider.value = 0.0;
+          if (clippingValue) clippingValue.textContent = '0.0 cm';
+        } else {
+          clippingSlider.min = -0.4;
+          clippingSlider.max = 0.4;
+          clippingSlider.step = 0.005;
+          clippingSlider.value = 0.0;
+          if (clippingValue) clippingValue.textContent = '0.0 cm';
+        }
       }
-      showToast(`Mặt cắt: ${btn.textContent.trim()}`);
+      setClippingPlane(plane, parseFloat(clippingSlider?.value) || 0, false, viewer);
+      showToast(`✂️ Mặt cắt: ${btn.textContent.trim()}`);
     });
   });
 
@@ -1455,6 +1472,46 @@ export function initFloatingTools(viewer) {
     document.getElementById('halfBodyPill')?.classList.add('hidden');
     showToast('Đã tắt mặt cắt 3D');
   });
+
+  function openClippingController(plane = 'coronal', offset = null, targetViewer = viewer) {
+    if (!clippingPopover) return;
+    const selCard = document.getElementById('selectionCard');
+    if (selCard) selCard.classList.add('hidden');
+
+    clippingPopover.classList.remove('hidden');
+    btnClipping?.classList.add('active');
+
+    planeButtons.forEach(b => b.classList.toggle('active', b.dataset.plane === plane));
+
+    if (clippingSlider) {
+      if (plane === 'axial') {
+        clippingSlider.min = 0.0;
+        clippingSlider.max = 1.8;
+        clippingSlider.step = 0.01;
+        clippingSlider.value = (offset !== null) ? offset : 1.0;
+        if (clippingValue) clippingValue.textContent = `${(parseFloat(clippingSlider.value) * 100).toFixed(1)} cm`;
+      } else if (plane === 'coronal') {
+        clippingSlider.min = -0.3;
+        clippingSlider.max = 0.3;
+        clippingSlider.step = 0.005;
+        clippingSlider.value = (offset !== null) ? offset : 0.0;
+        if (clippingValue) clippingValue.textContent = `${(parseFloat(clippingSlider.value) * 100).toFixed(1)} cm`;
+      } else {
+        clippingSlider.min = -0.4;
+        clippingSlider.max = 0.4;
+        clippingSlider.step = 0.005;
+        clippingSlider.value = (offset !== null) ? offset : 0.0;
+        if (clippingValue) clippingValue.textContent = `${(parseFloat(clippingSlider.value) * 100).toFixed(1)} cm`;
+      }
+    }
+
+    setClippingPlane(plane, parseFloat(clippingSlider?.value) || 0, false, targetViewer);
+    showToast(`✂️ Mặt cắt: ${plane === 'sagittal' ? 'Đứng dọc' : plane === 'coronal' ? 'Đứng ngang' : 'Cắt ngang'}`);
+  }
+
+  window.openClippingController = (plane = 'coronal', offset = null) => {
+    openClippingController(plane, offset, viewer);
+  };
 
   // Half-Body Hemisection Toolbar & Floating Pill controls
   const btnToolHalfBody = document.getElementById('btnToolHalfBody');
@@ -1573,6 +1630,12 @@ export function initFloatingTools(viewer) {
     toggleMotionPanel(viewer);
   });
 
+  // Patient Consultation Mode (30-second patient explanation)
+  const btnConsult = document.getElementById('btnToolConsult');
+  btnConsult?.addEventListener('click', async () => {
+    const { openPatientConsultationModal } = await import('./patientConsultationModal.js');
+    openPatientConsultationModal();
+  });
 
   // Offline & PWA Storage Manager Mode (LỆNH #06)
   const btnOffline = document.getElementById('btnToolOffline');
