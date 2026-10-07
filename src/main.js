@@ -144,6 +144,11 @@ async function init() {
         initOfflinePrompt(viewer);
       });
 
+      // Silent Background Preloader (Tự động nạp dần thư viện 3D khi có Wi-Fi, không giật lag)
+      import('./utils/silentBackgroundPreloader.js').then(({ initSilentBackgroundPreloader }) => {
+        initSilentBackgroundPreloader();
+      });
+
       // Cross-platform Desktop Keyboard Shortcuts
       initDesktopShortcuts(viewer);
     }
