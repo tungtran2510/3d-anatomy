@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="endoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a101d" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Acid vs Mucus Gradients -->
+    <linearGradient id="acidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+    <linearGradient id="mucusGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#endoBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="210" height="26" rx="6" fill="#059669" fill-opacity="0.3" stroke="#34d399" stroke-width="1" />
+    <text x="12" y="17" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">SINH LÝ HỌC &amp; NỘI SOI TIÊU HÓA</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Hàng Rào Niêm Mạc Dạ Dày &amp; Cân Bằng Toan – Kiềm</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Lớp gel chất nhầy Bicarbonate (pH 7.0) ngăn acid dịch vị (pH 1.5) tự tiêu hủy thành dạ dày</text>
+
+  <!-- Central Cross-Section Graphic -->
+  <g transform="translate(300, 210)">
+    <!-- 1. Gastric Lumen (Lòng dạ dày chứa Acid HCl) -->
+    <rect x="-180" y="-90" width="360" height="50" rx="6" fill="url(#acidGrad)" opacity="0.8"/>
+    <text x="0" y="-60" text-anchor="middle" fill="#fee2e2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12" font-weight="800">LÒNG DẠ DÀY: ACID HCl + PEPSIN (pH ~ 1.5 – 2.0)</text>
+
+    <!-- 2. Mucus-Bicarbonate Barrier (Lớp nhầy đệm Bicarbonate bảo vệ) -->
+    <rect x="-180" y="-35" width="360" height="28" rx="4" fill="url(#mucusGrad)" opacity="0.9"/>
+    <text x="0" y="-17" text-anchor="middle" fill="#ecfdf5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">LỚP CHẤT NHẦY ĐỆM HCO3⁻ BẢO VỆ (pH ~ 7.0)</text>
+
+    <!-- 3. Epithelial Cells (Tế bào biểu mô niêm mạc) -->
+    <g transform="translate(-180, 0)">
+      <!-- 12 cells in row -->
+      <path d="M0,0 L30,0 L30,45 L0,45 Z M30,0 L60,0 L60,45 L30,45 Z M60,0 L90,0 L90,45 L60,45 Z M90,0 L120,0 L120,45 L90,45 Z M120,0 L150,0 L150,45 L120,45 Z M150,0 L180,0 L180,45 L150,45 Z M180,0 L210,0 L210,45 L180,45 Z M210,0 L240,0 L240,45 L210,45 Z M240,0 L270,0 L270,45 L240,45 Z M270,0 L300,0 L300,45 L270,45 Z M300,0 L330,0 L330,45 L300,45 Z M330,0 L360,0 L360,45 L330,45 Z" 
+            fill="#fda4af" stroke="#e11d48" stroke-width="1.2"/>
+    </g>
+    <text x="0" y="28" text-anchor="middle" fill="#9f1239" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="800">LỚP TẾ BÀO BIỂU MÔ NIÊM MẠC DẠ DÀY</text>
+
+    <!-- 4. Submucosa & Capillaries (Lớp dưới niêm & Mạch máu tưới dưỡng) -->
+    <rect x="-180" y="50" width="360" height="35" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+    <text x="0" y="72" text-anchor="middle" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="700">LỚP DƯỚI NIÊM MẠC &amp; MAO MẠCH CẤP MÁU TÁI TẠO</text>
+  </g>
+
+  <!-- Left Callout: Yếu tố bảo vệ -->
+  <g transform="translate(24, 130)">
+    <rect width="140" height="85" rx="8" fill="#1e293b" fill-opacity="0.85" stroke="#10b981" stroke-width="1.2" />
+    <text x="10" y="20" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">Yếu Tố Bảo Vệ</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Màng nhầy mucin</text>
+    <text x="10" y="54" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Bicarbonate kiềm</text>
+    <text x="10" y="70" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Prostaglandin tưới máu</text>
+  </g>
+
+  <!-- Right Callout: Yếu tố tấn công -->
+  <g transform="translate(436, 130)">
+    <rect width="140" height="85" rx="8" fill="#1e293b" fill-opacity="0.85" stroke="#ef4444" stroke-width="1.2" />
+    <text x="10" y="20" fill="#f87171" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">Yếu Tố Tấn Công</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Vi khuẩn H. pylori</text>
+    <text x="10" y="54" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Thuốc giảm đau NSAID</text>
+    <text x="10" y="70" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Stress &amp; rượu bia</text>
+  </g>
+
+  <!-- Bottom Insight Bar -->
+  <g transform="translate(24, 328)">
+    <rect width="552" height="34" rx="7" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <text x="16" y="21" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">NỘI SOI TIÊU HÓA:</text>
+    <text x="156" y="21" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Khi mất cân bằng, acid ăn mòn màng nhầy dẫn tới loét tá tràng và nguy cơ chảy máu ồ ạt.</text>
+  </g>
+</svg>

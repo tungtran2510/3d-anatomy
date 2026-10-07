@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="kneeBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a101d" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Bone Ivory Gradient -->
+    <linearGradient id="boneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+
+    <!-- ACL Amber/Cyan Ligament Gradient -->
+    <linearGradient id="aclGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- PCL Darker Blue Ligament Gradient -->
+    <linearGradient id="pclGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+
+    <!-- Meniscus Fibrocartilage Turquoise -->
+    <linearGradient id="meniscusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf" />
+      <stop offset="100%" stop-color="#0f766e" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#kneeBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="210" height="26" rx="6" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1" />
+    <text x="12" y="17" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">HỆ KHỚP &amp; DÂY CHẰNG Y KHOA</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Giải Phẫu Phức Hợp Khớp Gối &amp; 4 Trụ Cột Dây Chằng</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Sự đan chéo ba chiều giữa Dây chằng chéo trước (ACL), chéo sau (PCL) và Sụn chêm</text>
+
+  <!-- Central Knee Graphic -->
+  <g transform="translate(300, 220)">
+    <!-- 1. Femur (Distal Condyles - Lồi cầu đùi) -->
+    <path d="M-55,-130 L-55,-60 C-55,-25 -85,-15 -85,15 C-85,35 -55,40 -40,35 C-25,30 -15,0 0,0 C15,0 25,30 40,35 C55,40 85,35 85,15 C85,-15 55,-25 55,-60 L55,-130 Z" 
+          fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.5" opacity="0.9"/>
+    <text x="0" y="-85" text-anchor="middle" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="700">XƯƠNG ĐÙI (FEMUR)</text>
+
+    <!-- 2. Tibia (Proximal Plateau - Mâm chày) -->
+    <path d="M-85,75 C-85,55 -55,50 -40,52 C-20,53 -10,65 0,65 C10,65 20,53 40,52 C55,50 85,55 85,75 C85,95 45,105 40,140 L-40,140 C-45,105 -85,95 -85,75 Z" 
+          fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="0" y="125" text-anchor="middle" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5" font-weight="700">XƯƠNG CHÀY (TIBIA)</text>
+
+    <!-- Fibula Head (Chỏm xương mác bên ngoài) -->
+    <ellipse cx="98" cy="105" rx="16" ry="24" fill="url(#boneGrad)" stroke="#94a3b8" stroke-width="1.2"/>
+    <text x="124" y="110" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9" font-weight="700">X. MÁC</text>
+
+    <!-- 3. Menisci (Sụn chêm trong & ngoài) -->
+    <!-- Medial Meniscus (Trong) -->
+    <path d="M-78,45 C-50,42 -35,46 -30,52 C-35,58 -55,58 -78,54 Z" fill="url(#meniscusGrad)" stroke="#0d9488" stroke-width="1.2"/>
+    <!-- Lateral Meniscus (Ngoài) -->
+    <path d="M78,45 C50,42 35,46 30,52 C35,58 55,58 78,54 Z" fill="url(#meniscusGrad)" stroke="#0d9488" stroke-width="1.2"/>
+
+    <!-- 4. PCL (Posterior Cruciate Ligament - Dây chằng chéo sau, chạy chếch ra sau) -->
+    <path d="M-15,10 C-12,25 15,48 20,62 L10,65 C5,50 -22,25 -25,12 Z" fill="url(#pclGrad)" stroke="#1d4ed8" stroke-width="1.2"/>
+
+    <!-- 5. ACL (Anterior Cruciate Ligament - Dây chằng chéo trước, bắt chéo từ lồi cầu ngoài đùi xuống gai chày trước) -->
+    <path d="M28,8 C22,22 -8,45 -14,64 L-24,60 C-18,40 16,15 20,5 Z" fill="url(#aclGrad)" stroke="#0284c7" stroke-width="1.5"/>
+
+    <!-- 6. Collateral Ligaments (MCL & LCL) -->
+    <!-- MCL (Tibial Collateral) -->
+    <path d="M-82,-10 C-84,25 -82,60 -78,95" fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+    <!-- LCL (Fibular Collateral) -->
+    <path d="M82,0 C88,35 94,65 98,90" fill="none" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+
+    <!-- Interactive Highlights / Pulse Dots -->
+    <circle cx="2" cy="35" r="4" fill="#38bdf8">
+      <animate attributeName="r" values="3;5.5;3" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Left Callout: ACL & Sụn Chêm Trong -->
+  <g transform="translate(24, 130)">
+    <rect width="170" height="98" rx="8" fill="#1e293b" fill-opacity="0.85" stroke="#0284c7" stroke-width="1.2" />
+    <text x="10" y="20" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12" font-weight="700">Dây Chằng Chéo Trước (ACL)</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Ngăn mâm chày trượt ra trước</text>
+    <text x="10" y="54" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Khóa vững xoay khi nhảy/đáp</text>
+    <text x="10" y="72" fill="#2dd4bf" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700">Sụn Chêm Trong (Medial)</text>
+    <text x="10" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Chịu 60% tải trọng truyền xuống</text>
+    <line x1="170" y1="35" x2="285" y2="245" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 3"/>
+  </g>
+
+  <!-- Right Callout: PCL & Dây Chằng Bên (MCL/LCL) -->
+  <g transform="translate(406, 130)">
+    <rect width="170" height="98" rx="8" fill="#1e293b" fill-opacity="0.85" stroke="#3b82f6" stroke-width="1.2" />
+    <text x="10" y="20" fill="#60a5fa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="12" font-weight="700">Dây Chằng Chéo Sau (PCL)</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Khối sợi khỏe gấp 2 lần ACL</text>
+    <text x="10" y="54" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Ngăn mâm chày thụt ra sau</text>
+    <text x="10" y="72" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700">Dây Chằng Bên (MCL &amp; LCL)</text>
+    <text x="10" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10">• Giữ vững trục gập duỗi 0°–140°</text>
+    <line x1="0" y1="35" x2="-95" y2="235" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="3 3"/>
+  </g>
+
+  <!-- Bottom Insight Bar -->
+  <g transform="translate(24, 328)">
+    <rect width="552" height="34" rx="7" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <text x="16" y="21" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">LÂM SÀNG THỂ THAO:</text>
+    <text x="156" y="21" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Rách đứt ACL kết hợp sụn chêm trong là tổn thương phổ biến nhất trong bóng đá &amp; bóng rổ.</text>
+  </g>
+</svg>

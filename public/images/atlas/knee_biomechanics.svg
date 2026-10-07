@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bioBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a101d" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Force Vectors -->
+    <linearGradient id="forceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#be123c" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#bioBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="210" height="26" rx="6" fill="#be123c" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1" />
+    <text x="12" y="17" fill="#f43f5e" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">CƠ SINH HỌC &amp; ĐỘNG HỌC GỐI</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Cơ Chế Cuộn – Trượt &amp; Phân Phối Tải Trọng 300% Khối Lượng Cơ Thể</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Sụn chêm làm tăng diện tích tiếp xúc từ 30% lên 70%, bảo vệ sụn khớp khỏi mài mòn</text>
+
+  <!-- Diagram Central Area -->
+  <g transform="translate(300, 210)">
+    <!-- Tibial Plateau Flat Base -->
+    <rect x="-110" y="30" width="220" height="24" rx="6" fill="#334155" stroke="#64748b" stroke-width="1.5"/>
+    <text x="0" y="46" text-anchor="middle" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="700">MÂM CHÀY (TIBIAL PLATEAU)</text>
+
+    <!-- Menisci Cushion Wedges -->
+    <path d="M-105,28 C-80,10 -50,26 -40,30 Z" fill="#2dd4bf" stroke="#0f766e" stroke-width="1.2"/>
+    <path d="M105,28 C80,10 50,26 40,30 Z" fill="#2dd4bf" stroke="#0f766e" stroke-width="1.2"/>
+    <text x="-75" y="12" fill="#2dd4bf" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700">SỤN CHÊM TRONG</text>
+    <text x="75" y="12" fill="#2dd4bf" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10" font-weight="700">SỤN CHÊM NGOÀI</text>
+
+    <!-- Femoral Condyle Curve (Lồi cầu tròn) -->
+    <ellipse cx="0" cy="-35" rx="75" ry="50" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+    <text x="0" y="-35" text-anchor="middle" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">LỒI CẦU ĐÙI (FEMUR CONDYLE)</text>
+
+    <!-- Kinematics Arrow: Roll and Slide -->
+    <path d="M-40,-8 C-10,-18 10,-18 40,-8" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="45,-6 38,-13 36,-3" fill="#fbbf24"/>
+    <text x="0" y="-2" text-anchor="middle" fill="#fbbf24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="9.5" font-weight="700">CUỘN &amp; TRƯỢT (ROLL-SLIDE)</text>
+
+    <!-- Force Vectors Downwards -->
+    <line x1="-55" y1="-85" x2="-55" y2="-45" stroke="url(#forceGrad)" stroke-width="4" stroke-linecap="round"/>
+    <polygon points="-55,-40 -60,-50 -50,-50" fill="#be123c"/>
+    <line x1="55" y1="-85" x2="55" y2="-45" stroke="url(#forceGrad)" stroke-width="4" stroke-linecap="round"/>
+    <polygon points="55,-40 50,-50 60,-50" fill="#be123c"/>
+    <text x="0" y="-95" text-anchor="middle" fill="#f43f5e" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11" font-weight="800">ÁP LỰC DỌC TRỤC ~300% BW</text>
+  </g>
+
+  <!-- Left Card: Chức năng Sụn Chêm -->
+  <g transform="translate(24, 140)">
+    <rect width="165" height="92" rx="8" fill="#1e293b" fill-opacity="0.85" stroke="#2dd4bf" stroke-width="1.2" />
+    <text x="10" y="20" fill="#2dd4bf" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">Hấp Thu Xung Lực</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Tăng diện tích tiếp xúc 2.5x</text>
+    <text x="10" y="54" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Giảm ứng suất nén sụn khớp</text>
+    <text x="10" y="72" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Bôi trơn dịch khớp hoạt dịch</text>
+  </g>
+
+  <!-- Right Card: Vai trò ACL Trong Động Học -->
+  <g transform="translate(411, 140)">
+    <rect width="165" height="92" rx="8" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="1.2" />
+    <text x="10" y="20" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">Khóa Vững Trục Xoay</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• 85% kháng lực trượt chày</text>
+    <text x="10" y="54" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Bảo vệ sụn chêm khi xoay</text>
+    <text x="10" y="72" fill="#cbd5e1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="10.5">• Giúp phanh hãm đổi hướng</text>
+  </g>
+
+  <!-- Bottom Insight Bar -->
+  <g transform="translate(24, 328)">
+    <rect width="552" height="34" rx="7" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <text x="16" y="21" fill="#fbbf24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700">HỆ QUẢ LÂM SÀNG:</text>
+    <text x="150" y="21" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11">Cắt bỏ sụn chêm làm tăng áp lực đỉnh lên sụn xương gấp 4 lần, gây thoái hóa khớp sớm.</text>
+  </g>
+</svg>

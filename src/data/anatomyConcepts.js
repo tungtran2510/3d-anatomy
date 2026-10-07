@@ -179,6 +179,128 @@ export const ANATOMY_CONCEPTS = [
       url: 'https://www.youtube.com/embed/8vK5eOqY7Qc',
       duration: '0:55'
     }
+  },
+
+  {
+    id: 'concept_knee_joint_ligaments',
+    keywords: [
+      'khớp gối', 'khop goi', 'gối', 'goi', 'dây chằng chéo', 'day chang cheo',
+      'acl', 'pcl', 'mcl', 'lcl', 'sụn chêm', 'sun chem', 'meniscus',
+      'rách sụn chêm', 'rach sun chem', 'đứt dây chằng', 'dut day chang',
+      'thoái hóa khớp gối', 'thoai hoa khop goi', 'lỏng gối', 'tràn dịch gối',
+      'patella', 'bánh chè', 'banh che', 'cruciate', 'collateral ligament'
+    ],
+    titleVi: 'Phức Hợp Khớp Gối & Dây Chằng',
+    latin: 'Articulatio genus et ligamenta cruciata (TA2: 1530)',
+    subtitle: 'Khớp chịu tải lớn nhất & 4 trụ cột dây chằng giữ vững',
+    thumbnail: '/images/atlas/knee_anatomy.svg',
+    system: 'joints',
+    primaryPartId: 'Anterior cruciate ligament',
+    subunits: [
+      { label: '⚡ Chéo trước (ACL)', partId: 'Anterior cruciate ligament', note: 'Khóa trượt mâm chày ra trước, trụ cột khi nhảy & tiếp đất' },
+      { label: '🛡️ Chéo sau (PCL)', partId: 'Posterior cruciate ligament', note: 'Bó sợi to khỏe gấp 2 lần ACL, ngăn mâm chày thụt ra sau' },
+      { label: '🌙 Sụn chêm (Meniscus)', partId: 'Medial meniscus', note: 'Đệm sợi bán nguyệt hấp thu 70% phản lực chấn động' },
+      { label: '🧱 Dây chằng bên (MCL/LCL)', partId: 'Fibular collateral ligament', note: 'Ổn định trục ngang, chống vẹo gối trong và ngoài' }
+    ],
+    slides: [
+      {
+        id: 'knee_anatomy',
+        title: 'Cấu tạo',
+        badge: '4 Trụ cột dây chằng',
+        image: '/images/atlas/knee_anatomy.svg',
+        caption: 'Mặt trước khớp gối bộc lộ xương đùi, xương chày, ACL, PCL và sụn chêm.'
+      },
+      {
+        id: 'knee_biomechanics',
+        title: 'Cơ sinh học',
+        badge: 'Chịu tải 300% BW',
+        image: '/images/atlas/knee_biomechanics.svg',
+        caption: 'Cơ chế cuộn – trượt lồi cầu đùi và sụn chêm đệm tải trọng nén.'
+      },
+      {
+        id: 'knee_injury_stages',
+        title: '4 Cấp độ',
+        badge: 'Chấn thương thể thao',
+        image: '/images/atlas/knee_injury_stages.svg',
+        caption: 'Từ giãn vi thể đến đứt hoàn toàn ACL và rách sụn quai vali kẹt gối.'
+      }
+    ],
+    simulator: {
+      title: '⚡ MÔ PHỎNG CHẤN THƯƠNG GỐI:',
+      ticks: ['Bình thường', 'Giãn Độ 1', 'Rách Độ 2', 'Đứt Độ 3'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Dây chằng căng chắc, sụn chêm trơn láng, khớp gối vững vàng 100%.' },
+        { level: 'Cấp 1: Giãn Độ 1', desc: 'Rách vi thể <5% bó sợi, phù nề nhẹ quanh gối, chưa mất vững trục.' },
+        { level: 'Cấp 2: Rách bán phần Độ 2', desc: 'Đứt 50% bó sợi, gối lỏng lẻo khi vặn xoay, tràn dịch khớp.' },
+        { level: 'Cấp 3: Đứt hoàn toàn Độ 3', desc: 'Đứt lìa toàn bộ ACL kèm rách sụn quai vali, dấu hiệu ngăn kéo trước (+).' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cơ Chế Đứt Dây Chằng ACL & Rách Sụn Chêm',
+      url: 'https://www.youtube.com/embed/36y0wHn04_s',
+      duration: '0:52'
+    }
+  },
+
+  {
+    id: 'concept_gastrointestinal_tract',
+    keywords: [
+      'dạ dày', 'da day', 'bao tử', 'bao tu', 'tá tràng', 'ta trang', 'hành tá tràng',
+      'ruột thừa', 'ruot thua', 'viêm ruột thừa', 'viem ruot thua', 'ruột non', 'ruot non',
+      'đại tràng', 'dai trang', 'ruột già', 'ruot gia', 'trực tràng', 'truc trang',
+      'polyp', 'loét dạ dày', 'loet da day', 'h. pylori', 'trĩ', 'tri', 'mcburney',
+      'stomach', 'duodenum', 'appendix', 'colon'
+    ],
+    titleVi: 'Hệ Ống Tiêu Hóa & Ổ Bụng',
+    latin: 'Tractus gastrointestinalis (TA2: 2850)',
+    subtitle: 'Chuỗi tiêu hóa liên tục chuyển hóa dinh dưỡng & đào thải cặn bã',
+    thumbnail: '/images/atlas/gi_tract_anatomy.svg',
+    system: 'visceral',
+    primaryPartId: 'Stomach',
+    subunits: [
+      { label: '🍲 Dạ dày (Stomach)', partId: 'Stomach', note: 'Chứa 1.5–2L, nhào trộn acid HCl pH 1.5–2 diệt khuẩn & tiêu hóa đạm' },
+      { label: '🌀 Hành tá tràng (Duodenum)', partId: 'Duodenum', note: 'Cửa ngõ trung hòa acid dịch vị & hấp thu dưỡng chất đầu tiên' },
+      { label: '⚡ Ruột thừa (Appendix)', partId: 'Vermiform appendix', note: 'Túi lympho miễn dịch manh tràng, vị trí viêm cấp hay gặp nhất' },
+      { label: '⭕ Khung đại tràng (Colon)', partId: 'Transverse colon', note: 'Hấp thu nước, tái hấp thu điện giải và tạo khuôn phân' }
+    ],
+    slides: [
+      {
+        id: 'gi_tract_anatomy',
+        title: 'Cấu tạo',
+        badge: 'Chuỗi liên tục',
+        image: '/images/atlas/gi_tract_anatomy.svg',
+        caption: 'Toàn cảnh ống tiêu hóa từ thực quản qua dạ dày, tá tràng đến ruột thừa.'
+      },
+      {
+        id: 'gi_endoscopy_physiology',
+        title: 'Sinh lý',
+        badge: 'Hàng rào bảo vệ',
+        image: '/images/atlas/gi_endoscopy_physiology.svg',
+        caption: 'Màng nhầy Bicarbonate kiềm pH 7.0 bảo vệ niêm mạc khỏi acid pH 1.5.'
+      },
+      {
+        id: 'gi_pathology_stages',
+        title: '4 Cấp độ',
+        badge: 'Tiến triển bệnh học',
+        image: '/images/atlas/gi_pathology_stages.svg',
+        caption: 'Từ viêm trợt niêm mạc đến loét thủng dạ dày & viêm ruột thừa vỡ mủ.'
+      }
+    ],
+    simulator: {
+      title: '🔬 TIẾN TRIỂN BỆNH LÝ TIÊU HÓA:',
+      ticks: ['Bình thường', 'Viêm trợt', 'Loét sâu', 'Biến chứng cấp'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Hàng rào nhầy bảo vệ nguyên vẹn, niêm mạc hồng hào trơn bóng.' },
+        { level: 'Cấp 1: Viêm trợt niêm mạc', desc: 'Trợt lớp biểu mô bề mặt, xung huyết phù nề, ợ hơi nóng rát.' },
+        { level: 'Cấp 2: Loét sâu thành cơ', desc: 'Ổ loét ăn sâu lớp cơ niêm, đau quặn khi đói, rỉ máu mao mạch.' },
+        { level: 'Cấp 3: Biến chứng cấp tính', desc: 'Thủng tạng rỗng / Viêm ruột thừa vỡ mủ, bụng cứng như gỗ cấp cứu.' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cơ Chế Loét Dạ Dày Tá Tràng & Viêm Ruột Thừa Cấp',
+      url: 'https://www.youtube.com/embed/z13P_zZvZ4U',
+      duration: '0:58'
+    }
   }
 ];
 
@@ -234,5 +356,39 @@ export function getVisualDeckForPart(partId) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_hepatobiliary_pancreas');
   }
 
+  // 4. Knee Joint & Cruciate Ligaments (ACL / PCL / Meniscus / Collateral)
+  if (
+    lower.includes('cruciate') ||
+    lower.includes('meniscus') ||
+    lower.includes('knee') ||
+    lower.includes('patellar') ||
+    lower.includes('khớp gối') ||
+    lower.includes('dây chằng chéo') ||
+    lower.includes('sụn chêm') ||
+    lower.includes('fibular collateral') ||
+    lower.includes('tibial collateral')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_knee_joint_ligaments');
+  }
+
+  // 5. Gastrointestinal Tract (Stomach, Duodenum, Appendix, Colon)
+  if (
+    lower.includes('stomach') ||
+    lower.includes('gastric') ||
+    lower.includes('duodenum') ||
+    lower.includes('appendix') ||
+    lower.includes('append') ||
+    lower.includes('colon') ||
+    lower.includes('cecum') ||
+    lower.includes('rectum') ||
+    lower.includes('dạ dày') ||
+    lower.includes('tá tràng') ||
+    lower.includes('ruột thừa') ||
+    lower.includes('đại tràng')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_gastrointestinal_tract');
+  }
+
   return null;
 }
+

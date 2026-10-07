@@ -416,6 +416,32 @@ export function getAnatomicalCompanions(partId) {
   if (lower.includes('urinary bladder') || lower.includes('bàng quang')) {
     return ['Ureter.l', 'Ureter.r', 'Prostate', 'Urethra'];
   }
+  // Knee complex: ACL, PCL, Meniscus must bring along opposing cruciate, menisci, and articular bone ends
+  if (lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('patellar ligament')) {
+    const isLeft = lower.includes('.l') || lower.includes('left');
+    const side = isLeft ? '.l' : '.r';
+    return [
+      `Anterior cruciate ligament${side}`,
+      `Posterior cruciate ligament${side}`,
+      `Medial meniscus${side}`,
+      `Lateral meniscus${side}`,
+      `Femur${side}`,
+      `Tibia${side}`,
+      `Patella${side}`,
+      'Anterior cruciate ligament',
+      'Posterior cruciate ligament',
+      'Medial meniscus',
+      'Lateral meniscus'
+    ];
+  }
+  // Gastrointestinal tract: Stomach brings Duodenum, Liver, and Colon context
+  if (lower === 'stomach' || lower.includes('dạ dày') || lower.includes('gaster')) {
+    return ['Duodenum', 'Liver', 'Pancreas', 'Transverse colon'];
+  }
+  // Appendix brings Manh tràng (Cecum) and Ascending colon
+  if (lower.includes('appendix') || lower.includes('ruột thừa')) {
+    return ['Cecum', 'Ascending colon', 'Ileum', 'Vermiform appendix'];
+  }
   return [];
 }
 
