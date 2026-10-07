@@ -82,7 +82,7 @@ export function initAtlasHub(viewer) {
                   <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Đa phương tiện</span>
+              <span class="vb-tab-label">Media</span>
             </button>
             <button type="button" class="vb-tab-btn" data-tab="quizzes" id="tabBtnQuizzes">
               <div class="vb-tab-icon">
@@ -100,7 +100,7 @@ export function initAtlasHub(viewer) {
                   <polygon points="10 7 11 9 13.5 9.5 11.7 11 12.2 13.5 10 12.2 7.8 13.5 8.3 11 6.5 9.5 9 9" fill="currentColor"/>
                 </svg>
               </div>
-              <span class="vb-tab-label">Thư viện của tôi</span>
+              <span class="vb-tab-label">Thư viện</span>
             </button>
           </div>
           <button type="button" class="vb-topbar-close" id="btnAtlasHubClose" title="Quay lại mô hình 3D (Đóng)">&times;</button>
@@ -788,7 +788,7 @@ function renderMediaTab(container, viewer) {
   let html = `
     <div class="media-shelf-topbar">
       <div class="media-shelf-info">
-        <span class="media-shelf-badge">🎬 12 Chuyên Đề Hoạt Ảnh Lâm Sàng Atlas</span>
+        <span class="media-shelf-badge">🎬 12 Chuyên đề Hoạt ảnh</span>
       </div>
       <button type="button" class="btn-media-add-new" id="btnMediaAddNewVideo" title="Thêm video mới">
         <span>➕ Thêm Video</span>

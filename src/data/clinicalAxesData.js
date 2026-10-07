@@ -80,7 +80,7 @@ export const CLINICAL_AXES = [
 
   {
     id: 'axis_hepatobiliary_pancreas',
-    titleVi: 'Hệ Gan – Mật – Tụy & Tuyến Tiêu Hóa',
+    titleVi: 'Hệ Gan – Mật – Tụy',
     latin: 'Systema hepatobiliare et pancreas',
     category: 'Tiêu hóa – Gan mật – Nội tiết',
     badge: 'Ngã Ba Dịch Tiêu Hóa',

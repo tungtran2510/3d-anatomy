@@ -1156,10 +1156,10 @@ export function renderNotesList(viewer) {
   const notes = getAllNotes();
   if (!notes || notes.length === 0) {
     container.innerHTML = `
-      <div style="padding: 24px 16px; text-align: center; color: #8b949e;">
-        <div style="font-size: 32px; margin-bottom: 8px;">📝</div>
-        <p style="font-weight: 600; color: #c9d1d9; font-size: 13px;">Chưa có ghi chú nào</p>
-        <p style="font-size: 11px; margin-top: 4px;">Hãy chọn cấu trúc bất kỳ trên mô hình 3D và viết ghi chú học tập.</p>
+      <div class="list-empty-state">
+        <span class="empty-icon">📝</span>
+        <p>Chưa có ghi chú nào</p>
+        <span class="hint">Hãy chọn cấu trúc bất kỳ trên mô hình 3D và viết ghi chú học tập</span>
       </div>
     `;
     return;

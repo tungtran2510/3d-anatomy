@@ -1829,9 +1829,9 @@ body.theme-dark .control-btn {
     position: fixed;
     top: var(--header-height);
     bottom: 0;
-    width: 66vw;
-    max-width: 270px;
-    min-width: 230px;
+    width: 84vw;
+    max-width: 330px;
+    min-width: 280px;
     z-index: 200;
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
@@ -1949,9 +1949,9 @@ body.theme-dark .control-btn {
   }
 
   .sidebar {
-    width: 75vw;
-    max-width: 275px;
-    min-width: 240px;
+    width: 85vw;
+    max-width: 330px;
+    min-width: 280px;
   }
 
   .sidebar-header {
@@ -1961,12 +1961,19 @@ body.theme-dark .control-btn {
 
   .sidebar-tabs {
     gap: 4px;
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   .sidebar-tab {
-    padding: 5px 8px;
-    font-size: 11px;
+    padding: 5px 9px;
+    font-size: 11.5px;
     border-radius: 6px;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .sidebar-content {
@@ -6650,12 +6657,20 @@ body.theme-dark .step-nav-btn.prev {
   margin: 0;
   font-size: 13px;
   font-weight: 700;
+  color: #0f172a;
+}
+[data-theme="dark"] .roadmap-section-title,
+body.theme-dark .roadmap-section-title {
   color: #f0f6fc;
 }
 
 .roadmap-section-desc {
   margin: 2px 0 0;
   font-size: 11px;
+  color: #64748b;
+}
+[data-theme="dark"] .roadmap-section-desc,
+body.theme-dark .roadmap-section-desc {
   color: #8b949e;
 }
 
@@ -6709,10 +6724,17 @@ body.theme-dark .step-nav-btn.prev {
   justify-content: space-between;
   align-items: center;
   padding: 8px 10px;
-  background: rgba(22, 27, 34, 0.85);
-  border: 1px solid rgba(248, 81, 73, 0.3);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   gap: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .weak-item-card,
+body.theme-dark .weak-item-card {
+  background: rgba(22, 27, 34, 0.85);
+  border: 1px solid rgba(248, 81, 73, 0.3);
 }
 
 .weak-item-card.mastered {
@@ -6734,6 +6756,11 @@ body.theme-dark .step-nav-btn.prev {
 .weak-name {
   font-size: 12px;
   font-weight: 600;
+  color: #0f172a;
+}
+
+[data-theme="dark"] .weak-name,
+body.theme-dark .weak-name {
   color: #f0f6fc;
 }
 
@@ -6745,11 +6772,23 @@ body.theme-dark .step-nav-btn.prev {
 }
 
 .weak-badge-score.warning {
+  background: rgba(248, 81, 73, 0.15);
+  color: #dc2626;
+}
+
+[data-theme="dark"] .weak-badge-score.warning,
+body.theme-dark .weak-badge-score.warning {
   background: rgba(248, 81, 73, 0.2);
   color: #ff7b72;
 }
 
 .weak-badge-score.good {
+  background: rgba(46, 160, 67, 0.15);
+  color: #16a34a;
+}
+
+[data-theme="dark"] .weak-badge-score.good,
+body.theme-dark .weak-badge-score.good {
   background: rgba(46, 160, 67, 0.2);
   color: #3fb950;
 }
@@ -6757,8 +6796,13 @@ body.theme-dark .step-nav-btn.prev {
 .weak-hint {
   margin: 3px 0 0;
   font-size: 10.5px;
-  color: #8b949e;
+  color: #64748b;
   line-height: 1.3;
+}
+
+[data-theme="dark"] .weak-hint,
+body.theme-dark .weak-hint {
+  color: #8b949e;
 }
 
 .weak-actions {
@@ -9595,7 +9639,8 @@ body.theme-dark .vb-tab-btn {
 .vb-tab-label {
   font-size: 11px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .vb-topbar-close {
@@ -9626,6 +9671,29 @@ body.theme-dark .vb-topbar-close {
 body.theme-dark .vb-topbar-close:hover {
   color: #f1f5f9;
   background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 480px) {
+  .vb-tab-btn {
+    padding: 3px 1px;
+    gap: 2px;
+  }
+  .vb-tab-label {
+    font-size: 10px;
+    letter-spacing: -0.2px;
+  }
+  .vb-tab-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .vb-tab-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+  .vb-topbar-close {
+    width: 36px;
+    font-size: 20px;
+  }
 }
 
 /* 2. SUB-CATEGORY BAR */
@@ -10096,12 +10164,14 @@ body.theme-dark .vb-bottom-item {
   align-items: center;
   justify-content: space-between;
   padding: 4px 6px;
+  gap: 8px;
 }
 
 .media-shelf-badge {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   color: #1e3a8a;
+  white-space: nowrap;
 }
 
 [data-theme="dark"] .media-shelf-badge,
@@ -10118,6 +10188,8 @@ body.theme-dark .media-shelf-badge {
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 [data-theme="dark"] .btn-media-add-new,
