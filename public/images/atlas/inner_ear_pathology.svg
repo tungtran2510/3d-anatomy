@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071326"/>
+      <stop offset="50%" stop-color="#0b2559"/>
+      <stop offset="100%" stop-color="#0f2b5c"/>
+    </linearGradient>
+    <linearGradient id="stage0Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="stage1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="stage2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9a3412"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="stage3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#881337"/>
+      <stop offset="100%" stop-color="#be123c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="360" fill="url(#bgNavy)" rx="12"/>
+  <rect width="596" height="356" x="2" y="2" fill="none" stroke="#1e40af" stroke-width="1.5" stroke-opacity="0.4" rx="10"/>
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 20)">
+    <rect width="430" height="28" rx="6" fill="#0b2559" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="16" cy="14" r="5" fill="#facc15"/>
+    <text x="30" y="19" fill="#e8f0fe" font-size="13" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">4 CẤP ĐỘ TIẾN TRIỂN BỆNH LÝ TAI &amp; TIỀN ĐÌNH THĂNG BẰNG</text>
+  </g>
+
+  <!-- 4 Columns for 4 Stages -->
+
+  <!-- CẤP 0: BÌNH THƯỜNG -->
+  <g transform="translate(24, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage0Grad)"/>
+    <text x="12" y="20" fill="#ecfdf5" font-size="11" font-weight="bold">CẤP 0: Bình thường</text>
+
+    <!-- Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Intact Pearly White Eardrum with Light Cone -->
+      <circle cx="50" cy="40" r="35" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+      <ellipse cx="50" cy="40" rx="28" ry="32" fill="#334155" opacity="0.6"/>
+      <!-- Malleus handle shadow -->
+      <line x1="50" y1="20" x2="52" y2="45" stroke="#f1f5f9" stroke-width="2.5"/>
+      <!-- Light cone (Nón sáng góc trước-dưới) -->
+      <polygon points="52,45 68,62 58,66" fill="#fef08a" opacity="0.9"/>
+      <text x="15" y="90" fill="#34d399" font-size="8.5" font-weight="bold">Màng nhĩ sáng bóng</text>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#34d399" font-size="9.5" font-weight="bold">Thính lực &amp; Thăng bằng</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Ngưỡng nghe: 0-20 dB</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Sỏi tai nằm cố định</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Vòi Eustache thông thoáng</text>
+    <text x="10" y="235" fill="#10b981" font-size="9" font-weight="bold">✓ Đi đứng vững vàng</text>
+  </g>
+
+  <!-- CẤP 1: VIÊM TAI GIỮA & Ứ DỊCH -->
+  <g transform="translate(164, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage1Grad)"/>
+    <text x="12" y="20" fill="#fef3c7" font-size="11" font-weight="bold">CẤP 1: Viêm tai giữa</text>
+
+    <!-- Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Retracted & Erythematous Eardrum with fluid bubbles -->
+      <circle cx="50" cy="40" r="35" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+      <ellipse cx="50" cy="40" rx="28" ry="32" fill="#78350f" opacity="0.7"/>
+      <!-- Lost light cone, bulging fluid line -->
+      <path d="M 25 45 Q 50 55 75 45" stroke="#fde047" stroke-width="2"/>
+      <circle cx="40" cy="55" r="3" fill="#fef08a" opacity="0.8"/>
+      <circle cx="58" cy="58" r="4" fill="#fef08a" opacity="0.8"/>
+      <!-- Hyperemia blood vessels on drum -->
+      <path d="M 50 15 L 45 35 M 50 15 L 58 32" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="15" y="90" fill="#fbbf24" font-size="8.5" font-weight="bold">Ứ dịch sau màng nhĩ</text>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#fbbf24" font-size="9.5" font-weight="bold">Tắc vòi Eustache</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Hòm nhĩ áp lực âm</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Màng nhĩ lõm, ứ dịch</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Ù tai, nghe nghẹt như nút</text>
+    <text x="10" y="235" fill="#f59e0b" font-size="9" font-weight="bold">⚠️ Giảm thính lực nhẹ</text>
+  </g>
+
+  <!-- CẤP 2: CHÓNG MẶT KỊCH PHÁT (BPPV) & MENIERE -->
+  <g transform="translate(304, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#f97316" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage2Grad)"/>
+    <text x="12" y="20" fill="#fff7ed" font-size="11" font-weight="bold">CẤP 2: BPPV / Meniere</text>
+
+    <!-- Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Semicircular Canal with detached Otoliths floating inside -->
+      <circle cx="50" cy="40" r="35" fill="#1e293b" stroke="#f97316" stroke-width="1.5"/>
+      <!-- Curved canal -->
+      <path d="M 28 55 C 20 20, 65 15, 75 50" stroke="#06b6d4" stroke-width="6" fill="none"/>
+      <!-- Detached otolith particles inside canal -->
+      <circle cx="38" cy="28" r="2.5" fill="#fef08a"/>
+      <circle cx="48" cy="22" r="2.5" fill="#fef08a"/>
+      <circle cx="58" cy="26" r="2.5" fill="#fef08a"/>
+      <!-- Vortex spinning arrows (cảm giác xoay tròn quay cuồng) -->
+      <path d="M 45 45 A 10 10 0 1 1 55 55" stroke="#f97316" stroke-width="2" fill="none"/>
+      <text x="10" y="90" fill="#fb923c" font-size="8.5" font-weight="bold">Sỏi tai trôi lạc chỗ</text>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#fb923c" font-size="9.5" font-weight="bold">Lạc chỗ thạch nhĩ</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Rơi vào ống bán khuyên</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Chóng mặt dữ dội khi xoay</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Giật nhãn cầu Nystagmus</text>
+    <text x="10" y="235" fill="#f97316" font-size="9" font-weight="bold">⚠️ Buồn nôn, mất thăng bằng</text>
+  </g>
+
+  <!-- CẤP 3: THỦNG MÀNG NHĨ & ĐIẾC TIẾP NHẬN -->
+  <g transform="translate(444, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage3Grad)"/>
+    <text x="10" y="20" fill="#fff1f2" font-size="11" font-weight="bold">CẤP 3: Thủng / Điếc</text>
+
+    <!-- Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Perforated eardrum with irregular ragged hole -->
+      <circle cx="50" cy="40" r="35" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+      <ellipse cx="50" cy="40" rx="28" ry="32" fill="#881337" opacity="0.8"/>
+      <!-- Central/Subtotal Perforation Hole (Lỗ thủng đen giữa màng nhĩ) -->
+      <ellipse cx="52" cy="46" rx="14" ry="12" fill="#020617" stroke="#dc2626" stroke-width="2"/>
+      <text x="44" y="50" fill="#f87171" font-size="11">⚡</text>
+      <!-- Ragged edge with purulent discharge trace -->
+      <path d="M 40 40 Q 50 35 62 42" stroke="#facc15" stroke-width="1.5"/>
+      <text x="10" y="90" fill="#f87171" font-size="8.5" font-weight="bold">Thủng màng nhĩ rộng</text>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#f87171" font-size="9.5" font-weight="bold">Mất chức năng thính giác</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Mủ tai tái phát mạn tính</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Thoái hóa tế bào lông ốc tai</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Giảm thính lực &gt; 70 dB</text>
+    <text x="10" y="235" fill="#ef4444" font-size="9" font-weight="bold">🚨 ĐIẾC TIẾP NHẬN VĨNH VIỄN</text>
+  </g>
+
+  <!-- Bottom Medical Note -->
+  <g transform="translate(24, 322)">
+    <rect width="552" height="26" rx="5" fill="#0b2559" stroke="#1e40af" stroke-width="1"/>
+    <text x="12" y="17" fill="#93c5fd" font-size="11">🔬 Điều trị BPPV: Nghiệm pháp xoay đầu Epley đưa sỏi tai về xoang nang • Vá nhĩ (Tympanoplasty) đóng lỗ thủng</text>
+  </g>
+</svg>

@@ -251,53 +251,51 @@ export const ANATOMY_CONCEPTS = [
       'polyp', 'loét dạ dày', 'loet da day', 'h. pylori', 'trĩ', 'tri', 'mcburney',
       'stomach', 'duodenum', 'appendix', 'colon'
     ],
-    titleVi: 'Hệ Ống Tiêu Hóa & Ổ Bụng',
-    latin: 'Tractus gastrointestinalis (TA2: 2850)',
-    subtitle: 'Chuỗi tiêu hóa liên tục chuyển hóa dinh dưỡng & đào thải cặn bã',
-    thumbnail: '/images/atlas/gi_tract_anatomy.svg',
+    titleVi: 'Hệ Tiêu Hóa & Vi Thể Dạ Dày',
+    latin: 'Gaster / Tractus gastrointestinalis (TA2: 2890)',
+    subtitle: 'Mô học 4 lớp thành dạ dày, tiêu hóa acid HCl và tiến triển loét H.pylori',
+    thumbnail: '/images/atlas/stomach_anatomy_macro.svg',
     system: 'visceral',
     primaryPartId: 'Stomach',
     subunits: [
-      { label: '🍲 Dạ dày (Stomach)', partId: 'Stomach', note: 'Chứa 1.5–2L, nhào trộn acid HCl pH 1.5–2 diệt khuẩn & tiêu hóa đạm' },
-      { label: '🌀 Hành tá tràng (Duodenum)', partId: 'Duodenum', note: 'Cửa ngõ trung hòa acid dịch vị & hấp thu dưỡng chất đầu tiên' },
-      { label: '⚡ Ruột thừa (Appendix)', partId: 'Vermiform appendix', note: 'Túi lympho miễn dịch manh tràng, vị trí viêm cấp hay gặp nhất' },
-      { label: '⭕ Khung đại tràng (Colon)', partId: 'Transverse colon', note: 'Hấp thu nước, tái hấp thu điện giải và tạo khuôn phân' }
+      { label: '🥣 Dạ dày', partId: 'Stomach', note: 'Dung tích 1.0–1.5L, nhào trộn acid HCl pH 1.5–2 diệt khuẩn & tiêu hóa đạm' },
+      { label: '🟡 Tá tràng', partId: 'Duodenum', note: 'Đoạn đầu ruột non uốn hình chữ C tiếp nhận mật và men tụy trung hòa acid' }
     ],
     slides: [
       {
-        id: 'gi_tract_anatomy',
+        id: 'stomach_macro',
         title: 'Cấu tạo',
-        badge: 'Chuỗi liên tục',
-        image: '/images/atlas/gi_tract_anatomy.svg',
-        caption: 'Toàn cảnh ống tiêu hóa từ thực quản qua dạ dày, tá tràng đến ruột thừa.'
+        badge: 'Đại thể Dạ dày & Tá tràng',
+        image: '/images/atlas/stomach_anatomy_macro.svg',
+        caption: 'Toàn cảnh giải phẫu từ thực quản qua tâm vị, đáy vị, thân vị, hang môn vị đến tá tràng.'
       },
       {
-        id: 'gi_endoscopy_physiology',
+        id: 'gastric_wall',
         title: 'Sinh lý',
-        badge: 'Hàng rào bảo vệ',
-        image: '/images/atlas/gi_endoscopy_physiology.svg',
-        caption: 'Màng nhầy Bicarbonate kiềm pH 7.0 bảo vệ niêm mạc khỏi acid pH 1.5.'
+        badge: 'Mô học 4 Lớp Thành',
+        image: '/images/atlas/gastric_wall_histology.svg',
+        caption: 'Vi thể 4 lớp: Niêm mạc (tế bào viền tiết HCl), Dưới niêm, Lớp cơ 3 chiều và Thanh mạc.'
       },
       {
-        id: 'gi_pathology_stages',
+        id: 'gastric_ulcer',
         title: '4 Cấp độ',
-        badge: 'Tiến triển bệnh học',
-        image: '/images/atlas/gi_pathology_stages.svg',
-        caption: 'Từ viêm trợt niêm mạc đến loét thủng dạ dày & viêm ruột thừa vỡ mủ.'
+        badge: 'Viêm loét & H.pylori',
+        image: '/images/atlas/gastric_ulcer_progression.svg',
+        caption: 'Tiến triển từ viêm trợt niêm mạc, nhiễm khuẩn H.pylori đến loét sâu và biến chứng thủng xuất huyết.'
       }
     ],
     simulator: {
-      title: '🔬 BỆNH LÝ TIÊU HÓA:',
-      ticks: ['Bình thường', 'Viêm trợt', 'Loét sâu', 'Biến chứng cấp'],
+      title: '🥣 BỆNH LÝ VIÊM LOÉT DẠ DÀY & H.PYLORI:',
+      ticks: ['Bình thường', 'Viêm trợt', 'Loét sâu', 'Thủng & Máu'],
       stages: [
-        { level: 'Cấp 0: Bình thường', desc: 'Hàng rào nhầy bảo vệ nguyên vẹn, niêm mạc hồng hào trơn bóng.' },
-        { level: 'Cấp 1: Viêm trợt niêm mạc', desc: 'Trợt lớp biểu mô bề mặt, xung huyết phù nề, ợ hơi nóng rát.' },
-        { level: 'Cấp 2: Loét sâu thành cơ', desc: 'Ổ loét ăn sâu lớp cơ niêm, đau quặn khi đói, rỉ máu mao mạch.' },
-        { level: 'Cấp 3: Biến chứng cấp tính', desc: 'Thủng tạng rỗng / Viêm ruột thừa vỡ mủ, bụng cứng như gỗ cấp cứu.' }
+        { level: 'Cấp 0: Bình thường', desc: 'Hàng rào nhầy Mucin dày nguyên vẹn, pH acid 1.5-2.0 được đệm tốt, không HP.' },
+        { level: 'Cấp 1: Viêm trợt niêm mạc', desc: 'H.pylori tiết Urease phá vỡ lớp nhầy, xung huyết đỏ rực, ợ hơi nóng rát.' },
+        { level: 'Cấp 2: Loét sâu thành cơ', desc: 'Ổ loét ăn sâu lớp dưới niêm và cơ, đau cồn cào lúc đói/no, đáy phủ giả mạc.' },
+        { level: 'Cấp 3: Thủng & Xuất huyết', desc: 'Đứt động mạch vị, nôn ra máu, đi ngoài phân đen, thủng tạng rỗng cấp cứu.' }
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cơ Chế Loét Dạ Dày Tá Tràng & Viêm Ruột Thừa Cấp',
+      title: 'Mô phỏng 3D: Cấu Tạo Dạ Dày & Cơ Chế Loét Dạ Dày Tá Tràng',
       url: 'https://www.youtube.com/embed/z13P_zZvZ4U',
       duration: '0:58'
     }
@@ -538,6 +536,67 @@ export const ANATOMY_CONCEPTS = [
       url: 'https://www.youtube.com/embed/rP6eX1Y7e8o',
       duration: '1:12'
     }
+  },
+  {
+    id: 'concept_inner_ear_vestibular',
+    keywords: [
+      'tai', 'ear', 'tai trong', 'tai giữa', 'tai ngoai', 'màng nhĩ', 'mang nhi',
+      'tympanic', 'xương búa', 'xuong bua', 'malleus', 'xương đe', 'xuong de',
+      'incus', 'xương bàn đạp', 'xuong ban dap', 'stapes', 'ốc tai', 'oc tai',
+      'cochlea', 'tiền đình', 'tien dinh', 'vestibular', 'bán khuyên', 'ban khuyen',
+      'semicircular', 'chóng mặt', 'chong mat', 'bppv', 'meniere', 'ù tai', 'u tai',
+      'thủng màng nhĩ', 'điếc', 'thính lực'
+    ],
+    titleVi: 'Hệ Thống Thính Giác & Tiền Đình Tai Trong',
+    latin: 'Auris interna / Organum vestibulocochleare (TA2: 5740)',
+    subtitle: 'Chuỗi xương con khuếch đại 22 lần âm thanh & hệ thống 3 ống bán khuyên thăng bằng',
+    thumbnail: '/images/atlas/ear_anatomy_macro.svg',
+    system: 'skeletal',
+    primaryPartId: 'Malleus.r',
+    subunits: [
+      { label: '🦴 Xương Búa', partId: 'Malleus.r', note: 'Cán búa gắn chặt vào màng nhĩ truyền rung động âm thanh' },
+      { label: '🦴 Xương Đe', partId: 'Incus.r', note: 'Khớp nối đòn bẩy trung gian giữa xương búa và xương bàn đạp' },
+      { label: '🦴 Xương Bàn Đạp', partId: 'Stapes.r', note: 'Xương nhỏ nhất cơ thể gõ vào cửa sổ bầu dục ốc tai' },
+      { label: '🥁 Màng Nhĩ', partId: 'Tympanic membrane.r', note: 'Màng mỏng hình nón ngăn cách tai ngoài và hòm nhĩ' }
+    ],
+    slides: [
+      {
+        id: 'ear_anatomy',
+        title: 'Cấu tạo',
+        badge: 'Tai Ngoài - Giữa - Trong',
+        image: '/images/atlas/ear_anatomy_macro.svg',
+        caption: 'Toàn cảnh vành tai, ống tai ngoài, màng nhĩ, chuỗi xương con, vòi Eustache và ốc tai.'
+      },
+      {
+        id: 'cochlea_vestibular',
+        title: 'Sinh lý',
+        badge: 'Corti & Ống Bán Khuyên',
+        image: '/images/atlas/cochlea_vestibular_micro.svg',
+        caption: 'Vi thể cơ quan Corti chuyển sóng âm thành xung điện và màng thạch nhĩ cảm nhận trọng lực.'
+      },
+      {
+        id: 'ear_pathology',
+        title: '4 Cấp độ',
+        badge: 'Bệnh lý Tai & Tiền đình',
+        image: '/images/atlas/inner_ear_pathology.svg',
+        caption: 'Tiến triển từ viêm tai giữa ứ dịch, chóng mặt kịch phát BPPV đến thủng nhĩ và điếc tiếp nhận.'
+      }
+    ],
+    simulator: {
+      title: '👂 BỆNH LÝ TAI & TIỀN ĐÌNH THĂNG BẰNG:',
+      ticks: ['Bình thường', 'Viêm tai giữa', 'BPPV/Meniere', 'Thủng & Điếc'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Màng nhĩ sáng bóng, sỏi tai nằm cố định trong xoang nang, thính lực 0-20 dB.' },
+        { level: 'Cấp 1: Viêm tai giữa', desc: 'Tắc vòi Eustache, hòm nhĩ áp lực âm, ứ dịch sau màng nhĩ, ù tai nghẹt mũi.' },
+        { level: 'Cấp 2: BPPV / Meniere', desc: 'Sỏi tai rơi vào ống bán khuyên, chóng mặt quay cuồng dữ dội khi trở mình, giật nhãn cầu.' },
+        { level: 'Cấp 3: Thủng màng nhĩ / Điếc', desc: 'Thủng màng nhĩ mạn tính hoặc thoái hóa tế bào lông ốc tai vĩnh viễn, điếc sâu >70 dB.' }
+      ]
+    },
+    video: {
+      title: 'Mô phỏng 3D: Cấu Tạo Tai & Cơ Chế Hoạt Động Của Tiền Đình Thăng Bằng',
+      url: 'https://www.youtube.com/embed/flIAxGsV1q0',
+      duration: '1:15'
+    }
   }
 ];
 
@@ -696,6 +755,25 @@ export function getVisualDeckForPart(partId) {
     lower.includes('cánh tay')
   ) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_brachial_plexus');
+  }
+
+  // 10. Inner Ear & Vestibular System (Malleus, Incus, Stapes, Tympanic, Cochlea, Ear)
+  if (
+    lower.includes('malleus') ||
+    lower.includes('incus') ||
+    lower.includes('stapes') ||
+    lower.includes('tympanic') ||
+    lower.includes('cochle') ||
+    lower.includes('vestibul') ||
+    lower.includes('auric') ||
+    lower.includes('tai') ||
+    lower.includes('màng nhĩ') ||
+    lower.includes('xương búa') ||
+    lower.includes('xương đe') ||
+    lower.includes('xương bàn đạp') ||
+    (lower.includes('ear') && !lower.includes('bear') && !lower.includes('clear'))
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_inner_ear_vestibular');
   }
 
   return null;

@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071326"/>
+      <stop offset="50%" stop-color="#0b2559"/>
+      <stop offset="100%" stop-color="#0f2b5c"/>
+    </linearGradient>
+    <linearGradient id="stomachGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="35%" stop-color="#e11d48"/>
+      <stop offset="70%" stop-color="#be123c"/>
+      <stop offset="100%" stop-color="#9f1239"/>
+    </linearGradient>
+    <linearGradient id="esophagusGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <linearGradient id="duodenumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="360" fill="url(#bgNavy)" rx="12"/>
+  <rect width="596" height="356" x="2" y="2" fill="none" stroke="#1e40af" stroke-width="1.5" stroke-opacity="0.4" rx="10"/>
+
+  <!-- Grid lines -->
+  <path d="M0 60 H600 M0 120 H600 M0 180 H600 M0 240 H600 M0 300 H600" stroke="#1e3a8a" stroke-width="0.5" stroke-opacity="0.2"/>
+  <path d="M100 0 V360 M200 0 V360 M300 0 V360 M400 0 V360 M500 0 V360" stroke="#1e3a8a" stroke-width="0.5" stroke-opacity="0.2"/>
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 20)">
+    <rect width="260" height="28" rx="6" fill="#0b2559" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="16" cy="14" r="5" fill="#f87171"/>
+    <text x="30" y="19" fill="#e8f0fe" font-size="13" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">GIẢI PHẪU ĐẠI THỂ DẠ DÀY</text>
+    <text x="210" y="18" fill="#38bdf8" font-size="10" font-family="monospace">TA2: 2890</text>
+  </g>
+
+  <!-- Esophagus (Thực quản) -->
+  <path d="M 235 45 C 238 65, 238 85, 240 105 L 260 105 C 258 85, 258 65, 255 45 Z" fill="url(#esophagusGrad)" stroke="#f43f5e" stroke-width="1.5"/>
+  <path d="M 238 75 Q 248 80 258 75" stroke="#ffe4e6" stroke-width="1" fill="none" opacity="0.6"/>
+
+  <!-- Stomach body contour (Dạ dày) -->
+  <!-- Cardia -> Fundus -> Greater curvature -> Pylorus -> Lesser curvature -->
+  <path d="
+    M 240 105 
+    C 215 95, 175 95, 150 125
+    C 120 160, 125 220, 155 265
+    C 185 305, 255 315, 310 295
+    C 350 280, 375 255, 385 225
+    L 375 210
+    C 345 220, 315 215, 285 205
+    C 255 190, 245 160, 250 135
+    C 252 120, 258 110, 260 105
+    Z
+  " fill="url(#stomachGrad)" stroke="#fda4af" stroke-width="2" filter="url(#glow)"/>
+
+  <!-- Rugae (Nếp gấp niêm mạc dạ dày phác thảo) -->
+  <path d="M 165 155 Q 180 190 190 235" stroke="#fecdd3" stroke-width="1.5" stroke-dasharray="3,2" fill="none" opacity="0.6"/>
+  <path d="M 195 145 Q 215 195 230 245" stroke="#fecdd3" stroke-width="1.5" stroke-dasharray="3,2" fill="none" opacity="0.6"/>
+  <path d="M 225 150 Q 245 190 270 230" stroke="#fecdd3" stroke-width="1.5" stroke-dasharray="3,2" fill="none" opacity="0.6"/>
+  <path d="M 280 215 Q 315 235 345 230" stroke="#fecdd3" stroke-width="1.5" stroke-dasharray="3,2" fill="none" opacity="0.6"/>
+
+  <!-- Duodenum (Tá tràng hình chữ C) -->
+  <path d="
+    M 385 225
+    C 410 220, 425 235, 425 255
+    C 425 275, 400 295, 370 300
+    L 365 285
+    C 385 280, 405 270, 405 255
+    C 405 245, 395 235, 375 235
+    Z
+  " fill="url(#duodenumGrad)" stroke="#fde68a" stroke-width="1.5"/>
+
+  <!-- Anatomical Landmark Markers & Pointer Lines -->
+  <!-- 1. Thực quản & Tâm vị (Cardia) -->
+  <line x1="248" y1="95" x2="160" y2="70" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="248" cy="95" r="3" fill="#38bdf8"/>
+  <g transform="translate(60, 55)">
+    <rect width="95" height="22" rx="4" fill="#0b2559" stroke="#38bdf8" stroke-width="1"/>
+    <text x="8" y="15" fill="#38bdf8" font-size="11" font-weight="bold">1. Tâm vị (Cardia)</text>
+  </g>
+
+  <!-- 2. Đáy vị (Fundus) -->
+  <line x1="165" y1="120" x2="80" y2="135" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="165" cy="120" r="3" fill="#38bdf8"/>
+  <g transform="translate(10, 125)">
+    <rect width="85" height="22" rx="4" fill="#0b2559" stroke="#38bdf8" stroke-width="1"/>
+    <text x="8" y="15" fill="#e8f0fe" font-size="11" font-weight="bold">2. Đáy vị (Fundus)</text>
+  </g>
+
+  <!-- 3. Bờ cong lớn (Greater curvature) -->
+  <line x1="150" y1="230" x2="60" y2="230" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="150" cy="230" r="3" fill="#f43f5e"/>
+  <g transform="translate(10, 220)">
+    <rect width="105" height="22" rx="4" fill="#0b2559" stroke="#f43f5e" stroke-width="1"/>
+    <text x="8" y="15" fill="#fecdd3" font-size="11" font-weight="bold">3. Bờ cong lớn</text>
+  </g>
+
+  <!-- 4. Thân vị (Body) -->
+  <line x1="230" y1="180" x2="310" y2="140" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="230" cy="180" r="3" fill="#38bdf8"/>
+  <g transform="translate(315, 130)">
+    <rect width="85" height="22" rx="4" fill="#0b2559" stroke="#38bdf8" stroke-width="1"/>
+    <text x="8" y="15" fill="#e8f0fe" font-size="11" font-weight="bold">4. Thân vị (Corpus)</text>
+  </g>
+
+  <!-- 5. Bờ cong nhỏ (Lesser curvature) -->
+  <line x1="260" y1="175" x2="330" y2="185" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="260" cy="175" r="3" fill="#f43f5e"/>
+  <g transform="translate(335, 175)">
+    <rect width="95" height="22" rx="4" fill="#0b2559" stroke="#f43f5e" stroke-width="1"/>
+    <text x="8" y="15" fill="#fecdd3" font-size="11" font-weight="bold">5. Bờ cong nhỏ</text>
+  </g>
+
+  <!-- 6. Hang môn vị (Antrum) & Môn vị (Pylorus) -->
+  <line x1="340" y1="250" x2="430" y2="225" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="340" cy="250" r="3" fill="#38bdf8"/>
+  <g transform="translate(435, 215)">
+    <rect width="135" height="22" rx="4" fill="#0b2559" stroke="#38bdf8" stroke-width="1"/>
+    <text x="8" y="15" fill="#38bdf8" font-size="11" font-weight="bold">6. Hang vị &amp; Môn vị</text>
+  </g>
+
+  <!-- 7. Tá tràng (Duodenum) -->
+  <line x1="410" y1="270" x2="460" y2="290" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="2,2"/>
+  <circle cx="410" cy="270" r="3" fill="#fbbf24"/>
+  <g transform="translate(465, 280)">
+    <rect width="115" height="22" rx="4" fill="#0b2559" stroke="#fbbf24" stroke-width="1"/>
+    <text x="8" y="15" fill="#fde68a" font-size="11" font-weight="bold">7. Tá tràng (Ruột non)</text>
+  </g>
+
+  <!-- Info footer callout -->
+  <g transform="translate(24, 322)">
+    <rect width="552" height="26" rx="5" fill="#0b2559" stroke="#1e40af" stroke-width="1"/>
+    <text x="12" y="17" fill="#93c5fd" font-size="11">💡 Dung tích: 1.0 – 1.5 Lít • Dịch vị: 2 – 3 Lít/ngày • pH Axit: 1.5 – 2.0 khử khuẩn và hoạt hóa Pepsinogen</text>
+  </g>
+</svg>

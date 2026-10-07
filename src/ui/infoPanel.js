@@ -976,7 +976,7 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
   } else if (deck.id === 'concept_knee_joint_ligaments') {
     headerTitle = `🦴 KHỚP GỐI & DÂY CHẰNG CHÉO`;
   } else if (deck.id === 'concept_gastrointestinal_tract') {
-    headerTitle = `🥣 HỆ TIÊU HÓA LIÊN TỤC`;
+    headerTitle = `🥣 HỆ TIÊU HÓA & VI THỂ DẠ DÀY`;
   } else if (deck.id === 'concept_cardiac_valves') {
     headerTitle = `🫀 TIM MẠCH & 4 BUỒNG TIM`;
   } else if (deck.id === 'concept_respiratory_alveoli') {
@@ -985,6 +985,8 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     headerTitle = `🩺 HỆ TIẾT NIỆU & CẦU THẬN`;
   } else if (deck.id === 'concept_brachial_plexus') {
     headerTitle = `⚡ ĐÁM RỐI THẦN KINH CÁNH TAY`;
+  } else if (deck.id === 'concept_inner_ear_vestibular') {
+    headerTitle = `👂 TAI TRONG & TIỀN ĐÌNH`;
   }
 
   container.innerHTML = `

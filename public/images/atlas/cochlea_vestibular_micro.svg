@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071326"/>
+      <stop offset="50%" stop-color="#0b2559"/>
+      <stop offset="100%" stop-color="#0f2b5c"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="360" fill="url(#bgNavy)" rx="12"/>
+  <rect width="596" height="356" x="2" y="2" fill="none" stroke="#1e40af" stroke-width="1.5" stroke-opacity="0.4" rx="10"/>
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 18)">
+    <rect width="360" height="28" rx="6" fill="#0b2559" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="16" cy="14" r="5" fill="#22d3ee"/>
+    <text x="30" y="19" fill="#e8f0fe" font-size="13" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">CƠ CHẾ VI THỂ THÍNH GIÁC &amp; THĂNG BẰNG</text>
+  </g>
+
+  <!-- Left Box: Cơ Quan Corti (Ốc Tai - Cảm Nhận Âm Thanh) -->
+  <g transform="translate(24, 56)">
+    <rect width="265" height="260" rx="8" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="1.5"/>
+    <rect width="265" height="30" rx="7" fill="#0b2559"/>
+    <text x="14" y="20" fill="#38bdf8" font-size="11.5" font-weight="bold">A. CƠ QUAN CORTI (Ốc Tai)</text>
+
+    <!-- Schematic Cross Section of Organ of Corti -->
+    <g transform="translate(15, 45)">
+      <!-- Basilar Membrane (Màng đáy) -->
+      <line x1="10" y1="110" x2="225" y2="110" stroke="#0284c7" stroke-width="3"/>
+      <text x="10" y="125" fill="#38bdf8" font-size="9" font-weight="bold">Màng đáy (Basilar Membrane)</text>
+
+      <!-- Inner hair cell (Tế bào lông trong) -->
+      <rect x="50" y="65" width="22" height="45" rx="3" fill="#fb7185"/>
+      <!-- Stereocilia (Lông rung chuyển động) -->
+      <line x1="55" y1="65" x2="52" y2="45" stroke="#f43f5e" stroke-width="1.8"/>
+      <line x1="60" y1="65" x2="60" y2="42" stroke="#f43f5e" stroke-width="1.8"/>
+      <line x1="65" y1="65" x2="68" y2="45" stroke="#f43f5e" stroke-width="1.8"/>
+      <text x="35" y="40" fill="#fecdd3" font-size="8.5">Lông rung</text>
+
+      <!-- Tectorial membrane (Màng mái che phủ phía trên) -->
+      <path d="M 30 40 C 70 30, 130 35, 175 48" stroke="#a78bfa" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <text x="110" y="32" fill="#c4b5fd" font-size="8.5">Màng mái</text>
+
+      <!-- Outer hair cells (3 hàng tế bào lông ngoài) -->
+      <rect x="100" y="70" width="16" height="40" rx="3" fill="#f43f5e" opacity="0.8"/>
+      <rect x="125" y="70" width="16" height="40" rx="3" fill="#f43f5e" opacity="0.8"/>
+      <rect x="150" y="70" width="16" height="40" rx="3" fill="#f43f5e" opacity="0.8"/>
+      <!-- Stereocilia for outer cells -->
+      <line x1="108" y1="70" x2="108" y2="52" stroke="#f43f5e" stroke-width="1.5"/>
+      <line x1="133" y1="70" x2="133" y2="52" stroke="#f43f5e" stroke-width="1.5"/>
+      <line x1="158" y1="70" x2="158" y2="52" stroke="#f43f5e" stroke-width="1.5"/>
+
+      <!-- Auditory nerve fibers leaving base -->
+      <path d="M 61 110 C 60 135, 100 145, 150 148" stroke="#facc15" stroke-width="2.5" stroke-dasharray="3,1"/>
+      <text x="145" y="142" fill="#fef08a" font-size="8.5">Sợi TK thính giác</text>
+    </g>
+
+    <!-- Explanatory note -->
+    <text x="12" y="210" fill="#93c5fd" font-size="9">• Sóng âm dội màng đáy làm uốn cong lông rung</text>
+    <text x="12" y="225" fill="#93c5fd" font-size="9">• Mở kênh K⁺ / Ca²⁺ khử cực phóng điện thế</text>
+    <text x="12" y="240" fill="#fde047" font-size="9" font-weight="bold">⚡ ~16,000 tế bào lông không thể tái tạo khi chết!</text>
+  </g>
+
+  <!-- Right Box: Tiền Đình & Thạch Nhĩ (Cảm Nhận Thăng Bằng) -->
+  <g transform="translate(310, 56)">
+    <rect width="265" height="260" rx="8" fill="url(#cardGrad)" stroke="#22d3ee" stroke-width="1.5"/>
+    <rect width="265" height="30" rx="7" fill="#0b2559"/>
+    <text x="14" y="20" fill="#22d3ee" font-size="11.5" font-weight="bold">B. HỆ THỐNG TIỀN ĐÌNH (Thăng Bằng)</text>
+
+    <!-- Schematic Ampulla & Otolith Matrix -->
+    <g transform="translate(15, 45)">
+      <!-- 1. Mào bóng (Ampulla & Cupula) xoay đầu -->
+      <rect width="110" height="90" rx="5" fill="#032541" stroke="#0891b2" stroke-width="1"/>
+      <text x="8" y="14" fill="#a5f3fc" font-size="8.5" font-weight="bold">Ống bán khuyên (Gia tốc xoay)</text>
+      <!-- Cupula gel structure -->
+      <path d="M 35 75 C 40 45, 70 45, 75 75 Z" fill="#06b6d4" opacity="0.6"/>
+      <path d="M 55 45 C 65 35, 75 40, 78 50" stroke="#facc15" stroke-width="2" stroke-linecap="round"/>
+      <text x="15" y="85" fill="#67e8f9" font-size="8">Mào bóng Cupula</text>
+
+      <!-- 2. Màng thạch nhĩ (Otolithic Membrane) gia tốc thẳng -->
+      <g transform="translate(120, 0)">
+        <rect width="115" height="90" rx="5" fill="#032541" stroke="#0891b2" stroke-width="1"/>
+        <text x="8" y="14" fill="#a5f3fc" font-size="8.5" font-weight="bold">Xoang nang (Gia tốc thẳng)</text>
+        <!-- Otolith stones (tinh thể sỏi tai CaCO3) -->
+        <rect x="15" y="25" width="85" height="15" rx="3" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+        <circle cx="25" cy="32" r="2.5" fill="#f8fafc"/>
+        <circle cx="38" cy="33" r="2.5" fill="#f8fafc"/>
+        <circle cx="50" cy="31" r="2.5" fill="#f8fafc"/>
+        <circle cx="65" cy="33" r="2.5" fill="#f8fafc"/>
+        <circle cx="80" cy="32" r="2.5" fill="#f8fafc"/>
+        <text x="15" y="47" fill="#f1f5f9" font-size="7.5">Màng sỏi tai (CaCO₃)</text>
+        <!-- Gel layer & hair cells underneath -->
+        <rect x="15" y="50" width="85" height="12" fill="#0e7490" opacity="0.7"/>
+        <line x1="25" y1="62" x2="25" y2="78" stroke="#f43f5e" stroke-width="1.5"/>
+        <line x1="45" y1="62" x2="45" y2="78" stroke="#f43f5e" stroke-width="1.5"/>
+        <line x1="65" y1="62" x2="65" y2="78" stroke="#f43f5e" stroke-width="1.5"/>
+        <line x1="85" y1="62" x2="85" y2="78" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="15" y="86" fill="#fda4af" font-size="7.5">Tế bào lông tiền đình</text>
+      </g>
+    </g>
+
+    <!-- Explanatory note -->
+    <text x="12" y="185" fill="#93c5fd" font-size="9">• 3 Ống bán khuyên: Nhận diện cử động gật, lắc, nghiêng</text>
+    <text x="12" y="200" fill="#93c5fd" font-size="9">• Xoang nang &amp; Cầu nang: Nhận diện đi thang máy, phanh xe</text>
+    <text x="12" y="215" fill="#fde047" font-size="9" font-weight="bold">⚠️ Sỏi tai bong lạc chỗ $\rightarrow$ Chóng mặt kịch phát (BPPV)!</text>
+    <text x="12" y="235" fill="#38bdf8" font-size="8.5">• Dây tiền đình dẫn truyền phối hợp nhãn cầu (Phản xạ VOR)</text>
+  </g>
+
+  <!-- Bottom Medical Note -->
+  <g transform="translate(24, 324)">
+    <rect width="552" height="24" rx="4" fill="#0b2559" stroke="#1e40af" stroke-width="1"/>
+    <text x="12" y="16" fill="#93c5fd" font-size="10.5">🔬 Phản xạ tiền đình - mắt (VOR) giúp mắt luôn nhìn cố định vào một điểm ngay cả khi đầu đang cử động lắc lư liên tục</text>
+  </g>
+</svg>

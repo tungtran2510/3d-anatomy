@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071326"/>
+      <stop offset="50%" stop-color="#0b2559"/>
+      <stop offset="100%" stop-color="#0f2b5c"/>
+    </linearGradient>
+    <linearGradient id="stage0Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="stage1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="stage2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9a3412"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="stage3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#881337"/>
+      <stop offset="100%" stop-color="#be123c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="360" fill="url(#bgNavy)" rx="12"/>
+  <rect width="596" height="356" x="2" y="2" fill="none" stroke="#1e40af" stroke-width="1.5" stroke-opacity="0.4" rx="10"/>
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 20)">
+    <rect width="400" height="28" rx="6" fill="#0b2559" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="16" cy="14" r="5" fill="#f43f5e"/>
+    <text x="30" y="19" fill="#e8f0fe" font-size="13" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">4 CẤP ĐỘ TIẾN TRIỂN VIÊM LOÉT DẠ DÀY &amp; H.PYLORI</text>
+  </g>
+
+  <!-- 4 Columns for 4 Stages -->
+
+  <!-- CẤP 0: BÌNH THƯỜNG -->
+  <g transform="translate(24, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage0Grad)"/>
+    <text x="12" y="20" fill="#ecfdf5" font-size="11" font-weight="bold">CẤP 0: Bình thường</text>
+
+    <!-- Cross Section Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Mucus gel layer -->
+      <rect width="100" height="15" fill="#6ee7b7" opacity="0.8" rx="3"/>
+      <text x="5" y="11" fill="#064e3b" font-size="8" font-weight="bold">Lớp nhầy đệm pH</text>
+      <!-- Mucosa -->
+      <rect y="18" width="100" height="35" fill="#fda4af" opacity="0.9" rx="3"/>
+      <text x="15" y="38" fill="#881337" font-size="9" font-weight="bold">Niêm mạc hồng</text>
+      <!-- Submucosa & Muscle -->
+      <rect y="56" width="100" height="35" fill="#be123c" opacity="0.8" rx="3"/>
+      <text x="25" y="76" fill="#ffe4e6" font-size="9">Lớp cơ khỏe</text>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#34d399" font-size="9.5" font-weight="bold">Chất nhầy Mucin dày</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Axit HCl không ngấm</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Tế bào tái tạo mỗi 3 ngày</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Không có vi khuẩn HP</text>
+    <text x="10" y="235" fill="#10b981" font-size="9" font-weight="bold">✓ Tiêu hóa êm dịu</text>
+  </g>
+
+  <!-- CẤP 1: VIÊM TRỢT NÔNG (H.pylori) -->
+  <g transform="translate(164, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage1Grad)"/>
+    <text x="12" y="20" fill="#fef3c7" font-size="11" font-weight="bold">CẤP 1: Viêm trợt</text>
+
+    <!-- Cross Section Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Eroded mucus -->
+      <path d="M 0 0 H 35 L 45 10 L 65 10 L 75 0 H 100 V 15 H 0 Z" fill="#fde68a" opacity="0.7"/>
+      <!-- H.pylori bacteria markers -->
+      <circle cx="50" cy="5" r="2" fill="#ef4444"/>
+      <circle cx="58" cy="7" r="2" fill="#ef4444"/>
+      <circle cx="65" cy="4" r="2" fill="#ef4444"/>
+      <!-- Mucosa with superficial erosion -->
+      <path d="M 0 18 H 35 L 45 28 L 65 28 L 75 18 H 100 V 53 H 0 Z" fill="#fb7185" opacity="0.9"/>
+      <text x="12" y="44" fill="#881337" font-size="9" font-weight="bold">Xung huyết đỏ</text>
+      <!-- Submucosa & Muscle intact -->
+      <rect y="56" width="100" height="35" fill="#be123c" opacity="0.8" rx="3"/>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#fbbf24" font-size="9.5" font-weight="bold">H.pylori tiết Urease</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Mất lớp nhầy bảo vệ</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Niêm mạc trợt nông</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Đầy hơi, ợ chua, ợ hơi</text>
+    <text x="10" y="235" fill="#f59e0b" font-size="9" font-weight="bold">⚠️ Nóng rát thượng vị</text>
+  </g>
+
+  <!-- CẤP 2: LOÉT SÂU THÀNH DẠ DÀY -->
+  <g transform="translate(304, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#f97316" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage2Grad)"/>
+    <text x="12" y="20" fill="#fff7ed" font-size="11" font-weight="bold">CẤP 2: Loét sâu</text>
+
+    <!-- Cross Section Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Crater penetrating mucosa and into submucosa -->
+      <path d="M 0 0 H 30 L 40 45 L 70 45 L 80 0 H 100 V 15 H 85 L 75 45 L 35 45 L 25 15 H 0 Z" fill="#ea580c"/>
+      <!-- Fibrinous exudate (Đáy ổ loét có giả mạc vàng bẩn) -->
+      <ellipse cx="55" cy="45" rx="14" ry="4" fill="#fef08a"/>
+      <!-- Surrounding eroded layers -->
+      <path d="M 0 18 H 25 L 35 50 H 0 Z" fill="#e11d48"/>
+      <path d="M 85 18 H 100 V 50 H 75 Z" fill="#e11d48"/>
+      <rect y="56" width="100" height="35" fill="#be123c" opacity="0.8" rx="3"/>
+      <!-- Vessel irritation -->
+      <line x1="35" y1="65" x2="75" y2="65" stroke="#ef4444" stroke-width="2"/>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#fb923c" font-size="9.5" font-weight="bold">Ổ loét ăn qua lớp cơ</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Axit ăn mòn dưới niêm</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Đáy loét có giả mạc</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Đau cồn cào lúc đói/no</text>
+    <text x="10" y="235" fill="#f97316" font-size="9" font-weight="bold">⚠️ Nguy cơ xuất huyết</text>
+  </g>
+
+  <!-- CẤP 3: BIẾN CHỨNG THỦNG & CHẢY MÁU -->
+  <g transform="translate(444, 60)">
+    <rect width="130" height="250" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+    <rect width="130" height="32" rx="7" fill="url(#stage3Grad)"/>
+    <text x="10" y="20" fill="#fff1f2" font-size="11" font-weight="bold">CẤP 3: Thủng &amp; Máu</text>
+
+    <!-- Cross Section Graphic -->
+    <g transform="translate(15, 45)">
+      <!-- Perforation hole going through all layers -->
+      <path d="M 0 0 H 30 L 45 90 H 65 L 80 0 H 100 V 90 H 0 Z" fill="#881337"/>
+      <!-- Hole perforation -->
+      <path d="M 40 0 L 46 92 M 66 92 L 72 0" stroke="#000" stroke-width="2"/>
+      <!-- Blood spilling into lumen -->
+      <path d="M 50 10 Q 30 25, 40 50 Q 60 70, 56 92" stroke="#dc2626" stroke-width="4" fill="none"/>
+      <!-- Emergency warning sign -->
+      <polygon points="56,35 48,50 64,50" fill="#facc15"/>
+      <text x="54" y="47" fill="#000" font-size="10" font-weight="bold">!</text>
+    </g>
+
+    <!-- Bullet description -->
+    <text x="10" y="155" fill="#f87171" font-size="9.5" font-weight="bold">Thủng tạng rỗng</text>
+    <text x="10" y="172" fill="#cbd5e1" font-size="9">• Đứt động mạch vị</text>
+    <text x="10" y="188" fill="#cbd5e1" font-size="9">• Nôn máu đỏ, phân đen</text>
+    <text x="10" y="204" fill="#cbd5e1" font-size="9">• Đau thắt như dao đâm</text>
+    <text x="10" y="235" fill="#ef4444" font-size="9" font-weight="bold">🚨 CẤP CỨU NGOẠI KHOA</text>
+  </g>
+
+  <!-- Bottom Medical Note -->
+  <g transform="translate(24, 322)">
+    <rect width="552" height="26" rx="5" fill="#0b2559" stroke="#1e40af" stroke-width="1"/>
+    <text x="12" y="17" fill="#93c5fd" font-size="11">💊 Phác đồ diệt H.pylori: Thuốc ức chế bơm Proton (PPI) + Kháng sinh Clarithromycin / Amoxicillin / Metronidazole</text>
+  </g>
+</svg>
