@@ -3780,6 +3780,102 @@ body.theme-dark .concept-card-desc {
   display: none;
 }
 
+/* ==========================================================================
+   SEARCH CLINICAL AXIS CARD (APPLE HEALTH LUXURY AESTHETIC)
+   ========================================================================== */
+.search-axis-card {
+  margin: 6px 6px 10px;
+  background: rgba(13, 21, 38, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.search-axis-card:hover {
+  background: rgba(18, 30, 56, 0.98);
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+.axis-card-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.axis-card-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.axis-card-cat {
+  font-size: 10px;
+  color: #94a3b8;
+}
+.axis-card-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.axis-card-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.axis-card-texts {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.axis-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.25;
+}
+.axis-card-desc {
+  font-size: 10.5px;
+  color: #cbd5e1;
+  line-height: 1.35;
+  margin-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.axis-steps-mini-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #64748b;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.axis-mini-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px 5px;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+.axis-chip-arrow {
+  color: #38bdf8;
+  font-weight: bold;
+}
+
 .concept-chip {
   padding: 3px 7px;
   border-radius: 5px;
@@ -4222,10 +4318,11 @@ body.theme-dark .tool-btn {
   border-color: #ff9800;
   color: #ff9800;
 }
-.tool-btn.highlight-consult {
-  border-color: rgba(56, 189, 248, 0.5);
+.tool-btn.highlight-clinical-axes {
+  border-color: rgba(56, 189, 248, 0.45);
 }
-.tool-btn.highlight-consult.active {
+.tool-btn.highlight-clinical-axes.active,
+.tool-btn.highlight-clinical-axes:hover {
   background: rgba(14, 165, 233, 0.25);
   border-color: #38bdf8;
   color: #38bdf8;
@@ -6580,13 +6677,13 @@ body.theme-dark .step-nav-btn.prev {
   color: #fff;
 }
 
-.tool-btn.highlight-consult {
+.tool-btn.highlight-clinical-axes {
   background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(30, 64, 175, 0.25));
   border-color: rgba(56, 189, 248, 0.5);
   color: #38bdf8;
 }
-.tool-btn.highlight-consult:hover,
-.tool-btn.highlight-consult.active {
+.tool-btn.highlight-clinical-axes:hover,
+.tool-btn.highlight-clinical-axes.active {
   background: linear-gradient(135deg, rgba(2, 132, 199, 0.45), rgba(30, 64, 175, 0.45));
   border-color: #38bdf8;
   box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
@@ -13438,28 +13535,411 @@ body:not(.theme-dark) .btn-pwa-dismiss:hover {
   gap: 8px;
   margin-top: 8px;
 }
-.btn-deck-clip-tool, .btn-deck-consult-tool {
-  flex: 1;
+.btn-deck-axis-tool {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.btn-deck-axis-tool:hover {
+  background: rgba(14, 165, 233, 0.25);
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+
+/* ==========================================================================
+   CLINICAL AXES MODAL (APPLE HEALTH LUXURY AESTHETIC)
+   ========================================================================== */
+.clinical-axes-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  animation: fadeInModal 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clinical-axes-modal-backdrop.hidden {
+  display: none !important;
+}
+
+.clinical-axes-dialog {
+  width: 100%;
+  max-width: 460px;
+  max-height: 88vh;
+  background: rgba(13, 21, 38, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #f1f5f9;
+  font-family: inherit;
+}
+
+/* Header */
+.axes-header {
+  padding: 16px 18px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.axes-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.axes-pill-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.axes-category-text {
+  font-size: 11px;
+  color: #94a3b8;
+}
+.axes-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.axes-latin-name {
+  font-size: 11.5px;
+  font-style: italic;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+.axes-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.axes-close-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+/* Tabs Scroller */
+.axes-tabs-scroller {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 10px 16px;
+  background: rgba(7, 12, 23, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  scrollbar-width: none;
+}
+.axes-tabs-scroller::-webkit-scrollbar {
+  display: none;
+}
+.axes-tab-btn {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  padding: 6px 11px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.axes-tab-btn.active {
+  background: rgba(14, 165, 233, 0.18);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #f0f9ff;
+  font-weight: 600;
+}
+
+/* Body */
+.axes-content-body {
+  padding: 14px 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.axes-content-body::-webkit-scrollbar {
+  width: 4px;
+}
+.axes-content-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+/* Summary Card */
+.axes-summary-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.axes-summary-text {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+.btn-axes-listen {
+  flex-shrink: 0;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.btn-axes-listen:hover {
+  background: rgba(56, 189, 248, 0.22);
+}
+.btn-axes-listen.speaking {
+  background: #0284c7;
+  color: #fff;
+  animation: pulseListen 1.5s infinite;
+}
+
+/* Chain Flow Steps */
+.section-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.section-badge-icon {
+  font-size: 12px;
+}
+.section-label-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+.axes-flow-steps {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+.axes-flow-steps::-webkit-scrollbar {
+  display: none;
+}
+.flow-step-btn {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 6px 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.flow-step-btn .step-num {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flow-step-btn .step-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+.flow-step-btn.active {
+  background: rgba(14, 165, 233, 0.16);
+  border-color: rgba(56, 189, 248, 0.45);
+}
+.flow-step-btn.active .step-num {
+  background: #0284c7;
+  color: #ffffff;
+}
+.flow-step-btn.active .step-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+.flow-arrow {
+  color: #475569;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Step Detail Card */
+.step-detail-card {
+  background: rgba(14, 165, 233, 0.07);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 6px;
+}
+.step-detail-header {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.step-marker {
+  color: #38bdf8;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.step-name {
+  color: #f1f5f9;
+}
+.step-note {
+  margin: 0 0 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #cbd5e1;
+}
+.btn-focus-step-3d {
+  width: 100%;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  background: #0b2559;
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #93c5fd;
-  padding: 6px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
   cursor: pointer;
-  transition: all 0.15s;
 }
-.btn-deck-clip-tool:hover {
-  background: #0284c7;
+.btn-focus-step-3d:hover {
+  background: rgba(56, 189, 248, 0.22);
   color: #ffffff;
 }
-.btn-deck-consult-tool:hover {
-  background: #1e40af;
-  color: #ffffff;
+
+/* Insights Q&A */
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.insight-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.insight-q {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+.insight-a {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.a-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+/* Tips */
+.tips-ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tip-li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.tip-bullet {
+  color: #34d399;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 1.3;
+}
+.tip-text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #cbd5e1;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes pulseListen {
+  0% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6); }
+  70% { box-shadow: 0 0 0 8px rgba(2, 132, 199, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
 }
 

@@ -998,12 +998,9 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
       ${simHtml}
       ${subunitsHtml}
       <div class="deck-quick-tools-row">
-        <button type="button" class="btn-deck-clip-tool" id="btnDeckQuickClip" title="Cắt lớp 3D để nhìn lòng tạng bên trong">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
-          <span>✂️ Cắt Lớp Lòng Tạng</span>
-        </button>
-        <button type="button" class="btn-deck-consult-tool" id="btnDeckQuickConsult" title="Mở chế độ Bác sĩ giải thích cho bệnh nhân 30 giây">
-          <span>🩺 Bác Sĩ Tư Vấn</span>
+        <button type="button" class="btn-deck-axis-tool" id="btnDeckClinicalAxis" title="Xem chuỗi mắt xích & trục giải phẫu ứng dụng liên quan">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>
+          <span>🧬 Trục Giải Phẫu Ứng Dụng Liên Quan</span>
         </button>
       </div>
     </div>
@@ -1083,29 +1080,18 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     });
   });
 
-  // ✂️ Quick Clipping tool for this concept
-  container.querySelector('#btnDeckQuickClip')?.addEventListener('click', (e) => {
+  // 🧬 Quick Clinical Axis Jump
+  container.querySelector('#btnDeckClinicalAxis')?.addEventListener('click', (e) => {
     e.stopPropagation();
-    let plane = 'coronal';
-    let offset = 0;
-    if (deck.id === 'concept_gastrointestinal_tract' || deck.id === 'concept_knee_joint_ligaments' || deck.id === 'concept_circle_of_willis') {
-      plane = 'sagittal';
-    } else if (deck.id === 'concept_intervertebral_disc') {
-      plane = 'axial';
-      offset = 1.05;
-    } else if (deck.id === 'concept_cardiac_valves' || deck.id === 'concept_urinary_nephron' || deck.id === 'concept_inner_ear_vestibular' || deck.id === 'concept_hepatobiliary_pancreas' || deck.id === 'concept_respiratory_alveoli' || deck.id === 'concept_brachial_plexus') {
-      plane = 'coronal';
-    }
-    if (typeof window.openClippingController === 'function') {
-      window.openClippingController(plane, offset);
-    }
-  });
+    let axisId = 'axis_gut_brain';
+    if (deck.id === 'concept_gastrointestinal_tract') axisId = 'axis_gut_brain';
+    else if (deck.id === 'concept_hepatobiliary_pancreas') axisId = 'axis_hepatobiliary_pancreas';
+    else if (deck.id === 'concept_intervertebral_disc' || deck.id === 'concept_knee_joint_ligaments') axisId = 'axis_brain_spine_sciatic';
+    else if (deck.id === 'concept_circle_of_willis' || deck.id === 'concept_inner_ear_vestibular') axisId = 'axis_cranial_nerves';
+    else if (deck.id === 'concept_cardiac_valves' || deck.id === 'concept_respiratory_alveoli') axisId = 'axis_cardiopulmonary_loop';
 
-  // 🩺 Quick Patient Consultation Mode
-  container.querySelector('#btnDeckQuickConsult')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    import('./patientConsultationModal.js').then(({ openPatientConsultationModal }) => {
-      openPatientConsultationModal(deck.id);
+    import('./clinicalAxesModal.js').then(({ openClinicalAxesModal }) => {
+      openClinicalAxesModal(axisId);
     });
   });
 }

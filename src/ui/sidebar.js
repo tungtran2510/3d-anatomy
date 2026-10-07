@@ -34,7 +34,19 @@ import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
 import { findAnatomyConcept, getVisualDeckForPart } from '../data/anatomyConcepts.js';
+import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
+import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
+
+export function findClinicalAxis(query) {
+  if (!query) return null;
+  const q = query.toLowerCase().trim();
+  return CLINICAL_AXES.find(axis => {
+    if (axis.titleVi.toLowerCase().includes(q)) return true;
+    if (axis.latin.toLowerCase().includes(q)) return true;
+    return axis.keywords?.some(k => q.includes(k) || k.includes(q));
+  });
+}
 
 
 // Systems as they are organised in the Z-Anatomy source file. Respiratory,
@@ -1630,11 +1642,11 @@ export function initFloatingTools(viewer) {
     toggleMotionPanel(viewer);
   });
 
-  // Patient Consultation Mode (30-second patient explanation)
-  const btnConsult = document.getElementById('btnToolConsult');
-  btnConsult?.addEventListener('click', async () => {
-    const { openPatientConsultationModal } = await import('./patientConsultationModal.js');
-    openPatientConsultationModal();
+  // Clinical Functional Axes & Applied Anatomy Hub (Trục Giải Phẫu Ứng Dụng)
+  const btnClinicalAxes = document.getElementById('btnToolClinicalAxes');
+  btnClinicalAxes?.addEventListener('click', async () => {
+    const { openClinicalAxesModal } = await import('./clinicalAxesModal.js');
+    openClinicalAxesModal();
   });
 
   // Offline & PWA Storage Manager Mode (LỆNH #06)
@@ -1736,13 +1748,34 @@ export function initSearch() {
       return;
     }
 
+    const matchedAxis = findClinicalAxis(query);
     const concept = findAnatomyConcept(query);
     const matches = searchStructures(query);
 
-    if (concept || matches.length > 0) {
+    if (matchedAxis || concept || matches.length > 0) {
       const lang = state.language || 'it';
 
       let html = '';
+      if (matchedAxis) {
+        html += `
+          <div class="search-axis-card" data-axis="${escapeHtml(matchedAxis.id)}">
+            <div class="axis-card-badge-row">
+              <span class="axis-card-badge">${escapeHtml(matchedAxis.badge)}</span>
+              <span class="axis-card-cat">${escapeHtml(matchedAxis.category)}</span>
+            </div>
+            <div class="axis-card-main">
+              <span class="axis-card-icon">${matchedAxis.icon}</span>
+              <div class="axis-card-texts">
+                <strong class="axis-card-title">${escapeHtml(matchedAxis.titleVi)}</strong>
+                <span class="axis-card-desc">${escapeHtml(matchedAxis.summary)}</span>
+              </div>
+            </div>
+            <div class="axis-steps-mini-chips">
+              ${matchedAxis.chainSteps.map(s => `<span class="axis-mini-chip">${s.step}. ${escapeHtml(s.title.split('&')[0].trim())}</span>`).join(' <span class="axis-chip-arrow">→</span> ')}
+            </div>
+          </div>
+        `;
+      }
       if (concept) {
         html += `
           <div class="search-concept-card" id="searchConceptCard">
@@ -1818,6 +1851,20 @@ export function initSearch() {
           clickEvent.stopPropagation();
           const targetPart = el.dataset.part || el.querySelector('[data-part]')?.dataset.part;
           if (targetPart) choose(targetPart);
+        });
+      });
+
+      results.querySelectorAll('.search-axis-card').forEach(card => {
+        card.addEventListener('click', (clickEvent) => {
+          clickEvent.stopPropagation();
+          const axisId = card.dataset.axis;
+          input.value = '';
+          results.innerHTML = '';
+          results.classList.remove('show');
+          document.querySelector('.header')?.classList.remove('search-open');
+          document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+          input.blur();
+          openClinicalAxesModal(axisId);
         });
       });
     } else {
