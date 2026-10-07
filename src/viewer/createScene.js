@@ -1,6 +1,7 @@
 // Three.js Viewer - Scene Creation
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { engineManager } from './engineManager.js';
 
 console.log('[createScene] Module loaded');
@@ -43,8 +44,16 @@ export function createScene() {
   renderer.setSize(Math.max(initialSize.width, 1), Math.max(initialSize.height, 1), false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = false; // Disabled for performance
+
+  // Medical Studio Environment Lighting for high-fidelity physiological reflections & realistic depth
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+  const roomEnv = new RoomEnvironment();
+  const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture;
+  scene.environment = envTexture;
+  scene.environmentIntensity = 0.85;
 
   // Camera
   // The Z-Anatomy models are built to real scale: a body is roughly 1.7 units
@@ -237,45 +246,45 @@ export function createScene() {
 function createLights(scene) {
   const lights = {};
 
-  // Medical Studio Ambient Light - uniform diffuse light so all anatomical structures are clearly and softly lit
-  lights.ambient = new THREE.AmbientLight(0xffffff, 0.95);
+  // Medical Studio Ambient Light - balanced fill so crevices and anatomical contours retain physiological depth
+  lights.ambient = new THREE.AmbientLight(0xffffff, 0.45);
   scene.add(lights.ambient);
 
-  // Key directional light - soft warm studio fill from upper front-right
-  lights.key = new THREE.DirectionalLight(0xfff8f2, 0.55);
+  // Key directional light - clinical examination light from upper front-right
+  lights.key = new THREE.DirectionalLight(0xfff8f2, 0.75);
   lights.key.position.set(28, 65, 45);
   scene.add(lights.key);
 
   // Fill light - soft cool-neutral fill to preserve tissue contrast
-  lights.fill = new THREE.DirectionalLight(0xf0f5ff, 0.40);
+  lights.fill = new THREE.DirectionalLight(0xf0f5ff, 0.45);
   lights.fill.position.set(-30, 25, -25);
   scene.add(lights.fill);
 
-  // Rim light - subtle back-light highlighting organ boundaries and silhouettes
-  lights.rim = new THREE.DirectionalLight(0xfff2e6, 0.30);
+  // Rim light - subtle back-light highlighting organ boundaries, tissue silhouettes, and anatomical edges
+  lights.rim = new THREE.DirectionalLight(0xfff2e6, 0.45);
   lights.rim.position.set(10, -25, -65);
   scene.add(lights.rim);
 
   // Front camera light for soft anatomical definition
-  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.20);
+  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.25);
   lights.front.position.set(0, 5, 65);
   scene.add(lights.front);
 
   // Hemisphere light for ground-to-sky subtle bounce
-  lights.hemi = new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 0.35);
+  lights.hemi = new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 0.30);
   scene.add(lights.hemi);
 
   return lights;
 }
 
 export function updateLightsForSystem(lights, system) {
-  // Diffuse soft medical studio lighting across all systems (no harsh specular hotspots)
+  // Balanced medical studio lighting across all systems (calibrated for RoomEnvironment IBL)
   const configs = {
-    muscular: { key: 0.55, fill: 0.40, ambient: 0.95 },
-    skeletal: { key: 0.55, fill: 0.40, ambient: 0.95 },
-    nervous: { key: 0.55, fill: 0.40, ambient: 0.95 },
-    visceral: { key: 0.55, fill: 0.40, ambient: 0.95 },
-    default: { key: 0.55, fill: 0.40, ambient: 0.95 }
+    muscular: { key: 0.75, fill: 0.45, ambient: 0.45 },
+    skeletal: { key: 0.75, fill: 0.45, ambient: 0.45 },
+    nervous: { key: 0.75, fill: 0.45, ambient: 0.45 },
+    visceral: { key: 0.75, fill: 0.45, ambient: 0.45 },
+    default: { key: 0.75, fill: 0.45, ambient: 0.45 }
   };
 
   const config = configs[system] || configs.default;

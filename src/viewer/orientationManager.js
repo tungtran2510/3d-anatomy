@@ -39,39 +39,39 @@ export function updateDissectionTableTheme(isDarkParam, scene) {
 
   if (tableTrayMat) {
     if (isDark) {
-      tableTrayMat.color.setHex(0x1e293b);
-      tableTrayMat.metalness = 0.35;
-      tableTrayMat.roughness = 0.42;
+      tableTrayMat.color.setHex(0x334155);
+      tableTrayMat.metalness = 0.85;
+      tableTrayMat.roughness = 0.32;
     } else {
-      tableTrayMat.color.setHex(0xe2e8f0);
-      tableTrayMat.metalness = 0.22;
-      tableTrayMat.roughness = 0.42;
+      tableTrayMat.color.setHex(0xcbd5e1);
+      tableTrayMat.metalness = 0.85;
+      tableTrayMat.roughness = 0.30;
     }
     tableTrayMat.needsUpdate = true;
   }
 
   if (tableRimMat) {
     if (isDark) {
-      tableRimMat.color.setHex(0x334155);
-      tableRimMat.metalness = 0.38;
-      tableRimMat.roughness = 0.35;
+      tableRimMat.color.setHex(0x475569);
+      tableRimMat.metalness = 0.88;
+      tableRimMat.roughness = 0.28;
     } else {
-      tableRimMat.color.setHex(0xcbd5e1);
-      tableRimMat.metalness = 0.25;
-      tableRimMat.roughness = 0.35;
+      tableRimMat.color.setHex(0x94a3b8);
+      tableRimMat.metalness = 0.88;
+      tableRimMat.roughness = 0.25;
     }
     tableRimMat.needsUpdate = true;
   }
 
   if (tableLegMat) {
     if (isDark) {
-      tableLegMat.color.setHex(0x475569);
-      tableLegMat.metalness = 0.40;
-      tableLegMat.roughness = 0.38;
+      tableLegMat.color.setHex(0x64748b);
+      tableLegMat.metalness = 0.90;
+      tableLegMat.roughness = 0.24;
     } else {
-      tableLegMat.color.setHex(0x94a3b8);
-      tableLegMat.metalness = 0.28;
-      tableLegMat.roughness = 0.38;
+      tableLegMat.color.setHex(0xe2e8f0);
+      tableLegMat.metalness = 0.90;
+      tableLegMat.roughness = 0.22;
     }
     tableLegMat.needsUpdate = true;
   }
@@ -79,12 +79,12 @@ export function updateDissectionTableTheme(isDarkParam, scene) {
   if (tableCasterMat) {
     if (isDark) {
       tableCasterMat.color.setHex(0x0f172a);
-      tableCasterMat.metalness = 0.30;
-      tableCasterMat.roughness = 0.60;
+      tableCasterMat.metalness = 0.50;
+      tableCasterMat.roughness = 0.50;
     } else {
-      tableCasterMat.color.setHex(0x64748b);
-      tableCasterMat.metalness = 0.20;
-      tableCasterMat.roughness = 0.60;
+      tableCasterMat.color.setHex(0x475569);
+      tableCasterMat.metalness = 0.50;
+      tableCasterMat.roughness = 0.50;
     }
     tableCasterMat.needsUpdate = true;
   }
@@ -111,32 +111,32 @@ export function createDissectionTable(scene) {
   tableGroup.name = 'dissectionTableGroup';
   tableGroup.userData.isDissectionTable = true;
 
-  // Materials: Adaptive Medical Brushed Stainless Steel
+  // Materials: Surgical Brushed Stainless Steel (Inox 316 Chuẩn Bàn Mổ)
   tableTrayMat = new THREE.MeshStandardMaterial({
-    color: isDark ? 0x1e293b : 0xe2e8f0,
-    metalness: isDark ? 0.35 : 0.22,
-    roughness: 0.42,
+    color: isDark ? 0x334155 : 0xcbd5e1,
+    metalness: 0.85,
+    roughness: isDark ? 0.32 : 0.30,
     name: 'DissectionTableTray'
   });
 
   tableRimMat = new THREE.MeshStandardMaterial({
-    color: isDark ? 0x334155 : 0xcbd5e1,
-    metalness: isDark ? 0.38 : 0.25,
-    roughness: 0.35,
+    color: isDark ? 0x475569 : 0x94a3b8,
+    metalness: 0.88,
+    roughness: isDark ? 0.28 : 0.25,
     name: 'DissectionTableRim'
   });
 
   tableLegMat = new THREE.MeshStandardMaterial({
-    color: isDark ? 0x475569 : 0x94a3b8,
-    metalness: isDark ? 0.40 : 0.28,
-    roughness: 0.38,
+    color: isDark ? 0x64748b : 0xe2e8f0,
+    metalness: 0.90,
+    roughness: isDark ? 0.24 : 0.22,
     name: 'DissectionTableLegs'
   });
 
   tableCasterMat = new THREE.MeshStandardMaterial({
-    color: isDark ? 0x0f172a : 0x64748b,
-    metalness: isDark ? 0.30 : 0.20,
-    roughness: 0.60,
+    color: isDark ? 0x0f172a : 0x475569,
+    metalness: 0.50,
+    roughness: 0.50,
     name: 'DissectionTableCasters'
   });
 
