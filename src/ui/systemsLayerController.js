@@ -676,7 +676,7 @@ export async function focusDigestiveSystem(viewer = state.viewer || window.viewe
 
   // 4. Configure Skeletal: Keep Skull & Teeth at head, hide ribs, vertebrae, pelvis, limbs
   showSystem('skeletal');
-  systemLevels.skeletal = 1.5;
+  systemLevels.skeletal = 1.0;
   const skeletalNodes = getMeshesBySystem('skeletal') || [];
   skeletalNodes.forEach(n => {
     const partId = n.userData?.partId;
@@ -1087,14 +1087,14 @@ async function applySystemLevel(systemId, level, viewer) {
     if (!state.loadedSystems.includes('skeletal')) {
       try {
         await loadModel('skeletal', viewer);
-        systemLevels.skeletal = 4.0;
+        systemLevels.skeletal = 3.0;
         showSystem('skeletal');
         updateItemUI('skeletal');
       } catch (err) {
         console.error('[systemsLayer] Failed to load skeletal anchor for muscular:', err);
       }
     } else if ((Number(systemLevels.skeletal) || 0) <= 0) {
-      systemLevels.skeletal = 4.0;
+      systemLevels.skeletal = 3.0;
       showSystem('skeletal');
       updateItemUI('skeletal');
     }
@@ -1165,7 +1165,7 @@ async function applySystemLevel(systemId, level, viewer) {
         hideSystem('muscular');
       } else {
         if ((Number(systemLevels.skeletal) || 0) <= 0) {
-          systemLevels.skeletal = 4.0;
+          systemLevels.skeletal = 3.0;
           showSystem('skeletal');
           updateItemUI('skeletal');
         }

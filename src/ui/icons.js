@@ -5,12 +5,11 @@ export const ICONS = {
   // Systems Icons (Medical Standard Visual Vector Icons)
   skeletal: `
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="4" r="2.5"/>
-      <path d="M12 6.5v14"/>
-      <path d="M8 9.5c2 1 6 1 8 0"/>
-      <path d="M7 13c3 1.5 7 1.5 10 0"/>
-      <path d="M7.5 16.5c2.5 1.2 6.5 1.2 9 0"/>
-      <path d="M9 20h6"/>
+      <path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 2.8 1.4 5.2 3.5 6.5v2.5a1.5 1.5 0 0 0 1.5 1.5h5a1.5 1.5 0 0 0 1.5-1.5v-2.5c2.1-1.3 3.5-3.7 3.5-6.5A7.5 7.5 0 0 0 12 2z"/>
+      <circle cx="9" cy="11" r="1.5" fill="currentColor"/>
+      <circle cx="15" cy="11" r="1.5" fill="currentColor"/>
+      <path d="M10 16.5v2M12 16v2.5M14 16.5v2"/>
+      <path d="M12 13v1.5"/>
     </svg>
   `,
 
