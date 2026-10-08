@@ -26,6 +26,7 @@ export const state = {
   // Dissect Mode (Visible Body scalpel mode)
   dissectMode: false,
   undoStack: [],
+  redoStack: [],
 
   // Loaded data
   partsData: null,
@@ -239,11 +240,15 @@ export function setDissectMode(enabled) {
   notify('dissectMode', enabled);
 }
 
-export function pushUndo(action) {
+export function pushUndo(action, isFromRedo = false) {
   if (!action) return;
   state.undoStack.push(action);
   if (state.undoStack.length > 50) {
     state.undoStack.shift();
+  }
+  if (!isFromRedo) {
+    state.redoStack = [];
+    notify('redoStack', state.redoStack);
   }
   notify('undoStack', state.undoStack);
 }
@@ -252,6 +257,26 @@ export function popUndo() {
   const action = state.undoStack.pop();
   notify('undoStack', state.undoStack);
   return action;
+}
+
+export function pushRedo(action) {
+  if (!action) return;
+  state.redoStack.push(action);
+  if (state.redoStack.length > 50) {
+    state.redoStack.shift();
+  }
+  notify('redoStack', state.redoStack);
+}
+
+export function popRedo() {
+  const action = state.redoStack.pop();
+  notify('redoStack', state.redoStack);
+  return action;
+}
+
+export function clearRedo() {
+  state.redoStack = [];
+  notify('redoStack', state.redoStack);
 }
 
 export function getSystemParts(systemId) {
@@ -272,6 +297,10 @@ export function resetState() {
   state.partStates.clear();
   state.selectionHistory = [];
   state.currentView = 'front';
+  state.undoStack = [];
+  state.redoStack = [];
+  notify('undoStack', state.undoStack);
+  notify('redoStack', state.redoStack);
   notify('selectedPart', null);
   notify('partStates', state.partStates);
   notify('isolatedPart', null);

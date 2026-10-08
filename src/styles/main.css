@@ -589,13 +589,15 @@ body.theme-dark .system-group.is-expanded {
 }
 
 .system-accordion-trigger .system-name {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--fg-primary);
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
 }
 
 .system-accordion-trigger .system-count {
@@ -1665,7 +1667,7 @@ body.theme-dark .control-btn {
 .modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 9999 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4226,33 +4228,41 @@ body.theme-dark .tile-title {
   }
 }
 
-/* Toast - Sleek 1-line capsule, pure white text, high contrast */
+/* Toast - Minimal, muted translucent gray capsule, non-intrusive */
 .app-toast {
   position: fixed;
-  top: 125px;
+  top: 58px;
   left: 50%;
-  transform: translateX(-50%) translateY(-15px);
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  padding: 8px 22px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%) translateY(-6px);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #94a3b8 !important;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 500;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
   z-index: 99999;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.16s ease, transform 0.16s ease;
   white-space: nowrap;
-  max-width: 90vw;
+  max-width: 85vw;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
   line-height: 1.4;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.15px;
+}
+
+[data-theme="light"] .app-toast,
+body:not([data-theme="dark"]) .app-toast {
+  background: rgba(241, 245, 249, 0.78);
+  color: #64748b !important;
+  border: 1px solid rgba(203, 213, 225, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .app-toast.show {
@@ -8277,6 +8287,10 @@ body.theme-dark .tab-vertical-text {
    ========================================================================== */
 .floating-ai-bubble {
   position: absolute;
+  right: 14px !important;
+  left: auto !important;
+  bottom: 78px !important;
+  top: auto !important;
   width: 36px !important;
   min-width: 36px !important;
   height: 44px !important;
@@ -8295,11 +8309,87 @@ body.theme-dark .tab-vertical-text {
   gap: 1px !important;
   font-size: 15px;
   cursor: grab;
-  z-index: 1005 !important;
+  z-index: 2200 !important;
   touch-action: none;
   user-select: none;
   opacity: 0.95;
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s, background 0.15s;
+}
+
+/* Floating Dual Undo/Redo Mini-Pill (Directly Under Top-Left Settings Gear) */
+.floating-undo-redo-pill {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background: rgba(241, 245, 249, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(203, 213, 225, 0.65);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .floating-undo-redo-pill,
+body.theme-dark .floating-undo-redo-pill {
+  background: rgba(30, 41, 59, 0.75);
+  border-color: rgba(71, 85, 105, 0.55);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.floating-undo-redo-pill .btn-history-step {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+[data-theme="dark"] .floating-undo-redo-pill .btn-history-step,
+body.theme-dark .floating-undo-redo-pill .btn-history-step {
+  color: #94a3b8;
+}
+
+.floating-undo-redo-pill .btn-history-step:hover:not(.disabled) {
+  background: rgba(226, 232, 240, 0.95);
+  color: #0284c7;
+  transform: scale(1.08);
+}
+
+[data-theme="dark"] .floating-undo-redo-pill .btn-history-step:hover:not(.disabled),
+body.theme-dark .floating-undo-redo-pill .btn-history-step:hover:not(.disabled) {
+  background: rgba(51, 65, 85, 0.95);
+  color: #38bdf8;
+}
+
+.floating-undo-redo-pill .btn-history-step.disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.floating-undo-redo-pill .history-step-divider {
+  width: 1px;
+  height: 13px;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+[data-theme="dark"] .floating-undo-redo-pill .history-step-divider,
+body.theme-dark .floating-undo-redo-pill .history-step-divider {
+  background: rgba(100, 116, 139, 0.4);
 }
 .ai-bubble-text {
   font-size: 9.5px !important;
@@ -8408,7 +8498,7 @@ body:has(.selection-card:not(.hidden)) .compact-ai-bar {
 }
 
 body:has(.selection-card:not(.hidden)) .ai-transparent-toast.has-bar {
-  bottom: calc(172px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(164px + env(safe-area-inset-bottom, 0px));
 }
 
 @keyframes slideUpIn {
@@ -8527,7 +8617,7 @@ body:has(.selection-card:not(.hidden)) .ai-transparent-toast.has-bar {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Transparent 1-2 line Floating HUD Toast for AI Response */
+/* Frameless Subtle HUD Whisper for AI & Status (No container, no border, no shadow, zero obstruction) */
 .ai-transparent-toast {
   position: fixed;
   bottom: calc(72px + env(safe-area-inset-bottom, 0px));
@@ -8535,33 +8625,36 @@ body:has(.selection-card:not(.hidden)) .ai-transparent-toast.has-bar {
   left: 50%;
   transform: translateX(-50%);
   width: auto;
-  max-width: min(92vw, 360px);
-  min-height: 32px;
-  background: rgba(15, 23, 42, 0.82);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(59, 130, 246, 0.4);
-  border-radius: 20px;
-  padding: 4px 12px;
+  max-width: min(92vw, 380px);
+  min-height: unset !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   display: flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  gap: 0;
   z-index: 125;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  animation: toastFadeInUp 0.25s ease-out forwards;
-  pointer-events: auto;
-  cursor: pointer;
-  transition: bottom 0.2s ease;
+  box-shadow: none !important;
+  animation: toastFadeInUp 0.2s ease-out forwards;
+  pointer-events: none !important;
+  cursor: default;
+  transition: bottom 0.2s ease, opacity 0.2s ease;
 }
 
 .ai-transparent-toast.has-bar {
-  bottom: calc(126px + env(safe-area-inset-bottom, 0px));
+  /* Sát ngay phía trên khung AI bar (bar 68px + height 48px + 2px gap = 118px) */
+  bottom: calc(118px + env(safe-area-inset-bottom, 0px));
 }
 
 @keyframes toastFadeInUp {
   from {
     opacity: 0;
-    transform: translate(-50%, 8px);
+    transform: translate(-50%, 3px);
   }
   to {
     opacity: 1;
@@ -8574,37 +8667,60 @@ body:has(.selection-card:not(.hidden)) .ai-transparent-toast.has-bar {
 }
 
 .ai-toast-badge {
-  font-size: 13px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.ai-toast-text {
-  font-size: 11.5px;
-  line-height: 1.35;
-  color: #e2e8f0;
-  font-weight: 500;
-  white-space: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  display: none !important;
 }
 
 .ai-toast-close {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 0 2px;
-  margin-left: auto;
-  flex-shrink: 0;
+  display: none !important;
 }
 
-.ai-toast-close:hover {
-  color: #f8fafc;
+.ai-toast-text {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  color: #64748b;
+  font-weight: 400 !important; /* TUYỆT ĐỐI KHÔNG IN ĐẬM theo yêu cầu người dùng */
+  text-align: center;
+  white-space: nowrap !important; /* TUYỆT ĐỐI KHÔNG QUÁ 2 DÒNG, CHỈ 1 DÒNG DUY NHẤT */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(94vw, 360px);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.95);
+  pointer-events: none;
+  background: transparent !important;
+  letter-spacing: 0.1px;
+}
+
+[data-theme="dark"] .ai-toast-text,
+body.theme-dark .ai-toast-text {
+  color: #94a3b8;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================================================
+   ANATOMICAL TYPOGRAPHY & VISUAL HIERARCHY
+   Phân định rõ thị giác: Tên chính IN ĐẬM (600) ↔ Chú thích ngoặc đơn KHÔNG IN ĐẬM (400)
+   ========================================================================== */
+.name-primary {
+  font-weight: 600;
+}
+
+.name-sub-paren {
+  font-weight: 400 !important; /* Tuyệt đối KHÔNG in đậm phần trong ngoặc */
+  font-style: normal;
+  opacity: 0.85;
+  font-size: 0.92em;
+  letter-spacing: normal;
+  display: inline-block;
+  margin-left: 2px;
+}
+
+[data-theme="dark"] .name-sub-paren,
+body.theme-dark .name-sub-paren {
+  color: #94a3b8 !important;
+}
+
+body:not(.theme-dark) .name-sub-paren {
+  color: #64748b !important;
 }
 
 /* ==========================================================================
@@ -12635,10 +12751,12 @@ body.theme-dark .floating-top-view-btn {
     z-index: 1500 !important;
   }
 
-  /* Automatically hide elements that collide with open selection card */
-  body:has(.selection-card:not(.hidden)) #floatingAIBubble,
+  /* Automatically hide elements that collide with open selection card or AI bar */
+  body:has(.selection-card:not(.hidden):not(.compact-mode)) #floatingAIBubble,
   body:has(.selection-card:not(.hidden)) .pwa-install-prompt-banner,
   body:has(.selection-card:not(.hidden)) .offline-prompt-banner,
+  body:has(#compactAIBar:not(.hidden)) .pwa-install-prompt-banner,
+  body:has(#compactAIBar:not(.hidden)) .offline-prompt-banner,
   body:has(.selection-card:not(.hidden)) .floating-top-view-btn,
   body:has(.selection-card:not(.hidden)) .floating-views-quick-nav,
   body:has(.selection-card:not(.hidden)) .depth-control {
@@ -12647,16 +12765,56 @@ body.theme-dark .floating-top-view-btn {
     pointer-events: none !important;
   }
 
-  /* Automatically hide elements that collide with open systems drawer */
-  body:has(.systems-stepper-drawer.open) #floatingAIBubble,
-  body:has(.systems-stepper-drawer.open) .floating-views-quick-nav,
-  body:has(.systems-stepper-drawer.open) .pwa-install-prompt-banner,
-  body:has(.systems-stepper-drawer.open) .offline-prompt-banner,
-  body:has(.sidebar:not(.drawer-closed)) #floatingAIBubble,
-  body:has(.sidebar:not(.drawer-closed)) .floating-views-quick-nav,
-  body:has(.sidebar:not(.drawer-closed)) .pwa-install-prompt-banner,
-  body:has(.sidebar:not(.drawer-closed)) .offline-prompt-banner,
-  body:has(.sidebar:not(.drawer-closed)) .floating-controls-column {
+  /* When selection-card is in compact mini-bar mode, elevate floating AI bubble above mini bar (only when no modal is active) */
+  body:not(:has(.modal:not(.hidden))):not(:has(.atlas-settings-modal:not(.hidden))):not(:has(.atlas-hub-modal:not(.hidden))):not(:has(.study-mode-modal:not(.hidden))):has(.selection-card:not(.hidden).compact-mode) #floatingAIBubble {
+    display: flex !important;
+    opacity: 0.95 !important;
+    pointer-events: auto !important;
+    bottom: 145px !important;
+    transition: bottom 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+  }
+
+  /* Automatically hide selection card when any modal or drawer is open */
+  body:has(.modal:not(.hidden)) #selectionCard,
+  body:has(.atlas-settings-modal:not(.hidden)) #selectionCard,
+  body:has(.atlas-hub-modal:not(.hidden)) #selectionCard,
+  body:has(.study-mode-modal:not(.hidden)) #selectionCard,
+  body:has(#aiAssistantModal:not(.hidden)) #selectionCard,
+  #app.systems-open #selectionCard,
+  #app.info-open #selectionCard {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Automatically hide floating elements when systems drawer or any modal is open */
+  #app.systems-open #floatingAIBubble,
+  #app.systems-open .depth-control,
+  #app.info-open #floatingAIBubble,
+  #app.info-open .depth-control,
+  #app.systems-open .floating-views-quick-nav,
+  #app.systems-open .pwa-install-prompt-banner,
+  #app.systems-open .offline-prompt-banner,
+  #app.info-open .floating-views-quick-nav,
+  #app.info-open .pwa-install-prompt-banner,
+  #app.info-open .offline-prompt-banner,
+  #app.systems-open .floating-controls-column,
+  body:has(.modal:not(.hidden)) #floatingAIBubble,
+  body:has(.modal:not(.hidden)) .depth-control,
+  body:has(.modal:not(.hidden)) .floating-undo-redo-pill,
+  body:has(.atlas-settings-modal:not(.hidden)) #floatingAIBubble,
+  body:has(.atlas-settings-modal:not(.hidden)) .depth-control,
+  body:has(.atlas-settings-modal:not(.hidden)) .floating-undo-redo-pill,
+  body:has(.atlas-hub-modal:not(.hidden)) #floatingAIBubble,
+  body:has(.atlas-hub-modal:not(.hidden)) .depth-control,
+  body:has(.atlas-hub-modal:not(.hidden)) .floating-undo-redo-pill,
+  body:has(.study-mode-modal:not(.hidden)) #floatingAIBubble,
+  body:has(.study-mode-modal:not(.hidden)) .depth-control,
+  body:has(.study-mode-modal:not(.hidden)) .floating-undo-redo-pill,
+  body:has(#aiAssistantModal:not(.hidden)) #floatingAIBubble,
+  body:has(#compactAIBar:not(.hidden)) #floatingAIBubble,
+  body:has(#helpModal:not(.hidden)) #floatingAIBubble,
+  body:has(#videoModal:not(.hidden)) #floatingAIBubble {
     display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;
@@ -12683,12 +12841,7 @@ body.theme-dark .floating-top-view-btn {
   }
 
   .systems-pull-tab {
-    top: calc(var(--ctrl-col-top) + 130px) !important;
-    left: 0 !important;
-    right: auto !important;
-    min-height: 108px !important;
-    border-radius: 0 10px 10px 0 !important;
-    border-left: none !important;
+    display: none !important;
   }
 
   .depth-control {
@@ -14192,7 +14345,6 @@ body.theme-dark .btn-deck-axis-tool:hover {
 /* Automatically hide canvas overlays and controls that collide with open mechanism sheet */
 body:has(#clinicalAxisSheet:not(.hidden)) .callout-layer,
 body:has(#clinicalAxisSheet:not(.hidden)) #labelsContainer,
-body:has(#clinicalAxisSheet:not(.hidden)) #floatingAIBubble,
 body:has(#clinicalAxisSheet:not(.hidden)) #systemsPullTab,
 body:has(#clinicalAxisSheet:not(.hidden)) .systems-pull-tab,
 body:has(#clinicalAxisSheet:not(.hidden)) #systemsStepperDrawer,
@@ -15233,6 +15385,243 @@ body.theme-dark .microvideo-desc-text {
     transform: translateX(-100%) !important;
     transition: opacity 0.2s, transform 0.2s;
   }
+}
+
+/* ==========================================================================
+   ATLAS SETTINGS MODAL (Visible Body & Medical Atlas Standard)
+   ========================================================================== */
+.atlas-settings-content {
+  max-width: 480px !important;
+  width: 92% !important;
+  max-height: 85vh !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+.settings-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-modal-title svg {
+  color: var(--accent, #0ea5e9);
+}
+
+.settings-modal-title h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.settings-modal-body {
+  padding: 16px !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-group-header h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+  color: var(--text-primary);
+}
+
+.settings-group-desc {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.settings-radio-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.settings-card-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg-secondary, rgba(0, 0, 0, 0.03));
+  border: 1.5px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.settings-card-btn:hover {
+  border-color: var(--accent, #0ea5e9);
+  background: rgba(14, 165, 233, 0.05);
+}
+
+.settings-card-btn.active {
+  border-color: var(--accent, #0ea5e9);
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.card-btn-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color, #94a3b8);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.18s ease;
+}
+
+.settings-card-btn.active .card-btn-indicator {
+  border-color: var(--accent, #0ea5e9);
+  background: var(--accent, #0ea5e9);
+}
+
+.settings-card-btn.active .card-btn-indicator::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: white;
+}
+
+.card-btn-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.card-btn-text strong {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.card-btn-text small {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.settings-theme-toggle-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.theme-choice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.theme-choice-btn[data-theme="dark"] {
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1.5px solid #334155;
+}
+
+.theme-choice-btn[data-theme="light"] {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1.5px solid #cbd5e1;
+}
+
+.theme-choice-btn[data-theme="dark"].active {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
+}
+
+.theme-choice-btn[data-theme="light"].active {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.4);
+}
+
+.settings-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-top: 4px;
+}
+
+.settings-switch-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.settings-switch-label strong {
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.settings-switch-label small {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.settings-about-box {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(14, 165, 233, 0.05);
+  border: 1px dashed rgba(14, 165, 233, 0.3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-app-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent, #0ea5e9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings-about-box p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.about-links {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.about-links a {
+  color: var(--accent, #0ea5e9);
+  text-decoration: none;
+  font-weight: 500;
 }
 
 

@@ -20,6 +20,7 @@ import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openImageZoomModal } from './imageZoomModal.js';
 import { getConstituentsForPart } from '../data/anatomyConstituents.js';
+import { formatNameWithSubtitles } from '../utils/textFormatters.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -252,13 +253,17 @@ export function updateInfoPanelContent(part, viewer) {
   const latinName = clinical.nameLatin || part.info?.latinName || '';
   const systemName = clinical.systemVi || part.system || '';
 
-  if (cardTitle) cardTitle.textContent = mainName;
+  if (cardTitle) cardTitle.innerHTML = formatNameWithSubtitles(mainName);
   if (cardCompactLabel) cardCompactLabel.textContent = 'Chi tiết giải phẫu';
 
   let cleanLatin = (latinName || '').trim();
   cleanLatin = cleanLatin.replace(/\s*\((TA2:[^)]+)\)/i, ' · $1');
   if (cleanLatin.startsWith('(') && cleanLatin.endsWith(')')) {
     cleanLatin = cleanLatin.slice(1, -1).trim();
+  }
+  // Loại bỏ hoàn toàn các chuỗi rác như ???????? hoặc null/undefined
+  if (/^[?\s\-_]+$/.test(cleanLatin) || cleanLatin.toLowerCase() === 'null' || cleanLatin.toLowerCase() === 'undefined') {
+    cleanLatin = '';
   }
 
   if (cardSubtitle) {
@@ -269,8 +274,16 @@ export function updateInfoPanelContent(part, viewer) {
   const miniTitle = document.getElementById('miniCardTitle');
   const miniLatin = document.getElementById('miniCardLatin');
   const miniDesc = document.getElementById('miniCardDesc');
-  if (miniTitle) miniTitle.textContent = mainName;
-  if (miniLatin) miniLatin.textContent = cleanLatin ? `(${cleanLatin})` : '';
+  if (miniTitle) miniTitle.innerHTML = formatNameWithSubtitles(mainName);
+  if (miniLatin) {
+    if (cleanLatin) {
+      miniLatin.textContent = `(${cleanLatin})`;
+      miniLatin.style.display = '';
+    } else {
+      miniLatin.textContent = '';
+      miniLatin.style.display = 'none';
+    }
+  }
   if (miniDesc) {
     const rawDesc = clinical.description || '';
     const firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;

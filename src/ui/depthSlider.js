@@ -12,6 +12,7 @@ import { showSystem, hideSystem, setStructureVisible, ghostAllExcept } from '../
 import { loadModel } from '../viewer/loadModel.js';
 import { getMuscleLayers, systemLevels, updateItemUI } from './systemsLayerController.js';
 import { triggerHaptic } from '../viewer/engineManager.js';
+import { showToast } from './sidebar.js';
 
 export const DISSECTION_STAGES = [
   { level: 0, title: 'Toàn bộ cấu trúc (Cơ tầng nông)', short: 'Lớp 0: Đầy đủ' },
@@ -26,10 +27,13 @@ let slider = null;
 let hintEl = null;
 let currentStage = 0;
 
-export function applyDepth(stage) {
+export function applyDepth(stage, notifyToast = false) {
   stage = Math.max(0, Math.min(5, Math.round(Number(stage) || 0)));
   if (stage !== currentStage) {
     triggerHaptic('light');
+    if (notifyToast) {
+      showToast(DISSECTION_STAGES[stage]?.title || `Độ sâu: Lớp ${stage}`);
+    }
   }
   currentStage = stage;
 
@@ -210,7 +214,7 @@ export function initDepthSlider() {
     if (depthRaf) cancelAnimationFrame(depthRaf);
     depthRaf = requestAnimationFrame(() => {
       depthRaf = null;
-      applyDepth(val);
+      applyDepth(val, true);
     });
   });
 

@@ -3,10 +3,10 @@ import { state, subscribe, getSystemParts, getStructureInfo, setLanguage, transl
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
 import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState } from '../viewer/visibility.js';
-import { selectPartById, deselectPart, undoLastDissect, executeUndo } from '../viewer/selection.js';
+import { selectPartById, deselectPart, undoLastDissect, executeUndo, executeRedo } from '../viewer/selection.js';
 import { setView, resetView, frameRegion } from '../viewer/camera.js';
 import { loadAllData, searchStructures } from '../utils/dataLoader.js';
-import { initDepthSlider, resetDepthSlider } from './depthSlider.js';
+import { initDepthSlider, resetDepthSlider, applyDepth } from './depthSlider.js';
 import { PRESETS, applyPreset } from '../data/presets.js';
 import { setInert, focusFirst, trapFocus, rovingList } from './focus.js';
 import { REGIONS_DATA } from '../data/regions.js';
@@ -33,10 +33,12 @@ import { initInfoPanel, updateInfoPanelContent, setCompactMode } from './infoPan
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
+import { formatNameWithSubtitles } from '../utils/textFormatters.js';
 import { findAnatomyConcept, getVisualDeckForPart } from '../data/anatomyConcepts.js';
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
+import { openSettingsModal } from './settingsModal.js';
 
 export function findClinicalAxis(query) {
   if (!query) return null;
@@ -478,7 +480,7 @@ function rowMarkup(group) {
   return `
     <div class="structure-item ${selected ? 'selected' : ''}" role="option" tabindex="-1" aria-selected="${selected}" data-part="${escapeHtml(primary)}" data-parts="${escapeHtml(group.parts.join('|'))}">
       <input type="checkbox" ${visible ? 'checked' : ''} data-part-checkbox="${escapeHtml(primary)}">
-      <span class="structure-name" title="${label}">${label}</span>
+      <span class="structure-name" title="${label}">${formatNameWithSubtitles(group.label)}</span>
       <span class="structure-sides">${sides}</span>
       <div class="structure-actions">
         <button class="action-btn isolate" data-action="isolate" title="${escapeHtml(translate('isolate'))}" aria-label="${escapeHtml(translate('isolate'))}">
@@ -727,7 +729,7 @@ function toggleTransparencySelected() {
   }
 }
 
-export function showToast(message, duration = 2500) {
+export function showToast(message, duration = 1300) {
   const toast = document.getElementById('appToast');
   if (!toast) return;
   toast.textContent = message;
@@ -736,7 +738,7 @@ export function showToast(message, duration = 2500) {
   clearTimeout(toast._timeout);
   toast._timeout = setTimeout(() => {
     toast.classList.remove('show');
-    setTimeout(() => toast.classList.add('hidden'), 300);
+    setTimeout(() => toast.classList.add('hidden'), 200);
   }, duration);
 }
 
@@ -931,12 +933,16 @@ export function initFooterActions(viewer) {
   });
 
   // Mobile Bottom Bar Navigation
-  document.getElementById('btnNavSystems')?.addEventListener('click', () => {
+  document.getElementById('btnNavViews')?.addEventListener('click', () => {
     openAtlasHub(viewer, 'views');
   });
 
-  document.getElementById('btnNavSearch')?.addEventListener('click', () => {
-    document.getElementById('searchOpen')?.click();
+  let currentNavDepthStage = 0;
+  document.getElementById('btnNavDepth')?.addEventListener('click', () => {
+    currentNavDepthStage = (currentNavDepthStage + 1) % 6;
+    applyDepth(currentNavDepthStage, true);
+    const slider = document.getElementById('depthSlider');
+    if (slider) slider.value = currentNavDepthStage;
   });
 
   const btnDissect = document.getElementById('btnNavDissect');
@@ -980,14 +986,51 @@ export function initFooterActions(viewer) {
     }
   });
 
-  const btnUndo = document.getElementById('btnNavUndo');
-  btnUndo?.addEventListener('click', () => {
+  const btnFloatingUndo = document.getElementById('btnFloatingUndo');
+  const btnFloatingRedo = document.getElementById('btnFloatingRedo');
+
+  const updateUndoRedoUI = () => {
+    if (btnFloatingUndo) {
+      btnFloatingUndo.classList.toggle('disabled', !state.undoStack || state.undoStack.length === 0);
+    }
+    if (btnFloatingRedo) {
+      btnFloatingRedo.classList.toggle('disabled', !state.redoStack || state.redoStack.length === 0);
+    }
+  };
+
+  subscribe('undoStack', updateUndoRedoUI);
+  subscribe('redoStack', updateUndoRedoUI);
+  updateUndoRedoUI();
+
+  btnFloatingUndo?.addEventListener('click', () => {
     const msg = executeUndo(viewer);
     if (msg) {
       showToast(msg);
     } else {
       showToast('Không còn thao tác nào để hoàn tác');
     }
+    updateUndoRedoUI();
+  });
+
+  btnFloatingRedo?.addEventListener('click', () => {
+    const msg = executeRedo(viewer);
+    if (msg) {
+      showToast(msg);
+    } else {
+      showToast('Không còn thao tác nào để làm lại');
+    }
+    updateUndoRedoUI();
+  });
+
+  // Legacy bottom bar undo if present
+  document.getElementById('btnNavUndo')?.addEventListener('click', () => {
+    const msg = executeUndo(viewer);
+    if (msg) {
+      showToast(msg);
+    } else {
+      showToast('Không còn thao tác nào để hoàn tác');
+    }
+    updateUndoRedoUI();
   });
 
   document.getElementById('btnNavReset')?.addEventListener('click', () => {
@@ -1008,6 +1051,8 @@ export function initFooterActions(viewer) {
     }
 
     state.undoStack = [];
+    state.redoStack = [];
+    updateUndoRedoUI();
     viewer?.render();
     showToast('Đã khôi phục toàn bộ giải phẫu & góc nhìn');
   });
@@ -2410,7 +2455,10 @@ function initDrawers() {
     return app?.classList.contains(panels[name].flag);
   }
 
+  document.getElementById('btnNavSystems')?.addEventListener('click', () => apply('systems', !isOpen('systems'), { moveFocus: true }));
+  document.getElementById('btnNavAnatomySystems')?.addEventListener('click', () => apply('systems', !isOpen('systems'), { moveFocus: true }));
   document.getElementById('systemsOpen')?.addEventListener('click', () => apply('systems', !isOpen('systems'), { moveFocus: true }));
+  document.getElementById('btnHeaderSettings')?.addEventListener('click', () => openSettingsModal(viewer));
   document.getElementById('systemsToggle')?.addEventListener('click', () => apply('systems', false, { moveFocus: true }));
   document.getElementById('infoOpen')?.addEventListener('click', () => apply('info', !isOpen('info'), { moveFocus: true }));
   document.getElementById('infoToggle')?.addEventListener('click', () => apply('info', false, { moveFocus: true }));

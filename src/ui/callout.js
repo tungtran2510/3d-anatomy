@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { state, translate } from '../state/store.js';
 import { getStructure, ownMeshesOf, getMeshRegistry } from '../viewer/loadModel.js';
+import { formatNameWithSubtitles } from '../utils/textFormatters.js';
 
 const OFFSET_X = 96;
 const OFFSET_Y = -64;
@@ -216,7 +217,7 @@ export function showCallout(partId, displayName, actions = {}) {
 
   const info = state.partsData?.[partId];
   const nameEl = root.querySelector('.callout-name');
-  nameEl.textContent = displayName;
+  nameEl.innerHTML = formatNameWithSubtitles(displayName);
   const isolateBtn = root.querySelector('[data-callout="isolate"]');
   if (isolateBtn) isolateBtn.textContent = translate('isolate');
   const hideBtn = root.querySelector('[data-callout="hide"]');

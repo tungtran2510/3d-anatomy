@@ -26,6 +26,7 @@ import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
 import { normalise, searchStructures } from '../utils/dataLoader.js';
 import { setExplodeFactor, resetExplode } from '../viewer/explodedView.js';
 import { applyAtlasPreset } from './atlasPresetEngine.js';
+import { openSettingsModal } from './settingsModal.js';
 
 function escapeHtml(text) {
   if (!text) return '';
@@ -330,8 +331,7 @@ function setupHubEvents(viewer) {
 
   const bottomSettingsBtn = hubModalEl.querySelector('#btnHubBottomSettings');
   bottomSettingsBtn?.addEventListener('click', () => {
-    toggleAppTheme(viewer);
-    showToast(`Đã chuyển sang giao diện ${isDarkTheme() ? 'Tối' : 'Sáng'}`);
+    openSettingsModal(viewer);
   });
 
   const bottomHelpBtn = hubModalEl.querySelector('#btnHubBottomHelp');

@@ -32,14 +32,12 @@ export function initAIAssistantUI(viewer) {
   `;
   container.appendChild(aiBarEl);
 
-  // 2. Create Transparent Floating HUD Toast (1-2 lines for AI response)
+  // 2. Create Frameless Subtle Whisper Text (No container, no badges, zero obstruction)
   aiToastEl = document.createElement('div');
   aiToastEl.id = 'aiTransparentToast';
   aiToastEl.className = 'ai-transparent-toast hidden';
   aiToastEl.innerHTML = `
-    <span class="ai-toast-badge" id="aiToastBadge">🎯</span>
     <span class="ai-toast-text" id="aiToastText">Đang xử lý...</span>
-    <button type="button" class="ai-toast-close" id="aiToastClose" title="Đóng">&times;</button>
   `;
   container.appendChild(aiToastEl);
 
@@ -53,7 +51,6 @@ function setupBarEvents(viewer) {
   const sendBtn = aiBarEl.querySelector('#btnAIQuickSend');
   const closeBtn = aiBarEl.querySelector('#btnAIQuickClose');
   const micBtn = aiBarEl.querySelector('#btnAIQuickMic');
-  const toastClose = aiToastEl.querySelector('#aiToastClose');
 
   const submitQuery = () => {
     if (autoSubmitTimer) {
@@ -70,13 +67,26 @@ function setupBarEvents(viewer) {
   };
 
   sendBtn?.addEventListener('click', submitQuery);
+
+  // Khi người dùng bấm vào ô nhập hoặc gõ phím -> Tự động dừng ghi âm để người dùng gõ phím
+  const cancelVoiceOnTyping = () => {
+    if (isRecording) {
+      try { recognition?.stop(); } catch {}
+      stopVoiceRecording();
+    }
+  };
+  inputEl?.addEventListener('focus', cancelVoiceOnTyping);
+  inputEl?.addEventListener('pointerdown', cancelVoiceOnTyping);
   inputEl?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       submitQuery();
+    } else {
+      cancelVoiceOnTyping();
     }
   });
 
   inputEl?.addEventListener('input', () => {
+    cancelVoiceOnTyping();
     if (inputEl.value.trim().length > 0) {
       sendBtn?.classList.add('has-text');
     } else {
@@ -89,15 +99,9 @@ function setupBarEvents(viewer) {
   });
 
   micBtn?.addEventListener('click', () => {
+    sessionStorage.removeItem('mic_perm_denied');
+    sessionStorage.removeItem('mic_perm_notified');
     toggleVoiceRecording(viewer);
-  });
-
-  toastClose?.addEventListener('click', () => {
-    hideAIToast();
-  });
-
-  aiToastEl?.addEventListener('click', () => {
-    hideAIToast();
   });
 }
 
@@ -158,9 +162,19 @@ function createSpeechRecognition(viewer) {
       console.warn('SpeechRecognition error:', e);
       stopVoiceRecording();
       if (e.error === 'not-allowed') {
-        showAIToast('⚠️ Cần cấp quyền Microphone trong trình duyệt để nói', true);
+        sessionStorage.setItem('mic_perm_denied', 'true');
+        // Chỉ thông báo 1 lần duy nhất, tuyệt đối không lặp lại gây phiền toái
+        const alreadyNotified = sessionStorage.getItem('mic_perm_notified');
+        if (!alreadyNotified) {
+          sessionStorage.setItem('mic_perm_notified', 'true');
+          showAIToast('Cần cấp quyền micro trong trình duyệt để nói', true);
+        }
       } else if (e.error !== 'no-speech') {
-        showAIToast('⚠️ Không nhận diện được âm thanh, hãy thử nói lại', true);
+        const alreadyNotifiedSpeech = sessionStorage.getItem('speech_err_notified');
+        if (!alreadyNotifiedSpeech) {
+          sessionStorage.setItem('speech_err_notified', 'true');
+          showAIToast('Không nhận được âm thanh, hãy nói lại', true);
+        }
       }
     };
 
@@ -179,31 +193,35 @@ function setupSpeechRecognition(viewer) {
   recognition = createSpeechRecognition(viewer);
 }
 
+export function startVoiceRecording(viewer) {
+  if (isRecording) return;
+  isRecording = true;
+  const micBtn = aiBarEl?.querySelector('#btnAIQuickMic');
+  const inputEl = aiBarEl?.querySelector('#inputAIQuickCmd');
+  micBtn?.classList.add('recording');
+  if (inputEl) {
+    inputEl.placeholder = '🎙️ Đang nghe... Hãy nói ngay (Chạm ô để gõ)';
+    inputEl.classList.add('listening');
+  }
+
+  try {
+    if (!recognition) {
+      recognition = createSpeechRecognition(viewer);
+    }
+    if (recognition) {
+      recognition.start();
+    }
+  } catch (err) {
+    console.warn('[AI voice start]:', err);
+  }
+}
+
 function toggleVoiceRecording(viewer) {
   if (isRecording) {
     try { recognition?.stop(); } catch {}
     stopVoiceRecording();
   } else {
-    try {
-      if (!recognition) {
-        recognition = createSpeechRecognition(viewer);
-      }
-      if (!recognition) {
-        showAIToast('⚠️ Trình duyệt chưa hỗ trợ nhận dạng giọng nói tiếng Việt', true);
-        return;
-      }
-      recognition.start();
-      isRecording = true;
-      const micBtn = aiBarEl?.querySelector('#btnAIQuickMic');
-      const inputEl = aiBarEl?.querySelector('#inputAIQuickCmd');
-      micBtn?.classList.add('recording');
-      if (inputEl) {
-        inputEl.placeholder = '🎙️ Đang nghe... Hãy nói ngay';
-        inputEl.classList.add('listening');
-      }
-    } catch {
-      stopVoiceRecording();
-    }
+    startVoiceRecording(viewer);
   }
 }
 
@@ -218,21 +236,27 @@ function stopVoiceRecording() {
   }
 }
 
-export function openAIAssistant(viewer, initialPrompt = null) {
+export function openAIAssistant(viewer, initialPrompt = null, autoStartVoice = true) {
   if (!aiBarEl) initAIAssistantUI(viewer);
 
   aiBarEl.classList.remove('hidden');
   document.getElementById('floatingAIBubble')?.classList.add('ai-bar-active');
 
   const inputEl = aiBarEl.querySelector('#inputAIQuickCmd');
-  if (inputEl) {
-    inputEl.focus();
-  }
 
   if (initialPrompt) {
     if (inputEl) inputEl.value = initialPrompt;
     handleCompactAISubmit(initialPrompt, viewer);
     closeAIAssistant();
+    return;
+  }
+
+  // Tự động nhảy vào ghi âm ngay lập tức nếu chưa bị từ chối; nếu đã từ chối thì focus ô gõ, không hỏi lại
+  const micDenied = sessionStorage.getItem('mic_perm_denied');
+  if (autoStartVoice && !micDenied) {
+    startVoiceRecording(viewer);
+  } else if (inputEl) {
+    inputEl.focus();
   }
 }
 
@@ -276,7 +300,7 @@ export async function handleCompactAISubmit(text, viewer) {
           : 'axis_gut_brain'
       );
       await openClinicalAxesModal(targetAxisId, viewer);
-      showAIToast(`🧬 Đã kích hoạt 3D: ${matchedAxis ? matchedAxis.titleVi.split('(')[0].trim() : 'Trục Lâm Sàng'}!`, true);
+      showAIToast(`Đã kích hoạt 3D: ${matchedAxis ? matchedAxis.titleVi.split('(')[0].trim() : 'Trục Lâm Sàng'}!`, true);
       return;
     }
   } catch {}
@@ -307,8 +331,13 @@ export async function handleCompactAISubmit(text, viewer) {
 export function showAIToast(message, autoHide = true) {
   if (!aiToastEl) return;
 
+  // Lọc sạch toàn bộ emoji / biểu tượng theo yêu cầu: "không có biểu tượng gì hết"
+  const cleanMsg = typeof message === 'string'
+    ? message.replace(/^[\s\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}🎯⚠️💡🧬🎙️✅❌]+\s*/u, '')
+    : message;
+
   const textEl = aiToastEl.querySelector('#aiToastText');
-  if (textEl) textEl.textContent = message;
+  if (textEl) textEl.textContent = cleanMsg;
 
   if (aiBarEl && !aiBarEl.classList.contains('hidden')) {
     aiToastEl.classList.add('has-bar');
@@ -321,9 +350,10 @@ export function showAIToast(message, autoHide = true) {
   if (toastTimeout) clearTimeout(toastTimeout);
 
   if (autoHide) {
+    // Thoát nhanh, nhẹ nhàng theo yêu cầu người dùng
     toastTimeout = setTimeout(() => {
       hideAIToast();
-    }, 4500);
+    }, 2200);
   }
 }
 

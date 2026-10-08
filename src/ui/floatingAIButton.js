@@ -29,17 +29,17 @@ export function initFloatingAIButton(viewer) {
     <span class="ai-bubble-text">AI</span>
   `;
 
-  // Restore saved position or default to floating bottom right
+  // Restore saved position (if on right half) or default to bottom-right above "Làm lại"
   const savedPos = getSavedPosition();
-  if (savedPos) {
+  if (savedPos && savedPos.x > 150) {
     bubbleEl.style.left = `${savedPos.x}px`;
     bubbleEl.style.top = `${savedPos.y}px`;
     bubbleEl.style.right = 'auto';
     bubbleEl.style.bottom = 'auto';
   } else {
-    bubbleEl.style.left = '14px';
-    bubbleEl.style.bottom = typeof window !== 'undefined' && window.innerWidth <= 768 ? '118px' : '80px';
-    bubbleEl.style.right = 'auto';
+    bubbleEl.style.right = '14px';
+    bubbleEl.style.bottom = typeof window !== 'undefined' && window.innerWidth <= 768 ? '78px' : '72px';
+    bubbleEl.style.left = 'auto';
     bubbleEl.style.top = 'auto';
   }
 
@@ -140,20 +140,15 @@ function setupLongPressDragHandlers(viewer) {
       bubbleEl.classList.remove('is-dragging');
       snapToEdge();
     } else {
-      // Quick tap without holding -> Toggle 1-line transparent AI bar
       isDragging = false;
       isLongPressed = false;
       bubbleEl.classList.remove('is-dragging');
-      lastToggleTime = Date.now();
-      toggleAIAssistant(viewer);
     }
   };
 
-  let lastToggleTime = 0;
   bubbleEl.addEventListener('click', (e) => {
-    if (Date.now() - lastToggleTime < 350) return;
+    e.stopPropagation();
     if (!pointerMoved && !isLongPressed) {
-      lastToggleTime = Date.now();
       toggleAIAssistant(viewer);
     }
   });

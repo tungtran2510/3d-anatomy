@@ -503,6 +503,7 @@ function applyCustomProps(mesh, props) {
   if (props.transparent !== undefined) m.transparent = props.transparent;
   if (props.opacity !== undefined) m.opacity = props.opacity;
   if (props.depthWrite !== undefined) m.depthWrite = props.depthWrite;
+  if (props.side !== undefined) m.side = props.side;
   if (props.bumpMap !== undefined) m.bumpMap = props.bumpMap;
   if (props.bumpScale !== undefined) m.bumpScale = props.bumpScale;
   if (props.name) m.name = props.name;
@@ -586,7 +587,8 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         metalness: 0.02,
         transparent: false,
         opacity: 1.0,
-        depthWrite: true
+        depthWrite: true,
+        side: THREE.DoubleSide
       });
     } else if (partName.includes('duodenum') || partName.includes('tá tràng')) {
       // Duodenum: C-loop wrapping around pancreas head with living mucosal depth
@@ -821,12 +823,15 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         metalness: 0.0
       });
     } else {
-      // Lymph nodes and vessels: Medical emerald-green PBR (matte)
+      // Lymph nodes and vessels: Soft physiological moss-green (gentle translucent medical PBR)
       applyCustomProps(mesh, {
         name: 'PBR_LymphNode',
-        color: 0x3E9C44,
-        roughness: 0.80,
-        metalness: 0.0
+        color: 0x4A7C59,
+        roughness: 0.65,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.75,
+        depthWrite: true
       });
     }
   } else if (systemId === 'muscular') {
@@ -1058,46 +1063,46 @@ function enhanceMaterialForOrgan(mesh, systemId) {
   } else if (systemId === 'cardiovascular') {
     const mName = (mesh.material?.name || '').toLowerCase();
     if (mName.includes('artery') || partName.includes('artery') || partName.includes('aorta') || partName.includes('động mạch') || partName.includes('dong mach')) {
+      // Arteries: Authentic living arterial blood crimson with soft fibrous adventitia diffusion
       applyCustomProps(mesh, {
         name: 'PBR_Artery',
-        color: 0xBF1820,
-        roughness: 0.35,
-        metalness: 0.03,
-        clearcoat: 0.52,
-        clearcoatRoughness: 0.18,
-        sheen: 0.55,
-        sheenColor: 0xf87171
+        color: 0x9E2020,
+        roughness: 0.54,
+        metalness: 0.0,
+        clearcoat: 0.0,
+        sheen: 0.35,
+        sheenColor: 0x7F1D1D
       });
     } else if (mName.includes('vein') || partName.includes('vein') || partName.includes('tĩnh mạch') || partName.includes('tinh mach') || partName.includes('cava')) {
+      // Veins: Physiological deoxygenated venous blood navy with soft adventitial tone
       applyCustomProps(mesh, {
         name: 'PBR_Vein',
-        color: 0x1E4C8A,
-        roughness: 0.34,
-        metalness: 0.02,
-        clearcoat: 0.48,
-        clearcoatRoughness: 0.20,
-        sheen: 0.45,
-        sheenColor: 0x60a5fa
+        color: 0x24426E,
+        roughness: 0.52,
+        metalness: 0.0,
+        clearcoat: 0.0,
+        sheen: 0.30,
+        sheenColor: 0x1E3A5F
       });
     } else if (mName.includes('trapezius') || partName.includes('heart') || partName.includes('myocard') || partName.includes('tim') || partName.includes('ventric') || partName.includes('atrium')) {
+      // Myocardium / Heart: Dense muscular cardiac parenchyma with natural biological texture
       applyCustomProps(mesh, {
         name: 'PBR_Heart',
-        color: 0x84201E,
-        roughness: 0.40,
-        metalness: 0.02,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.24,
-        sheen: 0.40,
-        sheenColor: 0xb91c1c
+        color: 0x782422,
+        roughness: 0.48,
+        metalness: 0.0,
+        clearcoat: 0.0,
+        sheen: 0.25,
+        sheenColor: 0x5C1D1D
       });
     } else if (partName.includes('valve') || partName.includes('van tim')) {
+      // Heart valves: Pearly fibrous endocardial leaflets
       applyCustomProps(mesh, {
         name: 'PBR_HeartValve',
         color: 0xD4CDC0,
-        roughness: 0.40,
-        metalness: 0.02,
-        clearcoat: 0.40,
-        clearcoatRoughness: 0.20,
+        roughness: 0.45,
+        metalness: 0.0,
+        clearcoat: 0.0,
         transparent: true,
         opacity: 0.90
       });

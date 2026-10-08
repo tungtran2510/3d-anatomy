@@ -1,6 +1,6 @@
 // Selection - Raycasting, highlighting, and selection management
 import * as THREE from 'three';
-import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo } from '../state/store.js';
+import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo, pushRedo, popRedo, clearRedo } from '../state/store.js';
 import { getMeshRegistry, getPickTargets, getStructure } from './loadModel.js';
 import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart, restoreAllParts, setPartTransparency } from './visibility.js';
 import { focusOnMesh, zoomIntoMesh, zoomOutToOverview } from './camera.js';
@@ -822,23 +822,30 @@ export function executeUndo(viewer = state.viewer) {
   if (typeof action === 'string' || action.type === 'dissect') {
     const partId = typeof action === 'string' ? action : action.partId;
     showPart(partId);
+    pushRedo({ type: 'dissect', partId });
     targetViewer?.render();
     const info = getStructureInfo(partId);
     const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || partId;
-    return `Đã phục hồi: ${name}`;
+    return `Đã hoàn tác: Khôi phục ${name}`;
   }
 
   // 2. Handle hide action
   if (action.type === 'hide') {
     showPart(action.partId);
+    pushRedo({ type: 'hide', partId: action.partId });
     targetViewer?.render();
     const info = getStructureInfo(action.partId);
     const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || action.partId;
-    return `Đã phục hồi: ${name}`;
+    return `Đã hoàn tác: Khôi phục ${name}`;
   }
 
   // 3. Handle isolate action
   if (action.type === 'isolate') {
+    pushRedo({
+      type: 'isolate',
+      partId: action.partId,
+      prevIsolated: action.prevIsolated
+    });
     restoreAllParts();
     if (action.prevIsolated) {
       isolatePart(action.prevIsolated);
@@ -853,27 +860,103 @@ export function executeUndo(viewer = state.viewer) {
 
   // 4. Handle selection step action
   if (action.type === 'select') {
+    pushRedo({
+      type: 'select',
+      prevId: action.prevId,
+      partId: action.partId || state.selectedPart?.id
+    });
     if (action.prevId) {
       selectPart(action.prevId, targetViewer, true);
       const info = getStructureInfo(action.prevId);
       const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || action.prevId;
       targetViewer?.render();
-      return `Đã quay lại bước trước: ${name}`;
+      return `Đã hoàn tác: Quay lại ${name}`;
     } else {
       deselectPart(true);
       targetViewer?.render();
-      return 'Đã bỏ chọn bộ phận';
+      return 'Đã hoàn tác: Bỏ chọn bộ phận';
     }
   }
 
   // 5. Handle transparency action
   if (action.type === 'ghost') {
+    const partState = state.partStates.get(action.partId);
+    const currentOpacity = partState?.opacity ?? 1;
+    pushRedo({
+      type: 'ghost',
+      partId: action.partId,
+      opacity: currentOpacity,
+      prevOpacity: action.prevOpacity
+    });
     setPartTransparency(action.partId, action.prevOpacity ?? 1);
     targetViewer?.render();
     return 'Đã hoàn tác độ trong suốt';
   }
 
   return 'Đã hoàn tác thao tác';
+}
+
+export function executeRedo(viewer = state.viewer) {
+  const action = popRedo();
+  if (!action) return null;
+
+  const targetViewer = viewer || state.viewer || window.viewer;
+
+  // 1. Redo dissect / hide
+  if (action.type === 'dissect' || action.type === 'hide') {
+    hidePart(action.partId);
+    pushUndo({ type: action.type, partId: action.partId }, true);
+    targetViewer?.render();
+    const info = getStructureInfo(action.partId);
+    const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || action.partId;
+    return `Đã làm lại: Ẩn ${name}`;
+  }
+
+  // 2. Redo isolate
+  if (action.type === 'isolate') {
+    pushUndo({
+      type: 'isolate',
+      partId: action.partId,
+      prevIsolated: action.prevIsolated
+    }, true);
+    if (action.partId) {
+      isolatePart(action.partId);
+      const isolateBtn = document.getElementById('cardIsolateBtn');
+      if (isolateBtn) isolateBtn.classList.add('active');
+    }
+    targetViewer?.render();
+    return 'Đã làm lại: Cô lập bộ phận';
+  }
+
+  // 3. Redo select
+  if (action.type === 'select') {
+    pushUndo({
+      type: 'select',
+      prevId: action.prevId,
+      partId: action.partId
+    }, true);
+    if (action.partId) {
+      selectPart(action.partId, targetViewer, true);
+      const info = getStructureInfo(action.partId);
+      const name = info?.name?.[state.language] || info?.name?.vi || info?.name?.en || action.partId;
+      targetViewer?.render();
+      return `Đã làm lại: Chọn ${name}`;
+    }
+  }
+
+  // 4. Redo ghost
+  if (action.type === 'ghost') {
+    pushUndo({
+      type: 'ghost',
+      partId: action.partId,
+      prevOpacity: action.prevOpacity
+    }, true);
+    setPartTransparency(action.partId, action.opacity ?? 0.3);
+    targetViewer?.render();
+    return 'Đã làm lại độ trong suốt';
+  }
+
+  return 'Đã làm lại thao tác';
 }
 
 export function undoLastDissect(viewer) {

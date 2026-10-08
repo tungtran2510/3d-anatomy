@@ -900,7 +900,7 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         subtitle: 'Lá lách (Tỳ), chuỗi hạch bạch huyết và ống ngực',
         badge: 'Lá lách & Miễn dịch',
         image: '/images/atlas/lymph_spleen.png',
-        systems: ['lymphatic', 'skeletal', 'visceral'],
+        systems: ['visceral', 'skeletal'],
         camera: { x: 0.25, y: 1.15, z: 0.78, targetX: 0.08, targetY: 1.15, targetZ: 0 },
         highlight: 'Spleen',
         desc: 'Cơ quan lympho lớn nhất cơ thể lọc máu, tiêu hủy hồng cầu già và sinh tế bào miễn dịch.'
