@@ -16,8 +16,11 @@ export const CLINICAL_AXES = [
     primarySystems: ['nervous', 'visceral', 'skeletal'],
     defaultPartId: 'Stomach',
     keywords: [
-      'trục não ruột', 'truc nao ruot', 'gut brain', 'vagus', 'dây thần kinh x', 'than kinh 10',
-      'dạ dày', 'da day', 'lo âu đau bụng', 'ruột kích thích', 'ibs', 'trầm cảm tiêu hóa'
+      'trục não ruột', 'truc nao ruot', 'chục lão chuột', 'chuc lao chuot', 'chụp não ruột', 'chup nao ruot',
+      'chục não ruột', 'chuc nao ruot', 'chục lão ruột', 'chuc lao ruot', 'chục não', 'chuc nao',
+      'trục ruột não', 'truc ruot nao', 'trục não', 'truc nao', 'gut brain', 'gut-brain', 'vagus',
+      'dây thần kinh x', 'than kinh 10', 'dây x', 'dạ dày ruột', 'lo âu đau bụng', 'ruột kích thích',
+      'ibs', 'trầm cảm tiêu hóa'
     ],
     chainSteps: [
       {
@@ -28,17 +31,17 @@ export const CLINICAL_AXES = [
         partIds: ['Hypothalamus', 'Midbrain.l', 'Midbrain.r', 'Pons.l', 'Pons.r', 'Medulla oblongata.l', 'Medulla oblongata.r'],
         system: 'nervous',
         shortNote: 'Tiếp nhận stress, phát tín hiệu báo động đến hệ thần kinh tự chủ.',
-        note: 'Tiếp nhận căng thẳng (stress), phát tín hiệu báo động đến hệ thần kinh tự chủ.'
+        note: 'Tiếp nhận căng thẳng (stress), phát tín hiệu báo động đến hệ thần kinh tự chủ và trục dưới đồi - tuyến yên - thượng thận (HPA).'
       },
       {
         step: 2,
         title: 'Dây thần kinh X (Phế vị / Lang thang)',
         shortTitle: '2. Dây X',
         partId: 'Vagus nerve (X).l',
-        partIds: ['Vagus nerve (X).l', 'Vagus nerve (X).r'],
+        partIds: ['Vagus nerve (X).l', 'Vagus nerve (X).r', 'Posterior nucleus of vagus nerve.l', 'Posterior nucleus of vagus nerve.r'],
         system: 'nervous',
         shortNote: 'Dây sọ dài nhất, dẫn xung động từ thân não xuống dạ dày và ruột.',
-        note: 'Dây thần kinh sọ dài nhất cơ thể, dẫn truyền xung động từ thân não xuống tim, dạ dày và ruột.'
+        note: 'Dây thần kinh sọ dài nhất cơ thể (Dây X), dẫn truyền xung động đối giao cảm từ thân não xuống tim, dạ dày và toàn bộ ống tiêu hóa.'
       },
       {
         step: 3,
@@ -48,23 +51,27 @@ export const CLINICAL_AXES = [
         partIds: ['Stomach'],
         system: 'visceral',
         shortNote: 'Tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc.',
-        note: 'Bị kích thích tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc gây đau cồn cào.'
+        note: 'Bị kích thích tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc gây đau cồn cào và trợt loét.'
       },
       {
         step: 4,
-        title: 'Ruột & Hệ vi sinh đường ruột',
-        shortTitle: '4. Ruột già',
+        title: 'Ruột & Hệ thần kinh ruột (ENS)',
+        shortTitle: '4. Ruột & ENS',
         partId: 'Transverse colon',
         partIds: ['Duodenum', 'Jejunum', 'Transverse colon', 'Ascending colon', 'Descending colon', 'Sigmoid colon'],
         system: 'visceral',
         shortNote: 'Co bóp gây ruột kích thích; sản xuất 90% Serotonin điều hòa não.',
-        note: 'Co bóp bất thường gây hội chứng ruột kích thích (IBS); tổng hợp 90% Serotonin điều hòa tâm trạng ngược lên não.'
+        note: 'Co bóp bất thường gây hội chứng ruột kích thích (IBS); tổng hợp 90% Serotonin và 50% Dopamine điều hòa tâm trạng ngược lên não.'
       }
     ],
     clinicalInsights: [
       {
         question: 'Tại sao khi lo lắng, thi cử hay căng thẳng ta lại bị đau quặn bụng, đi ngoài?',
         explanation: 'Khi não bị stress, tín hiệu truyền dọc theo Dây thần kinh X làm dạ dày co bóp hỗn loạn và kích hoạt nhu động ruột quá mức. 90% thụ thể Serotonin (chất dẫn truyền thần kinh) nằm ở ruột chứ không phải ở não.'
+      },
+      {
+        question: 'Vì sao đường ruột được mệnh danh là "Bộ não thứ hai" (The Second Brain)?',
+        explanation: 'Hệ thần kinh ruột (ENS) chứa hơn 500 triệu nơron thần kinh kết nối mật thiết với hệ vi sinh đường ruột (Microbiota). Chúng liên tục gửi tín hiệu điều hòa cảm xúc, giấc ngủ và miễn dịch ngược lên não bộ.'
       },
       {
         question: 'Bệnh nhân trầm cảm hoặc stress kéo dài có dễ bị loét dạ dày không?',
@@ -80,74 +87,259 @@ export const CLINICAL_AXES = [
 
   {
     id: 'axis_hepatobiliary_pancreas',
-    titleVi: 'Hệ Gan – Mật – Tụy',
+    titleVi: 'Hệ Gan – Mật – Tụy (Bộ Ba Chức Năng)',
     latin: 'Systema hepatobiliare et pancreas',
-    category: 'Tiêu hóa – Gan mật – Nội tiết',
-    badge: 'Ngã Ba Dịch Tiêu Hóa',
+    category: 'Tiêu hóa – Gan mật – Chuyển hóa & Nội tiết',
+    badge: 'Bộ Ba Tiết & Chuyển Hóa',
     icon: '🟡🟢🔴',
-    summary: 'Chuỗi sản xuất, cô đặc mật và men tiêu hóa hợp lưu tại cơ vòng Oddi đổ vào tá tràng để tiêu hóa mỡ và protein.',
+    summary: 'Bộ ba cơ quan tiêu hóa & chuyển hóa then chốt: Gan sản xuất dịch mật, Túi mật dự trữ cô đặc mật, Tuyến tụy tiết enzyme cực mạnh và insulin; cùng đổ dịch vào tá tràng D2 qua cơ vòng Oddi / bóng Vater.',
     primarySystems: ['visceral', 'skeletal'],
     defaultPartId: 'Gallbladder',
     keywords: [
-      'gan mật tụy', 'gan mat tuy', 'túi mật', 'tui mat', 'tuyến tụy', 'tuyen tuy', 'sỏi mật',
-      'viêm tụy cấp', 'oddi', 'vater', 'vàng da', 'tá tràng', 'men tụy'
+      'gan mật tụy', 'gan mat tuy', 'gân mà tự', 'gan mat', 'bộ ba chức năng', 'bo ba chuc nang',
+      'bộ ba gan mật tụy', 'bo ba gan mat tuy', 'bộ 3 chức năng', 'bộ 3 gan mật tụy', 'hệ gan mật tụy',
+      'he gan mat tuy', 'gan mật và tụy', 'túi mật và tụy', 'túi mật', 'tui mat', 'tuyến tụy', 'tuyen tuy',
+      'sỏi mật', 'viêm tụy cấp', 'oddi', 'vater', 'bóng vater', 'cơ vòng oddi', 'vàng da', 'tá tràng', 'men tụy'
     ],
     chainSteps: [
       {
         step: 1,
-        title: 'Nhu mô Gan',
-        shortTitle: '1. Gan',
+        title: 'Nhu mô Gan (Sản xuất mật & Chuyển hóa)',
+        shortTitle: '1. Nhu mô Gan',
         partId: 'Liver',
-        partIds: ['Liver'],
+        partIds: [
+          'Liver',
+          'Anterior lateral segment of liver (VI)',
+          'Anterior medial segment of liver (V)',
+          'Left anterior lateral segment of liver (III)',
+          'Left medial segment of liver (IV)',
+          'Left posterior lateral segment of liver (II)',
+          'Posterior lateral segment of liver (VII)',
+          'Posterior medial segment of liver (VIII)',
+          'Posterior segment of liver (I)'
+        ],
         system: 'visceral',
         shortNote: 'Sản xuất liên tục 800 - 1000ml dịch mật nhũ hóa chất béo.',
-        note: 'Sản xuất liên tục 800 - 1000ml dịch mật mỗi ngày để nhũ hóa chất béo.'
+        note: 'Tuyến tiêu hóa lớn nhất cơ thể (~1.5kg), sản xuất liên tục 800 - 1000ml dịch mật mỗi ngày để nhũ hóa lipid và khử độc chuyển hóa.'
       },
       {
         step: 2,
-        title: 'Túi mật & Đường mật',
-        shortTitle: '2. Túi mật',
+        title: 'Túi mật & Đường mật (Dự trữ & Dẫn lưu)',
+        shortTitle: '2. Túi mật & Ống mật',
         partId: 'Gallbladder',
         partIds: ['Gallbladder', 'Bile duct'],
         system: 'visceral',
-        shortNote: 'Dự trữ, cô đặc mật gấp 10 lần và tống mật qua ống mật chủ.',
-        note: 'Dự trữ và cô đặc dịch mật gấp 10 lần, co bóp tống mật khi thức ăn dầu mỡ xuống tá tràng.'
+        shortNote: 'Dự trữ, cô đặc mật gấp 10-20 lần và tống mật qua ống mật chủ.',
+        note: 'Dự trữ và cô đặc dịch mật gấp 10-20 lần; co bóp tống mật qua ống mật chủ khi thức ăn dầu mỡ xuống tá tràng kích thích hormone CCK.'
       },
       {
         step: 3,
-        title: 'Tuyến tụy (Tụy tạng)',
+        title: 'Tuyến tụy (Ngoại tiết men tiêu hóa & Nội tiết Insulin)',
         shortTitle: '3. Tuyến tụy',
         partId: 'Pancreas',
         partIds: ['Pancreas'],
         system: 'visceral',
-        shortNote: 'Tiết men tiêu hóa cực mạnh (Lipase, Protease) ở dạng bất hoạt.',
-        note: 'Tiết các men tiêu hóa cực mạnh (Amylase, Lipase, Trypsinogen) ở dạng bất hoạt để bảo vệ chính nó.'
+        shortNote: 'Tiết men Amylase, Lipase, Trypsinogen và hormone Insulin.',
+        note: 'Tụy ngoại tiết tiết các men tiêu hóa cực mạnh (Amylase, Lipase, Trypsinogen) ở dạng bất hoạt; Tụy nội tiết tiết Insulin và Glucagon điều hòa đường huyết.'
       },
       {
         step: 4,
-        title: 'Cơ vòng Oddi & Tá tràng',
-        shortTitle: '4. Tá tràng',
+        title: 'Cơ vòng Oddi, Bóng Vater & Tá tràng D2',
+        shortTitle: '4. Tá tràng & Cơ Oddi',
         partId: 'Duodenum',
         partIds: ['Duodenum'],
         system: 'visceral',
         shortNote: 'Ngã ba chung đổ mật và dịch tụy vào ruột; vị trí kẹt sỏi mật.',
-        note: 'Ngã ba chung nơi ống mật chủ và ống tụy chính đổ dịch vào tá tràng D2; vị trí sỏi mật dễ kẹt gây viêm tụy cấp.'
+        note: 'Ngã ba chung nơi ống mật chủ và ống tụy chính hợp lưu tại bóng Vater đổ vào tá tràng D2; đây là vị trí sỏi mật dễ kẹt gây Viêm tụy cấp nguy kịch.'
       }
     ],
     clinicalInsights: [
       {
         question: 'Tại sao một viên sỏi mật nhỏ lại có thể gây biến chứng Viêm tụy cấp nguy kịch?',
-        explanation: 'Ống mật chủ và ống tụy chính có đoạn chung tại bóng Vater. Khi sỏi từ túi mật rơi xuống kẹt tắc ngay ngã ba này, dịch mật và dịch tụy bị ứ ngược lại. Các men tụy bị kích hoạt sớm ngay trong tuyến tụy, tự tiêu hủy mô tụy gây đau dữ dội và đe dọa tính mạng.'
+        explanation: 'Ống mật chủ và ống tụy chính cùng đổ vào tá tràng qua một kênh chung tại bóng Vater. Khi sỏi mật rơi xuống kẹt tắc ngay ngã ba này, dịch mật dội ngược vào ống tụy. Men tụy (Trypsinogen) bị kích hoạt sớm ngay trong tuyến tụy, tự tiêu hủy và hoại tử mô tụy gây đau dữ dội, tụt huyết áp và đe dọa tính mạng.'
       },
       {
-        question: 'Cắt bỏ túi mật rồi có tiêu hóa mỡ được nữa không?',
-        explanation: 'Vẫn tiêu hóa được. Gan vẫn sản xuất mật bình thường và dịch mật sẽ chảy trực tiếp xuống ruột. Tuy nhiên vì không còn túi gom cô đặc mật nên người cắt túi mật cần hạn chế ăn bữa quá nhiều dầu mỡ cùng một lúc.'
+        question: 'Cắt bỏ túi mật rồi thì gan và ruột có tiêu hóa mỡ được nữa không?',
+        explanation: 'Vẫn tiêu hóa được. Gan vẫn sản xuất mật liên tục và chảy thẳng xuống tá tràng. Tuy nhiên vì không còn túi mật để cô đặc và xả mật ồ ạt sau bữa ăn nhiều dầu mỡ, người đã cắt túi mật nên chia nhỏ bữa ăn và hạn chế ăn quá nhiều chất béo cùng lúc.'
+      },
+      {
+        question: 'Tam chứng Charcot trong nhiễm trùng đường mật do sỏi mật gồm những dấu hiệu gì?',
+        explanation: 'Bao gồm: Đau quặn hạ sườn phải -> Sốt rét run -> Vàng da vàng mắt. Đây là dấu hiệu cảnh báo sỏi đang tắc nghẽn ống mật chủ cần can thiệp cấp cứu lấy sỏi qua nội soi mật tụy ngược dòng (ERCP).'
       }
     ],
     lifestyleTips: [
-      'Ăn sáng đầy đủ giúp túi mật co bóp tống mật đều đặn, chống đọng bùn và sỏi mật.',
+      'Ăn sáng đầy đủ giúp túi mật co bóp tống mật đều đặn, chống đọng bùn và sỏi cholesterol.',
       'Hạn chế bia rượu tuyệt đối nếu có tiền sử đau tức hạ sườn phải hoặc men gan tăng cao.',
       'Uống đủ nước, duy trì cân nặng hợp lý để giảm bài tiết cholesterol quá bão hòa vào dịch mật.'
+    ]
+  },
+
+  {
+    id: 'axis_digestive_glands',
+    titleVi: 'Hệ Thống Tuyến Tiêu Hóa (Digestive Glands System)',
+    latin: 'Systema glandularum digestoriarum',
+    category: 'Tiêu hóa – Tuyến ngoại tiết & Dịch thể',
+    badge: 'Bộ Máy Tiết Men Tiêu Hóa',
+    icon: '🥗🧪💧',
+    summary: 'Toàn bộ mạng lưới tuyến tiêu hóa từ khoang miệng đến ổ bụng: 3 cặp tuyến nước bọt lớn (Mang tai, Dưới hàm, Dưới lưỡi), Tuyến dịch vị dạ dày, Tuyến tụy nội/ngoại tiết và Nhu mô gan.',
+    primarySystems: ['visceral', 'skeletal'],
+    defaultPartId: 'Pancreas',
+    keywords: [
+      'tuyến tiêu hóa', 'tuyen tieu hoa', 'các tuyến tiêu hóa', 'cac tuyen tieu hoa', 'hệ tuyến tiêu hóa',
+      'he tuyen tieu hoa', 'tất cả tuyến tiêu hóa', 'tuyến nước bọt', 'tuyen nuoc bot', 'tuyến mang tai',
+      'tuyến dưới hàm', 'tuyến dưới lưỡi', 'men tiêu hóa', 'dịch tiêu hóa', 'tuyến dịch vị'
+    ],
+    chainSteps: [
+      {
+        step: 1,
+        title: '3 Cặp Tuyến Nước Bọt (Mang tai, Dưới hàm, Dưới lưỡi)',
+        shortTitle: '1. Tuyến nước bọt',
+        partId: 'Parotid gland.l',
+        partIds: [
+          'Parotid gland.l',
+          'Parotid gland.r',
+          'Parotid duct.l',
+          'Parotid duct.r',
+          'Submandibular gland.l',
+          'Submandibular gland.r',
+          'Submandibular duct.l',
+          'Submandibular duct.r',
+          'Sublingual gland.l',
+          'Sublingual gland.r'
+        ],
+        system: 'visceral',
+        shortNote: 'Tiết 1 - 1.5 lít nước bọt/ngày chứa Amylase (Ptyalin) tiêu hóa tinh bột chín.',
+        note: '3 cặp tuyến ngoại tiết lớn: Tuyến mang tai tiết thanh dịch chứa Amylase (Ptyalin); Tuyến dưới hàm và dưới lưỡi tiết hỗn hợp dịch nhầy Mucin giúp bôi trơn và tiêu hóa tinh bột chín ngay tại miệng.'
+      },
+      {
+        step: 2,
+        title: 'Tuyến Dịch Vị Dạ Dày (Gastric Glands)',
+        shortTitle: '2. Tuyến dịch vị',
+        partId: 'Stomach',
+        partIds: ['Stomach'],
+        system: 'visceral',
+        shortNote: 'Tế bào viền tiết axit HCl pH 1.5-2 và men Pepsin tiêu hóa protein.',
+        note: 'Hàng triệu tuyến vi thể ở niêm mạc: Tế bào thành (viền) tiết axit HCl pH 1.5 - 2 diệt khuẩn và hoạt hóa Pepsinogen; Tế bào chính tiết Pepsinogen phân cắt đạm; Tế bào cổ tuyến tiết nhầy kiềm bảo vệ.'
+      },
+      {
+        step: 3,
+        title: 'Lá Gan (Tuyến tiêu hóa lớn nhất cơ thể)',
+        shortTitle: '3. Nhu mô Gan',
+        partId: 'Liver',
+        partIds: [
+          'Liver',
+          'Anterior lateral segment of liver (VI)',
+          'Anterior medial segment of liver (V)',
+          'Left anterior lateral segment of liver (III)',
+          'Left medial segment of liver (IV)',
+          'Left posterior lateral segment of liver (II)',
+          'Posterior lateral segment of liver (VII)',
+          'Posterior medial segment of liver (VIII)',
+          'Posterior segment of liver (I)'
+        ],
+        system: 'visceral',
+        shortNote: 'Tuyến nặng 1.5kg, liên tục tiết 800 - 1000ml dịch mật nhũ hóa chất béo.',
+        note: 'Tuyến tiêu hóa kiêm chuyển hóa lớn nhất cơ thể, sản xuất liên tục 800 - 1000ml dịch mật chứa muối mật và sắc tố mật để nhũ hóa lipid thức ăn tại tá tràng.'
+      },
+      {
+        step: 4,
+        title: 'Tuyến Tụy (Ngoại tiết men tiêu hóa & Nội tiết)',
+        shortTitle: '4. Tuyến tụy',
+        partId: 'Pancreas',
+        partIds: ['Pancreas'],
+        system: 'visceral',
+        shortNote: 'Tiết bộ ba men Amylase, Lipase, Protease và hormone Insulin.',
+        note: 'Tụy ngoại tiết tiết 1.5 - 2 lít dịch tụy chứa Amylase (đường), Lipase (mỡ), Trypsinogen/Chymotrypsinogen (đạm); Tụy nội tiết tiết Insulin và Glucagon trực tiếp vào máu điều hòa glucose.'
+      }
+    ],
+    clinicalInsights: [
+      {
+        question: 'Cơ chế điều hòa phối hợp giữa các tuyến tiêu hóa trong bữa ăn diễn ra như thế nào?',
+        explanation: 'Giai đoạn tâm linh (Cephalic phase): Nhìn, ngửi thức ăn kích thích dây X bài tiết nước bọt và dịch vị trước khi nuốt. Khi thức ăn xuống tá tràng (Intestinal phase), niêm mạc ruột tiết hormone Secretin và Cholecystokinin (CCK) kích thích gan tiết mật, túi mật co bóp và tuyến tụy bơm ồ ạt enzyme tiêu hóa vào ruột.'
+      },
+      {
+        question: 'Nếu tuyến tụy bị suy giảm chức năng ngoại tiết thì cơ thể bị ảnh hưởng gì?',
+        explanation: 'Khi tụy không tiết đủ men Lipase và Protease, cơ thể không thể hấp thu chất béo và vitamin tan trong dầu (A, D, E, K), dẫn đến tình trạng tiêu phân mỡ (steatorrhea), sụt cân nhanh chóng và suy kiệt dinh dưỡng.'
+      }
+    ],
+    lifestyleTips: [
+      'Nhai kỹ khi ăn để enzyme amylase tuyến nước bọt có đủ thời gian phân giải tinh bột, giảm gánh nặng co bóp cho dạ dày.',
+      'Uống đủ nước trong ngày để duy trì lưu lượng tiết nước bọt và bảo vệ men răng chống sâu răng.',
+      'Hạn chế bia rượu để phòng ngừa viêm tụy mạn tính và xơ hóa nhu mô gan.'
+    ]
+  },
+
+  {
+    id: 'axis_csf_ventricles',
+    titleVi: 'Vòng Tuần Hoàn Dịch Não Tủy & Não Thất (CSF Circulation)',
+    latin: 'Circulatio liquoris cerebrospinalis et systema ventriculare',
+    category: 'Thần kinh – Dịch thể – Nội sọ',
+    badge: 'Vòng Đệm Sinh Mệnh Não Thất',
+    icon: '🧠💧🌊',
+    summary: 'Hệ thống sản xuất, luân chuyển và tái hấp thu của Dịch não tủy (CSF): Đám rối màng mạch lọc huyết tương sản xuất CSF, chảy qua 4 buồng não thất, khoang dưới nhện và hấp thu về xoang tĩnh mạch màng cứng.',
+    primarySystems: ['nervous', 'skeletal'],
+    defaultPartId: 'Lateral ventricle.l',
+    keywords: [
+      'dịch não tủy', 'dich nao tuy', 'nước não tủy', 'csf', 'tuần hoàn dịch não tủy', 'tuan hoan dich nao tuy',
+      'hệ thống não thất', 'he thong nao that', 'não thất', 'nao that', 'não thất bên', 'não thất 3', 'não thất ba',
+      'não thất 4', 'não thất tư', 'cống não', 'cống sylvius', 'đám rối màng mạch', 'áp lực nội sọ',
+      'não úng thủy', 'nao ung thuy', 'khoang dưới nhện'
+    ],
+    chainSteps: [
+      {
+        step: 1,
+        title: 'Đám Rối Màng Mạch & Hai Não Thất Bên',
+        shortTitle: '1. Não thất bên & Màng mạch',
+        partId: 'Lateral ventricle.l',
+        partIds: ['Lateral ventricle.l', 'Lateral ventricle.r', 'Choroid plexus.l', 'Choroid plexus.r'],
+        system: 'nervous',
+        shortNote: 'Sản xuất 500ml CSF/ngày; thể tích luân chuyển khoảng 150ml.',
+        note: 'Đám rối màng mạch (Choroid plexus) trong hai não thất bên liên tục lọc huyết tương sản xuất 500ml dịch não tủy mỗi ngày, đóng vai trò đệm thủy lực chống va đập cho não.'
+      },
+      {
+        step: 2,
+        title: 'Lỗ Gian Não Thất (Monro) & Não Thất Ba',
+        shortTitle: '2. Não thất ba',
+        partId: 'Third ventricle',
+        partIds: ['Third ventricle'],
+        system: 'nervous',
+        shortNote: 'Dịch từ hai bán cầu chảy qua lỗ Monro hội tụ vào Não thất ba ở đường giữa.',
+        note: 'Dịch não tủy từ hai não thất bên luân chuyển qua lỗ gian não thất Monro đổ vào Não thất ba nằm hẹp ở đường giữa giữa hai đồi thị và vùng dưới đồi.'
+      },
+      {
+        step: 3,
+        title: 'Cống Não Sylvius (Aqueduct of Midbrain)',
+        shortTitle: '3. Cống não Sylvius',
+        partId: 'Aqueduct of midbrain',
+        partIds: ['Aqueduct of midbrain'],
+        system: 'nervous',
+        shortNote: 'Ống hẹp 1-2mm dài 15mm; vị trí tắc nghẽn phổ biến gây não úng thủy.',
+        note: 'Kênh dẫn hẹp nhất chỉ rộng 1-2mm chạy xuyên qua trung não nối não thất ba và não thất tư. Đây là điểm thắt hiểm yếu dễ bị tắc nghẽn do u hoặc xuất huyết.'
+      },
+      {
+        step: 4,
+        title: 'Não Thất Tư & Khoang Dưới Nhện',
+        shortTitle: '4. Não thất tư & Dưới nhện',
+        partId: 'Fourth ventricle',
+        partIds: ['Fourth ventricle'],
+        system: 'nervous',
+        shortNote: 'Thoát qua lỗ Luschka & Magendie vào khoang dưới nhện bao bọc toàn bộ não tủy.',
+        note: 'Từ não thất tư, dịch não tủy thoát qua 2 lỗ bên (Luschka) và 1 lỗ giữa (Magendie) ra khoang dưới nhện bao quanh toàn bộ não và tủy sống, trước khi hấp thu qua hạt màng nhện Pacchioni vào máu tĩnh mạch.'
+      }
+    ],
+    clinicalInsights: [
+      {
+        question: 'Cơ chế bệnh sinh của bệnh Não úng thủy (Hydrocephalus) là gì?',
+        explanation: 'Khi cống não Sylvius bị hẹp bẩm sinh hoặc có khối u/máu tụ chèn ép các lỗ thoát não thất tư, dịch não tủy tiếp tục sinh ra nhưng không thoát được. Dịch ứ trệ làm giãn căng các buồng não thất, tăng vọt áp lực nội sọ gây đau đầu dữ dội, nôn vọt, teo nhu mô não và đe dọa tử vong.'
+      },
+      {
+        question: 'Tại sao chọc dò tủy sống thắt lưng (L3-L4 hoặc L4-L5) lại lấy được dịch não tủy an toàn?',
+        explanation: 'Khoang dưới nhện bao quanh não thông liên tục xuống tận khoang cùng tủy sống. Tủy sống tận cùng ở đốt sống L1-L2, nên chọc kim ở mức L3-L4 an toàn lấy dịch não tủy xét nghiệm tìm vi khuẩn gây viêm màng não mà không sợ chọc vào tủy sống.'
+      }
+    ],
+    lifestyleTips: [
+      'Đi khám ngay nếu xuất hiện tam chứng tăng áp lực nội sọ: Đau đầu dữ dội tăng dần, buồn nôn vọt vào buổi sáng và nhìn mờ/song thị.',
+      'Đội mũ bảo hiểm đạt chuẩn khi tham gia giao thông để bảo vệ hộp sọ khỏi chấn thương xuất huyết khoang dưới nhện.'
     ]
   },
 

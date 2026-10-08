@@ -249,7 +249,7 @@ function bindFloatingHudEvents() {
 /**
  * Mở Bottom Sheet xem chi tiết cơ chế bệnh sinh
  */
-function openMechanismSheet() {
+export function openMechanismSheet() {
   if (!sheetEl || !currentAxis) return;
   const a = currentAxis;
 
@@ -337,7 +337,7 @@ function openMechanismSheet() {
   }
 }
 
-function closeMechanismSheet() {
+export function closeMechanismSheet() {
   stopSpeech();
   if (sheetEl) sheetEl.classList.add('hidden');
 }

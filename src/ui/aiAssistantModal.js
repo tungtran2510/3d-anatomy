@@ -284,26 +284,103 @@ export function toggleAIAssistant(viewer) {
 export async function handleCompactAISubmit(text, viewer) {
   showAIToast(`Đang tìm kiếm & điều khiển 3D: "${text}"...`, false);
 
-  // Kiểm tra nếu câu lệnh hỏi về Trục lâm sàng (e.g. "trục não ruột", "gan mật tụy", "12 dây thần kinh")
+  // Kiểm tra nếu câu lệnh hỏi về Trục lâm sàng (e.g. "trục não ruột", "chục lão chuột", "gan mật tụy", "bộ ba chức năng", "tuyến tiêu hóa", "dịch não tủy")
   const lower = text.toLowerCase();
   try {
     const { CLINICAL_AXES } = await import('../data/clinicalAxesData.js');
-    const matchedAxis = CLINICAL_AXES.find(axis => {
-      return axis.keywords.some(k => lower.includes(k.toLowerCase()));
-    });
 
-    if (matchedAxis || lower.includes('trục') || lower.includes('truc') || lower.includes('gan mật') || lower.includes('não ruột')) {
-      const { openClinicalAxesModal } = await import('./clinicalAxesModal.js');
-      const targetAxisId = matchedAxis ? matchedAxis.id : (
-        (lower.includes('gan') || lower.includes('mật') || lower.includes('tụy'))
-          ? 'axis_hepatobiliary_pancreas'
-          : 'axis_gut_brain'
-      );
+    // 1. Nhận diện các biến thể giọng nói & từ khóa chuyên sâu
+    let targetAxisId = null;
+    if (
+      lower.includes('chục lão chuột') ||
+      lower.includes('chuc lao chuot') ||
+      lower.includes('chụp não ruột') ||
+      lower.includes('chup nao ruot') ||
+      lower.includes('chục não ruột') ||
+      lower.includes('chuc nao ruot') ||
+      lower.includes('chục não') ||
+      lower.includes('trục não ruột') ||
+      lower.includes('trục ruột não') ||
+      lower.includes('não ruột')
+    ) {
+      targetAxisId = 'axis_gut_brain';
+    } else if (
+      lower.includes('gan mật tụy') ||
+      lower.includes('gân mà tự') ||
+      lower.includes('gan mat tuy') ||
+      lower.includes('bộ ba chức năng') ||
+      lower.includes('bo ba chuc nang') ||
+      lower.includes('bộ ba gan mật tụy') ||
+      lower.includes('bo ba gan mat tuy') ||
+      lower.includes('bộ ba') ||
+      lower.includes('bộ 3') ||
+      lower.includes('hệ gan mật') ||
+      lower.includes('gan mật và tụy')
+    ) {
+      targetAxisId = 'axis_hepatobiliary_pancreas';
+    } else if (
+      lower.includes('tuyến tiêu hóa') ||
+      lower.includes('tuyen tieu hoa') ||
+      lower.includes('các tuyến tiêu hóa') ||
+      lower.includes('hệ tuyến tiêu hóa') ||
+      lower.includes('tuyến nước bọt')
+    ) {
+      targetAxisId = 'axis_digestive_glands';
+    } else if (
+      lower.includes('dịch não tủy') ||
+      lower.includes('dich nao tuy') ||
+      lower.includes('nước não tủy') ||
+      lower.includes('tuần hoàn dịch não tủy') ||
+      lower.includes('hệ thống não thất') ||
+      lower.includes('não thất') ||
+      lower.includes('não úng thủy')
+    ) {
+      targetAxisId = 'axis_csf_ventricles';
+    } else {
+      const matched = CLINICAL_AXES.find(axis => {
+        return axis.keywords.some(k => lower.includes(k.toLowerCase()));
+      });
+      if (matched) targetAxisId = matched.id;
+    }
+
+    if (targetAxisId) {
+      const matchedAxis = CLINICAL_AXES.find(a => a.id === targetAxisId);
+      const { openClinicalAxesModal, openMechanismSheet } = await import('./clinicalAxesModal.js');
       await openClinicalAxesModal(targetAxisId, viewer);
-      showAIToast(`Đã kích hoạt 3D: ${matchedAxis ? matchedAxis.titleVi.split('(')[0].trim() : 'Trục Lâm Sàng'}!`, true);
+
+      // Tự động mở Bottom Sheet cơ chế nếu câu hỏi nhắc đến "cơ chế", "giải thích", "chức năng", "bộ ba", "tại sao" hoặc "ai"
+      const needsMechanism =
+        lower.includes('cơ chế') ||
+        lower.includes('giải thích') ||
+        lower.includes('chức năng') ||
+        lower.includes('tại sao') ||
+        lower.includes('như thế nào') ||
+        lower.includes('bộ ba') ||
+        lower.includes('đầy đủ') ||
+        lower.includes('ai') ||
+        lower.includes('hỏi về');
+
+      if (needsMechanism) {
+        openMechanismSheet();
+      }
+
+      const axisName = matchedAxis ? matchedAxis.titleVi.split('(')[0].trim() : 'Trục Lâm Sàng';
+      showAIToast(`🎯 Đã kích hoạt 3D & cơ chế: ${axisName}!`, true);
+
+      // Đọc tóm tắt cơ chế qua giọng nói nếu có hỗ trợ
+      if (matchedAxis && 'speechSynthesis' in window) {
+        try {
+          const u = new SpeechSynthesisUtterance(`${matchedAxis.titleVi}. ${matchedAxis.summary}`);
+          u.lang = 'vi-VN';
+          u.rate = 1.0;
+          window.speechSynthesis.speak(u);
+        } catch {}
+      }
       return;
     }
-  } catch {}
+  } catch (err) {
+    console.warn('[Clinical Axis AI match error]:', err);
+  }
 
   const interpreted = interpretAIQuery(text, state.selectedPart);
 

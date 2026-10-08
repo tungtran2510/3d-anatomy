@@ -10,6 +10,7 @@ import { highlightMesh } from '../viewer/visibility.js';
 import { setClippingPlane } from '../viewer/clipping.js';
 import { toggleMeasurementMode } from '../viewer/measurement.js';
 import { getWeakStructures, getRoadmapProgress } from '../state/learningRoadmap.js';
+import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 
 // Pre-mapped high-frequency Vietnamese clinical anatomical aliases
 export const ANATOMICAL_SYNONYMS = {
@@ -175,6 +176,67 @@ export const ANATOMICAL_SYNONYMS = {
  */
 export function interpretAIQuery(query, activePart = null) {
   const q = query.toLowerCase().trim();
+
+  // 0. Intent: Clinical Functional Axes (Trục lâm sàng / Bộ ba chức năng / Tuyến tiêu hóa / Dịch não tủy / Trục não ruột / Chục lão chuột)
+  let targetAxis = null;
+  if (
+    q.includes('chục lão chuột') ||
+    q.includes('chuc lao chuot') ||
+    q.includes('chụp não ruột') ||
+    q.includes('chup nao ruot') ||
+    q.includes('chục não ruột') ||
+    q.includes('chuc nao ruot') ||
+    q.includes('chục não') ||
+    q.includes('trục não ruột') ||
+    q.includes('trục ruột não')
+  ) {
+    targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_gut_brain');
+  } else if (
+    q.includes('gan mật tụy') ||
+    q.includes('gân mà tự') ||
+    q.includes('gan mat tuy') ||
+    q.includes('bộ ba chức năng') ||
+    q.includes('bo ba chuc nang') ||
+    q.includes('bộ ba gan mật tụy') ||
+    q.includes('bo ba gan mat tuy') ||
+    q.includes('bộ ba') ||
+    q.includes('bộ 3') ||
+    q.includes('hệ gan mật') ||
+    q.includes('gan mật và tụy')
+  ) {
+    targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_hepatobiliary_pancreas');
+  } else if (
+    q.includes('tuyến tiêu hóa') ||
+    q.includes('tuyen tieu hoa') ||
+    q.includes('các tuyến tiêu hóa') ||
+    q.includes('hệ tuyến tiêu hóa') ||
+    q.includes('tất cả tuyến tiêu hóa') ||
+    q.includes('tuyến nước bọt')
+  ) {
+    targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_digestive_glands');
+  } else if (
+    q.includes('dịch não tủy') ||
+    q.includes('dich nao tuy') ||
+    q.includes('nước não tủy') ||
+    q.includes('tuần hoàn dịch não tủy') ||
+    q.includes('hệ thống não thất') ||
+    q.includes('não úng thủy')
+  ) {
+    targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_csf_ventricles');
+  } else {
+    targetAxis = CLINICAL_AXES.find(axis => {
+      return axis.keywords?.some(k => q.includes(k.toLowerCase()));
+    });
+  }
+
+  if (targetAxis) {
+    return {
+      intent: 'CLINICAL_AXIS',
+      axis: targetAxis,
+      axisId: targetAxis.id,
+      rawQuery: query
+    };
+  }
 
   // 1. Natural Language 3D Scene Controls
 
@@ -458,8 +520,56 @@ function findTargetStructure(query, activePart) {
  * Executes AI 3D actions and builds an authoritative, grounded response
  */
 export async function executeAICommand(interpreted, viewer) {
-  const { intent, target, rawQuery, hideSystems, showSystems, plane } = interpreted;
-  const activeViewer = viewer || state.viewer || window.viewer;
+  const { intent, target, rawQuery, hideSystems, showSystems, plane, axis } = interpreted;
+  const activeViewer = viewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
+
+  // 0. CLINICAL AXIS (Trục lâm sàng / Bộ ba chức năng / Tuyến tiêu hóa / Dịch não tủy / Trục não ruột)
+  if (intent === 'CLINICAL_AXIS' && axis) {
+    if (activeViewer) {
+      const { openClinicalAxesModal, openMechanismSheet } = await import('../ui/clinicalAxesModal.js');
+      await openClinicalAxesModal(axis.id, activeViewer);
+
+      const qLower = (rawQuery || '').toLowerCase();
+      if (
+        qLower.includes('cơ chế') ||
+        qLower.includes('giải thích') ||
+        qLower.includes('chức năng') ||
+        qLower.includes('tại sao') ||
+        qLower.includes('như thế nào') ||
+        qLower.includes('bộ ba') ||
+        qLower.includes('đầy đủ') ||
+        qLower.includes('ai')
+      ) {
+        openMechanismSheet();
+      }
+    }
+
+    const stepsFormatted = axis.chainSteps.map(s => `- **${s.title}:** ${s.note}`).join('\n');
+    const insightsFormatted = axis.clinicalInsights.map(qa => `> **❓ ${qa.question}**\n> 🩺 ${qa.explanation}`).join('\n\n');
+
+    return {
+      action: 'CLINICAL_AXIS',
+      axisId: axis.id,
+      actionBadge: `⚡ 3D: ${axis.titleVi.split('(')[0].trim()}`,
+      speechText: `${axis.titleVi}. ${axis.summary}`,
+      message: `
+### ⚡ ${axis.titleVi}
+*Latinh:* **${axis.latin}** | *Hệ cơ quan:* **${axis.category}**
+
+📖 **Tổng quan & Cơ chế sinh học:**
+${axis.summary}
+
+🔗 **Các Mắt Xích Liên Hoàn Trong Hệ Thống:**
+${stepsFormatted}
+
+🩺 **Cơ Chế Lâm Sàng & Ứng Dụng Y Khoa:**
+${insightsFormatted}
+
+💡 *Chạm vào từng chip trên thanh điều khiển nổi bên dưới để phóng to & chiếu sáng từng cơ quan!*
+      `.trim(),
+      data: axis
+    };
+  }
 
   // 1. FOCUS STRUCTURE
   if (intent === 'FOCUS_STRUCTURE' && target) {
