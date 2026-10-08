@@ -12853,7 +12853,20 @@ body.theme-dark .floating-top-view-btn {
   }
 
   .systems-pull-tab {
-    display: none !important;
+    position: absolute !important;
+    top: calc(var(--ctrl-col-top) + 130px) !important;
+    left: 0 !important;
+    right: auto !important;
+    min-height: 108px !important;
+    border-radius: 0 10px 10px 0 !important;
+    border-left: none !important;
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 1205 !important;
+  }
+  .systems-pull-tab.drawer-open {
+    transform: translateX(126px) !important;
   }
 
   .depth-control {
