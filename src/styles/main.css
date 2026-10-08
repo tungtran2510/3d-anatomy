@@ -495,7 +495,7 @@ body.theme-dark .search-clear-btn:hover {
 
 .system-group {
   margin-bottom: 6px;
-  background: #ffffff;
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -508,9 +508,28 @@ body.theme-dark .search-clear-btn:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
+[data-theme="dark"] .system-group,
+body.theme-dark .system-group {
+  background: var(--bg-secondary);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .system-group:hover,
+body.theme-dark .system-group:hover {
+  background: var(--bg-tertiary);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
 .system-group.is-expanded {
   border-color: rgba(30, 58, 138, 0.45);
   box-shadow: 0 4px 12px rgba(30, 58, 138, 0.08);
+}
+
+[data-theme="dark"] .system-group.is-expanded,
+body.theme-dark .system-group.is-expanded {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
 
 .system-group-header {
@@ -1832,11 +1851,23 @@ body.theme-dark .control-btn {
     width: 84vw;
     max-width: 330px;
     min-width: 280px;
-    z-index: 200;
+    z-index: 2500;
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
     box-shadow: 4px 0 30px var(--shadow-strong);
-    background: rgba(255, 255, 255, 0.98);
+    background: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .sidebar,
+  body.theme-dark .sidebar {
+    background: #0f172a !important;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  [data-theme="dark"] .sidebar-header,
+  body.theme-dark .sidebar-header {
+    background: #161b22 !important;
+    border-color: rgba(255, 255, 255, 0.08);
   }
 
   .sidebar:last-of-type {
@@ -10374,6 +10405,7 @@ body.theme-dark .btn-lib-explore {
   display: flex;
   align-items: flex-start;
   gap: 10px;
+  padding-right: 22px;
 }
 
 .prompt-icon-badge {
@@ -11775,9 +11807,12 @@ body.theme-dark .atlas-structure-item-card:hover,
   font-size: 13.5px;
   font-weight: 700;
   color: #0f172a;
-  white-space: nowrap;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 body.theme-dark .structure-card-name,
@@ -11808,6 +11843,8 @@ body.theme-dark .structure-card-latin,
   color: #172554;
   white-space: nowrap;
   flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
 }
 
 body.theme-dark .structure-card-badge,
@@ -12614,7 +12651,12 @@ body.theme-dark .floating-top-view-btn {
   body:has(.systems-stepper-drawer.open) #floatingAIBubble,
   body:has(.systems-stepper-drawer.open) .floating-views-quick-nav,
   body:has(.systems-stepper-drawer.open) .pwa-install-prompt-banner,
-  body:has(.systems-stepper-drawer.open) .offline-prompt-banner {
+  body:has(.systems-stepper-drawer.open) .offline-prompt-banner,
+  body:has(.sidebar:not(.drawer-closed)) #floatingAIBubble,
+  body:has(.sidebar:not(.drawer-closed)) .floating-views-quick-nav,
+  body:has(.sidebar:not(.drawer-closed)) .pwa-install-prompt-banner,
+  body:has(.sidebar:not(.drawer-closed)) .offline-prompt-banner,
+  body:has(.sidebar:not(.drawer-closed)) .floating-controls-column {
     display: none !important;
     opacity: 0 !important;
     pointer-events: none !important;

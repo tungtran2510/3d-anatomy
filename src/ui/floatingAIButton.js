@@ -86,7 +86,7 @@ function setupLongPressDragHandlers(viewer) {
       isDragging = true;
       bubbleEl.classList.add('is-dragging');
       if (navigator.vibrate) navigator.vibrate(25);
-      bubbleEl.setPointerCapture?.(e.pointerId);
+      try { bubbleEl.setPointerCapture?.(e.pointerId); } catch {}
     }, 220);
   };
 

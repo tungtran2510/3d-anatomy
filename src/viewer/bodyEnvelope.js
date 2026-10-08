@@ -28,18 +28,20 @@ function createFresnelMaterial() {
   return new THREE.ShaderMaterial({
     uniforms: {
       color: { value: new THREE.Color(isDark ? 0x0f172a : 0x94a3b8) },
-      rimColor: { value: new THREE.Color(isDark ? 0x38bdf8 : 0x0284c7) },
-      rimPower: { value: isDark ? 3.2 : 2.8 },
-      rimIntensity: { value: isDark ? 0.55 : 0.75 },
-      baseOpacity: { value: isDark ? 0.035 : 0.075 }
+      rimColor: { value: new THREE.Color(isDark ? 0x38bdf8 : 0x64748b) },
+      rimPower: { value: isDark ? 4.5 : 4.8 },
+      rimIntensity: { value: isDark ? 0.40 : 0.35 },
+      baseOpacity: { value: 0.0 }
     },
     vertexShader: `
       varying vec3 vNormal;
       varying vec3 vViewPosition;
+      varying vec3 vWorldPos;
       void main() {
         vNormal = normalize(normalMatrix * normal);
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
         vViewPosition = -mvPosition.xyz;
+        vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
         gl_Position = projectionMatrix * mvPosition;
       }
     `,
@@ -51,12 +53,25 @@ function createFresnelMaterial() {
       uniform float baseOpacity;
       varying vec3 vNormal;
       varying vec3 vViewPosition;
+      varying vec3 vWorldPos;
       void main() {
         vec3 normal = normalize(vNormal);
         vec3 viewDir = normalize(vViewPosition);
         float fresnel = 1.0 - max(dot(normal, viewDir), 0.0);
         float rim = pow(fresnel, rimPower) * rimIntensity;
-        float alpha = clamp(baseOpacity + rim, 0.0, 0.65);
+        
+        // Extremity attenuation: smoothly fade out at hands (Y < 0.86 & |X| > 0.19) and feet (Y < 0.11)
+        float fade = 1.0;
+        if (vWorldPos.y < 0.86 && abs(vWorldPos.x) > 0.19) {
+          float dist = (0.86 - vWorldPos.y) / 0.10;
+          fade *= clamp(1.0 - dist, 0.0, 1.0);
+        }
+        if (vWorldPos.y < 0.11) {
+          float dist = (0.11 - vWorldPos.y) / 0.09;
+          fade *= clamp(1.0 - dist, 0.0, 1.0);
+        }
+        
+        float alpha = clamp(baseOpacity + rim, 0.0, 0.28) * fade;
         vec3 finalColor = mix(color, rimColor, rim);
         gl_FragColor = vec4(finalColor, alpha);
       }
@@ -84,6 +99,8 @@ export async function initBodyEnvelope(viewer = state.viewer || window.viewer) {
 
   bodyEnvelopeGroup = new THREE.Group();
   bodyEnvelopeGroup.name = 'bodyEnvelopeGroup';
+  // Precise anatomical alignment offset matching Z-Anatomy cadaver skeleton
+  bodyEnvelopeGroup.position.set(0, 0.005, -0.006);
   anatomyRoot.add(bodyEnvelopeGroup);
 
   try {
@@ -222,10 +239,10 @@ export function syncBodyEnvelopeTheme(isDark, viewer = state.viewer || window.vi
   bodyEnvelopeGroup.traverse(node => {
     if (node.isMesh && node.material?.uniforms) {
       if (node.material.uniforms.color) node.material.uniforms.color.value.setHex(isDark ? 0x0f172a : 0x94a3b8);
-      if (node.material.uniforms.rimColor) node.material.uniforms.rimColor.value.setHex(isDark ? 0x38bdf8 : 0x0284c7);
-      if (node.material.uniforms.rimPower) node.material.uniforms.rimPower.value = isDark ? 3.2 : 2.8;
-      if (node.material.uniforms.rimIntensity) node.material.uniforms.rimIntensity.value = isDark ? 0.55 : 0.75;
-      if (node.material.uniforms.baseOpacity) node.material.uniforms.baseOpacity.value = isDark ? 0.035 : 0.075;
+      if (node.material.uniforms.rimColor) node.material.uniforms.rimColor.value.setHex(isDark ? 0x38bdf8 : 0x64748b);
+      if (node.material.uniforms.rimPower) node.material.uniforms.rimPower.value = isDark ? 4.5 : 4.8;
+      if (node.material.uniforms.rimIntensity) node.material.uniforms.rimIntensity.value = isDark ? 0.40 : 0.35;
+      if (node.material.uniforms.baseOpacity) node.material.uniforms.baseOpacity.value = 0.0;
     }
   });
   viewer?.invalidate?.(3);
