@@ -170,6 +170,36 @@ export const CONSTITUENTS_DATABASE = {
       { name: 'Xương cánh tay', latin: 'Humerus', searchQuery: 'Humerus', icon: '🦴' },
       { name: 'Xương quay & Xương trụ', latin: 'Radius & Ulna', searchQuery: 'Radius', icon: '🥢' }
     ]
+  },
+
+  // 12. HỆ NỘI TIẾT (ENDOCRINE GLANDS & HPA AXIS)
+  endocrine: {
+    title: 'Cấu tạo Các Tuyến Nội Tiết & Trục HPA',
+    diagram: '/images/atlas/reg_head_neck.png',
+    diagramCaption: 'Vùng dưới đồi, Tuyến yên, Tuyến giáp, Tuyến cận giáp & Tuyến thượng thận',
+    subparts: [
+      { name: 'Tuyến giáp', latin: 'Glandula thyroidea', searchQuery: 'Thyroid', icon: '🦋' },
+      { name: 'Tuyến cận giáp (4 tuyến)', latin: 'Glandulae parathyroideae', searchQuery: 'Parathyroid', icon: '🟡' },
+      { name: 'Tuyến yên', latin: 'Hypophysis / Pituitary', searchQuery: 'Adenohypophysis', icon: '🎛️' },
+      { name: 'Tuyến tùng', latin: 'Glandula pinealis', searchQuery: 'Pineal', icon: '👁️' },
+      { name: 'Tuyến thượng thận', latin: 'Glandula suprarenalis', searchQuery: 'Suprarenal', icon: '⛰️' },
+      { name: 'Vùng dưới đồi', latin: 'Hypothalamus', searchQuery: 'Brain', icon: '🧠' }
+    ]
+  },
+
+  // 13. TUYẾN TIÊU HÓA & NƯỚC BỌT (SALIVARY & DIGESTIVE GLANDS)
+  salivary: {
+    title: 'Cấu tạo Các Tuyến Nước Bọt & Ống Dẫn Tiêu Hóa',
+    diagram: '/images/atlas/dig_upper.png',
+    diagramCaption: 'Tuyến mang tai (Stensen), Tuyến dưới hàm (Wharton) & Tuyến dưới lưỡi',
+    subparts: [
+      { name: 'Tuyến mang tai', latin: 'Glandula parotidea', searchQuery: 'Parotid gland', icon: '🧃' },
+      { name: 'Ống tuyến mang tai (Stensen)', latin: 'Ductus parotideus', searchQuery: 'Parotid duct', icon: '🟡' },
+      { name: 'Tuyến dưới hàm', latin: 'Glandula submandibularis', searchQuery: 'Submandibular gland', icon: '💧' },
+      { name: 'Ống tuyến dưới hàm (Wharton)', latin: 'Ductus submandibularis', searchQuery: 'Submandibular duct', icon: '🟡' },
+      { name: 'Tuyến dưới lưỡi', latin: 'Glandula sublingualis', searchQuery: 'Sublingual gland', icon: '💦' },
+      { name: 'Lưỡi', latin: 'Lingua', searchQuery: 'Tongue', icon: '👅' }
+    ]
   }
 };
 
@@ -212,6 +242,12 @@ export function getConstituentsForPart(partId, baseName, systemName, regionName)
   }
   if (target.includes('plexus') || target.includes('arm') || target.includes('cánh tay') || target.includes('median') || target.includes('radial') || target.includes('ulnar')) {
     return CONSTITUENTS_DATABASE.brachial;
+  }
+  if (target.includes('endocrine') || target.includes('nội tiết') || target.includes('thyroid') || target.includes('tuyến giáp') || target.includes('pituitary') || target.includes('tuyến yên') || target.includes('suprarenal') || target.includes('thượng thận') || target.includes('parathyroid') || target.includes('pineal')) {
+    return CONSTITUENTS_DATABASE.endocrine;
+  }
+  if (target.includes('salivary') || target.includes('nước bọt') || target.includes('parotid') || target.includes('submandibular') || target.includes('sublingual') || target.includes('stensen') || target.includes('wharton')) {
+    return CONSTITUENTS_DATABASE.salivary;
   }
 
   // 2. Fallback theo hệ cơ quan và phân vùng giải phẫu

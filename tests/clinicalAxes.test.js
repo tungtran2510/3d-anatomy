@@ -3,12 +3,14 @@ import { interpretAIQuery, executeAICommand } from '../src/ai/anatomyAI.js';
 import { CLINICAL_AXES } from '../src/data/clinicalAxesData.js';
 
 describe('Clinical Axes & AI Mechanism Query Tests', () => {
-  it('includes all 8 essential clinical axes', () => {
+  it('includes all 10 essential clinical axes', () => {
     const axisIds = CLINICAL_AXES.map(a => a.id);
     expect(axisIds).toContain('axis_gut_brain');
     expect(axisIds).toContain('axis_hepatobiliary_pancreas');
     expect(axisIds).toContain('axis_digestive_glands');
     expect(axisIds).toContain('axis_csf_ventricles');
+    expect(axisIds).toContain('axis_hpa_endocrine');
+    expect(axisIds).toContain('axis_renal_cardiovascular');
     expect(axisIds).toContain('axis_cranial_nerves');
     expect(axisIds).toContain('axis_brain_spine_sciatic');
     expect(axisIds).toContain('axis_cardiopulmonary_loop');
@@ -97,6 +99,44 @@ describe('Clinical Axes & AI Mechanism Query Tests', () => {
       expect(res.intent).toBe('CLINICAL_AXIS');
       expect(res.axisId).toBe('axis_gut_brain');
       expect(res.axis.titleVi).toContain('Trục Não – Ruột');
+      expect(res.axis.chainSteps.length).toBe(4);
+    }
+  });
+
+  it('correctly maps "hệ nội tiết" and "tuyến giáp tuyến yên" to axis_hpa_endocrine', () => {
+    const queries = [
+      'hệ nội tiết',
+      'các tuyến nội tiết',
+      'tuyến yên',
+      'tuyến giáp',
+      'thượng thận',
+      'trục nội tiết',
+      'trục hpa'
+    ];
+
+    for (const q of queries) {
+      const res = interpretAIQuery(q);
+      expect(res.intent).toBe('CLINICAL_AXIS');
+      expect(res.axisId).toBe('axis_hpa_endocrine');
+      expect(res.axis.titleVi).toContain('Trục Thần Kinh – Thể Dịch – Nội Tiết');
+      expect(res.axis.chainSteps.length).toBe(4);
+    }
+  });
+
+  it('correctly maps "trục tim thận" and "huyết áp" to axis_renal_cardiovascular', () => {
+    const queries = [
+      'trục tim thận',
+      'tim thận',
+      'huyết áp',
+      'điều hòa huyết áp',
+      'hệ raas'
+    ];
+
+    for (const q of queries) {
+      const res = interpretAIQuery(q);
+      expect(res.intent).toBe('CLINICAL_AXIS');
+      expect(res.axisId).toBe('axis_renal_cardiovascular');
+      expect(res.axis.titleVi).toContain('Trục Tim – Thận & Hệ RAAS');
       expect(res.axis.chainSteps.length).toBe(4);
     }
   });

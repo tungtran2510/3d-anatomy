@@ -336,6 +336,35 @@ export async function handleCompactAISubmit(text, viewer) {
       lower.includes('não úng thủy')
     ) {
       targetAxisId = 'axis_csf_ventricles';
+    } else if (
+      lower.includes('nội tiết') ||
+      lower.includes('noi tiet') ||
+      lower.includes('tuyến yên') ||
+      lower.includes('tuyen yen') ||
+      lower.includes('tuyến giáp') ||
+      lower.includes('tuyen giap') ||
+      lower.includes('thượng thận') ||
+      lower.includes('thuong than') ||
+      lower.includes('tuyến cận giáp') ||
+      lower.includes('dưới đồi') ||
+      lower.includes('duoi doi') ||
+      lower.includes('tuyến tùng') ||
+      lower.includes('hpa') ||
+      lower.includes('trục nội tiết')
+    ) {
+      targetAxisId = 'axis_hpa_endocrine';
+    } else if (
+      lower.includes('tim thận') ||
+      lower.includes('tim than') ||
+      lower.includes('trục tim thận') ||
+      lower.includes('thận tim') ||
+      lower.includes('huyết áp') ||
+      lower.includes('huyet ap') ||
+      lower.includes('raas') ||
+      lower.includes('điều hòa huyết áp') ||
+      lower.includes('dieu hoa huyet ap')
+    ) {
+      targetAxisId = 'axis_renal_cardiovascular';
     } else {
       const matched = CLINICAL_AXES.find(axis => {
         return axis.keywords.some(k => lower.includes(k.toLowerCase()));

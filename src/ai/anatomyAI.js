@@ -223,6 +223,34 @@ export function interpretAIQuery(query, activePart = null) {
     q.includes('não úng thủy')
   ) {
     targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_csf_ventricles');
+  } else if (
+    q.includes('nội tiết') ||
+    q.includes('noi tiet') ||
+    q.includes('tuyến yên') ||
+    q.includes('tuyen yen') ||
+    q.includes('tuyến giáp') ||
+    q.includes('tuyen giap') ||
+    q.includes('thượng thận') ||
+    q.includes('thuong than') ||
+    q.includes('tuyến cận giáp') ||
+    q.includes('dưới đồi') ||
+    q.includes('tuyến tùng') ||
+    q.includes('hpa') ||
+    q.includes('trục nội tiết')
+  ) {
+    targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_hpa_endocrine');
+  } else if (
+    q.includes('tim thận') ||
+    q.includes('tim than') ||
+    q.includes('trục tim thận') ||
+    q.includes('thận tim') ||
+    q.includes('huyết áp') ||
+    q.includes('huyet ap') ||
+    q.includes('raas') ||
+    q.includes('điều hòa huyết áp') ||
+    q.includes('dieu hoa huyet ap')
+  ) {
+    targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_renal_cardiovascular');
   } else {
     targetAxis = CLINICAL_AXES.find(axis => {
       return axis.keywords?.some(k => q.includes(k.toLowerCase()));

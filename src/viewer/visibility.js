@@ -448,16 +448,116 @@ export function getAnatomicalCompanions(partId) {
   if (lower === 'pancreas' || lower.includes('tụy')) {
     return ['Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Bile duct', 'Gallbladder', 'Spleen', 'Splenic artery', 'Splenic vein', 'Inferior pancreaticoduodenal artery'];
   }
-  if (lower.startsWith('kidney') || lower.includes('thận') || lower.includes('ren ')) {
+  if (lower.startsWith('kidney') || lower.includes('thận') || lower.includes('ren ') || lower.includes('suprarenal') || lower.includes('thượng thận') || lower.includes('ureter')) {
     const isLeft = lower.includes('.l') || lower.includes('left') || lower.includes('trái');
     const side = isLeft ? '.l' : '.r';
-    return [`Renal pelvis${side}`, `Ureter${side}`, `Suprarenal gland${side}`, 'Urinary bladder'];
+    return [
+      `Renal pelvis${side}`,
+      `Ureter${side}`,
+      `Suprarenal gland${side}`,
+      `Suprarenal gland${side === '.l' ? '.r' : '.l'}`,
+      'Urinary bladder',
+      'Abdominal aorta',
+      'Inferior vena cava (abdominal part)',
+      `Intrarenal arteries of ${isLeft ? 'left' : 'right'} kidney`
+    ];
   }
   if (lower.includes('urinary bladder') || lower.includes('bàng quang')) {
-    return ['Ureter.l', 'Ureter.r', 'Prostate', 'Urethra'];
+    return ['Ureter.l', 'Ureter.r', 'Prostate', 'Urethra', 'Kidney.l', 'Kidney.r'];
+  }
+  // Heart & Great Vessels: Cardiac chambers, coronary arteries, aorta and pulmonary trunk
+  if (lower.includes('heart') || lower.includes('tim') || lower.includes('ventricle') || lower.includes('atrium') || lower.includes('tâm thất') || lower.includes('tâm nhĩ') || lower.includes('coronary') || lower.includes('mạch vành') || lower.includes('aorta')) {
+    return [
+      'Left ventricle',
+      'Right ventricle',
+      'Left atrium',
+      'Right atrium',
+      'Ascending aorta',
+      'Thoracic aorta',
+      'Pulmonary trunk',
+      'Left pulmonary artery',
+      'Right pulmonary artery',
+      'Left coronary artery',
+      'Right coronary artery',
+      'Circumflex artery of heart',
+      'Superior vena cava',
+      'Inferior vena cava (thoracic part)'
+    ];
+  }
+  // Respiratory System: Trachea, Bronchi, Lungs & Pulmonary Vasculature
+  if (lower.includes('lung') || lower.includes('phổi') || lower.includes('pulmo') || lower.includes('trachea') || lower.includes('khí quản') || lower.includes('bronch') || lower.includes('phế quản')) {
+    return [
+      'Trachea',
+      'Left lung',
+      'Right lung',
+      'Left inferior lobar bronchus',
+      'Left superior lobar bronchus',
+      'Pulmonary trunk',
+      'Left pulmonary artery',
+      'Right pulmonary artery',
+      'Heart',
+      'Pleura'
+    ];
+  }
+  // Thyroid & Parathyroid Glands: Intimately bound to Trachea, Laryngeal Cartilages & Carotid Arteries
+  if (lower.includes('thyroid') || lower.includes('giáp') || lower.includes('parathyroid') || lower.includes('cận giáp')) {
+    return [
+      'Thyroid gland',
+      'Inferior parathyroid gland.l',
+      'Inferior parathyroid gland.r',
+      'Superior parathyroid gland.l',
+      'Superior parathyroid gland.r',
+      'Trachea',
+      'Thyroid cartilage',
+      'Inferior thyroid artery.l',
+      'Inferior thyroid artery.r',
+      'Left common carotid artery',
+      'Right common carotid artery'
+    ];
+  }
+  // Pituitary & Pineal Glands (Endocrine Brain Core)
+  if (lower.includes('adenohypophysis') || lower.includes('neurohypophysis') || lower.includes('hypophysis') || lower.includes('tuyến yên') || lower.includes('pineal') || lower.includes('tuyến tùng')) {
+    return [
+      'Adenohypophysis',
+      'Neurohypophysis',
+      'Pineal gland',
+      'Hypothalamus',
+      'Third ventricle',
+      'Optic chiasm',
+      'Internal carotid artery.l',
+      'Internal carotid artery.r'
+    ];
+  }
+  // Salivary Glands: Parotid, Submandibular, Sublingual & their Ducts
+  if (lower.includes('parotid') || lower.includes('mang tai') || lower.includes('submandibular') || lower.includes('dưới hàm') || lower.includes('sublingual') || lower.includes('dưới lưỡi')) {
+    return [
+      'Parotid gland.l',
+      'Parotid gland.r',
+      'Parotid duct.l',
+      'Parotid duct.r',
+      'Submandibular gland.l',
+      'Submandibular gland.r',
+      'Submandibular duct.l',
+      'Submandibular duct.r',
+      'Sublingual gland.l',
+      'Sublingual gland.r',
+      'Tongue'
+    ];
+  }
+  // Sciatic Nerve & Lumbosacral Plexus
+  if (lower.includes('sciatic') || lower.includes('thần kinh tọa') || lower.includes('thần kinh ngồi')) {
+    return [
+      'Sciatic nerve.l',
+      'Sciatic nerve.r',
+      'Vertebra L4',
+      'Vertebra L5',
+      'Sacrum',
+      'Femur.l',
+      'Femur.r'
+    ];
   }
   // Knee complex: ACL, PCL, Meniscus must bring along opposing cruciate, menisci, and articular bone ends
-  if (lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('patellar ligament')) {
+  if (lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('patellar ligament') || lower.includes('khớp gối')) {
     const isLeft = lower.includes('.l') || lower.includes('left');
     const side = isLeft ? '.l' : '.r';
     return [

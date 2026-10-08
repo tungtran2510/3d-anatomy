@@ -658,5 +658,190 @@ export const CLINICAL_AXES = [
       'Thực hiện bài tập thu cằm (Chin tuck) và mở rộng ngực 10 lần mỗi khi giải lao.',
       'Tập các bài tăng cường cơ mông (Glute bridge, Clamshell) để ổn định trục chân khi đi đứng.'
     ]
+  },
+
+  {
+    id: 'axis_hpa_endocrine',
+    titleVi: 'Trục Thần Kinh – Thể Dịch – Nội Tiết (HPA & Thyroid Axis)',
+    latin: 'Axis hypothalamo-hypophyseo-adrenalis et thyroideus',
+    category: 'Nội tiết – Thần kinh – Chuyển hóa',
+    badge: 'Hệ Thống Tuyến Nội Tiết Toàn Thân',
+    icon: '🧬⚡🔮',
+    summary: 'Bộ chỉ huy thể dịch tối cao điều hòa toàn bộ cơ thể: Vùng dưới đồi và Tuyến yên phát lệnh kích hoạt Tuyến giáp điều hòa chuyển hóa năng lượng và Tuyến thượng thận đáp ứng stress sinh tồn.',
+    primarySystems: ['nervous', 'visceral', 'cardiovascular', 'skeletal'],
+    defaultPartId: 'Adenohypophysis',
+    keywords: [
+      'hpa', 'nội tiết', 'noi tiet', 'hệ nội tiết', 'he noi tiet', 'các tuyến nội tiết', 'cac tuyen noi tiet',
+      'tuyến yên', 'tuyen yen', 'tuyến giáp', 'tuyen giap', 'tuyến thượng thận', 'tuyen thuong than',
+      'tuyến tùng', 'tuyen tung', 'tuyến cận giáp', 'tuyen can giap', 'hormone', 'cortisol', 't3 t4',
+      'stress sinh tồn', 'tuyến'
+    ],
+    chainSteps: [
+      {
+        step: 1,
+        title: 'Vùng Dưới Đồi & Tuyến Yên (Bộ Chỉ Huy Thể Dịch Tối Cao)',
+        shortTitle: '1. Dưới đồi & Tuyến yên',
+        partId: 'Adenohypophysis',
+        partIds: ['Adenohypophysis', 'Neurohypophysis', 'Pineal gland', 'Hypothalamus', 'Third ventricle'],
+        system: 'visceral',
+        shortNote: 'Tiết CRH, TRH kích thích tuyến yên sản xuất ACTH, TSH, GH, LH/FSH.',
+        note: 'Vùng dưới đồi là cầu nối giữa hệ thần kinh và hệ nội tiết, tiết hormone giải phóng (CRH, TRH) điều khiển thùy trước tuyến yên sản xuất hormone hướng tuyến và thùy sau dự trữ ADH, Oxytocin.'
+      },
+      {
+        step: 2,
+        title: 'Tuyến Giáp, Tuyến Cận Giáp & Mạch Máu Giáp (Chuyển Hóa & Canxi)',
+        shortTitle: '2. Tuyến giáp & Cận giáp',
+        partId: 'Thyroid gland',
+        partIds: [
+          'Thyroid gland',
+          'Inferior parathyroid gland.l',
+          'Inferior parathyroid gland.r',
+          'Superior parathyroid gland.l',
+          'Superior parathyroid gland.r',
+          'Trachea',
+          'Inferior thyroid artery.l',
+          'Inferior thyroid artery.r'
+        ],
+        system: 'visceral',
+        shortNote: 'Tuyến giáp tiết T3-T4 chuyển hóa; 4 tuyến cận giáp tiết PTH giữ canxi máu.',
+        note: 'Tuyến giáp tiết Thyroxine (T4) và T3 điều hòa tốc độ chuyển hóa cơ bản; 4 hạt tuyến cận giáp nằm mặt sau tiết hormone PTH đối kháng với Calcitonin để duy trì hằng định nồng độ canxi máu.'
+      },
+      {
+        step: 3,
+        title: 'Tuyến Thượng Thận & Mạch Thượng Thận (Trục Đối Phó Stress Sinh Tồn)',
+        shortTitle: '3. Tuyến thượng thận',
+        partId: 'Suprarenal gland.l',
+        partIds: [
+          'Suprarenal gland.l',
+          'Suprarenal gland.r',
+          'Inferior suprarenal artery.l',
+          'Inferior suprarenal artery.r',
+          'Abdominal aorta',
+          'Inferior vena cava (abdominal part)'
+        ],
+        system: 'visceral',
+        shortNote: 'Vỏ tiết Cortisol, Aldosterone; Tủy tiết Adrenaline phản xạ chống stress.',
+        note: 'Vỏ thượng thận nhận lệnh ACTH tiết Cortisol chống viêm và Aldosterone giữ muối nước; Tủy thượng thận được dây giao cảm kích thích trực tiếp tiết Adrenaline tăng nhịp tim và huyết áp trong tích tắc.'
+      },
+      {
+        step: 4,
+        title: 'Cơ Quan Đích & Vòng Phản Hồi Ngược (Negative Feedback Loop)',
+        shortTitle: '4. Cơ quan đích & Phản hồi',
+        partId: 'Liver',
+        partIds: ['Liver', 'Left ventricle', 'Pancreas'],
+        system: 'visceral',
+        shortNote: 'Gan, Tim, Tụy tiếp nhận hormone; nồng độ máu tự điều hòa ngược lên não.',
+        note: 'Mạng lưới điều hòa ngược (Negative Feedback): Khi nồng độ hormone tuyến đích trong máu đạt ngưỡng tối ưu, chúng quay lại ức chế vùng dưới đồi và tuyến yên ngừng tiết để giữ cân bằng nội môi hoàn hảo.'
+      }
+    ],
+    clinicalInsights: [
+      {
+        question: 'Tại sao căng thẳng kéo dài (Chronic Stress) lại gây tăng cân, teo cơ và suy giảm miễn dịch?',
+        explanation: 'Khi stress kéo dài, trục HPA bị kích hoạt liên tục khiến tuyến thượng thận bơm ồ ạt hormone Cortisol. Cortisol dư thừa phân hủy protein ở cơ bắp để tạo đường, tích tụ mỡ ở vùng bụng và ức chế các tế bào lympho miễn dịch khiến cơ thể dễ nhiễm trùng.'
+      },
+      {
+        question: 'Tại sao cắt bỏ toàn bộ tuyến giáp bắt buộc phải bảo tồn các tuyến cận giáp?',
+        explanation: 'Nếu vô tình cắt hoặc làm tổn thương 4 hạt tuyến cận giáp siêu nhỏ ở mặt sau tuyến giáp, nồng độ canxi máu sẽ tụt nghiêm trọng trong vài giờ gây co giật cơ liên tục (Cơn hạ canxi Tetany), co thắt thanh quản dẫn đến ngạt thở đe dọa tính mạng.'
+      }
+    ],
+    lifestyleTips: [
+      'Ngủ đủ 7-8 tiếng trong phòng tối hoàn toàn giúp tuyến tùng tiết Melatonin tối ưu, phục hồi hệ nội tiết.',
+      'Thiền định, hít thở sâu và đi dạo trong thiên nhiên giúp ức chế trục HPA, hạ nồng độ Cortisol huyết tương.',
+      'Đảm bảo đủ muối Iod trong khẩu phần ăn hàng ngày để phòng ngừa bướu cổ và suy giáp.'
+    ]
+  },
+
+  {
+    id: 'axis_renal_cardiovascular',
+    titleVi: 'Trục Tim – Thận & Hệ RAAS (Cardiorenal & Blood Pressure Axis)',
+    latin: 'Axis cardiorenalis et systema reninum-angiotensinum',
+    category: 'Tuần hoàn – Tiết niệu – Huyết áp',
+    badge: 'Cân Bằng Thể Tích & Huyết Áp',
+    icon: '🫘❤️🩸',
+    summary: 'Trục tương tác sống còn giữa Tim mạch và Tiết niệu: Thận lọc 180 lít dịch/ngày và tiết enzyme Renin điều hòa huyết áp; Tim bơm máu nuôi thận và tiết peptide ANP khi quá tải thể tích tuần hoàn.',
+    primarySystems: ['cardiovascular', 'visceral', 'skeletal'],
+    defaultPartId: 'Renal pelvis.l',
+    keywords: [
+      'tim thận', 'tim than', 'trục tim thận', 'truc tim than', 'huyết áp', 'huyet ap', 'raas', 'renin',
+      'thận', 'than', 'thượng thận', 'thuong than', 'niệu quản', 'bàng quang', 'lọc máu', 'suy tim suy thận',
+      'cardiorenal', 'angiotensin', 'aldosterone'
+    ],
+    chainSteps: [
+      {
+        step: 1,
+        title: 'Cầu Thận, Bể Thận & Mạch Máu Thận (Bộ Lọc Máu Cực Lớn)',
+        shortTitle: '1. Thận & ĐM Thận',
+        partId: 'Renal pelvis.l',
+        partIds: [
+          'Renal pelvis.l',
+          'Renal pelvis.r',
+          'Intrarenal arteries of left kidney',
+          'Intrarenal arteries of right kidney',
+          'Abdominal aorta',
+          'Inferior vena cava (abdominal part)'
+        ],
+        system: 'visceral',
+        shortNote: 'Nhận 20-25% cung lượng tim, lọc 180 lít dịch/ngày; tiết Renin khi tụt áp.',
+        note: 'Mỗi phút thận đón nhận hơn 1.2 lít máu từ Động mạch chủ bụng qua Động mạch thận; tế bào cạnh cầu thận cảm nhận áp lực tưới máu để tiết enzyme Renin khởi động hệ thống co mạch RAAS.'
+      },
+      {
+        step: 2,
+        title: 'Tuyến Thượng Thận & Aldosterone (Hấp Thu Lại Muối Nước)',
+        shortTitle: '2. Thượng thận & RAAS',
+        partId: 'Suprarenal gland.l',
+        partIds: [
+          'Suprarenal gland.l',
+          'Suprarenal gland.r',
+          'Inferior suprarenal artery.l',
+          'Inferior suprarenal artery.r'
+        ],
+        system: 'visceral',
+        shortNote: 'Angiotensin II kích hoạt vỏ thượng thận tiết Aldosterone tăng giữ Natri.',
+        note: 'Renin từ thận hoạt hóa Angiotensinogen thành Angiotensin I, qua men ACE tại phổi thành Angiotensin II co mạch cực mạnh và kích thích thượng thận tiết Aldosterone giữ muối nước.'
+      },
+      {
+        step: 3,
+        title: 'Quả Tim, Cung Động Mạch Chủ & Mạch Vành (Bơm Máu & Tiết ANP)',
+        shortTitle: '3. Tim & Cung ĐM Chủ',
+        partId: 'Left ventricle',
+        partIds: [
+          'Left ventricle',
+          'Right ventricle',
+          'Left atrium',
+          'Right atrium',
+          'Ascending aorta',
+          'Left coronary artery',
+          'Right coronary artery'
+        ],
+        system: 'cardiovascular',
+        shortNote: 'Thể tích dịch tăng làm tăng huyết áp; cơ tâm nhĩ căng tiết ANP giúp hạ áp.',
+        note: 'Khi thể tích tuần hoàn tăng, tim phải bóp máu với lực lớn hơn; khi tâm nhĩ bị căng dãn quá mức do ứ máu, tế bào cơ tim tiết hormone ANP kích thích thận thải natri và nước để bảo vệ tim.'
+      },
+      {
+        step: 4,
+        title: 'Niệu Quản, Bàng Quang & Đường Thoát Nước Tiểu (Điều Hòa Thể Tích)',
+        shortTitle: '4. Niệu quản & Bàng quang',
+        partId: 'Urinary bladder',
+        partIds: ['Ureter.l', 'Ureter.r', 'Urinary bladder'],
+        system: 'visceral',
+        shortNote: 'Dẫn lưu 1.5 - 2 lít nước tiểu/ngày ra ngoài duy trì áp suất thẩm thấu cơ thể.',
+        note: 'Nước tiểu sau khi tinh lọc và cô đặc chảy xuống bể thận, được sóng nhu động niệu quản đẩy xuống bàng quang tích trữ và bài xuất ra ngoài nhằm giữ cân bằng nước và điện giải.'
+      }
+    ],
+    clinicalInsights: [
+      {
+        question: 'Tại sao suy tim lâu ngày lại dẫn đến suy thận và ngược lại (Hội chứng Tim - Thận)?',
+        explanation: 'Khi tim suy, lượng máu bơm tới thận bị giảm khiến thận tưởng cơ thể bị mất máu nên tăng tiết Renin giữ muối nước. Lượng nước ứ đọng lại làm tăng gánh nặng thể tích khiến quả tim suy càng kiệt quệ hơn, tạo vòng xoắn bệnh lý ác tính (Cardiorenal Syndrome).'
+      },
+      {
+        question: 'Tại sao bệnh nhân tăng huyết áp thường được kê thuốc ức chế men chuyển (ACEi)?',
+        explanation: 'Thuốc ức chế men chuyển ngăn chặn việc chuyển đổi Angiotensin I thành Angiotensin II, làm giãn mạch máu toàn thân và ức chế bài tiết Aldosterone giúp thận đào thải bớt muối nước, từ đó hạ huyết áp hiệu quả và bảo vệ thành mạch.'
+      }
+    ],
+    lifestyleTips: [
+      'Giảm lượng muối ăn dưới 5g/ngày (khoảng 1 thìa cà phê) để giảm tải tích tụ Natri và bảo vệ cầu thận.',
+      'Uống đủ 1.5 - 2 lít nước mỗi ngày giúp thận lọc độc tố dễ dàng và ngừa hình thành sỏi niệu.',
+      'Đo huyết áp định kỳ để phát hiện sớm các tổn thương thành mạch âm thầm của tim và thận.'
+    ]
   }
 ];
