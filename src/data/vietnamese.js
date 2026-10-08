@@ -860,7 +860,133 @@ const EXACT_DICTIONARY = {
   'External anal sphincter': 'Cơ thắt ngoài hậu môn',
   'Inferior pharyngeal constrictor': 'Cơ siết họng dưới',
   'Inferior tarsus': 'Sụn mi dưới',
-  'Superior tarsus': 'Sụn mi trên'
+  'Superior tarsus': 'Sụn mi trên',
+
+  // --- SKELETAL ---
+  'Sesamoid bones of foot': 'Các xương vừng bàn chân',
+  'Sesamoid bone of foot': 'Xương vừng bàn chân',
+
+  // --- MUSCULAR ---
+  'Common tendinous ring': 'Vòng gân chung (Vòng Zinn)',
+  'Iliopectineal arch': 'Cung chậu lược',
+  'Levatores breves costarum': 'Các cơ nâng sườn ngắn',
+  'Levatores longi costarum': 'Các cơ nâng sườn dài',
+  'Middle pharyngeal constrictor': 'Cơ khít hầu giữa',
+  'Obturator externus': 'Cơ bịt ngoài',
+  'Obturator internus': 'Cơ bịt trong',
+  'Psoas major': 'Cơ thắt lưng lớn',
+  'Rotatores': 'Các cơ xoay',
+  'Superior pharyngeal constrictor': 'Cơ khít hầu trên',
+  'Synovial sheaths of digits of hand': 'Các bao hoạt dịch gân ngón tay',
+  'Tensor fasciae latae': 'Cơ căng mạc đùi',
+
+  // --- CARDIOVASCULAR ---
+  'Cavernous sinus': 'Xoang hang',
+  'Costocervical trunk': 'Thân sườn cổ',
+  'Deep palmar arch': 'Cung động mạch gan tay sâu',
+  'Deep venous palmar arch': 'Cung tĩnh mạch gan tay sâu',
+  'Dorsal carpal anastomosis': 'Mạng mạch mu cổ tay',
+  'Dorsal digital arteries of foot': 'Các động mạch mu ngón chân',
+  'Dorsal digital arteries of hand': 'Các động mạch mu ngón tay',
+  'Dorsal digital veins of foot': 'Các tĩnh mạch mu ngón chân',
+  'Dorsal digital veins of hand': 'Các tĩnh mạch mu ngón tay',
+  'Dorsal venous arch of foot': 'Cung tĩnh mạch mu chân',
+  'Dorsal venous network of hand': 'Mạng tĩnh mạch mu tay',
+  'Inferior petrosal sinus': 'Xoang đá dưới',
+  'Intercapitular veins of foot': 'Các tĩnh mạch gian đầu xương bàn chân',
+  'Patellar anastomosis': 'Mạng mạch bánh chè',
+  'Plantar arch': 'Cung động mạch gan chân',
+  'Plantar venous arch': 'Cung tĩnh mạch gan chân',
+  'Sigmoid sinus': 'Xoang sigma',
+  'Superficial palmar arch': 'Cung động mạch gan tay nông',
+  'Superficial venous palmar arch': 'Cung tĩnh mạch gan tay nông',
+  'Superior petrosal sinus': 'Xoang đá trên',
+  'Thyrocervical trunk': 'Thân giáp cổ',
+  'Transverse sinus': 'Xoang ngang',
+
+  // --- LYMPHATIC ---
+  'Palatine tonsil': 'Hạnh nhân khẩu cái (Amidan)',
+
+  // --- VISCERAL ---
+  'Accessory parotid gland': 'Tuyến mang tai phụ',
+
+  // --- NERVOUS SYSTEM & SENSORY ---
+  'Anterior occipital sulcus*': 'Rãnh chẩm trước',
+  'Anterior occipital sulcus': 'Rãnh chẩm trước',
+  'Anterior segment of eyeball': 'Phân đoạn trước nhãn cầu',
+  'Auditory tube': 'Vòi tai (Vòi Eustache / Vòi nhĩ)',
+  'Base of peduncle': 'Nền cuống não',
+  'Chorda tympani': 'Thừng nhĩ',
+  'Cingulate gyrus (Posteroventral part*)': 'Hồi đai (Phần sau bụng)',
+  'Cingulate gyrus (Posteroventral part)': 'Hồi đai (Phần sau bụng)',
+  'Cingulate gyrus and sulcus (Middle anterior part)': 'Hồi và rãnh đai (Phần giữa trước)',
+  'Cingulate gyrus and sulcus (Middle posterior part)': 'Hồi và rãnh đai (Phần giữa sau)',
+  'Cingulate gyrus and sulcus (Posterior dorsal part)': 'Hồi và rãnh đai (Phần sau lưng)',
+  'Cingulate sulcus (Marginal part*)': 'Rãnh đai (Phần viền)',
+  'Cingulate sulcus (Marginal part)': 'Rãnh đai (Phần viền)',
+  'Circular sulcus of insula': 'Rãnh vòng thùy đảo',
+  'Cochlea': 'Ốc tai',
+  'Cuneus': 'Hồi chêm (Chêm não)',
+  'Flocculus': 'Nhung não (Tiểu thùy nhung)',
+  'Ganglia of sympathetic trunk': 'Các hạch chuỗi giao cảm',
+  'Inferior colliculus': 'Gò dưới (Củ não sinh tư dưới)',
+  'Inferior occipital gyrus and sulcus*': 'Hồi và rãnh chẩm dưới',
+  'Inferior occipital gyrus and sulcus': 'Hồi và rãnh chẩm dưới',
+  'Insula (Subcentral gyrus and ant. and post. sulci*)': 'Thùy đảo (Hồi dưới trung tâm và rãnh)',
+  'Insula (Subcentral gyrus and ant. and post. sulci)': 'Thùy đảo (Hồi dưới trung tâm và rãnh)',
+  'Interpeduncular fossa': 'Hố gian cuống não',
+  'Lat_Fis-ant-Horizont': 'Rãnh bên (Nhánh trước ngang)',
+  'Lat_Fis-ant-Vertical': 'Rãnh bên (Nhánh trước thẳng đứng)',
+  'Lat_Fis-post': 'Rãnh bên (Nhánh sau)',
+  'Lateral geniculate body': 'Thể gối ngoài',
+  'Lateral occipital gyrus (Middle occipital gyrus*)': 'Hồi chẩm ngoài (Hồi chẩm giữa)',
+  'Lateral occipital gyrus (Middle occipital gyrus)': 'Hồi chẩm ngoài (Hồi chẩm giữa)',
+  'Mamillary body': 'Thể vú',
+  'Medial geniculate body': 'Thể gối trong',
+  'Medial occipitotemporal gyrus (Parahippocampal*)': 'Hồi chẩm thái dương trong (Hồi cạnh hải mã)',
+  'Medial occipitotemporal gyrus (Parahippocampal)': 'Hồi chẩm thái dương trong (Hồi cạnh hải mã)',
+  'Midbrain': 'Trung não',
+  'Nucleus ambiguus': 'Nhân hoài nghi',
+  'Occipitotemporal sulcus (Lateral part*)': 'Rãnh chẩm thái dương (Phần ngoài)',
+  'Occipitotemporal sulcus (Lateral part)': 'Rãnh chẩm thái dương (Phần ngoài)',
+  'Olive': 'Trâm hành não (Trâm não)',
+  'Optic chiasm': 'Giao thoa thị giác',
+  'Orbital gyri (Frontomarginal gyrus and sulcus*)': 'Các hồi ổ mắt (Hồi và rãnh trán viền)',
+  'Orbital gyri (Frontomarginal gyrus and sulcus)': 'Các hồi ổ mắt (Hồi và rãnh trán viền)',
+  'Orbital gyri': 'Các hồi ổ mắt',
+  'Orbital sulci (H-shaped orbital sulci*)': 'Các rãnh ổ mắt (Rãnh hình chữ H)',
+  'Orbital sulci (H-shaped orbital sulci)': 'Các rãnh ổ mắt (Rãnh hình chữ H)',
+  'Orbital sulci (Lateral Orbital sulcus*)': 'Các rãnh ổ mắt (Rãnh ổ mắt ngoài)',
+  'Orbital sulci (Lateral Orbital sulcus)': 'Các rãnh ổ mắt (Rãnh ổ mắt ngoài)',
+  'Paracentral gyrus and sulcus*': 'Hồi và rãnh cạnh trung tâm',
+  'Paracentral gyrus and sulcus': 'Hồi và rãnh cạnh trung tâm',
+  'Peduncle of flocculus': 'Cuống nhung não',
+  'Posterior segment of eyeball': 'Phân đoạn sau nhãn cầu',
+  'Precentral sulcus (Superior part)*': 'Rãnh trước trung tâm (Phần trên)',
+  'Precentral sulcus (Superior part)': 'Rãnh trước trung tâm (Phần trên)',
+  'Precentral sulcus (inferior part)*': 'Rãnh trước trung tâm (Phần dưới)',
+  'Precentral sulcus (inferior part)': 'Rãnh trước trung tâm (Phần dưới)',
+  'Precuneus': 'Hồi tiền chêm',
+  'Pyramid of medulla oblongata': 'Tháp hành não',
+  'Straight gyrus (Gyrus rectus)': 'Hồi thẳng',
+  'Stria medullaris thalami': 'Vân tủy đồi thị',
+  'Stria terminalis': 'Vân tận cùng',
+  'Sulcus interm_prim-Jensen': 'Rãnh trung gian Jensen',
+  'Superior cerebellar peduncle': 'Cuống tiểu não trên',
+  'Superior colliculus': 'Gò trên (Củ não sinh tư trên)',
+  'Superior occipital gyri': 'Các hồi chẩm trên',
+  'Superior temporal gyrus (Lateral part)': 'Hồi thái dương trên (Phần ngoài)',
+  'Sympathetic trunk': 'Chuỗi hạch giao cảm (Thân giao cảm)',
+  'Temporal plane': 'Diện thái dương (Planum temporale)',
+  'Tonsil of cerebellum': 'Hạnh nhân tiểu não',
+  'Transverse frontopolar gyrus and sulcus*': 'Hồi và rãnh trán cực ngang',
+  'Transverse frontopolar gyrus and sulcus': 'Hồi và rãnh trán cực ngang',
+  'Transverse temporal gyri': 'Các hồi thái dương ngang (Hồi Heschl)',
+  'Tympanic membrane': 'Màng nhĩ',
+  'Vestibular nuclei': 'Các nhân tiền đình',
+  'Vestibule': 'Tiền đình tai',
+  'White matter of telencephalon': 'Chất trắng đoan não',
+  'Zonular fibres': 'Các sợi đai mi (Dây chằng treo thủy tinh thể)'
 };
 
 // Morphological glossary for compound terms
@@ -1032,17 +1158,22 @@ export function getVietnameseName(englishBaseName) {
   if (!englishBaseName) return '';
   const { base, side } = splitSideAndSuffix(englishBaseName);
   const clean = base.replace(/^\((.*)\)$/, '$1').trim();
+  const cleanNorm = clean.replace(/\*+$/g, '').trim();
 
   let vnBase = null;
 
   // 1. Direct match
   if (EXACT_DICTIONARY[clean]) {
     vnBase = EXACT_DICTIONARY[clean];
+  } else if (EXACT_DICTIONARY[cleanNorm]) {
+    vnBase = EXACT_DICTIONARY[cleanNorm];
   } else {
     // 2. Case-insensitive exact match
     const lower = clean.toLowerCase();
+    const lowerNorm = cleanNorm.toLowerCase();
     for (const [key, val] of Object.entries(EXACT_DICTIONARY)) {
-      if (key.toLowerCase() === lower) {
+      const kLow = key.toLowerCase();
+      if (kLow === lower || kLow === lowerNorm) {
         vnBase = val;
         break;
       }
@@ -1222,6 +1353,38 @@ export function getVietnameseSynonyms(englishBaseName) {
   // Pelvis / Reproductive notes
   if (lower.includes('sinh dục') || lower.includes('tiết niệu') || enLower.includes('genital') || enLower.includes('pelvis') || enLower.includes('testis') || enLower.includes('penis') || enLower.includes('prostate')) {
     synonyms.push('vùng chậu', 'khung chậu', 'hệ sinh dục');
+  }
+
+  // Tonsil (Amidan)
+  if (lower.includes('hạnh nhân') || lower.includes('amidan') || enLower.includes('tonsil')) {
+    synonyms.push('amidan', 'hạnh nhân khẩu cái', 'viêm amidan', 'tonsil');
+  }
+  // Cavernous sinus & Dural sinuses
+  if (lower.includes('xoang hang') || enLower.includes('cavernous sinus')) {
+    synonyms.push('xoang hang', 'xoang tĩnh mạch màng cứng', 'cavernous sinus');
+  }
+  // Ear / Cochlea / Tympanic
+  if (lower.includes('ốc tai') || enLower.includes('cochlea')) {
+    synonyms.push('ốc tai', 'tai trong', 'cơ quan corti', 'cochlea');
+  }
+  if (lower.includes('màng nhĩ') || enLower.includes('tympanic')) {
+    synonyms.push('màng nhĩ', 'tai giữa', 'tympanic membrane');
+  }
+  // Eye / Optic chiasm / Zinn
+  if (lower.includes('giao thoa thị giác') || enLower.includes('optic chiasm')) {
+    synonyms.push('giao thoa thị giác', 'giao thoa thị', 'dây thần kinh thị', 'optic chiasm');
+  }
+  if (lower.includes('vòng zinn') || enLower.includes('common tendinous ring')) {
+    synonyms.push('vòng zinn', 'vòng gân chung', 'common tendinous ring');
+  }
+  if (lower.includes('cơ căng mạc đùi') || enLower.includes('tensor fasciae latae')) {
+    synonyms.push('cơ căng mạc đùi', 'dải chậu chày', 'tfl');
+  }
+  if (lower.includes('cơ thắt lưng lớn') || enLower.includes('psoas')) {
+    synonyms.push('cơ thắt lưng lớn', 'cơ thắt lưng chậu', 'psoas major');
+  }
+  if (lower.includes('xương vừng') || enLower.includes('sesamoid')) {
+    synonyms.push('xương vừng', 'sesamoid');
   }
 
   // Cerebrospinal fluid & Ventricular system (CSF) - Exclude heart chambers!
