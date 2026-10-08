@@ -555,9 +555,9 @@ const PLEXUS_PATTERNS = [...CNS_PATTERNS, 'plexus', 'đám rối', 'sciatic', 'n
 // -----------------------------------------------------------------------------
 export function isSkeletalVisibleAtLevel(pIdLower, level) {
   if (level <= 0) return false;
-  if (level >= 3.0) return true; // Level 3: Full skeleton!
+  if (level >= 4.0) return true; // Level 4: 100% complete skeleton!
 
-  // 1. Cột sống (Vertebral Column) & Nền chẩm Occipital (Hiển thị ở Level 1, 2, 3 - Ảnh 1)
+  // 1. Cột sống (Vertebral Column) & Nền chẩm Occipital (Hiển thị ở Level 1, 2, 3, 4 - Ảnh 1)
   const isSpine = 
     pIdLower.includes('vertebra') || pIdLower.includes('atlas') || pIdLower.includes('axis') ||
     pIdLower.includes('sacrum') || pIdLower.includes('coccyx') || pIdLower.includes('occipital') ||
@@ -596,7 +596,18 @@ export function isSkeletalVisibleAtLevel(pIdLower, level) {
     return true;
   }
 
-  // Any other bone (extremities, hands, feet, clavicle, scapula) requires Level 3!
+  // Level 3: Shows Axial + Pelvis + Long bones of 4 limbs, peels distal hand/foot bones
+  if (level >= 3.0) {
+    const isDistalHandFoot = 
+      pIdLower.includes('phalanx') || pIdLower.includes('scaphoid') || pIdLower.includes('lunate') ||
+      pIdLower.includes('triquetrum') || pIdLower.includes('pisiform') || pIdLower.includes('trapezium') ||
+      pIdLower.includes('trapezoid') || pIdLower.includes('capitate') || pIdLower.includes('hamate') ||
+      pIdLower.includes('metacarpal') || pIdLower.includes('calcaneus') || pIdLower.includes('talus') ||
+      pIdLower.includes('navicular') || pIdLower.includes('cuboid') || pIdLower.includes('cuneiform') ||
+      pIdLower.includes('metatarsal') || pIdLower.includes('sesamoid');
+    return !isDistalHandFoot;
+  }
+
   return false;
 }
 

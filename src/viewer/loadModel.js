@@ -373,15 +373,23 @@ function processModel(model, systemId, viewer) {
     const isStructure = !!child.userData?.za_name || (child.isMesh && child.name && !findAncestorZaName(child.parent));
     if (!isStructure) return;
 
-    const partId = child.userData?.za_name || child.name;
+    let partId = child.userData?.za_name || child.name;
+    const rawPartId = partId;
+    if (partId === '????????') partId = 'Microvascular anastomosis';
+    else if (partId === '?x.l') partId = 'Microvascular plexus.l';
+    else if (partId === '?x.r') partId = 'Microvascular plexus.r';
+
     child.userData.partId = partId;
     child.userData.system = systemId;
-    child.userData.originalName = partId;
+    child.userData.originalName = rawPartId;
 
     const parentId = findAncestorPartId(child.parent);
 
     nodes.push(child);
     meshRegistry.set(partId, child);
+    if (rawPartId && rawPartId !== partId) {
+      meshRegistry.set(rawPartId, child);
+    }
     structures.set(partId, {
       node: child,
       systemId,

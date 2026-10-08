@@ -750,6 +750,117 @@ const EXACT_DICTIONARY = {
   'Nucleus pulposus T7-T8': 'Nhân nhầy đĩa đệm T7-T8',
   'Nucleus pulposus T8-T9': 'Nhân nhầy đĩa đệm T8-T9',
   'Nucleus pulposus T9-T10': 'Nhân nhầy đĩa đệm T9-T10',
+
+  // Corrupted mesh name replacements
+  'Microvascular anastomosis': 'Mạng mao mạch vi tuần hoàn (Vi mạch)',
+  'Microvascular plexus': 'Đám rối vi mạch mao mạch',
+
+  // Ear ossicles & middle ear
+  'Incus': 'Xương đe (Tai giữa)',
+  'Malleus': 'Xương búa (Tai giữa)',
+  'Stapes': 'Xương bàn đạp (Tai giữa)',
+
+  // Permanent teeth
+  'Lower canine': 'Răng nanh hàm dưới',
+  'Upper canine': 'Răng nanh hàm trên',
+  'Lower first molar tooth': 'Răng cối lớn 1 hàm dưới (Răng 6)',
+  'Upper first molar tooth': 'Răng cối lớn 1 hàm trên (Răng 6)',
+  'Lower second molar tooth': 'Răng cối lớn 2 hàm dưới (Răng 7)',
+  'Upper second molar tooth': 'Răng cối lớn 2 hàm trên (Răng 7)',
+  'Lower third molar tooth': 'Răng khôn hàm dưới (Răng 8)',
+  'Upper third molar tooth': 'Răng khôn hàm trên (Răng 8)',
+  'Lower first premolar': 'Răng tiền cối 1 hàm dưới (Răng 4)',
+  'Upper first premolar': 'Răng tiền cối 1 hàm trên (Răng 4)',
+  'Lower second premolar': 'Răng tiền cối 2 hàm dưới (Răng 5)',
+  'Upper second premolar': 'Răng tiền cối 2 hàm trên (Răng 5)',
+  'Lower medial incisor': 'Răng cửa giữa hàm dưới (Răng 1)',
+  'Upper medial incisor': 'Răng cửa giữa hàm trên (Răng 1)',
+  'Lower lateral incisor': 'Răng cửa bên hàm dưới (Răng 2)',
+  'Upper lateral incisor': 'Răng cửa bên hàm trên (Răng 2)',
+
+  // Visceral & Genitourinary
+  'Ductus deferens': 'Ống dẫn tinh',
+  'Ejaculatory duct': 'Ống phóng tinh',
+  'Seminal gland': 'Túi tinh (Tuyến tinh)',
+  'Renal pelvis': 'Bể thận',
+  'Major calyx': 'Đài thận lớn',
+  'Minor calyx': 'Đài thận bé',
+  'Parotid gland': 'Tuyến mang tai',
+  'Submandibular gland': 'Tuyến dưới hàm',
+  'Sublingual gland': 'Tuyến dưới lưỡi',
+  'Sublingual caruncle': 'Cục dưới lưỡi',
+  'Parotid duct': 'Ống tuyến mang tai (Ống Stenon)',
+  'Submandibular duct': 'Ống tuyến dưới hàm (Ống Wharton)',
+  'Lesser sublingual duct': 'Ống tuyến dưới lưỡi nhỏ',
+  'Major sublingual duct': 'Ống tuyến dưới lưỡi lớn',
+  'Superior parathyroid gland': 'Tuyến cận giáp trên',
+  'Inferior parathyroid gland': 'Tuyến cận giáp dưới',
+  'Intermediate bronchus': 'Phế quản trung gian',
+  'Middle lobar bronchus': 'Phế quản thùy giữa',
+  'Deep lingual artery': 'Động mạch lưỡi sâu',
+
+  // Eye structures
+  'Cornea': 'Giác mạc (Mắt)',
+  'Iris': 'Mống mắt (Tròng đen)',
+  'Sclera': 'Củng mạc (Tròng trắng)',
+  'Retina': 'Võng mạc (Màng thị giác)',
+  'Anterior chamber of eyeball': 'Tiền phòng nhãn cầu (Mắt)',
+  'Posterior chamber of eyeball': 'Hậu phòng nhãn cầu (Mắt)',
+  'Vitreous body': 'Thủy tinh thể (Thể dịch kính)',
+  'Ciliary body': 'Thể mi (Mắt)',
+  'Lens': 'Thể thủy tinh (Thấu kính mắt)',
+  'Lacrimal gland': 'Tuyến lệ',
+  'Lacrimal sac': 'Túi lệ',
+  'Nasolacrimal duct': 'Ống lệ mũi',
+  'Lacrimal canaliculus': 'Tiểu quản lệ',
+  'Ampulla of lacrimal canaliculus': 'Bóng tiểu quản lệ',
+
+  // Tendons & Fascia
+  'Calcaneal tendon': 'Gân gót (Gân Achilles)',
+  'Achilles tendon': 'Gân gót (Gân Achilles)',
+  'Intermediate tendon of digastric muscle': 'Gân trung gian cơ hai bụng',
+  'Epicranial aponeurosis': 'Cân trên sọ (Cân đỉnh)',
+  'Clavipectoral fascia': 'Mạc quạ đòn (Mạc ngực đòn)',
+  'Pectoral fascia': 'Mạc ngực',
+
+  // Cranial bones
+  'Frontal bone': 'Xương trán (Xương sọ)',
+  'Parietal bone': 'Xương đỉnh (Xương sọ)',
+  'Occipital bone': 'Xương chẩm (Xương sọ)',
+  'Temporal bone': 'Xương thái dương (Xương sọ)',
+  'Sphenoid bone': 'Xương bướm (Nền sọ)',
+  'Ethmoid bone': 'Xương sàng (Nền sọ)',
+  'Sinus of frontal bone': 'Xoang trán',
+
+  // Brain structures & Nuclei
+  'Amygdaloid body': 'Thể hạnh nhân (Não)',
+  'Hippocampus': 'Hồi hải mã',
+  'Corpus callosum': 'Thể chai',
+  'Fornix': 'Vòm não',
+  'Thalamus': 'Đồi thị',
+  'Hypothalamus': 'Vùng dưới đồi',
+  'Caudate nucleus': 'Nhân đuôi',
+  'Putamen': 'Nhân bèo (Bèo sẫm)',
+  'Globus pallidus': 'Cầu nhạt',
+  'Substantia nigra': 'Chất đen',
+  'Red nucleus': 'Nhân đỏ',
+  'Cerebellum': 'Tiểu não',
+  'Pons': 'Cầu não',
+  'Medulla oblongata': 'Hành não',
+
+  // Muscular missing
+  'External intercostal muscles': 'Các cơ gian sườn ngoài',
+  'Internal intercostal muscles': 'Các cơ gian sườn trong',
+  'Innermost intercostal muscles': 'Các cơ gian sườn trong cùng',
+  'Dorsal interossei muscles of foot': 'Các cơ gian cốt mu chân',
+  'Dorsal interossei muscles of hand': 'Các cơ gian cốt mu tay',
+  'Lumbrical muscles of foot': 'Các cơ giun bàn chân',
+  'Lumbrical muscles of hand': 'Các cơ giun bàn tay',
+  'Bucinator': 'Cơ mút',
+  'External anal sphincter': 'Cơ thắt ngoài hậu môn',
+  'Inferior pharyngeal constrictor': 'Cơ siết họng dưới',
+  'Inferior tarsus': 'Sụn mi dưới',
+  'Superior tarsus': 'Sụn mi trên'
 };
 
 // Morphological glossary for compound terms
@@ -838,6 +949,45 @@ const PATTERNS = [
   { match: /\blevator scapulae\b/i, replace: 'Cơ nâng vai' },
   { match: /\blevator\b/i, replace: 'Cơ nâng' },
   { match: /\bdepressor\b/i, replace: 'Cơ hạ' },
+
+  // Lymphatic nodes
+  { match: /^(.*)\s+lymph\s+nodes?$/i, replace: (m, p) => `Các hạch bạch huyết ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+nodes?$/i, replace: (m, p) => `Các hạch ${getVietnameseName(p)}` },
+  // Vascular plurals & singulars
+  { match: /^(.*)\s+veins$/i, replace: (m, p) => `Các tĩnh mạch ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+vein$/i, replace: (m, p) => `Tĩnh mạch ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+arteries$/i, replace: (m, p) => `Các động mạch ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+artery$/i, replace: (m, p) => `Động mạch ${getVietnameseName(p)}` },
+  // Nervous system
+  { match: /^(.*)\s+nerves$/i, replace: (m, p) => `Các dây thần kinh ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+nerve$/i, replace: (m, p) => `Dây thần kinh ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+plexus$/i, replace: (m, p) => `Đám rối ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+ganglion$/i, replace: (m, p) => `Hạch thần kinh ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+nucleus$/i, replace: (m, p) => `Nhân ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+tract$/i, replace: (m, p) => `Dải ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+fasciculus$/i, replace: (m, p) => `Bó ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+sulcus$/i, replace: (m, p) => `Rãnh ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+gyrus$/i, replace: (m, p) => `Hồi ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+lobule$/i, replace: (m, p) => `Tiểu thùy ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+pole$/i, replace: (m, p) => `Cực ${getVietnameseName(p)}` },
+  // Muscles
+  { match: /^(.*)\s+muscles$/i, replace: (m, p) => `Các cơ ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+muscle$/i, replace: (m, p) => `Cơ ${getVietnameseName(p)}` },
+  // Divisions & Trunks
+  { match: /^Anterior division of (.*)$/i, replace: (m, p) => `Ngành trước của ${getVietnameseName(p)}` },
+  { match: /^Posterior division of (.*)$/i, replace: (m, p) => `Ngành sau của ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+trunk of brachial plexus$/i, replace: (m, p) => `thân ${getVietnameseName(p)} đám rối cánh tay` },
+  // Branches
+  { match: /^(.*)\s+branches of (.*)$/i, replace: (m, p1, p2) => `Các nhánh ${getVietnameseName(p1)} của ${getVietnameseName(p2)}` },
+  { match: /^(.*)\s+branch of (.*)$/i, replace: (m, p1, p2) => `Nhánh ${getVietnameseName(p1)} của ${getVietnameseName(p2)}` },
+  { match: /^(.*)\s+branches$/i, replace: (m, p) => `Các nhánh ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+branch$/i, replace: (m, p) => `Nhánh ${getVietnameseName(p)}` },
+  // Septum & Bursa
+  { match: /^(.*)\s+intermuscular septum of (.*)$/i, replace: (m, p1, p2) => `Vách gian cơ ${getVietnameseName(p1)} của ${getVietnameseName(p2)}` },
+  { match: /^(.*)\s+intermuscular septum$/i, replace: (m, p) => `Vách gian cơ ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+bursae$/i, replace: (m, p) => `Các túi thanh mạc ${getVietnameseName(p)}` },
+  { match: /^(.*)\s+bursa$/i, replace: (m, p) => `Túi thanh mạc ${getVietnameseName(p)}` },
+
   { match: /\bmuscle\b/i, replace: 'Cơ' },
   { match: /\bartery\b/i, replace: 'Động mạch' },
   { match: /\bvein\b/i, replace: 'Tĩnh mạch' },
@@ -895,6 +1045,37 @@ export function getVietnameseName(englishBaseName) {
       if (key.toLowerCase() === lower) {
         vnBase = val;
         break;
+      }
+    }
+  }
+
+  // 2b. Strip suffix "muscle", "muscles", "tooth", "teeth" and check EXACT_DICTIONARY
+  if (!vnBase) {
+    if (/\s+muscles?\b/i.test(clean)) {
+      const without = clean.replace(/\s+muscles?\b/i, '').trim();
+      const withoutLower = without.toLowerCase();
+      let matched = EXACT_DICTIONARY[without];
+      if (!matched) {
+        for (const [k, v] of Object.entries(EXACT_DICTIONARY)) {
+          if (k.toLowerCase() === withoutLower) {
+            matched = v;
+            break;
+          }
+        }
+      }
+      if (matched) {
+        vnBase = (!matched.startsWith('Cơ') && !matched.startsWith('Các cơ') && !matched.startsWith('Dải') && !matched.startsWith('Gân') && !matched.startsWith('Màng'))
+          ? `Cơ ${matched.toLowerCase()}`
+          : matched;
+      }
+    } else if (/\s+(?:tooth|teeth)\b/i.test(clean)) {
+      const without = clean.replace(/\s+(?:tooth|teeth)\b/i, '').trim();
+      const withoutLower = without.toLowerCase();
+      for (const [k, v] of Object.entries(EXACT_DICTIONARY)) {
+        if (k.toLowerCase() === withoutLower) {
+          vnBase = v;
+          break;
+        }
       }
     }
   }
@@ -982,7 +1163,7 @@ export function getVietnameseSynonyms(englishBaseName) {
     synonyms.push('lá lách', 'lách', 'tỳ', 'lách tỳ', 'la lach', 'ty', 'spleen');
   }
   if (lower.includes('tụy') || enLower.includes('pancreas')) {
-    synonyms.push('tụy', 'tuyến tụy', 'tụy tạng', 'tuy', 'tuyen tuy', 'pancreas');
+    synonyms.push('tụy', 'tuyến tụy', 'tụy tạng', 'tuy', 'tuyen tuy', 'pancreas', 'lá tụy', 'la tuy');
   }
   if (lower.includes('túi mật') || lower.includes('mật') || enLower.includes('gallbladder')) {
     synonyms.push('mật', 'túi mật', 'bọng mật', 'tui mat', 'mat', 'gallbladder');
@@ -1008,6 +1189,15 @@ export function getVietnameseSynonyms(englishBaseName) {
   if (lower.includes('tá tràng') || enLower.includes('duodenum')) {
     synonyms.push('ruột non', 'ta trang', 'duodenum');
   }
+  if (lower.includes('hỗng tràng') || lower.includes('không tràng') || enLower.includes('jejunum')) {
+    synonyms.push('không tràng', 'hỗng tràng', 'khong trang', 'hong trang', 'ruột non', 'ruot non', 'jejunum');
+  }
+  if (lower.includes('hồi tràng') || enLower.includes('ileum') || enLower.includes('ileal') || enLower.includes('ileocolic')) {
+    synonyms.push('hồi tràng', 'hoi trang', 'ruột non', 'ruot non', 'ileum', 'ileal');
+  }
+  if (lower.includes('đại tràng') || lower.includes('manh tràng') || lower.includes('trực tràng') || enLower.includes('colon') || enLower.includes('rectum') || enLower.includes('caecum') || enLower.includes('taenia')) {
+    synonyms.push('ruột già', 'ruot gia', 'đại tràng', 'dai trang', 'colon', 'kết tràng');
+  }
   if (lower.includes('phổi') || enLower.includes('lung')) {
     synonyms.push('lá phổi', 'hai lá phổi', 'la phoi', 'phoi', 'lung');
   }
@@ -1019,6 +1209,19 @@ export function getVietnameseSynonyms(englishBaseName) {
   }
   if (lower.includes('bạch huyết') || enLower.includes('lymph')) {
     synonyms.push('hệ bạch huyết', 'hạch bạch huyết', 'bach huyet', 'hach');
+  }
+
+  // Sensory: Eye & Ear
+  if (lower.includes('mắt') || lower.includes('nhãn cầu') || lower.includes('giác mạc') || lower.includes('mống mắt') || lower.includes('củng mạc') || lower.includes('võng mạc') || enLower.includes('eye') || enLower.includes('orbit') || enLower.includes('cornea') || enLower.includes('iris') || enLower.includes('sclera') || enLower.includes('retina') || enLower.includes('lacrimal')) {
+    synonyms.push('nhãn cầu', 'mắt', 'con mắt', 'nhan cau', 'mat', 'eyeball', 'eye');
+  }
+  if (lower.includes('tai') || lower.includes('nhĩ') || lower.includes('ốc tai') || lower.includes('xương đe') || lower.includes('xương búa') || lower.includes('xương bàn đạp') || enLower.includes('incus') || enLower.includes('malleus') || enLower.includes('stapes') || enLower.includes('tympan') || enLower.includes('auric') || enLower.includes('cochlea')) {
+    synonyms.push('tai', 'tai giữa', 'màng nhĩ', 'thính giác', 'ear');
+  }
+
+  // Pelvis / Reproductive notes
+  if (lower.includes('sinh dục') || lower.includes('tiết niệu') || enLower.includes('genital') || enLower.includes('pelvis') || enLower.includes('testis') || enLower.includes('penis') || enLower.includes('prostate')) {
+    synonyms.push('vùng chậu', 'khung chậu', 'hệ sinh dục');
   }
 
   // Cerebrospinal fluid & Ventricular system (CSF) - Exclude heart chambers!
@@ -1072,7 +1275,21 @@ export function getVietnameseSynonyms(englishBaseName) {
   if (lower.includes('xương đòn')) synonyms.push('xương quai xanh', 'quai xanh');
   if (lower.includes('cơ delta')) synonyms.push('cơ vai', 'bắp vai');
   if (lower.includes('cơ nhị đầu')) synonyms.push('chuột trước', 'bắp tay trước');
-  if (lower.includes('cơ tam đầu')) synonyms.push('chuột sau', 'bắp tay sau');
+  if (enLower.includes('pectoral') || lower.includes('cơ ngực') || lower.includes('ngực lớn') || lower.includes('ngực bé') || lower.includes('ngực đòn')) {
+    synonyms.push('cơ ngực', 'co nguc', 'ngực', 'bắp ngực', 'ngực lớn', 'ngực bé', 'pectoralis');
+  }
+  if (enLower.includes('latissimus') || enLower.includes('trapezius') || enLower.includes('erector spinae') || enLower.includes('rhomboid') || lower.includes('cơ lưng') || lower.includes('lưng rộng')) {
+    synonyms.push('cơ lưng', 'co lung', 'lưng', 'cơ xô', 'bắp lưng');
+  }
+  if (enLower.includes('glute') || lower.includes('cơ mông') || lower.includes('mông lớn') || lower.includes('mông bé') || lower.includes('mông nhỡ')) {
+    synonyms.push('cơ mông', 'co mong', 'mông', 'mông lớn', 'mông nhỡ', 'mông bé', 'gluteus');
+  }
+  if (enLower.includes('calcaneal tendon') || enLower.includes('achilles') || lower.includes('gân gót') || lower.includes('gân achilles')) {
+    synonyms.push('gân gót', 'gân achilles', 'gót chân', 'gan got', 'gan achilles', 'calcaneal tendon', 'achilles tendon');
+  }
+  if (lower.includes('sọ') || lower.includes('trán') || lower.includes('đỉnh') || lower.includes('chẩm') || lower.includes('thái dương') || enLower.includes('cran') || enLower.includes('skull') || enLower.includes('parietal') || enLower.includes('frontal') || enLower.includes('occipital') || enLower.includes('temporal') || enLower.includes('sphenoid') || enLower.includes('ethmoid')) {
+    synonyms.push('xương sọ', 'hộp sọ', 'sọ não', 'xuong so', 'hop so', 'so nao', 'skull', 'cranium');
+  }
   if (lower.includes('đốt sống') || enLower.includes('vertebra')) {
     synonyms.push('cột sống', 'xương sống', 'dot song', 'cot song');
 

@@ -130,7 +130,7 @@ export const EXTENDED_SYSTEMS = [
     baseSystem: 'visceral',
     subType: 'respiratory',
     label: { vi: 'Hệ Hô hấp (Phổi & Khí quản)', en: 'Respiratory system' },
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6a6 6 0 0 0 12 0V3"/><path d="M12 9v12"/><path d="M8 15a4 4 0 0 0 4 4 4 4 0 0 0 4-4"/></svg>`,
+    icon: ICONS.respiratory,
     count: 40
   },
   {
@@ -138,7 +138,7 @@ export const EXTENDED_SYSTEMS = [
     baseSystem: 'visceral',
     subType: 'digestive',
     label: { vi: 'Hệ Tiêu hóa (Gan, Dạ dày, Ruột)', en: 'Digestive system' },
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 6 5 6 9c0 6 6 13 6 13s6-7 6-13c0-4-2-7-6-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`,
+    icon: ICONS.digestive,
     count: 46
   },
   {
@@ -146,7 +146,7 @@ export const EXTENDED_SYSTEMS = [
     baseSystem: 'visceral',
     subType: 'urinary_genital',
     label: { vi: 'Hệ Tiết niệu & Sinh dục', en: 'Urogenital system' },
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    icon: ICONS.urinary_genital,
     count: 24
   },
   {
@@ -161,7 +161,7 @@ export const EXTENDED_SYSTEMS = [
     baseSystem: 'visceral',
     subType: 'endocrine',
     label: { vi: 'Hệ Nội tiết (Tuyến giáp, Yên)', en: 'Endocrine system' },
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg>`,
+    icon: ICONS.endocrine,
     count: 8
   },
   {
