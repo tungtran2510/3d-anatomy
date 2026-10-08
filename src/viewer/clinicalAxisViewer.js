@@ -290,13 +290,15 @@ export function focusAxisStep(axisId, stepIdx, viewer = window.viewer, zoomClose
 
     if (hasMeshes && !stepBox.isEmpty()) {
       const stepCenter = stepBox.getCenter(new THREE.Vector3());
+      const stepSize = stepBox.getSize(new THREE.Vector3());
       const aspect = activeViewer.camera.aspect || (window.innerWidth / window.innerHeight) || 1;
       const fovRad = THREE.MathUtils.degToRad(activeViewer.camera.fov || 35);
       const tanHalfFov = Math.tan(fovRad / 2);
       const distV = (stepSize.y / 2) / tanHalfFov;
       const distH = (stepSize.x / 2) / (tanHalfFov * aspect);
-      const padding = aspect < 1.0 ? 1.35 : 1.20;
-      const dist = Math.max(0.55, Math.max(distV, distH) * padding);
+      const padding = aspect < 1.0 ? 1.40 : 1.25;
+      const dist = Math.max(0.45, Math.max(distV, distH) * padding);
+      const direction = new THREE.Vector3(0.18, 0.04, 0.98).normalize();
       const targetPos = stepCenter.clone().add(direction.multiplyScalar(dist));
 
       animateCameraTo(activeViewer.camera, activeViewer.controls, targetPos, stepCenter, activeViewer, 500);

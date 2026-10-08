@@ -680,7 +680,7 @@ export const CLINICAL_AXES = [
       {
         step: 1,
         title: 'Vùng Dưới Đồi & Tuyến Yên (Bộ Chỉ Huy Thể Dịch Tối Cao)',
-        shortTitle: '1. Dưới đồi & Tuyến yên',
+        shortTitle: '1. Dưới đồi - Yên',
         partId: 'Adenohypophysis',
         partIds: ['Adenohypophysis', 'Neurohypophysis', 'Pineal gland', 'Hypothalamus', 'Third ventricle'],
         system: 'visceral',
@@ -690,10 +690,11 @@ export const CLINICAL_AXES = [
       {
         step: 2,
         title: 'Tuyến Giáp, Tuyến Cận Giáp & Mạch Máu Giáp (Chuyển Hóa & Canxi)',
-        shortTitle: '2. Tuyến giáp & Cận giáp',
+        shortTitle: '2. Tuyến giáp',
         partId: 'Thyroid gland',
         partIds: [
           'Thyroid gland',
+          'Thyroid cartilage',
           'Inferior parathyroid gland.l',
           'Inferior parathyroid gland.r',
           'Superior parathyroid gland.l',
@@ -704,16 +705,18 @@ export const CLINICAL_AXES = [
         ],
         system: 'visceral',
         shortNote: 'Tuyến giáp tiết T3-T4 chuyển hóa; 4 tuyến cận giáp tiết PTH giữ canxi máu.',
-        note: 'Tuyến giáp tiết Thyroxine (T4) và T3 điều hòa tốc độ chuyển hóa cơ bản; 4 hạt tuyến cận giáp nằm mặt sau tiết hormone PTH đối kháng với Calcitonin để duy trì hằng định nồng độ canxi máu.'
+        note: 'Tuyến giáp tựa trên sụn giáp và khí quản, tiết Thyroxine (T4) và T3 điều hòa tốc độ chuyển hóa cơ bản; 4 hạt tuyến cận giáp nằm mặt sau tiết hormone PTH đối kháng với Calcitonin để duy trì hằng định nồng độ canxi máu.'
       },
       {
         step: 3,
-        title: 'Tuyến Thượng Thận & Mạch Thượng Thận (Trục Đối Phó Stress Sinh Tồn)',
-        shortTitle: '3. Tuyến thượng thận',
+        title: 'Tuyến Thượng Thận & Thận (Trục Đối Phó Stress Sinh Tồn)',
+        shortTitle: '3. Thượng thận',
         partId: 'Suprarenal gland.l',
         partIds: [
           'Suprarenal gland.l',
           'Suprarenal gland.r',
+          'Renal pelvis.l',
+          'Renal pelvis.r',
           'Inferior suprarenal artery.l',
           'Inferior suprarenal artery.r',
           'Abdominal aorta',
@@ -721,17 +724,23 @@ export const CLINICAL_AXES = [
         ],
         system: 'visceral',
         shortNote: 'Vỏ tiết Cortisol, Aldosterone; Tủy tiết Adrenaline phản xạ chống stress.',
-        note: 'Vỏ thượng thận nhận lệnh ACTH tiết Cortisol chống viêm và Aldosterone giữ muối nước; Tủy thượng thận được dây giao cảm kích thích trực tiếp tiết Adrenaline tăng nhịp tim và huyết áp trong tích tắc.'
+        note: 'Tuyến thượng thận nằm chụp lên cực trên hai quả thận; Vỏ thượng thận nhận lệnh ACTH tiết Cortisol chống viêm và Aldosterone giữ muối nước; Tủy thượng thận được dây giao cảm kích thích trực tiếp tiết Adrenaline tăng nhịp tim và huyết áp trong tích tắc.'
       },
       {
         step: 4,
-        title: 'Cơ Quan Đích & Vòng Phản Hồi Ngược (Negative Feedback Loop)',
-        shortTitle: '4. Cơ quan đích & Phản hồi',
-        partId: 'Liver',
-        partIds: ['Liver', 'Left ventricle', 'Pancreas'],
+        title: 'Đảo Tụy Nội Tiết & Gan (Chuyển Hóa Glucose & Cân Bằng Năng Lượng)',
+        shortTitle: '4. Đảo tụy & Gan',
+        partId: 'Pancreas',
+        partIds: [
+          'Pancreas',
+          'Liver',
+          'Hepatic portal vein',
+          'Splenic vein',
+          'Superior mesenteric vein'
+        ],
         system: 'visceral',
-        shortNote: 'Gan, Tim, Tụy tiếp nhận hormone; nồng độ máu tự điều hòa ngược lên não.',
-        note: 'Mạng lưới điều hòa ngược (Negative Feedback): Khi nồng độ hormone tuyến đích trong máu đạt ngưỡng tối ưu, chúng quay lại ức chế vùng dưới đồi và tuyến yên ngừng tiết để giữ cân bằng nội môi hoàn hảo.'
+        shortNote: 'Đảo tụy tiết Insulin & Glucagon; dẫn qua Tĩnh mạch cửa vào gan điều hòa đường huyết.',
+        note: 'Tuyến tụy nội tiết chứa các đảo tụy Langerhans: tế bào Beta tiết Insulin hạ đường huyết, tế bào Alpha tiết Glucagon tăng đường huyết; toàn bộ hormone dẫn qua Tĩnh mạch cửa trực tiếp vào Gan để tổng hợp dự trữ Glycogen.'
       }
     ],
     clinicalInsights: [
@@ -770,7 +779,7 @@ export const CLINICAL_AXES = [
       {
         step: 1,
         title: 'Cầu Thận, Bể Thận & Mạch Máu Thận (Bộ Lọc Máu Cực Lớn)',
-        shortTitle: '1. Thận & ĐM Thận',
+        shortTitle: '1. Thận & Mạch',
         partId: 'Renal pelvis.l',
         partIds: [
           'Renal pelvis.l',
@@ -787,11 +796,13 @@ export const CLINICAL_AXES = [
       {
         step: 2,
         title: 'Tuyến Thượng Thận & Aldosterone (Hấp Thu Lại Muối Nước)',
-        shortTitle: '2. Thượng thận & RAAS',
+        shortTitle: '2. Thượng thận',
         partId: 'Suprarenal gland.l',
         partIds: [
           'Suprarenal gland.l',
           'Suprarenal gland.r',
+          'Renal pelvis.l',
+          'Renal pelvis.r',
           'Inferior suprarenal artery.l',
           'Inferior suprarenal artery.r'
         ],
@@ -802,7 +813,7 @@ export const CLINICAL_AXES = [
       {
         step: 3,
         title: 'Quả Tim, Cung Động Mạch Chủ & Mạch Vành (Bơm Máu & Tiết ANP)',
-        shortTitle: '3. Tim & Cung ĐM Chủ',
+        shortTitle: '3. Tim & Cung ĐM',
         partId: 'Left ventricle',
         partIds: [
           'Left ventricle',
@@ -820,9 +831,9 @@ export const CLINICAL_AXES = [
       {
         step: 4,
         title: 'Niệu Quản, Bàng Quang & Đường Thoát Nước Tiểu (Điều Hòa Thể Tích)',
-        shortTitle: '4. Niệu quản & Bàng quang',
+        shortTitle: '4. Bàng quang',
         partId: 'Urinary bladder',
-        partIds: ['Ureter.l', 'Ureter.r', 'Urinary bladder'],
+        partIds: ['Renal pelvis.l', 'Renal pelvis.r', 'Ureter.l', 'Ureter.r', 'Urinary bladder'],
         system: 'visceral',
         shortNote: 'Dẫn lưu 1.5 - 2 lít nước tiểu/ngày ra ngoài duy trì áp suất thẩm thấu cơ thể.',
         note: 'Nước tiểu sau khi tinh lọc và cô đặc chảy xuống bể thận, được sóng nhu động niệu quản đẩy xuống bàng quang tích trữ và bài xuất ra ngoài nhằm giữ cân bằng nước và điện giải.'
