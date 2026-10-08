@@ -35,3 +35,22 @@
 ### 4. NGUYÊN TẮC HỎI & XIN PHÉP TRƯỚC KHI LÀM
 - Không tự ý thay đổi bố cục lớn hoặc cấu trúc hệ thống nếu chưa trình bày rõ phương án và được người dùng xác nhận "Đồng ý".
 - Không tự ý đẩy (push) code lên mạng khi người dùng chưa bảo "đẩy".
+
+---
+
+### 5. KHÔNG LẶP LẠI THÔNG BÁO ĐÃ CUNG CẤP (NON-REPEATING NOTIFICATIONS)
+- **Quy tắc tuyệt đối:** Những thông báo cấp quyền (như Microphone) hoặc trạng thái mà người dùng đã thấy / đã xử lý thì CẤM TUYỆT ĐỐI việc lặp lại hay spam cảnh báo trong cùng một phiên làm việc.
+- Kiểm tra cờ lưu phiên (`sessionStorage.getItem('mic_perm_denied')` / `mic_perm_notified`), nếu đã thông báo 1 lần thì tự động bỏ qua, chỉ focus vào ô gõ phím.
+
+---
+
+### 6. PHÂN BIỆT THỊ GIÁC & ĐỒNG BỘ TYPOGRAPHY (TYPOGRAPHIC HIERARCHY)
+- **Tên chính giải phẫu**: Bắt buộc in đậm (`font-weight: 600`).
+- **Phần chú thích / danh pháp trong ngoặc đơn**: CẤM IN ĐẬM, bắt buộc dùng chữ thường (`font-weight: 400 !important; color: #94a3b8 / #64748b; font-size: 0.92em;`). Tuyệt đối không để in đậm cả cụm từ đầu đến đuôi.
+- **Loại bỏ chuỗi rác**: Triệt tiêu 100% các ký tự rác như `(????????)` khi không có tên Latinh.
+
+---
+
+## DEPLOYMENT TARGETS
+- **GitHub Repository**: `https://github.com/tungtran2510/3d-anatomy.git` (nhánh `master`)
+- **Vercel Production Live**: `https://3d-anatomy-atlas-vn.vercel.app`
