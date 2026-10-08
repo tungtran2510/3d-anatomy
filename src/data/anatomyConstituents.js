@@ -50,7 +50,9 @@ export const CONSTITUENTS_DATABASE = {
       { name: 'Hang môn vị', latin: 'Antrum pyloricum', searchQuery: 'Stomach', icon: '⏳' },
       { name: 'Cơ thắt môn vị', latin: 'Pylorus', searchQuery: 'Pylorus', icon: '🔒' },
       { name: 'Bờ cong nhỏ', latin: 'Curvatura minor', searchQuery: 'Stomach', icon: '↩️' },
-      { name: 'Bờ cong lớn', latin: 'Curvatura major', searchQuery: 'Stomach', icon: '↪️' }
+      { name: 'Bờ cong lớn', latin: 'Curvatura major', searchQuery: 'Stomach', icon: '↪️' },
+      { name: 'Thành trước dạ dày (Bóc tách)', latin: 'Paries anterior', searchQuery: 'Stomach_AnteriorWall', icon: '🔪' },
+      { name: 'Lòng dạ dày & Niêm mạc', latin: 'Tunica mucosa gastrica', searchQuery: 'Stomach', icon: '🔬' }
     ]
   },
 

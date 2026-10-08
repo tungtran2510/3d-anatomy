@@ -944,6 +944,26 @@ export const CLINICAL_DATABASE = {
     videoId: '3ZfVjV7VqJ8'
   },
 
+  'Stomach_AnteriorWall': {
+    nameVi: 'Thành trước dạ dày (Mảnh bóc tách lòng dạ dày)',
+    nameLatin: 'Paries anterior gastris (TA2: 2894)',
+    nameEn: 'Anterior wall of stomach',
+    regionVi: 'Thượng vị & Mặt trước thân dạ dày',
+    systemVi: 'Hệ Tiêu Hóa',
+    description: 'Thành trước của dạ dày tiếp xúc thùy gan trái, cơ hoành và thành bụng trước. Ở chế độ bóc tách giải phẫu, thành trước được mở ra để lộ các nếp gấp niêm mạc (rugae), lòng dạ dày và mạng lưới thần kinh ruột bên trong.',
+    function: 'Co bóp nhào trộn dịch vị; ở chế độ bóc tách có thể lật mở để khảo sát niêm mạc và đám rối thần kinh dạ dày.',
+    clinical: 'Thường được mở trong phẫu thuật mở dạ dày (Gastrostomy); loét thành trước có nguy cơ thủng trực tiếp vào ổ phúc mạc lớn gây viêm phúc mạc cấp tính.',
+    relations: {
+      muscles: '3 tầng cơ trơn dày (dọc, vòng, chéo) phủ thanh mạc phúc mạc.',
+      bones: 'Được che chắn bởi các sụn sườn 7 - 9 bên trái.',
+      nerves: 'Các nhánh của thân trước Dây thần kinh X (Phế vị).',
+      vessels: 'Các nhánh động mạch vị trái và vị mạc nối.'
+    },
+    lessonLink: '/tieu-hoa/da-day-va-ruot',
+    lessonTitle: 'Dạ Dày: Cấu Trúc Cơ Học & Chức Năng Tiêu Hóa',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
   // === HỆ THỐNG NÃO THẤT & DỊCH NÃO TỦY (VENTRICULAR SYSTEM & CSF) ===
   'Lateral ventricle': {
     nameVi: 'Não thất bên (Não thất I & II)',

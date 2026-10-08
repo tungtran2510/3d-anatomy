@@ -531,13 +531,13 @@ export const CLINICAL_AXES = [
     chainSteps: [
       {
         step: 1,
-        title: 'Tâm thất Tim (Bơm máu)',
-        shortTitle: '1. Tâm thất',
+        title: 'Tâm thất Tim & Thân Động Mạch Phổi (Bơm Máu Lên Phổi)',
+        shortTitle: '1. Tâm thất & Thân ĐMP',
         partId: 'Right ventricle',
-        partIds: ['Right ventricle', 'Left ventricle'],
+        partIds: ['Right ventricle', 'Left ventricle', 'Pulmonary trunk', 'Left pulmonary artery', 'Right pulmonary artery'],
         system: 'cardiovascular',
-        shortNote: 'Thất phải bơm máu lên phổi, thất trái bơm máu đi nuôi cơ thể.',
-        note: 'Tiếp nhận máu nghèo oxy từ cơ thể trở về và bơm qua Động mạch phổi.'
+        shortNote: 'Thất phải bơm máu lên phổi qua thân ĐMP, thất trái bơm đi nuôi cơ thể.',
+        note: 'Tiếp nhận máu nghèo oxy từ cơ thể trở về và bơm qua Thân động mạch phổi chia 2 nhánh vào hai lá phổi.'
       },
       {
         step: 2,
@@ -551,13 +551,20 @@ export const CLINICAL_AXES = [
       },
       {
         step: 3,
-        title: 'Tâm nhĩ Tim (Hồi lưu)',
-        shortTitle: '3. Tâm nhĩ',
+        title: 'Tĩnh Mạch Phổi & Tâm Nhĩ Tim (Hồi Lưu Máu Giàu Oxy)',
+        shortTitle: '3. TM Phổi & Tâm nhĩ',
         partId: 'Left atrium',
-        partIds: ['Left atrium', 'Right atrium'],
+        partIds: [
+          'Left atrium',
+          'Right atrium',
+          'Left superior pulmonary vein',
+          'Left inferior pulmonary vein',
+          'Right superior pulmonary vein',
+          'Right inferior pulmonary vein'
+        ],
         system: 'cardiovascular',
-        shortNote: 'Đón nhận máu giàu oxy từ phổi và máu nghèo oxy từ tĩnh mạch.',
-        note: 'Đưa máu đỏ tươi giàu oxy trở về buồng tim trái với áp lực cao.'
+        shortNote: '4 tĩnh mạch phổi dẫn máu giàu oxy về tâm nhĩ trái chuẩn bị tống máu.',
+        note: 'Đưa máu đỏ tươi giàu oxy từ phổi qua 4 tĩnh mạch phổi trở về tâm nhĩ trái với áp lực cao.'
       },
       {
         step: 4,

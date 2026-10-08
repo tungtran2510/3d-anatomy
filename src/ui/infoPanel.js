@@ -6,7 +6,7 @@ import { getClinicalData } from '../data/clinicalInfo.js';
 import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getTableVisibility } from '../viewer/orientationManager.js';
 import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
-import { hidePart, isolatePart, setPartTransparency, restoreAllParts } from '../viewer/visibility.js';
+import { hidePart, isolatePart, setPartTransparency, restoreAllParts, toggleStomachDissection, isStomachDissected } from '../viewer/visibility.js';
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
@@ -223,8 +223,39 @@ export function initInfoPanel(viewer) {
     handleRadiusBlast(viewer);
   });
 
+  const stomachDissectBtn = document.getElementById('cardStomachDissectBtn');
+  stomachDissectBtn?.addEventListener('click', () => {
+    const isNowDissected = toggleStomachDissection();
+    viewer?.render?.();
+    updateStomachDissectButtonUI(isNowDissected);
+    if (isNowDissected) {
+      showToast('🔪 Đã bóc tách thành trước: Lộ nếp gấp niêm mạc & đám rối thần kinh dạ dày!');
+    } else {
+      showToast('🩺 Đã đóng kín dạ dày: Thành trước nguyên vẹn sinh lý!');
+    }
+  });
+
   // Synchronize history buttons initial state
   notifySelectionHistoryChanged();
+}
+
+export function updateStomachDissectButtonUI(isDissected) {
+  const container = document.getElementById('stomachDissectContainer');
+  const btn = document.getElementById('cardStomachDissectBtn');
+  const icon = document.getElementById('stomachDissectIcon');
+  const text = document.getElementById('stomachDissectText');
+  if (!container || !btn || !icon || !text) return;
+
+  btn.classList.toggle('dissected', isDissected);
+  if (isDissected) {
+    icon.textContent = '🩺';
+    text.textContent = 'Đóng kín thành trước dạ dày';
+    btn.title = 'Đóng lại thành trước dạ dày nguyên vẹn sinh lý';
+  } else {
+    icon.textContent = '🔪';
+    text.textContent = 'Bóc tách thành trước (Mở lòng dạ dày)';
+    btn.title = 'Bóc tách thành trước để mở lòng dạ dày quan sát niêm mạc bên trong';
+  }
 }
 
 export function updateInfoPanelContent(part, viewer) {
@@ -288,6 +319,19 @@ export function updateInfoPanelContent(part, viewer) {
     const rawDesc = clinical.description || '';
     const firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;
     miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Xem thêm" để đọc chi tiết giải phẫu.';
+  }
+
+  // Handle Stomach Dissection button visibility & state
+  const stomachContainer = document.getElementById('stomachDissectContainer');
+  const partIdStr = (part?.id || '').toLowerCase();
+  const isStomachRelated = partIdStr.includes('stomach') || partIdStr.includes('dạ dày');
+  if (stomachContainer) {
+    if (isStomachRelated) {
+      stomachContainer.classList.remove('hidden');
+      updateStomachDissectButtonUI(isStomachDissected());
+    } else {
+      stomachContainer.classList.add('hidden');
+    }
   }
 
   // 2. Core Anatomical Explanation (Ngắn gọn 1-2 câu ứng dụng thực tế, không lý thuyết dài dòng)

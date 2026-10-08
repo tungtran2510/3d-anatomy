@@ -389,6 +389,7 @@ const EXACT_DICTIONARY = {
   'Brain': 'Não bộ',
   'Liver': 'Gan',
   'Stomach': 'Dạ dày',
+  'Stomach_AnteriorWall': 'Thành trước dạ dày (Mảnh bóc tách lòng dạ dày)',
   'Duodenum': 'Tá tràng',
   'Small intestine': 'Ruột non',
   'Large intestine': 'Ruột già (Đại tràng)',

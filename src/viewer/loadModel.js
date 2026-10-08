@@ -362,6 +362,226 @@ function setupIntervertebralDiscs(model, systemId, viewer, nodes) {
   });
 }
 
+function setupStomachAnatomy(model, systemId, viewer, nodes) {
+  let stomachMesh = null;
+  model.traverse((child) => {
+    if (child.isMesh && child.name && /stomach/i.test(child.name)) {
+      stomachMesh = child;
+    }
+  });
+
+  if (!stomachMesh || !stomachMesh.geometry) return;
+
+  const geom = stomachMesh.geometry;
+  const pos = geom.attributes.position;
+  const norm = geom.attributes.normal;
+  const index = geom.index;
+  if (!pos || !index) return;
+
+  // Extract boundary edges to find the anterior wall window
+  const idxArr = index.array;
+  const edgeCount = new Map();
+  function edgeKey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
+  for (let i = 0; i < idxArr.length; i += 3) {
+    const a = idxArr[i], b = idxArr[i+1], c = idxArr[i+2];
+    edgeCount.set(edgeKey(a, b), (edgeCount.get(edgeKey(a, b)) || 0) + 1);
+    edgeCount.set(edgeKey(b, c), (edgeCount.get(edgeKey(b, c)) || 0) + 1);
+    edgeCount.set(edgeKey(c, a), (edgeCount.get(edgeKey(c, a)) || 0) + 1);
+  }
+
+  const boundaryEdges = [];
+  for (const [k, count] of edgeCount.entries()) {
+    if (count === 1) boundaryEdges.push(k.split('_').map(Number));
+  }
+
+  const adj = new Map();
+  for (const [u, v] of boundaryEdges) {
+    if (!adj.has(u)) adj.set(u, []);
+    if (!adj.has(v)) adj.set(v, []);
+    adj.get(u).push(v);
+    adj.get(v).push(u);
+  }
+
+  // Find the anterior window loop (>50 vertices, 78 vertices in Z-Anatomy)
+  const visited = new Set();
+  let holeLoop = null;
+  for (const start of adj.keys()) {
+    if (visited.has(start)) continue;
+    const loop = [start];
+    visited.add(start);
+    let curr = start;
+    while (true) {
+      const nbrs = adj.get(curr) || [];
+      const next = nbrs.find(n => !visited.has(n));
+      if (next !== undefined) {
+        visited.add(next);
+        loop.push(next);
+        curr = next;
+      } else {
+        break;
+      }
+    }
+    if (loop.length > 50) {
+      holeLoop = loop;
+      break;
+    }
+  }
+
+  if (!holeLoop || holeLoop.length < 3) return;
+
+  const N = holeLoop.length;
+  // Boundary points with normals
+  const bPts = holeLoop.map(vi => ({
+    x: pos.getX(vi),
+    y: pos.getY(vi),
+    z: pos.getZ(vi),
+    nx: norm ? norm.getX(vi) : 0,
+    ny: norm ? norm.getY(vi) : 0,
+    nz: norm ? norm.getZ(vi) : 1
+  }));
+
+  // Average center and outward normal
+  let cx = 0, cy = 0, cz = 0, cnx = 0, cny = 0, cnz = 0;
+  for (const p of bPts) {
+    cx += p.x; cy += p.y; cz += p.z;
+    cnx += p.nx; cny += p.ny; cnz += p.nz;
+  }
+  cx /= N; cy /= N; cz /= N;
+  cnx /= N; cny /= N; cnz /= N;
+  const nlen = Math.hypot(cnx, cny, cnz) || 1;
+  cnx /= nlen; cny /= nlen; cnz /= nlen;
+
+  // Gentle anatomical bulge (+Z anterior gastric wall contour)
+  const bulge = 0.0035;
+  const centerPt = {
+    x: cx + cnx * bulge,
+    y: cy + cny * bulge,
+    z: cz + cnz * bulge,
+    nx: cnx,
+    ny: cny,
+    nz: cnz
+  };
+
+  // Build concentric rings for smooth dome curvature matching stomach wall
+  const rings = [bPts];
+  const fractions = [0.66, 0.33];
+  for (const f of fractions) {
+    const ring = [];
+    const ringBulge = bulge * Math.sin(Math.PI * f * 0.5);
+    for (let i = 0; i < N; i++) {
+      const bp = bPts[i];
+      ring.push({
+        x: cx + (bp.x - cx) * f + cnx * ringBulge,
+        y: cy + (bp.y - cy) * f + cny * ringBulge,
+        z: cz + (bp.z - cz) * f + cnz * ringBulge,
+        nx: bp.nx * f + cnx * (1 - f),
+        ny: bp.ny * f + cny * (1 - f),
+        nz: bp.nz * f + cnz * (1 - f)
+      });
+    }
+    rings.push(ring);
+  }
+
+  const patchVertices = [];
+  const patchNormals = [];
+
+  for (const p of rings[0]) {
+    patchVertices.push(p.x, p.y, p.z);
+    patchNormals.push(p.nx, p.ny, p.nz);
+  }
+  for (const p of rings[1]) {
+    patchVertices.push(p.x, p.y, p.z);
+    patchNormals.push(p.nx, p.ny, p.nz);
+  }
+  for (const p of rings[2]) {
+    patchVertices.push(p.x, p.y, p.z);
+    patchNormals.push(p.nx, p.ny, p.nz);
+  }
+  const centerIdx = 3 * N;
+  patchVertices.push(centerPt.x, centerPt.y, centerPt.z);
+  patchNormals.push(centerPt.nx, centerPt.ny, centerPt.nz);
+
+  const patchIndices = [];
+  for (let i = 0; i < N; i++) {
+    const next = (i + 1) % N;
+    patchIndices.push(i, next, N + i);
+    patchIndices.push(next, N + next, N + i);
+  }
+  for (let i = 0; i < N; i++) {
+    const next = (i + 1) % N;
+    patchIndices.push(N + i, N + next, 2 * N + i);
+    patchIndices.push(N + next, 2 * N + next, 2 * N + i);
+  }
+  for (let i = 0; i < N; i++) {
+    const next = (i + 1) % N;
+    patchIndices.push(2 * N + i, 2 * N + next, centerIdx);
+  }
+
+  const patchGeom = new THREE.BufferGeometry();
+  patchGeom.setAttribute('position', new THREE.Float32BufferAttribute(patchVertices, 3));
+  patchGeom.setAttribute('normal', new THREE.Float32BufferAttribute(patchNormals, 3));
+  patchGeom.setIndex(patchIndices);
+  patchGeom.computeVertexNormals();
+
+  if (patchGeom.computeBoundsTree) {
+    patchGeom.computeBoundsTree();
+  }
+
+  // Create PBR Material matching stomach perfectly
+  const patchMat = stomachMesh.material ? stomachMesh.material.clone() : new THREE.MeshStandardMaterial({
+    name: 'PBR_Stomach_AnteriorWall',
+    color: 0xB86A64,
+    roughness: 0.48,
+    metalness: 0.02,
+    side: THREE.DoubleSide
+  });
+  patchMat.name = 'PBR_Stomach_AnteriorWall';
+  patchMat.side = THREE.DoubleSide;
+
+  const patchMesh = new THREE.Mesh(patchGeom, patchMat);
+  patchMesh.name = 'Stomach_AnteriorWall';
+  patchMesh.renderOrder = stomachMesh.renderOrder || 0;
+  patchMesh.userData = {
+    ...stomachMesh.userData,
+    partId: 'Stomach_AnteriorWall',
+    za_name: 'Stomach_AnteriorWall',
+    system: systemId,
+    isStomachPatch: true,
+    isAnteriorWall: true,
+    parentStomachId: 'Stomach',
+    baseMaterial: patchMat
+  };
+
+  stomachMesh.add(patchMesh);
+
+  // Register in structures and meshRegistry
+  meshRegistry.set('Stomach_AnteriorWall', patchMesh);
+  meshRegistry.set(patchMesh.name, patchMesh);
+  structures.set('Stomach_AnteriorWall', {
+    node: patchMesh,
+    systemId,
+    parentId: 'Stomach',
+    childIds: [],
+    ownMeshes: [patchMesh]
+  });
+
+  const stomachStruct = structures.get('Stomach');
+  if (stomachStruct) {
+    if (!stomachStruct.childIds) stomachStruct.childIds = [];
+    if (!stomachStruct.childIds.includes('Stomach_AnteriorWall')) {
+      stomachStruct.childIds.push('Stomach_AnteriorWall');
+    }
+    if (!stomachStruct.ownMeshes) stomachStruct.ownMeshes = [stomachMesh];
+    if (!stomachStruct.ownMeshes.includes(patchMesh)) {
+      stomachStruct.ownMeshes.push(patchMesh);
+    }
+  }
+
+  if (nodes && !nodes.includes(patchMesh)) {
+    nodes.push(patchMesh);
+  }
+}
+
 function processModel(model, systemId, viewer) {
   const nodes = [];
 
@@ -438,6 +658,8 @@ function processModel(model, systemId, viewer) {
 
   if (systemId === 'joints') {
     setupIntervertebralDiscs(model, systemId, viewer, nodes);
+  } else if (systemId === 'visceral') {
+    setupStomachAnatomy(model, systemId, viewer, nodes);
   }
 
   systemRegistry.set(systemId, nodes);

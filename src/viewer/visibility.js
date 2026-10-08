@@ -874,3 +874,17 @@ export function setPartVisibility(partId, visible) {
   if (!getMeshRegistry().has(partId)) return;
   setStructureVisible(partId, visible);
 }
+
+export function toggleStomachDissection(forceOpen = null) {
+  const patchMesh = getMeshRegistry().get('Stomach_AnteriorWall');
+  if (!patchMesh) return false;
+  const isCurrentlyOpen = !patchMesh.visible;
+  const shouldOpen = forceOpen !== null ? forceOpen : !isCurrentlyOpen;
+  patchMesh.visible = !shouldOpen;
+  return shouldOpen;
+}
+
+export function isStomachDissected() {
+  const patchMesh = getMeshRegistry().get('Stomach_AnteriorWall');
+  return patchMesh ? !patchMesh.visible : false;
+}

@@ -2782,6 +2782,50 @@ body.theme-dark .info-group-title {
   box-shadow: 0 2px 6px rgba(30, 58, 138, 0.3);
 }
 
+/* Stomach Anterior Wall Dissection Button */
+.stomach-dissect-container {
+  margin-top: 8px;
+}
+.stomach-dissect-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.12), rgba(225, 29, 72, 0.08));
+  color: #be123c;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(225, 29, 72, 0.1);
+}
+.stomach-dissect-btn:hover {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.15));
+  border-color: rgba(225, 29, 72, 0.5);
+  transform: translateY(-1px);
+}
+.stomach-dissect-btn.dissected {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+  color: #047857;
+}
+[data-theme="dark"] .stomach-dissect-btn,
+body.theme-dark .stomach-dissect-btn {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.22), rgba(225, 29, 72, 0.14));
+  border-color: rgba(244, 63, 94, 0.45);
+  color: #fda4af;
+}
+[data-theme="dark"] .stomach-dissect-btn.dissected,
+body.theme-dark .stomach-dissect-btn.dissected {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.16));
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #6ee7b7;
+}
+
 /* BLOCK 3: Learn more */
 .learn-more-row {
   display: grid;
