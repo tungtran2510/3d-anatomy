@@ -13,7 +13,7 @@ export const CLINICAL_AXES = [
     badge: 'Trục Tương Tác 2 Chiều',
     icon: '🧠⚡🥣',
     summary: 'Mạng lưới truyền tín hiệu 2 chiều giữa hệ thần kinh trung ương và hệ tiêu hóa, giải thích tại sao căng thẳng lo âu lại gây đau dạ dày và rối loạn tiêu hóa.',
-    primarySystems: ['nervous', 'visceral', 'skeletal'],
+    primarySystems: ['nervous', 'visceral', 'cardiovascular', 'skeletal'],
     defaultPartId: 'Stomach',
     keywords: [
       'trục não ruột', 'truc nao ruot', 'chục lão chuột', 'chuc lao chuot', 'chụp não ruột', 'chup nao ruot',
@@ -45,20 +45,20 @@ export const CLINICAL_AXES = [
       },
       {
         step: 3,
-        title: 'Dạ dày & Tuyến dịch vị',
-        shortTitle: '3. Dạ dày',
+        title: 'Dạ dày, Môn vị & Mạc Nối (Dạ Dày Liên Kết)',
+        shortTitle: '3. Dạ dày & Mạc nối',
         partId: 'Stomach',
-        partIds: ['Stomach'],
+        partIds: ['Stomach', 'Oesophagus', 'Lesser omentum', 'Left gastric artery'],
         system: 'visceral',
-        shortNote: 'Tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc.',
-        note: 'Bị kích thích tăng tiết axit HCl quá mức, giảm lưu lượng máu nuôi niêm mạc gây đau cồn cào và trợt loét.'
+        shortNote: 'Nối thực quản và tá tràng, tăng tiết axit HCl khi stress.',
+        note: 'Dạ dày tiếp nối Thực quản ở tâm vị và Tá tràng ở môn vị, được nuôi bởi ĐM vị trái và liên kết với gan qua mạc nối nhỏ; khi stress, dây X kích thích tăng tiết acid HCl quá mức gây đau cồn cào và trợt loét.'
       },
       {
         step: 4,
-        title: 'Ruột & Hệ thần kinh ruột (ENS)',
+        title: 'Tá Tràng, Ruột Non & Ruột Già (ENS & Vi sinh ruột)',
         shortTitle: '4. Ruột & ENS',
         partId: 'Transverse colon',
-        partIds: ['Duodenum', 'Jejunum', 'Transverse colon', 'Ascending colon', 'Descending colon', 'Sigmoid colon'],
+        partIds: ['Duodenum', 'Jejunum', 'Transverse colon', 'Ascending colon', 'Descending colon', 'Sigmoid colon', 'Superior mesenteric artery', 'Superior mesenteric vein'],
         system: 'visceral',
         shortNote: 'Co bóp gây ruột kích thích; sản xuất 90% Serotonin điều hòa não.',
         note: 'Co bóp bất thường gây hội chứng ruột kích thích (IBS); tổng hợp 90% Serotonin và 50% Dopamine điều hòa tâm trạng ngược lên não.'
@@ -92,20 +92,21 @@ export const CLINICAL_AXES = [
     category: 'Tiêu hóa – Gan mật – Chuyển hóa & Nội tiết',
     badge: 'Bộ Ba Tiết & Chuyển Hóa',
     icon: '🟡🟢🔴',
-    summary: 'Bộ ba cơ quan tiêu hóa & chuyển hóa then chốt: Gan sản xuất dịch mật, Túi mật dự trữ cô đặc mật, Tuyến tụy tiết enzyme cực mạnh và insulin; cùng đổ dịch vào tá tràng D2 qua cơ vòng Oddi / bóng Vater.',
-    primarySystems: ['visceral', 'skeletal'],
+    summary: 'Bộ ba cơ quan tiêu hóa & chuyển hóa then chốt liên kết hữu cơ: Gan sản xuất dịch mật, Túi mật cô đặc mật, Tuyến tụy tiết enzyme cực mạnh và insulin; toàn bộ kết nối chặt chẽ bằng ống mật chủ, ống tụy Wirsung, mạc nối nhỏ và hệ mạch máu cửa/thân tạng đổ vào tá tràng D2.',
+    primarySystems: ['visceral', 'cardiovascular', 'skeletal'],
     defaultPartId: 'Gallbladder',
     keywords: [
       'gan mật tụy', 'gan mat tuy', 'gân mà tự', 'gan mat', 'bộ ba chức năng', 'bo ba chuc nang',
       'bộ ba gan mật tụy', 'bo ba gan mat tuy', 'bộ 3 chức năng', 'bộ 3 gan mật tụy', 'hệ gan mật tụy',
       'he gan mat tuy', 'gan mật và tụy', 'túi mật và tụy', 'túi mật', 'tui mat', 'tuyến tụy', 'tuyen tuy',
-      'sỏi mật', 'viêm tụy cấp', 'oddi', 'vater', 'bóng vater', 'cơ vòng oddi', 'vàng da', 'tá tràng', 'men tụy'
+      'sỏi mật', 'viêm tụy cấp', 'oddi', 'vater', 'bóng vater', 'cơ vòng oddi', 'vàng da', 'tá tràng', 'men tụy',
+      'ống mật chủ', 'ong mat chu', 'ống tụy', 'ong tuy', 'wirsung', 'mạc nối nhỏ'
     ],
     chainSteps: [
       {
         step: 1,
-        title: 'Nhu mô Gan (Sản xuất mật & Chuyển hóa)',
-        shortTitle: '1. Nhu mô Gan',
+        title: 'Nhu mô Gan & Hệ Mạch Máu Cửa (Sản xuất mật & Lọc máu)',
+        shortTitle: '1. Gan & TM Cửa',
         partId: 'Liver',
         partIds: [
           'Liver',
@@ -116,41 +117,61 @@ export const CLINICAL_AXES = [
           'Left posterior lateral segment of liver (II)',
           'Posterior lateral segment of liver (VII)',
           'Posterior medial segment of liver (VIII)',
-          'Posterior segment of liver (I)'
+          'Posterior segment of liver (I)',
+          'Hepatic portal vein',
+          'Proper hepatic artery',
+          'Common hepatic artery',
+          'Hepatic veins',
+          'Inferior vena cava (abdominal part)'
         ],
         system: 'visceral',
-        shortNote: 'Sản xuất liên tục 800 - 1000ml dịch mật nhũ hóa chất béo.',
-        note: 'Tuyến tiêu hóa lớn nhất cơ thể (~1.5kg), sản xuất liên tục 800 - 1000ml dịch mật mỗi ngày để nhũ hóa lipid và khử độc chuyển hóa.'
+        shortNote: 'Sản xuất 800-1000ml mật/ngày; nhận máu dinh dưỡng từ Tĩnh mạch cửa.',
+        note: 'Tuyến lớn nhất cơ thể (~1.5kg), sản xuất 800 - 1000ml dịch mật/ngày; nhận 75-80% lượng máu qua Tĩnh mạch cửa và 20-25% máu giàu oxy từ Động mạch gan riêng.'
       },
       {
         step: 2,
-        title: 'Túi mật & Đường mật (Dự trữ & Dẫn lưu)',
+        title: 'Túi Mật, Ống Mật Chủ & Mạc Nối Nhỏ (Dự trữ & Dẫn lưu)',
         shortTitle: '2. Túi mật & Ống mật',
         partId: 'Gallbladder',
-        partIds: ['Gallbladder', 'Bile duct'],
+        partIds: ['Gallbladder', 'Bile duct', 'Lesser omentum'],
         system: 'visceral',
-        shortNote: 'Dự trữ, cô đặc mật gấp 10-20 lần và tống mật qua ống mật chủ.',
-        note: 'Dự trữ và cô đặc dịch mật gấp 10-20 lần; co bóp tống mật qua ống mật chủ khi thức ăn dầu mỡ xuống tá tràng kích thích hormone CCK.'
+        shortNote: 'Cô đặc mật 10-20 lần; Ống mật chủ trong mạc nối nhỏ dẫn mật xuống D2.',
+        note: 'Túi mật cô đặc mật gấp 10-20 lần; co bóp tống mật qua Ống mật chủ (chạy trong dây chằng gan - tá tràng của Mạc nối nhỏ) đổ xuống tá tràng khi có thức ăn mỡ.'
       },
       {
         step: 3,
-        title: 'Tuyến tụy (Ngoại tiết men tiêu hóa & Nội tiết Insulin)',
-        shortTitle: '3. Tuyến tụy',
+        title: 'Tuyến Tụy, Ống Tụy Chính & Mạch Lách (Ngoại tiết men & Nội tiết)',
+        shortTitle: '3. Tuyến tụy & Ống tụy',
         partId: 'Pancreas',
-        partIds: ['Pancreas'],
+        partIds: [
+          'Pancreas',
+          'Pancreatic duct',
+          'Accessory pancreatic duct',
+          'Splenic artery',
+          'Splenic vein',
+          'Superior mesenteric vein'
+        ],
         system: 'visceral',
-        shortNote: 'Tiết men Amylase, Lipase, Trypsinogen và hormone Insulin.',
-        note: 'Tụy ngoại tiết tiết các men tiêu hóa cực mạnh (Amylase, Lipase, Trypsinogen) ở dạng bất hoạt; Tụy nội tiết tiết Insulin và Glucagon điều hòa đường huyết.'
+        shortNote: 'Ống tụy Wirsung dẫn Lipase, Amylase, Trypsin; ĐM lách chạy bờ trên.',
+        note: 'Tụy ngoại tiết tiết 1.5 - 2L dịch men tiêu hóa qua Ống tụy chính (Wirsung) & Ống tụy phụ (Santorini); Động mạch lách chạy dọc bờ trên tụy; Tĩnh mạch lách hợp lưu với TM mạc treo tràng trên sau đầu tụy để tạo nên Tĩnh mạch cửa; Tụy nội tiết tiết Insulin điều hòa đường huyết.'
       },
       {
         step: 4,
-        title: 'Cơ vòng Oddi, Bóng Vater & Tá tràng D2',
+        title: 'Tá Tràng Chữ C, Môn Vị Dạ Dày & Cơ Vòng Oddi (Hợp lưu dịch)',
         shortTitle: '4. Tá tràng & Cơ Oddi',
         partId: 'Duodenum',
-        partIds: ['Duodenum'],
+        partIds: [
+          'Duodenum',
+          'Stomach',
+          'Oesophagus',
+          'Gastroduodenal artery',
+          'Left gastric artery',
+          'Inferior pancreaticoduodenal artery',
+          'Anterior inferior pancreaticoduodenal artery'
+        ],
         system: 'visceral',
-        shortNote: 'Ngã ba chung đổ mật và dịch tụy vào ruột; vị trí kẹt sỏi mật.',
-        note: 'Ngã ba chung nơi ống mật chủ và ống tụy chính hợp lưu tại bóng Vater đổ vào tá tràng D2; đây là vị trí sỏi mật dễ kẹt gây Viêm tụy cấp nguy kịch.'
+        shortNote: 'Khung tá tràng C ôm đầu tụy, nối môn vị dạ dày; ngã ba sỏi dễ kẹt.',
+        note: 'Khung tá tràng chữ C ôm trọn đầu tụy, tiếp nối môn vị dạ dày và thực quản; bóng Vater và cơ vòng Oddi tại D2 là ngã ba hợp lưu dịch mật và men tụy; mạng mạch vị - tá tràng và tụy - tá tràng nuôi dưỡng phong phú, nơi sỏi mật dễ kẹt gây Viêm tụy cấp nguy kịch.'
       }
     ],
     clinicalInsights: [
@@ -182,7 +203,7 @@ export const CLINICAL_AXES = [
     badge: 'Bộ Máy Tiết Men Tiêu Hóa',
     icon: '🥗🧪💧',
     summary: 'Toàn bộ mạng lưới tuyến tiêu hóa từ khoang miệng đến ổ bụng: 3 cặp tuyến nước bọt lớn (Mang tai, Dưới hàm, Dưới lưỡi), Tuyến dịch vị dạ dày, Tuyến tụy nội/ngoại tiết và Nhu mô gan.',
-    primarySystems: ['visceral', 'skeletal'],
+    primarySystems: ['visceral', 'cardiovascular', 'skeletal'],
     defaultPartId: 'Pancreas',
     keywords: [
       'tuyến tiêu hóa', 'tuyen tieu hoa', 'các tuyến tiêu hóa', 'cac tuyen tieu hoa', 'hệ tuyến tiêu hóa',
@@ -192,7 +213,7 @@ export const CLINICAL_AXES = [
     chainSteps: [
       {
         step: 1,
-        title: '3 Cặp Tuyến Nước Bọt (Mang tai, Dưới hàm, Dưới lưỡi)',
+        title: '3 Cặp Tuyến Nước Bọt & Ống Tuyến (Mang tai, Dưới hàm, Dưới lưỡi)',
         shortTitle: '1. Tuyến nước bọt',
         partId: 'Parotid gland.l',
         partIds: [
@@ -213,18 +234,18 @@ export const CLINICAL_AXES = [
       },
       {
         step: 2,
-        title: 'Tuyến Dịch Vị Dạ Dày (Gastric Glands)',
+        title: 'Tuyến Dịch Vị Dạ Dày & Ống Tiêu Hóa (Gastric Glands)',
         shortTitle: '2. Tuyến dịch vị',
         partId: 'Stomach',
-        partIds: ['Stomach'],
+        partIds: ['Stomach', 'Oesophagus', 'Left gastric artery'],
         system: 'visceral',
         shortNote: 'Tế bào viền tiết axit HCl pH 1.5-2 và men Pepsin tiêu hóa protein.',
         note: 'Hàng triệu tuyến vi thể ở niêm mạc: Tế bào thành (viền) tiết axit HCl pH 1.5 - 2 diệt khuẩn và hoạt hóa Pepsinogen; Tế bào chính tiết Pepsinogen phân cắt đạm; Tế bào cổ tuyến tiết nhầy kiềm bảo vệ.'
       },
       {
         step: 3,
-        title: 'Lá Gan (Tuyến tiêu hóa lớn nhất cơ thể)',
-        shortTitle: '3. Nhu mô Gan',
+        title: 'Lá Gan & Hệ Thống Dẫn Mật (Tuyến tiêu hóa lớn nhất cơ thể)',
+        shortTitle: '3. Nhu mô Gan & Mật',
         partId: 'Liver',
         partIds: [
           'Liver',
@@ -235,7 +256,11 @@ export const CLINICAL_AXES = [
           'Left posterior lateral segment of liver (II)',
           'Posterior lateral segment of liver (VII)',
           'Posterior medial segment of liver (VIII)',
-          'Posterior segment of liver (I)'
+          'Posterior segment of liver (I)',
+          'Gallbladder',
+          'Bile duct',
+          'Hepatic portal vein',
+          'Proper hepatic artery'
         ],
         system: 'visceral',
         shortNote: 'Tuyến nặng 1.5kg, liên tục tiết 800 - 1000ml dịch mật nhũ hóa chất béo.',
@@ -243,13 +268,13 @@ export const CLINICAL_AXES = [
       },
       {
         step: 4,
-        title: 'Tuyến Tụy (Ngoại tiết men tiêu hóa & Nội tiết)',
-        shortTitle: '4. Tuyến tụy',
+        title: 'Tuyến Tụy, Hệ Thống Ống Tụy & Tá Tràng (Men Tiêu Hóa & Insulin)',
+        shortTitle: '4. Tuyến tụy & Ống tụy',
         partId: 'Pancreas',
-        partIds: ['Pancreas'],
+        partIds: ['Pancreas', 'Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Splenic artery'],
         system: 'visceral',
         shortNote: 'Tiết bộ ba men Amylase, Lipase, Protease và hormone Insulin.',
-        note: 'Tụy ngoại tiết tiết 1.5 - 2 lít dịch tụy chứa Amylase (đường), Lipase (mỡ), Trypsinogen/Chymotrypsinogen (đạm); Tụy nội tiết tiết Insulin và Glucagon trực tiếp vào máu điều hòa glucose.'
+        note: 'Tụy ngoại tiết tiết 1.5 - 2 lít dịch tụy chứa Amylase (đường), Lipase (mỡ), Trypsinogen/Chymotrypsinogen (đạm) dẫn qua ống Wirsung vào tá tràng D2; Tụy nội tiết tiết Insulin và Glucagon.'
       }
     ],
     clinicalInsights: [

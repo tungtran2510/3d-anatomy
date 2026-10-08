@@ -125,39 +125,59 @@ export async function activateClinicalAxis3D(axisId, viewer = window.viewer) {
   });
   axisPartIdsCache = allAxisPartIds;
 
-  // 3. Cô lập đa cơ quan: Các cơ quan trong trục sáng rõ, cơ thể nền làm mờ pha lê
+  // 3. Cô lập đa cơ quan: Các cơ quan trong trục sáng rõ 100%, cơ thể nền làm mờ pha lê
+  // Thu thập TẤT CẢ các mesh thực sự thuộc về các cơ quan trong chuỗi trục
+  const axisMeshesSet = new Set();
+  allAxisPartIds.forEach(id => {
+    ownMeshesOf(id).forEach(m => axisMeshesSet.add(m));
+  });
+
+  // Quét toàn bộ scene để gom chính xác các mesh con (như Liver_1, Liver_2, các phân thùy...)
+  activeViewer.scene.traverse(obj => {
+    if (obj.isMesh) {
+      const pId = obj.userData?.partId;
+      if (pId && allAxisPartIds.has(pId)) {
+        axisMeshesSet.add(obj);
+      } else if (obj.name && allAxisPartIds.has(obj.name.replace(/_/g, ' '))) {
+        axisMeshesSet.add(obj);
+      }
+    }
+  });
+
   batchPartStates(() => {
-    getMeshRegistry().forEach((node, id) => {
-      const isPartOfAxis = allAxisPartIds.has(id);
-
-      if (isPartOfAxis) {
-        setStructureVisible(id, true);
-        restoreMaterial(id);
-
-        // Đảm bảo độ rõ nét 100% cho các cơ quan của trục
-        ownMeshesOf(id).forEach(mesh => {
+    activeViewer.scene.traverse(mesh => {
+      if (!mesh.isMesh) return;
+      if (mesh.userData?.partId || mesh.userData?.system) {
+        if (axisMeshesSet.has(mesh)) {
+          // Cơ quan trong trục: Bắt buộc 100% rõ nét, bật sáng, phục hồi vật liệu gốc PBR
           mesh.visible = true;
-          if (mesh.userData.ownsMaterial) {
-            const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-            mats.forEach(m => {
+          if (mesh.userData.baseMaterial) {
+            mesh.material = mesh.userData.baseMaterial;
+            mesh.userData.ownsMaterial = false;
+          }
+          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          mats.forEach(m => {
+            if (m.name === 'PBR_Omentum' || m.name === 'PBR_Peritoneum') {
+              m.transparent = true;
+              m.opacity = 0.38;
+              m.depthWrite = false;
+            } else {
               m.transparent = false;
               m.opacity = 1.0;
               m.depthWrite = true;
-            });
-          }
-        });
-      } else {
-        // Làm mờ làm khung nền cơ thể trong suốt
-        setStructureVisible(id, true);
-        ownMeshesOf(id).forEach(mesh => {
+            }
+          });
+        } else {
+          // Các cơ quan / khung xương nền xung quanh: Làm mờ pha lê trong suốt
+          mesh.visible = true;
           applyGhostToMesh(mesh);
-        });
+        }
       }
     });
   });
 
   // 4. Tự động đóng khung Camera (Auto Multi-Mesh Framing) bao trọn toàn bộ chuỗi trục
-  frameAllAxisParts(allAxisPartIds, activeViewer, true);
+  frameAllAxisParts(axisMeshesSet, activeViewer, true);
 
   // 5. Mặc định kích hoạt mắt xích đầu tiên
   focusAxisStep(axisId, 0, activeViewer, false);
@@ -172,32 +192,48 @@ export async function activateClinicalAxis3D(axisId, viewer = window.viewer) {
 /**
  * Tính toán Bounding Box và đóng khung camera toàn bộ chuỗi trục
  */
-function frameAllAxisParts(partIdsSet, viewer, animate = true) {
+function frameAllAxisParts(axisMeshes, viewer, animate = true) {
   if (!viewer) return;
   const { camera, controls } = viewer;
 
   const box = new THREE.Box3();
   let hasMeshes = false;
 
-  partIdsSet.forEach(partId => {
-    const meshes = ownMeshesOf(partId);
-    meshes.forEach(mesh => {
-      if (mesh.visible) {
-        box.expandByObject(mesh);
-        hasMeshes = true;
+  if (axisMeshes && axisMeshes.size > 0) {
+    axisMeshes.forEach(item => {
+      if (item.isMesh) {
+        if (item.visible) {
+          box.expandByObject(item);
+          hasMeshes = true;
+        }
+      } else {
+        const meshes = ownMeshesOf(item);
+        meshes.forEach(mesh => {
+          if (mesh.visible) {
+            box.expandByObject(mesh);
+            hasMeshes = true;
+          }
+        });
       }
     });
-  });
+  }
 
   if (!hasMeshes || box.isEmpty()) return;
 
   const center = box.getCenter(new THREE.Vector3());
   const size = box.getSize(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z, 0.3);
 
-  // Góc nghiêng 3/4 thanh lịch (Anterolateral view), giữ tầm nhìn toàn thân từ đầu xuống bụng
-  const direction = new THREE.Vector3(0.28, 0.08, 0.95).normalize();
-  const distance = Math.max(1.85, maxDim * 2.2);
+  // Tính toán khoảng cách quang học chuẩn xác trên cả Mobile (dọc) và Desktop (ngang)
+  const aspect = camera.aspect || (window.innerWidth / window.innerHeight) || 1;
+  const fovRad = THREE.MathUtils.degToRad(camera.fov || 35);
+  const tanHalfFov = Math.tan(fovRad / 2);
+  const distV = (size.y / 2) / tanHalfFov;
+  const distH = (size.x / 2) / (tanHalfFov * aspect);
+  const padding = aspect < 1.0 ? 1.25 : 1.15;
+  const distance = Math.max(0.70, Math.max(distV, distH) * padding);
+
+  // Góc nhìn Anterolateral thanh lịch, tập trung vừa vặn vào cụm cơ quan
+  const direction = new THREE.Vector3(0.18, 0.04, 0.98).normalize();
   const targetPosition = center.clone().add(direction.multiplyScalar(distance));
 
   animateCameraTo(camera, controls, targetPosition, center, viewer, animate ? 600 : 0);
@@ -254,14 +290,13 @@ export function focusAxisStep(axisId, stepIdx, viewer = window.viewer, zoomClose
 
     if (hasMeshes && !stepBox.isEmpty()) {
       const stepCenter = stepBox.getCenter(new THREE.Vector3());
-      const stepSize = stepBox.getSize(new THREE.Vector3());
-      const maxDim = Math.max(stepSize.x, stepSize.y, stepSize.z, 0.1);
-
-      const direction = new THREE.Vector3().subVectors(activeViewer.camera.position, activeViewer.controls.target).normalize();
-      if (direction.lengthSq() < 0.001) direction.set(0.2, 0.1, 0.96).normalize();
-
-      // Giữ khoảng cách vừa phải để vẫn thấy tương quan với chuỗi cơ quan
-      const dist = Math.max(1.35, maxDim * 3.5);
+      const aspect = activeViewer.camera.aspect || (window.innerWidth / window.innerHeight) || 1;
+      const fovRad = THREE.MathUtils.degToRad(activeViewer.camera.fov || 35);
+      const tanHalfFov = Math.tan(fovRad / 2);
+      const distV = (stepSize.y / 2) / tanHalfFov;
+      const distH = (stepSize.x / 2) / (tanHalfFov * aspect);
+      const padding = aspect < 1.0 ? 1.35 : 1.20;
+      const dist = Math.max(0.55, Math.max(distV, distH) * padding);
       const targetPos = stepCenter.clone().add(direction.multiplyScalar(dist));
 
       animateCameraTo(activeViewer.camera, activeViewer.controls, targetPos, stepCenter, activeViewer, 500);
@@ -367,13 +402,18 @@ export function deactivateClinicalAxis3D(viewer = window.viewer) {
   activeAxisId = null;
   axisPartIdsCache.clear();
 
-  // Khôi phục tất cả vật liệu bình thường
+  // Khôi phục tất cả vật liệu bình thường cho toàn bộ mesh trong scene
   getMeshRegistry().forEach((node, id) => {
     restoreMaterial(id);
-    ownMeshesOf(id).forEach(mesh => {
-      const base = mesh.userData.baseMaterial;
-      if (base) mesh.material = base;
-    });
+  });
+  activeViewer.scene.traverse(mesh => {
+    if (mesh.isMesh) {
+      const base = mesh.userData?.baseMaterial;
+      if (base) {
+        mesh.material = base;
+        mesh.userData.ownsMaterial = false;
+      }
+    }
   });
 
   notify('clinicalAxisDeactivated', true);

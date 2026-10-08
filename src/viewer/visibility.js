@@ -216,7 +216,8 @@ export function isolatePart(partId) {
 
   batchPartStates(() => {
     getMeshRegistry().forEach((node, id) => {
-      const keeping = keep.has(id);
+      const ownerId = node.userData?.partId || id;
+      const keeping = keep.has(id) || keep.has(ownerId);
       setStructureVisible(id, keeping);
       if (!keeping) return;
 
@@ -439,13 +440,13 @@ export function getAnatomicalCompanions(partId) {
   }
   // Biliary system: Gallbladder is intimately bound to the biliary tree, liver fossa, and duodenum
   if (lower === 'gallbladder' || lower.includes('túi mật') || lower.includes('vesica biliaris')) {
-    return ['Bile duct', 'Liver', 'Duodenum'];
+    return ['Bile duct', 'Liver', 'Duodenum', 'Pancreas', 'Pancreatic duct', 'Proper hepatic artery', 'Common hepatic artery', 'Hepatic portal vein'];
   }
   if (lower === 'bile duct' || lower.includes('ống mật') || lower.includes('ductus choledochus')) {
-    return ['Gallbladder', 'Liver', 'Duodenum', 'Pancreatic duct'];
+    return ['Gallbladder', 'Liver', 'Duodenum', 'Pancreas', 'Pancreatic duct', 'Proper hepatic artery', 'Hepatic portal vein'];
   }
   if (lower === 'pancreas' || lower.includes('tụy')) {
-    return ['Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Bile duct', 'Spleen'];
+    return ['Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Bile duct', 'Gallbladder', 'Spleen', 'Splenic artery', 'Splenic vein', 'Inferior pancreaticoduodenal artery'];
   }
   if (lower.startsWith('kidney') || lower.includes('thận') || lower.includes('ren ')) {
     const isLeft = lower.includes('.l') || lower.includes('left') || lower.includes('trái');
@@ -473,9 +474,53 @@ export function getAnatomicalCompanions(partId) {
       'Lateral meniscus'
     ];
   }
-  // Gastrointestinal tract: Stomach brings Duodenum, Liver, and Colon context
+  // Gastrointestinal tract: Stomach brings Duodenum, Oesophagus, Lesser Omentum, Liver, Pancreas and Gastric Vessels
   if (lower === 'stomach' || lower.includes('dạ dày') || lower.includes('gaster')) {
-    return ['Duodenum', 'Liver', 'Pancreas', 'Transverse colon'];
+    return [
+      'Duodenum',
+      'Oesophagus',
+      'Lesser omentum',
+      'Liver',
+      'Pancreas',
+      'Left gastric artery',
+      'Common hepatic artery',
+      'Gastroduodenal artery',
+      'Splenic artery',
+      'Hepatic portal vein'
+    ];
+  }
+  // Liver brings Gallbladder, Bile duct, Portal vein, Hepatic artery and Duodenum
+  if (lower === 'liver' || lower.includes('gan') || lower.includes('hepar')) {
+    return [
+      'Gallbladder',
+      'Bile duct',
+      'Duodenum',
+      'Stomach',
+      'Pancreas',
+      'Pancreatic duct',
+      'Lesser omentum',
+      'Hepatic portal vein',
+      'Proper hepatic artery',
+      'Common hepatic artery',
+      'Hepatic veins',
+      'Inferior vena cava (abdominal part)'
+    ];
+  }
+  // Duodenum brings Stomach, Pancreas, Bile duct, and Pancreatic duct
+  if (lower === 'duodenum' || lower.includes('tá tràng')) {
+    return [
+      'Stomach',
+      'Pancreas',
+      'Pancreatic duct',
+      'Accessory pancreatic duct',
+      'Bile duct',
+      'Gallbladder',
+      'Jejunum',
+      'Lesser omentum',
+      'Gastroduodenal artery',
+      'Inferior pancreaticoduodenal artery',
+      'Anterior inferior pancreaticoduodenal artery'
+    ];
   }
   // Appendix brings Manh tràng (Cecum) and Ascending colon
   if (lower.includes('appendix') || lower.includes('ruột thừa')) {
@@ -494,7 +539,8 @@ export function ghostAllExcept(partId) {
   const ghosted = new Set();
 
   getMeshRegistry().forEach((node, id) => {
-    if (keep.has(id)) return;
+    const ownerId = node.userData?.partId || id;
+    if (keep.has(id) || keep.has(ownerId)) return;
 
     const meshes = ownMeshesOf(id);
     if (!meshes.some(mesh => mesh.visible)) return;
@@ -525,23 +571,23 @@ export function ghostAllExcept(partId) {
         mat.needsUpdate = true;
       });
     });
-    // Liver: elegant translucent bed (35% opacity) showing gallbladder resting under right lobe
+    // Liver: rich semi-translucent anatomical context (75% opacity) showing gallbladder resting under right lobe
     withDescendants('Liver').forEach(descId => {
       ownMeshesOf(descId).forEach(mesh => {
         ownMaterials(mesh).forEach(mat => {
           mat.transparent = true;
-          mat.opacity = 0.35;
-          mat.depthWrite = false;
+          mat.opacity = 0.75;
+          mat.depthWrite = true;
           mat.needsUpdate = true;
         });
       });
     });
-    // Duodenum: subtle context translucency (28% opacity) showing terminal duct entry
+    // Duodenum: solid mucosal C-loop (100% opacity) showing terminal duct entry at major papilla
     ownMeshesOf('Duodenum').forEach(mesh => {
       ownMaterials(mesh).forEach(mat => {
-        mat.transparent = true;
-        mat.opacity = 0.28;
-        mat.depthWrite = false;
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
         mat.needsUpdate = true;
       });
     });
