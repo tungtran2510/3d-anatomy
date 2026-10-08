@@ -1279,12 +1279,19 @@ function centerCamera(viewer) {
 
   const center = box.getCenter(new THREE.Vector3());
   const size = box.getSize(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z);
 
-  // Position camera adapted for 35° telephoto medical lens
-  const distance = maxDim * 1.8;
-  const direction = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
-  camera.position.copy(center).add(direction.multiplyScalar(distance));
+  // Responsive framing adapted for 35° telephoto medical lens
+  // Ensures entire skeleton from skull to toes fits with comfortable breathing room on both mobile & desktop
+  const aspect = camera.aspect || (window.innerWidth / window.innerHeight) || 1;
+  const fovRad = THREE.MathUtils.degToRad(camera.fov || 35);
+  const tanHalfFov = Math.tan(fovRad / 2);
+  const distV = (size.y / 2) / tanHalfFov;
+  const distH = (size.x / 2) / (tanHalfFov * aspect);
+  const padding = aspect < 1.0 ? 1.25 : 1.15;
+  const distance = Math.max(distV, distH) * padding;
+
+  // Strict anterior front direction (no rotation or angle on initial launch)
+  camera.position.set(center.x, center.y, center.z + distance);
   controls.target.copy(center);
   controls.update();
 

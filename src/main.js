@@ -79,13 +79,19 @@ async function init() {
 
     if (viewer) {
       // A shared link with explicit URL hash wins over default.
-      // On regular/first visit without URL hash, ALWAYS default strictly to skeletal (no muscular).
+      // On regular/first visit without URL hash, ALWAYS default strictly to skeletal (no muscular)
+      // and ALWAYS show a clean, upright, uncropped full-body front overview.
       const hashState = readState();
-      const saved = hashState || storedState();
-      if (!hashState && saved) {
-        // Enforce skeleton-only default when opening root application
-        saved.systems = [DEFAULT_SYSTEM];
+      
+      if (!hashState) {
+        // Clean root entry: ALWAYS clear any stale view state from previous sessions
+        try {
+          window.localStorage.removeItem('anatomy:view');
+        } catch { /* ignore */ }
       }
+
+      // ONLY restore saved state if user arrived via an explicit URL hash (deep link)
+      const saved = hashState;
       const systems = (hashState?.systems?.length) ? hashState.systems : [DEFAULT_SYSTEM];
 
       console.log(`[main] Loading ${systems.join(', ')}...`);

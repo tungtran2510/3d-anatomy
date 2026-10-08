@@ -75,11 +75,9 @@ function write() {
   // with hundreds of entries.
   window.history.replaceState(null, '', next);
 
-  try {
-    window.localStorage.setItem('anatomy:view', serialised);
-  } catch {
-    // Private mode or a full quota; the URL is still authoritative.
-  }
+  // The active URL hash is the single source of truth for the active session.
+  // We do NOT persist camera/part selections into global localStorage so that
+  // fresh root launches always open cleanly into the pristine anatomical overview.
 }
 
 export function scheduleStateWrite() {

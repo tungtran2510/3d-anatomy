@@ -26,7 +26,13 @@ export function setView(viewName, viewer, animate = true) {
   if (!model) return Promise.resolve();
 
   // Frame the model where it actually is; adapted for 35° telephoto medical lens
-  const distance = model.maxDim * 1.8;
+  const aspect = camera.aspect || (window.innerWidth / window.innerHeight) || 1;
+  const fovRad = THREE.MathUtils.degToRad(camera.fov || 35);
+  const tanHalfFov = Math.tan(fovRad / 2);
+  const distV = (model.size.y / 2) / tanHalfFov;
+  const distH = (model.size.x / 2) / (tanHalfFov * aspect);
+  const padding = aspect < 1.0 ? 1.25 : 1.15;
+  const distance = Math.max(distV, distH) * padding;
   const targetTarget = model.center.clone();
   const targetPos = view.position.clone().multiplyScalar(distance).add(targetTarget);
 
