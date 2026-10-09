@@ -13,6 +13,7 @@ import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { activateClinicalAxis3D, focusAxisStep, deactivateClinicalAxis3D } from '../viewer/clinicalAxisViewer.js';
 import { showToast } from './sidebar.js';
 import { getClinicalAxisIcon } from './icons.js';
+import { renderCollapsibleTextHtml } from '../utils/textFormatters.js';
 
 let hudEl = null;
 let sheetEl = null;
@@ -308,13 +309,19 @@ export function openMechanismSheet() {
           <h3 class="sheet-title">${a.titleVi}</h3>
           <span class="sheet-latin">${a.latin}</span>
         </div>
-        <button type="button" class="btn-sheet-close" id="btnCloseMechanismSheet">&times;</button>
+        <div class="sheet-header-actions">
+          <button type="button" class="btn-sheet-tier-toggle" id="btnToggleSheetTier" title="Mở rộng / Thu gọn toàn màn hình">
+            <svg class="icon-expand-up" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span class="tier-label">Mở rộng</span>
+          </button>
+          <button type="button" class="btn-sheet-close" id="btnCloseMechanismSheet">&times;</button>
+        </div>
       </div>
 
       <div class="sheet-body-scroll">
         <!-- Summary Box with Voice -->
         <div class="sheet-summary-box">
-          <p class="sheet-summary-p">${a.summary}</p>
+          ${renderCollapsibleTextHtml(a.summary, 120, 'Mở rộng ↓', 'Thu gọn ↑')}
           <button type="button" class="btn-sheet-voice" id="btnSheetVoice">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             <span>Nghe giải thích</span>
@@ -329,7 +336,7 @@ export function openMechanismSheet() {
               <div class="step-item-badge">#${st.step}</div>
               <div class="step-item-content">
                 <div class="step-item-title">${st.title}</div>
-                <div class="step-item-desc">${st.note}</div>
+                <div class="step-item-desc">${renderCollapsibleTextHtml(st.note, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
               </div>
             </div>
           `).join('')}
@@ -346,7 +353,7 @@ export function openMechanismSheet() {
               </div>
               <div class="sheet-qa-answer">
                 <span class="qa-a-icon">🩺</span>
-                <span>${qa.explanation}</span>
+                ${renderCollapsibleTextHtml(qa.explanation, 100, 'Mở rộng ↓', 'Thu gọn ↑')}
               </div>
             </div>
           `).join('')}
@@ -364,6 +371,18 @@ export function openMechanismSheet() {
   `;
 
   sheetEl.classList.remove('hidden');
+
+  // Gắn sự kiện chuyển nấc mở rộng / thu gọn sheet
+  const btnTier = sheetEl.querySelector('#btnToggleSheetTier');
+  const cardEl = sheetEl.querySelector('.clinical-sheet-card');
+  btnTier?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isExpanded = cardEl?.classList.toggle('is-expanded');
+    const label = btnTier.querySelector('.tier-label');
+    if (label) {
+      label.textContent = isExpanded ? 'Thu gọn' : 'Mở rộng';
+    }
+  });
 
   // Gắn sự kiện đóng sheet
   const btnClose = sheetEl.querySelector('#btnCloseMechanismSheet');

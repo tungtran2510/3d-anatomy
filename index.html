@@ -361,17 +361,19 @@
             <span class="mini-latin" id="miniCardLatin"></span>
           </div>
           <div class="mini-bar-desc-row">
-            <span class="mini-desc" id="miniCardDesc">Chạm "Chi tiết" để xem đầy đủ</span>
+            <span class="mini-desc" id="miniCardDesc">Chạm để mở rộng toàn bộ giải phẫu</span>
           </div>
         </div>
         <div class="mini-bar-actions">
-          <button type="button" class="mini-btn-ai-voice" id="btnMiniAIVoice" title="Nghe giải thích 15s" aria-label="Nghe giải thích 15s">
-            <span class="mini-ai-sparkle">✨</span>
-            <span class="mini-ai-label">15s</span>
+          <button type="button" class="mini-btn-speaker" id="btnMiniAIVoice" title="Nghe tóm tắt giọng nói 15s" aria-label="Nghe giải thích 15 giây">
+            <svg class="mini-speaker-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
           </button>
-          <button type="button" class="mini-btn-expand-pill" id="btnMiniExpand" title="Mở rộng chi tiết">
-            <span>Chi tiết</span>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          <button type="button" class="mini-btn-expand-chevron" id="btnMiniExpand" title="Mở rộng thông tin" aria-label="Mở rộng">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
           </button>
           <button type="button" class="mini-btn-close" id="btnMiniClose" title="Ẩn thanh" aria-label="Đóng thanh">&times;</button>
         </div>
@@ -434,10 +436,10 @@
               <div class="structure-header-actions">
                 <button type="button" class="btn-ai-voice-summary" id="btnAIVoiceSummary" title="Nghe tóm tắt giải thích nhanh (15 giây)">
                   <span class="ai-sparkle">✨</span>
-                  <span class="ai-btn-text">Nghe 15s</span>
-                  <svg class="ai-voice-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  <span class="ai-btn-text">15s</span>
+                  <svg class="ai-voice-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
                 </button>
-                <button type="button" class="btn-pronounce-audio" id="btnPronounceAudio" title="Phát âm danh pháp giải phẫu">
+                <button type="button" class="btn-pronounce-audio hidden" id="btnPronounceAudio" title="Phát âm danh pháp giải phẫu" aria-hidden="true" style="display:none;">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
                 </button>
               </div>

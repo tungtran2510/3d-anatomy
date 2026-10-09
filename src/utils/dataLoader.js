@@ -87,10 +87,10 @@ export function cleanSearchLabel(text) {
   if (!text) return '';
   let str = text.trim();
   // 1. Remove side indicator in parentheses: (trái), (phải), (trai), (phai)
-  str = str.replace(/\s*\((trái|phải|trai|phai)\)/gi, '').trim();
-  // 2. Remove bulky aliases in parentheses (e.g. (Cơ dựng gai sống), (Cơ cổ vai gáy), (Phần lên), (Phần ngang), (cơ 6 múi), (Cơ lưng sâu))
-  // Keeps concise structural notations like (C1), (L4-L5), (Atlas)
-  str = str.replace(/\s*\((?:Cơ\s+|Phần\s+|cơ\s+|nhánh\s+|vai\s*-\s*gáy|[^)]{6,})\)/gi, '').trim();
+  str = str.replace(/\s*\((?:trái|phải|trai|phai)\)/gi, '').trim();
+  // 2. Remove bulky parenthetical aliases/explanations: (Cơ dựng gai sống), (Cơ cổ vai gáy), (Phần lên), (cơ 6 múi), (Cơ lưng sâu), etc.
+  // Preserves concise structural coordinates like (C1-C7), (L4-L5), (Atlas), (Axis), (TA2: 1234)
+  str = str.replace(/\s*\((?![CTLRS]\d|Atlas|Axis|TA2)[^)]+\)/gi, '').trim();
   return str;
 }
 
@@ -150,17 +150,20 @@ function scoreRow(row, query, tokens, rawQuery = '') {
   const rawLower = rawQuery ? rawQuery.toLowerCase().trim() : '';
 
   const label = row.label || row.name || row.partId || '';
+  const rawLabel = (row.rawLabel || label).toLowerCase();
   const labelLen = label.length;
 
+  const hasDiacritics = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(rawLower);
+
   // 1. Direct Exact & Accented Vietnamese matches (Ưu tiên tuyệt đối từ chuẩn y khoa)
-  if (rawLower && label) {
-    const labelLower = label.toLowerCase();
-    if (labelLower === rawLower) best = 150;
-    else if (labelLower.startsWith(rawLower)) best = 120;
-    else if (labelLower.split(/[\s(),.-]+/).some(word => word === rawLower)) best = 110;
-    else if (labelLower.includes(rawLower)) best = 95;
+  if (rawLower && rawLabel) {
+    if (rawLabel === rawLower) best = 160;
+    else if (rawLabel.startsWith(rawLower)) best = 130;
+    else if (rawLabel.split(/[\s(),.-]+/).some(word => word === rawLower)) best = 115;
+    else if (rawLabel.includes(rawLower)) best = 100;
   }
 
+  // 2. Term-based normalized matching
   for (const term of (row.terms || [])) {
     if (term === query) best = Math.max(best, 100);
     else if (term.startsWith(query)) best = Math.max(best, 80);
@@ -175,6 +178,28 @@ function scoreRow(row, query, tokens, rawQuery = '') {
   }
 
   if (!best) return 0;
+
+  // 3. Strict Diacritic Collision Protection:
+  // If the query has diacritics (e.g. "cơ thang" vs "cơ thẳng"), verify word-level vowel/tone harmony.
+  if (hasDiacritics && rawLower) {
+    const rawTokens = rawLower.split(/[\s(),.-]+/).filter(t => t.length >= 2);
+    const targetWords = (rawLabel + ' ' + (row.rawLabel || '')).toLowerCase().split(/[\s(),.-]+/).filter(Boolean);
+    
+    // Check if every rawToken is matched by an accent-compatible word in target
+    for (const qTok of rawTokens) {
+      const qNorm = normalise(qTok);
+      // Find candidate words in target that normalized match qTok
+      const matchingTargetWords = targetWords.filter(tw => normalise(tw) === qNorm || normalise(tw).startsWith(qNorm));
+      if (matchingTargetWords.length > 0) {
+        // If query token is "thang", and target words only have "thẳng", they have different vowel/tone!
+        const exactAccentMatch = matchingTargetWords.some(tw => tw === qTok || tw.startsWith(qTok));
+        if (!exactAccentMatch) {
+          // If query had tone or specific vowel that differs (e.g. "thang" vs "thẳng"), disqualify!
+          return 0;
+        }
+      }
+    }
+  }
 
   // Prefer what the user can already see over a system still to be downloaded.
   if (state.loadedSystems.includes(row.system)) best += 15;

@@ -22,7 +22,7 @@ import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openImageZoomModal } from './imageZoomModal.js';
 import { getConstituentsForPart } from '../data/anatomyConstituents.js';
-import { formatNameWithSubtitles } from '../utils/textFormatters.js';
+import { formatNameWithSubtitles, setupCollapsibleClamp, renderCollapsibleTextHtml, escapeHTML } from '../utils/textFormatters.js';
 import { getVietnameseVoice } from '../utils/speechVoice.js';
 
 let currentSnapTier = 'compact'; // 'compact' | 'half' | 'full'
@@ -180,10 +180,11 @@ export function initInfoPanel(viewer) {
 
   toggleDropdownBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (currentSnapTier === 'full') {
+    if (currentSnapTier === 'compact') {
       setSheetSnapTier('half');
     } else {
-      setSheetSnapTier('full');
+      setSheetSnapTier('compact');
+      showToast('🔽 Đã thu gọn thành 1 dòng');
     }
   });
 
@@ -280,7 +281,7 @@ export function updateInfoPanelContent(part, viewer) {
   const systemName = clinical.systemVi || part.system || '';
 
   if (cardTitle) cardTitle.innerHTML = formatNameWithSubtitles(mainName);
-  if (cardCompactLabel) cardCompactLabel.textContent = 'Chi tiết giải phẫu';
+  if (cardCompactLabel) cardCompactLabel.textContent = 'Thông tin';
 
   let cleanLatin = (latinName || '').trim();
   cleanLatin = cleanLatin.replace(/\s*\((TA2:[^)]+)\)/i, ' · $1');
@@ -317,7 +318,7 @@ export function updateInfoPanelContent(part, viewer) {
     const rawDesc = clinical.description || clinical.function || '';
     let firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;
     firstSentence = firstSentence.replace(/[\.\!\?]$/, '').trim();
-    miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Chi tiết" để xem đầy đủ.';
+    miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm để mở rộng toàn bộ giải phẫu.';
     miniDesc.title = rawDesc || firstSentence;
   }
 
@@ -337,15 +338,11 @@ export function updateInfoPanelContent(part, viewer) {
 
   if (explainDesc) {
     const raw = clinical.description || 'Đang cập nhật thông tin giải phẫu học...';
-    const firstSentence = raw.split(/[\.\!\?]\s+/)[0] || raw;
-    explainDesc.textContent = firstSentence.replace(/[\.\!\?]$/, '') + '.';
-    explainDesc.title = raw;
+    setupCollapsibleClamp(explainDesc, raw, 110, 'Mở rộng ↓', 'Thu gọn ↑');
   }
   if (explainFunc) {
     const raw = clinical.function || clinical.clinical || 'Đang cập nhật chức năng sinh lý & cơ học...';
-    const firstSentence = raw.split(/[\.\!\?]\s+/)[0] || raw;
-    explainFunc.textContent = firstSentence.replace(/[\.\!\?]$/, '') + '.';
-    explainFunc.title = raw;
+    setupCollapsibleClamp(explainFunc, raw, 110, 'Mở rộng ↓', 'Thu gọn ↑');
   }
   const relBlock = document.querySelector('.explain-rel');
   if (relBlock) relBlock.style.display = 'none';
@@ -450,7 +447,18 @@ export function setSheetSnapTier(tier) {
 
   const label = document.getElementById('cardCompactLabel');
   if (label) {
-    label.textContent = tier === 'full' ? 'Chi tiết' : 'Thông tin';
+    label.textContent = 'Thông tin';
+  }
+
+  const toggleDropdownBtn = document.getElementById('btnToggleInfoDropdown');
+  if (toggleDropdownBtn) {
+    toggleDropdownBtn.title = (tier === 'compact') ? 'Chạm để mở rộng chi tiết' : 'Chạm để thu gọn thành 1 dòng (hoặc gạt nhẹ xuống)';
+  }
+
+  const arrow = card.querySelector('.info-header-arrow svg');
+  if (arrow) {
+    arrow.style.transform = (tier === 'compact') ? 'rotate(180deg)' : 'rotate(0deg)';
+    arrow.style.transition = 'transform 0.2s ease';
   }
 }
 
@@ -460,6 +468,7 @@ export function getSheetSnapTier() {
 
 if (typeof window !== 'undefined') {
   window.setSheetSnapTier = setSheetSnapTier;
+  window.getSheetSnapTier = getSheetSnapTier;
 }
 
 export function setCompactMode(compact) {
@@ -515,52 +524,33 @@ function initBottomSheetGestures(card) {
     const deltaTime = Math.max(1, Date.now() - startTime);
     const velocityY = lastDeltaY / deltaTime; // px / ms
 
-    // 1. Fast flick / swipe down (velocity > 0.45 or swipe down quickly > 110px) -> collapse to mini bar
-    if (velocityY > 0.45 || (lastDeltaY > 110 && deltaTime < 350)) {
+    // 1. Any downward swipe/flick (flick velocity > 0.25 or downward drag > 20px) -> collapse directly to 1-line compact mode!
+    if (velocityY > 0.25 || lastDeltaY > 20) {
       setSheetSnapTier('compact');
-      showToast('🔽 Đã thu gọn thanh');
+      showToast('🔽 Đã thu gọn thành 1 dòng');
       return;
     }
 
-    // 2. Fast flick / swipe up -> expand to full
-    if (velocityY < -0.45 || (lastDeltaY < -110 && deltaTime < 350)) {
-      setSheetSnapTier('full');
-      showToast('🔼 Mở rộng toàn bộ thông tin');
-      return;
-    }
-
-    // 3. Moderate downward drag (> 45px)
-    if (lastDeltaY > 45) {
-      if (initialTier === 'full') {
-        setSheetSnapTier('half');
-        showToast('🔽 Nấc thông tin vừa');
-      } else {
-        setSheetSnapTier('compact');
-        showToast('🔽 Đã thu gọn');
-      }
-      return;
-    }
-
-    // 4. Moderate upward drag (< -45px)
-    if (lastDeltaY < -45) {
+    // 2. Fast flick / swipe up -> expand
+    if (velocityY < -0.3 || lastDeltaY < -35) {
       if (initialTier === 'compact') {
         setSheetSnapTier('half');
       } else {
         setSheetSnapTier('full');
-        showToast('🔼 Mở rộng toàn bộ');
       }
+      showToast('🔼 Mở rộng thông tin');
       return;
     }
 
-    // 5. Tap / Click on drag handle wrap
-    if (Math.abs(lastDeltaY) < 10 && e.target && e.target.closest('#cardDragHandleWrap')) {
-      if (currentSnapTier === 'full') {
+    // 3. Tap / Click on drag handle wrap or info header
+    if (Math.abs(lastDeltaY) < 10 && e.target && e.target.closest('#cardDragHandleWrap, #btnToggleInfoDropdown')) {
+      if (currentSnapTier === 'compact') {
         setSheetSnapTier('half');
-      } else if (currentSnapTier === 'half') {
-        setSheetSnapTier('full');
       } else {
-        setSheetSnapTier('half');
+        setSheetSnapTier('compact');
+        showToast('🔽 Đã thu gọn thành 1 dòng');
       }
+      return;
     }
   }
 
@@ -570,6 +560,15 @@ function initBottomSheetGestures(card) {
     dragHandleWrap.addEventListener('touchend', onPointerEnd, { passive: true });
     dragHandleWrap.addEventListener('touchcancel', onPointerEnd, { passive: true });
     dragHandleWrap.addEventListener('mousedown', onPointerStart);
+    dragHandleWrap.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentSnapTier === 'compact') {
+        setSheetSnapTier('half');
+      } else {
+        setSheetSnapTier('compact');
+        showToast('🔽 Đã thu gọn thành 1 dòng');
+      }
+    });
   }
 
   if (header) {
@@ -577,6 +576,18 @@ function initBottomSheetGestures(card) {
     header.addEventListener('touchmove', onPointerMove, { passive: true });
     header.addEventListener('touchend', onPointerEnd, { passive: true });
     header.addEventListener('touchcancel', onPointerEnd, { passive: true });
+    header.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('a')) {
+        return;
+      }
+      e.stopPropagation();
+      if (currentSnapTier === 'compact') {
+        setSheetSnapTier('half');
+      } else {
+        setSheetSnapTier('compact');
+        showToast('🔽 Đã thu gọn thành 1 dòng');
+      }
+    });
   }
 
   if (miniTrigger) {
@@ -591,6 +602,15 @@ function initBottomSheetGestures(card) {
   window.addEventListener('mouseup', (e) => {
     if (isDragging) onPointerEnd(e);
   });
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging) onPointerMove(e);
+  }, { passive: true });
+  window.addEventListener('touchend', (e) => {
+    if (isDragging) onPointerEnd(e);
+  }, { passive: true });
+  window.addEventListener('touchcancel', (e) => {
+    if (isDragging) onPointerEnd(e);
+  }, { passive: true });
 }
 
 export function toggleCardBodyDropdown() {
@@ -810,7 +830,7 @@ function renderDynamicPathway(part, clinical, mainName) {
         `;
       }).join('')}
     </div>
-    <div class="pathway-clinical-note">${matched.note}</div>
+    <div class="pathway-clinical-note">${renderCollapsibleTextHtml(matched.note, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
   `;
 
   // Bind click on each step to jump to that 3D structure
@@ -1379,7 +1399,9 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
 
     if (levelEl) levelEl.textContent = `Giai đoạn ${idx}`;
     if (nameEl) nameEl.textContent = stage.name.replace(/^Cấp\s*\d+:\s*/i, '');
-    if (descEl) descEl.textContent = stage.desc;
+    if (descEl) {
+      setupCollapsibleClamp(descEl, stage.desc, 100, 'Mở rộng ↓', 'Thu gọn ↑');
+    }
 
     if (stageCard) {
       stageCard.className = `pathology-stage-card level-${idx}`;
@@ -1391,7 +1413,7 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
 
     if (adviceEl) {
       if (idx >= 2 && pathology.advice) {
-        adviceEl.textContent = pathology.advice;
+        setupCollapsibleClamp(adviceEl, pathology.advice, 100, 'Mở rộng ↓', 'Thu gọn ↑');
         adviceEl.classList.remove('hidden');
       } else {
         adviceEl.classList.add('hidden');
@@ -1528,9 +1550,14 @@ function renderAnatomyConstituents(part, clinical, mainName, viewer) {
     titleEl.textContent = `🧩 ${constituents.title || 'Cấu tạo chi tiết & Các bộ phận'}`;
   }
 
-  grid.innerHTML = constituents.subparts.map((sub) => {
+  const subparts = constituents.subparts || [];
+  const maxInitial = 4;
+  const hasExtra = subparts.length > maxInitial;
+
+  const chipsHtml = subparts.map((sub, idx) => {
+    const isExtra = idx >= maxInitial;
     return `
-      <button type="button" class="constituent-chip" data-search="${sub.searchQuery || sub.name}" data-name="${sub.name}" title="Chạm để định vị 3D: ${sub.name}">
+      <button type="button" class="constituent-chip ${isExtra ? 'subpart-extra hidden' : ''}" data-search="${sub.searchQuery || sub.name}" data-name="${sub.name}" title="Chạm để định vị 3D: ${sub.name}">
         <span class="chip-icon">${sub.icon || '🔹'}</span>
         <div class="chip-text-wrap">
           <span class="chip-name">${sub.name}</span>
@@ -1539,6 +1566,30 @@ function renderAnatomyConstituents(part, clinical, mainName, viewer) {
       </button>
     `;
   }).join('');
+
+  const toggleHtml = hasExtra ? `
+    <button type="button" class="btn-subparts-expand-toggle btn-text-expand-toggle" id="btnToggleSubparts">
+      <span class="subparts-toggle-text">+${subparts.length - maxInitial} bộ phận khác (Mở rộng ↓)</span>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  ` : '';
+
+  grid.innerHTML = chipsHtml + toggleHtml;
+
+  if (hasExtra) {
+    const toggleSubBtn = grid.querySelector('#btnToggleSubparts');
+    toggleSubBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const extraChips = grid.querySelectorAll('.subpart-extra');
+      const isHidden = extraChips[0]?.classList.contains('hidden');
+      extraChips.forEach(c => c.classList.toggle('hidden', !isHidden));
+      toggleSubBtn.classList.toggle('is-expanded', isHidden);
+      const textSpan = toggleSubBtn.querySelector('.subparts-toggle-text');
+      if (textSpan) {
+        textSpan.textContent = isHidden ? 'Thu gọn ↑' : `+${subparts.length - maxInitial} bộ phận khác (Mở rộng ↓)`;
+      }
+    });
+  }
 
   grid.querySelectorAll('.constituent-chip').forEach(btn => {
     btn.addEventListener('click', async (e) => {
@@ -2157,7 +2208,7 @@ function renderNetterBiomechanicsSection(part, clinical, mainName, viewer) {
             <span class="netter-icon">🦴</span>
             <span>Nguyên ủy & Bám tận trên Xương:</span>
           </div>
-          <div class="netter-field-desc">${bonesRelation}</div>
+          <div class="netter-field-desc">${renderCollapsibleTextHtml(bonesRelation, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
         </div>
 
         <!-- Thần kinh chi phối -->
@@ -2166,7 +2217,7 @@ function renderNetterBiomechanicsSection(part, clinical, mainName, viewer) {
             <span class="netter-icon">⚡</span>
             <span>Thần kinh chi phối:</span>
           </div>
-          <div class="netter-field-desc">${nervesRelation}</div>
+          <div class="netter-field-desc">${renderCollapsibleTextHtml(nervesRelation, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
         </div>
 
         <!-- Mạch máu nuôi -->
@@ -2175,7 +2226,7 @@ function renderNetterBiomechanicsSection(part, clinical, mainName, viewer) {
             <span class="netter-icon">🩸</span>
             <span>Mạch máu cấp máu:</span>
           </div>
-          <div class="netter-field-desc">${vesselsRelation}</div>
+          <div class="netter-field-desc">${renderCollapsibleTextHtml(vesselsRelation, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
         </div>
 
         <!-- Động tác vận động -->
@@ -2184,7 +2235,7 @@ function renderNetterBiomechanicsSection(part, clinical, mainName, viewer) {
             <span class="netter-icon">🏋️</span>
             <span>Chức năng cơ học:</span>
           </div>
-          <div class="netter-field-desc">${actionText}</div>
+          <div class="netter-field-desc">${renderCollapsibleTextHtml(actionText, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
         </div>
       </div>
 

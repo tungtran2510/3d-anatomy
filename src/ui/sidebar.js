@@ -112,13 +112,13 @@ const SYSTEM_LABELS_SHORT = {
   vi: {
     skeletal: 'Xương',
     joints: 'Khớp',
-    muscular: 'Cơ bắp',
-    nervous: 'Thần kinh',
-    cardiovascular: 'Tim mạch',
+    muscular: 'Cơ',
+    nervous: 'T.Kinh',
+    cardiovascular: 'Mạch',
     respiratory: 'Hô hấp',
     digestive: 'Tiêu hóa',
     urinary_genital: 'Tiết niệu',
-    lymphatic: 'Bạch huyết',
+    lymphatic: 'B.Huyết',
     endocrine: 'Nội tiết',
     integumentary: 'Da',
     visceral: 'Nội tạng'
@@ -1995,11 +1995,11 @@ export function initSearch() {
       let html = '';
       if (matches.length > 0) {
         html += matches.map((row, index) => {
-          // Paired structures are one row with a side chip each, instead of two
-          // near-identical rows.
+          // Paired structures are one row with a side chip each (T/P on Vietnamese, L/R on English)
+          const sideShort = (s) => (lang === 'vi' ? (s === 'left' ? 'T' : 'P') : translate(s === 'left' ? 'side_left_short' : 'side_right_short'));
           const sides = ['left', 'right']
             .filter(side => row.sides[side])
-            .map(side => `<button type="button" class="result-side" data-part="${escapeHtml(row.sides[side])}" title="${translate(side === 'left' ? 'side_left' : 'side_right')}">${translate(side === 'left' ? 'side_left_short' : 'side_right_short')}</button>`)
+            .map(side => `<button type="button" class="result-side" data-part="${escapeHtml(row.sides[side])}" title="${translate(side === 'left' ? 'side_left' : 'side_right')}">${escapeHtml(sideShort(side))}</button>`)
             .join('');
 
           const target = row.sides.none || row.sides.right || row.sides.left;

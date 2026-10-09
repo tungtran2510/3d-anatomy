@@ -135,10 +135,30 @@ describe('Muscle Search & AI Query Tests (Cơ Thang, Cơ Dọc Sống Lưng, Cá
     expect(res.target.base).toContain('trapezius');
   });
 
-  it('searchStructures returns valid matches for "cơ thang" and "cơ dọc sống lưng"', () => {
+  it('searchStructures returns valid matches for "cơ thang" and "cơ dọc sống lưng" and strictly excludes "cơ thẳng"', () => {
+    // Add Rectus muscles into search index to verify diacritic collision protection
+    const rectusBases = ['Rectus femoris muscle', 'Rectus abdominis muscle'];
+    for (const base of rectusBases) {
+      const label = getVietnameseName(base);
+      const synonyms = getVietnameseSynonyms(base, label);
+      state.searchIndex.push({
+        key: `${base}|muscular`,
+        base,
+        label,
+        rawLabel: label,
+        system: 'muscular',
+        sides: { left: `${base}.l`, right: `${base}.r` },
+        partIds: [`${base}.l`, `${base}.r`],
+        italian: [],
+        terms: [normalise(base), normalise(label), ...synonyms.map(normalise)]
+      });
+    }
+
     const trapeziusMatches = searchStructures('cơ thang');
     expect(trapeziusMatches.length).toBeGreaterThan(0);
     expect(trapeziusMatches.some(m => m.base.toLowerCase().includes('trapezius'))).toBe(true);
+    // MUST strictly exclude Rectus muscles (Cơ thẳng đùi, Cơ thẳng bụng)
+    expect(trapeziusMatches.some(m => m.base.toLowerCase().includes('rectus'))).toBe(false);
 
     const erectorMatches = searchStructures('cơ dọc sống lưng');
     expect(erectorMatches.length).toBeGreaterThan(0);

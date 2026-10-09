@@ -14,6 +14,7 @@ import { isMeasurementActive, handleMeasurementClick } from './measurement.js';
 import { getNote, saveNote } from '../state/notes.js';
 import { triggerHaptic } from './engineManager.js';
 import { dissectMultiLayer, restoreDissectLayer, redoDissectLayer } from './dissection.js';
+import { renderCollapsibleTextHtml } from '../utils/textFormatters.js';
 
 // Distinguishes a tap from the end of an orbit gesture.
 const TAP_MAX_MOVE_PX = 10;
@@ -545,7 +546,7 @@ function showInfoPanel(partData) {
     clinicalMarkup = `
       <div class="clinical-box">
         <h4 class="clinical-heading">⚡ Chức năng & Vận động</h4>
-        <p class="clinical-desc">${escapeHtml(clinical.function)}</p>
+        <div class="clinical-desc">${renderCollapsibleTextHtml(clinical.function, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
 
         <!-- 4-Way Anatomical Relations -->
         <h4 class="clinical-heading" style="margin-top: 12px; color: #58a6ff;">🔗 Liên Quan Giải Phẫu Học</h4>
@@ -554,34 +555,34 @@ function showInfoPanel(partData) {
             <span class="relation-icon">🔴</span>
             <div class="relation-body">
               <strong>Cơ liên quan:</strong>
-              <p>${escapeHtml(rel.muscles || 'Liên kết nhóm cơ định hình và vận động.')}</p>
+              ${renderCollapsibleTextHtml(rel.muscles || 'Liên kết nhóm cơ định hình và vận động.', 100, 'Mở rộng ↓', 'Thu gọn ↑')}
             </div>
           </div>
           <div class="relation-item">
             <span class="relation-icon">🦴</span>
             <div class="relation-body">
               <strong>Xương & Khớp:</strong>
-              <p>${escapeHtml(rel.bones || 'Tiếp khớp với các diện xương kế cận.')}</p>
+              ${renderCollapsibleTextHtml(rel.bones || 'Tiếp khớp với các diện xương kế cận.', 100, 'Mở rộng ↓', 'Thu gọn ↑')}
             </div>
           </div>
           <div class="relation-item">
             <span class="relation-icon">⚡</span>
             <div class="relation-body">
               <strong>Thần kinh:</strong>
-              <p>${escapeHtml(rel.nerves || 'Chi phối bởi các nhánh thần kinh ngoại biên.')}</p>
+              ${renderCollapsibleTextHtml(rel.nerves || 'Chi phối bởi các nhánh thần kinh ngoại biên.', 100, 'Mở rộng ↓', 'Thu gọn ↑')}
             </div>
           </div>
           <div class="relation-item">
             <span class="relation-icon">🩸</span>
             <div class="relation-body">
               <strong>Mạch máu:</strong>
-              <p>${escapeHtml(rel.vessels || 'Cấp máu bởi các nhánh động mạch khu vực.')}</p>
+              ${renderCollapsibleTextHtml(rel.vessels || 'Cấp máu bởi các nhánh động mạch khu vực.', 100, 'Mở rộng ↓', 'Thu gọn ↑')}
             </div>
           </div>
         </div>
 
         <h4 class="clinical-heading" style="margin-top: 12px; color: #ff7b72;">🩺 Ý nghĩa lâm sàng & Bệnh lý</h4>
-        <p class="clinical-desc">${escapeHtml(clinical.clinical)}</p>
+        <div class="clinical-desc">${renderCollapsibleTextHtml(clinical.clinical, 100, 'Mở rộng ↓', 'Thu gọn ↑')}</div>
 
         <!-- Personal Study Note Area in Info Panel -->
         <div class="info-note-area" style="margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);">
