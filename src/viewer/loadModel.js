@@ -449,118 +449,85 @@ function setupStomachAnatomy(model, systemId, viewer, nodes) {
   const nlen = Math.hypot(cnx, cny, cnz) || 1;
   cnx /= nlen; cny /= nlen; cnz /= nlen;
 
-  // Gentle anatomical bulge (+Z anterior gastric wall contour)
-  const bulge = 0.0035;
-  const centerPt = {
-    x: cx + cnx * bulge,
-    y: cy + cny * bulge,
-    z: cz + cnz * bulge,
-    nx: cnx,
-    ny: cny,
-    nz: cnz
-  };
+  // Natural anatomical dome bulge calculated from boundary sagitta
+  const bulge = 0.004;
 
-  // Build concentric rings for smooth dome curvature matching stomach wall
-  const rings = [bPts];
-  const fractions = [0.66, 0.33];
-  for (const f of fractions) {
-    const ring = [];
-    const ringBulge = bulge * Math.sin(Math.PI * f * 0.5);
+  // Clone existing position, normal, and index arrays
+  const newPositions = Array.from(pos.array);
+  const newNormals = Array.from(norm.array);
+  const newIndices = Array.from(index.array);
+
+  // Concentric rings (Ring 0 reuses holeLoop indices directly, eliminating any boundary duplicate vertices or seams!)
+  const ringVertIndices = [holeLoop];
+  const fractions = [0.80, 0.60, 0.40, 0.20];
+
+  for (let rIdx = 0; rIdx < fractions.length; rIdx++) {
+    const f = fractions[rIdx];
+    const ringBulge = bulge * Math.cos(f * Math.PI * 0.5);
+    const ringIdxs = [];
     for (let i = 0; i < N; i++) {
       const bp = bPts[i];
-      ring.push({
-        x: cx + (bp.x - cx) * f + cnx * ringBulge,
-        y: cy + (bp.y - cy) * f + cny * ringBulge,
-        z: cz + (bp.z - cz) * f + cnz * ringBulge,
-        nx: bp.nx * f + cnx * (1 - f),
-        ny: bp.ny * f + cny * (1 - f),
-        nz: bp.nz * f + cnz * (1 - f)
-      });
+      const rx = cx + (bp.x - cx) * f + cnx * ringBulge;
+      const ry = cy + (bp.y - cy) * f + cny * ringBulge;
+      const rz = cz + (bp.z - cz) * f + cnz * ringBulge;
+      let rnx = bp.nx * Math.sin(f * Math.PI * 0.5) + cnx * Math.cos(f * Math.PI * 0.5);
+      let rny = bp.ny * Math.sin(f * Math.PI * 0.5) + cny * Math.cos(f * Math.PI * 0.5);
+      let rnz = bp.nz * Math.sin(f * Math.PI * 0.5) + cnz * Math.cos(f * Math.PI * 0.5);
+      const rlen = Math.hypot(rnx, rny, rnz) || 1;
+
+      const newIdx = newPositions.length / 3;
+      newPositions.push(rx, ry, rz);
+      newNormals.push(rnx / rlen, rny / rlen, rnz / rlen);
+      ringIdxs.push(newIdx);
     }
-    rings.push(ring);
+    ringVertIndices.push(ringIdxs);
   }
 
-  const patchVertices = [];
-  const patchNormals = [];
+  // Center vertex
+  const centerIdx = newPositions.length / 3;
+  newPositions.push(cx + cnx * bulge, cy + cny * bulge, cz + cnz * bulge);
+  newNormals.push(cnx, cny, cnz);
 
-  for (const p of rings[0]) {
-    patchVertices.push(p.x, p.y, p.z);
-    patchNormals.push(p.nx, p.ny, p.nz);
+  // Triangles with consistent outward counter-clockwise winding matching Three.js normal convention
+  for (let r = 0; r < ringVertIndices.length - 1; r++) {
+    const rCurr = ringVertIndices[r];
+    const rNext = ringVertIndices[r + 1];
+    for (let i = 0; i < N; i++) {
+      const nextI = (i + 1) % N;
+      newIndices.push(rCurr[i], rCurr[nextI], rNext[i]);
+      newIndices.push(rNext[i], rCurr[nextI], rNext[nextI]);
+    }
   }
-  for (const p of rings[1]) {
-    patchVertices.push(p.x, p.y, p.z);
-    patchNormals.push(p.nx, p.ny, p.nz);
-  }
-  for (const p of rings[2]) {
-    patchVertices.push(p.x, p.y, p.z);
-    patchNormals.push(p.nx, p.ny, p.nz);
-  }
-  const centerIdx = 3 * N;
-  patchVertices.push(centerPt.x, centerPt.y, centerPt.z);
-  patchNormals.push(centerPt.nx, centerPt.ny, centerPt.nz);
-
-  const patchIndices = [];
+  const rLast = ringVertIndices[ringVertIndices.length - 1];
   for (let i = 0; i < N; i++) {
-    const next = (i + 1) % N;
-    patchIndices.push(i, next, N + i);
-    patchIndices.push(next, N + next, N + i);
-  }
-  for (let i = 0; i < N; i++) {
-    const next = (i + 1) % N;
-    patchIndices.push(N + i, N + next, 2 * N + i);
-    patchIndices.push(N + next, 2 * N + next, 2 * N + i);
-  }
-  for (let i = 0; i < N; i++) {
-    const next = (i + 1) % N;
-    patchIndices.push(2 * N + i, 2 * N + next, centerIdx);
+    const nextI = (i + 1) % N;
+    newIndices.push(rLast[i], rLast[nextI], centerIdx);
   }
 
-  const patchGeom = new THREE.BufferGeometry();
-  patchGeom.setAttribute('position', new THREE.Float32BufferAttribute(patchVertices, 3));
-  patchGeom.setAttribute('normal', new THREE.Float32BufferAttribute(patchNormals, 3));
-  patchGeom.setIndex(patchIndices);
-  patchGeom.computeVertexNormals();
+  // Create unified watertight geometry for stomach
+  const sealedGeom = new THREE.BufferGeometry();
+  sealedGeom.setAttribute('position', new THREE.Float32BufferAttribute(newPositions, 3));
+  sealedGeom.setAttribute('normal', new THREE.Float32BufferAttribute(newNormals, 3));
+  sealedGeom.setIndex(newIndices);
+  sealedGeom.computeVertexNormals();
 
-  if (patchGeom.computeBoundsTree) {
-    patchGeom.computeBoundsTree();
+  if (sealedGeom.computeBoundsTree) {
+    sealedGeom.computeBoundsTree();
   }
 
-  // Create PBR Material matching stomach perfectly
-  const patchMat = stomachMesh.material ? stomachMesh.material.clone() : new THREE.MeshStandardMaterial({
-    name: 'PBR_Stomach_AnteriorWall',
-    color: 0xB86A64,
-    roughness: 0.48,
-    metalness: 0.02,
-    side: THREE.DoubleSide
-  });
-  patchMat.name = 'PBR_Stomach_AnteriorWall';
-  patchMat.side = THREE.DoubleSide;
+  stomachMesh.geometry.dispose();
+  stomachMesh.geometry = sealedGeom;
 
-  const patchMesh = new THREE.Mesh(patchGeom, patchMat);
-  patchMesh.name = 'Stomach_AnteriorWall';
-  patchMesh.renderOrder = stomachMesh.renderOrder || 0;
-  patchMesh.userData = {
-    ...stomachMesh.userData,
-    partId: 'Stomach_AnteriorWall',
-    za_name: 'Stomach_AnteriorWall',
-    system: systemId,
-    isStomachPatch: true,
-    isAnteriorWall: true,
-    parentStomachId: 'Stomach',
-    baseMaterial: patchMat
-  };
+  // Register Stomach aliases
+  meshRegistry.set('Stomach', stomachMesh);
+  meshRegistry.set('Stomach_AnteriorWall', stomachMesh);
 
-  stomachMesh.add(patchMesh);
-
-  // Register in structures and meshRegistry
-  meshRegistry.set('Stomach_AnteriorWall', patchMesh);
-  meshRegistry.set(patchMesh.name, patchMesh);
   structures.set('Stomach_AnteriorWall', {
-    node: patchMesh,
+    node: stomachMesh,
     systemId,
     parentId: 'Stomach',
     childIds: [],
-    ownMeshes: [patchMesh]
+    ownMeshes: [stomachMesh]
   });
 
   const stomachStruct = structures.get('Stomach');
@@ -570,10 +537,6 @@ function setupStomachAnatomy(model, systemId, viewer, nodes) {
       stomachStruct.childIds.push('Stomach_AnteriorWall');
     }
     stomachStruct.ownMeshes = [stomachMesh];
-  }
-
-  if (nodes && !nodes.includes(patchMesh)) {
-    nodes.push(patchMesh);
   }
 }
 

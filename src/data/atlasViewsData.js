@@ -916,126 +916,193 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         id: 'dig_1_upper',
         title: '1. Upper Digestive System',
         titleVi: '1. Đường Tiêu Hóa Trên',
-        subtitle: 'Miệng, thực quản và dạ dày',
+        subtitle: 'Thực quản, dạ dày và tá tràng D1-D4',
         image: '/images/atlas/dig_upper.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.35, y: 1.45, z: 0.55, targetX: 0, targetY: 1.40, targetZ: 0 },
         highlight: 'Oesophagus',
-        desc: 'Ống dẫn thức ăn từ miệng qua thực quản xuống dạ dày.'
+        desc: 'Đoạn đầu ống tiêu hóa tiếp nhận, vận chuyển và nghiền nhào nhũ trấp thức ăn.'
       },
       {
         id: 'dig_2_lower',
         title: '2. Lower Digestive System',
         titleVi: '2. Đường Tiêu Hóa Dưới',
-        subtitle: 'Ruột non, ruột già và hậu môn trực tràng',
+        subtitle: 'Ruột non, khung đại tràng và hậu môn trực tràng',
         image: '/images/atlas/dig_lower.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 0.95, z: 0.90, targetX: 0, targetY: 0.95, targetZ: 0 },
         highlight: 'Ascending colon',
-        desc: 'Hấp thu triệt để chất dinh dưỡng và hình thành khuôn phân.'
+        desc: 'Toàn bộ đoạn ruột hấp thu triệt để dưỡng chất, tái hấp thu nước và đào thải phân.'
       },
       {
-        id: 'dig_3_peritoneum',
-        title: '3. Peritoneum',
-        titleVi: '3. Phúc Mạc & Mạc Nối',
-        subtitle: 'Mạc nối lớn, mạc nối nhỏ và rễ mạc treo',
+        id: 'dig_3_hepatobiliary',
+        title: '3. Hepatobiliary-Pancreatic System',
+        titleVi: '3. Hệ Gan - Mật - Tụy & Ống Dẫn Mật',
+        subtitle: 'Túi mật, ống mật chủ, ống tụy Wirsung và nhú tá lớn Oddi',
+        image: '/images/atlas/biliary_anatomy.svg',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: -0.06, y: 1.15, z: 0.52, targetX: -0.02, targetY: 1.13, targetZ: 0 },
+        highlight: 'Bile duct',
+        desc: 'Ngã ba mật tụy: Ống mật chủ kết hợp ống tụy chính tại bóng Vater đổ vào tá tràng D2 qua cơ vòng Oddi.'
+      },
+      {
+        id: 'dig_4_stomach_layers',
+        title: '4. Stomach Wall Layers & Dissection',
+        titleVi: '4. Bóc Tách Các Lớp Dạ Dày & Nếp Gấp Rugae',
+        subtitle: 'Bóc tách 3 tầng cơ trơn, dưới niêm mạc và nếp gấp niêm mạc Rugae',
+        image: '/images/atlas/gastric_wall_histology.svg',
+        systems: ['visceral'],
+        camera: { x: 0.08, y: 1.18, z: 0.58, targetX: 0.02, targetY: 1.16, targetZ: 0 },
+        highlight: 'Stomach',
+        desc: 'Bóc tách hình bậc thang phơi bày 5 tầng thành dạ dày: Thanh mạc, Cơ dọc, Cơ vòng, Cơ chéo trong và Niêm mạc Rugae.'
+      },
+      {
+        id: 'dig_5_esophagus_diaphragm',
+        title: '5. Gastroesophageal Junction & Diaphragm',
+        titleVi: '5. Kết Nối Dạ Dày - Thực Quản & Cơ Hoành',
+        subtitle: 'Lỗ thực quản T10, góc tâm vị His và cơ thắt thực quản dưới',
+        image: '/images/atlas/resp_diaphragm.png',
+        systems: ['visceral', 'muscular', 'skeletal'],
+        camera: { x: 0.12, y: 1.22, z: 0.56, targetX: -0.02, targetY: 1.25, targetZ: 0 },
+        highlight: 'Diaphragm',
+        desc: 'Thực quản chui qua lỗ cơ hoành T10, dây chằng hoành - thực quản và góc His tạo van chống trào ngược GERD.'
+      },
+      {
+        id: 'dig_6_small_intestine',
+        title: '6. Small Intestine & Mesentery Isolation',
+        titleVi: '6. Cô Lập Ruột Non & Mạc Treo Ruột',
+        subtitle: 'Tá tràng, hỗng tràng, hồi tràng và cung mạch mạc treo',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0, y: 1.02, z: 0.82, targetX: 0, targetY: 1.00, targetZ: 0 },
+        highlight: 'Jejunum',
+        desc: 'Bóc tách cô lập 6m ruột non cuộn nếp, neo vào thành bụng sau bởi rễ mạc treo và cung mạch vòm vasa recta.'
+      },
+      {
+        id: 'dig_7_large_intestine',
+        title: '7. Large Intestine & Appendix Isolation',
+        titleVi: '7. Cô Lập Khung Đại Tràng & Ruột Thừa',
+        subtitle: 'Manh tràng, ruột thừa, 3 dải cơ dọc Taeniae và bướu Haustra',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['visceral'],
+        camera: { x: 0, y: 0.98, z: 0.98, targetX: 0, targetY: 0.96, targetZ: 0 },
+        highlight: 'Ascending colon',
+        desc: 'Cô lập khung đại tràng chữ U với 3 đặc trưng nhận diện: Dải cơ dọc Taeniae coli, túi phình Haustra và túi mỡ mạc nối.'
+      },
+      {
+        id: 'dig_8_pelvic_anorectal',
+        title: '8. Pelvic Floor & Anorectal Canal',
+        titleVi: '8. Trực Tràng & Cơ Sàn Chậu (Cơ Nâng Hậu Môn)',
+        subtitle: 'Bóng trực tràng, cơ mu - trực tràng, cơ thắt hậu môn trong & ngoài',
+        image: '/images/atlas/skel_pelvis.png',
+        systems: ['visceral', 'muscular', 'skeletal'],
+        camera: { x: 0, y: 0.80, z: 0.68, targetX: 0, targetY: 0.78, targetZ: 0 },
+        highlight: 'External anal sphincter.l',
+        desc: 'Cơ mu - trực tràng (Puborectalis) tạo quai kéo góc hậu môn trực tràng 80-90 độ kiềm giữ phân, phối hợp cùng hệ cơ thắt kép.'
+      },
+      {
+        id: 'dig_9_peritoneum',
+        title: '9. Peritoneum & Mesenteries',
+        titleVi: '9. Phúc Mạc & Mạc Nối',
+        subtitle: 'Mạc nối lớn, mạc nối nhỏ và rễ mạc treo ruột',
         image: '/images/atlas/dig_peritoneum.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0, y: 1.05, z: 0.95, targetX: 0, targetY: 1.05, targetZ: 0 },
-        desc: 'Màng bao bọc và cố định các tạng trong ổ bụng, chứa mạch máu nuôi ruột.'
+        desc: 'Màng bao bọc và cố định các tạng trong ổ bụng, chứa mạch máu nuôi ruột và các ngách hậu cung mạc nối.'
       },
       {
-        id: 'dig_4_salivary_glands',
-        title: '4. Salivary Glands',
-        titleVi: '4. Tuyến Nước Bọt',
+        id: 'dig_10_alimentary_canal',
+        title: '10. Alimentary Canal Complete',
+        titleVi: '10. Toàn Bộ Trục Ống Tiêu Hóa',
+        subtitle: 'Trục ống liên tục từ miệng đến hậu môn dài 9m',
+        image: '/images/atlas/gi_tract_anatomy.svg',
+        systems: ['visceral', 'skeletal'],
+        camera: { x: 0, y: 1.12, z: 1.55, targetX: 0, targetY: 1.12, targetZ: 0 },
+        desc: 'Đoạn ống tiêu hóa dài khoảng 9 mét với nhu động co bóp liên tục đưa thức ăn chuyển dịch một chiều.'
+      },
+      {
+        id: 'dig_11_couinaud_liver',
+        title: '11. Couinaud Liver Segments & Porta Hepatis',
+        titleVi: '11. Tám Hạ Phân Thùy Gan Couinaud & Cửa Gan',
+        subtitle: 'Phân chia giải phẫu 8 hạ phân thùy I - VIII theo cuống Glisson',
+        image: '/images/atlas/dig_peritoneum.png',
+        systems: ['visceral'],
+        camera: { x: -0.10, y: 1.18, z: 0.68, targetX: -0.02, targetY: 1.15, targetZ: 0 },
+        highlight: 'Liver',
+        desc: '8 hạ phân thùy Couinaud độc lập về mạch máu cuống Glisson (TM cửa, ĐM gan, đường mật) làm nền tảng phẫu thuật gan chọn lọc.'
+      },
+      {
+        id: 'dig_12_stomach_vasculature',
+        title: '12. Stomach Vasculature & Celiac Trunk',
+        titleVi: '12. Mạng Mạch Máu Nuôi Dạ Dày',
+        subtitle: 'Vòng ĐM bờ cong lớn, bờ cong nhỏ và ĐM thân tạng',
+        image: '/images/atlas/stomach_anatomy_macro.svg',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0.15, y: 1.15, z: 0.75, targetX: 0, targetY: 1.12, targetZ: 0 },
+        highlight: 'Stomach',
+        desc: 'Nhánh tách từ động mạch thân tạng cấp máu phong phú cho dạ dày chống loét và nuôi dưỡng nhũ trấp.'
+      },
+      {
+        id: 'dig_13_sphincters',
+        title: '13. Digestive Sphincters & Valves',
+        titleVi: '13. Các Cơ Thắt Đường Tiêu Hóa',
+        subtitle: 'Cơ thắt tâm vị, môn vị, van hồi manh tràng và cơ thắt hậu môn',
+        image: '/images/atlas/dig_lower.png',
+        systems: ['visceral'],
+        camera: { x: 0, y: 1.05, z: 0.70, targetX: 0, targetY: 1.05, targetZ: 0 },
+        desc: 'Các van một chiều ngăn trào ngược dịch vị và kiểm soát lưu thông thức ăn nhịp nhàng theo nhu động.'
+      },
+      {
+        id: 'dig_14_salivary_glands',
+        title: '14. Salivary Glands',
+        titleVi: '14. Tuyến Nước Bọt',
         subtitle: 'Tuyến mang tai, dưới hàm và dưới lưỡi',
         image: '/images/atlas/dig_upper.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.35, y: 1.54, z: 0.40, targetX: 0, targetY: 1.52, targetZ: 0 },
-        desc: 'Tiết enzym amylase bắt đầu quá trình tiêu hóa tinh bột ngay tại miệng.'
+        desc: 'Tiết enzym amylase bắt đầu quá trình tiêu hóa tinh bột ngay tại miệng và bôi trơn thức ăn.'
       },
       {
-        id: 'dig_5_teeth',
-        title: '5. Teeth',
-        titleVi: '5. Bộ Răng Vĩnh Viễn',
+        id: 'dig_15_teeth',
+        title: '15. Permanent Teeth',
+        titleVi: '15. Bộ Răng Vĩnh Viễn',
         subtitle: '32 răng người lớn: răng cửa, nanh, hàm',
         image: '/images/atlas/skel_skull.png',
         systems: ['skeletal'],
         camera: { x: 0, y: 1.54, z: 0.35, targetX: 0, targetY: 1.52, targetZ: 0 },
         highlight: 'Maxilla.l',
-        desc: 'Bộ phận cơ học cắn xé và nghiền nhỏ thức ăn trước khi nuốt.'
+        desc: 'Bộ phận cơ học cắn xé và nghiền nhỏ thức ăn trước khi nuốt xuống thực quản.'
       },
       {
-        id: 'dig_6_laryngopharynx',
-        title: '6. Laryngopharynx',
-        titleVi: '6. Hầu Thanh Quản',
+        id: 'dig_16_laryngopharynx',
+        title: '16. Laryngopharynx & Epiglottis',
+        titleVi: '16. Hầu Thanh Quản & Nắp Thanh Môn',
         subtitle: 'Ngã tư đường ăn và đường thở',
         image: '/images/atlas/resp_upper.png',
         systems: ['visceral', 'skeletal'],
         camera: { x: 0.25, y: 1.46, z: 0.40, targetX: 0, targetY: 1.44, targetZ: 0 },
-        desc: 'Nắp thanh nhiệt đậy kín đường thở khi thức ăn đi qua hầu vào thực quản.'
+        desc: 'Nắp thanh môn đậy kín đường thở khi thức ăn đi qua hầu vào thực quản, chống sặc đường hô hấp.'
       },
       {
-        id: 'dig_7_alimentary_canal',
-        title: '7. Alimentary Canal',
-        titleVi: '7. Toàn Bộ Ống Tiêu Hóa',
-        subtitle: 'Trục ống liên tục từ miệng đến trực tràng',
-        image: '/images/atlas/dig_lower.png',
-        systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 1.12, z: 1.55, targetX: 0, targetY: 1.12, targetZ: 0 },
-        desc: 'Đoạn ống tiêu hóa dài khoảng 9 mét với nhu động co bóp liên tục.'
-      },
-      {
-        id: 'dig_8_stomach_vasculature',
-        title: '8. Stomach Vasculature',
-        titleVi: '8. Mạng Mạch Máu Nuôi Dạ Dày',
-        subtitle: 'Vòng ĐM bờ cong lớn và bờ cong nhỏ',
-        image: '/images/atlas/dig_upper.png',
-        systems: ['visceral', 'cardiovascular'],
-        camera: { x: 0.15, y: 1.15, z: 0.75, targetX: 0, targetY: 1.12, targetZ: 0 },
-        highlight: 'Stomach',
-        desc: 'Nhánh tách từ động mạch thân tạng cấp máu phong phú cho dạ dày.'
-      },
-      {
-        id: 'dig_9_sphincters',
-        title: '9. Sphincters',
-        titleVi: '9. Các Cơ Thắt Đường Tiêu Hóa',
-        subtitle: 'Cơ thắt tâm vị, môn vị, van hồi manh tràng',
-        image: '/images/atlas/dig_lower.png',
-        systems: ['visceral'],
-        camera: { x: 0, y: 1.05, z: 0.70, targetX: 0, targetY: 1.05, targetZ: 0 },
-        desc: 'Các van một chiều ngăn trào ngược dịch vị và kiểm soát lưu thông thức ăn.'
-      },
-      {
-        id: 'dig_10_accessory_organs',
-        title: '10. Accessory Organs',
-        titleVi: '10. Tuyến Tiêu Hóa Phụ Trợ',
-        subtitle: 'Lá gan, túi mật và tuyến tụy',
-        image: '/images/atlas/dig_peritoneum.png',
-        systems: ['visceral'],
-        camera: { x: -0.15, y: 1.15, z: 0.75, targetX: 0, targetY: 1.12, targetZ: 0 },
-        highlight: 'Liver',
-        desc: 'Sản xuất mật nhũ hóa chất béo và enzym phân giải protid, lipid, glucid.'
-      },
-      {
-        id: 'dig_11_regional_vasculature',
-        title: '11. Regional Vasculature',
-        titleVi: '11. Mạch Máu Vùng Ổ Bụng',
-        subtitle: 'ĐM mạc treo tràng trên và tĩnh mạch cửa',
-        image: '/images/atlas/dig_peritoneum.png',
+        id: 'dig_17_regional_vasculature',
+        title: '17. Regional Vasculature & Portal Vein',
+        titleVi: '17. Mạch Máu Vùng Ổ Bụng & Tĩnh Mạch Cửa',
+        subtitle: 'ĐM mạc treo tràng trên và hệ tĩnh mạch cửa gan',
+        image: '/images/atlas/biliary_physiology.svg',
         systems: ['visceral', 'cardiovascular'],
         camera: { x: 0.1, y: 1.12, z: 0.80, targetX: 0, targetY: 1.10, targetZ: 0 },
-        desc: 'Thu gom toàn bộ chất dinh dưỡng hấp thu từ ruột về gan xử lý.'
+        desc: 'Thu gom toàn bộ chất dinh dưỡng hấp thu từ ruột về gan xử lý và khử độc trước khi vào tuần hoàn.'
       },
       {
-        id: 'dig_12_intestines',
-        title: '12. Intestines',
-        titleVi: '12. Ruột Non & Ruột Già',
-        subtitle: 'Hỗng tràng, hồi tràng, đại tràng lên, ngang, xuống',
-        image: '/images/atlas/dig_lower.png',
-        systems: ['visceral', 'skeletal'],
-        camera: { x: 0, y: 0.95, z: 0.85, targetX: 0, targetY: 0.92, targetZ: 0 },
-        desc: 'Toàn bộ các quai ruột non và khung đại tràng bao quanh ổ bụng.'
+        id: 'dig_18_enteric_nervous',
+        title: '18. Enteric Nervous System & Vagus',
+        titleVi: '18. Phân Bố Thần Kinh Tự Chủ Ruột (Hệ ENS)',
+        subtitle: 'Dây thần kinh lang thang X, chuỗi hạch giao cảm và đám rối Meissner/Auerbach',
+        image: '/images/atlas/nerv_brain.png',
+        systems: ['visceral', 'nervous', 'skeletal'],
+        camera: { x: 0.22, y: 1.20, z: 0.70, targetX: 0, targetY: 1.18, targetZ: 0 },
+        highlight: 'Stomach',
+        desc: 'Hệ thần kinh ruột (não bộ thứ hai) phối hợp cùng thần kinh phó giao cảm điều phối nhu động ruột và tiết dịch.'
       }
     ]
   },
@@ -1324,6 +1391,45 @@ export const ATLAS_LAB_CATEGORIES = [
     camera: { x: 0.75, y: 1.25, z: 0.85, targetX: 0, targetY: 0.78, targetZ: 0.65 },
     image: '/images/atlas/reg_lower_limb.png',
     desc: 'Bộc lộ tam giác đùi Scarpa, thần kinh tọa và các nhóm cơ cẳng chân.'
+  },
+  {
+    id: 'lab_hepatobiliary_pancreas',
+    titleVi: '10. Phẫu Tích Hệ Gan - Mật - Tụy - Tá Tràng',
+    title: '10. Hepatobiliary & Pancreatic Dissection',
+    subtitle: 'Bộc lộ túi mật, ống mật chủ, đầu tụy và tá tràng D2',
+    badge: 'Nằm ngửa',
+    orientation: 'supine',
+    showTable: true,
+    systems: ['visceral', 'cardiovascular', 'skeletal'],
+    camera: { x: 0.35, y: 1.35, z: 0.30, targetX: -0.02, targetY: 0.82, targetZ: 0.05 },
+    image: '/images/atlas/biliary_anatomy.svg',
+    desc: 'Phẫu tích bộc lộ cuống gan, tam giác Calot (động mạch túi mật), ống mật chủ và ngã ba tụy tá tràng.'
+  },
+  {
+    id: 'lab_stomach_dissection',
+    titleVi: '11. Phẫu Tích & Cắt Mở Thành Dạ Dày',
+    title: '11. Gastric Dissection & Mucosal Inspection',
+    subtitle: 'Bóc tách tầng cơ và mở cửa sổ quan sát nếp gấp niêm mạc Rugae',
+    badge: 'Nằm ngửa',
+    orientation: 'supine',
+    showTable: true,
+    systems: ['visceral', 'skeletal'],
+    camera: { x: 0.30, y: 1.35, z: 0.25, targetX: 0.02, targetY: 0.82, targetZ: 0.02 },
+    image: '/images/atlas/stomach_anatomy_macro.svg',
+    desc: 'Phẫu tích mở mặt trước dạ dày phơi bày các nếp gấp niêm mạc, lỗ tâm vị và van cơ thắt môn vị.'
+  },
+  {
+    id: 'lab_pelvic_anorectal',
+    titleVi: '12. Phẫu Tích Sàn Chậu & Ống Hậu Môn Trực Tràng',
+    title: '12. Pelvic Floor & Anorectal Dissection',
+    subtitle: 'Bộc lộ cơ nâng hậu môn, cơ thắt ngoài và khoang ngồi trực tràng',
+    badge: 'Nằm sấp',
+    orientation: 'prone',
+    showTable: true,
+    systems: ['visceral', 'muscular', 'skeletal'],
+    camera: { x: 0.40, y: 1.30, z: 0.40, targetX: 0, targetY: 0.80, targetZ: 0.20 },
+    image: '/images/atlas/skel_pelvis.png',
+    desc: 'Phẫu tích sàn chậu từ phía sau bộc lộ quai cơ mu - trực tràng và hệ thống cơ thắt hậu môn.'
   }
 ];
 
@@ -1722,6 +1828,45 @@ export const ATLAS_MICROANATOMY_CATEGORIES = [
         camera: { x: 0.35, y: 0.62, z: 0.65, targetX: 0.10, targetY: 0.60, targetZ: 0 },
         image: '/images/atlas/micro_osteon.jpg',
         desc: 'Đơn vị cấu tạo chức năng cơ bản của xương đặc, dẫn truyền mạch máu và thần kinh nuôi xương.'
+      }
+    ]
+  },
+  {
+    id: 'micro_group_digestive',
+    titleVi: 'Mô Học & Giải Phẫu Vi Thể Hệ Tiêu Hóa',
+    cards: [
+      {
+        id: 'micro_stomach_wall',
+        titleVi: '1. Cắt Lớp Đa Tầng Thành Dạ Dày',
+        title: '1. Gastric Wall Histology & Rugae',
+        subtitle: 'Thanh mạc, 3 tầng cơ trơn, dưới niêm Meissner và tuyến vị tiết acid',
+        badge: 'Mô học dạ dày',
+        systems: ['visceral'],
+        camera: { x: 0.08, y: 1.18, z: 0.58, targetX: 0.02, targetY: 1.16, targetZ: 0 },
+        image: '/images/atlas/gastric_wall_histology.svg',
+        desc: 'Mặt cắt vi thể 5 tầng: thanh mạc, cơ dọc, cơ vòng, cơ chéo trong, dưới niêm và niêm mạc với nếp gấp Rugae.'
+      },
+      {
+        id: 'micro_ampulla_vater',
+        titleVi: '2. Vi Thể Bóng Gan Tụy & Cơ Vòng Oddi',
+        title: '2. Ampulla of Vater & Sphincter of Oddi',
+        subtitle: 'Ống mật chủ, ống Wirsung, cơ vòng Oddi và nhú tá lớn D2',
+        badge: 'Ngã ba mật tụy',
+        systems: ['visceral'],
+        camera: { x: -0.06, y: 1.15, z: 0.52, targetX: -0.02, targetY: 1.13, targetZ: 0 },
+        image: '/images/atlas/biliary_anatomy.svg',
+        desc: 'Cấu trúc vi thể cơ vòng Oddi kiểm soát dòng chảy dịch mật và dịch tụy đổ vào lòng tá tràng.'
+      },
+      {
+        id: 'micro_intestinal_villi',
+        titleVi: '3. Vi Thể Quai Ruột Non & Nhung Mao Hấp Thu',
+        title: '3. Intestinal Villi & Microvilli',
+        subtitle: 'Nếp gấp Kerckring, nhung mao ruột, bờ bàn chải và mảng Peyer',
+        badge: 'Nhung mao ruột',
+        systems: ['visceral'],
+        camera: { x: 0, y: 1.02, z: 0.82, targetX: 0, targetY: 1.00, targetZ: 0 },
+        image: '/images/atlas/gi_tract_anatomy.svg',
+        desc: 'Đơn vị hấp thu vi thể: nhung mao ruột chứa mao mạch và mạch dưỡng trấp lacteal vận chuyển lipid.'
       }
     ]
   }

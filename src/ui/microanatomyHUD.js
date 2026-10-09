@@ -113,6 +113,47 @@ const MICRO_DATA = {
     ],
     clinicalPearls: 'Hiện tượng tái cấu trúc xương (Bone remodeling) diễn ra liên tục nhờ hủy cốt bào đào đường hầm và tạo cốt bào xếp các lá Osteon mới.',
     audioScript: 'Đơn vị Osteon là tế bào kiến trúc cơ bản của xương đặc. Các lá xương hình ống lồng vào nhau với các sợi collagen đan chéo góc đối nghịch, tạo nên một kết cấu chịu lực xoắn vặn siêu bền vững tương tự như sợi carbon hiện đại.'
+  },
+  micro_stomach_wall: {
+    titleVi: 'Cắt Lớp Đa Tầng Thành Dạ Dày & Nếp Gấp Rugae',
+    category: '🔬 Mô Học & Giải Phẫu Vi Thể Dạ Dày',
+    image: '/images/atlas/gastric_wall_histology.svg',
+    layers: [
+      { name: '1. Tầng Thanh Mạc (Tunica Serosa)', desc: 'Lá phúc mạc tạng mỏng phủ ngoài trơn nhẵn, tiết thanh dịch giúp dạ dày trượt êm ái khi co bóp.' },
+      { name: '2. Tầng Cơ 3 Lớp (Dọc - Vòng - Chéo)', desc: 'Cơ dọc ngoài, cơ vòng giữa (dày lên ở môn vị) và cơ chéo trong đặc thù giúp dạ dày nhào nghiền nát thức ăn đa hướng.' },
+      { name: '3. Tầng Dưới Niêm Mạc (Tela Submucosa)', desc: 'Mô liên kết chứa mạng mao mạch dày đặc và đám rối thần kinh Meissner điều tiết lưu lượng máu và bài tiết dịch vị.' },
+      { name: '4. Cơ Niêm & Tầng Niêm Mạc (Tunica Mucosa)', desc: 'Biểu mô trụ đơn tiết chất nhầy kiềm bảo vệ thành dạ dày trước nồng độ axit chát HCl pH 1.5 - 2.0.' },
+      { name: '5. Tuyến Vị & Nếp Gấp Rugae', desc: 'Tế bào viền (Parietal cells) tiết HCl và Yếu tố nội tại Castle; tế bào chính (Chief cells) tiết men Pepsinogen thủy phân protein.' }
+    ],
+    clinicalPearls: 'Vi khuẩn Helicobacter pylori phá vỡ hàng rào chất nhầy bảo vệ, phối hợp cùng tăng tiết acid do stress gây viêm loét dạ dày tá tràng. Thuốc ức chế bơm proton (PPI) chẹn trực tiếp bơm H+/K+-ATPase trên tế bào viền.',
+    audioScript: 'Thành dạ dày sở hữu cấu trúc năm tầng mô học kiên cố. Đặc biệt nhất là ba lớp cơ trơn đan chéo đa hướng kết hợp cùng hàng rào niêm mạc tiết chất nhầy kiềm, vừa đảm bảo nhào nghiền thức ăn mạnh mẽ vừa chống lại sự ăn mòn của axit clohydric nồng độ cao.'
+  },
+  micro_ampulla_vater: {
+    titleVi: 'Vi Thể Ngã Ba Gan Mật Tụy & Cơ Vòng Oddi',
+    category: '🔬 Mô Học Hệ Thống Dẫn Mật & Tụy',
+    image: '/images/atlas/biliary_anatomy.svg',
+    layers: [
+      { name: '1. Ống Mật Chủ (Common Bile Duct)', desc: 'Dẫn mật từ gan và túi mật xuống, đi sau đoạn D1 tá tràng và vùi sau đầu tụy.' },
+      { name: '2. Ống Tụy Chính Wirsung', desc: 'Chạy dọc trục thân tụy, thu gom enzyme amylase, lipase và trypsinogen kiềm hóa dịch vị.' },
+      { name: '3. Bóng Gan Tụy (Ampulla of Vater)', desc: 'Khoang phình giãn ngã ba nơi ống mật chủ hợp lưu cùng ống tụy trước khi xuyên vào thành tá tràng.' },
+      { name: '4. Cơ Vòng Oddi & Nhú Tá Lớn (Major Duodenal Papilla)', desc: 'Cụm cơ vòng nhẵn dày kiểm soát van xả một chiều: giãn mở khi thức ăn vào tá tràng và co đóng khi đói.' }
+    ],
+    clinicalPearls: 'Sỏi mật từ túi mật rơi xuống kẹt tại bóng Vater là nguyên nhân hàng đầu gây Viêm tụy cấp do tắc nghẽn dòng chảy dịch tụy (Biliary pancreatitis). Kỹ thuật nội soi mật tụy ngược dòng (ERCP) cho phép cắt mở cơ vòng Oddi để gắp sỏi giải áp cấp cứu.',
+    audioScript: 'Ngã ba mật tụy và cơ vòng Oddi là chốt chặn sinh học quyết định quá trình tiêu hóa mỡ và protein. Khi thức ăn giàu lipid kích thích hormone CCK bài tiết, cơ vòng Oddi sẽ giãn mở cho dịch mật và dịch tụy cùng ùa vào tá tràng D2 để nhũ hóa thức ăn.'
+  },
+  micro_intestinal_villi: {
+    titleVi: 'Vi Thể Quai Ruột Non & Nhung Mao Hấp Thu',
+    category: '🔬 Mô Học Hệ Thống Hấp Thu Dinh Dưỡng',
+    image: '/images/atlas/gi_tract_anatomy.svg',
+    layers: [
+      { name: '1. Nếp Gấp Vòng Kerckring (Plicae Circulares)', desc: 'Các nếp gấp niêm mạc vĩnh viễn chạy vòng quanh lòng ruột non, tăng diện tích tiếp xúc lên 3 lần.' },
+      { name: '2. Nhung Mao Ruột (Intestinal Villi)', desc: 'Hàng triệu nhú lồi hình ngón tay cao 0.5 - 1 mm, tăng diện tích bề mặt lên gấp 10 lần.' },
+      { name: '3. Mao Mạch & Mạch Dưỡng Trấp Trung Tâm (Lacteal)', desc: 'Mạch bạch huyết ở trục nhung mao chuyên biệt hấp thu axit béo chuỗi dài và chylomicron dạng nhũ tương trắng sữa.' },
+      { name: '4. Bờ Bàn Chải Vi Nhung Mao (Microvilli)', desc: 'Gấp nếp siêu vi của màng tế bào biểu mô ruột, chứa men lactase, maltase và peptidase, đẩy tổng diện tích hấp thu lên tới 250 mét vuông.' },
+      { name: '5. Mảng Bạch Huyết Peyer (Peyer\'s Patches)', desc: 'Cụm nang lympho miễn dịch GALT tại hồi tràng nhận diện kháng nguyên vi khuẩn đường ruột.' }
+    ],
+    clinicalPearls: 'Trong bệnh Celiac, phản ứng dị ứng Gluten dẫn tới phá hủy và teo đét toàn bộ nhung mao ruột, gây hội chứng kém hấp thu nghiêm trọng, tiêu chảy phân mỡ và sụt cân.',
+    audioScript: 'Nhung mao ruột non là bề mặt hấp thu tinh vi và rộng lớn nhất cơ thể người. Với sự kết hợp giữa nếp gấp Kerckring, nhung mao và bờ bàn chải vi nhung mao, diện tích trao đổi chất của ruột non đạt tới 250 mét vuông, tương đương một sân tennis tiêu chuẩn.'
   }
 };
 

@@ -321,26 +321,44 @@ function getFineCameraConfig(card) {
       return { pos: { x: 0, y: 1.25, z: 0.95 }, target: { x: 0, y: 1.22, z: 0 } };
     case 'dig_2_lower':
       return { pos: { x: 0, y: 0.96, z: 1.05 }, target: { x: 0, y: 0.96, z: 0 } };
-    case 'dig_3_peritoneum':
+    case 'dig_3_hepatobiliary':
+    case 'lab_hepatobiliary_pancreas':
+    case 'micro_ampulla_vater':
+      return { pos: { x: -0.06, y: 1.15, z: 0.52 }, target: { x: -0.02, y: 1.13, z: 0 } };
+    case 'dig_4_stomach_layers':
+    case 'lab_stomach_dissection':
+    case 'micro_stomach_wall':
+      return { pos: { x: 0.08, y: 1.18, z: 0.58 }, target: { x: 0.02, y: 1.16, z: 0 } };
+    case 'dig_5_esophagus_diaphragm':
+      return { pos: { x: 0.12, y: 1.22, z: 0.56 }, target: { x: -0.02, y: 1.25, z: 0 } };
+    case 'dig_6_small_intestine':
+    case 'micro_intestinal_villi':
+      return { pos: { x: 0, y: 1.02, z: 0.82 }, target: { x: 0, y: 1.00, z: 0 } };
+    case 'dig_7_large_intestine':
+      return { pos: { x: 0, y: 0.98, z: 0.98 }, target: { x: 0, y: 0.96, z: 0 } };
+    case 'dig_8_pelvic_anorectal':
+    case 'lab_pelvic_anorectal':
+      return { pos: { x: 0, y: 0.80, z: 0.68 }, target: { x: 0, y: 0.78, z: 0 } };
+    case 'dig_9_peritoneum':
       return { pos: { x: 0, y: 1.08, z: 1.05 }, target: { x: 0, y: 1.08, z: 0 } };
-    case 'dig_4_salivary_glands':
-      return { pos: { x: 0.32, y: 1.54, z: 0.42 }, target: { x: 0, y: 1.52, z: 0 } };
-    case 'dig_5_teeth':
-      return { pos: { x: 0, y: 1.54, z: 0.35 }, target: { x: 0, y: 1.52, z: 0 } };
-    case 'dig_6_laryngopharynx':
-      return { pos: { x: 0.25, y: 1.48, z: 0.42 }, target: { x: 0, y: 1.46, z: 0 } };
-    case 'dig_7_alimentary_canal':
+    case 'dig_10_alimentary_canal':
       return { pos: { x: 0, y: 1.15, z: 1.45 }, target: { x: 0, y: 1.15, z: 0 } };
-    case 'dig_8_stomach_vasculature':
+    case 'dig_11_couinaud_liver':
+      return { pos: { x: -0.10, y: 1.18, z: 0.68 }, target: { x: -0.02, y: 1.15, z: 0 } };
+    case 'dig_12_stomach_vasculature':
       return { pos: { x: 0.12, y: 1.15, z: 0.75 }, target: { x: 0, y: 1.12, z: 0 } };
-    case 'dig_9_sphincters':
+    case 'dig_13_sphincters':
       return { pos: { x: 0, y: 1.08, z: 0.75 }, target: { x: 0, y: 1.08, z: 0 } };
-    case 'dig_10_accessory_organs':
-      return { pos: { x: -0.05, y: 1.16, z: 0.72 }, target: { x: 0, y: 1.14, z: 0 } };
-    case 'dig_11_regional_vasculature':
+    case 'dig_14_salivary_glands':
+      return { pos: { x: 0.32, y: 1.54, z: 0.42 }, target: { x: 0, y: 1.52, z: 0 } };
+    case 'dig_15_teeth':
+      return { pos: { x: 0, y: 1.54, z: 0.35 }, target: { x: 0, y: 1.52, z: 0 } };
+    case 'dig_16_laryngopharynx':
+      return { pos: { x: 0.25, y: 1.48, z: 0.42 }, target: { x: 0, y: 1.46, z: 0 } };
+    case 'dig_17_regional_vasculature':
       return { pos: { x: 0.1, y: 1.12, z: 0.85 }, target: { x: 0, y: 1.1, z: 0 } };
-    case 'dig_12_intestines':
-      return { pos: { x: 0, y: 0.96, z: 0.95 }, target: { x: 0, y: 0.96, z: 0 } };
+    case 'dig_18_enteric_nervous':
+      return { pos: { x: 0.22, y: 1.20, z: 0.70 }, target: { x: 0, y: 1.18, z: 0 } };
 
     // Lymphatic Views
     case 'lymph_spleen':
@@ -995,7 +1013,198 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
-        case 'dig_3_peritoneum': {
+        case 'dig_3_hepatobiliary':
+        case 'lab_hepatobiliary_pancreas':
+        case 'micro_ampulla_vater': {
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'visceral') {
+            const isHepatobiliary = /gallbladder|bile duct|pancreas|duodenum|accessory pancreatic duct/i.test(name);
+            const isLiver = /liver|gan/i.test(name);
+            if (isHepatobiliary) {
+              node.visible = true;
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              if (/gallbladder/i.test(name)) {
+                mat.color.setHex(0x15803d); // Deep emerald green for gallbladder
+              } else if (/bile duct/i.test(name)) {
+                mat.color.setHex(0x22c55e); // Bright bile duct green
+                if (mat.emissive) mat.emissive.setHex(0x064e3b);
+              } else if (/pancreatic duct/i.test(name)) {
+                mat.color.setHex(0x38bdf8); // Light cyan for pancreatic ducts
+                if (mat.emissive) mat.emissive.setHex(0x0369a1);
+              } else if (/pancreas/i.test(name)) {
+                mat.color.setHex(0xfef08a); // Pale warm yellow for pancreas
+              } else if (/duodenum/i.test(name)) {
+                mat.color.setHex(0xfb923c); // Warm amber for duodenum C-loop
+              }
+            } else if (isLiver) {
+              node.visible = true;
+              node.renderOrder = 3;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.28;
+              mat.depthWrite = false;
+            } else {
+              node.visible = false;
+            }
+          } else if (sys === 'cardiovascular') {
+            node.visible = /gastroduodenal|pancreaticoduodenal|hepatic|celiac|portal/i.test(name);
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_4_stomach_layers':
+        case 'lab_stomach_dissection':
+        case 'micro_stomach_wall': {
+          if (sys === 'visceral') {
+            const isStomach = /stomach|duodenum|oesophagus/i.test(name);
+            node.visible = isStomach;
+            if (isStomach) {
+              node.renderOrder = 6;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_5_esophagus_diaphragm': {
+          if (sys === 'visceral') {
+            node.visible = /oesophagus|stomach/i.test(name);
+            if (node.visible) {
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          } else if (sys === 'muscular') {
+            const isDiaphragm = /diaphragm/i.test(name);
+            node.visible = isDiaphragm;
+            if (isDiaphragm) {
+              node.renderOrder = 6;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.72;
+              mat.depthWrite = true;
+              mat.color.setHex(0xb45309);
+            }
+          } else if (sys === 'skeletal') {
+            node.visible = /vertebra_t[89]|vertebra_t1[012]|vertebra_l1|rib.*[789]|rib.*1[012]/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.35;
+              mat.depthWrite = false;
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_6_small_intestine':
+        case 'micro_intestinal_villi': {
+          if (sys === 'visceral') {
+            node.visible = /duodenum|jejunum|ileum/i.test(name);
+            if (node.visible) {
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              if (/jejunum/i.test(name)) {
+                mat.color.setHex(0xf97316);
+              } else if (/duodenum/i.test(name)) {
+                mat.color.setHex(0xfbbf24);
+              }
+            }
+          } else if (sys === 'cardiovascular') {
+            node.visible = /mesenteric|jejunal|ileal|aorta/i.test(name);
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_7_large_intestine': {
+          if (sys === 'visceral') {
+            const isColon = /colon|appendix|caecum|taenia|mesocolon/i.test(name);
+            node.visible = isColon;
+            if (isColon) {
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              if (/appendix/i.test(name)) {
+                mat.color.setHex(0xef4444); // Red highlight for appendix
+              } else if (/taenia/i.test(name)) {
+                mat.color.setHex(0xfde047); // Yellow ribbon for taeniae coli
+              } else {
+                mat.color.setHex(0xc2785c); // Colon terracotta tone
+              }
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_8_pelvic_anorectal':
+        case 'lab_pelvic_anorectal': {
+          if (sys === 'visceral') {
+            node.visible = /colon|rectum|sigmoid/i.test(name);
+            if (node.visible) {
+              node.renderOrder = 10;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              mat.color.setHex(0xbe5b45);
+            }
+          } else if (sys === 'muscular') {
+            const isPelvicMusc = /sphincter|levator|pubo-analis|coccygeus|piriformis|obturator internus/i.test(name);
+            node.visible = isPelvicMusc;
+            if (isPelvicMusc) {
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              if (/sphincter/i.test(name)) {
+                mat.color.setHex(0xd97706);
+              } else {
+                mat.color.setHex(0x9a3412);
+              }
+            }
+          } else if (sys === 'skeletal') {
+            node.visible = REGEX_PELVIS.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.35;
+              mat.depthWrite = false;
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_9_peritoneum': {
           if (REGEX_GENITALIA.test(name)) {
             node.visible = false;
             break;
@@ -1019,7 +1228,76 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
-        case 'dig_4_salivary_glands': {
+        case 'dig_10_alimentary_canal': {
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = true;
+          } else if (sys === 'visceral') {
+            if (REGEX_LUNG_TISSUE.test(name) || /kidney|renal|ureter|bladder/i.test(name)) {
+              node.visible = false;
+            } else {
+              node.visible = true;
+            }
+          }
+          break;
+        }
+
+        case 'dig_11_couinaud_liver': {
+          if (sys === 'visceral') {
+            const isCouinaud = /segment of liver/i.test(name) || /liver/i.test(name) || /gallbladder/i.test(name);
+            node.visible = isCouinaud;
+            if (isCouinaud) {
+              node.renderOrder = 8;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              if (/segment of liver \(i\)/i.test(name)) {
+                mat.color.setHex(0x9333ea); // Purple - Caudate (I)
+              } else if (/segment of liver \(ii\)/i.test(name)) {
+                mat.color.setHex(0x2563eb); // Blue - Left lateral superior (II)
+              } else if (/segment of liver \(iii\)/i.test(name)) {
+                mat.color.setHex(0x06b6d4); // Cyan - Left lateral inferior (III)
+              } else if (/segment of liver \(iv\)/i.test(name)) {
+                mat.color.setHex(0x10b981); // Emerald - Quadrate / Left medial (IV)
+              } else if (/segment of liver \(v\)/i.test(name)) {
+                mat.color.setHex(0xf59e0b); // Amber - Right anterior inferior (V)
+              } else if (/segment of liver \(vi\)/i.test(name)) {
+                mat.color.setHex(0xef4444); // Red - Right posterior inferior (VI)
+              } else if (/segment of liver \(vii\)/i.test(name)) {
+                mat.color.setHex(0xec4899); // Pink - Right posterior superior (VII)
+              } else if (/segment of liver \(viii\)/i.test(name)) {
+                mat.color.setHex(0x8b5cf6); // Violet - Right anterior superior (VIII)
+              } else if (/gallbladder/i.test(name)) {
+                mat.color.setHex(0x166534);
+              }
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'dig_12_stomach_vasculature': {
+          if (sys === 'visceral') {
+            node.visible = /stomach|duodenum|oesophagus|esophagus|liver|spleen|pancreas/i.test(name);
+          } else if (sys === 'cardiovascular') {
+            node.visible = /celiac|gastric|splenic|hepatic|mesenteric|aorta/i.test(name);
+          }
+          break;
+        }
+
+        case 'dig_13_sphincters': {
+          if (sys === 'visceral') {
+            node.visible = /stomach|duodenum|oesophagus|esophagus|caecum|colon|appendix/i.test(name);
+          }
+          break;
+        }
+
+        case 'dig_14_salivary_glands': {
           if (sys === 'skeletal') {
             node.visible = /mandible|maxilla|skull|temporal|zygomatic|hyoid|teeth|tooth/i.test(name);
             if (node.visible) {
@@ -1042,7 +1320,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
-        case 'dig_6_laryngopharynx': {
+        case 'dig_16_laryngopharynx': {
           if (sys === 'skeletal') {
             node.visible = /vertebra_c|c1|c2|c3|c4|c5|c6|c7|hyoid|mandible|maxilla|skull/i.test(name);
           } else if (sys === 'visceral') {
@@ -1051,57 +1329,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
-        case 'dig_7_alimentary_canal': {
-          if (REGEX_GENITALIA.test(name)) {
-            node.visible = false;
-            break;
-          }
-          if (sys === 'skeletal') {
-            node.visible = true;
-          } else if (sys === 'visceral') {
-            if (REGEX_LUNG_TISSUE.test(name) || /kidney|renal|ureter|bladder/i.test(name)) {
-              node.visible = false;
-            } else {
-              node.visible = true;
-            }
-          }
-          break;
-        }
-
-        case 'dig_8_stomach_vasculature': {
-          if (sys === 'visceral') {
-            node.visible = /stomach|duodenum|oesophagus|esophagus|liver|spleen|pancreas/i.test(name);
-          } else if (sys === 'cardiovascular') {
-            node.visible = /celiac|gastric|splenic|hepatic|mesenteric|aorta/i.test(name);
-          }
-          break;
-        }
-
-        case 'dig_9_sphincters': {
-          if (sys === 'visceral') {
-            node.visible = /stomach|duodenum|oesophagus|esophagus|caecum|colon|appendix/i.test(name);
-          }
-          break;
-        }
-
-        case 'dig_10_accessory_organs': {
-          if (sys === 'visceral') {
-            const isAccessory = /liver|gallbladder|bile duct|pancreas|duodenum|spleen/i.test(name);
-            node.visible = isAccessory;
-            if (isAccessory) {
-              node.renderOrder = 6;
-              const mat = prepareMeshMaterial(node);
-              mat.transparent = false;
-              mat.opacity = 1.0;
-              mat.depthWrite = true;
-            }
-          } else {
-            node.visible = false;
-          }
-          break;
-        }
-
-        case 'dig_11_regional_vasculature': {
+        case 'dig_17_regional_vasculature': {
           if (sys === 'visceral') {
             node.visible = /stomach|duodenum|liver|pancreas|colon|jejunum/i.test(name);
           } else if (sys === 'cardiovascular') {
@@ -1110,19 +1338,35 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
-        case 'dig_12_intestines': {
-          if (REGEX_GENITALIA.test(name)) {
-            node.visible = false;
-            break;
-          }
-          if (sys === 'skeletal') {
-            node.visible = true;
-          } else if (sys === 'visceral') {
-            if (REGEX_LUNG_TISSUE.test(name) || /kidney|renal|ureter|bladder|liver|stomach|trachea/i.test(name)) {
-              node.visible = false;
-            } else {
-              node.visible = /colon|jejunum|ileum|caecum|appendix|taenia|duodenum/i.test(name);
+        case 'dig_18_enteric_nervous': {
+          if (sys === 'visceral') {
+            node.visible = /stomach|duodenum|jejunum|colon/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.45;
+              mat.depthWrite = false;
             }
+          } else if (sys === 'nervous') {
+            node.visible = /vagus|sympathetic|splanchnic|coeliac|mesenteric|plexus/i.test(name);
+            if (node.visible) {
+              node.renderOrder = 10;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              mat.color.setHex(0xfacc15); // Glowing yellow nerves
+            }
+          } else if (sys === 'skeletal') {
+            node.visible = /vertebra|rib|pelvi/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.22;
+              mat.depthWrite = false;
+            }
+          } else {
+            node.visible = false;
           }
           break;
         }
@@ -1327,7 +1571,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     setSystemTransparency('skeletal', 0.18);
   } else if (viewId.startsWith('musc_')) {
     setSystemTransparency('skeletal', 0.22);
-  } else if (viewId === 'dig_1_upper' || viewId === 'dig_2_lower' || viewId === 'dig_3_peritoneum' || viewId === 'dig_7_alimentary_canal' || viewId === 'dig_12_intestines') {
+  } else if (viewId.startsWith('dig_') || viewId.startsWith('lab_hepatobiliary') || viewId.startsWith('lab_stomach') || viewId.startsWith('lab_pelvic') || viewId.startsWith('micro_stomach') || viewId.startsWith('micro_ampulla') || viewId.startsWith('micro_intestinal')) {
     setSystemTransparency('skeletal', 0.14);
   } else if (viewId === 'lymph_spleen') {
     setSystemTransparency('skeletal', 0.15);
