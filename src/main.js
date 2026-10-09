@@ -78,6 +78,17 @@ async function init() {
     console.log(`[main] Anatomy data ready: ${Object.keys(partsData).length} structures`);
 
     if (viewer) {
+      initTheme(viewer);
+      document.getElementById('mainThemeToggleBtn')?.addEventListener('click', () => {
+        toggleAppTheme(viewer);
+      });
+      document.getElementById('netStatusBadge')?.addEventListener('click', () => {
+        engineManager.toggleTelemetryHUD();
+      });
+      await initUI(viewer);
+      initSelection(viewer);
+      trackViewState(viewer);
+
       // A shared link with explicit URL hash wins over default.
       // On regular/first visit without URL hash, ALWAYS default strictly to skeletal (no muscular)
       // and ALWAYS show a clean, upright, uncropped full-body front overview.
@@ -115,17 +126,6 @@ async function init() {
       setTimeout(() => { loadingOverlay.style.display = 'none'; }, 300);
     }
     if (viewer) {
-      initTheme(viewer);
-      document.getElementById('mainThemeToggleBtn')?.addEventListener('click', () => {
-        toggleAppTheme(viewer);
-      });
-      document.getElementById('netStatusBadge')?.addEventListener('click', () => {
-        engineManager.toggleTelemetryHUD();
-      });
-      await initUI(viewer);
-      initSelection(viewer);
-      trackViewState(viewer);
-
       // Register PWA Service Worker & Version Update Banner (LỆNH #06)
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -155,6 +155,11 @@ async function init() {
         initSilentBackgroundPreloader();
       });
 
+      // Android Hardware Back Button & Exit Confirmation Guard (LỆNH #09)
+      import('./ui/navigationHistory.js').then(({ initNavigationHistory }) => {
+        initNavigationHistory(viewer);
+      });
+
       // Cross-platform Desktop Keyboard Shortcuts
       initDesktopShortcuts(viewer);
     }
@@ -178,7 +183,6 @@ function initDesktopShortcuts(targetViewer) {
       document.getElementById('btnAIQuickClose')?.click();
       document.getElementById('offlineCloseBtn')?.click();
       document.getElementById('motionCloseBtn')?.click();
-      document.getElementById('aiCloseBtn')?.click();
       document.getElementById('cardCloseBtn')?.click();
       document.getElementById('helpClose')?.click();
       document.getElementById('videoModalClose')?.click();

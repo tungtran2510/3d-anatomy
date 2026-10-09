@@ -143,20 +143,20 @@ export function focusOnMesh(mesh, viewer, animate = true, spread = 2.5, isExplic
     direction.set(0, 0, 1).normalize();
   }
 
+  const fovRad = THREE.MathUtils.degToRad(camera.fov || 35);
+  const tanHalfFov = Math.tan(fovRad / 2);
+  const aspect = camera.aspect || (typeof window !== 'undefined' ? window.innerWidth / window.innerHeight : 1) || 1;
+
   if (isExplicitZoom) {
-    // Explicit 2nd step: Smooth close-up inspection (Zoom gần khi người dùng ấn nút Phóng to)
-    distance = Math.max(0.48, maxDim * 4.0);
+    // Explicit close-up inspection
+    distance = Math.max(0.18, (maxDim / 2) / (tanHalfFov * Math.min(1, aspect)) * 1.25);
   } else {
-    // 1st step: Keep wide anatomical context (chỉ điểm cấu trúc, KHÔNG zoom quá nhiều)
-    // Khoảng cách 2.15m cho phép người dùng thấy rõ vị trí cấu trúc tương quan toàn thân/vùng ngực-cột sống
-    const idealContextDist = 2.15;
-    const curDist = camera.position.distanceTo(controls.target);
-    // Nếu khoảng cách hiện tại đã ở tầm nhìn bao quát đẹp (1.9m - 2.6m), giữ nguyên để tránh giật hình; nếu quá xa/quá gần thì chuyển về 2.15m
-    if (curDist >= 1.9 && curDist <= 2.6) {
-      distance = curDist;
-    } else {
-      distance = idealContextDist;
-    }
+    // 1st step: Adaptively frame structure in anatomical context:
+    // Small structures (discs, ear ossicles, eye): zoom in to ~0.35m - 0.45m so the 3D structure is clearly visible
+    // Medium organs (stomach, heart, kidney): ~0.7m - 1.1m
+    // Large regions / whole body: ~1.8m - 2.35m
+    const fittedDist = (maxDim / 2) / (tanHalfFov * Math.min(1, aspect)) * 2.2;
+    distance = Math.max(0.32, Math.min(fittedDist, 2.35));
   }
 
   const targetPosition = center.clone().add(direction.clone().multiplyScalar(distance));

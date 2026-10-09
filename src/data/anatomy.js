@@ -24,7 +24,8 @@ export const SYSTEM_IDS = [
   'cardiovascular',
   'lymphatic',
   'nervous',
-  'visceral'
+  'visceral',
+  'integumentary'
 ];
 
 // System loaded on startup. The others are fetched when the user enables them,

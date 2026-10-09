@@ -66,9 +66,9 @@ describe('buildPartsData', () => {
 });
 
 describe('SYSTEM_IDS', () => {
-  it('matches the seven models that are exported', () => {
+  it('matches the eight models that are exported', () => {
     expect(SYSTEM_IDS).toEqual([
-      'skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral'
+      'skeletal', 'muscular', 'joints', 'cardiovascular', 'lymphatic', 'nervous', 'visceral', 'integumentary'
     ]);
   });
 

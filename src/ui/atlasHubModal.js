@@ -141,7 +141,7 @@ export function initAtlasHub(viewer) {
         <!-- 4. MAIN SCROLLABLE SHELVES CONTENT -->
         <div class="atlas-vb-body" id="atlasHubBody"></div>
 
-        <!-- 5. BOTTOM NAVIGATION BAR (5 Items: Trình đơn, Liên kết, Cài đặt, Trợ giúp, Tải Offline) -->
+        <!-- 5. BOTTOM NAVIGATION BAR (3 Items: Trình đơn, Liên kết, Tìm kiếm) -->
         <footer class="atlas-vb-bottombar">
           <button type="button" class="vb-bottom-item" id="btnHubBottomMenu" title="Trình đơn giải phẫu">
             <div class="vb-bottom-icon">
@@ -166,34 +166,14 @@ export function initAtlasHub(viewer) {
             </div>
             <span>Liên kết</span>
           </button>
-          <button type="button" class="vb-bottom-item" id="btnHubBottomSettings" title="Cài đặt giao diện & Quản trị">
+          <button type="button" class="vb-bottom-item" id="btnHubBottomSearch" title="Tìm kiếm góc nhìn & cấu trúc giải phẫu">
             <div class="vb-bottom-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
             </div>
-            <span>Cài đặt</span>
-          </button>
-          <button type="button" class="vb-bottom-item" id="btnHubBottomHelp" title="Hướng dẫn sử dụng">
-            <div class="vb-bottom-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
-            </div>
-            <span>Trợ giúp</span>
-          </button>
-          <button type="button" class="vb-bottom-item" id="btnHubBottomStore" title="Tải toàn bộ dữ liệu để xem khi không có mạng">
-            <div class="vb-bottom-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <circle cx="9" cy="21" r="1"/>
-                <circle cx="20" cy="21" r="1"/>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-              </svg>
-            </div>
-            <span>Tải Về Máy</span>
+            <span>Tìm kiếm</span>
           </button>
         </footer>
       </div>
@@ -322,28 +302,22 @@ function setupHubEvents(viewer) {
   const bottomMenuBtn = hubModalEl.querySelector('#btnHubBottomMenu');
   bottomMenuBtn?.addEventListener('click', () => {
     closeAtlasHub();
-    document.getElementById('btnMenuToggle')?.click();
+    const systemsBtn = document.getElementById('btnNavSystems') || document.getElementById('systemsToggle');
+    systemsBtn?.click();
   });
 
   launchLinkBtn?.addEventListener('click', () => {
     copyLaunchLink();
   });
 
-  const bottomSettingsBtn = hubModalEl.querySelector('#btnHubBottomSettings');
-  bottomSettingsBtn?.addEventListener('click', () => {
-    openSettingsModal(viewer);
-  });
-
-  const bottomHelpBtn = hubModalEl.querySelector('#btnHubBottomHelp');
-  bottomHelpBtn?.addEventListener('click', () => {
-    showToast('💡 Mẹo: Chạm vào bất kỳ thẻ góc nhìn nào để mở trực tiếp trên mô hình 3D.');
-  });
-
-  const bottomStoreBtn = hubModalEl.querySelector('#btnHubBottomStore');
-  bottomStoreBtn?.addEventListener('click', async () => {
-    closeAtlasHub();
-    const { openOfflineModal } = await import('./offlineModal.js');
-    openOfflineModal(viewer);
+  const bottomSearchBtn = hubModalEl.querySelector('#btnHubBottomSearch');
+  bottomSearchBtn?.addEventListener('click', () => {
+    const searchTabBtn = hubModalEl.querySelector('.vb-tab-btn[data-tab="search"]');
+    if (searchTabBtn) {
+      searchTabBtn.click();
+    }
+    const searchInput = hubModalEl.querySelector('#atlasHubSearchInput');
+    setTimeout(() => searchInput?.focus(), 120);
   });
 
   window.addEventListener('atlas-media-updated', () => {

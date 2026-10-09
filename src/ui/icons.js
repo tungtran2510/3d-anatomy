@@ -2,56 +2,51 @@
 // Replaces obsolete emoji with sharp, professional, scalable vector graphics.
 
 export const ICONS = {
-  // Systems Icons (Medical Standard Visual Vector Icons)
+  // Systems Icons (Medical Standard Visual Vector Icons - High Contrast 2.2px Stroke)
   skeletal: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 2.8 1.4 5.2 3.5 6.5v2.5a1.5 1.5 0 0 0 1.5 1.5h5a1.5 1.5 0 0 0 1.5-1.5v-2.5c2.1-1.3 3.5-3.7 3.5-6.5A7.5 7.5 0 0 0 12 2z"/>
-      <circle cx="9" cy="11" r="1.5" fill="currentColor"/>
-      <circle cx="15" cy="11" r="1.5" fill="currentColor"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 2.6 1.3 4.8 3.2 6.1v2.4a1.5 1.5 0 0 0 1.5 1.5h5.6a1.5 1.5 0 0 0 1.5-1.5V15.6c1.9-1.3 3.2-3.5 3.2-6.1A7.5 7.5 0 0 0 12 2z"/>
+      <circle cx="9" cy="10" r="1.5" fill="currentColor"/>
+      <circle cx="15" cy="10" r="1.5" fill="currentColor"/>
+      <path d="M12 12.5v1"/>
       <path d="M10 16.5v2M12 16v2.5M14 16.5v2"/>
-      <path d="M12 13v1.5"/>
     </svg>
   `,
 
   joints: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3.5"/>
-      <path d="M12 2v6.5"/>
-      <path d="M12 15.5V22"/>
-      <path d="M6 7c2 2 4 2 6 0"/>
-      <path d="M18 17c-2-2-4-2-6 0"/>
-      <path d="M5 12h3.5"/>
-      <path d="M15.5 12H19"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.25"/>
+      <path d="M12 2v6.5M12 15.5V22"/>
+      <path d="M5 8c2.5 1 5 1 7-1M12 17c2 2 4.5 2 7 1"/>
+      <circle cx="12" cy="2" r="1.5" fill="currentColor"/>
+      <circle cx="12" cy="22" r="1.5" fill="currentColor"/>
     </svg>
   `,
 
   muscular: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 6c3 0 5 3 8 3s5-3 8-3"/>
-      <path d="M4 12c3 0 5 3 8 3s5-3 8-3"/>
-      <path d="M4 18c3 0 5 3 8 3s5-3 8-3"/>
-      <path d="M2 4v16"/>
-      <path d="M22 4v16"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 14c-1.5-1.5-2-4-1-6.5C6 5 8 4 10 5c1 .5 2 1.5 3 1 1.5-1 3.5-.5 4.5.5s1 2.5.5 3.5c1 .5 1.5 1.5 1.5 2.5 0 2-2 3.5-4.5 3.5H9c-1.5 0-2.5-.5-3-2z"/>
+      <path d="M10 8.5c1 1 2.5 1 4 0"/>
+      <path d="M9 12c1.5 1 3.5 1 5.5 0"/>
     </svg>
   `,
 
   nervous: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z"/>
-      <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z"/>
-      <circle cx="12" cy="12" r="1.5"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4.5c-2.5-2-6-1.5-7 1.5-1 2.5 0 5 1 6-1.5 1-2 3.5-.5 5 1 1 2.5 1.5 4 .5v3.5h5v-3.5c1.5 1 3 .5 4-.5 1.5-1.5 1-4-.5-5 1-1 2-3.5 1-6-1-3-4.5-3.5-7-1.5z"/>
+      <path d="M12 4.5V17M8 9a2 2 0 0 1 2 2M16 9a2 2 0 0 0-2 2"/>
     </svg>
   `,
 
   cardiovascular: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-      <path d="M3.5 12h3l2-3 3 7 2-4h7"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19.5 13.5c1.5-1.5 2.5-3.2 2.5-5.5A5.5 5.5 0 0 0 16.5 2.5c-1.8 0-3 .6-4.5 2.2-1.5-1.6-2.7-2.2-4.5-2.2A5.5 5.5 0 0 0 2 8c0 2.3 1 4 2.5 5.5l7.5 7.5z"/>
+      <path d="M3.5 12h3l2-3 3 6 2-3h7"/>
     </svg>
   `,
 
   arterial: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
       <path d="M12 4v6M9 6l3 2 3-2"/>
       <path d="M12 12v6"/>
@@ -59,68 +54,67 @@ export const ICONS = {
   `,
 
   venous: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="rgba(30, 58, 138, 0.35)"/>
       <path d="M12 4v14M8 8l4 4 4-4" stroke="#1e3a8a" stroke-width="2"/>
     </svg>
   `,
 
   visceral: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3v9"/>
-      <path d="M12 8l-3 3c-3 3-4 6-1 8 2.5 1.5 4-1 4-4"/>
-      <path d="M12 8l3 3c3 3 4 6 1 8-2.5 1.5-4-1-4-4"/>
-      <circle cx="12" cy="3" r="1.5"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="3" r="1.5" fill="currentColor"/>
+      <path d="M12 4.5v6.5"/>
+      <path d="M8.5 7.5c-3 1.5-4.5 5-3.5 8.5 1 3 3.5 5 7 5s6-2 7-5c1-3.5-.5-7-3.5-8.5"/>
+      <path d="M9 13.5c1.5 1 4.5 1 6 0"/>
     </svg>
   `,
 
   respiratory: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3v8"/>
-      <path d="M12 9c-2-2-5-2-7 0-3 3-1 9 2 9 3 0 5-5 5-9z"/>
-      <path d="M12 9c2-2 5-2 7 0 3 3 1 9-2 9-3 0-5-5-5-9z"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2v8M10 4h4M9 7h6"/>
+      <path d="M12 10c-2.5-1-6 0-7.5 3.5-1.5 3.5-.5 7.5 2 7.5 2.5 0 4.5-2.5 5.5-6.5"/>
+      <path d="M12 10c2.5-1 6 0 7.5 3.5 1.5 3.5.5 7.5-2 7.5-2.5 0-4.5-2.5-5.5-6.5"/>
     </svg>
   `,
 
   digestive: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3v4"/>
-      <path d="M12 7c-3.5 0-6 2-6 6 0 5 4 8 8 8s6-3 6-7c0-5-4.5-7-8-7z"/>
-      <path d="M9 13c1 1 5 1 6 0"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2v4"/>
+      <path d="M11 6c-3.5 0-6 2.5-6 6.5 0 4.5 3.5 8.5 8 8.5s7-3.5 7-7.5c0-4.5-3.5-6-7-6.5"/>
+      <path d="M8 12c1.5 1 4.5 1 6 0M10 16c1.2.8 3.5.8 4.5 0"/>
     </svg>
   `,
 
   urinary_genital: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M7 6c-2 2-3 5-1 8 2 2 4 1 5-2 0-3-2-6-4-6z"/>
-      <path d="M17 6c2 2 3 5 1 8-2 2-4 1-5-2 0-3 2-6 4-6z"/>
-      <path d="M10 14c0 3 1 5 2 6 1-1 2-3 2-6"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 5c-2.5 2-3 5.5-1 8 2 2.5 4.5 1 5-2 .5-2.5-1.5-5-4-6z"/>
+      <path d="M17 5c2.5 2 3 5.5 1 8-2 2.5-4.5 1-5-2-.5-2.5 1.5-5 4-6z"/>
+      <path d="M9.5 12c0 3 1.5 5 2.5 6.5M14.5 12c0 3-1.5 5-2.5 6.5"/>
+      <ellipse cx="12" cy="19.5" rx="2.5" ry="1.5"/>
     </svg>
   `,
 
   endocrine: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="7"/>
-      <path d="M12 7v10M7 12h10"/>
-      <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v18"/>
+      <path d="M12 8c-3-3-8-2-8 3s4 6 8 2c4 4 8 3 8-2s-5-6-8-3z"/>
+      <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
     </svg>
   `,
 
   lymphatic: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      <circle cx="12" cy="11" r="2.5"/>
+      <circle cx="12" cy="11" r="2.5" fill="currentColor" fill-opacity="0.25"/>
       <path d="M12 7v1.5M12 13.5V15M8 11h1.5M14.5 11H16"/>
     </svg>
   `,
 
   integumentary: `
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="11" width="18" height="10" rx="1.5"/>
-      <path d="M3 15.5h18"/>
-      <path d="M3 18.5h18"/>
-      <path d="M8 15.5c0-4 4-5 4-11"/>
-      <path d="M15 15.5c0-3 2-4 3-7"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="10" rx="2"/>
+      <path d="M3 15h18M3 18h18"/>
+      <path d="M8 15c0-4 3.5-5 3.5-11M16 15c0-3 2-4 2.5-7"/>
     </svg>
   `,
 

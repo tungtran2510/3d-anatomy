@@ -6,6 +6,7 @@
 
 import { selectStructureAnywhere, showToast } from './sidebar.js';
 import { ANATOMY_CONCEPTS } from '../data/anatomyConcepts.js';
+import { getVietnameseVoice } from '../utils/speechVoice.js';
 
 let consultationModalEl = null;
 let currentActiveCase = null;
@@ -240,8 +241,7 @@ function speakExplanation(text, btnEl) {
   utterance.lang = 'vi-VN';
   utterance.rate = 0.95;
 
-  const voices = window.speechSynthesis.getVoices();
-  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang.startsWith('vi'));
+  const viVoice = getVietnameseVoice();
   if (viVoice) utterance.voice = viVoice;
 
   if (btnEl) {
@@ -259,7 +259,7 @@ function speakExplanation(text, btnEl) {
   };
 
   window.speechSynthesis.speak(utterance);
-  showToast('🔊 Bác sĩ AI đang đọc tư vấn...');
+  showToast('🔊 Đang đọc giải thích tư vấn...');
 }
 
 export function openPatientConsultationModal(targetCaseId = null, viewer = window.viewer) {
@@ -327,13 +327,13 @@ function renderConsultationUI() {
           </div>
         </div>
 
-        <!-- Doctor's 10-Second Explanation -->
+        <!-- 10-Second Explanation -->
         <div class="consult-doctor-explain-card">
           <div class="doctor-card-top">
             <div class="doctor-badge-title">
-              <span>🩺 Bác sĩ giải thích (Dễ hiểu & Trực quan)</span>
+              <span>🎧 Nghe giải thích (Dễ hiểu & Trực quan)</span>
             </div>
-            <button type="button" class="btn-consult-tts" id="btnConsultTTS" title="Nghe Bác sĩ AI đọc to">
+            <button type="button" class="btn-consult-tts" id="btnConsultTTS" title="Nghe đọc to giải thích">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
               <span>Nghe đọc</span>
             </button>
@@ -417,7 +417,7 @@ function renderConsultationUI() {
   // TTS Speaker
   const ttsBtn = consultationModalEl.querySelector('#btnConsultTTS');
   ttsBtn?.addEventListener('click', () => {
-    const fullText = `${c.title}. Bệnh nhân hỏi: ${c.patientQuestion}. Bác sĩ giải thích: ${c.doctorExplanation}. Lời khuyên điều trị: ${c.advice}`;
+    const fullText = `${c.title}. Bệnh nhân hỏi: ${c.patientQuestion}. Giải thích: ${c.doctorExplanation}. Lời khuyên điều trị: ${c.advice}`;
     speakExplanation(fullText, ttsBtn);
   });
 

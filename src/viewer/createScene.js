@@ -44,8 +44,9 @@ export function createScene() {
   renderer.setSize(Math.max(initialSize.width, 1), Math.max(initialSize.height, 1), false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-  renderer.shadowMap.enabled = false; // Disabled for performance
+  renderer.toneMappingExposure = 1.08;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   // Medical Studio Environment Lighting for high-fidelity physiological reflections & realistic depth
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -53,7 +54,7 @@ export function createScene() {
   const roomEnv = new RoomEnvironment();
   const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture;
   scene.environment = envTexture;
-  scene.environmentIntensity = 0.85;
+  scene.environmentIntensity = 0.20;
 
   // Camera
   // The Z-Anatomy models are built to real scale: a body is roughly 1.7 units
@@ -243,61 +244,172 @@ export function createScene() {
   return viewerObj;
 }
 
+function createContactShadowPlane(scene) {
+  if (typeof document === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    // 1. Broad soft ambient occlusion under both legs & pelvis
+    const ambientGrad = ctx.createRadialGradient(256, 256, 10, 256, 256, 240);
+    ambientGrad.addColorStop(0, 'rgba(15, 23, 42, 0.22)');
+    ambientGrad.addColorStop(0.40, 'rgba(15, 23, 42, 0.12)');
+    ambientGrad.addColorStop(0.75, 'rgba(15, 23, 42, 0.03)');
+    ambientGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+    ctx.fillStyle = ambientGrad;
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Helper to draw realistic foot contact imprint (heel, arch, ball of foot)
+    const drawFootShadow = (cx, cy, rotationAngle) => {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotationAngle);
+
+      // Heel contact (gót chân)
+      const heelGrad = ctx.createRadialGradient(0, 45, 0, 0, 45, 38);
+      heelGrad.addColorStop(0, 'rgba(15, 23, 42, 0.48)');
+      heelGrad.addColorStop(0.5, 'rgba(15, 23, 42, 0.22)');
+      heelGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      ctx.fillStyle = heelGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, 45, 28, 35, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ball of foot & metatarsal pads (ụ bàn chân & ngón chân)
+      const ballGrad = ctx.createRadialGradient(0, -35, 0, 0, -35, 45);
+      ballGrad.addColorStop(0, 'rgba(15, 23, 42, 0.44)');
+      ballGrad.addColorStop(0.55, 'rgba(15, 23, 42, 0.18)');
+      ballGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      ctx.fillStyle = ballGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, -35, 34, 46, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Connecting lateral longitudinal arch contact (vòm ngoài bàn chân)
+      const archGrad = ctx.createRadialGradient(10, 5, 0, 10, 5, 30);
+      archGrad.addColorStop(0, 'rgba(15, 23, 42, 0.28)');
+      archGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      ctx.fillStyle = archGrad;
+      ctx.beginPath();
+      ctx.ellipse(10, 5, 16, 38, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    };
+
+    // Anatomical stance: Left foot slightly angled (-8 deg), Right foot slightly angled (+8 deg)
+    drawFootShadow(192, 252, -0.12);
+    drawFootShadow(320, 252, 0.12);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0.88,
+    depthWrite: false,
+    toneMapped: false
+  });
+  const geometry = new THREE.PlaneGeometry(1.15, 1.15);
+  const plane = new THREE.Mesh(geometry, material);
+  plane.rotation.x = -Math.PI / 2;
+  plane.position.set(0, -0.002, 0);
+  plane.name = 'contactShadowPlane';
+  plane.renderOrder = 0;
+  scene.add(plane);
+  return plane;
+}
+
 function createLights(scene) {
   const lights = {};
 
-  // Medical Studio Ambient Light - balanced fill so crevices and anatomical contours retain physiological depth
-  lights.ambient = new THREE.AmbientLight(0xffffff, 0.42);
+  // Ground Contact Shadow - anchors cadaver and human body to studio floor, preventing floating appearance
+  lights.contactShadow = createContactShadowPlane(scene);
+
+  // Medical Studio Ambient Light - subtle fill so deep anatomical crevices retain natural shadow depth
+  lights.ambient = new THREE.AmbientLight(0xffffff, 0.16);
   scene.add(lights.ambient);
 
-  // Key directional light - clinical examination light from upper front-right
-  lights.key = new THREE.DirectionalLight(0xfff8f2, 0.85);
-  lights.key.position.set(28, 65, 45);
+  // Key directional light - clinical examination light (4500K warm ivory) from upper front-right
+  lights.key = new THREE.DirectionalLight(0xfffbf2, 1.08);
+  lights.key.position.set(2.2, 3.4, 2.8);
+  lights.key.target.position.set(0, 0.85, 0);
+  scene.add(lights.key.target);
+  lights.key.castShadow = true;
+  lights.key.shadow.mapSize.width = 1024;
+  lights.key.shadow.mapSize.height = 1024;
+  lights.key.shadow.camera.near = 0.5;
+  lights.key.shadow.camera.far = 10.0;
+  lights.key.shadow.camera.left = -1.2;
+  lights.key.shadow.camera.right = 1.2;
+  lights.key.shadow.camera.top = 1.4;
+  lights.key.shadow.camera.bottom = -1.4;
+  lights.key.shadow.bias = -0.0003;
+  lights.key.shadow.normalBias = 0.015;
+  lights.key.shadow.radius = 2.2;
   scene.add(lights.key);
 
-  // Fill light - soft cool-neutral fill to preserve tissue contrast
-  lights.fill = new THREE.DirectionalLight(0xf0f5ff, 0.45);
-  lights.fill.position.set(-30, 25, -25);
+  // Fill light - soft cool-neutral fill (7000K daylight cyan tint) from lower front-left to soften harsh shadows
+  lights.fill = new THREE.DirectionalLight(0xe8f0fe, 0.32);
+  lights.fill.position.set(-2.6, 1.4, 2.2);
+  lights.fill.target.position.set(0, 0.85, 0);
+  scene.add(lights.fill.target);
   scene.add(lights.fill);
 
-  // Dual Studio Rim Lights - crisp edge separation for tissue silhouettes, bones, and organs
-  lights.rimLeft = new THREE.DirectionalLight(0xe0f2fe, 0.65);
-  lights.rimLeft.position.set(-25, 45, -55);
+  // Dual Studio Rim Lights - sharp silhouette separation creating deep 3D sculptural volume
+  // Rim Left: Crisp cool rim kicker from behind-left
+  lights.rimLeft = new THREE.DirectionalLight(0x7dd3fc, 0.78);
+  lights.rimLeft.position.set(-2.4, 2.0, -2.6);
+  lights.rimLeft.target.position.set(0, 0.85, 0);
+  scene.add(lights.rimLeft.target);
   scene.add(lights.rimLeft);
 
-  lights.rimRight = new THREE.DirectionalLight(0xffedd5, 0.55);
-  lights.rimRight.position.set(25, 45, -55);
+  // Rim Right: Warm golden rim kicker from behind-right
+  lights.rimRight = new THREE.DirectionalLight(0xfef08a, 0.50);
+  lights.rimRight.position.set(2.4, 1.8, -2.6);
+  lights.rimRight.target.position.set(0, 0.85, 0);
+  scene.add(lights.rimRight.target);
   scene.add(lights.rimRight);
 
   // Backward-compatible rim reference
   lights.rim = lights.rimLeft;
 
-  // Front camera light for soft anatomical definition
-  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.25);
+  // Organic upward bounce light - simulates light reflection from internal viscera & cavity base
+  lights.underBounce = new THREE.DirectionalLight(0xffedd5, 0.14);
+  lights.underBounce.position.set(0, -2.0, 1.0);
+  lights.underBounce.target.position.set(0, 0.85, 0);
+  scene.add(lights.underBounce.target);
+  scene.add(lights.underBounce);
+
+  // Front camera light: subtle fill, eliminating harsh direct flash reflection
+  lights.front = new THREE.DirectionalLight(0xfffbf5, 0.05);
   lights.front.position.set(0, 5, 65);
   scene.add(lights.front);
 
-  // Hemisphere light for ground-to-sky subtle bounce
-  lights.hemi = new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 0.30);
+  // Hemisphere light for ground-to-sky subtle organic bounce
+  lights.hemi = new THREE.HemisphereLight(0xfffaf0, 0xd0dbe6, 0.16);
   scene.add(lights.hemi);
 
   return lights;
 }
 
 export function updateLightsForSystem(lights, system) {
-  // Balanced medical studio lighting across all systems (calibrated for RoomEnvironment IBL)
+  // Cinema-grade medical studio lighting balanced across all systems
   const configs = {
-    muscular: { key: 0.75, fill: 0.45, ambient: 0.45 },
-    skeletal: { key: 0.75, fill: 0.45, ambient: 0.45 },
-    nervous: { key: 0.75, fill: 0.45, ambient: 0.45 },
-    visceral: { key: 0.75, fill: 0.45, ambient: 0.45 },
-    default: { key: 0.75, fill: 0.45, ambient: 0.45 }
+    muscular: { key: 1.05, fill: 0.30, ambient: 0.16, rimLeft: 0.78, rimRight: 0.48 },
+    skeletal: { key: 1.02, fill: 0.32, ambient: 0.16, rimLeft: 0.75, rimRight: 0.45 },
+    nervous: { key: 1.10, fill: 0.30, ambient: 0.15, rimLeft: 0.82, rimRight: 0.50 },
+    visceral: { key: 1.12, fill: 0.28, ambient: 0.15, rimLeft: 0.80, rimRight: 0.48 },
+    cardiovascular: { key: 1.15, fill: 0.28, ambient: 0.15, rimLeft: 0.82, rimRight: 0.50 },
+    default: { key: 1.05, fill: 0.30, ambient: 0.16, rimLeft: 0.78, rimRight: 0.48 }
   };
 
   const config = configs[system] || configs.default;
   if (lights.key) lights.key.intensity = config.key;
   if (lights.fill) lights.fill.intensity = config.fill;
   if (lights.ambient) lights.ambient.intensity = config.ambient;
+  if (lights.rimLeft) lights.rimLeft.intensity = config.rimLeft;
+  if (lights.rimRight) lights.rimRight.intensity = config.rimRight;
 }
 
 export function setSceneBackground(scene, color) {

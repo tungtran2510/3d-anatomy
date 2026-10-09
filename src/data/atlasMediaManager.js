@@ -2,7 +2,122 @@
 // Đồng bộ 12 danh mục Hoạt ảnh & Video Y khoa (Atlas 2027)
 // Hỗ trợ Quản trị viên tùy biến link video, tiêu đề, thời lượng và lưu vào LocalStorage
 
+// -----------------------------------------------------------------------------
+// DANH MỤC 9 VIDEO PLAYLIST ĐÀO TẠO & GIẢI PHẪU BỆNH LÝ CHUYÊN SÂU
+// -----------------------------------------------------------------------------
+export const MEDICAL_TRAINING_PLAYLISTS = [
+  {
+    id: 'pl_spine',
+    titleVi: '1. Giải Phẫu & Bệnh Lý Cột Sống',
+    title: '1. Spine Anatomy & Pathologies',
+    subtitle: 'Toàn bộ giải phẫu 33 đốt sống, đĩa đệm và cơ chế thoái hóa',
+    duration: 'Playlist',
+    badge: 'Cột sống',
+    type: 'video',
+    image: './images/atlas/skel_spine.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby',
+    desc: 'Giải phẫu 33 đốt sống, 4 đường cong sinh lý, đĩa đệm, cơ chế thoái hóa và thoát vị đĩa đệm.'
+  },
+  {
+    id: 'pl_digestive',
+    titleVi: '2. Giải Phẫu & Sinh Lý Hệ Tiêu Hóa',
+    title: '2. Digestive Anatomy & Physiology',
+    subtitle: 'Cấu trúc & chức năng dạ dày, gan, mật, tụy và ruột non',
+    duration: 'Playlist',
+    badge: 'Tiêu hóa',
+    type: 'video',
+    image: './images/atlas/dig_upper.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSKaN2oXXs5RHnoPdgv2ZsgF&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSKaN2oXXs5RHnoPdgv2ZsgF',
+    desc: 'Cấu trúc và chức năng dạ dày, gan, mật, tụy, ruột non và cơ chế tiêu hóa hấp thu dinh dưỡng.'
+  },
+  {
+    id: 'pl_nutrition',
+    titleVi: '3. Ăn Uống & Dinh Dưỡng Khoa Học',
+    title: '3. Clinical Nutrition & Diet',
+    subtitle: 'Chế độ dinh dưỡng cân bằng và can thiệp hỗ trợ bệnh lý',
+    duration: 'Playlist',
+    badge: 'Dinh dưỡng',
+    type: 'video',
+    image: './images/atlas/dig_lower.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSLDD-tu3qmcOEMp-ocgsBMU&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSLDD-tu3qmcOEMp-ocgsBMU',
+    desc: 'Chế độ ăn cân bằng các nhóm dưỡng chất, dinh dưỡng hỗ trợ điều trị bệnh và nâng cao thể trạng.'
+  },
+  {
+    id: 'pl_pathology',
+    titleVi: '4. Bệnh Lý Học: Nguyên Nhân & Giải Pháp',
+    title: '4. Pathologies: Causes & Solutions',
+    subtitle: 'Phân tích nguyên nhân gốc rễ, cơ chế bệnh sinh và giải pháp',
+    duration: 'Playlist',
+    badge: 'Bệnh lý',
+    type: 'video',
+    image: './images/atlas/circ_simplified.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSI-Ej51joE-6N8R-G3ltg-x&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSI-Ej51joE-6N8R-G3ltg-x',
+    desc: 'Phân tích cơ chế bệnh sinh từ gốc rễ, các hội chứng phổ biến và giải pháp can thiệp khoa học.'
+  },
+  {
+    id: 'pl_weight',
+    titleVi: '5. Quản Lý Cân Nặng: Tăng Giảm Cân & Chuyển Hóa',
+    title: '5. Weight Management & Metabolism',
+    subtitle: 'Khoa học tăng cơ giảm mỡ, chuyển hóa và vóc dáng chuẩn',
+    duration: 'Playlist',
+    badge: 'Cân nặng',
+    type: 'video',
+    image: './images/atlas/med_paired_muscles.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLUwNUcW9Grzk&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLUwNUcW9Grzk',
+    desc: 'Khoa học tăng cơ giảm mỡ, cân bằng năng lượng nạp vào - tiêu hao và tối ưu hóa chuyển hóa cơ thể.'
+  },
+  {
+    id: 'pl_organ_systems',
+    titleVi: '6. Tổng Quan Toàn Diện Các Hệ Cơ Quan',
+    title: '6. Comprehensive Organ Systems',
+    subtitle: 'Giải phẫu đại cương 12 hệ cơ quan trong cơ thể người',
+    duration: 'Playlist',
+    badge: 'Hệ cơ quan',
+    type: 'video',
+    image: './images/atlas/skel_full.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLXeja4lDX0Qc&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLXeja4lDX0Qc',
+    desc: 'Hệ xương, hệ cơ bắp, hệ tuần hoàn, hệ hô hấp, hệ tiêu hóa, hệ thần kinh và sự phối hợp đồng bộ.'
+  },
+  {
+    id: 'pl_preventive',
+    titleVi: '7. Y Học Dự Phòng: Phòng Bệnh Chủ Động',
+    title: '7. Preventive Medicine & Wellness',
+    subtitle: 'Chiến lược bảo vệ miễn dịch, thải độc và phòng ngừa sớm',
+    duration: 'Playlist',
+    badge: 'Phòng bệnh',
+    type: 'video',
+    image: './images/atlas/med_skin.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLFCWgyj8rzLA&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLFCWgyj8rzLA',
+    desc: 'Nguyên lý bảo vệ sức khỏe sớm, tăng cường hệ miễn dịch, loại bỏ độc tố và duy trì lối sống lành mạnh.'
+  },
+  {
+    id: 'pl_health_knowledge',
+    titleVi: '8. Kiến Thức Sức Khỏe Toàn Diện',
+    title: '8. Health Education & Wellness Knowledge',
+    subtitle: 'Cẩm nang y khoa thường thức bảo vệ sức khỏe cả gia đình',
+    duration: 'Playlist',
+    badge: 'Sức khỏe',
+    type: 'video',
+    image: './images/atlas/nerv_brain.png',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSIysyrnuDZLADVvkGrIKRae&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSIysyrnuDZLADVvkGrIKRae',
+    desc: 'Cẩm nang kiến thức y khoa thường thức giúp hiểu rõ cơ thể để tự chăm sóc và bảo vệ sức khỏe gia đình.'
+  }
+];
+
 export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
+  {
+    id: 'medical_training_playlists',
+    titleVi: 'Khóa Đào Tạo & Video Series Chuyên Sâu',
+    cards: MEDICAL_TRAINING_PLAYLISTS
+  },
   {
     id: 'system_overviews_media',
     titleVi: 'Tổng Quan Các Hệ Cơ Quan',
@@ -514,6 +629,14 @@ export function getAtlasMediaCategories() {
             });
           }
         });
+        // Tự động bổ sung kệ Khóa Đào Tạo & Video Series Chuyên Sâu nếu chưa có trong bộ nhớ cache
+        if (!parsed.some(cat => cat.id === 'medical_training_playlists')) {
+          const premierCat = DEFAULT_ATLAS_MEDIA_CATEGORIES.find(c => c.id === 'medical_training_playlists');
+          if (premierCat) {
+            parsed.unshift(premierCat);
+            healed = true;
+          }
+        }
         if (healed) {
           try { localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed)); } catch {}
         }
@@ -583,7 +706,7 @@ export function importAtlasMediaJSON(jsonString) {
   }
 }
 
-// Bộ phân giải URL Video thông minh (YouTube watch, youtu.be, embed, shorts, hoặc video MP4/WebM/Blob)
+// Bộ phân giải URL Video thông minh (YouTube playlist, watch, youtu.be, embed, shorts, hoặc video MP4/WebM/Blob)
 export function parseVideoUrl(rawUrl) {
   if (!rawUrl) return { type: 'none', url: '' };
   const str = rawUrl.trim();
@@ -595,6 +718,18 @@ export function parseVideoUrl(rawUrl) {
     /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(str)
   ) {
     return { type: 'video', url: str };
+  }
+
+  // Bóc tách YouTube Playlist ID (bắt buộc dùng embed/videoseries?list= để nhúng an toàn trong iframe)
+  const playlistMatch = str.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+  if (playlistMatch && playlistMatch[1]) {
+    const listId = playlistMatch[1];
+    return {
+      type: 'youtube_playlist',
+      id: listId,
+      url: `https://www.youtube.com/embed/videoseries?list=${listId}&rel=0&enablejsapi=1`,
+      watchUrl: `https://www.youtube.com/playlist?list=${listId}`
+    };
   }
 
   // Bóc tách YouTube ID từ mọi biến thể liên kết
@@ -664,12 +799,13 @@ export const BUILTIN_CLINICAL_VIDEOS = {
   },
   spine_disc: {
     id: 'vid_spine_disc',
-    title: 'Hoạt Ảnh 3D: Thoát Vị Đĩa Đệm L4-L5 & Chèn Ép Tủy',
-    subtitle: 'Cột Sống & Đĩa Đệm',
-    desc: 'Mô phỏng 3D tải trọng nén làm rách bao xơ (Annulus), nhân nhầy (Nucleus) thoát vị chèn ép rễ thần kinh tọa.',
-    videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+    title: 'Giải Phẫu & Bệnh Lý Cột Sống (Playlist Chuyên Sâu)',
+    subtitle: 'Trục Cột Sống, Đĩa Đệm & Thoái Hóa',
+    desc: 'Toàn bộ giải phẫu 33 đốt sống, 4 đường cong sinh lý, đĩa đệm, cơ chế thoái hóa và thoát vị đĩa đệm chèn ép rễ thần kinh.',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby',
     thumbnail: './images/atlas/skel_spine.png',
-    duration: '10:38',
+    duration: 'Playlist',
     badge: 'Cột sống'
   },
   heart_valves: {
@@ -684,13 +820,16 @@ export const BUILTIN_CLINICAL_VIDEOS = {
   },
   stomach_gi: {
     id: 'vid_stomach_gi',
-    title: 'Hoạt Ảnh 3D: Nhu Động Dạ Dày & Cơ Vòng Môn Vị',
+    title: 'Giải Phẫu & Sinh Lý Hệ Tiêu Hóa (Playlist Chuyên Sâu)',
     subtitle: 'Dạ Dày & Ống Tiêu Hóa',
-    desc: 'Sóng nhu động 3 lớp cơ co bóp nhào trộn nhũ trấp và mở nhịp nhàng cơ thắt môn vị tống thức ăn xuống tá tràng.',
-    videoUrl: 'https://www.youtube.com/embed/p9VdK1_7pQw',
+    desc: 'Cấu trúc & chức năng dạ dày, nhu động 3 lớp cơ, cơ thắt môn vị và cơ chế tiêu hóa hấp thu dinh dưỡng.',
+    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSKaN2oXXs5RHnoPdgv2ZsgF&rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSKaN2oXXs5RHnoPdgv2ZsgF',
+    nutritionUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSLDD-tu3qmcOEMp-ocgsBMU',
+    nutritionTitle: 'Ăn Uống & Dinh Dưỡng Khoa Học',
     thumbnail: './images/atlas/dig_upper.png',
-    duration: '10:37',
-    badge: 'Dạ dày'
+    duration: 'Playlist',
+    badge: 'Tiêu hóa'
   },
   intestine_absorption: {
     id: 'vid_intestine_absorption',
@@ -837,7 +976,9 @@ export function getPartVideo(partId) {
     lower.includes('vertebra') || lower.includes('spine') || lower.includes('disc') || lower.includes('discus') ||
     lower.includes('pulposus') || lower.includes('fibrosus') || lower.includes('đốt sống') || lower.includes('cột sống') ||
     lower.includes('đĩa đệm') || lower.includes('thắt lưng') || lower.includes('tủy sống') || lower.includes('l4') ||
-    lower.includes('l5') || lower.includes('c5') || lower.includes('c6') || lower.includes('c3') || lower.includes('t1')
+    lower.includes('l5') || lower.includes('c5') || lower.includes('c6') || lower.includes('c3') || lower.includes('t1') ||
+    lower.includes('atlas') || lower.includes('axis') || lower.includes('sacrum') || lower.includes('coccyx') ||
+    lower.includes('đốt đội') || lower.includes('đốt trục') || lower.includes('xương cùng') || lower.includes('cùng cụt')
   ) {
     return { ...BUILTIN_CLINICAL_VIDEOS.spine_disc, isDefault: true };
   }

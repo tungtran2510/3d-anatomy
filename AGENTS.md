@@ -1,8 +1,9 @@
 # QUY TẮC BẤT KHẢ XÂM PHẠM CHO DỰ ÁN ATLAS GIẢI PHẪU 3D (ANATOMY ATLAS)
 
-## 1. QUY TẮC BẮT BUỘC: PLAYWRIGHT MOBILE VIEWPORT (390x844) & GỬI ẢNH TRỰC TIẾP VÀO CHAT
-- **Bắt buộc tuyệt đối:** Sau BẤT KỲ một thao tác, tính năng, sửa lỗi, căn chỉnh nút bấm hay văn bản nào: Agent BẮT BUỘC phải dùng trình duyệt (Playwright mobile viewport 390x844) chụp ảnh màn hình giao diện thực tế và **GỬI TRỰC TIẾP HÌNH ÁNH ĐÓ VÀO ĐOẠN CHAT** để người dùng nghiệm thu bằng mắt thường.
-- **Cấm tuyệt đối:** CẤM báo cáo chay bằng chữ, cấm phỏng đoán, cấm chỉ đưa đường dẫn file ảnh. Phải nhúng trực tiếp markdown hình ảnh vào câu trả lời để hiển thị trực quan trước mắt người dùng.
+## 1. TUYỆT ĐỐI CẤM BÁO CÁO VĂN BẢN - CHỈ BÁO CÁO BẰNG HÌNH ẢNH THỰC TẾ TRÊN MOBILE (390x844)
+- **Cấm tuyệt đối báo cáo văn bản:** CẤM TUYỆT ĐỐI viết báo cáo phân tích, liệt kê, giải thích dài dòng bằng chữ. Người dùng KHÔNG đọc văn bản dài.
+- **Bắt buộc 100% bằng hình ảnh thực tế:** Mọi nghiệm thu, kết quả, tiến độ BẮT BUỘC chụp ảnh màn hình giao diện thực tế (Playwright Mobile 390x844) và nhúng/gửi trực tiếp ảnh vào đoạn chat.
+- **Text đi kèm tối đa 1 dòng:** Lời thoại đi kèm chỉ tối đa 1 câu ngắn hoặc câu hỏi bước kế tiếp. Cấm dông dài.
 
 ## 2. QUY TẮC CHUẨN 1 DÒNG & BẢO TOÀN KHUNG HÌNH (STRICT 1-LINE & ZERO CLIPPING)
 - **Chuẩn 1 dòng duy nhất:** Tiêu đề, thẻ badge, tên bộ phận, nút tab/pill, mô tả ngắn bắt buộc phải nằm gọn gàng trên **1 DÒNG DUY NHẤT**. Tuyệt đối không để rớt sang dòng thứ hai hay bị cắt chữ lửng lơ (`...`, `TUẤ...`, `4 Cấp `). Đặt tên ngắn gọn, chuẩn y khoa, súc tích.

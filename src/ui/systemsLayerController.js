@@ -1249,6 +1249,13 @@ async function applySystemLevel(systemId, level, viewer) {
         });
       }
     } else if (systemId === 'integumentary') {
+      const isSolid = level > 1.0;
+      // When solid skin is active, hide internal nasal cartilages so they do not pierce the nose skin
+      viewer?.scene?.traverse(c => {
+        if (c.name && /alar_cartilage|septal_cartilage|lateral_process/i.test(c.name)) {
+          c.visible = !isSolid;
+        }
+      });
       if (level <= 0) {
         hideSystem('integumentary');
         updateBodyEnvelopeAuto(viewer);
@@ -1257,17 +1264,24 @@ async function applySystemLevel(systemId, level, viewer) {
         setBodyEnvelopeVisible(false, viewer);
         const nodes = getMeshesBySystem('integumentary') || [];
         nodes.forEach(n => {
-          if (n.isMesh && n.material) {
-            if (level <= 1.0) {
-              n.material.transparent = true;
-              n.material.opacity = 0.45;
-              n.material.depthWrite = true;
-            } else {
-              n.material.transparent = false;
-              n.material.opacity = 1.0;
-              n.material.depthWrite = true;
-            }
-          }
+          const updateMeshMat = (mesh) => {
+            if (!mesh?.isMesh || !mesh?.material) return;
+            const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+            mats.forEach(m => {
+              if (level <= 1.0) {
+                m.transparent = true;
+                m.opacity = 0.35;
+                m.depthWrite = false;
+              } else {
+                m.transparent = false;
+                m.opacity = 1.0;
+                m.depthWrite = true;
+              }
+              m.needsUpdate = true;
+            });
+          };
+          updateMeshMat(n);
+          n.traverse?.(updateMeshMat);
         });
       }
     } else {

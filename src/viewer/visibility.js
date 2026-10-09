@@ -49,9 +49,9 @@ function releaseMaterial(mesh, partId) {
 
 // Ghosting touches nearly every mesh at once, so it uses one shared faded
 // variant per source material — 65 of them, not one per mesh.
-// Dynamic theme-aware opacity: Dark mode ~0.045 (crystal glass), Light mode ~0.185 (soft anatomical silhouette with boosted contrast)
+// Dynamic theme-aware opacity: Dark mode ~0.045 (crystal glass), Light mode ~0.08 (crisp crystal silhouette without milky fog)
 const GHOST_OPACITY_DARK = 0.045;
-const GHOST_OPACITY_LIGHT = 0.185;
+const GHOST_OPACITY_LIGHT = 0.08;
 const ghostVariants = new WeakMap();
 const activeGhostMaterials = new Set();
 
@@ -740,9 +740,13 @@ export function clearGhost() {
   notify('ghostModeChanged', null);
 }
 
+export function isGhostActive() {
+  return ghostedIds !== null && ghostedIds.size > 0;
+}
+
 // Highlighting only touches `emissive`, so it can be undone without disturbing
-// a transparency the user set.
-export function highlightMesh(partId, color = 0xffdf5d, intensity = 0.5) {
+// a transparency the user set. Uses refined clinical cyan accent to preserve 100% PBR fidelity.
+export function highlightMesh(partId, color = 0x38bdf8, intensity = 0.28) {
   if (!partId) return;
 
   let resolvedPartId = partId;

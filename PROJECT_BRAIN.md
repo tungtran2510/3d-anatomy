@@ -6,11 +6,11 @@
 
 ## QUY TẮC TỐI CAO BẮT BUỘC CHO MỌI AGENT (SUPREME MANDATORY RULES)
 
-### 1. BÁO CÁO BẮT BUỘC BẰNG HÌNH ẢNH THỰC TẾ, CẤM BÁO CÁO VĂN BẢN SUÔNG (MANDATORY VISUAL PROOF REPORTING)
-- **Cấm tuyệt đối:** CẤM TUYỆT ĐỐI việc chỉ viết báo cáo bằng văn bản, mô tả bằng lời ("đã làm xong", "cơ bản ổn", "đã sửa đẹp") mà không có hình ảnh thực tế chứng minh.
-- **Bắt buộc gửi hình ảnh thực tế:** Mọi báo cáo hoàn thành công việc, chỉnh sửa giao diện, sửa lỗi hiển thị, cập nhật tính năng BẮT BUỘC phải chụp ảnh màn hình giao diện thực tế (Mobile / Desktop) và gửi/nhúng trực tiếp hình ảnh minh chứng để người dùng trực tiếp quan sát và đánh giá.
-- **Quy trình nghiệm thu bắt buộc:**  
-  `THỰC HIỆN` ➔ `CHỤP ẢNH MÀN HÌNH THỰC TẾ TRÊN MOBILE/DESKTOP` ➔ `GỬI HÌNH ẢNH MINH CHỨNG TRỰC TIẾP CHO NGƯỜI DÙNG` ➔ `CHỜ NGƯỜI DÙNG DUYỆT`.
+### 1. TUYỆT ĐỐI CẤM BÁO CÁO VĂN BẢN - CHỈ BÁO CÁO BẰNG HÌNH ẢNH THỰC TẾ (STRICT ZERO-TEXT & IMAGE-ONLY REPORTING)
+- **Cấm tuyệt đối báo cáo văn bản:** CẤM TUYỆT ĐỐI viết báo cáo bằng văn bản dài dòng, phân tích liệt kê bằng chữ lê thê ("đã làm xong", các mục gạch đầu dòng chữ dài). Người dùng KHÔNG đọc văn bản dài dòng.
+- **Bắt buộc báo cáo 100% bằng hình ảnh thực tế:** Mọi nghiệm thu, kết quả, tiến độ BẮT BUỘC chụp ảnh màn hình thực tế (Playwright Mobile 390x844) và nhúng trực tiếp hình ảnh vào chat (`![Mô tả ảnh](file:///đường/dẫn/ảnh.png)`).
+- **Text kèm theo tối đa 1 dòng:** Lời thoại đi kèm chỉ tối đa 1 dòng ngắn hoặc câu hỏi xin ý kiến bước tiếp theo. Không giải thích dông dài.
+- **Quy trình chuẩn:** `THỰC HIỆN` ➔ `CHỤP ẢNH PLAYWRIGHT MOBILE 390x844` ➔ `GỬI HÌNH ẢNH VÀO CHAT` ➔ `HỎI Ý KIẾN BƯỚC TIẾP THEO (1 DÒNG)`.
 
 ---
 
@@ -51,6 +51,26 @@
 
 ---
 
+### 7. CHUẨN TÍCH HỢP VIDEO & PLAYLIST Y KHOA (YOUTUBE EMBED & MAPPING)
+- **Chuẩn nhúng YouTube Playlist**: Không dùng URL trang web thông thường do hạn chế X-Frame-Options; bắt buộc nhúng qua: `https://www.youtube.com/embed/videoseries?list=${playlistId}&rel=0&enablejsapi=1`.
+- **4 vị trí phân bổ bắt buộc**:
+  1. **Thư viện Media (Atlas Hub)**: Kệ nổi bật số 1 (`medical_training_playlists`) gồm 8 playlist y khoa chuẩn mực với thumbnail, badge và đếm số lượng.
+  2. **Chuyên đề Tự Học & Lớp Học 3D**: Segmented tab số 2 (`🎬 8 Video Đào Tạo`) hiển thị danh mục thẻ playlist 1 chạm xem ngay.
+  3. **Flashcard bước học (Study Mode)**: Tích hợp nút `🎬 Video bài giảng` và nút `🎯 Thử thách 3D` trực tiếp trên thẻ bài giảng giải phẫu.
+  4. **Bảng thông tin chi tiết (InfoPanel)**: Gắn thẻ video giải phẫu + nút phụ dinh dưỡng y khoa `🥗 Ăn Uống & Dinh Dưỡng Khoa Học ▶` cho tạng tiêu hóa. Tuyệt đối không gắn nhãn thương hiệu riêng biệt.
+- **Dự phòng mở ngoài**: Tự động hiển thị nút `YouTube ↗` để người dùng có thể mở thẳng danh sách trên app YouTube khi cần.
+
+---
+
+### 8. VẬN HÀNH BỘ MÁY GIAO DIỆN & TƯƠNG TÁC (LIFECYCLE & INTEGRATION RUNBOOK)
+- **Khởi tạo UI không chặn (Unblocked UI Initialization)**: Toàn bộ DOM listener, Navigation Drawer, Selection Controller và Theme Switcher phải được khởi tạo trước hoặc song song với quá trình tải model GLTF (`skeletal.glb`). Đảm bảo thanh đáy và các menu phản hồi ngay lập tức (<100ms), không bị đóng băng khi tải mạng 3G/4G.
+- **Tiền nạp giọng đọc tiếng Việt (Web Speech API Voice Preload)**: Do hàm `speechSynthesis.getVoices()` trên WebKit/Blink là bất đồng bộ và trả về rỗng trong vài trăm mili-giây đầu, hệ thống sử dụng module `speechVoice.js` với sự kiện `onvoiceschanged` để lưu đệm trước các giọng `vi-VN`, triệt tiêu hoàn toàn lỗi rơi về giọng tiếng Anh mặc định.
+- **Liên kết đánh dấu Đã lưu ⭐ đồng bộ**: Nút `#cardBookmarkBtn` tại tiêu đề bảng chọn 3D kết nối trực tiếp hai chiều với danh mục `#bookmarksList` trong ngăn kéo `Hệ cơ quan › Đã lưu`.
+- **Mở rộng động học khớp (Expanded 3D Joint Kinematics)**: Hỗ trợ đầy đủ các vùng vận động chính: Gối, Vai, Háng, Khuỷu, Cột sống thân mình, Cột sống cổ, Khớp cổ chân, Khớp cổ tay, và Khớp thái dương hàm (TMJ).
+
+---
+
 ## DEPLOYMENT TARGETS
 - **GitHub Repository**: `https://github.com/tungtran2510/3d-anatomy.git` (nhánh `master`)
 - **Vercel Production Live**: `https://3d-anatomy-atlas-vn.vercel.app`
+

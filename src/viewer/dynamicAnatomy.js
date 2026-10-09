@@ -389,7 +389,7 @@ class DynamicAnatomyEngine {
 
     if (motionId === MOTIONS.CARDIAC) {
       this.viewer.scene.traverse((node) => {
-        if (!node.isMesh || node.parent?.name !== 'Scene') return;
+        if (!node.isMesh || node.userData?.isDissectionTable) return;
         const partId = (node.userData?.partId || node.name || '').toLowerCase();
         const isVentricle = partId.includes('ventricle') || partId.includes('papillary') || partId.includes('interventricular');
         const isAtrium = partId.includes('atrium') || partId.includes('auricle');
@@ -409,7 +409,7 @@ class DynamicAnatomyEngine {
       });
     } else if (motionId === MOTIONS.RESPIRATORY) {
       this.viewer.scene.traverse((node) => {
-        if (!node.isMesh || node.parent?.name !== 'Scene') return;
+        if (!node.isMesh || node.userData?.isDissectionTable) return;
         const partId = (node.userData?.partId || node.name || '').toLowerCase();
         const isLung = partId.includes('lung') || partId.includes('pulmo') || partId.includes('bronch');
         const isRib = partId.includes('rib') || partId.includes('costa') || partId.includes('cartilage');
@@ -514,7 +514,7 @@ class DynamicAnatomyEngine {
       }
 
       this.viewer.scene.traverse((obj) => {
-        if (!obj.isMesh || obj.parent?.name !== 'Scene' || !obj.geometry) return;
+        if (!obj.isMesh || obj.userData?.isDissectionTable || !obj.geometry) return;
         const partId = (obj.userData?.partId || obj.name || '').toLowerCase();
 
         if (!obj.geometry.boundingBox) obj.geometry.computeBoundingBox();
@@ -527,15 +527,24 @@ class DynamicAnatomyEngine {
         let weight = 1.0;
 
         if (chainType === 'spine') {
-          const isPelvisOrLeg = partId.includes('sacrum') || partId.includes('coccyx') || 
-            partId.includes('hip_bone') || partId.includes('ilium') || partId.includes('ischium') || 
-            partId.includes('pubis') || partId.includes('femur') || partId.includes('gluteus') || 
+          const isLimbOrPelvis = partId.includes('humerus') || partId.includes('radius') || 
+            partId.includes('ulna') || partId.includes('hand') || partId.includes('carpal') || 
+            partId.includes('metacarp') || partId.includes('digiti') || partId.includes('pollicis') || 
+            partId.includes('biceps') || partId.includes('triceps') || partId.includes('deltoid') || 
+            partId.includes('brachii') || partId.includes('forearm') || partId.includes('femur') || 
             partId.includes('patella') || partId.includes('tibia') || partId.includes('fibula') || 
-            partId.includes('foot') || partId.includes('toe') || partId.includes('psoas') || 
-            partId.includes('iliacus') || partId.includes('trochanter') || partId.includes('acetabul') || 
-            (cy < 0.96 && Math.abs(cx) < 0.15);
+            partId.includes('foot') || partId.includes('gluteus') || partId.includes('sacrum') || 
+            partId.includes('coccyx') || partId.includes('ilium') || partId.includes('ischium') || 
+            partId.includes('pubis') || partId.includes('scapula') || partId.includes('clavicle');
 
-          if (!isPelvisOrLeg && (cy >= 0.96 || (Math.abs(cx) >= 0.14 && cy >= 0.58))) {
+          const isSpineOrTorso = partId.includes('vertebra') || partId.includes('disc') || 
+            partId.includes('rib') || partId.includes('costa') || partId.includes('sternum') || 
+            partId.includes('erector spinae') || partId.includes('iliocostalis') || 
+            partId.includes('longissimus') || partId.includes('spinalis') || 
+            partId.includes('multifidus') || partId.includes('splenius') || 
+            partId.includes('rectus abdominis') || partId.includes('oblique');
+
+          if (!isLimbOrPelvis && (isSpineOrTorso || (cy >= 0.96 && Math.abs(cx) < 0.16))) {
             inChain = true;
             weight = 1.0;
           }
@@ -707,12 +716,15 @@ class DynamicAnatomyEngine {
       }
     };
 
+    const isTable = (m) => m.userData?.isDissectionTable || m.parent?.userData?.isDissectionTable || m.name === 'dissectionTableGroup' || m.parent?.name === 'dissectionTableGroup';
+
     if (motionId === MOTIONS.CARDIAC) {
       this.viewer.scene.traverse((mesh) => {
-        if (!mesh.isMesh || mesh.parent?.name !== 'Scene') return;
+        if (!mesh.isMesh || isTable(mesh)) return;
         const lower = (mesh.userData?.partId || mesh.name || '').toLowerCase();
-        const isThoraxBone = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle');
-        const isHeart = lower.includes('heart') || lower.includes('ventricle') || lower.includes('atrium') || lower.includes('aorta') || lower.includes('pulmonary');
+        const sys = mesh.userData?.system;
+        const isHeart = lower.includes('heart') || lower.includes('ventricle') || lower.includes('atrium') || lower.includes('aorta') || lower.includes('pulmonary trunk') || lower.includes('coronary');
+        const isThoraxBone = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle') || lower.includes('vertebra_t');
 
         saveMesh(mesh);
 
@@ -721,13 +733,14 @@ class DynamicAnatomyEngine {
           if (mesh.material) {
             mesh.material.transparent = false;
             mesh.material.opacity = 1.0;
+            mesh.material.depthWrite = true;
           }
         } else if (isThoraxBone) {
           mesh.visible = true;
           if (mesh.material) {
-            mesh.material.transparent = true;
-            mesh.material.opacity = 0.20;
-            mesh.material.depthWrite = false;
+            mesh.material.transparent = false;
+            mesh.material.opacity = 1.0;
+            mesh.material.depthWrite = true;
           }
         } else {
           mesh.visible = false;
@@ -735,43 +748,65 @@ class DynamicAnatomyEngine {
       });
     } else if (motionId === MOTIONS.RESPIRATORY) {
       this.viewer.scene.traverse((mesh) => {
-        if (!mesh.isMesh || mesh.parent?.name !== 'Scene') return;
+        if (!mesh.isMesh || isTable(mesh)) return;
         const lower = (mesh.userData?.partId || mesh.name || '').toLowerCase();
         const isResp = lower.includes('lung') || lower.includes('pulmo') || lower.includes('bronch') || lower.includes('trachea') || lower.includes('diaphragm');
         const isRibcage = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum') || lower.includes('clavicle') || lower.includes('vertebra');
-        const isDigestive = lower.includes('stomach') || lower.includes('liver') || lower.includes('intestine') || lower.includes('colon') || lower.includes('pancreas') || lower.includes('gallbladder') || lower.includes('kidney') || lower.includes('bladder') || lower.includes('spleen');
-        const isLimbOrSkull = lower.includes('femur') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('phalang') || lower.includes('tars') || lower.includes('patella') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('carpal') || lower.includes('metacarp') || lower.includes('cranium') || lower.includes('skull') || lower.includes('mandible') || lower.includes('maxilla') || lower.includes('pelvis') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('pubis') || lower.includes('sacrum');
 
         saveMesh(mesh);
 
         if (isResp || isRibcage) {
           mesh.visible = true;
-        } else if (isDigestive || isLimbOrSkull) {
+          if (mesh.material) {
+            mesh.material.transparent = false;
+            mesh.material.opacity = 1.0;
+            mesh.material.depthWrite = true;
+          }
+        } else {
           mesh.visible = false;
         }
       });
     } else {
       // Kinematic Joint Muscle Actions:
       // Active moving chain + Agonists: solid, opaque, with prime movers glowing
-      // Other surrounding bones/muscles: ghosted at opacity 0.22 for anatomical context
-      // Internal visceral organs: hidden
+      // Anchoring bones & relevant synergists: solid, opaque, pristine PBR bone/muscle
+      // Surrounding irrelevant limbs, organs, vessels, and nerves: strictly hidden (visible = false)
       const meta = MOTION_METADATA[motionId];
       const agonists = meta?.agonists || [];
       const movingNodesSet = new Set(this._cachedMotionNodes ? this._cachedMotionNodes.map(m => m.node) : []);
 
+      const isSpineMotion = motionId.startsWith('spine_');
+      const isHipMotion = motionId.startsWith('hip_');
+      const isKneeMotion = motionId.startsWith('knee_');
+      const isShoulderMotion = motionId.startsWith('shoulder_');
+      const isElbowOrForearm = motionId.startsWith('elbow_') || motionId.startsWith('forearm_');
+
       this.viewer.scene.traverse((mesh) => {
-        if (!mesh.isMesh || mesh.parent?.name !== 'Scene') return;
+        if (!mesh.isMesh || isTable(mesh)) return;
         const lower = (mesh.userData?.partId || mesh.name || '').toLowerCase();
         const sys = mesh.userData?.system;
-        const isInternalOrgan = sys === 'visceral' || sys === 'lymphatic' || sys === 'nervous' ||
-          lower.includes('stomach') || lower.includes('liver') || lower.includes('intestine') || 
-          lower.includes('kidney') || lower.includes('bladder') || lower.includes('colon');
 
         saveMesh(mesh);
 
-        if (isInternalOrgan) {
+        // 1. Strictly hide all non-musculoskeletal systems during joint motions
+        if (sys === 'cardiovascular' || sys === 'visceral' || sys === 'lymphatic' || sys === 'nervous' || sys === 'integumentary') {
           mesh.visible = false;
           return;
+        }
+
+        // 2. Hide obscuring flat aponeurosis/fascia sheets and retinacula that create polygonal artifacts
+        if (lower.includes('aponeurosis') || lower.includes('rectus sheath') || lower.includes('fascia lata') || lower.includes('linea alba') || lower.includes('retinaculum')) {
+          mesh.visible = false;
+          return;
+        }
+
+        // 3. Peripheral limb / scapula exclusion for spine motions
+        if (isSpineMotion) {
+          const isPeripheral = lower.includes('scapula') || lower.includes('clavicle') || lower.includes('femur') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('tars') || lower.includes('patella') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('carpal') || lower.includes('metacarp') || lower.includes('digiti') || lower.includes('pollicis') || lower.includes('hallucis') || lower.includes('skull') || lower.includes('cranium') || lower.includes('facial') || lower.includes('masseter') || lower.includes('biceps') || lower.includes('triceps') || lower.includes('deltoid') || lower.includes('quadriceps') || lower.includes('gastrocnemius') || lower.includes('soleus') || lower.includes('gluteus') || lower.includes('forearm');
+          if (isPeripheral) {
+            mesh.visible = false;
+            return;
+          }
         }
 
         const isInMovingChain = movingNodesSet.has(mesh);
@@ -784,17 +819,67 @@ class DynamicAnatomyEngine {
             mesh.material.opacity = 1.0;
             mesh.material.depthWrite = true;
             if (isAgonist && mesh.material.emissive) {
-              mesh.material.emissive.setHex(0x550a0a); // Subtle vibrant active red glow
+              mesh.material.emissive.setHex(0x550a0a); // Subtle active muscle tone
             }
           }
-        } else {
-          // Surrounding body: translucent ghost
+          return;
+        }
+
+        // 4. Regional contextual filtering for remaining musculoskeletal parts
+        let isContextVisible = false;
+
+        if (isSpineMotion) {
+          const isSpineBone = lower.includes('vertebra') || lower.includes('disc') || lower.includes('atlas') || lower.includes('axis') || lower.includes('sacrum') || lower.includes('coccyx');
+          const isPelvis = lower.includes('pelvi') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('pubis');
+          const isRibcage = lower.includes('rib') || lower.includes('costa') || lower.includes('sternum');
+          const isTrunkMuscle = lower.includes('erector spinae') || lower.includes('iliocostalis') || lower.includes('longissimus') || lower.includes('spinalis') || lower.includes('latissimus') || lower.includes('trapezius') || lower.includes('splenius') || lower.includes('rhomboid') || lower.includes('multifidus') || lower.includes('quadratus lumborum') || lower.includes('rectus abdominis') || lower.includes('oblique') || lower.includes('intertransversarii') || lower.includes('serratus posterior');
+
+          if (isSpineBone || isPelvis || isRibcage || isTrunkMuscle) {
+            isContextVisible = true;
+          }
+        } else if (isHipMotion) {
+          const isPelvisOrThigh = lower.includes('pelvi') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('pubis') || lower.includes('sacrum') || lower.includes('femur') || lower.includes('patella') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('vertebra_l');
+          const isHipMuscle = lower.includes('gluteus') || lower.includes('psoas') || lower.includes('iliacus') || lower.includes('rectus femoris') || lower.includes('sartorius') || lower.includes('pectineus') || lower.includes('biceps femoris') || lower.includes('semitendinosus') || lower.includes('semimembranosus') || lower.includes('tensor fasciae') || lower.includes('adductor') || lower.includes('gracilis') || lower.includes('piriformis');
+          const isUpperBody = lower.includes('skull') || lower.includes('cranium') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('rib') || lower.includes('sternum') || lower.includes('vertebra_c') || lower.includes('vertebra_t');
+
+          if ((isPelvisOrThigh || isHipMuscle) && !isUpperBody) {
+            isContextVisible = true;
+          }
+        } else if (isKneeMotion) {
+          const isLegBones = lower.includes('femur') || lower.includes('patella') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('pelvi') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('pubis');
+          const isKneeMuscle = lower.includes('quadriceps') || lower.includes('rectus femoris') || lower.includes('vastus') || lower.includes('biceps femoris') || lower.includes('semitendinosus') || lower.includes('semimembranosus') || lower.includes('gastrocnemius') || lower.includes('soleus') || lower.includes('popliteus') || lower.includes('sartorius') || lower.includes('gracilis');
+          const isUpperBody = lower.includes('skull') || lower.includes('cranium') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('rib') || lower.includes('sternum') || lower.includes('vertebra_c') || lower.includes('vertebra_t');
+
+          if ((isLegBones || isKneeMuscle) && !isUpperBody) {
+            isContextVisible = true;
+          }
+        } else if (isShoulderMotion) {
+          const isShoulderBones = lower.includes('scapula') || lower.includes('clavicle') || lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('rib') || lower.includes('sternum') || lower.includes('vertebra_c') || lower.includes('vertebra_t');
+          const isShoulderMuscles = lower.includes('deltoid') || lower.includes('supraspinatus') || lower.includes('infraspinatus') || lower.includes('subscapularis') || lower.includes('teres') || lower.includes('pectoralis') || lower.includes('latissimus') || lower.includes('trapezius') || lower.includes('rhomboid') || lower.includes('levator scapulae') || lower.includes('biceps') || lower.includes('triceps');
+          const isLowerBody = lower.includes('pelvi') || lower.includes('femur') || lower.includes('tibia') || lower.includes('fibula') || lower.includes('foot') || lower.includes('sacrum') || lower.includes('ilium');
+
+          if ((isShoulderBones || isShoulderMuscles) && !isLowerBody) {
+            isContextVisible = true;
+          }
+        } else if (isElbowOrForearm) {
+          const isArmBones = lower.includes('humerus') || lower.includes('radius') || lower.includes('ulna') || lower.includes('hand') || lower.includes('carpal') || lower.includes('metacarpal') || lower.includes('scapula') || lower.includes('clavicle');
+          const isArmMuscles = lower.includes('biceps') || lower.includes('brachialis') || lower.includes('brachioradialis') || lower.includes('triceps') || lower.includes('anconeus') || lower.includes('pronator') || lower.includes('supinator') || lower.includes('flexor carpi') || lower.includes('extensor carpi');
+          const isLowerBodyOrHead = lower.includes('pelvi') || lower.includes('femur') || lower.includes('tibia') || lower.includes('foot') || lower.includes('skull') || lower.includes('vertebra_l');
+
+          if ((isArmBones || isArmMuscles) && !isLowerBodyOrHead) {
+            isContextVisible = true;
+          }
+        }
+
+        if (isContextVisible) {
           mesh.visible = true;
           if (mesh.material) {
-            mesh.material.transparent = true;
-            mesh.material.opacity = 0.22;
-            mesh.material.depthWrite = false;
+            mesh.material.transparent = false;
+            mesh.material.opacity = 1.0;
+            mesh.material.depthWrite = true;
           }
+        } else {
+          mesh.visible = false;
         }
       });
     }

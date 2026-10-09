@@ -1,12 +1,14 @@
 // Advanced Anatomy Information Panel Controller (Visible Body & Atlas 2027 Standard)
 // Manages: History Navigation (< >), Full/Compact Mode, Model Orientation (Đứng/Nằm ngửa/Nằm sấp/Bàn mổ),
 // Audio Pronunciation, Anatomical Hierarchy Tree, 3D Structure Tagging, Learn More & Histology Thumbnails
-import { state } from '../state/store.js';
+import { state, getStructureInfo } from '../state/store.js';
+import { searchStructures } from '../utils/dataLoader.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
+import { PATIENT_CASES } from './patientConsultationModal.js';
 import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getTableVisibility } from '../viewer/orientationManager.js';
 import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
-import { hidePart, isolatePart, setPartTransparency, restoreAllParts, toggleStomachDissection, isStomachDissected } from '../viewer/visibility.js';
+import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost } from '../viewer/visibility.js';
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
@@ -21,6 +23,7 @@ import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openImageZoomModal } from './imageZoomModal.js';
 import { getConstituentsForPart } from '../data/anatomyConstituents.js';
 import { formatNameWithSubtitles } from '../utils/textFormatters.js';
+import { getVietnameseVoice } from '../utils/speechVoice.js';
 
 let isCompact = false;
 let isBodyCollapsed = false;
@@ -57,6 +60,19 @@ export function initInfoPanel(viewer) {
   audioBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     speakCurrentStructure();
+  });
+
+  // 2a. AI Doctor 15-sec Voice Summary Buttons (Full Sheet & Mini-Bar)
+  const aiVoiceBtn = document.getElementById('btnAIVoiceSummary');
+  aiVoiceBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    play15SecVoiceSummary(aiVoiceBtn);
+  });
+
+  const miniAIVoiceBtn = document.getElementById('btnMiniAIVoice');
+  miniAIVoiceBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    play15SecVoiceSummary(miniAIVoiceBtn);
   });
 
   // 2b. Section Explanation TTS Speaker Buttons (Đọc tiếng Việt chuẩn y khoa cho từng mục)
@@ -190,22 +206,19 @@ export function initInfoPanel(viewer) {
     showToast(isVisible ? '🗄️ Đã bật Bàn phẫu tích y khoa' : '🗄️ Đã ẩn Bàn phẫu tích');
   });
 
-  // 6. Adjust Model Actions (Hide, Ghost, Isolate, Radius Blast)
-  document.getElementById('cardHideBtn')?.addEventListener('click', () => {
-    const part = state.selectedPart;
-    if (part) {
-      hidePart(part.id);
-      viewer?.render?.();
-      showToast(`👁️ Đã ẩn: ${part.displayName || part.id}`);
-    }
-  });
-
+  // 6. Adjust Model Actions (Ghost / Fade Others, Isolate, Radius Blast)
   document.getElementById('cardGhostBtn')?.addEventListener('click', () => {
     const part = state.selectedPart;
     if (part) {
-      setPartTransparency(part.id, 0.3);
-      viewer?.render?.();
-      showToast(`👻 Làm mờ: ${part.displayName || part.id}`);
+      if (isGhostActive()) {
+        clearGhost();
+        viewer?.render?.();
+        showToast('✨ Đã khôi phục giải phẫu xung quanh sắc nét');
+      } else {
+        ghostAllExcept(part.id);
+        viewer?.render?.();
+        showToast(`👻 Đã làm mờ các cơ quan xung quanh (Fade Others)`);
+      }
     }
   });
 
@@ -223,39 +236,8 @@ export function initInfoPanel(viewer) {
     handleRadiusBlast(viewer);
   });
 
-  const stomachDissectBtn = document.getElementById('cardStomachDissectBtn');
-  stomachDissectBtn?.addEventListener('click', () => {
-    const isNowDissected = toggleStomachDissection();
-    viewer?.render?.();
-    updateStomachDissectButtonUI(isNowDissected);
-    if (isNowDissected) {
-      showToast('🔪 Đã bóc tách thành trước: Lộ nếp gấp niêm mạc & đám rối thần kinh dạ dày!');
-    } else {
-      showToast('🩺 Đã đóng kín dạ dày: Thành trước nguyên vẹn sinh lý!');
-    }
-  });
-
   // Synchronize history buttons initial state
   notifySelectionHistoryChanged();
-}
-
-export function updateStomachDissectButtonUI(isDissected) {
-  const container = document.getElementById('stomachDissectContainer');
-  const btn = document.getElementById('cardStomachDissectBtn');
-  const icon = document.getElementById('stomachDissectIcon');
-  const text = document.getElementById('stomachDissectText');
-  if (!container || !btn || !icon || !text) return;
-
-  btn.classList.toggle('dissected', isDissected);
-  if (isDissected) {
-    icon.textContent = '🩺';
-    text.textContent = 'Đóng kín thành trước dạ dày';
-    btn.title = 'Đóng lại thành trước dạ dày nguyên vẹn sinh lý';
-  } else {
-    icon.textContent = '🔪';
-    text.textContent = 'Bóc tách thành trước (Mở lòng dạ dày)';
-    btn.title = 'Bóc tách thành trước để mở lòng dạ dày quan sát niêm mạc bên trong';
-  }
 }
 
 export function updateInfoPanelContent(part, viewer) {
@@ -321,18 +303,15 @@ export function updateInfoPanelContent(part, viewer) {
     miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Xem thêm" để đọc chi tiết giải phẫu.';
   }
 
-  // Handle Stomach Dissection button visibility & state
-  const stomachContainer = document.getElementById('stomachDissectContainer');
-  const partIdStr = (part?.id || '').toLowerCase();
-  const isStomachRelated = partIdStr.includes('stomach') || partIdStr.includes('dạ dày');
-  if (stomachContainer) {
-    if (isStomachRelated) {
-      stomachContainer.classList.remove('hidden');
-      updateStomachDissectButtonUI(isStomachDissected());
-    } else {
-      stomachContainer.classList.add('hidden');
-    }
-  }
+
+  // Phase 2: Render Visual Anatomical Breadcrumbs (Hệ Cơ Quan › Cơ Quan Cha › Cấu Trúc Hiện Tại)
+  renderBreadcrumbTrail(part, clinical, mainName, viewer);
+
+  // Phase 2: Render Neighbor Smart-Chips (Cấu trúc tiếp giáp & Khám phá nhanh 1 chạm)
+  renderNeighborSmartChips(part, clinical, mainName, viewer);
+
+  // Phase 3: Render Interactive 4-Stage Pathology Simulator
+  renderPathologyProgressionSection(part, clinical, mainName, viewer);
 
   // 2. Core Anatomical Explanation (Ngắn gọn 1-2 câu ứng dụng thực tế, không lý thuyết dài dòng)
   const explainDesc = document.getElementById('cardExplainDesc');
@@ -359,6 +338,9 @@ export function updateInfoPanelContent(part, viewer) {
 
   // 2a.1 Render 3D Joint Kinematics & Range of Motion (Choice 2)
   renderJointKinematicsSection(part, clinical, mainName, viewer);
+
+  // 2a.2 Render Netter Clinical Musculoskeletal Biomechanics Card (Nguyên ủy, Bám tận, Thần kinh, Chức năng)
+  renderNetterBiomechanicsSection(part, clinical, mainName, viewer);
 
   // 2b. Render Dynamic Flow Pathway (Đường đi & Chu trình giải phẫu - Dịch não tủy, Gan mật tụy, Tim mạch)
   renderDynamicPathway(part, clinical, mainName);
@@ -528,8 +510,7 @@ function speakSectionExplanation(text, btnEl, sectionLabel) {
   utterance.lang = 'vi-VN';
   utterance.rate = 0.95; // Natural medical cadence
 
-  const voices = window.speechSynthesis.getVoices();
-  const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang.startsWith('vi'));
+  const viVoice = getVietnameseVoice();
   if (viVoice) {
     utterance.voice = viVoice;
   }
@@ -680,6 +661,665 @@ function handleRadiusBlast(viewer) {
   viewer?.render?.();
 }
 
+// =========================================================================
+// PHASE 2: VISUAL ANATOMICAL BREADCRUMB & NEIGHBOR SMART-CHIPS ENGINE
+// =========================================================================
+
+function getSystemIcon(systemName) {
+  const s = (systemName || '').toLowerCase();
+  if (s.includes('tim') || s.includes('tuần hoàn') || s.includes('mạch')) return '❤️';
+  if (s.includes('thần kinh') || s.includes('não')) return '🧠';
+  if (s.includes('tiêu hóa')) return '🥗';
+  if (s.includes('xương') || s.includes('khớp')) return '🦴';
+  if (s.includes('cơ')) return '💪';
+  if (s.includes('hô hấp') || s.includes('phổi')) return '🫁';
+  if (s.includes('tiết niệu') || s.includes('thận')) return '💧';
+  if (s.includes('nội tiết')) return '⚡';
+  if (s.includes('da')) return '🛡️';
+  return '🏛️';
+}
+
+function getParentOrganInfo(partId, mainName, clinical) {
+  const str = `${partId} ${mainName}`.toLowerCase();
+
+  // Heart chambers, valves, great vessels
+  if (/ventricle|atrium|valve|aorta|pulmonar|coronary|thất|nhĩ|van tim|mỏm tim|màng ngoài tim/.test(str)) {
+    return { name: 'Trái tim', latin: 'Cor', query: 'tim', icon: '❤️' };
+  }
+  // Stomach & gastric regions
+  if (/stomach|gaster|pylor|fundus|cardia|dạ dày|môn vị|tâm vị|hang vị/.test(str)) {
+    return { name: 'Dạ dày', latin: 'Gaster', query: 'dạ dày', icon: '🫄' };
+  }
+  // Hepatobiliary system
+  if (/hepar|liver|hepatic|gallbladder|biliar|gan|túi mật|ống mật/.test(str)) {
+    return { name: 'Gan - Mật', latin: 'Systema hepatobiliare', query: 'gan', icon: '🟤' };
+  }
+  // Pancreas
+  if (/pancrea|tụy/.test(str)) {
+    return { name: 'Tụy tạng', latin: 'Pancreas', query: 'tụy', icon: '🥖' };
+  }
+  // Kidneys & Urinary tract
+  if (/ren|kidney|nephron|ureter|bladder|thận|niệu quản|bàng quang/.test(str)) {
+    return { name: 'Thận - Tiết niệu', latin: 'Systema urinarium', query: 'thận', icon: '💧' };
+  }
+  // Brain & Central Nervous System
+  if (/cerebr|encephal|brain|thần kinh|não|tủy sống|tiểu não|thân não/.test(str)) {
+    return { name: 'Não bộ & Thần kinh', latin: 'Encephalon', query: 'não', icon: '🧠' };
+  }
+  // Spine & Vertebrae
+  if (/vertebra|disc|cột sống|đốt sống|đĩa đệm/.test(str)) {
+    return { name: 'Cột sống', latin: 'Columna vertebralis', query: 'cột sống', icon: '🦴' };
+  }
+  // Lungs & Respiratory
+  if (/lung|pulmo|bronch|trachea|phổi|phế quản|khí quản/.test(str)) {
+    return { name: 'Phổi & Đường thở', latin: 'Pulmones', query: 'phổi', icon: '🫁' };
+  }
+  // Shoulder & Upper Limb
+  if (/deltoid|pectoral|biceps|triceps|vai|cánh tay|ngực/.test(str)) {
+    return { name: 'Chi trên & Ngực', latin: 'Membrum superius', query: 'cơ delta', icon: '💪' };
+  }
+  // Knee & Lower Limb
+  if (/knee|femur|tibia|patella|meniscus|cruciate|gối|đùi|cẳng chân/.test(str)) {
+    return { name: 'Khớp gối & Chi dưới', latin: 'Articulatio genus', query: 'khớp gối', icon: '🦵' };
+  }
+
+  // Fallback to clinical region
+  if (clinical?.regionVi) {
+    return { name: clinical.regionVi, latin: '', query: clinical.regionVi, icon: '📍' };
+  }
+
+  return { name: 'Cơ quan giải phẫu', latin: '', query: '', icon: '🏛️' };
+}
+
+function resolvePartId(query) {
+  if (!query) return null;
+  // If query is an exact partId in partsData
+  if (getStructureInfo(query)) return query;
+
+  // Try searchStructures
+  try {
+    const matches = searchStructures(query);
+    if (matches && matches.length > 0 && matches[0].partIds && matches[0].partIds.length > 0) {
+      return matches[0].partIds[0];
+    }
+  } catch (err) {
+    console.warn('resolvePartId search error:', err);
+  }
+
+  // Case-insensitive direct key search
+  const qLower = query.toLowerCase();
+  if (state.partsData) {
+    for (const id of Object.keys(state.partsData)) {
+      if (id.toLowerCase() === qLower || id.toLowerCase().startsWith(`${qLower}.`)) {
+        return id;
+      }
+    }
+  }
+
+  return query;
+}
+
+const ANATOMICAL_NEIGHBORS = [
+  // Tim mạch - Thất trái & các thành phần
+  {
+    matches: ['ventricle_left', 'left_ventricle', 'thất trái', 'tâm thất trái'],
+    neighbors: [
+      { name: 'Tâm thất phải', latin: 'Ventriculus dexter', query: 'Right ventricle', icon: '💙' },
+      { name: 'Van hai lá (Mitral)', latin: 'Valva bicuspidalis', query: 'Mitral valve', icon: '🚪' },
+      { name: 'Động mạch chủ lên', latin: 'Aorta ascendens', query: 'Aorta', icon: '🔴' },
+      { name: 'Tâm nhĩ trái', latin: 'Atrium sinistrum', query: 'Left atrium', icon: '❤️' },
+      { name: 'Mỏm tim', latin: 'Apex cordis', query: 'Left ventricle', icon: '📍' }
+    ]
+  },
+  // Tim mạch - Thất phải
+  {
+    matches: ['ventricle_right', 'right_ventricle', 'thất phải', 'tâm thất phải'],
+    neighbors: [
+      { name: 'Tâm thất trái', latin: 'Ventriculus sinister', query: 'Left ventricle', icon: '❤️' },
+      { name: 'Van ba lá (Tricuspid)', latin: 'Valva tricuspidalis', query: 'Tricuspid valve', icon: '🚪' },
+      { name: 'Thân động mạch phổi', latin: 'Truncus pulmonalis', query: 'Pulmonary trunk', icon: '🔵' },
+      { name: 'Tâm nhĩ phải', latin: 'Atrium dextrum', query: 'Right atrium', icon: '💙' }
+    ]
+  },
+  // Động mạch chủ (Aorta)
+  {
+    matches: ['aorta', 'động mạch chủ', 'quai động mạch chủ'],
+    neighbors: [
+      { name: 'Tâm thất trái', latin: 'Ventriculus sinister', query: 'Left ventricle', icon: '❤️' },
+      { name: 'Quai động mạch chủ', latin: 'Arcus aortae', query: 'Aorta', icon: '🔴' },
+      { name: 'Thân tay đầu', latin: 'Truncus brachiocephalicus', query: 'Brachiocephalic trunk', icon: '🔴' },
+      { name: 'ĐM cảnh chung trái', latin: 'A. carotis communis', query: 'Left common carotid artery', icon: '🔴' },
+      { name: 'ĐM dưới đòn trái', latin: 'A. subclavia', query: 'Left subclavian artery', icon: '🔴' }
+    ]
+  },
+  // Tâm nhĩ
+  {
+    matches: ['atrium', 'tâm nhĩ', 'nhĩ trái', 'nhĩ phải'],
+    neighbors: [
+      { name: 'Tâm thất trái', latin: 'Ventriculus sinister', query: 'Left ventricle', icon: '❤️' },
+      { name: 'Tâm thất phải', latin: 'Ventriculus dexter', query: 'Right ventricle', icon: '💙' },
+      { name: 'Tĩnh mạch chủ trên', latin: 'Vena cava superior', query: 'Superior vena cava', icon: '🔵' },
+      { name: 'Tĩnh mạch phổi', latin: 'Venae pulmonales', query: 'Pulmonary vein', icon: '🔴' }
+    ]
+  },
+  // Dạ dày
+  {
+    matches: ['stomach', 'dạ dày', 'gaster', 'pylorus', 'môn vị', 'tâm vị'],
+    neighbors: [
+      { name: 'Đoạn dưới thực quản', latin: 'Esophagus', query: 'Esophagus', icon: '🥢' },
+      { name: 'Tá tràng (Duodenum)', latin: 'Duodenum', query: 'Duodenum', icon: '🌀' },
+      { name: 'Gan (Thùy trái)', latin: 'Hepar', query: 'Liver', icon: '🟤' },
+      { name: 'Tụy tạng (Thân tụy)', latin: 'Pancreas', query: 'Pancreas', icon: '🥖' },
+      { name: 'Lách', latin: 'Splen', query: 'Spleen', icon: '🟣' }
+    ]
+  },
+  // Tá tràng
+  {
+    matches: ['duodenum', 'tá tràng'],
+    neighbors: [
+      { name: 'Dạ dày (Môn vị)', latin: 'Gaster', query: 'Stomach', icon: '🫄' },
+      { name: 'Đầu tụy', latin: 'Caput pancreatis', query: 'Pancreas', icon: '🥖' },
+      { name: 'Ống mật chủ', latin: 'Ductus choledochus', query: 'Cystic duct', icon: '🟢' },
+      { name: 'Hỗng tràng', latin: 'Jejunum', query: 'Jejunum', icon: '🌀' },
+      { name: 'Túi mật', latin: 'Vesica biliaris', query: 'Gallbladder', icon: '🍐' }
+    ]
+  },
+  // Gan
+  {
+    matches: ['liver', 'gan', 'hepar'],
+    neighbors: [
+      { name: 'Túi mật', latin: 'Vesica biliaris', query: 'Gallbladder', icon: '🍐' },
+      { name: 'Dạ dày', latin: 'Gaster', query: 'Stomach', icon: '🫄' },
+      { name: 'Tá tràng', latin: 'Duodenum', query: 'Duodenum', icon: '🌀' },
+      { name: 'Cơ hoành', latin: 'Diaphragma', query: 'Diaphragm', icon: '🛡️' },
+      { name: 'Tĩnh mạch chủ dưới', latin: 'Vena cava inferior', query: 'Inferior vena cava', icon: '🔵' }
+    ]
+  },
+  // Túi mật
+  {
+    matches: ['gallbladder', 'túi mật', 'vesica biliaris'],
+    neighbors: [
+      { name: 'Gan (Mặt tạng)', latin: 'Hepar', query: 'Liver', icon: '🟤' },
+      { name: 'Ống mật chủ', latin: 'Ductus choledochus', query: 'Cystic duct', icon: '🟢' },
+      { name: 'Tá tràng (Khối tá tụy)', latin: 'Duodenum', query: 'Duodenum', icon: '🌀' },
+      { name: 'Dạ dày (Môn vị)', latin: 'Pylorus', query: 'Stomach', icon: '🫄' }
+    ]
+  },
+  // Thận
+  {
+    matches: ['kidney', 'thận', 'ren'],
+    neighbors: [
+      { name: 'Tuyến thượng thận', latin: 'Glandula suprarenalis', query: 'Suprarenal gland', icon: '👑' },
+      { name: 'Thận đối bên', latin: 'Ren', query: 'Kidney', icon: '🫘' },
+      { name: 'Niệu quản', latin: 'Ureter', query: 'Ureter', icon: '💧' },
+      { name: 'Đại tràng ngang', latin: 'Colon', query: 'Transverse colon', icon: '➰' }
+    ]
+  },
+  // Phổi
+  {
+    matches: ['lung', 'phổi', 'pulmo'],
+    neighbors: [
+      { name: 'Trái tim & Trung thất', latin: 'Cor & Mediastinum', query: 'Left ventricle', icon: '❤️' },
+      { name: 'Khí quản & Phế quản', latin: 'Trachea & Bronchus', query: 'Trachea', icon: '🫁' },
+      { name: 'Cơ hoành', latin: 'Diaphragma', query: 'Diaphragm', icon: '🛡️' }
+    ]
+  },
+  // Não bộ
+  {
+    matches: ['brain', 'não', 'cerebrum', 'cerebellum', 'thân não', 'tiểu não'],
+    neighbors: [
+      { name: 'Thân não', latin: 'Truncus encephali', query: 'Brainstem', icon: '⚡' },
+      { name: 'Tiểu não', latin: 'Cerebellum', query: 'Cerebellum', icon: '🧠' },
+      { name: 'Tủy sống', latin: 'Medulla spinalis', query: 'Spinal cord', icon: '🧬' }
+    ]
+  },
+  // Khớp gối
+  {
+    matches: ['knee', 'gối', 'cruciate', 'meniscus', 'patella'],
+    neighbors: [
+      { name: 'Xương bánh chè', latin: 'Patella', query: 'Patella.l', icon: '🦴' },
+      { name: 'Xương đùi', latin: 'Femur', query: 'Femur.l', icon: '🦴' },
+      { name: 'Xương chày', latin: 'Tibia', query: 'Tibia.l', icon: '🦴' }
+    ]
+  },
+  // Cột sống / Đĩa đệm
+  {
+    matches: ['vertebra', 'disc', 'đốt sống', 'đĩa đệm', 'lumbar', 'thắt lưng', 'cổ'],
+    neighbors: [
+      { name: 'Đĩa đệm gian đốt', latin: 'Discus intervertebralis', query: 'Intervertebral disc', icon: '💿' },
+      { name: 'Đốt sống lân cận', latin: 'Vertebra', query: 'Vertebra', icon: '🦴' }
+    ]
+  },
+  // Cơ delta / Vai
+  {
+    matches: ['deltoid', 'delta', 'cơ delta', 'vai', 'shoulder'],
+    neighbors: [
+      { name: 'Cơ ngực lớn', latin: 'M. pectoralis major', query: 'Pectoralis major.l', icon: '💪' },
+      { name: 'Cơ thang', latin: 'M. trapezius', query: 'Trapezius.l', icon: '💪' },
+      { name: 'Xương đòn', latin: 'Clavicula', query: 'Clavicle.l', icon: '🦴' }
+    ]
+  },
+  // Cơ ngực lớn
+  {
+    matches: ['pectoralis', 'ngực lớn', 'cơ ngực'],
+    neighbors: [
+      { name: 'Cơ delta', latin: 'M. deltoideus', query: 'Deltoid.l', icon: '💪' },
+      { name: 'Xương đòn', latin: 'Clavicula', query: 'Clavicle.l', icon: '🦴' },
+      { name: 'Xương ức', latin: 'Sternum', query: 'Sternum', icon: '🦴' }
+    ]
+  }
+];
+
+function getNeighborList(partId, mainName, clinical) {
+  const searchStr = `${partId} ${mainName}`.toLowerCase();
+  for (const item of ANATOMICAL_NEIGHBORS) {
+    if (item.matches.some(m => searchStr.includes(m))) {
+      return item.neighbors.filter(n => n.name.toLowerCase() !== mainName.toLowerCase());
+    }
+  }
+
+  // Fallback: check if constituents has subparts
+  const constituents = getConstituentsForPart(partId, mainName, clinical?.systemVi, clinical?.regionVi);
+  if (constituents && constituents.subparts && constituents.subparts.length > 0) {
+    return constituents.subparts.slice(0, 5).map(sub => ({
+      name: sub.name,
+      latin: sub.latin || '',
+      query: sub.searchQuery || sub.name,
+      icon: sub.icon || '🔹'
+    }));
+  }
+
+  return [];
+}
+
+function renderBreadcrumbTrail(part, clinical, mainName, viewer) {
+  const container = document.getElementById('selectionBreadcrumbTrail');
+  if (!container) return;
+
+  const systemName = clinical.systemVi || part.system || 'Hệ Giải Phẫu';
+  const systemIcon = getSystemIcon(systemName);
+  const parentInfo = getParentOrganInfo(part.id, mainName, clinical);
+
+  let html = `
+    <button type="button" class="crumb-chip crumb-system" data-action="system" title="Hệ: ${systemName}">
+      <span class="crumb-icon">${systemIcon}</span>
+      <span class="crumb-text">${systemName}</span>
+    </button>
+  `;
+
+  if (parentInfo.name && parentInfo.name.toLowerCase() !== mainName.toLowerCase()) {
+    html += `
+      <span class="crumb-separator">›</span>
+      <button type="button" class="crumb-chip crumb-parent" data-action="parent" data-query="${parentInfo.query}" title="Cơ quan: ${parentInfo.name}">
+        <span class="crumb-icon">${parentInfo.icon}</span>
+        <span class="crumb-text">${parentInfo.name}</span>
+      </button>
+    `;
+  }
+
+  html += `
+    <span class="crumb-separator">›</span>
+    <div class="crumb-chip crumb-current" title="Cấu trúc đang chọn">
+      <span class="crumb-icon">🎯</span>
+      <span class="crumb-text">${mainName}</span>
+    </div>
+  `;
+
+  container.innerHTML = html;
+  container.classList.remove('hidden');
+
+  // Bind clicks
+  container.querySelector('.crumb-system')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showToast(`🏛️ Đang chọn hệ: ${systemName}`);
+    const sysBtn = document.getElementById('systemsToggle');
+    if (sysBtn) sysBtn.click();
+  });
+
+  container.querySelector('.crumb-parent')?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const query = e.currentTarget.dataset.query;
+    if (query) {
+      showToast(`📍 Khám phá cơ quan: ${parentInfo.name}`);
+      try {
+        const resolvedId = resolvePartId(query);
+        await selectStructureAnywhere(resolvedId);
+        const card = document.getElementById('selectionCard');
+        if (card) {
+          card.classList.remove('hidden');
+          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+        }
+      } catch (err) {
+        console.warn('Cannot navigate to parent organ:', err);
+      }
+    }
+  });
+
+  // Update Mini-Card crumb badge
+  const miniCrumb = document.getElementById('miniCardCrumb');
+  if (miniCrumb) {
+    const badgeText = (parentInfo.name && parentInfo.name.toLowerCase() !== mainName.toLowerCase())
+      ? parentInfo.name
+      : systemName;
+    miniCrumb.textContent = badgeText;
+    miniCrumb.style.display = 'inline-flex';
+    miniCrumb.title = `${systemName} › ${badgeText}`;
+    miniCrumb.onclick = async (e) => {
+      e.stopPropagation();
+      if (parentInfo.query) {
+        showToast(`📍 Cơ quan: ${parentInfo.name}`);
+        const resolvedId = resolvePartId(parentInfo.query);
+        await selectStructureAnywhere(resolvedId);
+        const card = document.getElementById('selectionCard');
+        if (card) {
+          card.classList.remove('hidden');
+          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+        }
+      }
+    };
+  }
+}
+
+function renderNeighborSmartChips(part, clinical, mainName, viewer) {
+  const section = document.getElementById('cardNeighborSmartSection');
+  const scrollWrap = document.getElementById('cardNeighborChipsScroll');
+  if (!section || !scrollWrap) return;
+
+  const neighbors = getNeighborList(part.id, mainName, clinical);
+  if (!neighbors || neighbors.length === 0) {
+    section.classList.add('hidden');
+    scrollWrap.innerHTML = '';
+    return;
+  }
+
+  section.classList.remove('hidden');
+  scrollWrap.innerHTML = neighbors.map(n => `
+    <button type="button" class="neighbor-smart-chip" data-search="${n.query || n.name}" data-name="${n.name}" title="Chuyển đến: ${n.name}">
+      <span class="neighbor-chip-icon">${n.icon || '🔗'}</span>
+      <span class="neighbor-chip-name">${n.name}</span>
+      ${n.latin ? `<span class="neighbor-chip-latin" style="opacity:0.65;font-size:9.5px;font-style:italic;">(${n.latin})</span>` : ''}
+    </button>
+  `).join('');
+
+  scrollWrap.querySelectorAll('.neighbor-smart-chip').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const targetQuery = btn.dataset.search || btn.dataset.name;
+      const targetName = btn.dataset.name;
+      showToast(`🔗 Chuyển đến: ${targetName}`);
+      try {
+        const resolvedId = resolvePartId(targetQuery);
+        await selectStructureAnywhere(resolvedId);
+        const card = document.getElementById('selectionCard');
+        if (card) {
+          card.classList.remove('hidden');
+          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+        }
+      } catch (err) {
+        console.warn('Neighbor navigation failed:', err);
+      }
+    });
+  });
+}
+
+// =========================================================================
+// PHASE 3: INTERACTIVE 4-STAGE PATHOLOGY & 15-SEC AI DOCTOR VOICE ENGINE
+// =========================================================================
+
+let currentActivePathology = null;
+let currentActivePartForAI = null;
+let currentClinicalForAI = null;
+
+function getPathologyForPart(partId, mainName, clinical) {
+  const str = `${partId} ${mainName}`.toLowerCase();
+
+  // 1. Match against clinically authored PATIENT_CASES
+  if (Array.isArray(PATIENT_CASES)) {
+    for (const c of PATIENT_CASES) {
+      if (c.partId && str.includes(c.partId.toLowerCase())) return c;
+      if (c.id === 'gastric_ulcer' && /stomach|gaster|dạ dày|môn vị|tâm vị/.test(str)) return c;
+      if (c.id === 'cardiac_valve' && /ventricle|atrium|valve|aorta|pulmonar|tim|thất|nhĩ|van/.test(str)) return c;
+      if (c.id === 'biliary_stones' && /gallbladder|liver|hepar|pancreas|túi mật|gan|tụy|ống mật/.test(str)) return c;
+      if (c.id === 'disc_herniation' && /vertebra|disc|cột sống|đốt sống|đĩa đệm/.test(str)) return c;
+      if (c.id === 'knee_acl' && /knee|cruciate|meniscus|patella|gối|chày|sụn chêm|chéo/.test(str)) return c;
+      if (c.id === 'kidney_stones' && /kidney|ren|ureter|thận|niệu quản/.test(str)) return c;
+      if (c.id === 'willis_stroke' && /brain|cerebr|artery.*cerebr|willis|não|thần kinh sọ/.test(str)) return c;
+      if (c.id === 'respiratory_copd' && /lung|pulmo|bronch|trachea|alveol|phổi|phế quản|khí quản/.test(str)) return c;
+      if (c.id === 'carpal_tunnel' && /carpal|median nerve|bàn tay|cổ tay|gân gấp/.test(str)) return c;
+      if (c.id === 'ear_vertigo' && /ear|vestibular|tiền đình|tai trong|malleus|incus|stapes/.test(str)) return c;
+    }
+  }
+
+  // 2. Synthesize clinical 4-stage progression for other body systems
+  const systemVi = clinical?.systemVi || '';
+  if (/cơ|muscular|deltoid|pectoral|biceps|triceps/.test(str) || systemVi.includes('Cơ')) {
+    return {
+      id: 'muscle_pathology',
+      title: 'Tổn thương cơ học & Hội chứng quá tải cơ',
+      category: 'Cơ bắp & Vận động',
+      icon: '💪',
+      stages: [
+        { name: 'Cấp 0: Bình thường', desc: 'Trương lực cơ và độ đàn hồi sợi Actin-Myosin đạt chuẩn sinh lý khỏe mạnh.' },
+        { name: 'Cấp 1: Căng cứng & Vi chấn thương', desc: 'Tích tụ acid lactic sau vận động, mỏi nhức cơ âm ỉ, căng cơ cục bộ.' },
+        { name: 'Cấp 2: Rách sợi cơ bán phần', desc: 'Rách một phần bó sợi cơ, sưng nề, đau nhói khi co cơ, tụ máu mô mềm.' },
+        { name: 'Cấp 3: Đứt cơ hoàn toàn & Teo xơ', desc: 'Đứt toác gân cơ hoàn toàn, tụt đầu cơ, mất lực chi, cần phẫu thuật khâu phục hồi.' }
+      ],
+      advice: '✓ Nghỉ ngơi, chườm lạnh trong 48h đầu sau chấn thương.\n✓ Khởi động kỹ trước khi tập luyện và bổ sung đủ nước, điện giải.'
+    };
+  }
+
+  if (/xương|khớp|bone|skeletal|femur|tibia|clavicle|humerus|radius|ulna/.test(str) || systemVi.includes('Xương')) {
+    return {
+      id: 'bone_joint_pathology',
+      title: 'Thoái hóa sụn khớp & Loãng xương',
+      category: 'Hệ xương khớp',
+      icon: '🦴',
+      stages: [
+        { name: 'Cấp 0: Khung xương vững chắc', desc: 'Mật độ khoáng xương cao, bề mặt sụn khớp trơn láng hấp thu lực tốt.' },
+        { name: 'Cấp 1: Giảm mật độ xương & Mòn sụn', desc: 'Mỏi nhức khớp nhẹ khi mang vác nặng, thời tiết lạnh hoặc ngồi lâu.' },
+        { name: 'Cấp 2: Hẹp khe khớp & Mọc gai xương', desc: 'Đau cứng khớp buổi sáng, lạo xạo khi vận động, sưng viêm bao hoạt dịch.' },
+        { name: 'Cấp 3: Dính biến dạng & Gãy xương bệnh lý', desc: 'Mất biên độ vận động khớp, biến dạng trục chi, giòn xốp dễ gãy xương.' }
+      ],
+      advice: '✓ Bổ sung Canxi, Vitamin D3, Magie và tập thể dục chịu tải thường xuyên.\n✓ Tránh bê vác quá tải và kiểm tra mật độ xương định kỳ.'
+    };
+  }
+
+  if (/mạch máu|artery|vein|động mạch|tĩnh mạch|vascular/.test(str) || systemVi.includes('Mạch')) {
+    return {
+      id: 'vascular_pathology',
+      title: 'Xơ vữa động mạch & Thiếu máu cục bộ',
+      category: 'Tuần hoàn & Mạch máu',
+      icon: '🔴',
+      stages: [
+        { name: 'Cấp 0: Mạch máu trơn láng', desc: 'Lớp nội mô trơn nhẵn, thành mạch đàn hồi, tưới máu thông suốt.' },
+        { name: 'Cấp 1: Lắng đọng mảng lipid', desc: 'Mỡ máu LDL thâm nhập nội mô, dày thành mạch vi thể, chưa hẹp lòng.' },
+        { name: 'Cấp 2: Hẹp lòng mạch 50-70%', desc: 'Mảng xơ vữa phát triển, thiếu máu nuôi khi gắng sức, đau cách hồi.' },
+        { name: 'Cấp 3: Nứt vỡ & Bít tắc huyết khối', desc: 'Cục máu đông bít kín lòng mạch, hoại tử mô cấp cứu, nguy cơ nhồi máu cao.' }
+      ],
+      advice: '✓ Kiểm soát mỡ máu LDL, huyết áp và chỉ số đường huyết.\n✓ Không hút thuốc lá và tập thể dục nhịp điệu đều đặn 30 phút/ngày.'
+    };
+  }
+
+  return {
+    id: 'general_pathology',
+    title: 'Diễn tiến bệnh lý & Biến chứng lâm sàng',
+    category: 'Bệnh học & Phục hồi',
+    icon: '🩺',
+    stages: [
+      { name: 'Cấp 0: Sinh lý bình thường', desc: 'Cấu trúc giải phẫu học hoàn chỉnh, đảm bảo đầy đủ chức năng sinh lý cơ bản.' },
+      { name: 'Cấp 1: Rối loạn phản ứng sớm', desc: 'Xung huyết nhẹ hoặc phù nề mô kẽ, cảm giác căng mỏi hoặc đau âm ỉ.' },
+      { name: 'Cấp 2: Tổn thương cấu trúc thực thể', desc: 'Suy giảm chức năng rõ rệt, đau tăng khi vận động, có biểu hiện viêm mạn tính.' },
+      { name: 'Cấp 3: Biến chứng mạn tính & Thoái biến', desc: 'Xơ hóa mô, teo mất chức năng, ảnh hưởng dây chuyền đến các cơ quan lân cận.' }
+    ],
+    advice: '✓ Lắng nghe cơ thể, thăm khám chuyên khoa khi có dấu hiệu bất thường kéo dài.\n✓ Duy trì chế độ dinh dưỡng lành mạnh và thói quen sinh hoạt khoa học.'
+  };
+}
+
+function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
+  const section = document.getElementById('cardPathologySection');
+  if (!section) return;
+
+  const pathology = getPathologyForPart(part.id, mainName, clinical);
+  currentActivePathology = pathology;
+  currentActivePartForAI = part;
+  currentClinicalForAI = clinical;
+
+  if (!pathology || !pathology.stages || pathology.stages.length < 4) {
+    section.classList.add('hidden');
+    return;
+  }
+
+  section.classList.remove('hidden');
+
+  const titleEl = document.getElementById('pathologyTitle');
+  const catEl = document.getElementById('pathologyCategoryTag');
+  const iconEl = document.getElementById('pathologyIcon');
+  const slider = document.getElementById('pathologyRangeSlider');
+  const badge = document.getElementById('pathologyStageBadge');
+  const levelEl = document.getElementById('pathologyStageLevel');
+  const nameEl = document.getElementById('pathologyStageName');
+  const descEl = document.getElementById('pathologyStageDesc');
+  const adviceEl = document.getElementById('pathologyStageAdvice');
+  const stageCard = document.getElementById('pathologyStageCard');
+  const ticks = section.querySelectorAll('.stage-tick');
+
+  if (titleEl) titleEl.textContent = pathology.title || 'Mô phỏng diễn tiến bệnh lý';
+  if (catEl) catEl.textContent = pathology.category || 'Bệnh học lâm sàng';
+  if (iconEl) iconEl.textContent = pathology.icon || '⚡';
+
+  function applyStage(idx) {
+    const stage = pathology.stages[idx] || pathology.stages[0];
+    if (slider) slider.value = idx;
+
+    if (badge) {
+      badge.textContent = stage.name;
+      badge.className = `pathology-stage-pill stage-pill-${idx}`;
+    }
+
+    if (levelEl) levelEl.textContent = `Giai đoạn ${idx}`;
+    if (nameEl) nameEl.textContent = stage.name.replace(/^Cấp\s*\d+:\s*/i, '');
+    if (descEl) descEl.textContent = stage.desc;
+
+    if (stageCard) {
+      stageCard.className = `pathology-stage-card level-${idx}`;
+    }
+
+    ticks.forEach((tick, i) => {
+      tick.classList.toggle('active', i === idx);
+    });
+
+    if (adviceEl) {
+      if (idx >= 2 && pathology.advice) {
+        adviceEl.textContent = pathology.advice;
+        adviceEl.classList.remove('hidden');
+      } else {
+        adviceEl.classList.add('hidden');
+      }
+    }
+  }
+
+  applyStage(0);
+
+  if (slider) {
+    slider.oninput = (e) => {
+      e.stopPropagation();
+      const val = parseInt(e.target.value, 10);
+      applyStage(val);
+      showToast(`⚡ Bệnh lý Giai đoạn ${val}: ${pathology.stages[val]?.name || ''}`);
+    };
+  }
+
+  ticks.forEach(tick => {
+    tick.onclick = (e) => {
+      e.stopPropagation();
+      const step = parseInt(tick.dataset.step, 10);
+      applyStage(step);
+      showToast(`⚡ Bệnh lý Giai đoạn ${step}: ${pathology.stages[step]?.name || ''}`);
+    };
+  });
+}
+
+function generate15SecVoiceSummary(part, clinical, pathology) {
+  const name = part.displayName || clinical.nameVi || part.id;
+  const system = clinical.systemVi || 'cơ thể';
+
+  let funcText = clinical.function || clinical.description || '';
+  funcText = funcText.split(/[\.\!\?]\s+/)[0] || funcText;
+  funcText = funcText.replace(/^[A-ZÀ-Ỹ\s]+:/i, '').trim();
+
+  let pathoText = '';
+  if (pathology && pathology.title) {
+    pathoText = `Về mặt lâm sàng, thường gặp bệnh lý ${pathology.title}.`;
+  } else if (clinical.clinical) {
+    const rawClin = clinical.clinical.split(/[\.\!\?]\s+/)[0];
+    pathoText = `Lưu ý lâm sàng: ${rawClin}.`;
+  } else {
+    pathoText = `Cần lưu ý bảo vệ và theo dõi sức khỏe cơ quan này định kỳ.`;
+  }
+
+  let adviceText = '';
+  if (pathology && pathology.advice) {
+    const firstAdvice = pathology.advice.split('\n')[0].replace(/^✓\s*/, '');
+    adviceText = `Lời khuyên: ${firstAdvice}`;
+  } else {
+    adviceText = `Hãy giữ lối sống lành mạnh và thăm khám khi có biểu hiện bất thường.`;
+  }
+
+  return `Chào bạn! ${name} thuộc ${system}, có vai trò chính là ${funcText}. ${pathoText} ${adviceText}`;
+}
+
+function play15SecVoiceSummary(btnEl) {
+  if (!('speechSynthesis' in window)) {
+    showToast('Trình duyệt không hỗ trợ Web Speech TTS.');
+    return;
+  }
+
+  if (currentlySpeakingBtn) {
+    window.speechSynthesis.cancel();
+    currentlySpeakingBtn.classList.remove('is-speaking');
+    const wasThis = (currentlySpeakingBtn === btnEl);
+    currentlySpeakingBtn = null;
+    if (wasThis) {
+      showToast('⏹️ Đã dừng nghe giải thích');
+      return;
+    }
+  }
+
+  const part = currentActivePartForAI || state.selectedPart;
+  if (!part) {
+    showToast('Vui lòng chọn một cấu trúc giải phẫu trước.');
+    return;
+  }
+
+  const clinical = currentClinicalForAI || getClinicalData(part.id);
+  const speechText = generate15SecVoiceSummary(part, clinical, currentActivePathology);
+  const clean = cleanMedicalSpeech(speechText);
+
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.lang = 'vi-VN';
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+
+  const viVoice = getVietnameseVoice();
+  if (viVoice) utterance.voice = viVoice;
+
+  btnEl?.classList.add('is-speaking');
+  currentlySpeakingBtn = btnEl;
+  showToast('🎙️ Đang nghe giải thích (15s)...');
+
+  utterance.onend = () => {
+    btnEl?.classList.remove('is-speaking');
+    if (currentlySpeakingBtn === btnEl) currentlySpeakingBtn = null;
+  };
+
+  utterance.onerror = () => {
+    btnEl?.classList.remove('is-speaking');
+    if (currentlySpeakingBtn === btnEl) currentlySpeakingBtn = null;
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
 // -----------------------------------------------------------------------------
 // RENDER CẤU TẠO CHI TIẾT & BỘ PHẬN TRỰC QUAN (INTERACTIVE SUBPARTS CHIPS)
 // -----------------------------------------------------------------------------
@@ -734,7 +1374,7 @@ function renderAnatomyConstituents(part, clinical, mainName, viewer) {
 }
 
 // -----------------------------------------------------------------------------
-// RENDER HÌNH ẢNH GIẢI PHẪU CẤU TẠO & PHÓNG TO TOÀN MÀN HÌNH (HIGH-RES LIGHTBOX)
+// RENDER HÌNH ẢNH MINH HỌA GIẢI PHẪU (CHỈ HIỂN THỊ KHI NGƯỜI DÙNG BẤM XEM TRONG MÔ TẢ)
 // -----------------------------------------------------------------------------
 function renderAnatomyPhotoSection(part, clinical, mainName) {
   const section = document.getElementById('cardAnatomyPhotoSection');
@@ -754,21 +1394,41 @@ function renderAnatomyPhotoSection(part, clinical, mainName) {
     return;
   }
 
+  // Strictly follow rule: "ảnh chỉ trong mô tả thôi tuyệt đối không ấn vào một cái bộ phận nào mà ra một cái ảnh"
+  // Keep collapsed by default so selecting any 3D part NEVER pops up or reveals an image upfront.
   section.classList.remove('hidden');
   container.innerHTML = `
-    <div class="anatomy-photo-card" id="btnZoomAnatomyPhoto" title="Chạm để phóng to xem chi tiết toàn màn hình">
-      <div class="photo-img-wrap">
-        <img src="${constituents.diagram}" alt="${constituents.diagramCaption || mainName}" class="anatomy-photo-img" loading="lazy" />
-        <span class="photo-zoom-badge">🔍 Chạm phóng to 2 ngón tay</span>
-      </div>
-      <div class="photo-caption-bar">
-        <span class="photo-caption-text">${constituents.diagramCaption || constituents.title || mainName}</span>
-        <button type="button" class="btn-fullscreen-diagram" aria-label="Xem toàn màn hình">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-        </button>
+    <div class="anatomy-photo-accordion">
+      <button type="button" class="btn-toggle-diagram-desc" id="btnToggleDiagramDesc" aria-expanded="false">
+        <span class="diagram-icon">🖼️</span>
+        <span class="diagram-label">Xem ảnh minh họa mô tả 2D (${constituents.title || mainName})</span>
+        <span class="diagram-arrow">▼</span>
+      </button>
+      <div class="diagram-desc-drawer hidden" id="diagramDescDrawer">
+        <div class="anatomy-photo-card" id="btnZoomAnatomyPhoto" title="Chạm để phóng to xem chi tiết toàn màn hình">
+          <div class="photo-img-wrap">
+            <img src="${constituents.diagram}" alt="${constituents.diagramCaption || mainName}" class="anatomy-photo-img" loading="lazy" />
+            <span class="photo-zoom-badge">🔍 Chạm phóng to toàn màn hình</span>
+          </div>
+          <div class="photo-caption-bar">
+            <span class="photo-caption-text">${constituents.diagramCaption || constituents.title || mainName}</span>
+          </div>
+        </div>
       </div>
     </div>
   `;
+
+  const toggleBtn = container.querySelector('#btnToggleDiagramDesc');
+  const drawer = container.querySelector('#diagramDescDrawer');
+  const arrow = container.querySelector('.diagram-arrow');
+
+  toggleBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isHidden = drawer.classList.contains('hidden');
+    drawer.classList.toggle('hidden', !isHidden);
+    toggleBtn.setAttribute('aria-expanded', String(isHidden));
+    if (arrow) arrow.textContent = isHidden ? '▲' : '▼';
+  });
 
   const zoomHandler = (e) => {
     e.stopPropagation();
@@ -780,7 +1440,6 @@ function renderAnatomyPhotoSection(part, clinical, mainName) {
   };
 
   container.querySelector('#btnZoomAnatomyPhoto')?.addEventListener('click', zoomHandler);
-  container.querySelector('.btn-fullscreen-diagram')?.addEventListener('click', zoomHandler);
 }
 
 // -----------------------------------------------------------------------------
@@ -802,7 +1461,7 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
 
   section.innerHTML = `
     <div class="info-group-title">
-      <span>🎬 Video hoạt ảnh 3D y khoa</span>
+      <span>🎬 Video hoạt ảnh & Playlist đào tạo y khoa</span>
     </div>
     <div class="part-microvideo-row" id="btnPlayPartVideo" title="Chạm để phát video hoạt ảnh 3D">
       <div class="microvideo-thumb-box">
@@ -810,7 +1469,7 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
         <div class="microvideo-play-btn-circle">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         </div>
-        <span class="microvideo-duration">${video.duration || '0:40'}</span>
+        <span class="microvideo-duration">${video.duration || 'Playlist'}</span>
       </div>
       <div class="microvideo-details">
         <div class="microvideo-badge-row">
@@ -826,6 +1485,13 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
         </button>
       ` : ''}
     </div>
+    ${video.nutritionUrl ? `
+      <div class="part-microvideo-extra-row">
+        <button type="button" class="btn-microvideo-extra-pill nutrition" id="btnPlayExtraNutrition" title="Xem hướng dẫn dinh dưỡng lâm sàng">
+          <span>🥗 ${video.nutritionTitle || 'Ăn Uống & Dinh Dưỡng Khoa Học'} ▶</span>
+        </button>
+      </div>
+    ` : ''}
   `;
 
   const playAction = async (e) => {
@@ -839,6 +1505,11 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
   };
 
   section.querySelector('#btnPlayPartVideo')?.addEventListener('click', playAction);
+
+  section.querySelector('#btnPlayExtraNutrition')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openVideoModal(video.nutritionUrl, video.nutritionTitle || 'Ăn Uống & Dinh Dưỡng Khoa Học');
+  });
 
   if (isAdmin) {
     section.querySelector('#btnAdminEditVideo')?.addEventListener('click', (e) => {
@@ -930,26 +1601,6 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     ]
   };
 
-  let currentSlide = 0;
-
-  const deckHtml = slides.length > 0 ? `
-    <div class="disc-visual-deck">
-      <div class="deck-slide-frame" id="deckSlideFrame" title="Chạm để phóng to xem chi tiết vi thể">
-        <img src="${slides[0].image}" class="deck-slide-img" id="deckSlideImg" alt="${slides[0].title}" />
-        <span class="deck-slide-badge" id="deckSlideBadge">${slides[0].badge}</span>
-        <span class="deck-slide-zoom-hint">🔍 Chạm phóng to</span>
-        ${deck.video ? `<button type="button" class="btn-deck-video" id="btnDeckVideo">▶ Video 3D</button>` : ''}
-      </div>
-      <div class="deck-nav-pills" id="deckPills">
-        ${slides.map((s, idx) => `
-          <button type="button" class="deck-pill ${idx === 0 ? 'active' : ''}" data-slide="${idx}">
-            ${s.title}
-          </button>
-        `).join('')}
-      </div>
-    </div>
-  ` : '';
-
   const simHtml = `
     <div class="herniation-simulator-box">
       <div class="herniation-sim-header">
@@ -987,7 +1638,7 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     const isDisc = partId.startsWith('Intervertebral disc ');
     const isNucleus = partId.startsWith('Nucleus pulposus ');
     const level = isDisc ? partId.slice('Intervertebral disc '.length) : (isNucleus ? partId.slice('Nucleus pulposus '.length) : 'L4-L5');
-    headerTitle = `🔬 ĐĨA ĐỆM CỘT SỐNG ${level}`;
+    headerTitle = `🔬 CẤU TRÚC ĐĨA ĐỆM CỘT SỐNG ${level}`;
   } else if (deck.id === 'concept_circle_of_willis') {
     headerTitle = `🧠 ĐA GIÁC WILLIS NÃO`;
   } else if (deck.id === 'concept_hepatobiliary_pancreas') {
@@ -1013,9 +1664,11 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
       <div class="disc-subunits-header">
         <span class="disc-subunits-title">${headerTitle}</span>
       </div>
-      ${deckHtml}
-      ${simHtml}
+      <div class="disc-structure-intro" style="font-size:12px;color:var(--text-secondary,#475569);margin-bottom:8px;line-height:1.45;">
+        Cấu trúc đĩa đệm gồm <strong>Vòng sợi bao xơ</strong> (Anulus fibrosus) dày chắc bên ngoài và <strong>Nhân nhầy</strong> (Nucleus pulposus) ở tâm chịu lực nén thủy lực.
+      </div>
       ${subunitsHtml}
+      ${simHtml}
       <div class="deck-quick-tools-row">
         <button type="button" class="btn-deck-axis-tool" id="btnDeckClinicalAxis" title="Xem chuỗi mắt xích & trục giải phẫu ứng dụng liên quan">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -1031,51 +1684,6 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     cardBody.scrollTop = 0;
   }
 
-  // Attach event listeners
-  const imgEl = container.querySelector('#deckSlideImg');
-  const badgeEl = container.querySelector('#deckSlideBadge');
-  const pills = container.querySelectorAll('.deck-pill');
-
-  function setSlide(index) {
-    if (!slides[index]) return;
-    currentSlide = index;
-    if (imgEl) imgEl.src = slides[index].image;
-    if (badgeEl) badgeEl.textContent = slides[index].badge;
-    pills.forEach((p, idx) => {
-      p.classList.toggle('active', idx === index);
-    });
-  }
-
-  pills.forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const idx = parseInt(pill.dataset.slide, 10);
-      setSlide(idx);
-    });
-  });
-
-  container.querySelector('#deckSlideFrame')?.addEventListener('click', (e) => {
-    if (e.target.closest('#btnDeckVideo')) return;
-    e.stopPropagation();
-    openImageZoomModal({
-      src: slides[currentSlide]?.image,
-      title: slides[currentSlide]?.title,
-      subtitle: slides[currentSlide]?.badge,
-      slides: slides,
-      currentIndex: currentSlide,
-      onSlideChange: (newIdx) => {
-        setSlide(newIdx);
-      }
-    });
-  });
-
-  container.querySelector('#btnDeckVideo')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (deck?.video) {
-      openVideoModal(deck.video.url, deck.video.title);
-    }
-  });
-
   const range = container.querySelector('#herniationRange');
   const stageLabel = container.querySelector('#herniationStageLabel');
   const stageDesc = container.querySelector('#herniationStageDesc');
@@ -1085,10 +1693,6 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     const stage = sim.stages[val] || sim.stages[0];
     if (stageLabel) stageLabel.textContent = stage.level;
     if (stageDesc) stageDesc.textContent = stage.desc;
-    // Automatically switch to slide index 2 (Bệnh học) if user moves slider
-    if (slides.length >= 3 && currentSlide !== 2) {
-      setSlide(2);
-    }
   });
 
   ['pointerdown', 'touchstart', 'touchmove', 'mousedown'].forEach(evt => {
@@ -1115,9 +1719,7 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     else if (deck.id === 'concept_circle_of_willis' || deck.id === 'concept_inner_ear_vestibular') axisId = 'axis_cranial_nerves';
     else if (deck.id === 'concept_cardiac_valves' || deck.id === 'concept_respiratory_alveoli') axisId = 'axis_cardiopulmonary_loop';
 
-    import('./clinicalAxesModal.js').then(({ openClinicalAxesModal }) => {
-      openClinicalAxesModal(axisId);
-    });
+    openClinicalAxesModal(axisId);
   });
 }
 
@@ -1166,7 +1768,7 @@ const JOINT_KINEMATICS_MAP = [
     note: 'Gấp cẳng tay từ 0° đến 145° chạm vai'
   },
   {
-    match: ['spine', 'vertebra', 'cột sống', 'đốt sống', 'l4', 'l5', 'c5', 'c6'],
+    match: ['spine', 'vertebra', 'cột sống', 'đốt sống', 'l4', 'l5'],
     motionId: MOTIONS.SPINE_FLEXION,
     title: '🏃 ĐỘNG HỌC CỘT SỐNG',
     actionName: 'Cúi gập thân',
@@ -1174,6 +1776,46 @@ const JOINT_KINEMATICS_MAP = [
     maxAngle: 80,
     agonist: 'Cơ thẳng bụng & Cơ chéo bụng (Abdominals)',
     note: 'Cúi gập thân mình ra trước từ 0° đến 80°'
+  },
+  {
+    match: ['cervical', 'atlas', 'axis', 'đốt sống cổ', 'cột sống cổ', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
+    motionId: MOTIONS.SPINE_FLEXION,
+    title: '🏃 ĐỘNG HỌC CỘT SỐNG CỔ',
+    actionName: 'Cúi gập cổ',
+    minAngle: 0,
+    maxAngle: 60,
+    agonist: 'Cơ ức đòn chũm & Nhóm cơ dài cổ (Longus colli)',
+    note: 'Cúi cổ 0-50°, ngửa cổ 0-60°, xoay ngang 0-80°'
+  },
+  {
+    match: ['ankle', 'talus', 'calcaneus', 'cổ chân', 'xương sên', 'xương gót', 'mắt cá'],
+    motionId: MOTIONS.KNEE_FLEXION,
+    title: '🏃 ĐỘNG HỌC KHỚP CỔ CHÂN',
+    actionName: 'Gập mu chân (Dorsiflexion)',
+    minAngle: 0,
+    maxAngle: 50,
+    agonist: 'Cơ chày trước (Tibialis anterior) & Cơ bụng chân',
+    note: 'Gập mu chân 0-20°, gập lòng bàn chân 0-50°'
+  },
+  {
+    match: ['wrist', 'carpal', 'scaphoid', 'lunate', 'cổ tay', 'xương thuyền', 'xương nguyệt'],
+    motionId: MOTIONS.FOREARM_PRONATION,
+    title: '🏃 ĐỘNG HỌC KHỚP CỔ TAY',
+    actionName: 'Gập cổ tay (Palmar flexion)',
+    minAngle: 0,
+    maxAngle: 80,
+    agonist: 'Cơ gấp cổ tay quay & Cơ gấp cổ tay trụ',
+    note: 'Gập cổ tay 0-80°, duỗi cổ tay 0-70°'
+  },
+  {
+    match: ['mandible', 'temporomandibular', 'tmj', 'hàm dưới', 'thái dương hàm', 'cơ cắn'],
+    motionId: MOTIONS.SPINE_FLEXION,
+    title: '🏃 ĐỘNG HỌC KHỚP THÁI DƯƠNG HÀM',
+    actionName: 'Há miệng (Hạ hàm)',
+    minAngle: 0,
+    maxAngle: 45,
+    agonist: 'Cơ chân bướm ngoài & Nhóm cơ trên móng',
+    note: 'Biên độ há miệng 35-45mm, trượt ra trước 5-10mm'
   }
 ];
 
@@ -1287,3 +1929,118 @@ function renderJointKinematicsSection(part, clinical, mainName, viewer) {
     if (playBtn) playBtn.innerHTML = '▶ Chạy 3D';
   });
 }
+
+function renderNetterBiomechanicsSection(part, clinical, mainName, viewer) {
+  const container = document.getElementById('cardMuscleNetterSection');
+  if (!container) return;
+
+  const partId = String(part?.id || '').toLowerCase();
+  const nameVi = String(clinical?.nameVi || mainName || '').toLowerCase();
+  const system = String(part?.system || clinical?.systemVi || '').toLowerCase();
+
+  const isMuscle = system.includes('muscular') ||
+                   system.includes('cơ') ||
+                   partId.includes('muscle') ||
+                   partId.includes('tendon') ||
+                   partId.includes('aponeuros') ||
+                   nameVi.includes('cơ ') ||
+                   nameVi.includes('gân ') ||
+                   nameVi.includes('cân ');
+
+  if (!isMuscle) {
+    container.classList.add('hidden');
+    container.innerHTML = '';
+    return;
+  }
+
+  const bonesRelation = clinical.relations?.bones || 'Bám vào các mấu, củ, mào và diện xương qua gân cơ, tạo hệ thống đòn bẩy cử động.';
+  const nervesRelation = clinical.relations?.nerves || 'Được phân nhánh chi phối bởi các sợi thần kinh vận động và cảm giác bản thể tương ứng.';
+  const vesselsRelation = clinical.relations?.vessels || 'Được cấp máu nuôi dưỡng phong phú bởi các nhánh động mạch cơ và mạng mao mạch nội mạc.';
+  const actionText = clinical.function || 'Tham gia co rút chủ động, truyền lực đòn bẩy qua khớp và duy trì tư thế sinh lý.';
+
+  container.classList.remove('hidden');
+  container.innerHTML = `
+    <div class="muscle-netter-box">
+      <div class="muscle-netter-header">
+        <div class="muscle-netter-badge">
+          <span class="netter-dot"></span>
+          <span>Giải Phẫu Lâm Sàng Netter</span>
+        </div>
+        <span class="muscle-netter-sub">Nguyên ủy · Bám tận · Thần kinh</span>
+      </div>
+
+      <div class="muscle-netter-grid">
+        <!-- Điểm bám xương / Nguyên ủy & Bám tận -->
+        <div class="netter-field-card origin-field">
+          <div class="netter-field-title">
+            <span class="netter-icon">🦴</span>
+            <span>Nguyên ủy & Bám tận trên Xương:</span>
+          </div>
+          <div class="netter-field-desc">${bonesRelation}</div>
+        </div>
+
+        <!-- Thần kinh chi phối -->
+        <div class="netter-field-card nerve-field">
+          <div class="netter-field-title">
+            <span class="netter-icon">⚡</span>
+            <span>Thần kinh chi phối:</span>
+          </div>
+          <div class="netter-field-desc">${nervesRelation}</div>
+        </div>
+
+        <!-- Mạch máu nuôi -->
+        <div class="netter-field-card vessel-field">
+          <div class="netter-field-title">
+            <span class="netter-icon">🩸</span>
+            <span>Mạch máu cấp máu:</span>
+          </div>
+          <div class="netter-field-desc">${vesselsRelation}</div>
+        </div>
+
+        <!-- Động tác vận động -->
+        <div class="netter-field-card action-field">
+          <div class="netter-field-title">
+            <span class="netter-icon">🏋️</span>
+            <span>Chức năng cơ học:</span>
+          </div>
+          <div class="netter-field-desc">${actionText}</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons: Tương tác lâm sàng Netter -->
+      <div class="muscle-netter-actions">
+        <button type="button" class="btn-netter-action btn-show-attachment" id="btnShowBoneAttachment" title="Hiển thị khung xương và điểm bám của cơ này">
+          <span>🦴 Xem Khung xương & Điểm bám</span>
+        </button>
+        <button type="button" class="btn-netter-action btn-reset-muscles" id="btnResetMuscles" title="Khôi phục hiển thị toàn bộ cơ">
+          <span>🔄 Khôi phục hệ cơ</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Bind actions
+  const btnAttachment = container.querySelector('#btnShowBoneAttachment');
+  const btnReset = container.querySelector('#btnResetMuscles');
+
+  btnAttachment?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const activeViewer = viewer || window.viewer || state.viewer;
+    if (activeViewer) {
+      if (!state.loadedSystems.includes('skeletal')) {
+        showToast('⏳ Đang tải khung xương để hiển thị điểm bám...');
+        await activeViewer.loadModel('skeletal', activeViewer);
+      }
+      ghostAllExcept(part.id);
+      showToast(`🦴 Đang hiển thị điểm bám xương của: ${clinical.nameVi || mainName}`);
+    }
+  });
+
+  btnReset?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearGhost();
+    restoreAllParts();
+    showToast('🔄 Đã khôi phục toàn bộ hệ cơ bắp');
+  });
+}
+

@@ -12,7 +12,7 @@ import { getAnatomyRoot } from './orientationManager.js';
 let bodyEnvelopeGroup = null;
 let isLoading = false;
 let isLoaded = false;
-let userDisabled = false;
+let userDisabled = true; // Disabled by default to ensure crisp, clean skeletal rendering without ghost halos
 
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath(asset('draco/'));
@@ -60,14 +60,15 @@ function createFresnelMaterial() {
         float fresnel = 1.0 - max(dot(normal, viewDir), 0.0);
         float rim = pow(fresnel, rimPower) * rimIntensity;
         
-        // Extremity attenuation: smoothly fade out at hands (Y < 0.86 & |X| > 0.19) and feet (Y < 0.11)
+        // Extremity attenuation: smoothly dissolve above wrists (Y < 0.89, |X| > 0.16) and ankles (Y < 0.16)
+        // This guarantees the cadaver skeletal hands and feet are never smothered by distorted envelope mittens
         float fade = 1.0;
-        if (vWorldPos.y < 0.86 && abs(vWorldPos.x) > 0.19) {
-          float dist = (0.86 - vWorldPos.y) / 0.10;
+        if (vWorldPos.y < 0.89 && abs(vWorldPos.x) > 0.16) {
+          float dist = (0.89 - vWorldPos.y) / 0.05;
           fade *= clamp(1.0 - dist, 0.0, 1.0);
         }
-        if (vWorldPos.y < 0.11) {
-          float dist = (0.11 - vWorldPos.y) / 0.09;
+        if (vWorldPos.y < 0.16) {
+          float dist = (0.16 - vWorldPos.y) / 0.05;
           fade *= clamp(1.0 - dist, 0.0, 1.0);
         }
         
@@ -82,6 +83,50 @@ function createFresnelMaterial() {
     side: THREE.FrontSide,
     blending: THREE.NormalBlending
   });
+}
+
+// Precise anatomical realignment of skin mesh ensuring zero skeletal protrusion and realistic subcutaneous depth
+export function realignIntegumentaryGeometry(mesh) {
+  if (!mesh?.geometry?.attributes?.position) return;
+  if (mesh.userData.isRealigned) return;
+  mesh.userData.isRealigned = true;
+
+  const geom = mesh.geometry;
+  const pos = geom.attributes.position;
+  
+  // Hermite smoothstep helper: S-curve transition from 0 to 1
+  function smoothstep(edge0, edge1, val) {
+    const t = Math.min(1.0, Math.max(0.0, (val - edge0) / (edge1 - edge0)));
+    return t * t * (3.0 - 2.0 * t);
+  }
+
+  for (let i = 0; i < pos.count; i++) {
+    let x = pos.getX(i);
+    let y = pos.getY(i);
+    let z = pos.getZ(i);
+
+    // 1. Hand & Finger alignment: ensure distal phalanges never poke out like claws
+    if (y < 0.88 && Math.abs(x) > 0.18) {
+      const handProg = smoothstep(0.86, 0.73, y);
+      y -= handProg * handProg * 0.028;
+      const lateralSign = Math.sign(x);
+      x += lateralSign * handProg * 0.003;
+      z += handProg * 0.004;
+    }
+
+    // 2. Foot alignment: ensure toes smoothly cover the distal phalanges
+    if (y < 0.12) {
+      if (z > 0.05) {
+        z += 0.006 * smoothstep(0.05, 0.11, z);
+      }
+    }
+
+    pos.setXYZ(i, x, y, z);
+  }
+
+  pos.needsUpdate = true;
+  geom.computeVertexNormals();
+  if (geom.computeBoundsTree) geom.computeBoundsTree();
 }
 
 export async function initBodyEnvelope(viewer = state.viewer || window.viewer) {
@@ -99,8 +144,8 @@ export async function initBodyEnvelope(viewer = state.viewer || window.viewer) {
 
   bodyEnvelopeGroup = new THREE.Group();
   bodyEnvelopeGroup.name = 'bodyEnvelopeGroup';
-  // Precise anatomical alignment offset matching Z-Anatomy cadaver skeleton
-  bodyEnvelopeGroup.position.set(0, 0.005, -0.006);
+  // Precise anatomical alignment matching Z-Anatomy cadaver skeleton
+  bodyEnvelopeGroup.position.set(0, 0.002, 0.0095);
   anatomyRoot.add(bodyEnvelopeGroup);
 
   try {
@@ -117,8 +162,9 @@ export async function initBodyEnvelope(viewer = state.viewer || window.viewer) {
 
     model.traverse(node => {
       if (node.isMesh && node.geometry) {
+        realignIntegumentaryGeometry(node);
         node.material = fresnelMat;
-        node.renderOrder = 99; // Render over internal anatomy with soft depth blending
+        node.renderOrder = 0; // Keep behind/inline with anatomy, never artificially overlay with halos
         node.raycast = () => null; // Never intercept user pointer picking
         node.userData.isBodyEnvelope = true;
       }
@@ -168,7 +214,10 @@ export function toggleBodyEnvelope(viewer = state.viewer || window.viewer) {
 }
 
 export function updateBodyEnvelopeAuto(viewer = state.viewer || window.viewer) {
-  if (userDisabled) return;
+  if (userDisabled) {
+    setBodyEnvelopeVisible(false, viewer);
+    return;
+  }
   if (!bodyEnvelopeGroup && viewer?.scene) {
     bodyEnvelopeGroup = viewer.scene.getObjectByName('bodyEnvelopeGroup');
   }

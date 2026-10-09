@@ -38,6 +38,7 @@ import { findAnatomyConcept, getVisualDeckForPart } from '../data/anatomyConcept
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
+import { dissectMultiLayer } from '../viewer/dissection.js';
 import { openSettingsModal } from './settingsModal.js';
 
 export function findClinicalAxis(query) {
@@ -56,31 +57,46 @@ export function findClinicalAxis(query) {
 const SYSTEM_LABELS = {
   vi: {
     skeletal: 'Hệ Xương',
-    muscular: 'Hệ Cơ bắp',
     joints: 'Khớp & Dây chằng',
-    cardiovascular: 'Hệ Tim mạch & Mạch máu',
-    lymphatic: 'Hệ Bạch huyết & Miễn dịch',
-    nervous: 'Hệ Thần kinh & Não bộ',
-    visceral: 'Hệ Nội tạng toàn thể'
+    muscular: 'Hệ Cơ bắp',
+    nervous: 'Hệ Thần kinh',
+    cardiovascular: 'Hệ Tim mạch',
+    respiratory: 'Hệ Hô hấp',
+    digestive: 'Hệ Tiêu hóa',
+    urinary_genital: 'Hệ Tiết niệu & Sinh dục',
+    lymphatic: 'Hệ Bạch huyết',
+    endocrine: 'Hệ Nội tiết',
+    integumentary: 'Hệ Da & Vỏ bọc',
+    visceral: 'Nội tạng toàn thể'
   },
   en: {
     skeletal: 'Skeletal system',
-    muscular: 'Muscular system',
     joints: 'Joints & Ligaments',
+    muscular: 'Muscular system',
+    nervous: 'Nervous system',
     cardiovascular: 'Cardiovascular system',
-    lymphatic: 'Lymphoid organs',
-    nervous: 'Nervous system & sense organs',
+    respiratory: 'Respiratory system',
+    digestive: 'Digestive system',
+    urinary_genital: 'Urogenital system',
+    lymphatic: 'Lymphatic system',
+    endocrine: 'Endocrine system',
+    integumentary: 'Integumentary system',
     visceral: 'Visceral systems'
   }
 };
 
 const SYSTEM_ICONS = {
   skeletal: ICONS.skeletal,
-  muscular: ICONS.muscular,
   joints: ICONS.joints,
-  cardiovascular: ICONS.cardiovascular,
-  lymphatic: ICONS.lymphatic,
+  muscular: ICONS.muscular,
   nervous: ICONS.nervous,
+  cardiovascular: ICONS.cardiovascular,
+  respiratory: ICONS.respiratory,
+  digestive: ICONS.digestive,
+  urinary_genital: ICONS.urinary_genital,
+  lymphatic: ICONS.lymphatic,
+  endocrine: ICONS.endocrine,
+  integumentary: ICONS.integumentary,
   visceral: ICONS.visceral
 };
 
@@ -88,13 +104,14 @@ export function systemLabel(systemId, lang = state.language || 'vi') {
   return SYSTEM_LABELS[lang]?.[systemId] || SYSTEM_LABELS.vi?.[systemId] || SYSTEM_LABELS.en?.[systemId] || systemId;
 }
 
-// 10 Full Medical Systems Catalog
+// 12 Standard Medical Systems Catalog (Strict single line, color-coded badges)
 export const EXTENDED_SYSTEMS = [
   {
     id: 'skeletal',
     baseSystem: 'skeletal',
     label: { vi: 'Hệ Xương', en: 'Skeletal system' },
     icon: ICONS.skeletal,
+    badgeClass: 'sys-badge-skeletal',
     count: 277
   },
   {
@@ -102,6 +119,7 @@ export const EXTENDED_SYSTEMS = [
     baseSystem: 'joints',
     label: { vi: 'Khớp & Dây chằng', en: 'Joints & Ligaments' },
     icon: ICONS.joints,
+    badgeClass: 'sys-badge-joints',
     count: 349
   },
   {
@@ -109,36 +127,41 @@ export const EXTENDED_SYSTEMS = [
     baseSystem: 'muscular',
     label: { vi: 'Hệ Cơ bắp', en: 'Muscular system' },
     icon: ICONS.muscular,
+    badgeClass: 'sys-badge-muscular',
     count: 669
   },
   {
     id: 'nervous',
     baseSystem: 'nervous',
-    label: { vi: 'Hệ Thần kinh & Não bộ', en: 'Nervous system' },
+    label: { vi: 'Hệ Thần kinh', en: 'Nervous system' },
     icon: ICONS.nervous,
+    badgeClass: 'sys-badge-nervous',
     count: 580
   },
   {
     id: 'cardiovascular',
     baseSystem: 'cardiovascular',
-    label: { vi: 'Hệ Tim mạch & Mạch máu', en: 'Cardiovascular system' },
+    label: { vi: 'Hệ Tim mạch', en: 'Cardiovascular system' },
     icon: ICONS.cardiovascular,
+    badgeClass: 'sys-badge-cardiovascular',
     count: 676
   },
   {
     id: 'respiratory',
     baseSystem: 'visceral',
     subType: 'respiratory',
-    label: { vi: 'Hệ Hô hấp (Phổi & Khí quản)', en: 'Respiratory system' },
+    label: { vi: 'Hệ Hô hấp', en: 'Respiratory system' },
     icon: ICONS.respiratory,
+    badgeClass: 'sys-badge-respiratory',
     count: 40
   },
   {
     id: 'digestive',
     baseSystem: 'visceral',
     subType: 'digestive',
-    label: { vi: 'Hệ Tiêu hóa (Gan, Dạ dày, Ruột)', en: 'Digestive system' },
+    label: { vi: 'Hệ Tiêu hóa', en: 'Digestive system' },
     icon: ICONS.digestive,
+    badgeClass: 'sys-badge-digestive',
     count: 46
   },
   {
@@ -147,28 +170,40 @@ export const EXTENDED_SYSTEMS = [
     subType: 'urinary_genital',
     label: { vi: 'Hệ Tiết niệu & Sinh dục', en: 'Urogenital system' },
     icon: ICONS.urinary_genital,
+    badgeClass: 'sys-badge-urinary',
     count: 24
   },
   {
     id: 'lymphatic',
     baseSystem: 'lymphatic',
-    label: { vi: 'Hệ Bạch huyết & Miễn dịch', en: 'Lymphatic system' },
+    label: { vi: 'Hệ Bạch huyết', en: 'Lymphatic system' },
     icon: ICONS.lymphatic,
+    badgeClass: 'sys-badge-lymphatic',
     count: 158
   },
   {
     id: 'endocrine',
     baseSystem: 'visceral',
     subType: 'endocrine',
-    label: { vi: 'Hệ Nội tiết (Tuyến giáp, Yên)', en: 'Endocrine system' },
+    label: { vi: 'Hệ Nội tiết', en: 'Endocrine system' },
     icon: ICONS.endocrine,
+    badgeClass: 'sys-badge-endocrine',
     count: 8
+  },
+  {
+    id: 'integumentary',
+    baseSystem: 'integumentary',
+    label: { vi: 'Hệ Da & Vỏ bọc', en: 'Integumentary system' },
+    icon: ICONS.integumentary,
+    badgeClass: 'sys-badge-integumentary',
+    count: 22
   },
   {
     id: 'visceral',
     baseSystem: 'visceral',
     label: { vi: 'Nội tạng toàn thể', en: 'Visceral systems' },
     icon: ICONS.visceral,
+    badgeClass: 'sys-badge-visceral',
     count: 118
   }
 ];
@@ -201,21 +236,12 @@ export function initSystemsSidebar() {
 
   const lang = state.language || 'vi';
 
-  const presets = `
-    <div class="preset-row">
-      ${PRESETS.map(preset => `
-        <button type="button" class="preset-chip" data-preset="${preset.id}">
-          ${escapeHtml(preset.label[lang] || preset.label.vi || preset.label.en)}
-        </button>
-      `).join('')}
-    </div>
-  `;
-
-  container.innerHTML = presets + EXTENDED_SYSTEMS.map(item => {
+  container.innerHTML = EXTENDED_SYSTEMS.map(item => {
     const rawParts = item.subType ? getSubSystemParts(item.subType) : getSystemParts(item.baseSystem);
     const count = rawParts.length || item.count;
     const icon = item.icon || '🔬';
     const label = item.label[lang] || item.label.vi || item.label.en;
+    const badgeClass = item.badgeClass || '';
 
     // Determine initial visibility state
     let isVisible = false;
@@ -236,7 +262,7 @@ export function initSystemsSidebar() {
             <span class="system-checkbox-custom"></span>
           </label>
           <div class="system-accordion-trigger" data-toggle-accordion="${item.id}">
-            <span class="system-icon">${icon}</span>
+            <span class="system-icon ${badgeClass}">${icon}</span>
             <div class="system-text-wrap">
               <span class="system-name">${escapeHtml(label)}</span>
             </div>
@@ -250,13 +276,6 @@ export function initSystemsSidebar() {
       </div>
     `;
   }).join('');
-
-  container.querySelectorAll('[data-preset]').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const preset = PRESETS.find(p => p.id === chip.dataset.preset);
-      if (preset) applyPreset(preset);
-    });
-  });
 
   // Accordion Expand/Collapse
   container.querySelectorAll('[data-toggle-accordion]').forEach(trigger => {
@@ -844,13 +863,7 @@ export function initFooterActions(viewer) {
 
   document.getElementById('cardHideBtn')?.addEventListener('click', () => {
     if (state.selectedPart) {
-      pushUndo({
-        type: 'hide',
-        partId: state.selectedPart.id
-      });
-      hideSelected();
-      viewer?.render();
-      showToast('Đã bóc tách / ẩn bộ phận');
+      dissectMultiLayer(state.selectedPart.id, viewer);
     }
   });
 
@@ -947,10 +960,16 @@ export function initFooterActions(viewer) {
 
   const btnDissect = document.getElementById('btnNavDissect');
   btnDissect?.addEventListener('click', () => {
+    // Nếu đang chọn một bộ phận: Bấm nút bóc tách ở dưới sẽ bóc tách trực tiếp bộ phận đó theo từng lớp!
+    if (state.selectedPart) {
+      dissectMultiLayer(state.selectedPart.id, viewer);
+      return;
+    }
+
     state.dissectMode = !state.dissectMode;
     btnDissect.classList.toggle('dissect-active', state.dissectMode);
     if (state.dissectMode) {
-      showToast('Dao mổ BẬT: Chạm vào bất kỳ bộ phận nào để bóc tách');
+      showToast('Dao mổ BẬT: Chạm vào bất kỳ bộ phận nào để bóc tách từng lớp');
     } else {
       showToast('Chế độ bóc tách: TẮT');
     }
@@ -1081,11 +1100,16 @@ export function openVideo(videoIdOrUrl, videoTitle) {
   if (title) title.textContent = videoTitle || 'Video Bài Giảng Giải Phẫu';
 
   if (extLink) {
-    if (parsed.type === 'youtube') {
+    if (parsed.type === 'youtube_playlist') {
+      extLink.href = parsed.watchUrl || `https://www.youtube.com/playlist?list=${parsed.id}`;
+      extLink.style.display = 'inline-flex';
+      extLink.title = 'Mở danh sách phát trên YouTube';
+    } else if (parsed.type === 'youtube') {
       const match = parsed.url.match(/embed\/([a-zA-Z0-9_-]+)/);
       const ytId = match ? match[1] : '';
       extLink.href = ytId ? `https://www.youtube.com/watch?v=${ytId}` : parsed.url;
       extLink.style.display = 'inline-flex';
+      extLink.title = 'Mở video trên YouTube';
     } else {
       extLink.style.display = 'none';
     }
@@ -1139,9 +1163,10 @@ export function updateBookmarkButton(partId) {
   if (!btn) return;
   const saved = isBookmarked(partId);
   btn.classList.toggle('active', saved);
+  btn.title = saved ? 'Đã lưu trong mục Đã lưu ⭐ (Nhấn để bỏ lưu)' : 'Lưu cấu trúc này vào mục Đã lưu ⭐';
   btn.innerHTML = saved
-    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ffdf5d" stroke="#ffdf5d" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Đã lưu`
-    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Lưu`;
+    ? `<svg class="icon-bookmark" width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`
+    : `<svg class="icon-bookmark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
 }
 
 // Drawer Tabs (Systems, Regions, Roadmap, Bookmarks, Notes, History)
@@ -1703,8 +1728,7 @@ export function initFloatingTools(viewer) {
 
   // Clinical Functional Axes & Applied Anatomy Hub (Trục Giải Phẫu Ứng Dụng)
   const btnClinicalAxes = document.getElementById('btnToolClinicalAxes');
-  btnClinicalAxes?.addEventListener('click', async () => {
-    const { openClinicalAxesModal } = await import('./clinicalAxesModal.js');
+  btnClinicalAxes?.addEventListener('click', () => {
     openClinicalAxesModal();
   });
 

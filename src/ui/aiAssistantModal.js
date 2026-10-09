@@ -3,6 +3,8 @@
 import { state } from '../state/store.js';
 import { interpretAIQuery, executeAICommand } from '../ai/anatomyAI.js';
 import { selectPartById } from '../viewer/selection.js';
+import { searchStructures } from '../utils/dataLoader.js';
+import { selectStructureAnywhere } from './sidebar.js';
 
 let aiBarEl = null;
 let aiToastEl = null;
@@ -411,7 +413,26 @@ export async function handleCompactAISubmit(text, viewer) {
     console.warn('[Clinical Axis AI match error]:', err);
   }
 
-  const interpreted = interpretAIQuery(text, state.selectedPart);
+  let interpreted = interpretAIQuery(text, state.selectedPart);
+
+  // If interpreted has no target and no axis, perform an immediate direct search fallback
+  if (!interpreted.target && !interpreted.axis && interpreted.intent !== 'SYSTEM_CONTROL') {
+    const matches = searchStructures(text);
+    if (matches.length > 0) {
+      const top = matches[0];
+      const targetPartId = top.sides?.none || top.sides?.left || top.sides?.right || (top.partIds && top.partIds[0]) || top.base;
+      interpreted = {
+        intent: 'FOCUS_STRUCTURE',
+        target: {
+          id: targetPartId,
+          base: top.base,
+          system: top.system,
+          nameVi: top.label || top.base
+        },
+        rawQuery: text
+      };
+    }
+  }
 
   try {
     const result = await executeAICommand(interpreted, viewer);
@@ -430,6 +451,16 @@ export async function handleCompactAISubmit(text, viewer) {
       } catch {}
     }
   } catch (err) {
+    console.warn('[AI Command Execution Error]:', err);
+    // Secondary fallback: if executeAICommand somehow failed, attempt selectStructureAnywhere directly
+    const directMatches = searchStructures(text);
+    if (directMatches.length > 0) {
+      const top = directMatches[0];
+      const targetPartId = top.sides?.none || top.sides?.left || top.sides?.right || (top.partIds && top.partIds[0]) || top.base;
+      await selectStructureAnywhere(targetPartId);
+      showAIToast(`🎯 AI đã định vị & làm nổi bật: ${top.label || top.base}`, true);
+      return;
+    }
     showAIToast(`Không tìm thấy "${text}". Vui lòng thử lại!`, true);
   }
 }

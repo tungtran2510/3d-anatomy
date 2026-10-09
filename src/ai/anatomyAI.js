@@ -15,19 +15,26 @@ import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 // Pre-mapped high-frequency Vietnamese clinical anatomical aliases
 export const ANATOMICAL_SYNONYMS = {
   // Muscles
-  'cơ delta': { id: 'Deltoid.l', base: 'Deltoid', system: 'muscular', nameVi: 'Cơ delta (Cơ vai)' },
-  'co delta': { id: 'Deltoid.l', base: 'Deltoid', system: 'muscular', nameVi: 'Cơ delta (Cơ vai)' },
-  'cơ nhị đầu': { id: 'Biceps brachii.l', base: 'Biceps brachii', system: 'muscular', nameVi: 'Cơ nhị đầu cánh tay (Chuột trước)' },
-  'chuột tay': { id: 'Biceps brachii.l', base: 'Biceps brachii', system: 'muscular', nameVi: 'Cơ nhị đầu cánh tay' },
-  'cơ tam đầu': { id: 'Triceps brachii.l', base: 'Triceps brachii', system: 'muscular', nameVi: 'Cơ tam đầu cánh tay (Chuột sau)' },
-  'cơ tứ đầu đùi': { id: 'Quadriceps femoris.l', base: 'Quadriceps femoris', system: 'muscular', nameVi: 'Cơ tứ đầu đùi' },
-  'cơ tứ đầu': { id: 'Quadriceps femoris.l', base: 'Quadriceps femoris', system: 'muscular', nameVi: 'Cơ tứ đầu đùi' },
+  'cơ delta': { id: 'Acromial part of deltoid muscle.l', base: 'Acromial part of deltoid muscle', system: 'muscular', nameVi: 'Cơ delta (Cơ vai)' },
+  'co delta': { id: 'Acromial part of deltoid muscle.l', base: 'Acromial part of deltoid muscle', system: 'muscular', nameVi: 'Cơ delta (Cơ vai)' },
+  'cơ nhị đầu': { id: 'Long head of biceps brachii.l', base: 'Long head of biceps brachii', system: 'muscular', nameVi: 'Cơ nhị đầu cánh tay (Chuột trước)' },
+  'co nhi dau': { id: 'Long head of biceps brachii.l', base: 'Long head of biceps brachii', system: 'muscular', nameVi: 'Cơ nhị đầu cánh tay' },
+  'chuột tay': { id: 'Long head of biceps brachii.l', base: 'Long head of biceps brachii', system: 'muscular', nameVi: 'Cơ nhị đầu cánh tay' },
+  'cơ tam đầu': { id: 'Long head of triceps brachii.l', base: 'Long head of triceps brachii', system: 'muscular', nameVi: 'Cơ tam đầu cánh tay (Chuột sau)' },
+  'co tam dau': { id: 'Long head of triceps brachii.l', base: 'Long head of triceps brachii', system: 'muscular', nameVi: 'Cơ tam đầu cánh tay' },
+  'cơ tứ đầu đùi': { id: 'Rectus femoris muscle.l', base: 'Rectus femoris muscle', system: 'muscular', nameVi: 'Cơ tứ đầu đùi (Cơ thẳng đùi)' },
+  'co tu dau dui': { id: 'Rectus femoris muscle.l', base: 'Rectus femoris muscle', system: 'muscular', nameVi: 'Cơ tứ đầu đùi' },
+  'cơ tứ đầu': { id: 'Rectus femoris muscle.l', base: 'Rectus femoris muscle', system: 'muscular', nameVi: 'Cơ tứ đầu đùi' },
   'cơ mông lớn': { id: 'Gluteus maximus.l', base: 'Gluteus maximus', system: 'muscular', nameVi: 'Cơ mông lớn' },
   'cơ mông': { id: 'Gluteus maximus.l', base: 'Gluteus maximus', system: 'muscular', nameVi: 'Cơ mông lớn' },
-  'cơ thang': { id: 'Trapezius.l', base: 'Trapezius', system: 'muscular', nameVi: 'Cơ thang (Cơ cổ vai lưng)' },
-  'cơ lưng rộng': { id: 'Latissimus dorsi.l', base: 'Latissimus dorsi', system: 'muscular', nameVi: 'Cơ lưng rộng' },
-  'cơ ức đòn chũm': { id: 'Sternocleidomastoid.l', base: 'Sternocleidomastoid', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
-  'cơ bắp chân': { id: 'Gastrocnemius.l', base: 'Gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân (Bắp chân)' },
+  'cơ thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang (Cơ cổ vai lưng)' },
+  'co thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang' },
+  'cơ lưng rộng': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng' },
+  'co lung rong': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng' },
+  'cơ ức đòn chũm': { id: 'Sternocleidomastoid muscle.l', base: 'Sternocleidomastoid muscle', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
+  'co uc don chum': { id: 'Sternocleidomastoid muscle.l', base: 'Sternocleidomastoid muscle', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
+  'cơ bắp chân': { id: 'Medial head of gastrocnemius.l', base: 'Medial head of gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân (Bắp chân)' },
+  'co bap chan': { id: 'Medial head of gastrocnemius.l', base: 'Medial head of gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân' },
 
   // Nerves & Ventricular System / CSF
   'thần kinh tọa': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa (Dây thần kinh ngồi)' },
@@ -149,13 +156,97 @@ export const ANATOMICAL_SYNONYMS = {
   'xương sườn': { id: 'First rib.l', base: 'First rib', system: 'skeletal', nameVi: 'Xương sườn' },
 
   // Visceral, Lymphatic & Cardiovascular
-  'tim': { id: 'heart_all', base: 'Heart', system: 'cardiovascular', nameVi: 'Trái tim' },
-  'trái tim': { id: 'heart_all', base: 'Heart', system: 'cardiovascular', nameVi: 'Trái tim' },
-  'phổi': { id: 'lungs_all', base: 'Lungs', system: 'visceral', nameVi: 'Hai lá phổi' },
-  'lá phổi': { id: 'lungs_all', base: 'Lungs', system: 'visceral', nameVi: 'Hai lá phổi' },
+  'tim': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Trái tim (Tâm thất trái)' },
+  'trái tim': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Trái tim (Tâm thất trái)' },
+  'trai tim': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Trái tim' },
+  'hệ tim mạch': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Hệ Tim mạch' },
+  'he tim mach': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Hệ Tim mạch' },
+  
+  // Heart Chambers & Valves
+  'tâm thất trái': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Tâm thất trái' },
+  'tam that trai': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Tâm thất trái' },
+  'thất trái': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Tâm thất trái' },
+  'that trai': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Tâm thất trái' },
+  'buồng thất trái': { id: 'Left ventricle', base: 'Left ventricle', system: 'cardiovascular', nameVi: 'Tâm thất trái' },
+  
+  'tâm thất phải': { id: 'Right ventricle', base: 'Right ventricle', system: 'cardiovascular', nameVi: 'Tâm thất phải' },
+  'tam that phai': { id: 'Right ventricle', base: 'Right ventricle', system: 'cardiovascular', nameVi: 'Tâm thất phải' },
+  'thất phải': { id: 'Right ventricle', base: 'Right ventricle', system: 'cardiovascular', nameVi: 'Tâm thất phải' },
+  'that phai': { id: 'Right ventricle', base: 'Right ventricle', system: 'cardiovascular', nameVi: 'Tâm thất phải' },
+  'buồng thất phải': { id: 'Right ventricle', base: 'Right ventricle', system: 'cardiovascular', nameVi: 'Tâm thất phải' },
+  
+  'tâm nhĩ trái': { id: 'Left atrium', base: 'Left atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ trái' },
+  'tam nhi trai': { id: 'Left atrium', base: 'Left atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ trái' },
+  'nhĩ trái': { id: 'Left atrium', base: 'Left atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ trái' },
+  'nhi trai': { id: 'Left atrium', base: 'Left atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ trái' },
+  
+  'tâm nhĩ phải': { id: 'Right atrium', base: 'Right atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ phải' },
+  'tam nhi phai': { id: 'Right atrium', base: 'Right atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ phải' },
+  'nhĩ phải': { id: 'Right atrium', base: 'Right atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ phải' },
+  'nhi phai': { id: 'Right atrium', base: 'Right atrium', system: 'cardiovascular', nameVi: 'Tâm nhĩ phải' },
+
+  'van hai lá': { id: 'Posterior leaflet of left atrioventricular valve', base: 'Mitral valve', system: 'cardiovascular', nameVi: 'Van hai lá (Van nhĩ thất trái)' },
+  'van 2 la': { id: 'Posterior leaflet of left atrioventricular valve', base: 'Mitral valve', system: 'cardiovascular', nameVi: 'Van hai lá' },
+  'van ba lá': { id: 'Anterior leaflet of right atrioventricular valve', base: 'Tricuspid valve', system: 'cardiovascular', nameVi: 'Van ba lá (Van nhĩ thất phải)' },
+  'van 3 la': { id: 'Anterior leaflet of right atrioventricular valve', base: 'Tricuspid valve', system: 'cardiovascular', nameVi: 'Van ba lá' },
+  'van động mạch chủ': { id: 'Left coronary leaflet', base: 'Aortic valve', system: 'cardiovascular', nameVi: 'Van động mạch chủ' },
+  'van dong mach chu': { id: 'Left coronary leaflet', base: 'Aortic valve', system: 'cardiovascular', nameVi: 'Van động mạch chủ' },
+  'van động mạch phổi': { id: 'Anterior semilunar leaflet of pulmonary valve', base: 'Pulmonary valve', system: 'cardiovascular', nameVi: 'Van động mạch phổi' },
+
+  // Carotid Arteries & Great Vessels
+  'động mạch cảnh trong': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh trong' },
+  'dong mach canh trong': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh trong' },
+  'mạch cảnh trong': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh trong' },
+  'mach canh trong': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh trong' },
+  
+  'động mạch cảnh ngoài': { id: 'External carotid artery.l', base: 'External carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh ngoài' },
+  'dong mach canh ngoai': { id: 'External carotid artery.l', base: 'External carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh ngoài' },
+  'mạch cảnh ngoài': { id: 'External carotid artery.l', base: 'External carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh ngoài' },
+  'mach canh ngoai': { id: 'External carotid artery.l', base: 'External carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh ngoài' },
+  
+  'động mạch cảnh': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh' },
+  'dong mach canh': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh' },
+  'mạch cảnh': { id: 'Internal carotid artery.l', base: 'Internal carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh' },
+  'động mạch cảnh chung': { id: 'Left common carotid artery', base: 'Left common carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh chung' },
+  'dong mach canh chung': { id: 'Left common carotid artery', base: 'Left common carotid artery', system: 'cardiovascular', nameVi: 'Động mạch cảnh chung' },
+
+  'động mạch chủ': { id: 'Ascending aorta', base: 'Ascending aorta', system: 'cardiovascular', nameVi: 'Động mạch chủ' },
+  'dong mach chu': { id: 'Ascending aorta', base: 'Ascending aorta', system: 'cardiovascular', nameVi: 'Động mạch chủ' },
+  'cung động mạch chủ': { id: 'Ascending aorta', base: 'Ascending aorta', system: 'cardiovascular', nameVi: 'Cung động mạch chủ' },
+  'quai động mạch chủ': { id: 'Ascending aorta', base: 'Ascending aorta', system: 'cardiovascular', nameVi: 'Quai động mạch chủ' },
+  'động mạch chủ bụng': { id: 'Abdominal aorta', base: 'Abdominal aorta', system: 'cardiovascular', nameVi: 'Động mạch chủ bụng' },
+  'dong mach chu bung': { id: 'Abdominal aorta', base: 'Abdominal aorta', system: 'cardiovascular', nameVi: 'Động mạch chủ bụng' },
+  'động mạch chủ ngực': { id: 'Thoracic aorta', base: 'Thoracic aorta', system: 'cardiovascular', nameVi: 'Động mạch chủ ngực' },
+
+  'động mạch phổi': { id: 'Pulmonary trunk', base: 'Pulmonary trunk', system: 'cardiovascular', nameVi: 'Thân động mạch phổi' },
+  'dong mach phoi': { id: 'Pulmonary trunk', base: 'Pulmonary trunk', system: 'cardiovascular', nameVi: 'Thân động mạch phổi' },
+  'thân động mạch phổi': { id: 'Pulmonary trunk', base: 'Pulmonary trunk', system: 'cardiovascular', nameVi: 'Thân động mạch phổi' },
+
+  'tĩnh mạch chủ trên': { id: 'Superior vena cava', base: 'Superior vena cava', system: 'cardiovascular', nameVi: 'Tĩnh mạch chủ trên' },
+  'tinh mach chu tren': { id: 'Superior vena cava', base: 'Superior vena cava', system: 'cardiovascular', nameVi: 'Tĩnh mạch chủ trên' },
+  'tĩnh mạch chủ dưới': { id: 'Inferior vena cava', base: 'Inferior vena cava', system: 'cardiovascular', nameVi: 'Tĩnh mạch chủ dưới' },
+  'tinh mach chu duoi': { id: 'Inferior vena cava', base: 'Inferior vena cava', system: 'cardiovascular', nameVi: 'Tĩnh mạch chủ dưới' },
+
+  // Respiratory & Lungs
+  'phổi': { id: 'Superior lobe of left lung', base: 'Superior lobe of left lung', system: 'visceral', nameVi: 'Hai lá phổi' },
+  'phoi': { id: 'Superior lobe of left lung', base: 'Superior lobe of left lung', system: 'visceral', nameVi: 'Hai lá phổi' },
+  'lá phổi': { id: 'Superior lobe of left lung', base: 'Superior lobe of left lung', system: 'visceral', nameVi: 'Hai lá phổi' },
+  'phổi trái': { id: 'Superior lobe of left lung', base: 'Superior lobe of left lung', system: 'visceral', nameVi: 'Lá phổi trái' },
+  'phoi trai': { id: 'Superior lobe of left lung', base: 'Superior lobe of left lung', system: 'visceral', nameVi: 'Lá phổi trái' },
+  'phổi phải': { id: 'Superior lobe of right lung', base: 'Superior lobe of right lung', system: 'visceral', nameVi: 'Lá phổi phải' },
+  'phoi phai': { id: 'Superior lobe of right lung', base: 'Superior lobe of right lung', system: 'visceral', nameVi: 'Lá phổi phải' },
+  'khí quản': { id: 'Trachea', base: 'Trachea', system: 'visceral', nameVi: 'Khí quản' },
+  'khi quan': { id: 'Trachea', base: 'Trachea', system: 'visceral', nameVi: 'Khí quản' },
+  'thực quản': { id: 'Esophagus', base: 'Esophagus', system: 'visceral', nameVi: 'Thực quản' },
+  'thuc quan': { id: 'Esophagus', base: 'Esophagus', system: 'visceral', nameVi: 'Thực quản' },
+
+  // Digestive & Urinary Organs
   'dạ dày': { id: 'Stomach', base: 'Stomach', system: 'visceral', nameVi: 'Dạ dày (Bao tử)' },
+  'da day': { id: 'Stomach', base: 'Stomach', system: 'visceral', nameVi: 'Dạ dày (Bao tử)' },
   'bao tử': { id: 'Stomach', base: 'Stomach', system: 'visceral', nameVi: 'Dạ dày' },
+  'bao tu': { id: 'Stomach', base: 'Stomach', system: 'visceral', nameVi: 'Dạ dày' },
   'gan': { id: 'Liver', base: 'Liver', system: 'visceral', nameVi: 'Lá gan' },
+  'lá gan': { id: 'Liver', base: 'Liver', system: 'visceral', nameVi: 'Lá gan' },
   'túi mật': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật' },
   'tui mat': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật' },
   'mật': { id: 'Gallbladder', base: 'Gallbladder', system: 'visceral', nameVi: 'Túi mật & Đường mật' },
@@ -168,7 +259,32 @@ export const ANATOMICAL_SYNONYMS = {
   'lá lách': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách (Tỳ)' },
   'la lach': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' },
   'lách': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' },
-  'lach': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' }
+  'lach': { id: 'Spleen', base: 'Spleen', system: 'lymphatic', nameVi: 'Lá lách' },
+
+  // Kidneys & Urinary Tract
+  'thận': { id: 'Kidney.l', base: 'Kidney', system: 'visceral', nameVi: 'Quả thận' },
+  'than': { id: 'Kidney.l', base: 'Kidney', system: 'visceral', nameVi: 'Quả thận' },
+  'quả thận': { id: 'Kidney.l', base: 'Kidney', system: 'visceral', nameVi: 'Quả thận' },
+  'thận trái': { id: 'Kidney.l', base: 'Kidney', system: 'visceral', nameVi: 'Thận trái' },
+  'than trai': { id: 'Kidney.l', base: 'Kidney', system: 'visceral', nameVi: 'Thận trái' },
+  'thận phải': { id: 'Kidney.r', base: 'Kidney', system: 'visceral', nameVi: 'Thận phải' },
+  'than phai': { id: 'Kidney.r', base: 'Kidney', system: 'visceral', nameVi: 'Thận phải' },
+  'bể thận': { id: 'Renal pelvis.l', base: 'Renal pelvis', system: 'visceral', nameVi: 'Bể thận' },
+  'be than': { id: 'Renal pelvis.l', base: 'Renal pelvis', system: 'visceral', nameVi: 'Bể thận' },
+  'niệu quản': { id: 'Ureter.l', base: 'Ureter', system: 'visceral', nameVi: 'Niệu quản' },
+  'nieu quan': { id: 'Ureter.l', base: 'Ureter', system: 'visceral', nameVi: 'Niệu quản' },
+  'bàng quang': { id: 'Urinary bladder', base: 'Urinary bladder', system: 'visceral', nameVi: 'Bàng quang (Bọng đái)' },
+  'bang quang': { id: 'Urinary bladder', base: 'Urinary bladder', system: 'visceral', nameVi: 'Bàng quang' },
+
+  // Intestines
+  'đại tràng': { id: 'Ascending colon', base: 'Colon', system: 'visceral', nameVi: 'Đại tràng (Ruột già)' },
+  'dai trang': { id: 'Ascending colon', base: 'Colon', system: 'visceral', nameVi: 'Đại tràng' },
+  'ruột già': { id: 'Ascending colon', base: 'Colon', system: 'visceral', nameVi: 'Đại tràng (Ruột già)' },
+  'ruot gia': { id: 'Ascending colon', base: 'Colon', system: 'visceral', nameVi: 'Ruột già' },
+  'ruột non': { id: 'Jejunum', base: 'Jejunum', system: 'visceral', nameVi: 'Ruột non' },
+  'ruot non': { id: 'Jejunum', base: 'Jejunum', system: 'visceral', nameVi: 'Ruột non' },
+  'ruột thừa': { id: 'Vermiform appendix', base: 'Vermiform appendix', system: 'visceral', nameVi: 'Ruột thừa' },
+  'ruot thua': { id: 'Vermiform appendix', base: 'Vermiform appendix', system: 'visceral', nameVi: 'Ruột thừa' }
 };
 
 /**
@@ -460,7 +576,8 @@ export function interpretAIQuery(query, activePart = null) {
 function cleanSearchQuery(text) {
   return text
     .toLowerCase()
-    .replace(/^(tìm|hãy tìm|chỉ|cho xem|cho tôi xem|xem|focus|định vị|ở đâu|vị trí của|vị trí|chỉ ra|hãy chỉ)\s+/i, '')
+    .replace(/^(tìm|hãy tìm|chỉ|cho xem|cho tôi xem|hãy cho xem|xem|focus|định vị|vị trí của|vị trí|chỉ ra|hãy chỉ|hỏi về|thông tin về)\s+/i, '')
+    .replace(/\s+(?:ở đâu|ở vị trí nào|nằm ở đâu|nằm ở chỗ nào|ở chỗ nào|là gì|như thế nào|ra sao|là cái gì)$/i, '')
     .replace(/[?!.,;:()]/g, ' ')
     .trim();
 }
@@ -518,15 +635,18 @@ function findTargetStructure(query, activePart) {
   }
 
   // 3. Search database with cleanQ and query
-  const searchResults = searchStructures(cleanQ).concat(searchStructures(q));
+  let searchResults = searchStructures(cleanQ);
+  if (searchResults.length === 0 && q !== cleanQ) {
+    searchResults = searchStructures(q);
+  }
   if (searchResults.length > 0) {
     const first = searchResults[0];
-    const side = first.sides?.[0];
+    const targetPartId = first.sides?.none || first.sides?.left || first.sides?.right || (first.partIds && first.partIds[0]) || first.base;
     return {
-      id: side?.id || first.baseName,
-      base: first.baseName,
+      id: targetPartId,
+      base: first.base,
       system: first.system,
-      nameVi: first.name?.vi || first.baseName
+      nameVi: first.label || first.base
     };
   }
 
@@ -607,24 +727,34 @@ ${insightsFormatted}
         await loadModel(sys, activeViewer).catch(err => console.warn('Failed background load of', sys, err));
       }
       if (sys) showSystem(sys);
-      const selected = selectPartById(target.id, activeViewer);
+      let selected = selectPartById(target.id, activeViewer);
       if (!selected && target.base) {
-        selectPartById(target.base + '.l', activeViewer) ||
-        selectPartById(target.base, activeViewer) ||
-        selectPartById(target.base + '.r', activeViewer);
+        selected = selectPartById(target.base, activeViewer) ||
+                   selectPartById(target.base + '.l', activeViewer) ||
+                   selectPartById(target.base + '.r', activeViewer);
       }
       activeViewer.render();
     }
+
+    // Expand selection card on mobile/desktop so user sees detailed clinical information
+    const card = document.getElementById('selectionCard');
+    if (card) {
+      card.classList.remove('hidden');
+      window.dispatchEvent(new CustomEvent('expand-selection-card'));
+    }
+
     const clinical = getClinicalData(target.id, target.base);
+    const displayName = clinical?.nameVi || target.nameVi || target.base || 'cấu trúc giải phẫu';
+
     return {
       action: 'FOCUS',
-      actionBadge: `🎯 AI đã định vị & làm nổi bật: ${target.nameVi}`,
-      speechText: `Đã tìm thấy ${target.nameVi}.`,
+      actionBadge: `🎯 AI đã định vị & làm nổi bật: ${displayName}`,
+      speechText: `Đã tìm thấy ${displayName}.`,
       message: `
-        **${clinical.nameVi}** *(Latin: ${clinical.nameLatin || ''})*
-        - **Hệ cơ quan:** ${clinical.systemVi}
-        - **Chức năng chính:** ${clinical.function}
-        - **Liên quan lâm sàng:** ${clinical.clinical}
+        **${displayName}** *(Latin: ${clinical?.nameLatin || ''})*
+        - **Hệ cơ quan:** ${clinical?.systemVi || target.system || 'Hệ giải phẫu'}
+        - **Chức năng chính:** ${clinical?.function || 'Tham gia cấu tạo, vận động hoặc nâng đỡ sinh lý liên quan.'}
+        - **Liên quan lâm sàng:** ${clinical?.clinical || 'Cần chú ý thăm khám và bảo vệ tránh tổn thương cơ học.'}
       `.trim(),
       data: clinical,
       partId: target.id
@@ -808,39 +938,40 @@ ${insightsFormatted}
   // 10. CLINICAL Q&A (Grounded Medical Knowledge)
   if (target) {
     const clinical = getClinicalData(target.id, target.base);
-    const rel = clinical.relations || {};
+    const rel = clinical?.relations || {};
+    const displayName = clinical?.nameVi || target.nameVi || target.base || 'Cấu trúc giải phẫu';
 
     let answerContent = '';
     const qLower = rawQuery.toLowerCase();
 
     if (qLower.includes('thần kinh') || qLower.includes('dây thần kinh')) {
       answerContent = `
-        **Chi phối Thần kinh của ${clinical.nameVi}:**
+        **Chi phối Thần kinh của ${displayName}:**
         ⚡ ${rel.nerves || 'Được chi phối bởi các nhánh thần kinh vận động và cảm giác khu vực.'}
       `.trim();
     } else if (qLower.includes('mạch máu') || qLower.includes('máu') || qLower.includes('động mạch')) {
       answerContent = `
-        **Cấp máu & Tuần hoàn của ${clinical.nameVi}:**
+        **Cấp máu & Tuần hoàn của ${displayName}:**
         🩸 ${rel.vessels || 'Được nuôi dưỡng bởi các nhánh động mạch và mạng mạch quanh vùng.'}
       `.trim();
     } else if (qLower.includes('cơ') || qLower.includes('bám')) {
       answerContent = `
-        **Liên quan Cơ bắp của ${clinical.nameVi}:**
+        **Liên quan Cơ bắp của ${displayName}:**
         🔴 ${rel.muscles || 'Liên kết với các gân cơ phụ trách vận động và giữ vững tư thế.'}
       `.trim();
     } else if (qLower.includes('bệnh') || qLower.includes('chấn thương') || qLower.includes('đau')) {
       answerContent = `
-        **Bệnh lý & Ý nghĩa Lâm sàng của ${clinical.nameVi}:**
-        🩺 ${clinical.clinical}
+        **Bệnh lý & Ý nghĩa Lâm sàng của ${displayName}:**
+        🩺 ${clinical?.clinical || 'Cần chú ý bảo vệ trong sinh hoạt và vận động hàng ngày.'}
       `.trim();
     } else {
       // Full Academic Brief
       answerContent = `
-### 📘 Thông Tin Học Thuật: ${clinical.nameVi}
-*Latinh (TA2):* **${clinical.nameLatin || 'Chưa định danh'}** | *Tiếng Anh:* **${clinical.nameEn || ''}**
+### 📘 Thông Tin Học Thuật: ${displayName}
+*Latinh (TA2):* **${clinical?.nameLatin || 'Chưa định danh'}** | *Tiếng Anh:* **${clinical?.nameEn || ''}**
 
 ⚡ **Chức năng & Cơ sinh học:**
-${clinical.function}
+${clinical?.function || 'Đóng vai trò quan trọng trong việc nâng đỡ cấu trúc, truyền lực cơ học hoặc tham gia điều hòa sinh lý cơ thể.'}
 
 🔗 **4 Liên Quan Giải Phẫu Trọng Yếu:**
 - 🔴 **Cơ liên quan:** ${rel.muscles || 'Gân cơ vận động chính.'}
@@ -849,7 +980,7 @@ ${clinical.function}
 - 🩸 **Mạch máu cấp máu:** ${rel.vessels || 'Mạng mạch máu khu vực.'}
 
 🩺 **Ý Nghĩa Lâm Sàng & Tổn Thương:**
-${clinical.clinical}
+${clinical?.clinical || 'Cần chú ý tránh va chạm hoặc tổn thương cơ học.'}
       `.trim();
     }
 

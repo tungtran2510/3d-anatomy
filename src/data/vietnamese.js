@@ -58,13 +58,22 @@ const EXACT_DICTIONARY = {
   'Posterior segmental bronchus of right lung (BII)': 'Phế quản phân thùy sau phổi phải (BII)',
   'Inferior leaflet of right atrioventricular valve': 'Lá dưới van nhĩ thất phải (Van ba lá)',
   'Posterior leaflet of left atrioventricular valve': 'Lá sau van nhĩ thất trái (Van hai lá)',
-  'Septal leaflet of right atrioventricular valve': 'Lá vách van nhĩ thất phải',
+  'Anterior papillary muscle of right ventricle': 'Cơ nhú trước của tâm thất phải',
+  'Inferior papillary muscle of right ventricle': 'Cơ nhú dưới của tâm thất phải',
+  'Septal papillary muscle of right ventricle': 'Cơ nhú vách của tâm thất phải',
+  'Inferior papillary muscle of left ventricle': 'Cơ nhú dưới của tâm thất trái',
+  'Anterior papillary muscle of left ventricle': 'Cơ nhú trước của tâm thất trái',
+  'Septal leaflet of right atrioventricular valve': 'Lá vách van nhĩ thất phải (Van ba lá)',
+  'Anterior leaflet of right atrioventricular valve': 'Lá trước van nhĩ thất phải (Van ba lá)',
+  'Anterior semilunar leaflet of pulmonary valve': 'Lá bán nguyệt trước van thân động mạch phổi',
+  'Left semilunar leaflet of pulmonary valve': 'Lá bán nguyệt trái van thân động mạch phổi',
+  'Right semilunar leaflet of pulmonary valve': 'Lá bán nguyệt phải van thân động mạch phổi',
+  'Renal pelvis': 'Bể thận',
+  'Renal pelvis.r': 'Bể thận phải',
+  'Renal pelvis.l': 'Bể thận trái',
   'Left coronary leaflet': 'Lá vành trái (Van động mạch chủ)',
   'Non-coronary leaflet': 'Lá không vành (Van động mạch chủ)',
   'Right coronary leaflet': 'Lá vành phải (Van động mạch chủ)',
-  'Anterior semilunar leaflet of pulmonary valve': 'Lá bán nguyệt trước (Van động mạch phổi)',
-  'Left semilunar leaflet of pulmonary valve': 'Lá bán nguyệt trái (Van động mạch phổi)',
-  'Right semilunar leaflet of pulmonary valve': 'Lá bán nguyệt phải (Van động mạch phổi)',
   'Bifurcation of pulmonary trunk': 'Trạc chia thân động mạch phổi',
   'Coeliac trunk': 'Thân động mạch thân tạng',
   'Sigmoid arteries': 'Các động mạch đại tràng sigma',
@@ -1401,6 +1410,91 @@ export function getVietnameseSynonyms(englishBaseName) {
   }
   if (lower.includes('xương vừng') || enLower.includes('sesamoid')) {
     synonyms.push('xương vừng', 'sesamoid');
+  }
+
+  // Cardiovascular - Heart chambers, Papillary muscles, Valves & Great Vessels
+  if (enLower === 'left ventricle' || lower.includes('thất trái')) {
+    synonyms.push('tâm thất trái', 'tam that trai', 'thất trái', 'that trai', 'buồng thất trái', 'buong that trai', 'buồng tim', 'buong tim', 'tim', 'trái tim');
+  }
+  if (enLower === 'right ventricle' || lower.includes('thất phải')) {
+    synonyms.push('tâm thất phải', 'tam that phai', 'thất phải', 'that phai', 'buồng thất phải', 'buong that phai', 'buồng tim', 'buong tim', 'tim', 'trái tim');
+  }
+  if (enLower === 'left atrium' || lower.includes('nhĩ trái')) {
+    synonyms.push('tâm nhĩ trái', 'tam nhi trai', 'nhĩ trái', 'nhi trai', 'buồng nhĩ trái', 'buong nhi trai', 'buồng tim', 'buong tim', 'tim', 'trái tim');
+  }
+  if (enLower === 'right atrium' || lower.includes('nhĩ phải')) {
+    synonyms.push('tâm nhĩ phải', 'tam nhi phai', 'nhĩ phải', 'nhi phai', 'buồng nhĩ phải', 'buong nhi phai', 'buồng tim', 'buong tim', 'tim', 'trái tim');
+  }
+  if (enLower.includes('papillary muscle') || lower.includes('cơ nhú')) {
+    synonyms.push('cơ nhú', 'co nhu', 'cột cơ', 'thừng gân', 'van tim', 'tâm thất');
+  }
+  if (enLower.includes('internal carotid') || (lower.includes('cảnh trong') && lower.includes('động mạch'))) {
+    synonyms.push('động mạch cảnh trong', 'dong mach canh trong', 'mạch cảnh trong', 'mach canh trong', 'động mạch cảnh', 'dong mach canh', 'mạch cảnh', 'internal carotid');
+  }
+  if (enLower.includes('external carotid') || (lower.includes('cảnh ngoài') && lower.includes('động mạch'))) {
+    synonyms.push('động mạch cảnh ngoài', 'dong mach canh ngoai', 'mạch cảnh ngoài', 'mach canh ngoai', 'động mạch cảnh', 'dong mach canh', 'mạch cảnh', 'external carotid');
+  }
+  if (enLower.includes('common carotid') || (lower.includes('cảnh chung') && lower.includes('động mạch'))) {
+    synonyms.push('động mạch cảnh chung', 'dong mach canh chung', 'động mạch cảnh', 'dong mach canh', 'mạch cảnh', 'common carotid');
+  }
+  if (enLower.includes('aorta') || lower.includes('động mạch chủ')) {
+    synonyms.push('động mạch chủ', 'dong mach chu', 'cung động mạch chủ', 'quai động mạch chủ', 'aorta', 'mạch máu lớn');
+  }
+  if (enLower.includes('pulmonary trunk') || lower.includes('thân động mạch phổi') || (lower.includes('động mạch phổi') && !lower.includes('phân thùy'))) {
+    synonyms.push('thân động mạch phổi', 'động mạch phổi', 'dong mach phoi', 'pulmonary artery');
+  }
+  if (enLower.includes('vena cava') || lower.includes('tĩnh mạch chủ')) {
+    synonyms.push('tĩnh mạch chủ', 'tinh mach chu', 'tĩnh mạch chủ trên', 'tĩnh mạch chủ dưới', 'vena cava');
+  }
+  if (enLower.includes('atrioventricular valve') || lower.includes('van hai lá') || lower.includes('van ba lá') || enLower.includes('mitral') || enLower.includes('tricuspid')) {
+    synonyms.push('van tim', 'van hai lá', 'van 2 la', 'van ba lá', 'van 3 la', 'van nhĩ thất');
+  }
+
+  // Visceral - Major organs & glands
+  if (enLower === 'kidney' || enLower.startsWith('kidney.') || lower.includes('thận') && !lower.includes('thượng thận') && !lower.includes('thắt lưng')) {
+    synonyms.push('thận', 'than', 'quả thận', 'qua than', 'trái thận', 'thận trái', 'thận phải', 'hệ tiết niệu');
+  }
+  if (enLower.includes('renal pelvis') || lower.includes('bể thận')) {
+    synonyms.push('bể thận', 'be than', 'đài bể thận', 'xoang thận', 'thận');
+  }
+  if (enLower.includes('ureter') || lower.includes('niệu quản')) {
+    synonyms.push('niệu quản', 'nieu quan', 'đường dẫn tiểu', 'hệ tiết niệu');
+  }
+  if (enLower === 'liver' || lower.includes('gan')) {
+    synonyms.push('gan', 'lá gan', 'la gan', 'hệ tiêu hóa', 'hệ gan mật');
+  }
+  if (enLower === 'gallbladder' || lower.includes('túi mật')) {
+    synonyms.push('túi mật', 'tui mat', 'mật', 'mat', 'đường mật');
+  }
+  if (enLower === 'stomach' || lower.includes('dạ dày')) {
+    synonyms.push('dạ dày', 'da day', 'bao tử', 'bao tu', 'dạ dày bao tử');
+  }
+  if (enLower === 'pancreas' || lower.includes('tuyến tụy') || lower.includes('tụy')) {
+    synonyms.push('tuyến tụy', 'tuyen tuy', 'tụy', 'tuy', 'tụy tạng');
+  }
+  if (enLower === 'spleen' || lower.includes('lá lách') || lower.includes('lách')) {
+    synonyms.push('lá lách', 'la lach', 'lách', 'lach', 'tỳ', 'hệ miễn dịch');
+  }
+  if (enLower.includes('lobe of') && enLower.includes('lung') || enLower === 'lung' || lower.includes('phổi')) {
+    synonyms.push('phổi', 'phoi', 'lá phổi', 'la phoi', 'phổi trái', 'phổi phải', 'hai lá phổi', 'hệ hô hấp');
+  }
+  if (enLower === 'trachea' || lower.includes('khí quản')) {
+    synonyms.push('khí quản', 'khi quan', 'đường thở', 'ống thở', 'hệ hô hấp');
+  }
+  if (enLower === 'esophagus' || lower.includes('thực quản')) {
+    synonyms.push('thực quản', 'thuc quan', 'thực đạo', 'ống tiêu hóa');
+  }
+  if (enLower === 'urinary bladder' || lower.includes('bàng quang')) {
+    synonyms.push('bàng quang', 'bang quang', 'bọng đái', 'bong dai', 'chứa nước tiểu');
+  }
+  if (enLower.includes('colon') || lower.includes('đại tràng') || lower.includes('ruột già')) {
+    synonyms.push('ruột già', 'ruot gia', 'đại tràng', 'dai trang', 'đại tràng lên', 'đại tràng xuống', 'đại tràng ngang', 'đại tràng sigma');
+  }
+  if (enLower.includes('jejunum') || enLower.includes('ileum') || lower.includes('ruột non')) {
+    synonyms.push('ruột non', 'ruot non', 'hồi tràng', 'hỗng tràng');
+  }
+  if (enLower.includes('appendix') || lower.includes('ruột thừa')) {
+    synonyms.push('ruột thừa', 'ruot thua', 'dột thừa', 'viêm ruột thừa');
   }
 
   // Cerebrospinal fluid & Ventricular system (CSF) - Exclude heart chambers!

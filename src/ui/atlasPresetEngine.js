@@ -16,7 +16,8 @@ import { setModelOrientation } from '../viewer/orientationManager.js';
 import { setClippingPlane, disableClipping } from '../viewer/clipping.js';
 import { setExplodeFactor, resetExplode } from '../viewer/explodedView.js';
 import { openMotionPanel, closeMotionPanel } from './motionPanel.js';
-import { showToast } from './sidebar.js';
+import { showNeuromuscularHUD, hideNeuromuscularHUD } from './neuromuscularHUD.js';
+import { showMicroanatomyHUD, hideMicroanatomyHUD } from './microanatomyHUD.js';
 
 // Precompiled Regexes for Anatomical Structure Filtering
 const REGEX_SKULL_AND_CERVICAL = /frontal|parietal|occipital|temporal|sphenoid|ethmoid|maxilla|mandible|zygomatic|nasal|lacrimal|palatine|vomer|concha|hyoid|auditory|malleus|incus|stapes|tooth|teeth|skull|head|atlas|axis|vertebra_c|c1|c2|c3|c4|c5|c6|c7|disc c|temporomandibular|atlanto/i;
@@ -115,6 +116,20 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     document.getElementById('btnToolClipping')?.classList.remove('active');
     import('./radiologicalScout.js').then(({ hideScoutView }) => hideScoutView()).catch(() => {});
     closeMotionPanel();
+  }
+
+  // 5b. Neuromuscular Innervation Interactive HUD
+  if (card.innervationInfo || (card.id && card.id.startsWith('nerv_inerv_'))) {
+    showNeuromuscularHUD(card, viewer);
+  } else {
+    hideNeuromuscularHUD();
+  }
+
+  // 5c. Microanatomy & Histology Interactive HUD
+  if (card.id && card.id.startsWith('micro_')) {
+    showMicroanatomyHUD(card, viewer);
+  } else {
+    hideMicroanatomyHUD();
   }
 
   // 6. Reset System Transparencies to Solid (skip if motionId, which manages its own anatomical isolation)
@@ -238,6 +253,22 @@ function getFineCameraConfig(card) {
       return { pos: { x: 0.15, y: 0.65, z: -1.1 }, target: { x: 0.1, y: 0.65, z: 0 } };
     case 'nerv_13_autonomic':
       return { pos: { x: 0.3, y: 1.18, z: 0.75 }, target: { x: 0, y: 1.18, z: 0 } };
+    case 'nerv_inerv_shoulder_axillary':
+      return { pos: { x: 0.38, y: 1.38, z: 0.52 }, target: { x: 0.18, y: 1.35, z: 0 } };
+    case 'nerv_inerv_arm_radial':
+      return { pos: { x: 0.45, y: 1.15, z: 0.62 }, target: { x: 0.28, y: 1.10, z: 0 } };
+    case 'nerv_inerv_forearm_median':
+      return { pos: { x: 0.42, y: 0.95, z: 0.50 }, target: { x: 0.30, y: 0.90, z: 0 } };
+    case 'nerv_inerv_hand_ulnar':
+      return { pos: { x: 0.40, y: 0.92, z: 0.48 }, target: { x: 0.28, y: 0.88, z: 0 } };
+    case 'nerv_inerv_diaphragm_phrenic':
+      return { pos: { x: 0.16, y: 1.28, z: 0.60 }, target: { x: 0, y: 1.22, z: 0 } };
+    case 'nerv_inerv_pelvic_pudendal':
+      return { pos: { x: 0, y: 0.82, z: -0.72 }, target: { x: 0, y: 0.82, z: 0 } };
+    case 'nerv_inerv_thigh_femoral_obturator':
+      return { pos: { x: 0.28, y: 0.68, z: 0.72 }, target: { x: 0.14, y: 0.65, z: 0 } };
+    case 'nerv_inerv_leg_achilles_tibial_fibular':
+      return { pos: { x: 0.25, y: 0.35, z: -0.78 }, target: { x: 0.12, y: 0.30, z: 0 } };
 
     // Respiratory Views
     case 'resp_1_upper':
@@ -326,17 +357,19 @@ function getFineCameraConfig(card) {
     // Microanatomy Views
     case 'micro_skin_dark':
     case 'micro_skin_light':
-      return { pos: { x: 0, y: 1.25, z: 1.8 }, target: { x: 0, y: 1.2, z: 0 } };
+      return { pos: { x: 0, y: 1.35, z: 0.95 }, target: { x: 0, y: 1.30, z: 0 } };
     case 'micro_hair_follicle':
-      return { pos: { x: 0, y: 1.62, z: 0.45 }, target: { x: 0, y: 1.6, z: 0 } };
+      return { pos: { x: 0.12, y: 1.62, z: 0.35 }, target: { x: 0.05, y: 1.60, z: 0.05 } };
     case 'micro_eye':
+      return { pos: { x: 0.035, y: 1.60, z: 0.28 }, target: { x: 0.035, y: 1.60, z: 0.06 } };
     case 'micro_lacrimal':
+      return { pos: { x: 0.035, y: 1.60, z: 0.28 }, target: { x: 0.030, y: 1.60, z: 0.06 } };
     case 'micro_lens_zonule':
-      return { pos: { x: 0, y: 1.65, z: 0.7 }, target: { x: 0, y: 1.6, z: 0 } };
+      return { pos: { x: 0.035, y: 1.60, z: 0.20 }, target: { x: 0.035, y: 1.60, z: 0.06 } };
     case 'micro_femur_section':
-      return { pos: { x: 0.18, y: 0.62, z: 1.25 }, target: { x: 0.09, y: 0.62, z: 0 } };
+      return { pos: { x: 0.14, y: 0.62, z: 0.48 }, target: { x: 0.09, y: 0.62, z: 0 } };
     case 'micro_osteon':
-      return { pos: { x: 0.1, y: 0.62, z: 0.55 }, target: { x: 0.09, y: 0.62, z: 0 } };
+      return { pos: { x: 0.12, y: 0.62, z: 0.38 }, target: { x: 0.09, y: 0.62, z: 0 } };
 
     // Regional Views
     case 'reg_head_neck':
@@ -813,14 +846,8 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             mat.opacity = 1.0;
             mat.depthWrite = true;
             mat.color.setHex(0xc2410c);
-          } else if (isOrbitBone) {
-            node.visible = true;
-            node.renderOrder = 2;
-            const mat = prepareMeshMaterial(node);
-            mat.transparent = true;
-            mat.opacity = 0.22;
-            mat.depthWrite = false;
           } else {
+            // Hide all skull/orbit bones so eye is isolated and pristine
             node.visible = false;
           }
           break;
@@ -831,7 +858,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           const isLeftEye = lower.endsWith('l') || lower.includes('.l') || lower.includes('_l');
           const isLacrimal = isLeftEye && (lower.includes('lacrimal gland') || lower.includes('lacrimal sac') || lower.includes('nasolacrimal') || lower.includes('lacrimal canaliculus') || lower.includes('lacrimal bone'));
           const isEyeGlobe = isLeftEye && (lower.includes('cornea') || lower.includes('sclera'));
-          const isFacialBone = isLeftEye && (lower.includes('maxilla') || lower.includes('nasal') || lower.includes('frontal') || lower.includes('zygomatic'));
 
           if (isLacrimal) {
             node.visible = true;
@@ -846,16 +872,9 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             node.visible = true;
             node.renderOrder = 4;
             const mat = prepareMeshMaterial(node);
-            mat.transparent = true;
-            mat.opacity = 0.4;
-            mat.depthWrite = false;
-          } else if (isFacialBone) {
-            node.visible = true;
-            node.renderOrder = 2;
-            const mat = prepareMeshMaterial(node);
-            mat.transparent = true;
-            mat.opacity = 0.25;
-            mat.depthWrite = false;
+            mat.transparent = false;
+            mat.opacity = 0.85;
+            mat.depthWrite = true;
           } else {
             node.visible = false;
           }
@@ -867,14 +886,14 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           const isLeftEye = lower.endsWith('l') || lower.includes('.l') || lower.includes('_l');
           const isLens = isLeftEye && (lower.includes('lens') || lower.includes('cristallin'));
           const isZonule = isLeftEye && (lower.includes('suspensory') || lower.includes('zonul') || lower.includes('ciliar') || lower.includes('iris'));
-          const isOuterWall = isLeftEye && (lower.includes('sclera') || lower.includes('cornea'));
 
           if (isLens) {
             node.visible = true;
             node.renderOrder = 14;
             const mat = prepareMeshMaterial(node);
             mat.transparent = true;
-            mat.opacity = 0.88;
+            mat.opacity = 0.90;
+            mat.depthWrite = true;
             mat.color.setHex(0x38bdf8);
             if (mat.emissive) mat.emissive.setHex(0x0369a1);
           } else if (isZonule) {
@@ -883,14 +902,8 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             const mat = prepareMeshMaterial(node);
             mat.transparent = false;
             mat.opacity = 1.0;
+            mat.depthWrite = true;
             mat.color.setHex(0xfbbf24);
-          } else if (isOuterWall) {
-            node.visible = true;
-            node.renderOrder = 2;
-            const mat = prepareMeshMaterial(node);
-            mat.transparent = true;
-            mat.opacity = 0.15;
-            mat.depthWrite = false;
           } else {
             node.visible = false;
           }
@@ -899,8 +912,7 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
 
         case 'micro_femur_section': {
           const lower = name.toLowerCase();
-          const isFemur = lower.includes('femur') || lower.includes('patella');
-          const isContext = lower.includes('pelvi') || lower.includes('ilium') || lower.includes('ischium') || lower.includes('sacrum') || lower.includes('tibia');
+          const isFemur = (lower.includes('femur') || lower.includes('patella')) && (lower.endsWith('l') || lower.includes('.l') || lower.includes('_l') || !lower.includes('.r'));
           if (isFemur) {
             node.visible = true;
             node.renderOrder = 8;
@@ -909,12 +921,6 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             mat.opacity = 1.0;
             mat.depthWrite = true;
             mat.color.setHex(0xf5edd6);
-          } else if (isContext) {
-            node.visible = true;
-            const mat = prepareMeshMaterial(node);
-            mat.transparent = true;
-            mat.opacity = 0.18;
-            mat.depthWrite = false;
           } else {
             node.visible = false;
           }
@@ -923,15 +929,15 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
 
         case 'micro_osteon': {
           const lower = name.toLowerCase();
-          const isFemur = lower.includes('femur');
+          const isFemur = lower.includes('femur') && (lower.endsWith('l') || lower.includes('.l') || lower.includes('_l') || !lower.includes('.r'));
           if (isFemur) {
             node.visible = true;
-            node.renderOrder = 10;
+            node.renderOrder = 8;
             const mat = prepareMeshMaterial(node);
             mat.transparent = false;
             mat.opacity = 1.0;
             mat.depthWrite = true;
-            mat.color.setHex(0xfaf3e0);
+            mat.color.setHex(0xf1e5c8);
           } else {
             node.visible = false;
           }
@@ -1331,6 +1337,8 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     setSystemTransparency('skeletal', 0.14);
   } else if (viewId === 'urin_pelvic') {
     setSystemTransparency('skeletal', 0.28);
+  } else if (viewId.startsWith('nerv_inerv_')) {
+    setSystemTransparency('skeletal', 0.22);
   }
 }
 

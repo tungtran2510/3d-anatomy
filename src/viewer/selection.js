@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { state, setSelectedPart, getStructureInfo, translate, pushUndo, popUndo, pushRedo, popRedo, clearRedo } from '../state/store.js';
 import { getMeshRegistry, getPickTargets, getStructure } from './loadModel.js';
-import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isolatePart, hidePart, showPart, restoreAllParts, setPartTransparency } from './visibility.js';
+import { highlightMesh, clearHighlight, ghostAllExcept, clearGhost, isGhostActive, isolatePart, hidePart, showPart, restoreAllParts, setPartTransparency } from './visibility.js';
 import { focusOnMesh, zoomIntoMesh, zoomOutToOverview } from './camera.js';
 import { showCallout, hideCallout, isCalloutVisible } from '../ui/callout.js';
 import { loadDefinitions } from '../data/anatomy.js';
@@ -13,6 +13,7 @@ import { openLesson, openVideo } from '../ui/sidebar.js';
 import { isMeasurementActive, handleMeasurementClick } from './measurement.js';
 import { getNote, saveNote } from '../state/notes.js';
 import { triggerHaptic } from './engineManager.js';
+import { dissectMultiLayer, restoreDissectLayer, redoDissectLayer } from './dissection.js';
 
 // Distinguishes a tap from the end of an orbit gesture.
 const TAP_MAX_MOVE_PX = 10;
@@ -139,10 +140,7 @@ function onClick(event) {
       return;
     }
     if (state.dissectMode) {
-      pushUndo(partId);
-      hidePart(partId);
-      deselectPart();
-      viewer.render();
+      dissectMultiLayer(partId, viewer);
       return;
     }
 
@@ -261,10 +259,7 @@ function onTouchEnd(event) {
       return;
     }
     if (state.dissectMode) {
-      pushUndo(partId);
-      hidePart(partId);
-      deselectPart();
-      viewer.render();
+      dissectMultiLayer(partId, viewer);
       return;
     }
     // Toggle callout text when tapping on the structure that is already selected
@@ -427,8 +422,8 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
     info: info
   };
 
-  // Highlight selected mesh
-  highlightMesh(partId, 0xffdf5d, 0.8);
+  // Highlight selected mesh with crisp clinical cyan accent (preserves 100% PBR textures & normal maps)
+  highlightMesh(partId, 0x38bdf8, 0.28);
   lastSelectedMesh = mesh;
 
   // Smoothly jump/focus camera onto the selected structure if not skipped
@@ -436,9 +431,11 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
     focusOnMesh(mesh, viewer, true, 2.2);
   }
 
-  // Everything else drops to a ghost, so an occluded structure is still
-  // readable, and the camera eases in to answer "where is it".
-  ghostAllExcept(partId);
+  // Only maintain ghosting if ghost mode was explicitly activated by the user (Fade Others).
+  // By default, surrounding anatomy remains 100% solid, fully shaded & crisp, eliminating hazy fog!
+  if (isGhostActive()) {
+    ghostAllExcept(partId);
+  }
 
   showCallout(partId, partData.displayName, createCalloutActions(viewer));
 
@@ -739,6 +736,14 @@ export function selectPartById(partId, viewer, skipHistory = false, skipCamera =
     'sternum': 'Body of sternum',
     'lumbar vertebra': 'Vertebra L3',
     'lumbar vertebrae': 'Vertebra L3',
+    'disc': 'Intervertebral disc L4-L5',
+    'discs': 'Intervertebral disc L4-L5',
+    'đĩa đệm': 'Intervertebral disc L4-L5',
+    'dia dem': 'Intervertebral disc L4-L5',
+    'đĩa đệm gian đốt': 'Intervertebral disc L4-L5',
+    'đĩa đệm gian đốt sống': 'Intervertebral disc L4-L5',
+    'đĩa đệm cột sống': 'Intervertebral disc L4-L5',
+    'intervertebral disc': 'Intervertebral disc L4-L5',
     'ilium': 'Hip bone.l',
     'pelvis': 'Hip bone.l',
     'rib 5': 'Fifth rib.l',
@@ -752,7 +757,58 @@ export function selectPartById(partId, viewer, skipHistory = false, skipCamera =
     'rib 9': 'Ninth rib.l',
     'rib 10': 'Tenth rib.l',
     'rib 11': 'Eleventh rib.l',
-    'rib 12': 'Twelfth rib.l'
+    'rib 12': 'Twelfth rib.l',
+    // Heart chambers & great vessels
+    'heart': 'Left ventricle',
+    'heart_all': 'Left ventricle',
+    'tim': 'Left ventricle',
+    'trai tim': 'Left ventricle',
+    'left ventricle': 'Left ventricle',
+    'right ventricle': 'Right ventricle',
+    'left atrium': 'Left atrium',
+    'right atrium': 'Right atrium',
+    'tâm thất trái': 'Left ventricle',
+    'tam that trai': 'Left ventricle',
+    'tâm thất phải': 'Right ventricle',
+    'tam that phai': 'Right ventricle',
+    'tâm nhĩ trái': 'Left atrium',
+    'tam nhi trai': 'Left atrium',
+    'tâm nhĩ phải': 'Right atrium',
+    'tam nhi phai': 'Right atrium',
+    'internal carotid artery': 'Internal carotid artery.l',
+    'external carotid artery': 'External carotid artery.l',
+    'động mạch cảnh trong': 'Internal carotid artery.l',
+    'dong mach canh trong': 'Internal carotid artery.l',
+    'động mạch cảnh ngoài': 'External carotid artery.l',
+    'dong mach canh ngoai': 'External carotid artery.l',
+    'động mạch cảnh': 'Internal carotid artery.l',
+    'dong mach canh': 'Internal carotid artery.l',
+    'động mạch chủ': 'Ascending aorta',
+    'dong mach chu': 'Ascending aorta',
+    'aorta': 'Ascending aorta',
+    // Visceral organs & lungs
+    'lungs': 'Superior lobe of left lung',
+    'lungs_all': 'Superior lobe of left lung',
+    'lung': 'Superior lobe of left lung',
+    'phổi': 'Superior lobe of left lung',
+    'phoi': 'Superior lobe of left lung',
+    'thận': 'Kidney.l',
+    'than': 'Kidney.l',
+    'thận trái': 'Kidney.l',
+    'than trai': 'Kidney.l',
+    'thận phải': 'Kidney.r',
+    'than phai': 'Kidney.r',
+    'dạ dày': 'Stomach',
+    'da day': 'Stomach',
+    'gan': 'Liver',
+    'túi mật': 'Gallbladder',
+    'tui mat': 'Gallbladder',
+    'tuyến tụy': 'Pancreas',
+    'tuyen tuy': 'Pancreas',
+    'lá lách': 'Spleen',
+    'la lach': 'Spleen',
+    'bàng quang': 'Urinary bladder',
+    'bang quang': 'Urinary bladder'
   };
 
   let targetId = partId;
@@ -817,6 +873,13 @@ export function executeUndo(viewer = state.viewer) {
   if (!action) return null;
 
   const targetViewer = viewer || state.viewer || window.viewer;
+
+  // 0. Handle multi-layer dissection action
+  if (action.type === 'dissect_layer') {
+    const msg = restoreDissectLayer(action, targetViewer);
+    pushRedo(action);
+    return msg;
+  }
 
   // 1. Handle simple string or dissect action
   if (typeof action === 'string' || action.type === 'dissect') {
@@ -901,6 +964,13 @@ export function executeRedo(viewer = state.viewer) {
   if (!action) return null;
 
   const targetViewer = viewer || state.viewer || window.viewer;
+
+  // 0. Redo multi-layer dissection action
+  if (action.type === 'dissect_layer') {
+    const msg = redoDissectLayer(action, targetViewer);
+    pushUndo(action, true);
+    return msg;
+  }
 
   // 1. Redo dissect / hide
   if (action.type === 'dissect' || action.type === 'hide') {

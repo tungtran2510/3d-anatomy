@@ -457,7 +457,159 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         systems: ['nervous', 'visceral'],
         camera: { x: 0.35, y: 1.10, z: 0.85, targetX: 0, targetY: 1.10, targetZ: 0 },
         desc: 'Điều hòa nhịp tim, huyết áp, nhu động ruột và các phản ứng sinh tồn tự động.'
-      }
+      },
+      {
+        id: 'nerv_inerv_shoulder_axillary',
+        title: '14. Innervation of Shoulder (Axillary & Suprascapular)',
+        titleVi: '14. Chi Phối Vận Động Khớp Vai (TK Nách & TK Trên Vai)',
+        subtitle: 'Cơ delta, cơ tròn bé, cơ trên gai & cơ dưới gai',
+        badge: 'Chi phối cơ vai',
+        image: '/images/atlas/musc_limbs.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.38, y: 1.38, z: 0.52, targetX: 0.18, targetY: 1.35, targetZ: 0 },
+        highlight: 'Axillary nerve.l',
+        desc: 'Thần kinh nách (C5-C6) vòng quanh cổ phẫu thuật xương cánh tay chi phối cơ delta và cơ tròn bé. Thần kinh trên vai chi phối cơ trên gai và dưới gai.',
+        innervationInfo: {
+          nerve: 'Thần kinh nách (C5-C6) & Thần kinh trên vai (C5-C6)',
+          muscles: 'Cơ delta (Deltoid), Cơ tròn bé (Teres minor), Cơ trên gai (Supraspinatus), Cơ dưới gai (Infraspinatus)',
+          reflex: 'Phản xạ giạng cánh tay & xoay ngoài khớp vai',
+          clinicalSign: 'Mất rãnh cơ delta, vai vuông, mất cảm giác da vùng huy hiệu cơ delta (Regimental badge area) khi gãy cổ phẫu thuật xương cánh tay hoặc trật khớp vai.',
+          audioScript: 'Thần kinh nách xuất phát từ bó sau đám rối cánh tay, đi qua lỗ tứ giác vòng quanh cổ phẫu thuật xương cánh tay để vận động cơ delta. Tổn thương gây liệt cơ delta, mất khả năng giạng cánh tay và mất cảm giác vùng da huy hiệu.'
+        }
+      },
+      {
+        id: 'nerv_inerv_arm_radial',
+        title: '15. Innervation of Arm & Forearm Extensors (Radial Nerve)',
+        titleVi: '15. Chi Phối Duỗi Tay & Cẳng Tay (Thần Kinh Quay)',
+        subtitle: 'Rãnh xoắn xương cánh tay, cơ tam đầu & các cơ duỗi cổ - ngón tay',
+        badge: 'Bàn tay rũ cổ cò',
+        image: '/images/atlas/musc_limbs.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.45, y: 1.15, z: 0.62, targetX: 0.28, targetY: 1.10, targetZ: 0 },
+        highlight: 'Radial nerve.l',
+        desc: 'Thần kinh quay (C5-T1) chạy trong rãnh thần kinh quay mặt sau xương cánh tay, chi phối toàn bộ nhóm cơ duỗi chi trên.',
+        innervationInfo: {
+          nerve: 'Thần kinh quay (Radial Nerve - C5, C6, C7, C8, T1)',
+          muscles: 'Cơ tam đầu cánh tay, Cơ khuỷu, Cơ cánh tay quay, Cơ duỗi cổ tay quay dài & ngắn, Cơ duỗi các ngón, Cơ duỗi ngón út, Cơ duỗi cổ tay trụ, Cơ ngửa',
+          reflex: 'Phản xạ gân cơ tam đầu (C7-C8) & Phản xạ trâm quay (C5-C6)',
+          clinicalSign: 'Dấu hiệu "Bàn tay rũ cổ cò" (Wrist drop) - không thể duỗi cổ tay và khớp bàn ngón tay do gãy thân xương cánh tay hoặc tì đè kéo dài.',
+          audioScript: 'Thần kinh quay chi phối toàn bộ hệ thống cơ duỗi của cánh tay, cẳng tay và bàn tay. Khi gãy một phần ba giữa dưới xương cánh tay, dây thần kinh dễ bị tổn thương trong rãnh xoắn, dẫn đến liệt duỗi cổ tay tạo nên tư thế bàn tay rũ cổ cò điển hình.'
+        }
+      },
+      {
+        id: 'nerv_inerv_forearm_median',
+        title: '16. Innervation of Anterior Forearm & Hand (Median Nerve)',
+        titleVi: '16. Chi Phối Gấp Cẳng Tay & Bàn Tay (Thần Kinh Giữa)',
+        subtitle: 'Ống cổ tay, các cơ gấp & ô mô cái (Dấu hiệu Bàn tay khỉ)',
+        badge: 'Ống cổ tay & Ô mô cái',
+        image: '/images/atlas/musc_limbs.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.42, y: 0.95, z: 0.50, targetX: 0.30, targetY: 0.90, targetZ: 0 },
+        highlight: 'Median nerve.l',
+        desc: 'Thần kinh giữa (C6-T1) đi qua ống cổ tay dưới dây chằng vòng cổ tay, chi phối hầu hết các cơ gấp cẳng tay và các cơ ô mô cái.',
+        innervationInfo: {
+          nerve: 'Thần kinh giữa (Median Nerve - C6, C7, C8, T1)',
+          muscles: 'Cơ sấp tròn, Cơ gấp cổ tay quay, Cơ gan tay dài, Cơ gấp nông các ngón, Cơ gấp sâu các ngón (ngón 2-3), Cơ sấp vuông, Các cơ ô mô cái (gấp ngắn, dạng ngắn, đối ngón cái)',
+          reflex: 'Phản xạ sấp cẳng tay (C6-C7)',
+          clinicalSign: 'Hội chứng ống cổ tay (Carpal Tunnel Syndrome) gây tê rát 3 ngón rưỡi ngoài; teo ô mô cái tạo nên dấu hiệu "Bàn tay khỉ" (Ape hand) và mất động tác đối chiếu ngón cái.',
+          audioScript: 'Thần kinh giữa là dây thần kinh của sự khéo léo, chi phối các cơ gấp cẳng tay và cơ đối chiếu ngón cái. Chèn ép tại ống cổ tay gây tê buốt về đêm và lâu ngày teo phẳng ô mô cái tạo nên dấu hiệu bàn tay khỉ.'
+        }
+      },
+      {
+        id: 'nerv_inerv_hand_ulnar',
+        title: '17. Innervation of Intrinsic Hand (Ulnar Nerve)',
+        titleVi: '17. Chi Phối Cơ Nội Tại Bàn Tay (Thần Kinh Trụ)',
+        subtitle: 'Rãnh khuỷu tay, ống Guyon, các cơ liên cốt & ô mô út',
+        badge: 'Bàn tay vuốt trụ',
+        image: '/images/atlas/musc_limbs.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.40, y: 0.92, z: 0.48, targetX: 0.28, targetY: 0.88, targetZ: 0 },
+        highlight: 'Ulnar nerve.l',
+        desc: 'Thần kinh trụ (C8-T1) đi sau mỏm trên lồi cầu trong xương cánh tay, qua ống Guyon chi phối các cơ nội tại bàn tay thực hiện các động tác khép dạng ngón tay.',
+        innervationInfo: {
+          nerve: 'Thần kinh trụ (Ulnar Nerve - C8, T1)',
+          muscles: 'Cơ gấp cổ tay trụ, Cơ gấp sâu các ngón (ngón 4-5), Các cơ ô mô út (dạng, gấp, đối ngón út), Toàn bộ các cơ liên cốt mu tay & gan tay, Cơ giun 3-4, Cơ khép ngón cái',
+          reflex: 'Nghiệm pháp Froment (Froment sign - kẹp giấy giữa ngón cái và ngón trỏ)',
+          clinicalSign: 'Dấu hiệu "Bàn tay vuốt trụ" (Claw hand) - quá duỗi khớp bàn ngón và gấp khớp liên ngón 4-5; teo các khoang liên cốt mu bàn tay.',
+          audioScript: 'Thần kinh trụ chi phối sức mạnh và độ tinh xảo ngón tay. Đi qua rãnh ròng rọc khuỷu tay và ống Guyon cổ tay. Khi tổn thương, cơ khép ngón cái và các cơ liên cốt bị liệt gây tư thế bàn tay vuốt trụ và teo rãnh mu tay.'
+        }
+      },
+      {
+        id: 'nerv_inerv_diaphragm_phrenic',
+        title: '18. Innervation of Diaphragm (Phrenic Nerve C3-C5)',
+        titleVi: '18. Chi Phối Vận Động Cơ Hoành (Thần Kinh Hoành C3-C5)',
+        subtitle: 'Đường đi xuyên trung thất trước màng ngoài tim tới vòm hoành',
+        badge: 'Nhịp thở sinh tồn',
+        image: '/images/atlas/resp_diaphragm.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.16, y: 1.28, z: 0.60, targetX: 0, targetY: 1.22, targetZ: 0 },
+        highlight: 'Diaphragm',
+        desc: 'Thần kinh hoành bắt nguồn từ các nhánh trước dây thần kinh gai sống cổ C3, C4, C5, là nguồn vận động duy nhất cho cơ hoành hô hấp.',
+        innervationInfo: {
+          nerve: 'Thần kinh hoành (Phrenic Nerve - Rễ C3, C4, C5: "C3-4-5 keeps diaphragm alive")',
+          muscles: 'Cơ hoành (Diaphragm) - phần ức, phần sườn, phần thắt lưng và trung tâm gân',
+          reflex: 'Cử động hô hấp cơ hoành (Diaphragmatic excursion test)',
+          clinicalSign: 'Liệt cơ hoành một bên gây nâng cao vòm hoành nghịch thường trên phim X-quang ngực thẳng và suy giảm dung tích sống.',
+          audioScript: 'Thần kinh hoành là nguồn vận động độc quyền điều khiển cơ hoành, cơ hô hấp chính của cơ thể. Bắt nguồn từ các rễ cổ C3 đến C5, dây thần kinh chạy áp sát hai bên màng ngoài tim để phân nhánh vào vòm hoành.'
+        }
+      },
+      {
+        id: 'nerv_inerv_pelvic_pudendal',
+        title: '19. Innervation of Pelvic Floor (Pudendal Nerve S2-S4)',
+        titleVi: '19. Chi Phối Cơ Đáy Chậu & Vùng Chậu (Thần Kinh Thẹn S2-S4)',
+        subtitle: 'Khuyết ngồi bé, ống thẹn Alcock, cơ nâng hậu môn & cơ thắt vân',
+        badge: 'Đáy chậu & Cơ thắt',
+        image: '/images/atlas/nerv_spinal.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0, y: 0.82, z: -0.72, targetX: 0, targetY: 0.82, targetZ: 0 },
+        highlight: 'Pudendal nerve.l',
+        desc: 'Thần kinh thẹn (S2-S4) rời chậu hông qua khuyết ngồi lớn rồi vòng qua gai ngồi vào khuyết ngồi bé qua ống thẹn Alcock, chi phối cơ nâng hậu môn và cơ quan sinh dục ngoài.',
+        innervationInfo: {
+          nerve: 'Thần kinh thẹn (Pudendal Nerve - Rễ S2, S3, S4: "S2-3-4 keeps poop off the floor")',
+          muscles: 'Cơ nâng hậu môn (Levator ani), Cơ thắt ngoài hậu môn (External anal sphincter), Cơ ngồi hang (Ischiocavernosus), Cơ hành xốp (Bulbospongiosus), Cơ ngang đáy chậu',
+          reflex: 'Phản xạ hành xốp (Bulbocavernosus reflex - S2-S4) & Phản xạ co thắt hậu môn (Anal wink)',
+          clinicalSign: 'Hội chứng đau dây thần kinh thẹn do chèn ép ống Alcock (thường gặp ở người đạp xe đường dài); mất phản xạ đại tiểu tiện tự chủ; chỉ định thủ thuật phong bế thần kinh thẹn trong sản khoa.',
+          audioScript: 'Thần kinh thẹn xuất phát từ đám rối cùng các nhánh S2 đến S4, đi qua ống thẹn Alcock chi phối toàn bộ cơ sàn chậu và cơ thắt ngoài hậu môn niệu đạo, giữ vai trò sinh tồn trong việc kiểm soát đại tiểu tiện và chức năng sinh dục.'
+        }
+      },
+      {
+        id: 'nerv_inerv_thigh_femoral_obturator',
+        title: '20. Innervation of Thigh (Femoral & Obturator Nerves)',
+        titleVi: '20. Chi Phối Vận Động Đùi Trước & Đùi Trong (TK Đùi & TK Bịt)',
+        subtitle: 'Cơ tứ đầu đùi, phản xạ gân bánh chè (L3-L4) & các cơ khép đùi',
+        badge: 'Phản xạ bánh chè L3-L4',
+        image: '/images/atlas/reg_lower_limb.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.28, y: 0.68, z: 0.72, targetX: 0.14, targetY: 0.65, targetZ: 0 },
+        highlight: 'Femoral nerve.l',
+        desc: 'Thần kinh đùi (L2-L4) đi qua tam giác đùi dưới dây chằng bẹn chi phối cơ tứ đầu đùi duỗi gối; thần kinh bịt (L2-L4) qua lỗ bịt chi phối nhóm cơ khép đùi.',
+        innervationInfo: {
+          nerve: 'Thần kinh đùi (Femoral Nerve - L2-L4) & Thần kinh bịt (Obturator Nerve - L2-L4)',
+          muscles: 'Cơ tứ đầu đùi (Cơ thẳng đùi, Cơ rộng ngoài, rộng trong, rộng giữa), Cơ may, Cơ lược; Cơ khép dài, Cơ khép ngắn, Cơ khép lớn, Cơ thon',
+          reflex: 'Phản xạ gân bánh chè (Patellar tendon reflex - trung khu tủy sống L3-L4)',
+          clinicalSign: 'Mất phản xạ gân bánh chè, sụm gối do liệt cơ tứ đầu đùi, không thể leo cầu thang hoặc đá chân ra trước; mất động tác khép hai đùi.',
+          audioScript: 'Thần kinh đùi là nhánh lớn nhất của đám rối thắt lưng, chi phối cơ tứ đầu đùi duỗi thẳng khớp gối. Khám phản xạ gân bánh chè là nghiệm pháp kinh điển đánh giá tính toàn vẹn của cung phản xạ thần kinh gai sống L3 và L4.'
+        }
+      },
+      {
+        id: 'nerv_inerv_leg_achilles_tibial_fibular',
+        title: '21. Innervation of Leg, Heel & Foot (Sciatic, Tibial & Fibular)',
+        titleVi: '21. Chi Phối Cẳng Chân & Gót Chân Achilles (TK Chày & TK Mác)',
+        subtitle: 'Cơ tam đầu cẳng chân, gân gót Achilles (S1) & Bàn chân rũ (Foot Drop)',
+        badge: 'Gân Achilles & Bàn chân rũ',
+        image: '/images/atlas/reg_lower_limb.png',
+        systems: ['nervous', 'muscular', 'skeletal'],
+        camera: { x: 0.25, y: 0.35, z: -0.78, targetX: 0.12, targetY: 0.30, targetZ: 0 },
+        highlight: 'Tibial nerve.l',
+        desc: 'Thần kinh tọa chia nhánh tại đỉnh hố khoeo thành thần kinh chày (chi phối cơ tam đầu cẳng chân hợp thành gân Achilles, phản xạ S1) và thần kinh mác chung (vòng quanh chỏm xương mác chi phối duỗi cổ chân).',
+        innervationInfo: {
+          nerve: 'Thần kinh chày (Tibial Nerve - L4-S3) & Thần kinh mác chung / mác sâu (Common & Deep Fibular Nerve - L4-S2)',
+          muscles: 'Cơ bụng chân (Gastrocnemius), Cơ dép (Soleus), Cơ gan chân, Gân gót Achilles, Cơ chày sau, Cơ chày trước, Cơ duỗi dài các ngón chân',
+          reflex: 'Phản xạ gân gót Achilles (Achilles tendon reflex - trung khu tủy sống S1-S2)',
+          clinicalSign: 'Tổn thương TK mác chung ở chỏm xương mác gây dấu hiệu "Bàn chân rũ" (Foot drop) với dáng đi chấm phẩy (Steppage gait); tổn thương TK chày gây mất phản xạ gân gót và không thể nhón gót chân (tiptoe).',
+          audioScript: 'Thần kinh tọa phân đôi thành thần kinh chày chi phối gân gót Achilles giúp động tác nhón chân, và thần kinh mác chung chi phối cơ chày trước nâng bàn chân. Chấn thương chỏm xương mác rất dễ gây liệt thần kinh mác dẫn đến bàn chân rũ và dáng đi chấm phẩy.'
+        }
+      },
     ]
   },
   {
@@ -1047,7 +1199,7 @@ export const ATLAS_QUIZZES_DATA = [
     titleVi: '3. Ca Bệnh Lâm Sàng Tương Tác',
     title: '3. Ca Bệnh Lâm Sàng Tương Tác',
     subtitle: 'Tình huống cấp cứu tai nạn và phẫu thuật',
-    badge: 'Bác sĩ ảo',
+    badge: 'Lâm sàng',
     image: '/images/atlas/quiz_clinical_cases.png',
     action: 'start_scenario',
     desc: 'Vận dụng giải phẫu vào lâm sàng: vết thương thấu ngực, gãy cổ xương đùi, thoát vị.'
