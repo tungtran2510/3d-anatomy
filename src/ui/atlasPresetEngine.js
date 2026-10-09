@@ -359,6 +359,8 @@ function getFineCameraConfig(card) {
       return { pos: { x: 0.1, y: 1.12, z: 0.85 }, target: { x: 0, y: 1.1, z: 0 } };
     case 'dig_18_enteric_nervous':
       return { pos: { x: 0.22, y: 1.20, z: 0.70 }, target: { x: 0, y: 1.18, z: 0 } };
+    case 'dig_19_duodenum_papilla':
+      return { pos: { x: 0.08, y: 1.10, z: 0.38 }, target: { x: 0.01, y: 1.094, z: 0.03 } };
 
     // Lymphatic Views
     case 'lymph_spleen':
@@ -371,6 +373,12 @@ function getFineCameraConfig(card) {
       return { pos: { x: 0, y: 1.05, z: 0.88 }, target: { x: 0, y: 1.05, z: 0 } };
     case 'urin_pelvic':
       return { pos: { x: 0, y: 0.88, z: 0.75 }, target: { x: 0, y: 0.88, z: 0 } };
+    case 'uro_kidney_coronal':
+      return { pos: { x: 0.14, y: 1.12, z: 0.35 }, target: { x: 0.06, y: 1.11, z: -0.02 } };
+
+    // Surface Anatomy Views
+    case 'surf_1_torso':
+      return { pos: { x: 0, y: 1.18, z: 1.35 }, target: { x: 0, y: 1.18, z: 0 } };
 
     // Microanatomy Views
     case 'micro_skin_dark':
@@ -424,6 +432,17 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     }
     node.material = node.userData.__origMaterial.clone();
     return node.material;
+  }
+
+  // Handle dedicated internal anatomy groups
+  const kidneyInternalGroup = viewer.scene?.getObjectByName('Kidney_Internal_Coronal_Group');
+  if (kidneyInternalGroup) {
+    kidneyInternalGroup.visible = (viewId === 'uro_kidney_coronal');
+  }
+
+  const duodenumLumenGroup = viewer.scene?.getObjectByName('Duodenum_Ampulla_Vater_Lumen');
+  if (duodenumLumenGroup) {
+    duodenumLumenGroup.visible = (viewId === 'dig_19_duodenum_papilla');
   }
 
   // Pre-filter meshes by allowed systems and specific preset views
@@ -821,6 +840,37 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
               mat.transparent = true;
               mat.opacity = 0.25;
               mat.depthWrite = false;
+            }
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
+        case 'surf_1_torso': {
+          if (sys === 'integumentary') {
+            node.visible = true;
+            const mat = prepareMeshMaterial(node);
+            mat.transparent = true;
+            mat.opacity = 0.35;
+            mat.depthWrite = false;
+            mat.color.setHex(0xe4b59d);
+            mat.roughness = 0.55;
+            mat.metalness = 0.02;
+          } else if (sys === 'muscular') {
+            node.visible = /pectoralis|rectus abdominis|external oblique|latissimus dorsi|serratus anterior|trapezius|deltoid|infraspinatus/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            }
+          } else if (sys === 'skeletal') {
+            node.visible = /clavicle|sternum|manubrium|xiphoid|rib|costal|iliac|ilium|pubis|spine|vertebra/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 0.95;
             }
           } else {
             node.visible = false;
@@ -1371,6 +1421,52 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
           break;
         }
 
+        case 'dig_19_duodenum_papilla': {
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = /vertebra_l[123]|rib.*(10|11|12)/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.14;
+              mat.depthWrite = false;
+            }
+          } else if (sys === 'visceral') {
+            const isAmpullaGroup = /Duodenum_Ampulla_Vater_Lumen|Major_Duodenal_Papilla|Sphincter_of_Oddi/i.test(name);
+            const isDuodenum = /duodenum/i.test(name);
+            const isBiliaryPancreas = /pancrea|gallbladder|bile/i.test(name);
+
+            if (isAmpullaGroup) {
+              node.visible = true;
+              if (node.isMesh) {
+                node.renderOrder = 9;
+              }
+            } else if (isDuodenum) {
+              node.visible = true;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.32;
+              mat.depthWrite = false;
+            } else if (isBiliaryPancreas) {
+              node.visible = true;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            } else {
+              node.visible = false;
+            }
+          } else if (sys === 'cardiovascular') {
+            node.visible = /celiac|gastroduodenal|pancreaticoduodenal|splenic|mesenteric/i.test(name);
+          } else {
+            node.visible = false;
+          }
+          break;
+        }
+
         // --- LYMPHATIC SYSTEM VIEWS ---
         case 'lymph_spleen': {
           if (REGEX_GENITALIA.test(name)) {
@@ -1445,6 +1541,52 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
               mat.opacity = 1.0;
               mat.depthWrite = true;
             }
+          }
+          break;
+        }
+
+        case 'uro_kidney_coronal': {
+          if (REGEX_GENITALIA.test(name)) {
+            node.visible = false;
+            break;
+          }
+          if (sys === 'skeletal') {
+            node.visible = /vertebra_t(11|12)|vertebra_l[123]|rib.*(11|12)/i.test(name);
+            if (node.visible) {
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.14;
+              mat.depthWrite = false;
+            }
+          } else if (sys === 'visceral') {
+            const isInternalKidney = /Kidney_Internal_Coronal_Group|Kidney_Coronal_Cortex|Renal_Pyramids|Renal_Calyces|Renal_Calculus/i.test(name);
+            const isKidneyLeft = /kidneyl|kidney\.l/i.test(name);
+            const isRenalPedicle = /renal pelvis|ureter.*l|suprarenal.*l/i.test(name);
+
+            if (isInternalKidney) {
+              node.visible = true;
+              if (node.isMesh) {
+                node.renderOrder = 9;
+              }
+            } else if (isKidneyLeft) {
+              node.visible = true;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.20;
+              mat.depthWrite = false;
+            } else if (isRenalPedicle) {
+              node.visible = true;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+            } else {
+              node.visible = false;
+            }
+          } else if (sys === 'cardiovascular') {
+            node.visible = /renal.*l|aorta|cava/i.test(name);
+          } else {
+            node.visible = false;
           }
           break;
         }
@@ -1577,10 +1719,12 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
     setSystemTransparency('skeletal', 0.15);
   } else if (viewId === 'lymph_nodes_system') {
     setSystemTransparency('skeletal', 0.18);
-  } else if (viewId === 'urin_system') {
+  } else if (viewId === 'urin_system' || viewId === 'uro_kidney_coronal') {
     setSystemTransparency('skeletal', 0.14);
   } else if (viewId === 'urin_pelvic') {
     setSystemTransparency('skeletal', 0.28);
+  } else if (viewId === 'surf_1_torso') {
+    setSystemTransparency('integumentary', 0.35);
   } else if (viewId.startsWith('nerv_inerv_')) {
     setSystemTransparency('skeletal', 0.22);
   }

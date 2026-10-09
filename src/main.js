@@ -18,10 +18,17 @@ import { initTheme, toggleAppTheme } from './utils/themeManager.js';
 import { engineManager } from './viewer/engineManager.js';
 
 import { cleanSearchLabel } from './utils/dataLoader.js';
+import { applyAtlasPreset } from './ui/atlasPresetEngine.js';
+import { ATLAS_SYSTEMS_CATEGORIES, ATLAS_CROSS_SECTIONS_CATEGORIES, ATLAS_LAB_CATEGORIES, ATLAS_REGIONS_CATEGORIES } from './data/atlasViewsData.js';
 
 window.state = state;
 window.selectStructureAnywhere = selectStructureAnywhere;
 window.selectPartById = selectPartById;
+window.applyAtlasPreset = applyAtlasPreset;
+window.ATLAS_SYSTEMS_CATEGORIES = ATLAS_SYSTEMS_CATEGORIES;
+window.ATLAS_CROSS_SECTIONS_CATEGORIES = ATLAS_CROSS_SECTIONS_CATEGORIES;
+window.ATLAS_LAB_CATEGORIES = ATLAS_LAB_CATEGORIES;
+window.ATLAS_REGIONS_CATEGORIES = ATLAS_REGIONS_CATEGORIES;
 
 setTranslations({ vi: translationsVi, en: translationsEn, it: translationsIt });
 

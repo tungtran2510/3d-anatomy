@@ -1103,6 +1103,18 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         camera: { x: 0.22, y: 1.20, z: 0.70, targetX: 0, targetY: 1.18, targetZ: 0 },
         highlight: 'Stomach',
         desc: 'Hệ thần kinh ruột (não bộ thứ hai) phối hợp cùng thần kinh phó giao cảm điều phối nhu động ruột và tiết dịch.'
+      },
+      {
+        id: 'dig_19_duodenum_papilla',
+        title: '19. Duodenal Lumen & Ampulla of Vater',
+        titleVi: '19. Lòng Tá Tràng D2 & Nhú Tá Lớn (Cơ Vòng Oddi)',
+        subtitle: 'Ngã ba mật tụy đổ vào tá tràng qua nhú tá lớn',
+        badge: 'Bóng Vater',
+        image: '/images/atlas/dig_duodenum_papilla.png',
+        systems: ['visceral', 'cardiovascular'],
+        camera: { x: 0.08, y: 1.09, z: 0.24, targetX: 0.01, targetY: 1.09, targetZ: 0.03 },
+        highlight: 'Major_Duodenal_Papilla',
+        desc: 'Mở cửa sổ thành trước tá tràng đoạn D2: Quan sát nhú tá lớn, cơ vòng Oddi và điểm hội tụ của ống mật chủ cùng ống tụy chính Wirsung.'
       }
     ]
   },
@@ -1167,6 +1179,18 @@ export const ATLAS_SYSTEMS_CATEGORIES = [
         camera: { x: 0, y: 0.88, z: 0.78, targetX: 0, targetY: 0.88, targetZ: 0 },
         highlight: 'Urinary bladder',
         desc: 'Giải phẫu đáy chậu, nâng đỡ các tạng sinh dục và bài tiết nước tiểu.'
+      },
+      {
+        id: 'uro_kidney_coronal',
+        title: '3. Kidney Internal Architecture',
+        titleVi: '3. Bổ Dọc Thận & Cấu Trúc Tủy - Vỏ (Sỏi Thận)',
+        subtitle: 'Tháp thận Malpighi, đài bể thận và sỏi thận đài dưới',
+        badge: 'Thận bổ dọc',
+        image: '/images/atlas/uro_kidney_coronal.png',
+        systems: ['visceral', 'skeletal', 'cardiovascular'],
+        camera: { x: 0.14, y: 1.12, z: 0.35, targetX: 0.06, targetY: 1.11, targetZ: -0.02 },
+        highlight: 'Kidney_Coronal_Cortex.l',
+        desc: 'Thiết đồ bổ dọc thận trái: Phân định rõ vỏ thận giàu mao mạch, 7 tháp tủy Malpighi, hệ thống đài bể thận và vị trí đọng sỏi thận đài dưới.'
       }
     ]
   }
@@ -1232,6 +1256,16 @@ export const ATLAS_REGIONS_CATEGORIES = [
     image: '/images/atlas/reg_lower_limb.png',
     camera: { x: 0.25, y: 0.5, z: 1.3, targetX: 0.2, targetY: 0.5, targetZ: 0 },
     systems: ['skeletal']
+  },
+  {
+    id: 'surf_1_torso',
+    titleVi: 'Giải Phẫu Bề Mặt Thân Mình (Da Bán Trong Suốt)',
+    title: 'Surface Anatomy & Body Envelope',
+    subtitle: 'Đối chiếu mốc xương và cơ bắp dưới lớp da người',
+    badge: 'Giải phẫu bề mặt',
+    image: '/images/atlas/surf_torso.png',
+    camera: { x: 0, y: 1.25, z: 1.15, targetX: 0, targetY: 1.15, targetZ: 0 },
+    systems: ['integumentary', 'skeletal', 'muscular']
   }
 ];
 

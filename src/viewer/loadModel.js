@@ -7,6 +7,7 @@ import { state, setLoadingSystem } from '../state/store.js';
 import { asset } from '../utils/paths.js';
 import { getAnatomyRoot } from './orientationManager.js';
 import { updateBodyEnvelopeAuto, realignIntegumentaryGeometry } from './bodyEnvelope.js';
+import { setupKidneyInternalAnatomy, setupDuodenumAnatomy } from './internalAnatomy.js';
 
 // Without an acceleration structure, picking cost grows with the triangle
 // count: 10.4M triangles tested per pointer event across seven systems.
@@ -618,6 +619,8 @@ function processModel(model, systemId, viewer) {
     setupIntervertebralDiscs(model, systemId, viewer, nodes);
   } else if (systemId === 'visceral') {
     setupStomachAnatomy(model, systemId, viewer, nodes);
+    setupKidneyInternalAnatomy(model, systemId, viewer, nodes, meshRegistry, structures);
+    setupDuodenumAnatomy(model, systemId, viewer, nodes, meshRegistry, structures);
   }
 
   systemRegistry.set(systemId, nodes);
