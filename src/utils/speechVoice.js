@@ -21,6 +21,17 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       refreshVoices();
     };
   }
+
+  // Intercept speak calls if muted
+  try {
+    const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+    window.speechSynthesis.speak = function(utterance) {
+      if (window.__aiVoiceMuted) {
+        return;
+      }
+      return origSpeak(utterance);
+    };
+  } catch {}
 }
 
 /**
@@ -38,4 +49,35 @@ export function getVietnameseVoice() {
   if (starts) return starts;
 
   return null;
+}
+
+/**
+ * Checks if AI speech reading is globally muted
+ */
+export function isVoiceMuted() {
+  return typeof window !== 'undefined' && !!window.__aiVoiceMuted;
+}
+
+/**
+ * Sets global mute state for AI voice reading
+ */
+export function setVoiceMuted(muted) {
+  if (typeof window === 'undefined') return;
+  window.__aiVoiceMuted = !!muted;
+  if (muted && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch {}
+  }
+}
+
+/**
+ * Immediately cancels all currently active AI speech synthesis
+ */
+export function stopAllSpeech() {
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch {}
+  }
 }

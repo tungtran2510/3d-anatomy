@@ -12,6 +12,7 @@
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { activateClinicalAxis3D, focusAxisStep, deactivateClinicalAxis3D } from '../viewer/clinicalAxisViewer.js';
 import { showToast } from './sidebar.js';
+import { getClinicalAxisIcon } from './icons.js';
 
 let hudEl = null;
 let sheetEl = null;
@@ -110,7 +111,14 @@ export async function openClinicalAxesModal(axisId = null, viewer = window.viewe
  */
 export function closeClinicalAxesModal(viewer = window.viewer) {
   stopSpeech();
-  if (hudEl) hudEl.classList.add('hidden');
+  if (hudEl) {
+    hudEl.classList.add('hidden');
+    const dropdown = hudEl.querySelector('#hudAxisDropdown');
+    if (dropdown) dropdown.classList.add('hidden');
+    if (hudEl._outsideDropdownHandler) {
+      document.removeEventListener('pointerdown', hudEl._outsideDropdownHandler);
+    }
+  }
   closeMechanismSheet();
   deactivateClinicalAxis3D(viewer);
 }
@@ -128,7 +136,7 @@ function renderFloatingHud() {
       <!-- Row 1: Header + Tools -->
       <div class="hud-top-row">
         <div class="hud-title-wrap">
-          <span class="hud-axis-icon">${a.icon.slice(0, 2)}</span>
+          <span class="hud-axis-icon">${getClinicalAxisIcon(a.id)}</span>
           <span class="hud-axis-title">${a.titleVi.split('(')[0].trim()}</span>
           <span class="hud-axis-badge">${a.badge}</span>
         </div>
@@ -161,19 +169,33 @@ function renderFloatingHud() {
 
       <!-- Row 3: Single-line Concise Note (< 15 words) -->
       <div class="hud-note-row">
-        <span class="hud-note-bullet">💡</span>
+        <span class="hud-note-bullet">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </span>
         <span class="hud-note-text">${currentStep.shortNote || currentStep.note}</span>
       </div>
     </div>
 
     <!-- Dropdown Menu đổi trục nhanh -->
     <div class="hud-axis-dropdown hidden" id="hudAxisDropdown">
-      ${CLINICAL_AXES.map(item => `
-        <button type="button" class="hud-dropdown-item ${item.id === a.id ? 'active' : ''}" data-select-axis="${item.id}">
-          <span class="dropdown-item-icon">${item.icon}</span>
-          <span class="dropdown-item-title">${item.titleVi}</span>
-        </button>
-      `).join('')}
+      <div class="hud-dropdown-header">
+        <span class="hud-dropdown-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:5px;"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+          Trục ứng dụng lâm sàng
+        </span>
+        <button type="button" class="hud-dropdown-close-btn" id="btnCloseAxisDropdown" title="Đóng danh sách">&times;</button>
+      </div>
+      <div class="hud-dropdown-scroll">
+        ${CLINICAL_AXES.map(item => {
+          const cleanTitle = item.titleVi.replace(/\s*\([^)]*\)/g, '').trim();
+          return `
+            <button type="button" class="hud-dropdown-item ${item.id === a.id ? 'active' : ''}" data-select-axis="${item.id}" title="${item.titleVi}">
+              <span class="dropdown-item-icon">${getClinicalAxisIcon(item.id)}</span>
+              <span class="dropdown-item-title">${cleanTitle}</span>
+            </button>
+          `;
+        }).join('')}
+      </div>
     </div>
   `;
 
@@ -221,12 +243,35 @@ function bindFloatingHudEvents() {
   // 3. Đổi trục nhanh (Dropdown)
   const btnSwitch = hudEl.querySelector('#btnSwitchAxis');
   const dropdown = hudEl.querySelector('#hudAxisDropdown');
+  const btnCloseDropdown = hudEl.querySelector('#btnCloseAxisDropdown');
+
   if (btnSwitch && dropdown) {
     btnSwitch.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.classList.toggle('hidden');
     });
   }
+
+  if (btnCloseDropdown && dropdown) {
+    btnCloseDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.add('hidden');
+    });
+  }
+
+  // Outside click listener to dismiss dropdown
+  const onOutsideClick = (e) => {
+    if (dropdown && !dropdown.classList.contains('hidden')) {
+      if (!dropdown.contains(e.target) && !btnSwitch?.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    }
+  };
+  if (hudEl._outsideDropdownHandler) {
+    document.removeEventListener('pointerdown', hudEl._outsideDropdownHandler);
+  }
+  hudEl._outsideDropdownHandler = onOutsideClick;
+  document.addEventListener('pointerdown', onOutsideClick);
 
   hudEl.querySelectorAll('[data-select-axis]').forEach(item => {
     item.addEventListener('click', async (e) => {

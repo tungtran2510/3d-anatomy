@@ -83,6 +83,17 @@ function italianTermsFor(normalisedBase) {
   return [...new Set(found)];
 }
 
+export function cleanSearchLabel(text) {
+  if (!text) return '';
+  let str = text.trim();
+  // 1. Remove side indicator in parentheses: (trái), (phải), (trai), (phai)
+  str = str.replace(/\s*\((trái|phải|trai|phai)\)/gi, '').trim();
+  // 2. Remove bulky aliases in parentheses (e.g. (Cơ dựng gai sống), (Cơ cổ vai gáy), (Phần lên), (Phần ngang), (cơ 6 múi), (Cơ lưng sâu))
+  // Keeps concise structural notations like (C1), (L4-L5), (Atlas)
+  str = str.replace(/\s*\((?:Cơ\s+|Phần\s+|cơ\s+|nhánh\s+|vai\s*-\s*gáy|[^)]{6,})\)/gi, '').trim();
+  return str;
+}
+
 // One row per anatomical structure, not per mesh: a paired structure appears
 // once with both sides attached, instead of filling the list with duplicates.
 function buildSearchIndex() {
@@ -97,13 +108,15 @@ function buildSearchIndex() {
 
     let row = rows.get(key);
     if (!row) {
-      const viName = info.name?.vi || '';
+      const rawVi = info.name?.vi || '';
+      const viName = cleanSearchLabel(rawVi) || rawVi;
       const viSyns = getVietnameseSynonyms(base);
       const latin = info.latinName || '';
       const italian = italianTermsFor(normalise(base));
 
       const terms = [
         normalise(base),
+        normalise(rawVi),
         normalise(viName),
         normalise(latin),
         ...viSyns.map(normalise),
@@ -114,6 +127,7 @@ function buildSearchIndex() {
         key,
         base,
         label: viName || base.replace(/^\((.*)\)$/, '$1'),
+        rawLabel: rawVi,
         latin,
         system,
         sides: {},
@@ -135,16 +149,19 @@ function scoreRow(row, query, tokens, rawQuery = '') {
   let best = 0;
   const rawLower = rawQuery ? rawQuery.toLowerCase().trim() : '';
 
+  const label = row.label || row.name || row.partId || '';
+  const labelLen = label.length;
+
   // 1. Direct Exact & Accented Vietnamese matches (Ưu tiên tuyệt đối từ chuẩn y khoa)
-  if (rawLower && row.label) {
-    const labelLower = row.label.toLowerCase();
+  if (rawLower && label) {
+    const labelLower = label.toLowerCase();
     if (labelLower === rawLower) best = 150;
     else if (labelLower.startsWith(rawLower)) best = 120;
     else if (labelLower.split(/[\s(),.-]+/).some(word => word === rawLower)) best = 110;
     else if (labelLower.includes(rawLower)) best = 95;
   }
 
-  for (const term of row.terms) {
+  for (const term of (row.terms || [])) {
     if (term === query) best = Math.max(best, 100);
     else if (term.startsWith(query)) best = Math.max(best, 80);
     else if (term.split(/[\s(),.-]+/).some(word => word.startsWith(query))) best = Math.max(best, 60);
@@ -153,7 +170,7 @@ function scoreRow(row, query, tokens, rawQuery = '') {
 
   if (!best && tokens.length > 1) {
     // Every token has to appear somewhere for a multi-word query to count.
-    const all = row.terms.join(' ');
+    const all = (row.terms || []).join(' ');
     if (tokens.every(token => all.includes(token))) best = 35;
   }
 
@@ -164,7 +181,7 @@ function scoreRow(row, query, tokens, rawQuery = '') {
 
   // A short name that matches is a better answer than a long one that merely
   // contains the query.
-  best -= Math.min(row.label.length / 12, 6);
+  best -= Math.min(labelLen / 12, 6);
 
   return best;
 }
@@ -183,7 +200,16 @@ export function searchStructures(query, limit = 30) {
     if (score > 0) scored.push({ row, score });
   }
 
-  scored.sort((a, b) => b.score - a.score || a.row.label.length - b.row.label.length);
+  scored.sort((a, b) => {
+    const lenA = (a.row.label || a.row.name || '').length;
+    const lenB = (b.row.label || b.row.name || '').length;
+    return b.score - a.score || lenA - lenB;
+  });
 
-  return scored.slice(0, limit).map(entry => entry.row);
+  return scored.slice(0, limit).map(entry => {
+    const r = entry.row;
+    if (!r.base) r.base = r.partId;
+    if (!r.label) r.label = r.name || r.partId;
+    return r;
+  });
 }

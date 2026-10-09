@@ -17,7 +17,8 @@
   <!-- Professional Vietnamese Modern Typography: Be Vietnam Pro -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet"></noscript>
 </head>
 <body>
   <div id="app">
@@ -274,6 +275,19 @@
             <button type="button" class="pill-close-btn" id="pillCloseHalfBodyBtn" title="Tắt chế độ nửa người">&times;</button>
           </div>
 
+          <!-- Floating Quick Voice Mute / Speaker Toggle (Top-Right, next to Fullscreen) -->
+          <button type="button" class="btn-quick-voice-mute" id="btnQuickMuteAI" title="Tắt / Bật âm lượng giọng đọc AI" aria-label="Tắt hoặc bật âm lượng giọng đọc AI">
+            <svg class="icon-speaker" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            <svg class="icon-muted hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+          </button>
+
           <!-- Floating Top View Button (Góc nhìn từ trên đỉnh đầu nhân vật) -->
           <button type="button" class="floating-top-view-btn" id="btnQuickTopView" title="Góc nhìn từ trên đỉnh đầu">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -337,42 +351,39 @@
 
     <!-- Full Information Panel (Visible Body & Medical Atlas Standard) -->
     <div class="selection-card compact-mode hidden" id="selectionCard">
-      <!-- 1. COMPACT MINI-BAR (Tối đa 1-2 dòng, mặc định khi chọn/tìm kiếm) -->
+      <!-- 1. COMPACT MINI-BAR (Chuẩn 1 dòng tiêu đề + 1 dòng giải thích siêu nhỏ) -->
       <div class="selection-mini-bar" id="selectionMiniBar">
-        <div class="mini-bar-row-top">
-          <div class="mini-bar-title-wrap" id="miniBarExpandTrigger" title="Chạm để mở khung chi tiết giải phẫu">
+        <div class="mini-bar-content-col" id="miniBarExpandTrigger" title="Chạm để mở rộng chi tiết">
+          <div class="mini-bar-title-row">
             <span class="mini-pin">📍</span>
             <span class="mini-title" id="miniCardTitle">Chọn cấu trúc</span>
             <span class="mini-crumb-badge" id="miniCardCrumb" style="display:none;"></span>
             <span class="mini-latin" id="miniCardLatin"></span>
           </div>
-          <div class="mini-bar-actions">
-            <button type="button" class="mini-btn-ai-voice" id="btnMiniAIVoice" title="Nghe giải thích (15s)" aria-label="Nghe giải thích 15s">
-              <span class="mini-ai-sparkle">✨</span>
-              <span class="mini-ai-label">Giải thích 15s</span>
-            </button>
-            <button type="button" class="mini-btn-audio" id="btnMiniAudio" title="Nghe phát âm danh pháp" aria-label="Phát âm">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            </button>
-            <button type="button" class="mini-btn-zoom" id="btnMiniZoom" title="Phóng to chi tiết" aria-label="Phóng to">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-            </button>
-            <button type="button" class="mini-btn-close" id="btnMiniClose" title="Ẩn thanh (vẫn giữ điểm chỉ 3D)" aria-label="Đóng thanh">&times;</button>
+          <div class="mini-bar-desc-row">
+            <span class="mini-desc" id="miniCardDesc">Chạm "Chi tiết" để xem đầy đủ</span>
           </div>
         </div>
-        <div class="mini-bar-row-bottom" id="miniBarDescRow">
-          <div class="mini-desc-container">
-            <span class="mini-desc" id="miniCardDesc">Đang tải tóm tắt cấu trúc giải phẫu...</span>
-            <button type="button" class="mini-btn-expand" id="btnMiniExpand" title="Mở rộng xem chi tiết y khoa">
-              <span>Xem thêm</span>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
+        <div class="mini-bar-actions">
+          <button type="button" class="mini-btn-ai-voice" id="btnMiniAIVoice" title="Nghe giải thích 15s" aria-label="Nghe giải thích 15s">
+            <span class="mini-ai-sparkle">✨</span>
+            <span class="mini-ai-label">15s</span>
+          </button>
+          <button type="button" class="mini-btn-expand-pill" id="btnMiniExpand" title="Mở rộng chi tiết">
+            <span>Chi tiết</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button type="button" class="mini-btn-close" id="btnMiniClose" title="Ẩn thanh" aria-label="Đóng thanh">&times;</button>
         </div>
       </div>
 
       <!-- 2. FULL EXPANDED SHEET (Only shown when user taps "Xem thêm") -->
       <div class="selection-full-sheet" id="selectionFullSheet">
+        <!-- Intelligent Drag Handle (Kéo xuống các nấc nhỏ hơn / Vuốt nhanh xuống để thu gọn) -->
+        <div class="bottom-sheet-drag-handle-wrap" id="cardDragHandleWrap" title="Kéo xuống các nấc nhỏ hơn / Vuốt nhanh xuống để thu gọn">
+          <div class="bottom-sheet-drag-handle" id="cardDragHandle"></div>
+        </div>
+
         <!-- 1. Header Row (Visible Body Standard: History Navigation & Information Toggle) -->
         <div class="selection-card-header">
         <div class="selection-card-nav-btns">
@@ -435,14 +446,44 @@
           </div>
         </div>
 
-        <!-- BLOCK 0.2: NEIGHBOR SMART-CHIPS (Cấu Trúc Tiếp Giáp & Khám Phá Nhanh 1 Chạm) -->
-        <div class="info-section-group neighbor-smart-section hidden" id="cardNeighborSmartSection">
-          <div class="neighbor-section-header">
-            <span class="neighbor-header-icon">🔗</span>
-            <span class="neighbor-header-title">Cấu trúc tiếp giáp & Khám phá nhanh:</span>
-          </div>
-          <div class="neighbor-chips-scroll" id="cardNeighborChipsScroll">
-            <!-- Dynamic neighbor chips injected here -->
+        <!-- BLOCK 1: CORE EXPLANATION (ƯU TIÊN LÊN ĐẦU CHO NGƯỜI DÙNG DỄ HIỂU NHẤT) -->
+        <div class="info-section-group core-explanation-section" id="cardCoreExplanationSection">
+          <div class="core-explain-card">
+            <!-- Là gì? -->
+            <div class="explain-item explain-desc">
+              <div class="explain-header">
+                <span class="explain-badge badge-desc">💡 Là gì?</span>
+                <span class="explain-subtitle">Bản chất & Khái niệm</span>
+                <button type="button" class="btn-explain-tts" id="btnSpeakDesc" title="Nghe đọc tiếng Việt: Bản chất là gì" aria-label="Nghe đọc bản chất">
+                  <svg class="tts-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                </button>
+              </div>
+              <div class="explain-content" id="cardExplainDesc">Đang tải thông tin bản chất cấu tạo...</div>
+            </div>
+
+            <!-- Ý nghĩa là gì? -->
+            <div class="explain-item explain-func">
+              <div class="explain-header">
+                <span class="explain-badge badge-func">⚙️ Ý nghĩa là gì?</span>
+                <span class="explain-subtitle">Chức năng & Vai trò</span>
+                <button type="button" class="btn-explain-tts" id="btnSpeakFunc" title="Nghe đọc tiếng Việt: Chức năng & Vai trò" aria-label="Nghe đọc chức năng">
+                  <svg class="tts-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                </button>
+              </div>
+              <div class="explain-content" id="cardExplainFunc">Đang tải ý nghĩa sinh lý & cơ học...</div>
+            </div>
+
+            <!-- Liên kết ra sao? -->
+            <div class="explain-item explain-rel">
+              <div class="explain-header">
+                <span class="explain-badge badge-rel">🔗 Liên kết ra sao?</span>
+                <span class="explain-subtitle">Vị trí & Tương quan giải phẫu</span>
+                <button type="button" class="btn-explain-tts" id="btnSpeakRel" title="Nghe đọc tiếng Việt: Vị trí & Liên kết giải phẫu" aria-label="Nghe đọc liên kết">
+                  <svg class="tts-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                </button>
+              </div>
+              <div class="explain-content" id="cardExplainRel">Đang tải liên kết giải phẫu...</div>
+            </div>
           </div>
         </div>
 
@@ -488,54 +529,19 @@
           <!-- Dynamically populated for Intervertebral Discs and Nucleus Pulposus -->
         </div>
 
-        <!-- BLOCK 0.6: JOINT KINEMATICS & RANGE OF MOTION (Chuyển động khớp 3D & Đo góc ROM) -->
-        <div class="info-section-group joint-kinematics-section hidden" id="cardJointKinematicsSection">
-          <!-- Dynamically populated for articulating joints and moving bones -->
-        </div>
-
         <!-- BLOCK 0.7: NETTER MUSCULOSKELETAL BIOMECHANICS (Nguyên ủy, Bám tận, Thần kinh & Chức năng) -->
         <div class="info-section-group muscle-netter-section hidden" id="cardMuscleNetterSection">
           <!-- Dynamically populated for skeletal muscles & tendons -->
         </div>
 
-        <!-- BLOCK 1: CORE EXPLANATION (ƯU TIÊN Ở NGAY TRÊN ĐẦU THEO CHUẨN Y KHOA) -->
-        <div class="info-section-group core-explanation-section" id="cardCoreExplanationSection">
-          <div class="core-explain-card">
-            <!-- Là gì? -->
-            <div class="explain-item explain-desc">
-              <div class="explain-header">
-                <span class="explain-badge badge-desc">💡 Là gì?</span>
-                <span class="explain-subtitle">Bản chất & Khái niệm</span>
-                <button type="button" class="btn-explain-tts" id="btnSpeakDesc" title="Nghe đọc tiếng Việt: Bản chất là gì" aria-label="Nghe đọc bản chất">
-                  <svg class="tts-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-                </button>
-              </div>
-              <div class="explain-content" id="cardExplainDesc">Đang tải thông tin bản chất cấu tạo...</div>
-            </div>
-
-            <!-- Ý nghĩa là gì? -->
-            <div class="explain-item explain-func">
-              <div class="explain-header">
-                <span class="explain-badge badge-func">⚙️ Ý nghĩa là gì?</span>
-                <span class="explain-subtitle">Chức năng & Vai trò</span>
-                <button type="button" class="btn-explain-tts" id="btnSpeakFunc" title="Nghe đọc tiếng Việt: Chức năng & Vai trò" aria-label="Nghe đọc chức năng">
-                  <svg class="tts-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-                </button>
-              </div>
-              <div class="explain-content" id="cardExplainFunc">Đang tải ý nghĩa sinh lý & cơ học...</div>
-            </div>
-
-            <!-- Liên kết ra sao? -->
-            <div class="explain-item explain-rel">
-              <div class="explain-header">
-                <span class="explain-badge badge-rel">🔗 Liên kết ra sao?</span>
-                <span class="explain-subtitle">Vị trí & Tương quan giải phẫu</span>
-                <button type="button" class="btn-explain-tts" id="btnSpeakRel" title="Nghe đọc tiếng Việt: Vị trí & Liên kết giải phẫu" aria-label="Nghe đọc liên kết">
-                  <svg class="tts-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-                </button>
-              </div>
-              <div class="explain-content" id="cardExplainRel">Đang tải liên kết giải phẫu...</div>
-            </div>
+        <!-- BLOCK 0.2: NEIGHBOR SMART-CHIPS (Cấu Trúc Tiếp Giáp & Khám Phá Nhanh 1 Chạm) -->
+        <div class="info-section-group neighbor-smart-section hidden" id="cardNeighborSmartSection">
+          <div class="neighbor-section-header">
+            <span class="neighbor-header-icon">🔗</span>
+            <span class="neighbor-header-title">Cấu trúc tiếp giáp & Khám phá nhanh:</span>
+          </div>
+          <div class="neighbor-chips-scroll" id="cardNeighborChipsScroll">
+            <!-- Dynamic neighbor chips injected here -->
           </div>
         </div>
 

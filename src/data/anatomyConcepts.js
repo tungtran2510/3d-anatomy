@@ -65,10 +65,10 @@ export const ANATOMY_CONCEPTS = [
   {
     id: 'concept_circle_of_willis',
     keywords: [
-      'willis', 'đa giác willis', 'da giac willis', 'mạch máu não', 'mach mau nao',
-      'đột quỵ', 'dot quy', 'tai biến', 'tai bien', 'phình mạch', 'phinh mach',
-      'aneurysm', 'stroke', 'basilar', 'thân nền', 'than nen', 'cảnh trong', 'canh trong',
-      'não giữa', 'nao giua', 'mca', 'aca', 'pca', 'não trước', 'não sau'
+      'willis', 'đa giác willis', 'da giac willis', 'vòng willis', 'vong willis',
+      'đáy não', 'day nao', 'mạch máu não', 'mach mau nao',
+      'tuần hoàn não', 'tuan hoan nao', 'phình mạch não', 'phinh mach nao',
+      'aneurysm', 'stroke'
     ],
     titleVi: 'Đa Giác Willis Não',
     latin: 'Circulus arteriosus cerebri (TA2: 4488)',
@@ -362,7 +362,7 @@ export const ANATOMY_CONCEPTS = [
   {
     id: 'concept_respiratory_alveoli',
     keywords: [
-      'phổi', 'phoi', 'lung', 'khí quản', 'khi quan', 'trachea',
+      'phổi', 'phoi', 'lá phổi', 'lungs', 'khí quản', 'khi quan', 'trachea',
       'phế quản', 'phe quan', 'bronchus', 'bronchial', 'phế nang', 'phe nang',
       'alveoli', 'alveolus', 'màng phổi', 'mang phoi', 'cơ hoành', 'co hoanh',
       'hô hấp', 'ho hap', 'respiratory', 'hen suyễn', 'copd', 'khó thở'
@@ -421,7 +421,7 @@ export const ANATOMY_CONCEPTS = [
   {
     id: 'concept_urinary_nephron',
     keywords: [
-      'thận', 'than', 'kidney', 'tiết niệu', 'tiet nieu', 'urinary',
+      'thận', 'hệ thận', 'quả thận', 'qua than', 'kidney', 'tiết niệu', 'tiet nieu', 'urinary',
       'cầu thận', 'cau than', 'nephron', 'bowman', 'bàng quang', 'bang quang',
       'bladder', 'niệu quản', 'nieu quan', 'ureter', 'sỏi thận', 'soi than',
       'suy thận', 'suy than', 'ckd', 'egfr', 'nước tiểu', 'lọc máu'
@@ -605,6 +605,13 @@ export function normaliseConceptText(str) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().trim();
 }
 
+function matchConceptKeyword(text, keyword) {
+  if (!text || !keyword) return false;
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(^|[^a-zA-Z0-9àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđĐ])${escaped}([^a-zA-Z0-9àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđĐ]|$)`, 'i');
+  return regex.test(text);
+}
+
 export function findAnatomyConcept(query) {
   if (!query || typeof query !== 'string') return null;
   const clean = query.toLowerCase().trim();
@@ -615,7 +622,7 @@ export function findAnatomyConcept(query) {
     return concept.keywords.some(kw => {
       const kwLower = kw.toLowerCase().trim();
       const kwNorm = normaliseConceptText(kw);
-      return clean.includes(kwLower) || kwLower.includes(clean) || norm.includes(kwNorm) || kwNorm.includes(norm);
+      return matchConceptKeyword(clean, kwLower) || matchConceptKeyword(norm, kwNorm) || (kwLower.length >= 4 && clean === kwLower);
     });
   }) || null;
 }
@@ -640,12 +647,12 @@ export function getVisualDeckForPart(partId) {
 
   // 2. Circle of Willis & Cerebral Arteries
   if (
-    lower.includes('basilar') ||
-    lower.includes('carotid') ||
-    lower.includes('cerebral artery') ||
-    lower.includes('communicating artery') ||
     lower.includes('willis') ||
-    lower.includes('vertebral artery')
+    lower.includes('đa giác willis') ||
+    lower.includes('da giac willis') ||
+    lower.includes('circulus arteriosus') ||
+    (lower.includes('mạch máu') && lower.includes('não')) ||
+    (lower.includes('tuần hoàn') && lower.includes('não'))
   ) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_circle_of_willis');
   }

@@ -2,6 +2,40 @@
 // Standard Terminologia Anatomica (TA2) Vietnamese translation
 
 const EXACT_DICTIONARY = {
+  // Back & Spine Muscles (Terminologia Anatomica TA2)
+  'Ascending part of trapezius muscle': 'Cơ thang - Phần dưới (Phần lên)',
+  'Descending part of trapezius muscle': 'Cơ thang - Phần trên (Cơ cổ vai gáy)',
+  'Transverse part of trapezius muscle': 'Cơ thang - Phần giữa (Phần ngang)',
+  'Trapezius muscle': 'Cơ thang (Cơ cổ vai gáy)',
+  'Subtendinous bursa of trapezius muscle': 'Túi thanh mạc dưới gân cơ thang',
+  'Latissimus dorsi muscle': 'Cơ lưng rộng (Cơ xô)',
+  'Iliocostalis colli muscle': 'Cơ chậu sườn cổ (Cơ dựng gai sống)',
+  'Iliocostalis lumborum muscle': 'Cơ chậu sườn thắt lưng (Cơ dọc sống lưng / dựng gai)',
+  'Iliocostalis thoracis muscle': 'Cơ chậu sườn ngực (Cơ dựng gai sống)',
+  'Longissimus capitis muscle': 'Cơ cực dài đầu (Cơ dựng gai sống)',
+  'Longissimus colli muscle': 'Cơ cực dài cổ (Cơ dựng gai sống)',
+  'Longissimus thoracis muscle': 'Cơ cực dài ngực (Cơ dọc sống lưng / dựng gai)',
+  'Spinalis capitis muscle': 'Cơ gai đầu (Cơ dựng gai sống)',
+  'Spinalis colli muscle': 'Cơ gai cổ (Cơ dựng gai sống)',
+  'Spinalis thoracis muscle': 'Cơ gai ngực (Cơ dọc sống lưng / dựng gai)',
+  'Multifidus colli muscle': 'Cơ nhiều nhánh cổ (Cơ lưng sâu)',
+  'Multifidus lumborum muscle': 'Cơ nhiều nhánh thắt lưng (Cơ lưng sâu)',
+  'Multifidus thoracis muscle': 'Cơ nhiều nhánh ngực (Cơ lưng sâu)',
+  'Interspinales colli muscles': 'Các cơ gian gai cổ',
+  'Interspinales lumborum muscles': 'Các cơ gian gai thắt lưng',
+  'Interspinales thoracis muscles': 'Các cơ gian gai ngực',
+  'Semispinalis capitis muscle': 'Cơ bán gai đầu',
+  'Semispinalis colli muscle': 'Cơ bán gai cổ',
+  'Semispinalis thoracis muscle': 'Cơ bán gai ngực',
+  'Levator scapulae': 'Cơ nâng vai',
+  'Rhomboid major': 'Cơ trám lớn',
+  'Rhomboid minor': 'Cơ trám bé',
+  'Splenius capitis': 'Cơ gối đầu',
+  'Splenius cervicis': 'Cơ gối cổ',
+  'Quadratus lumborum': 'Cơ vuông thắt lưng',
+  'Serratus posterior superior': 'Cơ răng sau trên',
+  'Serratus posterior inferior': 'Cơ răng sau dưới',
+
   'Skin': 'Lớp da bề mặt',
   'Meso-appendix': 'Mạc treo ruột thừa',
   'Free taenia': 'Dải cơ tự do (Đại tràng)',
@@ -465,6 +499,8 @@ const EXACT_DICTIONARY = {
   'Left pulmonary artery': 'Động mạch phổi trái',
   'Right pulmonary artery': 'Động mạch phổi phải',
   'Common carotid artery': 'Động mạch cảnh chung',
+  'Left common carotid artery': 'Động mạch cảnh chung trái',
+  'Right common carotid artery': 'Động mạch cảnh chung phải',
   'Internal carotid artery': 'Động mạch cảnh trong',
   'External carotid artery': 'Động mạch cảnh ngoài',
   'Femoral artery': 'Động mạch đùi',
@@ -1550,6 +1586,38 @@ export function getVietnameseSynonyms(englishBaseName) {
   if (lower.includes('cơ nhị đầu')) synonyms.push('chuột trước', 'bắp tay trước');
   if (enLower.includes('pectoral') || lower.includes('cơ ngực') || lower.includes('ngực lớn') || lower.includes('ngực bé') || lower.includes('ngực đòn')) {
     synonyms.push('cơ ngực', 'co nguc', 'ngực', 'bắp ngực', 'ngực lớn', 'ngực bé', 'pectoralis');
+  }
+  // Back & Spine Muscles (Cơ thang, Cơ dọc sống lưng / dựng gai, Cơ lưng rộng, Cơ trám)
+  if (enLower.includes('trapezius') || lower.includes('cơ thang') || lower.includes('thang')) {
+    synonyms.push('cơ thang', 'co thang', 'cơ hình thang', 'co hinh thang', 'cơ cổ vai gáy', 'co co vai gay', 'cơ vai gáy', 'co vai gay', 'cơ gáy', 'trapezius', 'cơ lưng trên', 'cơ lưng');
+  }
+  if (
+    enLower.includes('longissimus') ||
+    enLower.includes('iliocostalis') ||
+    enLower.includes('spinalis') ||
+    enLower.includes('erector spinae') ||
+    enLower.includes('multifidus') ||
+    lower.includes('dọc sống lưng') ||
+    lower.includes('dựng gai') ||
+    lower.includes('cạnh sống')
+  ) {
+    synonyms.push(
+      'cơ dọc sống lưng', 'co doc song lung', 'cơ dựng gai', 'co dung gai',
+      'cơ dựng sống', 'co dung song', 'cơ sống lưng', 'co song lung',
+      'cơ cạnh sống', 'co canh song', 'cơ lưng sâu', 'co lung sau',
+      'cơ cực dài', 'co cuc dai', 'cơ chậu sườn', 'co chau suon',
+      'cơ gai', 'co gai', 'cơ nhiều nhánh', 'co nhieu nhanh',
+      'erector spinae', 'paraspinal', 'cơ lưng'
+    );
+  }
+  if (enLower.includes('latissimus') || lower.includes('lưng rộng') || lower.includes('cơ xô')) {
+    synonyms.push('cơ lưng rộng', 'co lung rong', 'cơ xô', 'co xo', 'cơ vây cá', 'latissimus dorsi', 'cơ lưng');
+  }
+  if (enLower.includes('rhomboid') || lower.includes('cơ trám')) {
+    synonyms.push('cơ trám', 'co tram', 'cơ trám lớn', 'cơ trám bé', 'rhomboid', 'cơ lưng');
+  }
+  if (enLower.includes('levator scapulae') || lower.includes('nâng vai')) {
+    synonyms.push('cơ nâng vai', 'co nang vai', 'levator scapulae');
   }
   if (enLower.includes('latissimus') || enLower.includes('trapezius') || enLower.includes('erector spinae') || enLower.includes('rhomboid') || lower.includes('cơ lưng') || lower.includes('lưng rộng')) {
     synonyms.push('cơ lưng', 'co lung', 'lưng', 'cơ xô', 'bắp lưng');

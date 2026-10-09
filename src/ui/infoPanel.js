@@ -9,7 +9,7 @@ import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getT
 import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
 import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost } from '../viewer/visibility.js';
-import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview } from '../viewer/selection.js';
+import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview, resolveAnatomicalAlias } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
 import { getPartVideo, removePartVideo, isAdminLoggedIn } from '../data/atlasMediaManager.js';
@@ -25,17 +25,22 @@ import { getConstituentsForPart } from '../data/anatomyConstituents.js';
 import { formatNameWithSubtitles } from '../utils/textFormatters.js';
 import { getVietnameseVoice } from '../utils/speechVoice.js';
 
-let isCompact = false;
+let currentSnapTier = 'compact'; // 'compact' | 'half' | 'full'
+let isCompact = true;
 let isBodyCollapsed = false;
 let isZoomedIn = false;
 let currentlySpeakingBtn = null;
 
 let isInfoPanelInitialized = false;
+let isGesturesInitialized = false;
 
 export function initInfoPanel(viewer) {
   const card = document.getElementById('selectionCard');
   if (!card || isInfoPanelInitialized) return;
   isInfoPanelInitialized = true;
+
+  // Initialize Smart Multi-Snap Touch & Drag Gestures
+  initBottomSheetGestures(card);
 
   // 1. Selection History Navigation (< and > buttons, Visible Body standard)
   const backBtn = document.getElementById('btnSelectionHistoryBack');
@@ -118,12 +123,12 @@ export function initInfoPanel(viewer) {
 
   miniExpandBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    setCompactMode(false);
+    setSheetSnapTier('half');
   });
 
   miniTrigger?.addEventListener('click', (e) => {
     e.stopPropagation();
-    setCompactMode(false);
+    setSheetSnapTier('half');
   });
 
   miniAudioBtn?.addEventListener('click', (e) => {
@@ -151,27 +156,35 @@ export function initInfoPanel(viewer) {
   });
 
   window.addEventListener('expand-selection-card', () => {
-    setCompactMode(false);
+    setSheetSnapTier('compact');
   });
 
-  // 3. Compact Mode & Dropdown Toggles
+  // 3. Compact Mode & Dropdown Toggles (Intelligent 3-Snap Switching)
   const toggleCompactBtn = document.getElementById('btnToggleCompactCard');
   const compactBar = document.getElementById('btnSwitchCompactMode');
   const toggleDropdownBtn = document.getElementById('btnToggleInfoDropdown');
 
   toggleCompactBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    setCompactMode(true);
+    if (currentSnapTier === 'compact') {
+      setSheetSnapTier('half');
+    } else {
+      setSheetSnapTier('compact');
+    }
   });
 
   compactBar?.addEventListener('click', (e) => {
     e.stopPropagation();
-    setCompactMode(true);
+    setSheetSnapTier('compact');
   });
 
   toggleDropdownBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    setCompactMode(true);
+    if (currentSnapTier === 'full') {
+      setSheetSnapTier('half');
+    } else {
+      setSheetSnapTier('full');
+    }
   });
 
   // 3b. 2-Step Zoom / Overview Toggle (Không zoom giật đột ngột, chỉ phóng to khi người dùng bấm)
@@ -279,8 +292,11 @@ export function updateInfoPanelContent(part, viewer) {
     cleanLatin = '';
   }
 
+  const cleanSystem = (systemName || '').replace(/\s*\([^)]*\)/g, '').trim();
+
   if (cardSubtitle) {
-    cardSubtitle.textContent = cleanLatin ? `${cleanLatin} • ${systemName}` : systemName;
+    cardSubtitle.textContent = cleanLatin ? `${cleanLatin} • ${cleanSystem}` : cleanSystem;
+    cardSubtitle.title = cleanLatin ? `${cleanLatin} • ${systemName}` : systemName;
   }
 
   // Populate 1-to-2 line Mini-Bar
@@ -298,11 +314,12 @@ export function updateInfoPanelContent(part, viewer) {
     }
   }
   if (miniDesc) {
-    const rawDesc = clinical.description || '';
-    const firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;
-    miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Xem thêm" để đọc chi tiết giải phẫu.';
+    const rawDesc = clinical.description || clinical.function || '';
+    let firstSentence = rawDesc.split(/[\.\!\?]\s+/)[0] || rawDesc;
+    firstSentence = firstSentence.replace(/[\.\!\?]$/, '').trim();
+    miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm "Chi tiết" để xem đầy đủ.';
+    miniDesc.title = rawDesc || firstSentence;
   }
-
 
   // Phase 2: Render Visual Anatomical Breadcrumbs (Hệ Cơ Quan › Cơ Quan Cha › Cấu Trúc Hiện Tại)
   renderBreadcrumbTrail(part, clinical, mainName, viewer);
@@ -313,18 +330,22 @@ export function updateInfoPanelContent(part, viewer) {
   // Phase 3: Render Interactive 4-Stage Pathology Simulator
   renderPathologyProgressionSection(part, clinical, mainName, viewer);
 
-  // 2. Core Anatomical Explanation (Ngắn gọn 1-2 câu ứng dụng thực tế, không lý thuyết dài dòng)
+  // 2. Core Anatomical Explanation (Ngắn gọn 1 câu siêu nhỏ, không lý thuyết dài dòng)
   const explainDesc = document.getElementById('cardExplainDesc');
   const explainFunc = document.getElementById('cardExplainFunc');
   const explainRel = document.getElementById('cardExplainRel');
 
   if (explainDesc) {
     const raw = clinical.description || 'Đang cập nhật thông tin giải phẫu học...';
-    explainDesc.textContent = raw.split(/[\.\!\?]\s+/)[0] + '.';
+    const firstSentence = raw.split(/[\.\!\?]\s+/)[0] || raw;
+    explainDesc.textContent = firstSentence.replace(/[\.\!\?]$/, '') + '.';
+    explainDesc.title = raw;
   }
   if (explainFunc) {
     const raw = clinical.function || clinical.clinical || 'Đang cập nhật chức năng sinh lý & cơ học...';
-    explainFunc.textContent = raw.split(/[\.\!\?]\s+/)[0] + '.';
+    const firstSentence = raw.split(/[\.\!\?]\s+/)[0] || raw;
+    explainFunc.textContent = firstSentence.replace(/[\.\!\?]$/, '') + '.';
+    explainFunc.title = raw;
   }
   const relBlock = document.querySelector('.explain-rel');
   if (relBlock) relBlock.style.display = 'none';
@@ -335,9 +356,6 @@ export function updateInfoPanelContent(part, viewer) {
 
   // 2a. Render Interactive Disc Subunits (Vòng sợi & Nhân nhầy)
   renderDiscSubunitsSection(part, clinical, mainName, viewer);
-
-  // 2a.1 Render 3D Joint Kinematics & Range of Motion (Choice 2)
-  renderJointKinematicsSection(part, clinical, mainName, viewer);
 
   // 2a.2 Render Netter Clinical Musculoskeletal Biomechanics Card (Nguyên ủy, Bám tận, Thần kinh, Chức năng)
   renderNetterBiomechanicsSection(part, clinical, mainName, viewer);
@@ -401,19 +419,178 @@ export function updateInfoPanelContent(part, viewer) {
   notifySelectionHistoryChanged();
 }
 
-export function setCompactMode(compact) {
-  isCompact = compact;
+export function setSheetSnapTier(tier) {
   const card = document.getElementById('selectionCard');
   if (!card) return;
 
-  card.classList.toggle('compact-mode', isCompact);
+  currentSnapTier = tier;
+  card.style.transform = '';
+  card.classList.remove('is-dragging');
+
+  if (tier === 'compact') {
+    isCompact = true;
+    card.classList.add('compact-mode');
+    card.classList.remove('sheet-half', 'sheet-full');
+  } else if (tier === 'half') {
+    isCompact = false;
+    card.classList.remove('compact-mode', 'sheet-full');
+    card.classList.add('sheet-half');
+  } else if (tier === 'full') {
+    isCompact = false;
+    card.classList.remove('compact-mode', 'sheet-half');
+    card.classList.add('sheet-full');
+  }
 
   const iconMin = card.querySelector('.icon-minimize');
   const iconMax = card.querySelector('.icon-maximize');
   if (iconMin && iconMax) {
-    iconMin.classList.toggle('hidden', isCompact);
-    iconMax.classList.toggle('hidden', !isCompact);
+    iconMin.classList.toggle('hidden', tier === 'compact');
+    iconMax.classList.toggle('hidden', tier !== 'compact');
   }
+
+  const label = document.getElementById('cardCompactLabel');
+  if (label) {
+    label.textContent = tier === 'full' ? 'Chi tiết' : 'Thông tin';
+  }
+}
+
+export function getSheetSnapTier() {
+  return currentSnapTier;
+}
+
+if (typeof window !== 'undefined') {
+  window.setSheetSnapTier = setSheetSnapTier;
+}
+
+export function setCompactMode(compact) {
+  setSheetSnapTier(compact ? 'compact' : 'half');
+}
+
+function initBottomSheetGestures(card) {
+  if (isGesturesInitialized || !card) return;
+  isGesturesInitialized = true;
+
+  const dragHandleWrap = document.getElementById('cardDragHandleWrap');
+  const header = card.querySelector('.selection-card-header');
+  const miniTrigger = document.getElementById('miniBarExpandTrigger');
+
+  let startY = 0;
+  let startTime = 0;
+  let isDragging = false;
+  let lastDeltaY = 0;
+  let initialTier = currentSnapTier;
+
+  function onPointerStart(e) {
+    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('a')) {
+      return;
+    }
+
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    startTime = Date.now();
+    isDragging = true;
+    lastDeltaY = 0;
+    initialTier = currentSnapTier;
+    card.classList.add('is-dragging');
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const deltaY = clientY - startY;
+    lastDeltaY = deltaY;
+
+    if (deltaY > 0) {
+      card.style.transform = `translateY(${deltaY}px)`;
+    } else if (deltaY < 0 && (initialTier === 'half' || initialTier === 'compact')) {
+      card.style.transform = `translateY(${Math.max(-200, deltaY)}px)`;
+    }
+  }
+
+  function onPointerEnd(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    card.classList.remove('is-dragging');
+    card.style.transform = '';
+
+    const deltaTime = Math.max(1, Date.now() - startTime);
+    const velocityY = lastDeltaY / deltaTime; // px / ms
+
+    // 1. Fast flick / swipe down (velocity > 0.45 or swipe down quickly > 110px) -> collapse to mini bar
+    if (velocityY > 0.45 || (lastDeltaY > 110 && deltaTime < 350)) {
+      setSheetSnapTier('compact');
+      showToast('🔽 Đã thu gọn thanh');
+      return;
+    }
+
+    // 2. Fast flick / swipe up -> expand to full
+    if (velocityY < -0.45 || (lastDeltaY < -110 && deltaTime < 350)) {
+      setSheetSnapTier('full');
+      showToast('🔼 Mở rộng toàn bộ thông tin');
+      return;
+    }
+
+    // 3. Moderate downward drag (> 45px)
+    if (lastDeltaY > 45) {
+      if (initialTier === 'full') {
+        setSheetSnapTier('half');
+        showToast('🔽 Nấc thông tin vừa');
+      } else {
+        setSheetSnapTier('compact');
+        showToast('🔽 Đã thu gọn');
+      }
+      return;
+    }
+
+    // 4. Moderate upward drag (< -45px)
+    if (lastDeltaY < -45) {
+      if (initialTier === 'compact') {
+        setSheetSnapTier('half');
+      } else {
+        setSheetSnapTier('full');
+        showToast('🔼 Mở rộng toàn bộ');
+      }
+      return;
+    }
+
+    // 5. Tap / Click on drag handle wrap
+    if (Math.abs(lastDeltaY) < 10 && e.target && e.target.closest('#cardDragHandleWrap')) {
+      if (currentSnapTier === 'full') {
+        setSheetSnapTier('half');
+      } else if (currentSnapTier === 'half') {
+        setSheetSnapTier('full');
+      } else {
+        setSheetSnapTier('half');
+      }
+    }
+  }
+
+  if (dragHandleWrap) {
+    dragHandleWrap.addEventListener('touchstart', onPointerStart, { passive: true });
+    dragHandleWrap.addEventListener('touchmove', onPointerMove, { passive: true });
+    dragHandleWrap.addEventListener('touchend', onPointerEnd, { passive: true });
+    dragHandleWrap.addEventListener('touchcancel', onPointerEnd, { passive: true });
+    dragHandleWrap.addEventListener('mousedown', onPointerStart);
+  }
+
+  if (header) {
+    header.addEventListener('touchstart', onPointerStart, { passive: true });
+    header.addEventListener('touchmove', onPointerMove, { passive: true });
+    header.addEventListener('touchend', onPointerEnd, { passive: true });
+    header.addEventListener('touchcancel', onPointerEnd, { passive: true });
+  }
+
+  if (miniTrigger) {
+    miniTrigger.addEventListener('touchstart', onPointerStart, { passive: true });
+    miniTrigger.addEventListener('touchmove', onPointerMove, { passive: true });
+    miniTrigger.addEventListener('touchend', onPointerEnd, { passive: true });
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) onPointerMove(e);
+  });
+  window.addEventListener('mouseup', (e) => {
+    if (isDragging) onPointerEnd(e);
+  });
 }
 
 export function toggleCardBodyDropdown() {
@@ -731,8 +908,10 @@ function getParentOrganInfo(partId, mainName, clinical) {
   return { name: 'Cơ quan giải phẫu', latin: '', query: '', icon: '🏛️' };
 }
 
-function resolvePartId(query) {
+export function resolvePartId(query) {
   if (!query) return null;
+  const aliased = resolveAnatomicalAlias(query);
+  if (aliased && aliased.toLowerCase().trim() !== query.toLowerCase().trim()) return aliased;
   // If query is an exact partId in partsData
   if (getStructureInfo(query)) return query;
 
@@ -936,7 +1115,8 @@ function renderBreadcrumbTrail(part, clinical, mainName, viewer) {
   const container = document.getElementById('selectionBreadcrumbTrail');
   if (!container) return;
 
-  const systemName = clinical.systemVi || part.system || 'Hệ Giải Phẫu';
+  const rawSystemName = clinical.systemVi || part.system || 'Hệ Giải Phẫu';
+  const systemName = rawSystemName.replace(/\s*\([^)]*\)/g, '').trim();
   const systemIcon = getSystemIcon(systemName);
   const parentInfo = getParentOrganInfo(part.id, mainName, clinical);
 
@@ -1077,10 +1257,11 @@ function getPathologyForPart(partId, mainName, clinical) {
   if (Array.isArray(PATIENT_CASES)) {
     for (const c of PATIENT_CASES) {
       if (c.partId && str.includes(c.partId.toLowerCase())) return c;
+      if (c.id === 'cervical_spondylosis' && /cervical|c1|c2|c3|c4|c5|c6|c7|đốt sống cổ|cột sống cổ|atlas|axis/.test(str)) return c;
       if (c.id === 'gastric_ulcer' && /stomach|gaster|dạ dày|môn vị|tâm vị/.test(str)) return c;
       if (c.id === 'cardiac_valve' && /ventricle|atrium|valve|aorta|pulmonar|tim|thất|nhĩ|van/.test(str)) return c;
       if (c.id === 'biliary_stones' && /gallbladder|liver|hepar|pancreas|túi mật|gan|tụy|ống mật/.test(str)) return c;
-      if (c.id === 'disc_herniation' && /vertebra|disc|cột sống|đốt sống|đĩa đệm/.test(str)) return c;
+      if (c.id === 'disc_herniation' && (/lumbar|l1|l2|l3|l4|l5|thắt lưng|tọa/.test(str) || (/vertebra|disc|cột sống|đốt sống|đĩa đệm/.test(str) && !/cervical|c1|c2|c3|c4|c5|c6|c7|cổ|thoracic|t1|t2|t3|t4|t5|t6|t7|t8|t9|t10|t11|t12|ngực/.test(str)))) return c;
       if (c.id === 'knee_acl' && /knee|cruciate|meniscus|patella|gối|chày|sụn chêm|chéo/.test(str)) return c;
       if (c.id === 'kidney_stones' && /kidney|ren|ureter|thận|niệu quản/.test(str)) return c;
       if (c.id === 'willis_stroke' && /brain|cerebr|artery.*cerebr|willis|não|thần kinh sọ/.test(str)) return c;
@@ -1768,16 +1949,6 @@ const JOINT_KINEMATICS_MAP = [
     note: 'Gấp cẳng tay từ 0° đến 145° chạm vai'
   },
   {
-    match: ['spine', 'vertebra', 'cột sống', 'đốt sống', 'l4', 'l5'],
-    motionId: MOTIONS.SPINE_FLEXION,
-    title: '🏃 ĐỘNG HỌC CỘT SỐNG',
-    actionName: 'Cúi gập thân',
-    minAngle: 0,
-    maxAngle: 80,
-    agonist: 'Cơ thẳng bụng & Cơ chéo bụng (Abdominals)',
-    note: 'Cúi gập thân mình ra trước từ 0° đến 80°'
-  },
-  {
     match: ['cervical', 'atlas', 'axis', 'đốt sống cổ', 'cột sống cổ', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
     motionId: MOTIONS.SPINE_FLEXION,
     title: '🏃 ĐỘNG HỌC CỘT SỐNG CỔ',
@@ -1786,6 +1957,16 @@ const JOINT_KINEMATICS_MAP = [
     maxAngle: 60,
     agonist: 'Cơ ức đòn chũm & Nhóm cơ dài cổ (Longus colli)',
     note: 'Cúi cổ 0-50°, ngửa cổ 0-60°, xoay ngang 0-80°'
+  },
+  {
+    match: ['spine', 'lumbar', 'thoracic', 'thắt lưng', 'ngực', 'cột sống', 'đốt sống thắt lưng', 'l1', 'l2', 'l3', 'l4', 'l5'],
+    motionId: MOTIONS.SPINE_FLEXION,
+    title: '🏃 ĐỘNG HỌC CỘT SỐNG THẮT LƯNG',
+    actionName: 'Cúi gập thân',
+    minAngle: 0,
+    maxAngle: 80,
+    agonist: 'Cơ thẳng bụng & Cơ chéo bụng (Abdominals)',
+    note: 'Cúi gập thân mình ra trước từ 0° đến 80°'
   },
   {
     match: ['ankle', 'talus', 'calcaneus', 'cổ chân', 'xương sên', 'xương gót', 'mắt cá'],

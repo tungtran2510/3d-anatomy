@@ -354,6 +354,34 @@ function createCalloutActions(viewer) {
         window.dispatchEvent(new CustomEvent('expand-selection-card'));
       }
     },
+    expand: () => {
+      const card = document.getElementById('selectionCard');
+      if (card) {
+        card.classList.remove('hidden');
+        import('../ui/infoPanel.js').then(({ setSheetSnapTier }) => {
+          setSheetSnapTier('half');
+        });
+      }
+    },
+    speak: id => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        if (window.speechSynthesis.speaking) {
+          window.speechSynthesis.cancel();
+          return;
+        }
+      }
+      const targetId = id || state.selectedPart?.id;
+      if (!targetId) return;
+      const part = state.selectedPart || { id: targetId };
+      const clinical = getClinicalData(targetId);
+      const name = clinical.nameVi || part.displayName || targetId;
+      const desc = clinical.description || clinical.function || '';
+      const firstSentence = desc.split(/[\.\!\?]\s+/)[0] || desc;
+      const textToSpeak = `${name}. ${firstSentence}`;
+      import('../utils/speechVoice.js').then(({ speakVietnamese }) => {
+        speakVietnamese(textToSpeak);
+      });
+    },
     isolate: id => {
       pushUndo({
         type: 'isolate',
@@ -724,100 +752,116 @@ export function getSelectedPart() {
   return state.selectedPart;
 }
 
+// Anatomical alias map for standardized resolution across search, AI, and viewer
+export const ANATOMICAL_ALIAS_MAP = {
+  'atlas': 'Atlas (C1)',
+  'axis': 'Axis (C2)',
+  'sternum': 'Body of sternum',
+  'lumbar vertebra': 'Vertebra L3',
+  'lumbar vertebrae': 'Vertebra L3',
+  'disc': 'Intervertebral disc L4-L5',
+  'discs': 'Intervertebral disc L4-L5',
+  'đĩa đệm': 'Intervertebral disc L4-L5',
+  'dia dem': 'Intervertebral disc L4-L5',
+  'đĩa đệm gian đốt': 'Intervertebral disc L4-L5',
+  'đĩa đệm gian đốt sống': 'Intervertebral disc L4-L5',
+  'đĩa đệm cột sống': 'Intervertebral disc L4-L5',
+  'intervertebral disc': 'Intervertebral disc L4-L5',
+  'ilium': 'Hip bone.l',
+  'pelvis': 'Hip bone.l',
+  'rib 5': 'Fifth rib.l',
+  'rib 1': 'First rib.l',
+  'rib 2': 'Second rib.l',
+  'rib 3': 'Third rib.l',
+  'rib 4': 'Fourth rib.l',
+  'rib 6': 'Sixth rib.l',
+  'rib 7': 'Seventh rib.l',
+  'rib 8': 'Eighth rib.l',
+  'rib 9': 'Ninth rib.l',
+  'rib 10': 'Tenth rib.l',
+  'rib 11': 'Eleventh rib.l',
+  'rib 12': 'Twelfth rib.l',
+  // Heart chambers & great vessels
+  'heart': 'Left ventricle',
+  'heart_all': 'Left ventricle',
+  'tim': 'Left ventricle',
+  'trai tim': 'Left ventricle',
+  'left ventricle': 'Left ventricle',
+  'right ventricle': 'Right ventricle',
+  'left atrium': 'Left atrium',
+  'right atrium': 'Right atrium',
+  'tâm thất trái': 'Left ventricle',
+  'tam that trai': 'Left ventricle',
+  'tâm thất phải': 'Right ventricle',
+  'tam that phai': 'Right ventricle',
+  'tâm nhĩ trái': 'Left atrium',
+  'tam nhi trai': 'Left atrium',
+  'tâm nhĩ phải': 'Right atrium',
+  'tam nhi phai': 'Right atrium',
+  'internal carotid artery': 'Internal carotid artery.l',
+  'external carotid artery': 'External carotid artery.l',
+  'common carotid artery': 'Left common carotid artery',
+  'động mạch cảnh trong': 'Internal carotid artery.l',
+  'dong mach canh trong': 'Internal carotid artery.l',
+  'động mạch cảnh trong trái': 'Internal carotid artery.l',
+  'dong mach canh trong trai': 'Internal carotid artery.l',
+  'động mạch cảnh trong phải': 'Internal carotid artery.r',
+  'dong mach canh trong phai': 'Internal carotid artery.r',
+  'động mạch cảnh ngoài': 'External carotid artery.l',
+  'dong mach canh ngoai': 'External carotid artery.l',
+  'động mạch cảnh ngoài trái': 'External carotid artery.l',
+  'dong mach canh ngoai trai': 'External carotid artery.l',
+  'động mạch cảnh ngoài phải': 'External carotid artery.r',
+  'dong mach canh ngoai phai': 'External carotid artery.r',
+  'động mạch cảnh chung': 'Left common carotid artery',
+  'dong mach canh chung': 'Left common carotid artery',
+  'động mạch cảnh chung trái': 'Left common carotid artery',
+  'dong mach canh chung trai': 'Left common carotid artery',
+  'động mạch cảnh chung phải': 'Right common carotid artery',
+  'dong mach canh chung phai': 'Right common carotid artery',
+  'động mạch cảnh': 'Internal carotid artery.l',
+  'dong mach canh': 'Internal carotid artery.l',
+  'động mạch chủ': 'Ascending aorta',
+  'dong mach chu': 'Ascending aorta',
+  'aorta': 'Ascending aorta',
+  // Visceral organs & lungs
+  'lungs': 'Superior lobe of left lung',
+  'lungs_all': 'Superior lobe of left lung',
+  'lung': 'Superior lobe of left lung',
+  'phổi': 'Superior lobe of left lung',
+  'phoi': 'Superior lobe of left lung',
+  'thận': 'Kidney.l',
+  'than': 'Kidney.l',
+  'thận trái': 'Kidney.l',
+  'than trai': 'Kidney.l',
+  'thận phải': 'Kidney.r',
+  'than phai': 'Kidney.r',
+  'dạ dày': 'Stomach',
+  'da day': 'Stomach',
+  'gan': 'Liver',
+  'túi mật': 'Gallbladder',
+  'tui mat': 'Gallbladder',
+  'tuyến tụy': 'Pancreas',
+  'tuyen tuy': 'Pancreas',
+  'lá lách': 'Spleen',
+  'la lach': 'Spleen',
+  'bàng quang': 'Urinary bladder',
+  'bang quang': 'Urinary bladder'
+};
+
+export function resolveAnatomicalAlias(name) {
+  if (!name) return name;
+  const lower = name.toLowerCase().trim();
+  if (ANATOMICAL_ALIAS_MAP[lower]) return ANATOMICAL_ALIAS_MAP[lower];
+  if (lower.includes('lumbar')) return 'Vertebra L3';
+  return name;
+}
+
 export function selectPartById(partId, viewer, skipHistory = false, skipCamera = false) {
   if (!partId) return false;
   const targetViewer = viewer || state.viewer || window.viewer;
   const registry = getMeshRegistry();
-
-  // Anatomical alias map for standardized resolution
-  const ALIAS_MAP = {
-    'atlas': 'Atlas (C1)',
-    'axis': 'Axis (C2)',
-    'sternum': 'Body of sternum',
-    'lumbar vertebra': 'Vertebra L3',
-    'lumbar vertebrae': 'Vertebra L3',
-    'disc': 'Intervertebral disc L4-L5',
-    'discs': 'Intervertebral disc L4-L5',
-    'đĩa đệm': 'Intervertebral disc L4-L5',
-    'dia dem': 'Intervertebral disc L4-L5',
-    'đĩa đệm gian đốt': 'Intervertebral disc L4-L5',
-    'đĩa đệm gian đốt sống': 'Intervertebral disc L4-L5',
-    'đĩa đệm cột sống': 'Intervertebral disc L4-L5',
-    'intervertebral disc': 'Intervertebral disc L4-L5',
-    'ilium': 'Hip bone.l',
-    'pelvis': 'Hip bone.l',
-    'rib 5': 'Fifth rib.l',
-    'rib 1': 'First rib.l',
-    'rib 2': 'Second rib.l',
-    'rib 3': 'Third rib.l',
-    'rib 4': 'Fourth rib.l',
-    'rib 6': 'Sixth rib.l',
-    'rib 7': 'Seventh rib.l',
-    'rib 8': 'Eighth rib.l',
-    'rib 9': 'Ninth rib.l',
-    'rib 10': 'Tenth rib.l',
-    'rib 11': 'Eleventh rib.l',
-    'rib 12': 'Twelfth rib.l',
-    // Heart chambers & great vessels
-    'heart': 'Left ventricle',
-    'heart_all': 'Left ventricle',
-    'tim': 'Left ventricle',
-    'trai tim': 'Left ventricle',
-    'left ventricle': 'Left ventricle',
-    'right ventricle': 'Right ventricle',
-    'left atrium': 'Left atrium',
-    'right atrium': 'Right atrium',
-    'tâm thất trái': 'Left ventricle',
-    'tam that trai': 'Left ventricle',
-    'tâm thất phải': 'Right ventricle',
-    'tam that phai': 'Right ventricle',
-    'tâm nhĩ trái': 'Left atrium',
-    'tam nhi trai': 'Left atrium',
-    'tâm nhĩ phải': 'Right atrium',
-    'tam nhi phai': 'Right atrium',
-    'internal carotid artery': 'Internal carotid artery.l',
-    'external carotid artery': 'External carotid artery.l',
-    'động mạch cảnh trong': 'Internal carotid artery.l',
-    'dong mach canh trong': 'Internal carotid artery.l',
-    'động mạch cảnh ngoài': 'External carotid artery.l',
-    'dong mach canh ngoai': 'External carotid artery.l',
-    'động mạch cảnh': 'Internal carotid artery.l',
-    'dong mach canh': 'Internal carotid artery.l',
-    'động mạch chủ': 'Ascending aorta',
-    'dong mach chu': 'Ascending aorta',
-    'aorta': 'Ascending aorta',
-    // Visceral organs & lungs
-    'lungs': 'Superior lobe of left lung',
-    'lungs_all': 'Superior lobe of left lung',
-    'lung': 'Superior lobe of left lung',
-    'phổi': 'Superior lobe of left lung',
-    'phoi': 'Superior lobe of left lung',
-    'thận': 'Kidney.l',
-    'than': 'Kidney.l',
-    'thận trái': 'Kidney.l',
-    'than trai': 'Kidney.l',
-    'thận phải': 'Kidney.r',
-    'than phai': 'Kidney.r',
-    'dạ dày': 'Stomach',
-    'da day': 'Stomach',
-    'gan': 'Liver',
-    'túi mật': 'Gallbladder',
-    'tui mat': 'Gallbladder',
-    'tuyến tụy': 'Pancreas',
-    'tuyen tuy': 'Pancreas',
-    'lá lách': 'Spleen',
-    'la lach': 'Spleen',
-    'bàng quang': 'Urinary bladder',
-    'bang quang': 'Urinary bladder'
-  };
-
-  let targetId = partId;
-  const lowerInput = partId.toLowerCase().trim();
-  if (ALIAS_MAP[lowerInput]) {
-    targetId = ALIAS_MAP[lowerInput];
-  } else if (lowerInput.includes('lumbar')) {
-    targetId = 'Vertebra L3';
-  }
+  const targetId = resolveAnatomicalAlias(partId);
 
   // 1. Direct match
   let mesh = registry.get(targetId);

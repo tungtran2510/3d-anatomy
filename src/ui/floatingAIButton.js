@@ -37,8 +37,8 @@ export function initFloatingAIButton(viewer) {
     bubbleEl.style.right = 'auto';
     bubbleEl.style.bottom = 'auto';
   } else {
-    bubbleEl.style.right = '14px';
-    bubbleEl.style.bottom = typeof window !== 'undefined' && window.innerWidth <= 768 ? '78px' : '72px';
+    bubbleEl.style.right = '8px';
+    bubbleEl.style.bottom = '64px';
     bubbleEl.style.left = 'auto';
     bubbleEl.style.top = 'auto';
   }

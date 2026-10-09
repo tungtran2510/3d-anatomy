@@ -17,6 +17,8 @@ import { getVietnameseSynonyms } from './data/vietnamese.js';
 import { initTheme, toggleAppTheme } from './utils/themeManager.js';
 import { engineManager } from './viewer/engineManager.js';
 
+import { cleanSearchLabel } from './utils/dataLoader.js';
+
 window.state = state;
 window.selectStructureAnywhere = selectStructureAnywhere;
 window.selectPartById = selectPartById;
@@ -36,9 +38,15 @@ function buildSearchIndex(parts) {
     const vnSyns = getVietnameseSynonyms(info.baseName);
     vnSyns.forEach(s => terms.push(s.toLowerCase()));
 
+    const rawDisplayName = info.name?.[state.language] || info.name?.vi || info.name?.en || partId;
+    const displayName = cleanSearchLabel(rawDisplayName) || rawDisplayName;
+
     index.push({
       partId,
-      name: info.name?.[state.language] || info.name?.vi || info.name?.en || partId,
+      base: info.baseName || partId,
+      name: displayName,
+      label: displayName,
+      rawLabel: rawDisplayName,
       latinName: info.latinName || '',
       system: info.system || 'unknown',
       terms: [...new Set(terms)]

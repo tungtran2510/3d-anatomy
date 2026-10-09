@@ -759,7 +759,10 @@ export function initSystemsLayerController(viewer) {
             ${ICONS.moreDots}
           </button>
           <div class="region-dropdown-menu hidden" id="regionDropdownMenu">
-            <div class="region-dropdown-header">Phân vùng giải phẫu:</div>
+            <div class="region-dropdown-header">
+              <span>Phân vùng giải phẫu:</span>
+              <button type="button" class="region-menu-close-btn" id="btnRegionMenuClose" title="Đóng danh mục">&times;</button>
+            </div>
             <button type="button" class="region-menu-item" data-region="head">Đầu & Cổ</button>
             <button type="button" class="region-menu-item" data-region="torso">Lồng ngực</button>
             <button type="button" class="region-menu-item" data-region="pelvis">Khung chậu</button>
@@ -892,9 +895,16 @@ function setupEvents(viewer) {
   // 6. Region More Dropdown (...)
   const moreBtn = drawerEl?.querySelector('#btnRegionMore');
   const dropdownMenu = drawerEl?.querySelector('#regionDropdownMenu');
+  const closeMenuBtn = drawerEl?.querySelector('#btnRegionMenuClose');
+
   moreBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     dropdownMenu?.classList.toggle('hidden');
+  });
+
+  closeMenuBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownMenu?.classList.add('hidden');
   });
 
   drawerEl?.querySelectorAll('.region-menu-item').forEach(item => {

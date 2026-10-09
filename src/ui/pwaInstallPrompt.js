@@ -54,6 +54,7 @@ export function showPWAInstallPrompt() {
   pwaPromptEl.className = 'pwa-install-prompt-banner animate-in';
   pwaPromptEl.innerHTML = `
     <div class="pwa-prompt-container">
+      <button type="button" class="btn-pwa-close" id="btnPWAClose" title="Đóng thông báo">&times;</button>
       <div class="pwa-prompt-left">
         <div class="pwa-prompt-icon-wrap">
           <img src="/favicon.svg" alt="App Icon" class="pwa-prompt-icon" width="34" height="34" />
@@ -80,7 +81,13 @@ export function showPWAInstallPrompt() {
 
   const btnInstall = pwaPromptEl.querySelector('#btnPWAInstallNow');
   const btnDismiss = pwaPromptEl.querySelector('#btnPWADismiss');
+  const btnClose = pwaPromptEl.querySelector('#btnPWAClose');
   const iosGuide = pwaPromptEl.querySelector('#pwaIosGuide');
+
+  btnClose?.addEventListener('click', () => {
+    localStorage.setItem('pwa_install_dismissed', '1');
+    dismissPWAInstallPrompt();
+  });
 
   btnInstall?.addEventListener('click', async () => {
     if (deferredPrompt) {

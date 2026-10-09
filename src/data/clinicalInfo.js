@@ -520,6 +520,112 @@ export const CLINICAL_DATABASE = {
     videoId: 'yU8C5r4N8w0'
   },
 
+  // === HỆ CƠ LƯNG & CỘT SỐNG (BACK & SPINE MUSCLES - CLINICAL TA2) ===
+  'Descending part of trapezius muscle': {
+    nameVi: 'Cơ thang - Phần trên (Cơ cổ vai gáy)',
+    nameLatin: 'Pars descendens musculi trapezii (TA2: 2231)',
+    nameEn: 'Descending part of trapezius muscle (Upper trapezius)',
+    regionVi: 'Cổ - Vai - Lưng trên',
+    systemVi: 'Hệ Cơ (Cơ Nông Vùng Lưng & Cổ)',
+    description: 'Bó sợi cơ dày khỏe chạy chếch từ xương chẩm và dây chằng gáy xuống bám vào 1/3 ngoài xương đòn và mỏm cùng vai; là phần cơ hoạt động nhiều nhất và dễ bị co thắt nhất của cơ thang.',
+    function: 'Nâng đai vai lên trên (nhún vai), giữ vững xương bả vai khi mang vác vật nặng; hỗ trợ duỗi cổ, nghiêng đầu sang bên cùng phía và xoay mặt sang bên đối diện.',
+    relationsText: 'Nằm nông ngay dưới da và mạc gáy; phủ lên trên cơ nâng vai, cơ gối đầu và cơ trám; bờ trước tạo nên ranh giới sau của tam giác cổ sau.',
+    clinical: 'Thủ phạm hàng đầu gây Hội chứng đau cổ vai gáy và Đau đầu do căng cơ (Tension headache); thường xuyên hình thành các điểm nút cơ co thắt (Trigger points) do ngồi làm việc máy tính sai tư thế gục đầu về phía trước (Forward Head Posture / Upper Crossed Syndrome).',
+    relations: {
+      muscles: 'Cơ ức đòn chũm, cơ nâng vai (Levator scapulae), cơ gối đầu (Splenius capitis), cơ trám lớn và bé.',
+      bones: 'Xương chẩm, các mỏm gai đốt sống cổ C1-C6 (qua dây chằng gáy), 1/3 ngoài xương đòn và mỏm cùng vai.',
+      nerves: 'Chi phối vận động bởi Dây thần kinh sọ XI (Thần kinh phụ) và các nhánh cảm giác bản thể từ C3-C4.',
+      vessels: 'Động mạch cổ ngang (Transverse cervical artery) và nhánh sau của động mạch chẩm.'
+    },
+    lessonLink: '/cot-song/co-vai-gay-va-co-thang',
+    lessonTitle: 'Cơ Thang (Trapezius) & Hội Chứng Cổ Vai Gáy: Cơ Chế & Trị Liệu',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Trapezius muscle': {
+    nameVi: 'Cơ thang (Toàn bộ cơ cổ vai lưng)',
+    nameLatin: 'Musculus trapezius (TA2: 2230)',
+    nameEn: 'Trapezius muscle',
+    regionVi: 'Cổ - Vai - Lưng trên',
+    systemVi: 'Hệ Cơ (Cơ Nông Vùng Lưng)',
+    description: 'Cơ dẹt hình tam giác rộng lớn trải dài từ nền sọ cổ qua toàn bộ cột sống ngực đến bờ gai vai; hai bên hợp thành hình thang cân đối phủ trọn vẹn lưng trên.',
+    function: 'Định vị và điều phối toàn bộ chuyển động của xương bả vai: phần trên nâng vai, phần giữa kéo bả vai vào trong sát cột sống, phần dưới hạ bả vai; phối hợp xoay bả vai lên trên giúp cánh tay giơ cao qua đầu (>90 độ).',
+    relationsText: 'Phủ kín vùng gáy và lưng trên, nằm ngay dưới da; che phủ các cơ sâu vùng lưng gồm cơ nâng vai, cơ trám, cơ dựng gai sống và cơ răng sau trên.',
+    clinical: 'Liệt dây thần kinh XI (thần kinh phụ) làm xệ vai, cánh vai biến dạng mất vững; co cứng mạn tính do stress và tư thế gù lưng vươn đầu.',
+    relations: {
+      muscles: 'Cơ nâng vai, cơ trám, cơ lưng rộng, cơ delta, cơ ức đòn chũm.',
+      bones: 'Xương chẩm, mỏm gai từ C1 đến T12, xương đòn, gai vai và mỏm cùng vai.',
+      nerves: 'Dây thần kinh XI (Thần kinh phụ) và các nhánh từ đám rối cổ C3-C4.',
+      vessels: 'Động mạch cổ ngang và động mạch bả vai lưng.'
+    },
+    lessonLink: '/cot-song/co-vai-gay-va-co-thang',
+    lessonTitle: 'Cơ Thang Toàn Diện: Giải Phẫu Vận Động & Động Học Khớp Vai',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Longissimus thoracis muscle': {
+    nameVi: 'Cơ cực dài ngực (Khối cơ dọc sống lưng / Cơ dựng gai)',
+    nameLatin: 'Musculus longissimus thoracis (TA2: 2253)',
+    nameEn: 'Longissimus thoracis muscle (Erector spinae)',
+    regionVi: 'Cột sống & Thân mình (Vùng lưng - thắt lưng)',
+    systemVi: 'Hệ Cơ (Hệ Cơ Dựng Gai Sống & Cơ Dọc Sống Lưng)',
+    description: 'Phân đoạn dài nhất và lớn nhất của khối cơ dựng gai sống (Erector spinae), tạo nên gờ cơ dọc dày chắc chạy song song ngay cạnh hai bên cột sống từ xương chậu qua ngực lên đến các đốt sống cổ.',
+    function: 'Là trụ cột chính duy trì tư thế đứng thẳng của con người chống lại trọng lực Trái Đất; thực hiện động tác duỗi thẳng cột sống lưng khi co hai bên, và nghiêng/xoay thân mình khi co một bên.',
+    relationsText: 'Nằm kẹp ở giữa cơ chậu sườn (ở phía ngoài) và cơ gai (ở phía trong) trong rãnh đốt sống sâu; được bao bọc phía sau bởi cân ngực thắt lưng (Thoracolumbar fascia) dày chắc.',
+    clinical: 'Căng cơ thắt lưng cấp (Lumbago / Back strain) sau khi cúi gập người khiêng vật nặng sai kỹ thuật; co thắt bảo vệ (muscle spasm) khi có thoát vị đĩa đệm hoặc thoái hóa cột sống; teo cơ cạnh sống ở người ít vận động gây đau lưng mạn tính.',
+    relations: {
+      muscles: 'Cơ chậu sườn thắt lưng (Iliocostalis), cơ gai ngực (Spinalis), cơ nhiều nhánh (Multifidus), cơ lưng rộng và cơ răng sau dưới.',
+      bones: 'Mào chậu, mặt sau xương cùng, mỏm ngang các đốt sống thắt lưng và góc sườn của toàn bộ các xương sườn.',
+      nerves: 'Nhánh sau (nhánh lưng) của các dây thần kinh gai sống ngực và thắt lưng.',
+      vessels: 'Các nhánh sau của động mạch gian sườn và động mạch thắt lưng.'
+    },
+    lessonLink: '/cot-song/co-dung-gai-va-dau-that-lung',
+    lessonTitle: 'Khối Cơ Dọc Sống Lưng (Erector Spinae): Cột Trụ Vận Động & Bảo Vệ Cột Sống',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Iliocostalis lumborum muscle': {
+    nameVi: 'Cơ chậu sườn thắt lưng (Cơ dọc sống lưng - Cột ngoài)',
+    nameLatin: 'Musculus iliocostalis lumborum (TA2: 2248)',
+    nameEn: 'Iliocostalis lumborum muscle',
+    regionVi: 'Cột sống & Thắt lưng',
+    systemVi: 'Hệ Cơ (Khối Cơ Dọc Sống Lưng / Dựng Gai)',
+    description: 'Cột cơ ngoài cùng của khối cơ dựng gai sống (Erector spinae), xuất phát từ mào chậu và mào cùng chạy lên bám vào góc dưới của 6 xương sườn cuối.',
+    function: 'Duỗi cột sống thắt lưng, nghiêng người sang bên và ổn định khung chậu khi đi đứng hoặc chạy nhảy.',
+    relationsText: 'Nằm ở bờ ngoài rãnh đốt sống, tiếp giáp cơ vuông thắt lưng ở sâu phía trước và cơ lưng rộng ở nông phía sau.',
+    clinical: 'Điểm xuất phát đau thắt lưng cơ năng phổ biến nhất do ngồi lâu nghiêng một bên; hội chứng đau cân cơ thắt lưng (Myofascial pain syndrome).',
+    relations: {
+      muscles: 'Cơ cực dài ngực, cơ vuông thắt lưng, cơ chéo bụng trong và ngoài.',
+      bones: 'Mào chậu, xương cùng, mỏm ngang đốt L1-L4 và các xương sườn 7-12.',
+      nerves: 'Nhánh sau của các dây thần kinh gai sống ngực dưới và thắt lưng.',
+      vessels: 'Các động mạch thắt lưng và động mạch dưới sườn.'
+    },
+    lessonLink: '/cot-song/co-dung-gai-va-dau-that-lung',
+    lessonTitle: 'Cơ Chậu Sườn & Tư Thế Chuẩn Tránh Đau Thắt Lưng',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Multifidus lumborum muscle': {
+    nameVi: 'Cơ nhiều nhánh thắt lưng (Cơ ổn định cột sống sâu)',
+    nameLatin: 'Musculus multifidus lumborum (TA2: 2261)',
+    nameEn: 'Multifidus lumborum muscle',
+    regionVi: 'Cột sống thắt lưng',
+    systemVi: 'Hệ Cơ (Cơ Lưng Sâu Bản Thể)',
+    description: 'Chuỗi các bó cơ nhỏ xếp hình lông chim đan chéo từ mỏm núm và mỏm ngang đốt sống dưới lên bám vào mỏm gai đốt sống trên (vượt qua 2 đến 4 đốt sống).',
+    function: 'Là cơ ổn định vi chuyển động (micro-stabilizer) quan trọng nhất của từng tầng đĩa đệm và khớp mấu sống; cảm nhận vị trí bản thể (Proprioception) điều chỉnh cột sống theo thời gian thực.',
+    relationsText: 'Nằm ở lớp sâu nhất trong rãnh đốt sống, phủ sát trên bản cung đốt sống và tiếp giáp trực tiếp bao khớp mấu sống.',
+    clinical: 'Bị ức chế thần kinh và teo thoái hóa mỡ (fatty infiltration) cực nhanh chỉ sau 24-48 giờ bị đau lưng cấp hoặc thoát vị đĩa đệm, khiến cột sống mất vững và đau tái phát kéo dài.',
+    relations: {
+      muscles: 'Khối cơ dựng gai (Longissimus, Spinalis) phủ phía sau; các cơ xoay ngắn ở sâu hơn.',
+      bones: 'Mặt sau xương cùng, các mỏm núm đốt sống thắt lưng và mỏm gai đốt sống.',
+      nerves: 'Nhánh trong của các nhánh sau dây thần kinh gai sống thắt lưng.',
+      vessels: 'Nhánh lưng của động mạch thắt lưng.'
+    },
+    lessonLink: '/cot-song/co-dung-gai-va-dau-that-lung',
+    lessonTitle: 'Cơ Nhiều Nhánh (Multifidus): Chìa Khóa Ổn Định Cột Sống Chống Tái Phát Thoát Vị',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
   // === ĐAI VAI & CHI TRÊN (SHOULDER & UPPER LIMB) ===
   'Clavicle': {
     nameVi: 'Xương đòn (Xương quai xanh)',
@@ -781,6 +887,66 @@ export const CLINICAL_DATABASE = {
     },
     lessonLink: '/tim-mach/dong-mach-chu',
     lessonTitle: 'Cây Động Mạch Chủ & Bệnh Lý Phình Bóc Tách Ngực',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Internal carotid artery': {
+    nameVi: 'Động mạch cảnh trong',
+    nameLatin: 'Arteria carotis interna (TA2: 4423)',
+    nameEn: 'Internal carotid artery',
+    regionVi: 'Cổ & Nền Sọ',
+    systemVi: 'Hệ Tim Mạch (Mạch Cảnh & Não)',
+    description: 'Nhánh lớn của động mạch cảnh chung cấp máu cho đại não và ổ mắt',
+    function: 'Cung cấp 80% lưu lượng máu nuôi đại não và mắt; tham gia tạo đa giác Willis đáy não.',
+    clinical: 'Xơ vữa hẹp động mạch cảnh gây cơn thiếu máu não thoáng qua (TIA) và đột quỵ nhồi máu não; phình mạch đoạn xoang hang gây liệt vận nhãn.',
+    relations: {
+      muscles: 'Đi sâu dưới cơ ức đòn chũm, cơ nhị thân và cơ trâm móng.',
+      bones: 'Chui qua ống động mạch cảnh ở xương thái dương để vào nền sọ.',
+      nerves: 'Đi cùng thần kinh X (lang thang) và chuỗi hạch giao cảm cổ trong bao cảnh.',
+      vessels: 'Tách từ động mạch cảnh chung ngang mức bờ trên sụn giáp (C3-C4), đi cùng tĩnh mạch cảnh trong.'
+    },
+    lessonLink: '/tim-mach/mach-canh-va-dot-quy',
+    lessonTitle: 'Động Mạch Cảnh Trong: Giải Phẫu Não Bộ & Dự Phòng Đột Quỵ',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'Common carotid artery': {
+    nameVi: 'Động mạch cảnh chung',
+    nameLatin: 'Arteria carotis communis (TA2: 4363)',
+    nameEn: 'Common carotid artery',
+    regionVi: 'Cổ',
+    systemVi: 'Hệ Tim Mạch (Mạch Cảnh)',
+    description: 'Thân động mạch chính dẫn máu từ ngực lên nuôi đầu, mặt và não',
+    function: 'Vận chuyển máu áp lực cao lên nuôi dưỡng toàn bộ vùng đầu cổ và não bộ.',
+    clinical: 'Xơ vữa tại chỗ chia đôi xoang cảnh là vị trí hay gặp nhất gây tai biến đột quỵ; bắt mạch cảnh khi cấp cứu ngừng tuần hoàn.',
+    relations: {
+      muscles: 'Nằm trong tam giác cảnh, được che phủ bởi cơ ức đòn chũm.',
+      bones: 'Chạy dọc phía trước các mỏm ngang đốt sống cổ C4-C6.',
+      nerves: 'Đi trong bao cảnh cùng thần kinh X và chuỗi giao cảm cổ.',
+      vessels: 'Tĩnh mạch cảnh trong nằm ngoài, động mạch cảnh chung nằm trong.'
+    },
+    lessonLink: '/tim-mach/mach-canh-va-dot-quy',
+    lessonTitle: 'Động Mạch Cảnh Chung: Trục Tuần Hoàn Nuôi Đầu Mặt',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  'External carotid artery': {
+    nameVi: 'Động mạch cảnh ngoài',
+    nameLatin: 'Arteria carotis externa (TA2: 4366)',
+    nameEn: 'External carotid artery',
+    regionVi: 'Cổ & Mặt',
+    systemVi: 'Hệ Tim Mạch (Mạch Cảnh Ngoài)',
+    description: 'Nhánh nông của động mạch cảnh chung cấp máu cho vùng mặt, da đầu và tạng cổ',
+    function: 'Tưới máu cho hệ cơ mặt, xương hàm, niêm mạc hầu họng và màng não ngoài qua ĐM màng não giữa.',
+    clinical: 'Thắt động mạch cảnh ngoài để cầm máu trong chấn thương hàm mặt hoặc phẫu thuật bóc u vùng cổ.',
+    relations: {
+      muscles: 'Đi trong tam giác cảnh rồi chui vào trong tuyến nước bọt mang tai.',
+      bones: 'Nằm sát góc hàm dưới và mỏm trâm xương thái dương.',
+      nerves: 'Bắt chéo bởi thần kinh hạ thiệt (XII) và các nhánh thần kinh mặt (VII).',
+      vessels: 'Tách ra 8 nhánh chính: giáp trên, hầu lên, lưỡi, mặt, chẩm, tai sau, thái dương nông, hàm.'
+    },
+    lessonLink: '/tim-mach/mach-canh-va-dot-quy',
+    lessonTitle: 'Động Mạch Cảnh Ngoài: Nhánh Nuôi Vùng Đầu Mặt Cổ',
     videoId: '3ZfVjV7VqJ8'
   },
 

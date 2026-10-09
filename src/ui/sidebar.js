@@ -1,12 +1,10 @@
 // Sidebar UI - Systems panel with collapsible groups
-import { state, subscribe, getSystemParts, getStructureInfo, setLanguage, translate, pushUndo } from '../state/store.js';
+import { state, setSelectedPart, subscribe, getSystemParts, getStructureInfo, setLanguage, translate, pushUndo } from '../state/store.js';
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
 import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState } from '../viewer/visibility.js';
 import { selectPartById, deselectPart, undoLastDissect, executeUndo, executeRedo } from '../viewer/selection.js';
-import { setView, resetView, frameRegion } from '../viewer/camera.js';
-import { loadAllData, searchStructures } from '../utils/dataLoader.js';
-import { initDepthSlider, resetDepthSlider, applyDepth } from './depthSlider.js';
+import { loadAllData, searchStructures, cleanSearchLabel } from '../utils/dataLoader.js';
 import { PRESETS, applyPreset } from '../data/presets.js';
 import { setInert, focusFirst, trapFocus, rovingList } from './focus.js';
 import { REGIONS_DATA } from '../data/regions.js';
@@ -29,7 +27,7 @@ import { initFloatingAIButton } from './floatingAIButton.js';
 import { initFullscreenController } from './fullscreenController.js';
 import { initAtlasHub, openAtlasHub } from './atlasHubModal.js';
 import { parseVideoUrl } from '../data/atlasMediaManager.js';
-import { initInfoPanel, updateInfoPanelContent, setCompactMode } from './infoPanel.js';
+import { initInfoPanel, updateInfoPanelContent, setCompactMode, setSheetSnapTier } from './infoPanel.js';
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
@@ -40,6 +38,12 @@ import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
 import { dissectMultiLayer } from '../viewer/dissection.js';
 import { openSettingsModal } from './settingsModal.js';
+import { isVoiceMuted, setVoiceMuted, stopAllSpeech } from '../utils/speechVoice.js';
+import { initDepthSlider } from './depthSlider.js';
+
+if (typeof window !== 'undefined') {
+  window.openClinicalAxesModal = openClinicalAxesModal;
+}
 
 export function findClinicalAxis(query) {
   if (!query) return null;
@@ -102,6 +106,41 @@ const SYSTEM_ICONS = {
 
 export function systemLabel(systemId, lang = state.language || 'vi') {
   return SYSTEM_LABELS[lang]?.[systemId] || SYSTEM_LABELS.vi?.[systemId] || SYSTEM_LABELS.en?.[systemId] || systemId;
+}
+
+const SYSTEM_LABELS_SHORT = {
+  vi: {
+    skeletal: 'Xương',
+    joints: 'Khớp',
+    muscular: 'Cơ bắp',
+    nervous: 'Thần kinh',
+    cardiovascular: 'Tim mạch',
+    respiratory: 'Hô hấp',
+    digestive: 'Tiêu hóa',
+    urinary_genital: 'Tiết niệu',
+    lymphatic: 'Bạch huyết',
+    endocrine: 'Nội tiết',
+    integumentary: 'Da',
+    visceral: 'Nội tạng'
+  },
+  en: {
+    skeletal: 'Bone',
+    joints: 'Joint',
+    muscular: 'Muscle',
+    nervous: 'Nerve',
+    cardiovascular: 'Cardio',
+    respiratory: 'Lung',
+    digestive: 'Digestive',
+    urinary_genital: 'Urogenital',
+    lymphatic: 'Lymph',
+    endocrine: 'Endocrine',
+    integumentary: 'Skin',
+    visceral: 'Visceral'
+  }
+};
+
+export function shortSystemLabel(systemId, lang = state.language || 'vi') {
+  return SYSTEM_LABELS_SHORT[lang]?.[systemId] || SYSTEM_LABELS_SHORT.vi?.[systemId] || systemLabel(systemId, lang);
 }
 
 // 12 Standard Medical Systems Catalog (Strict single line, color-coded badges)
@@ -387,7 +426,29 @@ export async function selectStructureAnywhere(partId) {
     }
   }
 
-  selectPartById(partId, state.viewer);
+  const ok = selectPartById(partId, state.viewer);
+  if (!ok) {
+    const clinical = getClinicalData(partId);
+    const displayName = clinical?.nameVi || info?.name?.[state.language] || info?.name?.vi || info?.name?.en || partId;
+    const synthesizedPart = {
+      id: partId,
+      meshName: info?.baseName || partId,
+      displayName: displayName,
+      system: systemId || 'unknown',
+      region: info?.region || 'unknown',
+      info: info || {
+        name: { vi: displayName, en: partId },
+        latinName: clinical?.nameLatin || partId,
+        system: systemId || 'unknown'
+      }
+    };
+    setSelectedPart(synthesizedPart);
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.selectStructureAnywhere = selectStructureAnywhere;
+  window.setSheetSnapTier = setSheetSnapTier;
 }
 
 // Hiding a system is instant, but its buffers are only released if it stays
@@ -934,15 +995,17 @@ export function initFooterActions(viewer) {
     showToast('Đã lưu ghi chú học tập 📝');
   });
 
-  document.getElementById('cardCloseBtn')?.addEventListener('click', () => {
+  document.getElementById('cardCloseBtn')?.addEventListener('click', (e) => {
+    e?.stopPropagation?.();
     const isolateBtn = document.getElementById('cardIsolateBtn');
     if (isolateBtn?.classList.contains('active')) {
       restoreAllParts();
       isolateBtn.classList.remove('active');
     }
     // Collapse to compact mini-bar, keeping 3D indicator and highlight intact
-    setCompactMode(true);
+    setSheetSnapTier('compact');
     document.getElementById('cardNoteBox')?.classList.add('hidden');
+    showToast('🔽 Đã thu gọn thanh (Cấu trúc vẫn hiển thị 📍)');
   });
 
   // Mobile Bottom Bar Navigation
@@ -1819,67 +1882,43 @@ export function initLanguageSelector() {
 export function renderQuickModulesTray(results, input) {
   if (!results || !input) return;
   results.innerHTML = `
-    <div class="quick-modules-tray" id="quickModulesTray">
-      <div class="tray-header">
-        <span class="tray-title-badge">⚡ CHỌN NHANH MÔ ĐUN ỨNG DỤNG</span>
-        <span class="tray-subtitle">Chạm để mở 3D</span>
+    <div class="quick-modules-tray compact-1-line" id="quickModulesTray">
+      <div class="tray-header-compact">
+        <span class="tray-title-badge">⚡ CHỌN NHANH</span>
+        <span class="tray-subtitle-scroll">Cuộn ngang →</span>
       </div>
-      <div class="tray-grid">
-        <button type="button" class="tray-item" data-action="axis" data-id="axis_gut_brain">
-          <span class="tray-icon">🧠</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Trục Não – Ruột</strong>
-            <span class="tray-desc">Thần kinh & Tiêu hóa</span>
-          </div>
+      <div class="tray-scroll-row">
+        <button type="button" class="tray-chip-1line tray-item" data-action="axis" data-id="axis_gut_brain">
+          <span class="tray-chip-icon">🧠</span>
+          <span class="tray-chip-name">Trục Não – Ruột</span>
         </button>
-        <button type="button" class="tray-item" data-action="axis" data-id="axis_hepatobiliary_pancreas">
-          <span class="tray-icon">🌿</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Hệ Gan – Mật – Tụy</strong>
-            <span class="tray-desc">Dòng mật & Cơ Oddi</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="axis" data-id="axis_hepatobiliary_pancreas">
+          <span class="tray-chip-icon">🌿</span>
+          <span class="tray-chip-name">Gan – Mật – Tụy</span>
         </button>
-        <button type="button" class="tray-item" data-action="axis" data-id="axis_cranial_nerves">
-          <span class="tray-icon">⚡</span>
-          <div class="tray-texts">
-            <strong class="tray-name">12 Dây TK Sọ</strong>
-            <span class="tray-desc">Giác quan & Vận động</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="axis" data-id="axis_cranial_nerves">
+          <span class="tray-chip-icon">⚡</span>
+          <span class="tray-chip-name">12 Dây TK Sọ</span>
         </button>
-        <button type="button" class="tray-item" data-action="axis" data-id="axis_brain_spine_sciatic">
-          <span class="tray-icon">🏃</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Thần Kinh Tọa</strong>
-            <span class="tray-desc">Rễ L4-L5 & Chi dưới</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="axis" data-id="axis_brain_spine_sciatic">
+          <span class="tray-chip-icon">🏃</span>
+          <span class="tray-chip-name">Thần Kinh Tọa</span>
         </button>
-        <button type="button" class="tray-item" data-action="axis" data-id="axis_cardiopulmonary">
-          <span class="tray-icon">❤️</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Tim – Phổi</strong>
-            <span class="tray-desc">Tuần hoàn trao đổi khí</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="axis" data-id="axis_cardiopulmonary">
+          <span class="tray-chip-icon">❤️</span>
+          <span class="tray-chip-name">Tim – Phổi</span>
         </button>
-        <button type="button" class="tray-item" data-action="part" data-part="Intervertebral disc L4-L5">
-          <span class="tray-icon">🦴</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Thoát Vị Đĩa Đệm</strong>
-            <span class="tray-desc">Mô phỏng 4 cấp độ</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="part" data-part="Intervertebral disc L4-L5">
+          <span class="tray-chip-icon">🦴</span>
+          <span class="tray-chip-name">Thoát Vị Đĩa Đệm</span>
         </button>
-        <button type="button" class="tray-item" data-action="part" data-part="Anterior cruciate ligament of knee.l">
-          <span class="tray-icon">🦵</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Dây Chằng Gối</strong>
-            <span class="tray-desc">ACL, PCL & Sụn chêm</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="part" data-part="Anterior cruciate ligament of knee.l">
+          <span class="tray-chip-icon">🦵</span>
+          <span class="tray-chip-name">Dây Chằng Gối</span>
         </button>
-        <button type="button" class="tray-item" data-action="part" data-part="Lateral ventricle.l">
-          <span class="tray-icon">🌊</span>
-          <div class="tray-texts">
-            <strong class="tray-name">Dịch Não Tủy CSF</strong>
-            <span class="tray-desc">Não thất & Dòng chảy</span>
-          </div>
+        <button type="button" class="tray-chip-1line tray-item" data-action="part" data-part="Lateral ventricle.l">
+          <span class="tray-chip-icon">🌊</span>
+          <span class="tray-chip-name">Dịch Não Tủy CSF</span>
         </button>
       </div>
     </div>
@@ -1907,7 +1946,7 @@ export function renderQuickModulesTray(results, input) {
         const card = document.getElementById('selectionCard');
         if (card) {
           card.classList.remove('hidden');
-          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+          setSheetSnapTier('compact');
         }
       }
     });
@@ -1954,49 +1993,6 @@ export function initSearch() {
       const lang = state.language || 'it';
 
       let html = '';
-      if (matchedAxis) {
-        html += `
-          <div class="search-axis-card" data-axis="${escapeHtml(matchedAxis.id)}">
-            <div class="axis-card-badge-row">
-              <span class="axis-card-badge">${escapeHtml(matchedAxis.badge)}</span>
-              <span class="axis-card-cat">${escapeHtml(matchedAxis.category)}</span>
-            </div>
-            <div class="axis-card-main">
-              <span class="axis-card-icon">${matchedAxis.icon}</span>
-              <div class="axis-card-texts">
-                <strong class="axis-card-title">${escapeHtml(matchedAxis.titleVi)}</strong>
-                <span class="axis-card-desc">${escapeHtml(matchedAxis.summary)}</span>
-              </div>
-            </div>
-            <div class="axis-steps-mini-chips">
-              ${matchedAxis.chainSteps.map(s => `<span class="axis-mini-chip">${s.step}. ${escapeHtml(s.title.split('&')[0].trim())}</span>`).join(' <span class="axis-chip-arrow">→</span> ')}
-            </div>
-          </div>
-        `;
-      }
-      if (concept) {
-        html += `
-          <div class="search-concept-card" id="searchConceptCard">
-            <div class="concept-card-top" data-part="${escapeHtml(concept.primaryPartId)}">
-              <img src="${concept.thumbnail}" class="concept-card-thumb" alt="${escapeHtml(concept.titleVi)}" />
-              <div class="concept-card-info">
-                <span class="concept-card-badge">Khái Niệm Chuyên Sâu</span>
-                <span class="concept-card-title">${escapeHtml(concept.titleVi)}</span>
-                <span class="concept-card-latin">${escapeHtml(concept.latin)}</span>
-                <span class="concept-card-desc">${escapeHtml(concept.subtitle)}</span>
-              </div>
-            </div>
-            <div class="concept-chips-row">
-              ${concept.subunits.map(sub => `
-                <button type="button" class="concept-chip" data-part="${escapeHtml(sub.partId)}" title="${escapeHtml(sub.note)}">
-                  ${escapeHtml(sub.label)}
-                </button>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }
-
       if (matches.length > 0) {
         html += matches.map((row, index) => {
           // Paired structures are one row with a side chip each, instead of two
@@ -2008,15 +2004,37 @@ export function initSearch() {
 
           const target = row.sides.none || row.sides.right || row.sides.left;
           const pending = state.loadedSystems.includes(row.system) ? '' : ' is-pending';
+          const displayName = cleanSearchLabel(row.label);
+          const fullLabel = row.rawLabel || row.label;
 
           return `
-            <div class="search-result-item${pending}" role="option" id="search-option-${index}" aria-selected="false" data-part="${escapeHtml(target)}">
-              <span class="result-name">${escapeHtml(row.label)}</span>
+            <div class="search-result-item${pending}" role="option" id="search-option-${index}" aria-selected="false" data-part="${escapeHtml(target)}" title="${escapeHtml(fullLabel)}">
+              <span class="result-name" title="${escapeHtml(fullLabel)}">${escapeHtml(displayName)}</span>
               <span class="result-sides">${sides}</span>
-              <span class="result-system">${escapeHtml(systemLabel(row.system, lang))}</span>
+              <span class="result-system">${escapeHtml(shortSystemLabel(row.system, lang))}</span>
             </div>
           `;
         }).join('');
+      }
+
+      if (concept) {
+        html += `
+          <div class="search-concept-card compact-1-line" id="searchConceptCard" data-part="${escapeHtml(concept.primaryPartId)}" title="${escapeHtml(concept.titleVi)}: ${escapeHtml(concept.subtitle)}">
+            <span class="concept-compact-badge">💡 Khái niệm</span>
+            <span class="concept-compact-title">${escapeHtml(concept.titleVi)}</span>
+            <span class="concept-compact-action">Mở 3D →</span>
+          </div>
+        `;
+      }
+
+      if (matchedAxis) {
+        html += `
+          <div class="search-axis-card compact-1-line" data-axis="${escapeHtml(matchedAxis.id)}" title="${escapeHtml(matchedAxis.titleVi)}: ${escapeHtml(matchedAxis.summary)}">
+            <span class="axis-compact-badge">⚡ ${escapeHtml(matchedAxis.badge || 'Trục LS')}</span>
+            <span class="axis-compact-title">${matchedAxis.icon} ${escapeHtml(matchedAxis.titleVi)}</span>
+            <span class="axis-compact-action">Khám phá →</span>
+          </div>
+        `;
       }
 
       results.innerHTML = html;
@@ -2033,7 +2051,7 @@ export function initSearch() {
         const card = document.getElementById('selectionCard');
         if (card) {
           card.classList.remove('hidden');
-          window.dispatchEvent(new CustomEvent('expand-selection-card'));
+          setSheetSnapTier('compact');
         }
       };
 
@@ -2180,14 +2198,14 @@ function onSelectionChange(part) {
 
     const isStudyMode = document.getElementById('studyModeModal')?.classList.contains('step-mode');
     const isQuizActive = document.body.classList.contains('quiz-active');
+    const isClinicalAxisActive = document.getElementById('clinicalAxisHud') && !document.getElementById('clinicalAxisHud').classList.contains('hidden');
 
     if (card) {
-      if (isStudyMode || isQuizActive) {
+      if (isStudyMode || isQuizActive || isClinicalAxisActive) {
         card.classList.add('hidden');
       } else {
         card.classList.remove('hidden');
-        const hasDeck = getVisualDeckForPart(part.id);
-        setCompactMode(!hasDeck);
+        setSheetSnapTier('compact');
         updateInfoPanelContent(part, state.viewer);
       }
     }
@@ -2365,6 +2383,7 @@ export async function initUI(viewer) {
   initSystemsLayerController(viewer);
   initFloatingAIButton(viewer);
   initFullscreenController(viewer);
+  initQuickVoiceMuteController();
   initAtlasHub(viewer);
   initInfoPanel(viewer);
   initViewsQuickNav(viewer);
@@ -2377,6 +2396,54 @@ export async function initUI(viewer) {
   document.getElementById('adminPortalBtn')?.addEventListener('click', () => {
     openAtlasAdmin(viewer);
   });
+}
+
+/**
+ * Controller cho nút loa nhỏ xíu tắt/bật âm lượng AI đọc trên góc màn hình
+ */
+export function initQuickVoiceMuteController() {
+  const btn = document.getElementById('btnQuickMuteAI');
+  if (!btn || btn._initialized) return;
+  btn._initialized = true;
+
+  const iconSpeaker = btn.querySelector('.icon-speaker');
+  const iconMuted = btn.querySelector('.icon-muted');
+
+  const updateUI = () => {
+    const muted = isVoiceMuted();
+    btn.classList.toggle('is-muted', muted);
+    if (iconSpeaker && iconMuted) {
+      iconSpeaker.classList.toggle('hidden', muted);
+      iconMuted.classList.toggle('hidden', !muted);
+    }
+    btn.title = muted ? 'Bật âm lượng giọng đọc AI' : 'Tắt âm lượng giọng đọc AI';
+  };
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isSpeaking = typeof window !== 'undefined' && window.speechSynthesis && window.speechSynthesis.speaking;
+
+    if (isSpeaking) {
+      stopAllSpeech();
+      btn.classList.remove('is-speaking');
+      showToast('Đã dừng đọc giọng nói AI');
+    } else {
+      const nextMuted = !isVoiceMuted();
+      setVoiceMuted(nextMuted);
+      updateUI();
+      showToast(nextMuted ? 'Đã tắt âm lượng giọng đọc AI' : 'Đã bật âm lượng giọng đọc AI');
+    }
+  });
+
+  // Theo dõi trạng thái giọng đọc AI để kích hoạt hiệu ứng sóng âm thanh
+  setInterval(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      const speaking = window.speechSynthesis.speaking && !isVoiceMuted();
+      btn.classList.toggle('is-speaking', !!speaking);
+    }
+  }, 250);
+
+  updateUI();
 }
 
 // Under 1024px the search field is hidden; this button is the only way to it.

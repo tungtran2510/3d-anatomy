@@ -1,6 +1,6 @@
 // Smart 3D Anatomy AI Engine
 // Natural language 3D model control, grounded medical reasoning, and adaptive pedagogy
-import { state } from '../state/store.js';
+import { state, setSelectedPart, getStructureInfo } from '../state/store.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { selectPartById } from '../viewer/selection.js';
@@ -27,10 +27,57 @@ export const ANATOMICAL_SYNONYMS = {
   'cơ tứ đầu': { id: 'Rectus femoris muscle.l', base: 'Rectus femoris muscle', system: 'muscular', nameVi: 'Cơ tứ đầu đùi' },
   'cơ mông lớn': { id: 'Gluteus maximus.l', base: 'Gluteus maximus', system: 'muscular', nameVi: 'Cơ mông lớn' },
   'cơ mông': { id: 'Gluteus maximus.l', base: 'Gluteus maximus', system: 'muscular', nameVi: 'Cơ mông lớn' },
-  'cơ thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang (Cơ cổ vai lưng)' },
+  'cơ thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang (Cơ cổ vai gáy)' },
   'co thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang' },
-  'cơ lưng rộng': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng' },
+  'cơ hình thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ hình thang (Cơ thang)' },
+  'co hinh thang': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ hình thang' },
+  'cơ cổ vai gáy': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang (Cơ cổ vai gáy)' },
+  'co co vai gay': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ cổ vai gáy' },
+  'cơ vai gáy': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang (Cơ cổ vai gáy)' },
+  'co vai gay': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ vai gáy' },
+  'trapezius': { id: 'Descending part of trapezius muscle.l', base: 'Descending part of trapezius muscle', system: 'muscular', nameVi: 'Cơ thang (Trapezius)' },
+
+  // Back & Spine Muscles (Khối cơ dọc sống lưng / Cơ dựng gai / Cơ cạnh sống)
+  'cơ dọc sống lưng': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Khối cơ dọc sống lưng / dựng gai)' },
+  'co doc song lung': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Khối cơ dọc sống lưng)' },
+  'cơ sống lưng': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Cơ sống lưng)' },
+  'co song lung': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ sống lưng' },
+  'cơ dựng gai': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Cơ dựng gai sống)' },
+  'co dung gai': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ dựng gai' },
+  'cơ dựng sống': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Cơ dựng sống)' },
+  'co dung song': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ dựng sống' },
+  'cơ cạnh sống': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Khối cơ cạnh sống)' },
+  'co canh song': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cạnh sống' },
+  'cơ lưng sâu': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Cơ lưng sâu)' },
+  'co lung sau': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ lưng sâu' },
+  'cơ cực dài': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài ngực (Longissimus)' },
+  'co cuc dai': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài' },
+  'longissimus': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ cực dài (Longissimus)' },
+  'erector spinae': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Cơ dựng gai sống (Erector spinae)' },
+  'paraspinal': { id: 'Longissimus thoracis muscle.l', base: 'Longissimus thoracis muscle', system: 'muscular', nameVi: 'Khối cơ cạnh sống (Paraspinal muscles)' },
+  'cơ chậu sườn': { id: 'Iliocostalis lumborum muscle.l', base: 'Iliocostalis lumborum muscle', system: 'muscular', nameVi: 'Cơ chậu sườn thắt lưng (Iliocostalis)' },
+  'co chau suon': { id: 'Iliocostalis lumborum muscle.l', base: 'Iliocostalis lumborum muscle', system: 'muscular', nameVi: 'Cơ chậu sườn' },
+  'iliocostalis': { id: 'Iliocostalis lumborum muscle.l', base: 'Iliocostalis lumborum muscle', system: 'muscular', nameVi: 'Cơ chậu sườn (Iliocostalis)' },
+  'cơ gai': { id: 'Spinalis thoracis muscle.l', base: 'Spinalis thoracis muscle', system: 'muscular', nameVi: 'Cơ gai ngực (Spinalis)' },
+  'co gai': { id: 'Spinalis thoracis muscle.l', base: 'Spinalis thoracis muscle', system: 'muscular', nameVi: 'Cơ gai' },
+  'spinalis': { id: 'Spinalis thoracis muscle.l', base: 'Spinalis thoracis muscle', system: 'muscular', nameVi: 'Cơ gai (Spinalis)' },
+  'cơ nhiều nhánh': { id: 'Multifidus lumborum muscle.l', base: 'Multifidus lumborum muscle', system: 'muscular', nameVi: 'Cơ nhiều nhánh thắt lưng (Multifidus)' },
+  'cơ nhiều chân': { id: 'Multifidus lumborum muscle.l', base: 'Multifidus lumborum muscle', system: 'muscular', nameVi: 'Cơ nhiều nhánh thắt lưng (Multifidus)' },
+  'co nhieu nhanh': { id: 'Multifidus lumborum muscle.l', base: 'Multifidus lumborum muscle', system: 'muscular', nameVi: 'Cơ nhiều nhánh' },
+  'multifidus': { id: 'Multifidus lumborum muscle.l', base: 'Multifidus lumborum muscle', system: 'muscular', nameVi: 'Cơ nhiều nhánh (Multifidus)' },
+  'cơ vuông thắt lưng': { id: 'Quadratus lumborum.l', base: 'Quadratus lumborum', system: 'muscular', nameVi: 'Cơ vuông thắt lưng' },
+  'co vuong that lung': { id: 'Quadratus lumborum.l', base: 'Quadratus lumborum', system: 'muscular', nameVi: 'Cơ vuông thắt lưng' },
+  'cơ nâng vai': { id: 'Levator scapulae.l', base: 'Levator scapulae', system: 'muscular', nameVi: 'Cơ nâng vai' },
+  'co nang vai': { id: 'Levator scapulae.l', base: 'Levator scapulae', system: 'muscular', nameVi: 'Cơ nâng vai' },
+  'cơ trám lớn': { id: 'Rhomboid major.l', base: 'Rhomboid major', system: 'muscular', nameVi: 'Cơ trám lớn' },
+  'cơ trám': { id: 'Rhomboid major.l', base: 'Rhomboid major', system: 'muscular', nameVi: 'Cơ trám lớn' },
+  'co tram': { id: 'Rhomboid major.l', base: 'Rhomboid major', system: 'muscular', nameVi: 'Cơ trám' },
+  'cơ gối đầu': { id: 'Splenius capitis.l', base: 'Splenius capitis', system: 'muscular', nameVi: 'Cơ gối đầu' },
+  'cơ bán gai': { id: 'Semispinalis thoracis muscle.l', base: 'Semispinalis thoracis muscle', system: 'muscular', nameVi: 'Cơ bán gai' },
+  'cơ lưng rộng': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng (Cơ xô)' },
   'co lung rong': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng' },
+  'cơ xô': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng (Cơ xô)' },
+  'co xo': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ xô' },
   'cơ ức đòn chũm': { id: 'Sternocleidomastoid muscle.l', base: 'Sternocleidomastoid muscle', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
   'co uc don chum': { id: 'Sternocleidomastoid muscle.l', base: 'Sternocleidomastoid muscle', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
   'cơ bắp chân': { id: 'Medial head of gastrocnemius.l', base: 'Medial head of gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân (Bắp chân)' },
@@ -288,10 +335,75 @@ export const ANATOMICAL_SYNONYMS = {
 };
 
 /**
+ * Robust word-boundary matching for Vietnamese and alphanumeric terms
+ * Prevents substring collisions like 'than' matching 'cơ thang'
+ */
+export function matchKeywordInText(text, keyword) {
+  if (!text || !keyword) return false;
+  const kw = keyword.toLowerCase().trim();
+  const t = text.toLowerCase().trim();
+  if (t === kw) return true;
+  const escaped = kw.replace(/[\.\*\+\?\^\$\{\}\(\)\|\[\]\\]/g, '\\$&');
+  const pattern = new RegExp('(?:^|[^a-z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])' + escaped + '(?:$|[^a-z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])', 'i');
+  return pattern.test(t);
+}
+
+/**
  * Parses user input to extract semantic intent, target entities, and 3D action
  */
 export function interpretAIQuery(query, activePart = null) {
   const q = query.toLowerCase().trim();
+
+  // -1. Intent: Muscle Overview & Classification ("các loại cơ", "các nhóm cơ", "hệ cơ", "cơ bắp", "có những loại cơ nào")
+  const isMuscleOverview = (
+    q.includes('các loại cơ') ||
+    q.includes('cac loai co') ||
+    q.includes('các nhóm cơ') ||
+    q.includes('cac nhom co') ||
+    q.includes('hệ cơ') ||
+    q.includes('he co') ||
+    q.includes('hệ thống cơ') ||
+    q.includes('he thong co') ||
+    q.includes('các loại cơ bắp') ||
+    q.includes('cac loai co bap') ||
+    q.includes('có những loại cơ nào') ||
+    q.includes('co nhung loai co nao') ||
+    q.includes('phân loại cơ') ||
+    q.includes('phan loai co') ||
+    q.includes('nhóm cơ chính') ||
+    q.includes('nhom co chinh') ||
+    (q.includes('cơ bắp') && (q.includes('loại') || q.includes('nhóm') || q.includes('tổng quan') || q.includes('phân loại') || q.includes('những'))) ||
+    q === 'các cơ' ||
+    q === 'hệ cơ bắp' ||
+    q === 'hệ cơ vân' ||
+    q === 'cơ bắp'
+  );
+
+  if (isMuscleOverview) {
+    return {
+      intent: 'MUSCLE_OVERVIEW',
+      rawQuery: query
+    };
+  }
+
+  // -0.5 Direct Muscle Structure Priority:
+  // If the query directly targets a specific muscle (e.g. "cơ thang", "cơ dọc sống lưng", "cơ delta"),
+  // route directly to structure focus/Q&A so it never gets intercepted by clinical axes.
+  const isExplicitAxisQuery = q.includes('trục') || q.includes('truc') || q.includes('chục') || q.includes('chuc') ||
+                              q.includes('bộ ba') || q.includes('bo ba') || q.includes('bộ 3') || q.includes('bo 3') ||
+                              q.includes('chuỗi') || q.includes('vòng tuần hoàn');
+
+  const directStructure = findTargetStructure(q, activePart);
+  const isMuscleTarget = directStructure && directStructure.system === 'muscular';
+
+  if (isMuscleTarget && !isExplicitAxisQuery) {
+    const isQuestion = q.includes('là gì') || q.includes('thế nào') || q.includes('chức năng') || q.includes('bệnh') || q.includes('triệu chứng') || q.includes('tại sao');
+    return {
+      intent: isQuestion ? 'CLINICAL_QNA' : 'FOCUS_STRUCTURE',
+      target: directStructure,
+      rawQuery: query
+    };
+  }
 
   // 0. Intent: Clinical Functional Axes (Trục lâm sàng / Bộ ba chức năng / Tuyến tiêu hóa / Dịch não tủy / Trục não ruột / Chục lão chuột)
   let targetAxis = null;
@@ -369,7 +481,7 @@ export function interpretAIQuery(query, activePart = null) {
     targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_renal_cardiovascular');
   } else {
     targetAxis = CLINICAL_AXES.find(axis => {
-      return axis.keywords?.some(k => q.includes(k.toLowerCase()));
+      return axis.keywords?.some(k => matchKeywordInText(q, k));
     });
   }
 
@@ -719,12 +831,67 @@ ${insightsFormatted}
     };
   }
 
+  // 0.1 MUSCLE OVERVIEW (Tổng quan hệ cơ & các nhóm cơ trên 3D)
+  if (intent === 'MUSCLE_OVERVIEW') {
+    if (activeViewer) {
+      if (!state.loadedSystems.includes('muscular')) {
+        loadModel('muscular', activeViewer).catch(err => console.warn('Failed background load of muscular:', err));
+      }
+      showSystem('muscular');
+      activeViewer.render();
+    }
+
+    const speechText = 'Hệ cơ cơ thể người gồm hơn 600 cơ, chia làm 3 loại mô: cơ vân, cơ trơn và cơ tim. Bạn có thể chọn xem các nhóm cơ lưng, vai gáy, chi trên và chi dưới trực tiếp trên mô hình 3D.';
+
+    return {
+      action: 'MUSCLE_OVERVIEW',
+      actionBadge: '💪 AI: Đã kích hoạt 3D Hệ Cơ & Phân Loại Các Nhóm Cơ',
+      speechText,
+      message: `
+### 💪 TỔNG QUAN HỆ CƠ & CÁC LOẠI CƠ TRONG CƠ THỂ
+*Hệ vận động & Động lực học sinh học (Muscular System)*
+
+---
+
+### 🧬 1. PHÂN LOẠI 3 LOẠI MÔ CƠ SINH HỌC:
+1. **Cơ Vân (Cơ Xương - Skeletal Muscle):**
+   - **Cấu tạo & Vị trí:** Gồm hơn 600 cơ bám vào xương qua các gân sợi collagen; chiếm 40-50% trọng lượng cơ thể. Tế bào cơ vân có các dải sáng tối (Sarcomere) chứa protein Actin & Myosin.
+   - **Phương thức hoạt động:** Vận động **chủ động theo ý muốn** dưới sự chỉ huy của vỏ não qua dây thần kinh sọ và dây thần kinh gai sống.
+   - **Chức năng:** Tạo lực kéo di chuyển các khớp xương, giúp đi đứng, nâng vác, duy trì tư thế chống lại trọng lực và sinh nhiệt sưởi ấm cơ thể.
+
+2. **Cơ Trơn (Smooth Muscle):**
+   - **Cấu tạo & Vị trí:** Tế bào hình thoi đơn nhân không có vân ngang, nằm ở thành các cơ quan rỗng: ống tiêu hóa (dạ dày, ruột), phế quản phổi, thành mạch máu, bàng quang và tử cung.
+   - **Phương thức hoạt động:** Hoạt động **hoàn toàn tự chủ vô thức**, do Hệ thần kinh tự chủ (Giao cảm / Đối giao cảm) và hormone điều hòa.
+   - **Chức năng:** Tạo sóng nhu động đẩy thức ăn, điều chỉnh huyết áp qua co giãn lòng mạch, và kiểm soát lưu lượng khí thở.
+
+3. **Cơ Tim (Cardiac Muscle - Myocardium):**
+   - **Cấu tạo & Vị trí:** Chỉ hiện diện duy nhất tại thành quả tim. Tế bào cơ tim phân nhánh đan lưới qua các đĩa gian bào (Intercalated discs) giúp xung điện lan truyền đồng bộ tức thì.
+   - **Phương thức hoạt động:** Co bóp **tự động liên tục 24/7** nhịp nhàng từ lúc phôi thai đến trọn đời nhờ hệ thống phát nhịp nội tại (Nút xoang).
+
+---
+
+### 🏋️ 2. NĂM NHÓM CƠ VẬN ĐỘNG CHÍNH TRÊN MÔ HÌNH 3D:
+- **Khối Cơ Lưng & Cột Sống (Back & Spine Muscles):**
+  - **Cơ thang (Trapezius):** Phủ kín cổ vai gáy và lưng trên; giữ vững bả vai và nâng đỡ cánh tay.
+  - **Cơ dọc sống lưng / Dựng gai (Erector Spinae):** Chạy dọc hai bên cột sống từ chậu lên sọ (Cơ chậu sườn, Cơ cực dài, Cơ gai); giữ lưng thẳng đứng.
+  - **Cơ lưng rộng (Latissimus dorsi - Cơ xô):** Kéo cánh tay ra sau và khép vào trong.
+  - **Cơ lưng sâu (Multifidus):** Khóa vững từng đốt sống, ngăn ngừa chấn thương đĩa đệm.
+- **Nhóm Cơ Đầu Mặt & Cổ:** Cơ ức đòn chũm, Cơ nâng vai, Cơ cắn nhai, Cơ biểu cảm nét mặt.
+- **Nhóm Cơ Chi Trên (Vai & Cánh tay):** Cơ delta (dang vai), Cơ nhị đầu (gấp cẳng tay), Cơ tam đầu (duỗi khuỷu).
+- **Nhóm Cơ Thân Mình (Ngực & Bụng):** Cơ ngực lớn, Cơ thẳng bụng (6 múi gập bụng), Cơ chéo bụng (xoay eo), Cơ hoành (hô hấp).
+- **Nhóm Cơ Chi Dưới (Mông & Chân):** Cơ mông lớn (duỗi háng), Cơ tứ đầu đùi (duỗi gối), Cơ gân kheo (gấp gối), Cơ bụng chân (bắp chuối kiễng gót).
+
+💡 *Bạn có thể bấm vào hoặc nói tên từng cơ cụ thể như: **"cơ thang"**, **"cơ dọc sống lưng"**, **"cơ delta"** để xem vị trí và chức năng chi tiết!*
+      `.trim()
+    };
+  }
+
   // 1. FOCUS STRUCTURE
   if (intent === 'FOCUS_STRUCTURE' && target) {
     if (activeViewer) {
       const sys = target.system;
       if (sys && !state.loadedSystems.includes(sys)) {
-        await loadModel(sys, activeViewer).catch(err => console.warn('Failed background load of', sys, err));
+        loadModel(sys, activeViewer).catch(err => console.warn('Failed background load of', sys, err));
       }
       if (sys) showSystem(sys);
       let selected = selectPartById(target.id, activeViewer);
@@ -736,15 +903,31 @@ ${insightsFormatted}
       activeViewer.render();
     }
 
+    const clinical = getClinicalData(target.id, target.base);
+    const displayName = clinical?.nameVi || target.nameVi || target.base || 'cấu trúc giải phẫu';
+
+    const info = getStructureInfo(target.id) || getStructureInfo(target.base);
+    const synthesizedPart = {
+      id: target.id,
+      meshName: target.base || target.id,
+      displayName: displayName,
+      system: target.system || info?.system || 'muscular',
+      region: info?.region || 'unknown',
+      info: {
+        ...(info || {}),
+        name: { vi: displayName, en: target.base || target.id },
+        latinName: clinical?.nameLatin || target.base || target.id,
+        system: target.system || info?.system || 'muscular'
+      }
+    };
+    setSelectedPart(synthesizedPart);
+
     // Expand selection card on mobile/desktop so user sees detailed clinical information
     const card = document.getElementById('selectionCard');
     if (card) {
       card.classList.remove('hidden');
       window.dispatchEvent(new CustomEvent('expand-selection-card'));
     }
-
-    const clinical = getClinicalData(target.id, target.base);
-    const displayName = clinical?.nameVi || target.nameVi || target.base || 'cấu trúc giải phẫu';
 
     return {
       action: 'FOCUS',

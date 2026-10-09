@@ -33,6 +33,25 @@ export const PATIENT_CASES = [
     advice: '✓ Giữ lưng thẳng, tuyệt đối không cúi gập bê vật nặng đột ngột.\n✓ Tập bơi lội, vật lý trị liệu phục hồi chức năng và dùng thuốc kháng viêm giảm áp rễ thần kinh.'
   },
   {
+    id: 'cervical_spondylosis',
+    conceptId: 'concept_intervertebral_disc',
+    title: 'Thoái hóa & Thoát vị cột sống cổ C4-C7',
+    category: 'Cột sống cổ & Đau vai gáy',
+    icon: '🦴',
+    partId: 'Vertebra C4',
+    idealPlane: 'sagittal',
+    clipOffset: 1.15,
+    patientQuestion: 'Bác sĩ ơi, tại sao tôi mỏi cứng cổ gáy mà lại tê buốt nhói lan xuống bả vai và ngón tay?',
+    doctorExplanation: 'Cột sống cổ gồm 7 đốt sống đỡ hộp sọ nặng 5kg. Khi cúi xem điện thoại nhiều hoặc thoái hóa, đĩa đệm cổ bị phồng lồi hoặc mọc gai xương đè ép rễ thần kinh cánh tay, gây đau buốt dọc từ cổ gáy xuống bả vai, cánh tay và tê bì ngón tay.',
+    stages: [
+      { name: 'Cấp 0: Khỏe mạnh', desc: 'Đốt sống cổ cong sinh lý tự nhiên, đĩa đệm đàn hồi êm dịu, cử động đầu linh hoạt.' },
+      { name: 'Cấp 1: Căng cứng cơ cổ gáy', desc: 'Mất đường cong sinh lý, cơ thang và cơ nâng vai co thắt căng cứng âm ỉ.' },
+      { name: 'Cấp 2: Chèn ép rễ thần kinh', desc: 'Đĩa đệm chèn ép rễ C5-C7, đau nhói điện giật lan xuống vai gáy và ngón tay.' },
+      { name: 'Cấp 3: Hẹp ống sống tủy cổ', desc: 'Tủy cổ bị chèn ép, đi lại loạng choạng, run giật gân xương, teo yếu bàn tay.' }
+    ],
+    advice: '✓ Giữ màn hình điện thoại ngang tầm mắt, không cúi gập cổ quá lâu (> 30 phút).\n✓ Tập bài tập vận động nhẹ cột sống cổ, gối ngủ có độ cao vừa phải (7-10cm) nâng đỡ gáy.'
+  },
+  {
     id: 'gastric_ulcer',
     conceptId: 'concept_gastrointestinal_tract',
     title: 'Viêm loét dạ dày & Vi khuẩn H.pylori',

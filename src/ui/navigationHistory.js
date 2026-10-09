@@ -5,6 +5,7 @@
 
 import { state } from '../state/store.js';
 import { deselectPart } from '../viewer/selection.js';
+import { setSheetSnapTier } from './infoPanel.js';
 import { closeAtlasHub } from './atlasHubModal.js';
 import { closeSettingsModal } from './settingsModal.js';
 import { closeOfflineModal } from './offlineModal.js';
@@ -178,8 +179,14 @@ function handleBackNavigation(viewer) {
 
   // 15. Structure Details Card (if active 3D part is selected)
   if (state.selectedPart) {
+    const card = document.getElementById('selectionCard');
+    if (card && !card.classList.contains('compact-mode') && !card.classList.contains('hidden')) {
+      // If sheet is expanded (half or full), Back gesture only collapses to compact mini-bar!
+      // Structure and 3D highlight remain completely intact!
+      setSheetSnapTier('compact');
+      return;
+    }
     deselectPart();
-    document.getElementById('cardCloseBtn')?.click();
     return;
   }
 

@@ -386,3 +386,100 @@ export const ICONS = {
     </svg>
   `
 };
+
+export const CLINICAL_AXIS_ICONS = {
+  axis_gut_brain: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4.5c-2.5-2-6-1.5-7 1.5-1 2.5 0 5 1 6-1.5 1-2 3.5-.5 5 1 1 2.5 1.5 4 .5v3.5h5v-3.5c1.5 1 3 .5 4-.5 1.5-1.5 1-4-.5-5 1-1 2-3.5 1-6-1-3-4.5-3.5-7-1.5z"/>
+      <path d="M12 4.5V17"/>
+      <path d="M9 13.5c1.5 1 4.5 1 6 0"/>
+    </svg>
+  `,
+
+  axis_hepatobiliary_pancreas: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 10c1.5-2.5 1-5.5-.5-7-2-2-6-1-9.5.5C4 5 2.5 8 3 12c.5 4 3.5 7 7.5 7 4 0 7-3 8-6z"/>
+      <circle cx="9" cy="11.5" r="2" fill="currentColor" fill-opacity="0.25"/>
+      <path d="M11 12.5l4 2.5"/>
+    </svg>
+  `,
+
+  axis_digestive_glands: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2v4"/>
+      <path d="M11 6c-3.5 0-6 2.5-6 6.5 0 4.5 3.5 8.5 8 8.5s7-3.5 7-7.5c0-4.5-3.5-6-7-6.5"/>
+      <path d="M8 12c1.5 1 4.5 1 6 0"/>
+      <circle cx="11" cy="15" r="1.5" fill="currentColor"/>
+    </svg>
+  `,
+
+  axis_csf_ventricles: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.5c-4 0-7 3-7 7 0 2.5 1.5 4.5 3 5.5v3a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-3c1.5-1 3-3 3-5.5 0-4-3-7-7-7z"/>
+      <path d="M12 6.5v5"/>
+      <path d="M9.5 9.5a2.5 2.5 0 0 0 5 0"/>
+    </svg>
+  `,
+
+  axis_cranial_nerves: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="6" r="3.5"/>
+      <path d="M12 9.5V22"/>
+      <path d="M8 12l4 2 4-2"/>
+      <path d="M7 16l5 2 5-2"/>
+      <path d="M9 20l3 1 3-1"/>
+      <circle cx="6" cy="12" r="1" fill="currentColor"/>
+      <circle cx="18" cy="12" r="1" fill="currentColor"/>
+    </svg>
+  `,
+
+  axis_brain_spine_sciatic: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="3.5" r="2"/>
+      <path d="M12 5.5v12.5"/>
+      <path d="M9 8h6M8.5 11h7M9 14h6"/>
+      <path d="M12 18l-3.5 4M12 18l3.5 4"/>
+    </svg>
+  `,
+
+  axis_cardiopulmonary_loop: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 14c1.5-1.5 2.5-3.2 2.5-5.5A5.5 5.5 0 0 0 16 3c-1.8 0-3 .6-4 2-1-1.4-2.2-2-4-2A5.5 5.5 0 0 0 2.5 8.5c0 2.3 1 4 2.5 5.5l7 7z"/>
+      <path d="M4 11h4M16 11h4"/>
+    </svg>
+  `,
+
+  axis_postural_kinetic_chain: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="3.5" r="2"/>
+      <path d="M12 5.5v13.5"/>
+      <path d="M6.5 10h11"/>
+      <path d="M9 22l3-3 3 3"/>
+      <circle cx="6.5" cy="10" r="1.5" fill="currentColor"/>
+      <circle cx="17.5" cy="10" r="1.5" fill="currentColor"/>
+    </svg>
+  `,
+
+  axis_hpa_endocrine: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2v20"/>
+      <circle cx="12" cy="5" r="2.5"/>
+      <path d="M7 10.5c2-1.5 8-1.5 10 0"/>
+      <ellipse cx="12" cy="16" rx="4.5" ry="3"/>
+      <circle cx="12" cy="16" r="1.5" fill="currentColor"/>
+    </svg>
+  `,
+
+  axis_renal_cardiovascular: `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a4 4 0 0 0-4 4c0 3 4 6 4 6s4-3 4-6a4 4 0 0 0-4-4z"/>
+      <path d="M7.5 15.5c-2.5 0-4 2-4 4s1.5 3 4 3 3.5-1.5 4-3"/>
+      <path d="M16.5 15.5c2.5 0 4 2 4 4s-1.5 3-4 3-3.5-1.5-4-3"/>
+    </svg>
+  `
+};
+
+export function getClinicalAxisIcon(axisId) {
+  return CLINICAL_AXIS_ICONS[axisId] || ICONS.visceral;
+}
+
