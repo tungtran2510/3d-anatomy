@@ -44,9 +44,9 @@ export function createScene() {
   renderer.setSize(Math.max(initialSize.width, 1), Math.max(initialSize.height, 1), false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.08;
+  renderer.toneMappingExposure = 1.06;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   // Medical Studio Environment Lighting for high-fidelity physiological reflections & realistic depth
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -336,17 +336,17 @@ function createLights(scene) {
   lights.key.target.position.set(0, 0.85, 0);
   scene.add(lights.key.target);
   lights.key.castShadow = true;
-  lights.key.shadow.mapSize.width = 1024;
-  lights.key.shadow.mapSize.height = 1024;
+  lights.key.shadow.mapSize.width = 2048;
+  lights.key.shadow.mapSize.height = 2048;
   lights.key.shadow.camera.near = 0.5;
   lights.key.shadow.camera.far = 10.0;
   lights.key.shadow.camera.left = -1.2;
   lights.key.shadow.camera.right = 1.2;
   lights.key.shadow.camera.top = 1.4;
   lights.key.shadow.camera.bottom = -1.4;
-  lights.key.shadow.bias = -0.0003;
-  lights.key.shadow.normalBias = 0.015;
-  lights.key.shadow.radius = 2.2;
+  lights.key.shadow.bias = -0.00025;
+  lights.key.shadow.normalBias = 0.02;
+  lights.key.shadow.radius = 1.8;
   scene.add(lights.key);
 
   // Fill light - soft cool-neutral fill (7000K daylight cyan tint) from lower front-left to soften harsh shadows
@@ -387,7 +387,7 @@ function createLights(scene) {
   scene.add(lights.front);
 
   // Hemisphere light for ground-to-sky subtle organic bounce
-  lights.hemi = new THREE.HemisphereLight(0xfffaf0, 0xd0dbe6, 0.16);
+  lights.hemi = new THREE.HemisphereLight(0xfffaf0, 0xd0dbe6, 0.15);
   scene.add(lights.hemi);
 
   return lights;
@@ -396,12 +396,14 @@ function createLights(scene) {
 export function updateLightsForSystem(lights, system) {
   // Cinema-grade medical studio lighting balanced across all systems
   const configs = {
-    muscular: { key: 1.05, fill: 0.30, ambient: 0.16, rimLeft: 0.78, rimRight: 0.48 },
-    skeletal: { key: 1.02, fill: 0.32, ambient: 0.16, rimLeft: 0.75, rimRight: 0.45 },
-    nervous: { key: 1.10, fill: 0.30, ambient: 0.15, rimLeft: 0.82, rimRight: 0.50 },
-    visceral: { key: 1.12, fill: 0.28, ambient: 0.15, rimLeft: 0.80, rimRight: 0.48 },
-    cardiovascular: { key: 1.15, fill: 0.28, ambient: 0.15, rimLeft: 0.82, rimRight: 0.50 },
-    default: { key: 1.05, fill: 0.30, ambient: 0.16, rimLeft: 0.78, rimRight: 0.48 }
+    muscular: { key: 1.05, fill: 0.30, ambient: 0.15, rimLeft: 0.78, rimRight: 0.48 },
+    skeletal: { key: 1.02, fill: 0.32, ambient: 0.15, rimLeft: 0.75, rimRight: 0.45 },
+    nervous: { key: 1.10, fill: 0.30, ambient: 0.14, rimLeft: 0.82, rimRight: 0.50 },
+    visceral: { key: 1.12, fill: 0.28, ambient: 0.14, rimLeft: 0.80, rimRight: 0.48 },
+    cardiovascular: { key: 1.15, fill: 0.28, ambient: 0.14, rimLeft: 0.82, rimRight: 0.50 },
+    lymphatic: { key: 1.08, fill: 0.30, ambient: 0.15, rimLeft: 0.78, rimRight: 0.48 },
+    integumentary: { key: 1.04, fill: 0.32, ambient: 0.15, rimLeft: 0.75, rimRight: 0.45 },
+    default: { key: 1.05, fill: 0.30, ambient: 0.15, rimLeft: 0.78, rimRight: 0.48 }
   };
 
   const config = configs[system] || configs.default;
