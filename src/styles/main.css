@@ -427,6 +427,11 @@ body.theme-dark .search-clear-btn:hover {
   min-height: 0;
 }
 
+/* Sidebar Backdrop - mobile only */
+.sidebar-backdrop {
+  display: none;
+}
+
 /* Sidebar Base */
 .sidebar {
   background: var(--bg-secondary);
@@ -1917,6 +1922,7 @@ body.theme-dark .halfbody-floating-pill .pill-flip-btn:active {
 
   /* Sidebar Backdrop for Auto-Dismiss on Mobile */
   .sidebar-backdrop {
+    display: block;
     position: fixed;
     inset: 0;
     top: var(--header-height);

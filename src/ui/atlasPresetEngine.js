@@ -18,6 +18,7 @@ import { setExplodeFactor, resetExplode } from '../viewer/explodedView.js';
 import { openMotionPanel, closeMotionPanel } from './motionPanel.js';
 import { showNeuromuscularHUD, hideNeuromuscularHUD } from './neuromuscularHUD.js';
 import { showMicroanatomyHUD, hideMicroanatomyHUD } from './microanatomyHUD.js';
+import { showSurfaceAnatomyHUD, hideSurfaceAnatomyHUD } from './surfaceAnatomyHUD.js';
 
 // Precompiled Regexes for Anatomical Structure Filtering
 const REGEX_SKULL_AND_CERVICAL = /frontal|parietal|occipital|temporal|sphenoid|ethmoid|maxilla|mandible|zygomatic|nasal|lacrimal|palatine|vomer|concha|hyoid|auditory|malleus|incus|stapes|tooth|teeth|skull|head|atlas|axis|vertebra_c|c1|c2|c3|c4|c5|c6|c7|disc c|temporomandibular|atlanto/i;
@@ -130,6 +131,13 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     showMicroanatomyHUD(card, viewer);
   } else {
     hideMicroanatomyHUD();
+  }
+
+  // 5d. Clinical Surface Anatomy & 9 Abdominal Regions HUD
+  if (card.id === 'surf_1_torso') {
+    showSurfaceAnatomyHUD(viewer);
+  } else {
+    hideSurfaceAnatomyHUD();
   }
 
   // 6. Reset System Transparencies to Solid (skip if motionId, which manages its own anatomical isolation)
@@ -360,7 +368,7 @@ function getFineCameraConfig(card) {
     case 'dig_18_enteric_nervous':
       return { pos: { x: 0.22, y: 1.20, z: 0.70 }, target: { x: 0, y: 1.18, z: 0 } };
     case 'dig_19_duodenum_papilla':
-      return { pos: { x: 0.08, y: 1.10, z: 0.38 }, target: { x: 0.01, y: 1.094, z: 0.03 } };
+      return { pos: { x: -0.02, y: 1.09, z: 0.12 }, target: { x: -0.054, y: 1.087, z: 0.032 } };
 
     // Lymphatic Views
     case 'lymph_spleen':
@@ -374,11 +382,11 @@ function getFineCameraConfig(card) {
     case 'urin_pelvic':
       return { pos: { x: 0, y: 0.88, z: 0.75 }, target: { x: 0, y: 0.88, z: 0 } };
     case 'uro_kidney_coronal':
-      return { pos: { x: 0.14, y: 1.12, z: 0.35 }, target: { x: 0.06, y: 1.11, z: -0.02 } };
+      return { pos: { x: 0.09, y: 1.115, z: 0.22 }, target: { x: 0.058, y: 1.111, z: -0.017 } };
 
     // Surface Anatomy Views
     case 'surf_1_torso':
-      return { pos: { x: 0, y: 1.18, z: 1.35 }, target: { x: 0, y: 1.18, z: 0 } };
+      return { pos: { x: 0, y: 1.12, z: 1.18 }, target: { x: 0, y: 1.12, z: 0 } };
 
     // Microanatomy Views
     case 'micro_skin_dark':
@@ -852,11 +860,13 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             node.visible = true;
             const mat = prepareMeshMaterial(node);
             mat.transparent = true;
-            mat.opacity = 0.35;
+            mat.opacity = 0.38;
             mat.depthWrite = false;
-            mat.color.setHex(0xe4b59d);
-            mat.roughness = 0.55;
-            mat.metalness = 0.02;
+            mat.color.setHex(0xe8beac);
+            mat.roughness = 0.52;
+            mat.metalness = 0.01;
+            mat.clearcoat = 0.18;
+            mat.clearcoatRoughness = 0.38;
           } else if (sys === 'muscular') {
             node.visible = /pectoralis|rectus abdominis|external oblique|latissimus dorsi|serratus anterior|trapezius|deltoid|infraspinatus/i.test(name);
             if (node.visible) {
@@ -1435,9 +1445,10 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
               mat.depthWrite = false;
             }
           } else if (sys === 'visceral') {
-            const isAmpullaGroup = /Duodenum_Ampulla_Vater_Lumen|Major_Duodenal_Papilla|Sphincter_of_Oddi/i.test(name);
+            const isAmpullaGroup = /Duodenum_Ampulla_Vater_Lumen|Major_Duodenal_Papilla|Sphincter_of_Oddi|Frenulum_of_Papilla/i.test(name);
             const isDuodenum = /duodenum/i.test(name);
-            const isBiliaryPancreas = /pancrea|gallbladder|bile/i.test(name);
+            const isPancreas = /pancrea/i.test(name) && !/duct/i.test(name);
+            const isBiliaryOrDuct = /gallbladder|bile|pancreatic.*duct/i.test(name);
 
             if (isAmpullaGroup) {
               node.visible = true;
@@ -1447,20 +1458,30 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             } else if (isDuodenum) {
               node.visible = true;
               const mat = prepareMeshMaterial(node);
+              mat.clippingPlanes = [];
               mat.transparent = true;
-              mat.opacity = 0.32;
+              mat.opacity = 0.58;
               mat.depthWrite = false;
-            } else if (isBiliaryPancreas) {
+              mat.roughness = 0.25;
+            } else if (isBiliaryOrDuct) {
               node.visible = true;
               const mat = prepareMeshMaterial(node);
               mat.transparent = false;
               mat.opacity = 1.0;
               mat.depthWrite = true;
+            } else if (isPancreas) {
+              // Ghosted translucent pancreas head highlighting internal duct convergence
+              node.visible = true;
+              const mat = prepareMeshMaterial(node);
+              mat.transparent = true;
+              mat.opacity = 0.28;
+              mat.depthWrite = false;
             } else {
               node.visible = false;
             }
           } else if (sys === 'cardiovascular') {
-            node.visible = /celiac|gastroduodenal|pancreaticoduodenal|splenic|mesenteric/i.test(name);
+            // Hide large vascular trunks to keep surgical window completely unobstructed
+            node.visible = false;
           } else {
             node.visible = false;
           }
@@ -1571,9 +1592,14 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
             } else if (isKidneyLeft) {
               node.visible = true;
               const mat = prepareMeshMaterial(node);
-              mat.transparent = true;
-              mat.opacity = 0.20;
-              mat.depthWrite = false;
+              // Dissect away anterior half using local coronal clipping plane
+              const worldPos = new THREE.Vector3();
+              node.getWorldPosition(worldPos);
+              mat.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0, 0, -1), worldPos.z + 0.001)];
+              mat.transparent = false;
+              mat.opacity = 1.0;
+              mat.depthWrite = true;
+              mat.side = THREE.DoubleSide;
             } else if (isRenalPedicle) {
               node.visible = true;
               const mat = prepareMeshMaterial(node);

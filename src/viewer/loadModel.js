@@ -748,7 +748,7 @@ export function getOrganicTextures() {
     serosaMap.repeat.set(16, 16);
 
     // 2. High-Definition Striated Muscle Fiber & Fascicle Normal Map (512x512)
-    // Multi-scale biological striation synthesis: macro fascicular undulation + micro myofibrils + sarcomere banding
+    // Multi-scale biological striation synthesis: macro fascicular undulation + micro myofibrils
     const muscleCanvas = document.createElement('canvas');
     muscleCanvas.width = 512;
     muscleCanvas.height = 512;
@@ -767,18 +767,13 @@ export function getOrganicTextures() {
           const nx = x / 512;
           const idx = (y * 512 + x) * 4;
 
-          // Level 1: Macro fascicular wave (bó sợi cơ uốn lượn tự nhiên)
-          const macroFascicle = Math.sin(nx * Math.PI * 18 + Math.cos(ny * Math.PI * 6) * 1.8) * 38;
-          // Level 2: Micro myofibril bundles (vi sợi cơ song song)
-          const microMyofibril = Math.sin(nx * Math.PI * 72 + Math.sin(ny * Math.PI * 14) * 0.9) * 16;
-          // Level 3: Sarcomere periodic cross-striation (vân ngang kính hiển vi)
-          const sarcomereBands = Math.sin(ny * Math.PI * 96) * 6;
-          // Level 4: Inter-fascicular perimysium cleft (rãnh phân cách màng bao bó sợi)
-          const perimysiumCleft = (((x * 19 + y * 7) % 31) - 15) * 1.6;
+          // Gentle continuous fascicular wave with subtle micro-fibril gradient
+          const macroFascicle = Math.sin(nx * Math.PI * 8 + Math.cos(ny * Math.PI * 2) * 0.5) * 8;
+          const microMyofibril = Math.sin(nx * Math.PI * 24) * 4;
 
           const normalX = Math.floor(Math.max(0, Math.min(255, 128 + macroFascicle + microMyofibril)));
-          const normalY = Math.floor(Math.max(0, Math.min(255, 128 + sarcomereBands + perimysiumCleft)));
-          const normalZ = 238;
+          const normalY = Math.floor(Math.max(0, Math.min(255, 128 + Math.sin(ny * Math.PI * 16) * 2)));
+          const normalZ = 250;
 
           mImg.data[idx] = normalX;
           mImg.data[idx + 1] = normalY;
@@ -791,7 +786,7 @@ export function getOrganicTextures() {
     const muscleMap = new THREE.CanvasTexture(muscleCanvas);
     muscleMap.wrapS = THREE.RepeatWrapping;
     muscleMap.wrapT = THREE.RepeatWrapping;
-    muscleMap.repeat.set(8, 20);
+    muscleMap.repeat.set(4, 8);
 
     if (mcCtx) {
       const mcImg = mcCtx.createImageData(256, 256);
@@ -800,10 +795,10 @@ export function getOrganicTextures() {
         for (let x = 0; x < 256; x++) {
           const nx = x / 256;
           const idx = (y * 256 + x) * 4;
-          // Fascicular clefts absorb light (higher roughness), belly ridge reflects moist sheen (lower roughness)
-          const fascicleWave = Math.sin(nx * Math.PI * 18 + Math.cos(ny * Math.PI * 6) * 1.8);
-          const roughByte = Math.floor(120 + (1 - fascicleWave) * 26 + (((x * 13 + y * 23) % 17) - 8) * 1.2);
-          const clamped = Math.max(90, Math.min(205, roughByte));
+          // Soft organic roughness variation (0.65 - 0.75 range)
+          const fascicleWave = Math.sin(nx * Math.PI * 8 + Math.cos(ny * Math.PI * 2) * 0.5);
+          const roughByte = Math.floor(175 + (1 - fascicleWave) * 12);
+          const clamped = Math.max(140, Math.min(220, roughByte));
           mcImg.data[idx] = clamped;
           mcImg.data[idx + 1] = clamped;
           mcImg.data[idx + 2] = clamped;
@@ -815,7 +810,7 @@ export function getOrganicTextures() {
     const muscleCavityMap = new THREE.CanvasTexture(muscleCavityCanvas);
     muscleCavityMap.wrapS = THREE.RepeatWrapping;
     muscleCavityMap.wrapT = THREE.RepeatWrapping;
-    muscleCavityMap.repeat.set(8, 20);
+    muscleCavityMap.repeat.set(4, 8);
 
     // 3. Dense Parallel Type-I Collagen Normal Map for Tendons & Ligaments (512x512)
     // Produces authentic glistening pearlescent collagen fiber highlights with longitudinal crimp
@@ -1557,21 +1552,18 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Facial mimic muscles: delicate, highly vascular myoglobin tone with biological light transmission
       applyCustomProps(mesh, {
         name: 'PBR_FacialMimic',
-        color: 0x8C262E,
-        roughness: 0.45,
+        color: 0x8A242B,
+        roughness: 0.62,
         roughnessMap: textures?.muscleCavityMap || textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.20,
-        clearcoatRoughness: 0.35,
-        sheen: 0.70,
-        sheenColor: 0xd946ef,
-        sheenRoughness: 0.32,
-        transmission: 0.10,
-        thickness: 0.020,
-        attenuationColor: 0xa81c2d,
-        attenuationDistance: 0.025,
+        metalness: 0.0,
+        clearcoat: 0.0,
+        specularIntensity: 0.22,
+        sheen: 0.80,
+        sheenColor: 0x991b1b,
+        sheenRoughness: 0.40,
+        transmission: 0.0,
         normalMap: textures?.muscleMap,
-        normalScale: [0.14, 0.14],
+        normalScale: [0.035, 0.035],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
@@ -1586,46 +1578,40 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Powerful masticatory & functional neck muscles: deep striated myoglobin
       applyCustomProps(mesh, {
         name: 'PBR_Masticatory_Neck',
-        color: 0x821E26,
-        roughness: 0.44,
+        color: 0x7E1D22,
+        roughness: 0.68,
         roughnessMap: textures?.muscleCavityMap || textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.22,
-        clearcoatRoughness: 0.32,
-        sheen: 0.65,
-        sheenColor: 0xb91c1c,
-        sheenRoughness: 0.30,
-        transmission: 0.08,
-        thickness: 0.030,
-        attenuationColor: 0x991b1b,
-        attenuationDistance: 0.035,
+        metalness: 0.0,
+        clearcoat: 0.0,
+        specularIntensity: 0.18,
+        sheen: 0.90,
+        sheenColor: 0x881337,
+        sheenRoughness: 0.45,
+        transmission: 0.0,
         normalMap: textures?.muscleMap,
-        normalScale: [0.18, 0.18],
+        normalScale: [0.035, 0.035],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
       });
     } else {
       // Living skeletal muscle tissue (Chest, Back, Abdomen, Upper & Lower Limbs):
-      // Rich physiological myoglobin ruby-crimson, SSS biological light transmission,
-      // multi-scale fascicle striation normal map and moist epimysial sheen.
+      // Rich physiological myoglobin ruby-crimson, velvety epimysial sheen micro-scattering,
+      // continuous fascicle striation and authentic biological appearance with zero plastic shine.
       applyCustomProps(mesh, {
         name: 'PBR_Muscle',
-        color: 0x821E26,
-        roughness: 0.44,
+        color: 0x7E1D22,
+        roughness: 0.70,
         roughnessMap: textures?.muscleCavityMap || textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.22,
-        clearcoatRoughness: 0.32,
-        sheen: 0.65,
-        sheenColor: 0xb91c1c,
-        sheenRoughness: 0.30,
-        transmission: 0.08,
-        thickness: 0.030,
-        attenuationColor: 0x991b1b,
-        attenuationDistance: 0.035,
+        metalness: 0.0,
+        clearcoat: 0.0,
+        specularIntensity: 0.18,
+        sheen: 0.92,
+        sheenColor: 0x881337,
+        sheenRoughness: 0.48,
+        transmission: 0.0,
         normalMap: textures?.muscleMap,
-        normalScale: [0.18, 0.18],
+        normalScale: [0.035, 0.035],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
