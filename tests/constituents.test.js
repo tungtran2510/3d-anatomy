@@ -11,7 +11,7 @@ describe('Anatomy Constituents Mesh Linkage', () => {
     meshList.forEach(m => allMeshes.add(m.toLowerCase()));
   });
 
-  it('all 82 constituents subparts have valid searchQuery matching real 3D meshes', () => {
+  it('all 133 constituents subparts have valid searchQuery matching real 3D meshes', () => {
     const broken = [];
     let checked = 0;
 
@@ -27,7 +27,7 @@ describe('Anatomy Constituents Mesh Linkage', () => {
       }
     }
 
-    expect(checked).toBe(82);
+    expect(checked).toBe(133);
     expect(broken).toEqual([]);
   });
 });

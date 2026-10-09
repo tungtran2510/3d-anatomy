@@ -202,6 +202,156 @@ export const CONSTITUENTS_DATABASE = {
       { name: 'Tuyến dưới lưỡi', latin: 'Glandula sublingualis', searchQuery: 'Sublingual gland', icon: '💦' },
       { name: 'Lưỡi', latin: 'Lingua', searchQuery: 'Tongue', icon: '👅' }
     ]
+  },
+
+  // 14. NHÃN CẦU & THỊ GIÁC (EYE & VISUAL PATHWAY)
+  eye: {
+    title: 'Cấu tạo Nhãn Cầu & Đường Dẫn Truyền Thị Giác',
+    diagram: '/images/atlas/eye_anatomy_macro.svg',
+    diagramCaption: 'Mặt cắt ngang nhãn cầu: Tiền phòng, Thể mi, Thể thủy tinh, Võng mạc & Dây TK thị giác II',
+    subparts: [
+      { name: 'Tiền phòng nhãn cầu', latin: 'Camera anterior bulbi', searchQuery: 'chamber of eyeball', icon: '👁️' },
+      { name: 'Bán phần trước nhãn cầu', latin: 'Segmentum anterius', searchQuery: 'segment of eyeball', icon: '🔍' },
+      { name: 'Bán phần sau nhãn cầu', latin: 'Segmentum posterius', searchQuery: 'segment of eyeball', icon: '🎯' },
+      { name: 'Dây thần kinh thị giác (TK II)', latin: 'Nervus opticus (II)', searchQuery: 'optic nerve', icon: '⚡' },
+      { name: 'Động mạch mi nuôi nhãn cầu', latin: 'Arteriae ciliares', searchQuery: 'ciliary', icon: '🔴' },
+      { name: 'Giao thoa thị giác', latin: 'Chiasma opticum', searchQuery: 'optic chiasm', icon: '🔀' }
+    ]
+  },
+
+  // 15. 8 HẠ PHÂN THÙY GAN THEO COUINAUD (COUINAUD LIVER SEGMENTATION I-VIII)
+  couinaud_liver: {
+    title: '8 Hạ Phân Thùy Gan Ngoại Khoa (Couinaud I – VIII)',
+    diagram: '/images/atlas/couinaud_liver_segments.svg',
+    diagramCaption: 'Phân chia 8 hạ phân thùy độc lập theo cuống tĩnh mạch cửa và tĩnh mạch gan',
+    subparts: [
+      { name: 'Hạ phân thùy I (Thùy đuôi)', latin: 'Segmentum posterius (I)', searchQuery: 'posterior segment of liver (i)', icon: '1️⃣' },
+      { name: 'Hạ phân thùy II (Sau trên trái)', latin: 'Segmentum posterius laterale (II)', searchQuery: 'left posterior lateral segment of liver (ii)', icon: '2️⃣' },
+      { name: 'Hạ phân thùy III (Trước dưới trái)', latin: 'Segmentum anterius laterale (III)', searchQuery: 'left anterior lateral segment of liver (iii)', icon: '3️⃣' },
+      { name: 'Hạ phân thùy IV (Thùy vuông giữa trái)', latin: 'Segmentum mediale (IV)', searchQuery: 'left medial segment of liver (iv)', icon: '4️⃣' },
+      { name: 'Hạ phân thùy V (Trước dưới phải)', latin: 'Segmentum anterius mediale (V)', searchQuery: 'anterior medial segment of liver (v)', icon: '5️⃣' },
+      { name: 'Hạ phân thùy VI (Sau dưới phải)', latin: 'Segmentum anterius laterale (VI)', searchQuery: 'anterior lateral segment of liver (vi)', icon: '6️⃣' },
+      { name: 'Hạ phân thùy VII (Sau trên phải)', latin: 'Segmentum posterius laterale (VII)', searchQuery: 'posterior lateral segment of liver (vii)', icon: '7️⃣' },
+      { name: 'Hạ phân thùy VIII (Trước trên phải)', latin: 'Segmentum posterius mediale (VIII)', searchQuery: 'posterior medial segment of liver (viii)', icon: '8️⃣' },
+      { name: 'Tĩnh mạch cửa gan', latin: 'Vena portae hepatis', searchQuery: 'hepatic portal vein', icon: '🔵' },
+      { name: 'Túi mật', latin: 'Vesica biliaris', searchQuery: 'gallbladder', icon: '🟢' }
+    ]
+  },
+
+  // 16. CẤU TRÚC TRONG TIM & VAN TIM (INTERNAL CARDIAC & VALVULAR COMPLEX)
+  cardiac_internal: {
+    title: 'Cấu tạo Trong Buồng Tim & Bộ Máy Van Tim',
+    diagram: '/images/atlas/cardiac_valve_pathology.svg',
+    diagramCaption: 'Các buồng tim, cơ nhú, thừng gân & hệ van 2 lá, 3 lá, van tổ chim',
+    subparts: [
+      { name: 'Cột cơ nhú trước thất phải', latin: 'M. papillaris anterior', searchQuery: 'anterior papillary muscle of right ventricle', icon: '🥩' },
+      { name: 'Cột cơ nhú dưới thất trái', latin: 'M. papillaris inferior', searchQuery: 'inferior papillary muscle of left ventricle', icon: '🥩' },
+      { name: 'Cột cơ nhú vách thất phải', latin: 'M. papillaris septalis', searchQuery: 'septal papillary muscle of right ventricle', icon: '🥩' },
+      { name: 'Lá van ba lá (Thất phải)', latin: 'Cuspis valvae tricuspidalis', searchQuery: 'leaflet of right atrioventricular valve', icon: '🚪' },
+      { name: 'Lá van hai lá (Thất trái)', latin: 'Cuspis valvae mitralis', searchQuery: 'leaflet of left atrioventricular valve', icon: '🚪' },
+      { name: 'Lá van động mạch chủ', latin: 'Valvula semilunaris aortae', searchQuery: 'coronary leaflet', icon: '🩸' },
+      { name: 'Lá van động mạch phổi', latin: 'Valvula semilunaris pulmonalis', searchQuery: 'semilunar leaflet of pulmonary valve', icon: '🫁' }
+    ]
+  },
+
+  // 17. ĐỘNG MẠCH VÀNH & HỆ THỐNG DẪN TRUYỀN TIM (CORONARY ARTERIES & CONDUCTION)
+  coronary_circulation: {
+    title: 'Cây Động Mạch Vành & Điện Sinh Lý Tim',
+    diagram: '/images/atlas/coronary_circulation_conduction.svg',
+    diagramCaption: 'Cây cấp máu động mạch vành LAD, LCx, RCA & hệ thống phát nhịp tự động SA-AV',
+    subparts: [
+      { name: 'Động mạch vành trái (LCA)', latin: 'Arteria coronaria sinistra', searchQuery: 'left coronary artery', icon: '🔴' },
+      { name: 'Động mạch vành phải (RCA)', latin: 'Arteria coronaria dextra', searchQuery: 'right coronary artery', icon: '🔴' },
+      { name: 'Nhánh mũ tim (LCx)', latin: 'Ramus circumflexus', searchQuery: 'circumflex artery', icon: '🩸' },
+      { name: 'Xoang tĩnh mạch vành', latin: 'Sinus coronarius', searchQuery: 'coronary sinus', icon: '🔵' },
+      { name: 'Tĩnh mạch dưới thất trái', latin: 'Vena posterior ventriculi sinistri', searchQuery: 'inferior vein of left ventricle', icon: '🔵' }
+    ]
+  },
+
+  // 18. KHỚP HÁNG & VÙNG CHẬU ĐÙI (HIP JOINT & FEMORAL COMPLEX)
+  hip_joint: {
+    title: 'Cấu tạo Khớp Háng, Sụn Viền & Dây Chằng Chậu Đùi',
+    diagram: '/images/atlas/hip_joint_anatomy.svg',
+    diagramCaption: 'Khớp chỏm cầu chịu lực lớn nhất: Ổ cối, Chỏm xương đùi, Sụn viền & Dây chằng Bigelow',
+    subparts: [
+      { name: 'Bao khớp háng', latin: 'Capsula articularis coxae', searchQuery: 'capsule of hip', icon: '🛡️' },
+      { name: 'Chỏm & Thân xương đùi', latin: 'Femur', searchQuery: 'femur', icon: '🦴' },
+      { name: 'Xương chậu & Ổ cối', latin: 'Os coxae & Acetabulum', searchQuery: 'hip bone', icon: '🧱' },
+      { name: 'Dây chằng chỏm xương đùi', latin: 'Ligamentum capitis femoris', searchQuery: 'ligament of head of femur', icon: '🎗️' }
+    ]
+  },
+
+  // 19. THANH QUẢN & TUYẾN GIÁP (LARYNX & THYROID GLAND)
+  larynx_thyroid: {
+    title: 'Cấu tạo Thanh Quản, Tuyến Giáp & Dây Thanh Âm',
+    diagram: '/images/atlas/larynx_thyroid_anatomy.svg',
+    diagramCaption: 'Khung sụn thanh quản: Sụn giáp, Sụn nhẫn, Tuyến giáp và Dây chằng nhẫn giáp',
+    subparts: [
+      { name: 'Sụn giáp (Trái táo Adam)', latin: 'Cartilago thyroidea', searchQuery: 'thyroid cartilage', icon: '🛡️' },
+      { name: 'Màng & Dây chằng nhẫn giáp', latin: 'Ligamentum cricothyroideum', searchQuery: 'cricothyroid', icon: '🎗️' },
+      { name: 'Màng giáp móng', latin: 'Membrana thyrohyoidea', searchQuery: 'thyrohyoid', icon: '🧣' },
+      { name: 'Tuyến giáp & Mạch nuôi', latin: 'Glandula thyroidea', searchQuery: 'thyroid', icon: '🦋' }
+    ]
+  },
+
+  // 20. ĐẠI TRÀNG & MẠC TREO (COLON & MESENTERY)
+  colon_mesentery: {
+    title: 'Cấu tạo Khung Đại Tràng & Dải Cơ Dọc Taenia Coli',
+    diagram: '/images/atlas/colon_mesentery_anatomy.svg',
+    diagramCaption: 'Khung ruột già: Manh tràng, Đại tràng lên, ngang, xuống, sigma & Mạc treo đại tràng',
+    subparts: [
+      { name: 'Đại tràng lên', latin: 'Colon ascendens', searchQuery: 'ascending colon', icon: '🌭' },
+      { name: 'Đại tràng ngang', latin: 'Colon transversum', searchQuery: 'transverse colon', icon: '🌭' },
+      { name: 'Đại tràng xuống', latin: 'Colon descendens', searchQuery: 'descending colon', icon: '🌭' },
+      { name: 'Đại tràng sigma', latin: 'Colon sigmoideum', searchQuery: 'sigmoid colon', icon: '➰' },
+      { name: 'Mạc treo đại tràng', latin: 'Mesocolon', searchQuery: 'mesocolon', icon: '🕸️' }
+    ]
+  },
+
+  // 21. TUYẾN TỤY & ĐƯỜNG TIÊU HÓA TRUNG TÂM (PANCREAS & CENTRAL GI)
+  pancreatic_ducts: {
+    title: 'Cấu tạo Tuyến Tụy, Đảo Langerhans & Ống Wirsung',
+    diagram: '/images/atlas/biliary_anatomy.svg',
+    diagramCaption: 'Đại thể tụy tạng nằm sau phúc mạc, vắt ngang cột sống trong khung tá tràng D1-D4',
+    subparts: [
+      { name: 'Tuyến tụy', latin: 'Pancreas', searchQuery: 'pancreas', icon: '🧈' },
+      { name: 'Tá tràng C-loop', latin: 'Duodenum', searchQuery: 'duodenum', icon: '⚡' },
+      { name: 'Động mạch lách (Nuôi tụy)', latin: 'Arteria splenica', searchQuery: 'splenic artery', icon: '🔴' },
+      { name: 'Tĩnh mạch lách', latin: 'Vena splenica', searchQuery: 'splenic vein', icon: '🔵' }
+    ]
+  },
+
+  // 22. BÀNG QUANG & TIẾT NIỆU DƯỚI (URINARY BLADDER & LOWER TRACT)
+  urinary_bladder: {
+    title: 'Cấu tạo Bàng Quang & Đường Tiết Niệu Dưới',
+    diagram: '/images/atlas/urinary_anatomy.svg',
+    diagramCaption: 'Bàng quang cơ chóp, vùng cổ bàng quang, tam giác Lieutaud và 2 lỗ niệu quản',
+    subparts: [
+      { name: 'Bàng quang', latin: 'Vesica urinaria', searchQuery: 'urinary bladder', icon: '💧' },
+      { name: 'Niệu quản', latin: 'Ureter', searchQuery: 'ureter', icon: '🚿' }
+    ]
+  },
+
+  // 23. LÁCH & HỆ MIỄN DỊCH BẠCH HUYẾT (SPLEEN & LYMPHOID ORGANS)
+  spleen_lymph: {
+    title: 'Cấu tạo Lách & Hệ Cơ Quan Miễn Dịch',
+    diagram: '/images/atlas/lymph_spleen.png',
+    diagramCaption: 'Lách (Tỳ tạng) - Cơ quan bạch huyết lớn nhất cơ thể lọc sạch máu và tiêu hủy hồng cầu già',
+    subparts: [
+      { name: 'Lách (Tỳ tạng)', latin: 'Splen / Lien', searchQuery: 'spleen', icon: '🟣' },
+      { name: 'Động mạch lách', latin: 'Arteria splenica', searchQuery: 'splenic artery', icon: '🔴' },
+      { name: 'Hạch bạch huyết bẹn', latin: 'Nodi lymphoidei', searchQuery: 'inguinal node', icon: '🟢' }
+    ]
+  },
+
+  // 24. HỆ DA & MÔ DƯỚI DA (INTEGUMENTARY SYSTEM)
+  integumentary_layers: {
+    title: 'Cấu trúc Lớp Da, Biểu Bì & Mô Mỡ Dưới Da',
+    diagram: '/images/atlas/micro_skin_light.jpg',
+    diagramCaption: '3 tầng giải phẫu da người: Biểu bì (Epidermis), Trung bì (Dermis) & Hạ bì (Hypodermis)',
+    subparts: [
+      { name: 'Toàn bộ lớp da người', latin: 'Integumentum commune', searchQuery: 'skin', icon: '🧖' }
+    ]
   }
 };
 
@@ -211,12 +361,45 @@ export const CONSTITUENTS_DATABASE = {
 export function getConstituentsForPart(partId, baseName, systemName, regionName) {
   const target = `${partId || ''} ${baseName || ''} ${systemName || ''} ${regionName || ''}`.toLowerCase();
 
-  // 1. Khớp từ khóa cụ thể
+  // 1. Khớp từ khóa cụ thể ưu tiên cao
+  if (target.includes('couinaud') || target.includes('segment of liver') || target.includes('phân thùy gan')) {
+    return CONSTITUENTS_DATABASE.couinaud_liver;
+  }
   if (target.includes('liver') || target.includes('gan') || target.includes('hepar') || target.includes('gallbladder') || target.includes('biliary')) {
     return CONSTITUENTS_DATABASE.liver;
   }
+  if (target.includes('coronary') || target.includes('động mạch vành') || target.includes('lad') || target.includes('rca') || target.includes('circumflex') || target.includes('vành')) {
+    return CONSTITUENTS_DATABASE.coronary_circulation;
+  }
+  if (target.includes('papillary') || target.includes('leaflet') || target.includes('tricuspid') || target.includes('mitral') || target.includes('van tim') || target.includes('cột cơ')) {
+    return CONSTITUENTS_DATABASE.cardiac_internal;
+  }
   if (target.includes('heart') || target.includes('tim') || target.includes('cardiac') || target.includes('ventricle') || target.includes('atrium') || target.includes('aorta')) {
     return CONSTITUENTS_DATABASE.heart;
+  }
+  if (target.includes('eye') || target.includes('mắt') || target.includes('eyeball') || target.includes('cornea') || target.includes('retina') || target.includes('optic')) {
+    return CONSTITUENTS_DATABASE.eye;
+  }
+  if (target.includes('hip') || target.includes('háng') || target.includes('acetabul') || target.includes('chậu đùi') || target.includes('trochanter')) {
+    return CONSTITUENTS_DATABASE.hip_joint;
+  }
+  if (target.includes('larynx') || target.includes('thanh quản') || target.includes('thyroid') || target.includes('tuyến giáp') || target.includes('cricoid')) {
+    return CONSTITUENTS_DATABASE.larynx_thyroid;
+  }
+  if (target.includes('colon') || target.includes('đại tràng') || target.includes('ruột già') || target.includes('cecum') || target.includes('manh tràng') || target.includes('appendix') || target.includes('ruột thừa') || target.includes('mesocolon') || target.includes('taenia')) {
+    return CONSTITUENTS_DATABASE.colon_mesentery;
+  }
+  if (target.includes('pancreas') || target.includes('tụy') || target.includes('wirsung') || target.includes('santorini')) {
+    return CONSTITUENTS_DATABASE.pancreatic_ducts;
+  }
+  if (target.includes('bladder') || target.includes('bàng quang')) {
+    return CONSTITUENTS_DATABASE.urinary_bladder;
+  }
+  if (target.includes('spleen') || target.includes('lách') || target.includes('tỳ')) {
+    return CONSTITUENTS_DATABASE.spleen_lymph;
+  }
+  if (target.includes('skin') || target.includes('lớp da') || target.includes('biểu bì') || target.includes('dermis') || target.includes('epidermis')) {
+    return CONSTITUENTS_DATABASE.integumentary_layers;
   }
   if (target.includes('stomach') || target.includes('dạ dày') || target.includes('gaster') || target.includes('pylorus') || target.includes('cardia')) {
     return CONSTITUENTS_DATABASE.stomach;
@@ -227,7 +410,7 @@ export function getConstituentsForPart(partId, baseName, systemName, regionName)
   if (target.includes('pectoralis') || target.includes('cơ ngực') || target.includes('sternum') || target.includes('rib') || target.includes('sườn')) {
     return CONSTITUENTS_DATABASE.pectoralis;
   }
-  if (target.includes('kidney') || target.includes('thận') || target.includes('ren') || target.includes('ureter') || target.includes('bladder')) {
+  if (target.includes('kidney') || target.includes('thận') || target.includes('ren') || target.includes('ureter')) {
     return CONSTITUENTS_DATABASE.kidney;
   }
   if (target.includes('lung') || target.includes('phổi') || target.includes('pulmo') || target.includes('bronch') || target.includes('trachea')) {
@@ -245,7 +428,7 @@ export function getConstituentsForPart(partId, baseName, systemName, regionName)
   if (target.includes('plexus') || target.includes('arm') || target.includes('cánh tay') || target.includes('median') || target.includes('radial') || target.includes('ulnar')) {
     return CONSTITUENTS_DATABASE.brachial;
   }
-  if (target.includes('endocrine') || target.includes('nội tiết') || target.includes('thyroid') || target.includes('tuyến giáp') || target.includes('pituitary') || target.includes('tuyến yên') || target.includes('suprarenal') || target.includes('thượng thận') || target.includes('parathyroid') || target.includes('pineal')) {
+  if (target.includes('endocrine') || target.includes('nội tiết') || target.includes('pituitary') || target.includes('tuyến yên') || target.includes('suprarenal') || target.includes('thượng thận') || target.includes('parathyroid') || target.includes('pineal')) {
     return CONSTITUENTS_DATABASE.endocrine;
   }
   if (target.includes('salivary') || target.includes('nước bọt') || target.includes('parotid') || target.includes('submandibular') || target.includes('sublingual') || target.includes('stensen') || target.includes('wharton')) {

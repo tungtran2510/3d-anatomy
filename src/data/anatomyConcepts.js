@@ -597,6 +597,210 @@ export const ANATOMY_CONCEPTS = [
       url: 'https://www.youtube.com/embed/flIAxGsV1q0',
       duration: '1:15'
     }
+  },
+
+  // 11. Động Mạch Vành & Xơ Vữa Động Mạch
+  {
+    id: 'concept_coronary_atherosclerosis',
+    keywords: [
+      'mạch vành', 'mach vanh', 'xơ vữa', 'xo vua', 'nhồi máu cơ tim', 'nhoi mau co tim',
+      'đau thắt ngực', 'dau that nguc', 'lad', 'rca', 'lcx', 'coronary', 'atherosclerosis', 'heart attack'
+    ],
+    titleVi: 'Động Mạch Vành & Xơ Vữa Động Mạch',
+    latin: 'Arteriae coronariae (TA2: 3951)',
+    subtitle: 'Cây cấp máu nuôi tim & tiến triển xơ vữa gây nhồi máu cơ tim',
+    thumbnail: '/images/atlas/coronary_circulation_conduction.svg',
+    system: 'cardiovascular',
+    primaryPartId: 'Left coronary artery',
+    subunits: [
+      { label: '🔴 ĐM Liên thất trước (LAD)', partId: 'Left coronary artery', note: 'Nhánh quan trọng nhất nuôi mỏm và vách liên thất' },
+      { label: '🔴 ĐM Vành phải (RCA)', partId: 'Right coronary artery', note: 'Cấp máu cho tâm thất phải và hệ thống nút xoang' },
+      { label: '🩸 Nhánh mũ tim (LCx)', partId: 'Circumflex artery of heart', note: 'Vòng quanh rãnh nhĩ thất nuôi thành sau thất trái' }
+    ],
+    slides: [
+      {
+        id: 'coronary_anatomy',
+        title: 'Cây Mạch Vành',
+        badge: 'Cấp máu cơ tim',
+        image: '/images/atlas/coronary_circulation_conduction.svg',
+        caption: 'Giải phẫu các nhánh động mạch vành và hệ thống dẫn truyền phát xung nhịp SA-AV.'
+      },
+      {
+        id: 'atherosclerosis_pathology',
+        title: '4 Giai Đoạn',
+        badge: 'Tiến triển xơ vữa',
+        image: '/images/atlas/atherosclerosis_stages.svg',
+        caption: 'Từ vệt mỡ nội mạc nhẹ đến mảng xơ loét nứt vỡ hình thành huyết khối cấp.'
+      }
+    ],
+    simulator: {
+      title: '⚡ XƠ VỮA ĐỘNG MẠCH VÀNH:',
+      ticks: ['Bình thường', 'Vệt mỡ', 'Mảng xơ', 'Nhồi máu'],
+      stages: [
+        { level: 'Giai đoạn 1: Mạch khỏe mạnh', desc: 'Lòng mạch thông suốt, nội mạc nhẵn bóng không cặn mỡ.' },
+        { level: 'Giai đoạn 2: Vệt mỡ nội mạc', desc: 'Lắng đọng cholesterol LDL dưới nội mạc, hẹp nhẹ <30%.' },
+        { level: 'Giai đoạn 3: Mảng xơ vữa sợi', desc: 'Mảng xơ chiếm 70% lòng mạch, gây đau thắt ngực khi gắng sức.' },
+        { level: 'Giai đoạn 4: Nhồi máu cơ tim cấp', desc: 'Nứt vỡ mảng xơ, huyết khối bít tắc 100% gây hoại tử cơ tim.' }
+      ]
+    },
+    video: {
+      title: 'Hoạt Ảnh 3D: Cây Động Mạch Vành & Cơ Chế Nhồi Máu Cơ Tim',
+      url: 'https://www.youtube.com/embed/Ktv-CaOt6UQ',
+      duration: '08:45'
+    }
+  },
+
+  // 12. 8 Hạ Phân Thùy Gan & Bệnh Học Xơ Gan
+  {
+    id: 'concept_liver_cirrhosis',
+    keywords: [
+      'xơ gan', 'xo gan', 'gan nhiễm mỡ', 'gan nhiem mo', 'couinaud', 'hạ phân thùy',
+      'ha phan thuy', 'tĩnh mạch cửa', 'men gan', 'cirrhosis', 'steatosis'
+    ],
+    titleVi: '8 Hạ Phân Thùy Gan & Bệnh Học Xơ Gan',
+    latin: 'Hepar & Cirrhosis hepatis (TA2: 2955)',
+    subtitle: 'Phân chia ngoại khoa Couinaud và tiến triển thoái hóa mỡ đến xơ gan',
+    thumbnail: '/images/atlas/couinaud_liver_segments.svg',
+    system: 'visceral',
+    primaryPartId: 'Liver',
+    subunits: [
+      { label: '🥩 8 Hạ phân thùy Couinaud', partId: 'Liver', note: '8 đơn vị giải phẫu độc lập có cuống mạch - mật riêng biệt' },
+      { label: '🔵 Tĩnh mạch cửa gan', partId: 'Hepatic portal vein', note: 'Gom toàn bộ máu dinh dưỡng từ dạ dày, ruột non về gan' },
+      { label: '🟢 Túi mật & Đường mật', partId: 'Gallbladder', note: 'Dự trữ và cô đặc dịch mật hỗ trợ tiêu hóa chất béo' }
+    ],
+    slides: [
+      {
+        id: 'couinaud_anatomy',
+        title: 'Couinaud I-VIII',
+        badge: 'Ngoại khoa gan',
+        image: '/images/atlas/couinaud_liver_segments.svg',
+        caption: 'Sơ đồ phân chia 8 hạ phân thùy gan độc lập theo trục tĩnh mạch cửa và tĩnh mạch gan.'
+      },
+      {
+        id: 'cirrhosis_pathology',
+        title: '4 Giai Đoạn',
+        badge: 'Tiến triển xơ gan',
+        image: '/images/atlas/liver_cirrhosis_stages.svg',
+        caption: 'Từ tích tụ hạt mỡ >5% đến lắng đọng dải xơ bắc cầu F2-F3 và xơ gan nốt F4.'
+      }
+    ],
+    simulator: {
+      title: '⚡ BỆNH HỌC GAN MẬT:',
+      ticks: ['Khỏe mạnh', 'Nhiễm mỡ', 'Xơ hóa', 'Xơ gan F4'],
+      stages: [
+        { level: 'Giai đoạn 1: Gan khỏe mạnh', desc: 'Nhu mô mịn, mềm mại, men gan AST/ALT chuẩn.' },
+        { level: 'Giai đoạn 2: Gan nhiễm mỡ', desc: 'Tích tụ hạt mỡ >5% thể tích gan, có thể đảo ngược 100% nếu điều chỉnh lối sống.' },
+        { level: 'Giai đoạn 3: Viêm gan xơ hóa F2-F3', desc: 'Dải xơ collagen bắc cầu giữa các khoảng cửa, tế bào gan tổn thương mạn tính.' },
+        { level: 'Giai đoạn 4: Xơ gan nốt F4', desc: 'Đảo lộn cấu trúc vi thể, bề mặt sần sùi cục nốt, tăng áp lực tĩnh mạch cửa.' }
+      ]
+    },
+    video: {
+      title: 'Hoạt Ảnh 3D: Cấu Trúc Nhu Mô Gan & Quá Trình Xơ Hóa',
+      url: 'https://www.youtube.com/embed/jGme7BRkpuQ',
+      duration: '09:12'
+    }
+  },
+
+  // 13. Nhãn Cầu & Bệnh Đục Thủy Tinh Thể
+  {
+    id: 'concept_eye_cataract',
+    keywords: [
+      'mắt', 'mat', 'nhãn cầu', 'nhan cau', 'thị giác', 'thi giac', 'đục thủy tinh thể',
+      'duc thuy tinh the', 'cườm khô', 'cuom kho', 'cataract', 'glaucoma', 'giác mạc', 'võng mạc'
+    ],
+    titleVi: 'Nhãn Cầu & Bệnh Đục Thủy Tinh Thể',
+    latin: 'Bulbus oculi & Cataracta (TA2: 5410)',
+    subtitle: 'Cơ quan thị giác, đường khúc xạ ánh sáng và tiến triển vẩn đục thể thủy tinh',
+    thumbnail: '/images/atlas/eye_anatomy_macro.svg',
+    system: 'nervous',
+    primaryPartId: 'Anterior chamber of eyeball.r',
+    subunits: [
+      { label: '👁️ Giác mạc & Tiền phòng', partId: 'Anterior chamber of eyeball.r', note: 'Thấu kính hội tụ ngoài cùng trong suốt' },
+      { label: '⚡ Dây thần kinh thị giác II', partId: 'Optic nerve (II).r', note: 'Dẫn truyền tín hiệu xung điện từ võng mạc về vỏ não chẩm' },
+      { label: '🔴 Động mạch mi', partId: 'Long posterior ciliary arteries.r', note: 'Mạng mạch máu nuôi dưỡng màng bọc nhãn cầu' }
+    ],
+    slides: [
+      {
+        id: 'eye_macro',
+        title: 'Cấu tạo Mắt',
+        badge: 'Giải phẫu thị giác',
+        image: '/images/atlas/eye_anatomy_macro.svg',
+        caption: 'Mặt cắt ngang nhãn cầu: Giác mạc, Thể mi, Thể thủy tinh, Võng mạc và Thần kinh thị giác II.'
+      },
+      {
+        id: 'cataract_stages',
+        title: '4 Cấp độ Đục',
+        badge: 'Tiến triển đục TTT',
+        image: '/images/atlas/cataract_glaucoma_stages.svg',
+        caption: 'Từ vẩn đục vỏ sớm đến đục nhân vàng nâu và đục chín toàn bộ cản trở ánh sáng.'
+      }
+    ],
+    simulator: {
+      title: '⚡ TIẾN TRIỂN THỦY TINH THỂ:',
+      ticks: ['Trong suốt', 'Đục sớm', 'Đục nhân', 'Đục chín'],
+      stages: [
+        { level: 'Cấp 1: Trong suốt 10/10', desc: 'Thủy tinh thể trong suốt hoàn hảo, thị lực sắc nét.' },
+        { level: 'Cấp 2: Đục vỏ nhẹ', desc: 'Vệt mờ li ti ở rìa thể mi, chói mắt khi nhìn đèn pha hoặc ánh nắng.' },
+        { level: 'Cấp 3: Đục nhân vàng nâu', desc: 'Nhìn mờ như qua màn sương mù, giảm thị lực ban đêm rõ rệt.' },
+        { level: 'Cấp 4: Đục chín toàn bộ', desc: 'Đồng tử trắng đục, chỉ còn cảm nhận sáng/tối, chỉ định mổ Phaco.' }
+      ]
+    },
+    video: {
+      title: 'Hoạt Ảnh 3D: Cấu Trúc Khúc Xạ Mắt & Phẫu Thuật Phaco',
+      url: 'https://www.youtube.com/embed/flIAxGsV1q0',
+      duration: '06:30'
+    }
+  },
+
+  // 14. Khớp Háng & Thoái Hóa Khớp
+  {
+    id: 'concept_hip_osteoarthritis',
+    keywords: [
+      'khớp háng', 'khop hang', 'thoái hóa khớp háng', 'thoai hoa khop hang',
+      'chỏm xương đùi', 'chom xuong dui', 'ổ cối', 'o coi', 'hip osteoarthritis', 'kellgren'
+    ],
+    titleVi: 'Khớp Háng & Thoái Hóa Khớp',
+    latin: 'Articulatio coxae & Coxarthrosis (TA2: 1412)',
+    subtitle: 'Khớp chỏm cầu chịu lực lớn nhất và 4 độ thoái hóa theo Kellgren-Lawrence',
+    thumbnail: '/images/atlas/hip_joint_anatomy.svg',
+    system: 'joints',
+    primaryPartId: 'Articular capsule of hip joint.r',
+    subunits: [
+      { label: '🛡️ Bao khớp & Dây chằng', partId: 'Articular capsule of hip joint.r', note: 'Dây chằng chậu đùi Bigelow chịu lực kéo >350kg' },
+      { label: '🦴 Chỏm xương đùi', partId: 'Femur.r', note: 'Hình 2/3 khối cầu bọc sụn trong trơn nhẵn' },
+      { label: '🧱 Ổ cối xương chậu', partId: 'Hip bone.r', note: 'Hõm khớp sâu có sụn viền mút kín giữ vững chỏm đùi' }
+    ],
+    slides: [
+      {
+        id: 'hip_anatomy',
+        title: 'Khớp Háng',
+        badge: 'Khớp chỏm cầu',
+        image: '/images/atlas/hip_joint_anatomy.svg',
+        caption: 'Mặt cắt trán khớp háng: Ổ cối, Sụn viền, Chỏm xương đùi và Dây chằng chậu đùi.'
+      },
+      {
+        id: 'hip_oa_stages',
+        title: '4 Độ Thoái Hóa',
+        badge: 'Kellgren-Lawrence',
+        image: '/images/atlas/hip_osteoarthritis_stages.svg',
+        caption: 'Từ mòn sụn nhẹ khe khớp đến gai xương lớn, xơ đặc xương và biến dạng chỏm đùi.'
+      }
+    ],
+    simulator: {
+      title: '⚡ THOÁI HÓA KHỚP HÁNG:',
+      ticks: ['Độ I', 'Độ II', 'Độ III', 'Độ IV'],
+      stages: [
+        { level: 'Độ I: Nghi ngờ thoái hóa', desc: 'Khe khớp còn bảo tồn, nghi ngờ gai xương nhỏ ở viền ổ cối.' },
+        { level: 'Độ II: Thoái hóa nhẹ', desc: 'Gai xương rõ rệt, sụn khớp bắt đầu mòn nhẹ, đau khi đi bộ xa.' },
+        { level: 'Độ III: Thoái hóa vừa', desc: 'Hẹp khe khớp >50%, xơ đặc xương dưới sụn, cản trở bước chân lên cầu thang.' },
+        { level: 'Độ IV: Thoái hóa nặng', desc: 'Mất toàn bộ sụn khớp (bone-on-bone), biến dạng chỏm xương đùi, chỉ định thay khớp.' }
+      ]
+    },
+    video: {
+      title: 'Hoạt Ảnh 3D: Động Học Khớp Háng & Thay Khớp Nhân Tạo',
+      url: 'https://www.youtube.com/embed/DLxYDoN634c',
+      duration: '09:20'
+    }
   }
 ];
 
@@ -781,6 +985,57 @@ export function getVisualDeckForPart(partId) {
     (lower.includes('ear') && !lower.includes('bear') && !lower.includes('clear'))
   ) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_inner_ear_vestibular');
+  }
+
+  // 11. Coronary Circulation & Atherosclerosis
+  if (
+    lower.includes('coronary') ||
+    lower.includes('vành') ||
+    lower.includes('atherosclero') ||
+    lower.includes('nhồi máu') ||
+    lower.includes('lad') ||
+    lower.includes('rca') ||
+    lower.includes('circumflex')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_coronary_atherosclerosis');
+  }
+
+  // 12. Liver Couinaud & Cirrhosis
+  if (
+    lower.includes('couinaud') ||
+    lower.includes('cirrhosis') ||
+    lower.includes('xơ gan') ||
+    lower.includes('segment of liver') ||
+    (lower.includes('gan') && !lower.includes('ngang'))
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_liver_cirrhosis');
+  }
+
+  // 13. Eye, Vision & Cataract
+  if (
+    lower.includes('eyeball') ||
+    lower.includes('cornea') ||
+    lower.includes('retina') ||
+    lower.includes('ciliary') ||
+    lower.includes('optic') ||
+    lower.includes('cataract') ||
+    lower.includes('glaucoma') ||
+    lower.includes('mắt') ||
+    lower.includes('thị giác')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_eye_cataract');
+  }
+
+  // 14. Hip Joint & Osteoarthritis
+  if (
+    lower.includes('capsule of hip') ||
+    lower.includes('hip joint') ||
+    lower.includes('acetabul') ||
+    lower.includes('coxae') ||
+    lower.includes('coxarthrosis') ||
+    lower.includes('khớp háng')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_hip_osteoarthritis');
   }
 
   return null;

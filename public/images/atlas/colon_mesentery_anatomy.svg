@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="colonBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09141f" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <!-- Colon Wall Gradient -->
+    <linearGradient id="colonWallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="50%" stop-color="#b45309" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+
+    <!-- Haustra Sacculations Highlight -->
+    <linearGradient id="haustraGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+
+    <!-- Mesocolon Peritoneal Veil -->
+    <linearGradient id="mesoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ca8a04" stop-opacity="0.15" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#colonBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="250" height="26" rx="6" fill="#b45309" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1" />
+    <text x="12" y="17" fill="#fbbf24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">ỐNG TIÊU HÓA &amp; MẠNG RUỘT GIÀ</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Giải Phẫu Khung Đại Tràng &amp; Dải Cơ Dọc Taenia Coli</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Manh tràng, Ruột thừa, Đại tràng lên - ngang - xuống - sigma &amp; Túi phình Haustra</text>
+
+  <!-- Central Colon Frame Graphic -->
+  <g transform="translate(300, 220)">
+    <!-- Mesocolon Fan background (Mạc treo đại tràng) -->
+    <path d="M-110,-40 C-80,-65 80,-65 110,-40 C80,30 -80,30 -110,-40 Z" 
+          fill="url(#mesoGrad)" stroke="#facc15" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="0" y="-10" fill="#fef08a" font-size="10" font-weight="600" text-anchor="middle">Mạc Treo Đại Tràng Ngang</text>
+
+    <!-- COLON ARCH FRAME (Khung đại tràng hình chữ U ngược) -->
+    <!-- 1. Cecum & Appendix (Manh tràng & Ruột thừa góc dưới phải) -->
+    <!-- Cecum Pouch -->
+    <path d="M-125,70 C-135,95 -105,115 -85,110 C-75,95 -75,70 -75,60" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="32" stroke-linecap="round"/>
+    <!-- Appendix (Ruột thừa hình giun) -->
+    <path d="M-115,105 C-130,120 -135,135 -125,145 C-115,150 -105,140 -110,130" 
+          fill="none" stroke="#f97316" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- 2. Ascending Colon (Đại tràng lên) -->
+    <path d="M-105,60 C-115,20 -115,-20 -105,-55" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="32" stroke-linecap="round"/>
+
+    <!-- Hepatic Flexure (Góc gan phải) -->
+    <path d="M-105,-55 C-100,-75 -85,-85 -60,-80" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="32" stroke-linecap="round"/>
+
+    <!-- 3. Transverse Colon (Đại tràng ngang võng nhẹ xuống dưới) -->
+    <path d="M-60,-80 C-20,-60 20,-60 60,-80" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="30" stroke-linecap="round"/>
+
+    <!-- Splenic Flexure (Góc lách trái cao hơn góc gan) -->
+    <path d="M60,-80 C85,-90 105,-80 110,-60" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="30" stroke-linecap="round"/>
+
+    <!-- 4. Descending Colon (Đại tràng xuống) -->
+    <path d="M110,-60 C115,-20 115,20 105,60" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="30" stroke-linecap="round"/>
+
+    <!-- 5. Sigmoid Colon (Đại tràng sigma uốn lượn chữ S) -->
+    <path d="M105,60 C95,95 65,110 40,95 C15,80 15,115 10,135" 
+          fill="none" stroke="url(#haustraGrad)" stroke-width="26" stroke-linecap="round"/>
+
+    <!-- Rectum (Trực tràng hướng xuống đáy chậu) -->
+    <path d="M10,135 L10,165" stroke="url(#haustraGrad)" stroke-width="24" stroke-linecap="round"/>
+
+    <!-- 6. TAENIA COLI (Dải cơ dọc đại tràng trắng ngà óng ánh chạy dọc giữa khung) -->
+    <path d="M-105,80 C-113,30 -113,-15 -105,-55 C-100,-72 -80,-75 -60,-75 C-20,-55 20,-55 60,-75 C80,-75 102,-72 108,-55 C113,-15 113,30 105,65 C95,95 65,108 40,95 C18,80 15,115 10,135" 
+          fill="none" stroke="#fef9c3" stroke-width="3" stroke-linecap="round" opacity="0.95"/>
+
+    <!-- Epiploic Appendices (Túi thừa mạc nối - các cuống mỡ treo lủng lẳng) -->
+    <circle cx="-125" cy="15" r="4.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+    <circle cx="-125" cy="-25" r="4" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+    <circle cx="-25" cy="-70" r="4.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+    <circle cx="25" cy="-70" r="4" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+    <circle cx="125" cy="15" r="4.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+    <circle cx="125" cy="-25" r="4" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>
+  </g>
+
+  <!-- Left Callouts (Góc gan & Manh tràng) -->
+  <g transform="translate(30, 140)">
+    <text x="0" y="0" fill="#fbbf24" font-size="11" font-weight="700">Đại Tràng Lên (Ascending)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Cố định vào thành bụng sau bởi mạc Toldt I</text>
+    <path d="M140,20 L170,20 L195,65" fill="none" stroke="#fbbf24" stroke-width="1" />
+    <circle cx="195" cy="65" r="2.5" fill="#fbbf24" />
+  </g>
+
+  <g transform="translate(30, 240)">
+    <text x="0" y="0" fill="#f97316" font-size="11" font-weight="700">Ruột Thừa (Appendix)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Gốc ruột thừa xuất phát từ nơi hội tụ 3 dải cơ dọc</text>
+    <path d="M130,20 L160,20 L185,80" fill="none" stroke="#f97316" stroke-width="1" />
+    <circle cx="185" cy="80" r="2.5" fill="#f97316" />
+  </g>
+
+  <!-- Right Callouts (Dải cơ dọc Taenia Coli & Sigma) -->
+  <g transform="translate(420, 140)">
+    <text x="0" y="0" fill="#fef9c3" font-size="11" font-weight="700">Dải Cơ Dọc (Taenia Coli)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">3 dải cơ trơn co rút tạo các túi phình Haustra</text>
+    <path d="M-5,10 L-35,10 L-65,30" fill="none" stroke="#fef9c3" stroke-width="1" />
+    <circle cx="-65" cy="30" r="2.5" fill="#fef9c3" />
+  </g>
+
+  <g transform="translate(420, 230)">
+    <text x="0" y="0" fill="#fbbf24" font-size="11" font-weight="700">Đại Tràng Sigma (Sigmoid)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Di động cao, dễ xoắn vặn ruột ở người già</text>
+    <path d="M-5,10 L-35,10 L-65,70" fill="none" stroke="#fbbf24" stroke-width="1" />
+    <circle cx="-65" cy="70" r="2.5" fill="#fbbf24" />
+  </g>
+</svg>

@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="larynxBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09141d" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <!-- Thyroid Butterfly Gland -->
+    <linearGradient id="thyroidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+
+    <!-- Cartilage Blue/Grey -->
+    <linearGradient id="cartilageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+
+    <!-- Tracheal Rings -->
+    <linearGradient id="tracheaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#larynxBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="240" height="26" rx="6" fill="#b45309" fill-opacity="0.3" stroke="#f59e0b" stroke-width="1" />
+    <text x="12" y="17" fill="#fbbf24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">HỆ NỘI TIẾT &amp; CƠ QUAN PHÁT ÂM</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Giải Phẫu Tuyến Giáp &amp; Khung Sụn Thanh Quản</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Sụn giáp (Trái táo Adam), Tuyến giáp 2 thùy &amp; Thần kinh quặt ngược thanh quản</text>
+
+  <!-- Central Anatomy Graphic -->
+  <g transform="translate(300, 220)">
+    <!-- 1. Hyoid Bone (Xương móng hình móng ngựa ở trên) -->
+    <path d="M-55,-120 C-30,-135 30,-135 55,-120 C60,-115 50,-110 40,-115 C20,-125 -20,-125 -40,-115 C-50,-110 -60,-115 -55,-120 Z" 
+          fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+
+    <!-- Thyrohyoid Membrane (Màng giáp móng) -->
+    <path d="M-45,-115 C-20,-125 20,-125 45,-115 L50,-70 C25,-65 -25,-65 -50,-70 Z" 
+          fill="#94a3b8" fill-opacity="0.3" stroke="#64748b" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <!-- 2. Thyroid Cartilage (Sụn giáp - Tấm sụn hình khiên) -->
+    <path d="M-55,-68 C-25,-75 25,-75 55,-68 L48,-15 C25,-10 -25,-10 -48,-15 Z" 
+          fill="url(#cartilageGrad)" stroke="#475569" stroke-width="1.8"/>
+    <!-- Laryngeal Prominence notch (Khuyết sụn giáp trên - Trái táo Adam) -->
+    <path d="M-8,-70 C-3,-62 3,-62 8,-70" fill="none" stroke="#334155" stroke-width="2"/>
+
+    <!-- Cricothyroid Membrane & Ligament (Màng nhẫn giáp) -->
+    <path d="M-30,-15 C-15,-10 15,-10 30,-15 L28,5 C15,8 -15,8 -28,5 Z" 
+          fill="#e2e8f0" fill-opacity="0.5" stroke="#94a3b8" stroke-width="1"/>
+
+    <!-- 3. Cricoid Cartilage (Sụn nhẫn hình vòng nhẫn) -->
+    <path d="M-32,5 C-15,10 15,10 32,5 L30,22 C15,26 -15,26 -30,22 Z" 
+          fill="url(#cartilageGrad)" stroke="#334155" stroke-width="1.5"/>
+
+    <!-- 4. Tracheal Rings (Các vòng sụn khí quản C-shaped) -->
+    <g transform="translate(0, 25)">
+      <path d="M-26,5 C-15,10 15,10 26,5" stroke="url(#tracheaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M-26,16 C-15,21 15,21 26,16" stroke="url(#tracheaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M-26,27 C-15,32 15,32 26,27" stroke="url(#tracheaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M-26,38 C-15,43 15,43 26,38" stroke="url(#tracheaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M-26,49 C-15,54 15,54 26,49" stroke="url(#tracheaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M-26,60 C-15,65 15,65 26,60" stroke="url(#tracheaGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- 5. THYROID GLAND (Tuyến giáp hình bướm ôm trước khí quản & sụn nhẫn) -->
+    <!-- Left & Right Lobes + Isthmus -->
+    <path d="M-15,35 C-5,32 5,32 15,35 C20,36 28,15 45,-15 C60,-40 75,-25 72,15 C70,45 55,75 35,78 C20,80 15,58 -15,58 C-20,80 -35,80 -55,75 C-70,45 -72,15 -60,-25 C-45,-40 -28,15 -20,36 Z" 
+          fill="url(#thyroidGrad)" stroke="#d97706" stroke-width="2" opacity="0.95"/>
+
+    <!-- Parathyroid Glands (4 Tuyến cận giáp phía sau - biểu diễn chấm vàng) -->
+    <circle cx="-55" cy="5" r="4.5" fill="#facc15" stroke="#78350f" stroke-width="1.2" stroke-dasharray="2 1"/>
+    <circle cx="-45" cy="55" r="4.5" fill="#facc15" stroke="#78350f" stroke-width="1.2" stroke-dasharray="2 1"/>
+    <circle cx="55" cy="5" r="4.5" fill="#facc15" stroke="#78350f" stroke-width="1.2" stroke-dasharray="2 1"/>
+    <circle cx="45" cy="55" r="4.5" fill="#facc15" stroke="#78350f" stroke-width="1.2" stroke-dasharray="2 1"/>
+
+    <!-- 6. Recurrent Laryngeal Nerves (Thần kinh quặt ngược thanh quản bò rãnh khí - thực quản) -->
+    <path d="M-36,95 C-34,50 -32,15 -35,-20" stroke="#facc15" stroke-width="2.2" stroke-dasharray="4 2" fill="none"/>
+    <path d="M36,95 C34,50 32,15 35,-20" stroke="#facc15" stroke-width="2.2" stroke-dasharray="4 2" fill="none"/>
+  </g>
+
+  <!-- Left Callouts (Sụn giáp & Màng nhẫn giáp) -->
+  <g transform="translate(30, 140)">
+    <text x="0" y="0" fill="#cbd5e1" font-size="11" font-weight="700">Sụn Giáp (Thyroid Cartilage)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Tấm sụn lớn nhất bảo vệ dây thanh âm</text>
+    <path d="M130,20 L165,20 L240,15" fill="none" stroke="#cbd5e1" stroke-width="1" />
+    <circle cx="240" cy="15" r="2.5" fill="#cbd5e1" />
+  </g>
+
+  <g transform="translate(30, 230)">
+    <text x="0" y="0" fill="#facc15" font-size="11" font-weight="700">TK Quặt Ngược Thanh Quản</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Chi phối vận động các cơ thanh âm</text>
+    <text x="0" y="26" fill="#f87171" font-size="8.5">• Dễ tổn thương trong mổ bướu giáp</text>
+    <path d="M130,30 L180,30 L260,20" fill="none" stroke="#facc15" stroke-width="1" />
+    <circle cx="260" cy="20" r="2.5" fill="#facc15" />
+  </g>
+
+  <!-- Right Callouts (Tuyến giáp & Tuyến cận giáp) -->
+  <g transform="translate(420, 140)">
+    <text x="0" y="0" fill="#f59e0b" font-size="11" font-weight="700">Tuyến Giáp (Thyroid Gland)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Tiết hormone T3, T4 điều hòa chuyển hóa</text>
+    <path d="M-5,10 L-40,10 L-65,70" fill="none" stroke="#f59e0b" stroke-width="1" />
+    <circle cx="-65" cy="70" r="2.5" fill="#f59e0b" />
+  </g>
+
+  <g transform="translate(420, 230)">
+    <text x="0" y="0" fill="#fef08a" font-size="11" font-weight="700">4 Tuyến Cận Giáp (Parathyroid)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Tiết PTH điều hòa nồng độ Canxi máu</text>
+    <path d="M-5,10 L-40,10 L-65,-10" fill="none" stroke="#fef08a" stroke-width="1" />
+    <circle cx="-65" cy="-10" r="2.5" fill="#fef08a" />
+  </g>
+
+  <g transform="translate(420, 310)">
+    <text x="0" y="0" fill="#cbd5e1" font-size="11" font-weight="700">Khí Quản (Trachea)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Chuỗi vòng sụn hình chữ C mở ra sau</text>
+    <path d="M-5,10 L-50,10 L-100,-25" fill="none" stroke="#cbd5e1" stroke-width="1" />
+    <circle cx="-100" cy="-25" r="2.5" fill="#cbd5e1" />
+  </g>
+</svg>

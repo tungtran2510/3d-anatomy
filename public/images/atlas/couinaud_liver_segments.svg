@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="couinaudBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a121d" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <!-- Segment Gradients -->
+    <linearGradient id="segRightPost" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#991b1b" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    <linearGradient id="segRightAnt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b91c1c" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+    <linearGradient id="segLeftMed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dc2626" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+    <linearGradient id="segLeftLat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#c2410c" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#couinaudBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="250" height="26" rx="6" fill="#991b1b" fill-opacity="0.3" stroke="#ef4444" stroke-width="1" />
+    <text x="12" y="17" fill="#fca5a5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">NGOẠI KHOA GAN MẬT (COUINAUD)</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Phân Chia 8 Hạ Phân Thùy Gan (Couinaud I – VIII)</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Mỗi phân thùy có cuống mạch - mật độc lập (Động mạch gan, Tĩnh mạch cửa, Đường mật)</text>
+
+  <!-- Central Liver Contour & 8 Segments Map -->
+  <g transform="translate(300, 220)">
+    <!-- IVC / Vena Cava at top back -->
+    <path d="M-20,-115 L10,-115 L8,30 L-22,30 Z" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="-4" y="-120" fill="#60a5fa" font-size="9" font-weight="700" text-anchor="middle">TM Chủ Dưới</text>
+
+    <!-- 3 Hepatic Veins branching out -->
+    <path d="M-6,-80 C-45,-75 -90,-65 -130,-45" stroke="#3b82f6" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <path d="M-5,-80 C-5,-50 -8,10 -10,35" stroke="#3b82f6" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M-4,-80 C35,-70 80,-55 125,-30" stroke="#3b82f6" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Liver Outer Silhouette -->
+    <!-- RIGHT LOBE (Segments VII, VIII superior / VI, V inferior) -->
+    <!-- Segment VII (Hạ phân thùy sau trên) -->
+    <path d="M-15,-85 C-70,-90 -150,-80 -195,-35 C-195,-5 -155,-5 -110,-10 C-75,-15 -25,-40 -15,-85 Z" 
+          fill="url(#segRightPost)" stroke="#fca5a5" stroke-width="1" />
+    <text x="-120" y="-45" fill="#ffffff" font-size="13" font-weight="800">VII</text>
+
+    <!-- Segment VIII (Hạ phân thùy trước trên phải) -->
+    <path d="M-15,-85 C-25,-40 -75,-15 -110,-10 C-65,0 -25,-10 -10,0 C-10,-45 -12,-70 -15,-85 Z" 
+          fill="url(#segRightAnt)" stroke="#fca5a5" stroke-width="1" />
+    <text x="-55" y="-45" fill="#ffffff" font-size="13" font-weight="800">VIII</text>
+
+    <!-- Segment VI (Hạ phân thùy sau dưới phải) -->
+    <path d="M-195,-35 C-205,30 -160,85 -105,95 C-105,45 -105,10 -110,-10 C-155,-5 -195,-5 -195,-35 Z" 
+          fill="url(#segRightPost)" stroke="#fca5a5" stroke-width="1" />
+    <text x="-145" y="45" fill="#ffffff" font-size="13" font-weight="800">VI</text>
+
+    <!-- Segment V (Hạ phân thùy trước dưới phải) -->
+    <path d="M-110,-10 C-105,10 -105,45 -105,95 C-65,105 -20,95 -10,75 C-10,35 -10,15 -10,0 C-25,-10 -65,0 -110,-10 Z" 
+          fill="url(#segRightAnt)" stroke="#fca5a5" stroke-width="1" />
+    <text x="-55" y="45" fill="#ffffff" font-size="13" font-weight="800">V</text>
+
+    <!-- LEFT LOBE (Segments IV medial / II, III lateral) -->
+    <!-- Segment IV (Thùy vuông - Hạ phân thùy giữa trái: IVa trên & IVb dưới) -->
+    <path d="M-10,-85 C15,-80 50,-65 65,-40 C45,10 40,55 35,80 C15,85 -5,80 -10,75 C-10,15 -10,-45 -10,-85 Z" 
+          fill="url(#segLeftMed)" stroke="#fca5a5" stroke-width="1" />
+    <text x="18" y="-35" fill="#ffffff" font-size="11" font-weight="800">IVa</text>
+    <text x="12" y="45" fill="#ffffff" font-size="11" font-weight="800">IVb</text>
+
+    <!-- Segment II (Hạ phân thùy sau trên trái) -->
+    <path d="M65,-40 C110,-55 160,-40 195,5 C150,15 110,15 70,5 C65,-15 65,-30 65,-40 Z" 
+          fill="url(#segLeftLat)" stroke="#fdba74" stroke-width="1" />
+    <text x="115" y="-20" fill="#ffffff" font-size="13" font-weight="800">II</text>
+
+    <!-- Segment III (Hạ phân thùy trước dưới trái) -->
+    <path d="M70,5 C110,15 150,15 195,5 C185,45 130,80 75,75 C55,75 40,65 35,55 C40,40 55,20 70,5 Z" 
+          fill="url(#segLeftLat)" stroke="#fdba74" stroke-width="1" />
+    <text x="110" y="45" fill="#ffffff" font-size="13" font-weight="800">III</text>
+
+    <!-- Segment I (Thùy đuôi - Lobus caudatus - Nằm sâu phía sau tĩnh mạch chủ) -->
+    <ellipse cx="-5" cy="-60" rx="16" ry="12" fill="#7f1d1d" stroke="#fca5a5" stroke-width="1.5" stroke-dasharray="3 2" />
+    <text x="-5" y="-56" fill="#fef08a" font-size="11" font-weight="800" text-anchor="middle">I</text>
+
+    <!-- Gallbladder (Túi mật nằm giữa V và IVb) -->
+    <ellipse cx="-15" cy="85" rx="12" ry="18" fill="#10b981" stroke="#34d399" stroke-width="2" />
+    <text x="-15" y="89" fill="#ffffff" font-size="8" font-weight="700" text-anchor="middle">Túi mật</text>
+  </g>
+
+  <!-- Left Side Annotations (Gan Phải) -->
+  <g transform="translate(30, 150)">
+    <rect width="130" height="42" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="10" y="16" fill="#f87171" font-size="10.5" font-weight="700">GAN PHẢI (Right)</text>
+    <text x="10" y="32" fill="#cbd5e1" font-size="9">• Sau: Phân thùy VI &amp; VII</text>
+    <text x="10" y="44" fill="#cbd5e1" font-size="9" display="none">• Trước: Phân thùy V &amp; VIII</text>
+  </g>
+
+  <g transform="translate(30, 210)">
+    <rect width="130" height="42" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="10" y="16" fill="#f87171" font-size="10.5" font-weight="700">TRƯỚC GAN PHẢI</text>
+    <text x="10" y="32" fill="#cbd5e1" font-size="9">• Phân thùy V &amp; VIII</text>
+  </g>
+
+  <g transform="translate(30, 270)">
+    <rect width="130" height="48" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="10" y="16" fill="#fef08a" font-size="10.5" font-weight="700">THÙY ĐUÔI (Segment I)</text>
+    <text x="10" y="30" fill="#cbd5e1" font-size="9">• Dẫn lưu máu độc lập</text>
+    <text x="10" y="42" fill="#cbd5e1" font-size="9">• Nằm ôm TM chủ dưới</text>
+  </g>
+
+  <!-- Right Side Annotations (Gan Trái & Ứng dụng) -->
+  <g transform="translate(440, 150)">
+    <rect width="135" height="48" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="10" y="16" fill="#fb923c" font-size="10.5" font-weight="700">GAN TRÁI (Left)</text>
+    <text x="10" y="30" fill="#cbd5e1" font-size="9">• Phân thùy bên: II &amp; III</text>
+    <text x="10" y="42" fill="#cbd5e1" font-size="9">• Phân thùy giữa: IVa &amp; IVb</text>
+  </g>
+
+  <g transform="translate(440, 220)">
+    <rect width="135" height="54" rx="6" fill="#047857" fill-opacity="0.3" stroke="#10b981" stroke-width="1" />
+    <text x="10" y="16" fill="#34d399" font-size="10.5" font-weight="700">Ý NGHĨA NGOẠI KHOA</text>
+    <text x="10" y="30" fill="#e2e8f0" font-size="9">• Cho phép phẫu thuật cắt</text>
+    <text x="10" y="44" fill="#e2e8f0" font-size="9">  từng hạ phân thùy gan an toàn</text>
+  </g>
+</svg>

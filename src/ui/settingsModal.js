@@ -13,6 +13,7 @@ import {
   setAutoBackupEnabled,
   getLastBackupTimestamps
 } from '../utils/backupManager.js';
+import { engineManager } from '../viewer/engineManager.js';
 
 let modalEl = null;
 
@@ -151,6 +152,43 @@ export function initSettingsModal(viewer) {
                 <input type="checkbox" id="chkSpeechAudio">
                 <span class="ios-slider"></span>
               </label>
+            </div>
+
+            <!-- Profile Đồ họa 3 cấp độ (Append-only) -->
+            <div class="settings-profile-container" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-top: 10px;">
+              <div class="switch-item-label" style="margin-bottom: 8px;">
+                <strong>Cấu hình Đồ họa &amp; Hiệu năng</strong>
+                <small>Tối ưu theo thiết bị: Điện thoại phổ thông hoặc Máy tính hiệu năng cao</small>
+              </div>
+              <div class="settings-segmented-profile" id="settingsGraphicsProfile" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                <button type="button" class="segment-profile-btn" data-profile="lite" style="padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                  <span style="font-size: 14px;">🔋</span>
+                  <span style="font-size: 11px; font-weight: 700;">Tiết Kiệm</span>
+                  <span style="font-size: 9px; opacity: 0.65;">Pin / Nhẹ</span>
+                </button>
+                <button type="button" class="segment-profile-btn" data-profile="balanced" style="padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                  <span style="font-size: 14px;">⚖️</span>
+                  <span style="font-size: 11px; font-weight: 700;">Cân Bằng</span>
+                  <span style="font-size: 9px; opacity: 0.65;">Mặc định</span>
+                </button>
+                <button type="button" class="segment-profile-btn" data-profile="cinematic" style="padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                  <span style="font-size: 14px;">🎬</span>
+                  <span style="font-size: 11px; font-weight: 700;">Điện Ảnh</span>
+                  <span style="font-size: 9px; opacity: 0.65;">Studio PBR</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Thanh trượt Phơi sáng (Append-only) -->
+            <div class="settings-exposure-container" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div class="switch-item-label">
+                  <strong>Độ Phơi Sáng Ánh Sáng</strong>
+                  <small>Cân chỉnh độ sáng phòng mổ / phòng đọc phim</small>
+                </div>
+                <span id="txtExposureVal" style="font-size: 11px; font-weight: 700; color: #38bdf8; font-family: monospace;">1.06</span>
+              </div>
+              <input type="range" id="rngExposureLevel" min="0.75" max="1.50" step="0.02" value="1.06" style="width: 100%; accent-color: #38bdf8; cursor: pointer;">
             </div>
           </div>
         </div>
@@ -306,6 +344,40 @@ export function initSettingsModal(viewer) {
     }
   });
 
+  // PBR quality toggle
+  const chkPBR = modalEl.querySelector('#chkPBRQuality');
+  chkPBR?.addEventListener('change', (e) => {
+    localStorage.setItem('atlas_pbr_enabled', e.target.checked ? 'true' : 'false');
+    showToast(`Đã ${e.target.checked ? 'bật' : 'tắt'} Vật liệu PBR Y khoa`);
+  });
+
+  // Graphics Profile buttons
+  const profileBtns = modalEl.querySelectorAll('.segment-profile-btn');
+  profileBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const profile = btn.dataset.profile;
+      engineManager.setGraphicsProfile(profile);
+      updateSettingsUI();
+      const labels = {
+        lite: 'Tiết Kiệm Pin / Máy nhẹ',
+        balanced: 'Cân Bằng Tiêu Chuẩn',
+        cinematic: 'Điện Ảnh Studio PBR'
+      };
+      showToast(`Đã chọn cấu hình: ${labels[profile] || profile}`);
+    });
+  });
+
+  // Exposure slider
+  const rngExposure = modalEl.querySelector('#rngExposureLevel');
+  const txtExposureVal = modalEl.querySelector('#txtExposureVal');
+  rngExposure?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    engineManager.setExposure(val);
+    if (txtExposureVal) {
+      txtExposureVal.textContent = val.toFixed(2);
+    }
+  });
+
   // Speech audio toggle
   const chkSpeech = modalEl.querySelector('#chkSpeechAudio');
   chkSpeech?.addEventListener('change', (e) => {
@@ -419,6 +491,28 @@ function updateSettingsUI() {
   modalEl.querySelectorAll('.theme-card-option').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.theme === currentTheme);
   });
+
+  const chkPBR = modalEl.querySelector('#chkPBRQuality');
+  if (chkPBR) {
+    chkPBR.checked = localStorage.getItem('atlas_pbr_enabled') !== 'false';
+  }
+
+  const currentProfile = engineManager.getGraphicsProfile();
+  modalEl.querySelectorAll('.segment-profile-btn').forEach(btn => {
+    const isActive = btn.dataset.profile === currentProfile;
+    btn.classList.toggle('active', isActive);
+    btn.style.borderColor = isActive ? '#38bdf8' : 'rgba(255,255,255,0.12)';
+    btn.style.background = isActive ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255,255,255,0.04)';
+    btn.style.boxShadow = isActive ? '0 0 8px rgba(56, 189, 248, 0.28)' : 'none';
+  });
+
+  const rngExposure = modalEl.querySelector('#rngExposureLevel');
+  const txtExposureVal = modalEl.querySelector('#txtExposureVal');
+  if (rngExposure && txtExposureVal) {
+    const curExp = engineManager.getExposure();
+    rngExposure.value = curExp;
+    txtExposureVal.textContent = Number(curExp).toFixed(2);
+  }
 
   const chkSpeech = modalEl.querySelector('#chkSpeechAudio');
   if (chkSpeech) {

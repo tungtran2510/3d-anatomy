@@ -1847,9 +1847,8 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
   const partId = part?.id || '';
   const deck = getVisualDeckForPart(partId);
 
-  // Exclusively dedicate this specialized micro-deck/simulator block to Intervertebral Discs & Herniation
-  // All other organs use the cleaner, streamlined Constituents + Micro-Video + High-Res Photo blocks
-  if (!deck || deck.id !== 'concept_intervertebral_disc') {
+  // Support all specialized micro-decks & 4-stage simulators (Discs, Coronary Atherosclerosis, Liver Cirrhosis, Hip OA, Cataract)
+  if (!deck) {
     container.classList.add('hidden');
     container.innerHTML = '';
     return;
@@ -1899,32 +1898,25 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
     </div>
   ` : '';
 
+  const diagramSrc = deck.diagramImage || deck.slides?.[1]?.image || deck.slides?.[0]?.image || deck.thumbnail;
+  const diagramHtml = diagramSrc ? `
+    <div class="deck-diagram-wrap" style="margin-bottom:8px;border-radius:8px;overflow:hidden;background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.08);text-align:center;padding:4px;">
+      <img src="${diagramSrc}" alt="${deck.titleVi || deck.title}" style="max-width:100%;height:auto;max-height:160px;display:block;margin:0 auto;border-radius:6px;filter:contrast(1.05);" />
+    </div>
+  ` : '';
+
   // Dynamic Header Title (Strict 1-line)
-  let headerTitle = `🔬 CẤU TRÚC GIẢI PHẪU CHUYÊN SÂU`;
+  let headerTitle = deck.titleVi || deck.title || `🔬 CẤU TRÚC GIẢI PHẪU CHUYÊN SÂU`;
   if (deck.id === 'concept_intervertebral_disc') {
     const isDisc = partId.startsWith('Intervertebral disc ');
     const isNucleus = partId.startsWith('Nucleus pulposus ');
     const level = isDisc ? partId.slice('Intervertebral disc '.length) : (isNucleus ? partId.slice('Nucleus pulposus '.length) : 'L4-L5');
     headerTitle = `🔬 CẤU TRÚC ĐĨA ĐỆM CỘT SỐNG ${level}`;
-  } else if (deck.id === 'concept_circle_of_willis') {
-    headerTitle = `🧠 ĐA GIÁC WILLIS NÃO`;
-  } else if (deck.id === 'concept_hepatobiliary_pancreas') {
-    headerTitle = `🧪 GAN – MẬT – TUYẾN TỤY`;
-  } else if (deck.id === 'concept_knee_joint_ligaments') {
-    headerTitle = `🦴 KHỚP GỐI & DÂY CHẰNG CHÉO`;
-  } else if (deck.id === 'concept_gastrointestinal_tract') {
-    headerTitle = `🥣 HỆ TIÊU HÓA & VI THỂ DẠ DÀY`;
-  } else if (deck.id === 'concept_cardiac_valves') {
-    headerTitle = `🫀 TIM MẠCH & 4 BUỒNG TIM`;
-  } else if (deck.id === 'concept_respiratory_alveoli') {
-    headerTitle = `🫁 HỆ HÔ HẤP & PHẾ NANG`;
-  } else if (deck.id === 'concept_urinary_nephron') {
-    headerTitle = `🩺 HỆ TIẾT NIỆU & CẦU THẬN`;
-  } else if (deck.id === 'concept_brachial_plexus') {
-    headerTitle = `⚡ ĐÁM RỐI THẦN KINH CÁNH TAY`;
-  } else if (deck.id === 'concept_inner_ear_vestibular') {
-    headerTitle = `👂 TAI TRONG & TIỀN ĐÌNH`;
   }
+
+  const descText = deck.desc || (deck.id === 'concept_intervertebral_disc'
+    ? 'Cấu trúc đĩa đệm gồm <strong>Vòng sợi bao xơ</strong> (Anulus fibrosus) dày chắc bên ngoài và <strong>Nhân nhầy</strong> (Nucleus pulposus) ở tâm chịu lực nén thủy lực.'
+    : 'Cấu trúc giải phẫu học chuyên sâu và mô phỏng tiến triển 4 giai đoạn lâm sàng.');
 
   container.innerHTML = `
     <div class="disc-subunits-box">
@@ -1932,8 +1924,9 @@ function renderDiscSubunitsSection(part, clinical, mainName, viewer) {
         <span class="disc-subunits-title">${headerTitle}</span>
       </div>
       <div class="disc-structure-intro" style="font-size:12px;color:var(--text-secondary,#475569);margin-bottom:8px;line-height:1.45;">
-        Cấu trúc đĩa đệm gồm <strong>Vòng sợi bao xơ</strong> (Anulus fibrosus) dày chắc bên ngoài và <strong>Nhân nhầy</strong> (Nucleus pulposus) ở tâm chịu lực nén thủy lực.
+        ${descText}
       </div>
+      ${diagramHtml}
       ${subunitsHtml}
       ${simHtml}
       <div class="deck-quick-tools-row">

@@ -140,8 +140,10 @@ class EngineManager {
 
     const { renderer, controls } = viewer;
 
+    // Apply saved profile and exposure
+    this.applyGraphicsProfile();
     if (renderer) {
-      renderer.setPixelRatio(this.drs.nativeRatio);
+      renderer.toneMappingExposure = this.getExposure();
     }
 
     // Track user camera interaction for Dynamic Resolution Scaling
@@ -223,6 +225,71 @@ class EngineManager {
     } catch {
       // Haptics not allowed or denied by user browser settings
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Graphics Profile & Lighting Controls (Lite / Balanced / Cinematic Studio)
+  // ---------------------------------------------------------------------------
+  getGraphicsProfile() {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem('atlas_graphics_profile') || 'balanced';
+    }
+    return 'balanced';
+  }
+
+  setGraphicsProfile(profile) {
+    const valid = ['lite', 'balanced', 'cinematic'];
+    const target = valid.includes(profile) ? profile : 'balanced';
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('atlas_graphics_profile', target);
+    }
+    this.applyGraphicsProfile(target);
+    return target;
+  }
+
+  applyGraphicsProfile(profile = this.getGraphicsProfile()) {
+    if (!this.viewer?.renderer) return;
+    const renderer = this.viewer.renderer;
+    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
+    if (profile === 'lite') {
+      this.drs.nativeRatio = 1.0;
+      this.drs.minRatio = 0.85;
+      renderer.setPixelRatio(1.0);
+      renderer.shadowMap.enabled = false;
+    } else if (profile === 'cinematic') {
+      this.drs.nativeRatio = Math.min(dpr, 2.0);
+      this.drs.minRatio = 1.25;
+      renderer.setPixelRatio(this.drs.nativeRatio);
+      renderer.shadowMap.enabled = true;
+    } else {
+      // balanced
+      this.drs.nativeRatio = Math.min(dpr, 1.35);
+      this.drs.minRatio = 1.0;
+      renderer.setPixelRatio(this.drs.nativeRatio);
+      renderer.shadowMap.enabled = true;
+    }
+    this.viewer.render?.();
+  }
+
+  getExposure() {
+    if (typeof localStorage !== 'undefined') {
+      const val = parseFloat(localStorage.getItem('atlas_exposure_level'));
+      if (!isNaN(val) && val >= 0.7 && val <= 1.6) return val;
+    }
+    return 1.06;
+  }
+
+  setExposure(val) {
+    const num = Math.max(0.7, Math.min(1.6, parseFloat(val) || 1.06));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('atlas_exposure_level', num.toFixed(2));
+    }
+    if (this.viewer?.renderer) {
+      this.viewer.renderer.toneMappingExposure = num;
+      this.viewer.render?.();
+    }
+    return num;
   }
 
   // ---------------------------------------------------------------------------

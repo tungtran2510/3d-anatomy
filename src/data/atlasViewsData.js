@@ -1754,6 +1754,90 @@ export const ATLAS_CROSS_SECTIONS_CATEGORIES = [
         desc: 'Mặt phẳng đứng dọc chính giữa qua các tạng vùng chậu và đáy chậu.'
       }
     ]
+  },
+  {
+    id: 'cs_group_knee_radiology',
+    titleVi: 'Khớp Gối (Cắt Lớp Đối Chiếu MRI/X-Quang)',
+    plane: 'coronal',
+    cards: [
+      {
+        id: 'cs_knee_coronal_mri',
+        titleVi: '1. Khớp Gối (Cắt Đứng Ngang Coronal MRI)',
+        title: '1. Knee (Coronal MRI)',
+        subtitle: 'Lát cắt đứng ngang bộc lộ sụn chêm, dây chằng chéo và lồi cầu xương đùi',
+        badge: 'Cắt đứng ngang',
+        plane: 'coronal',
+        offset: 0.02,
+        camera: { x: 0.18, y: 0.48, z: 0.42, targetX: 0.15, targetY: 0.48, targetZ: 0 },
+        systems: ['skeletal', 'joints'],
+        image: '/images/atlas/hip_joint_anatomy.svg',
+        scoutLabel: 'Knee Coronal MRI',
+        desc: 'Mặt phẳng đứng ngang đối chiếu phim MRI khớp gối: đánh giá rách sụn chêm trong/ngoài, đứt dây chằng bên chày (MCL) và bên mác (LCL).'
+      },
+      {
+        id: 'cs_knee_sagittal_mri',
+        titleVi: '2. Khớp Gối (Cắt Đứng Dọc Sagittal MRI)',
+        title: '2. Knee (Sagittal MRI)',
+        subtitle: 'Lát cắt đứng dọc qua dây chằng chéo trước (ACL), chéo sau (PCL) và xương bánh chè',
+        badge: 'Cắt đứng dọc',
+        plane: 'sagittal',
+        offset: 0.15,
+        camera: { x: 0.52, y: 0.48, z: 0.05, targetX: 0.15, targetY: 0.48, targetZ: 0 },
+        systems: ['skeletal', 'joints'],
+        image: '/images/atlas/hip_joint_anatomy.svg',
+        scoutLabel: 'Knee Sagittal MRI',
+        desc: 'Mặt phẳng vàng trong chẩn đoán chấn thương thể thao: đối chiếu toàn vẹn bó dây chằng chéo trước (ACL), dây chằng chéo sau (PCL) và sừng sau sụn chêm.'
+      },
+      {
+        id: 'cs_knee_axial_patella',
+        titleVi: '3. Khớp Gối (Cắt Ngang Bánh Chè - Đùi Axial)',
+        title: '3. Knee (Axial Patella)',
+        subtitle: 'Lát cắt ngang khớp bánh chè đùi đối chiếu tư thế chụp Skyline X-quang',
+        badge: 'Cắt ngang',
+        plane: 'axial',
+        offset: 0.49,
+        camera: { x: 0.15, y: 0.72, z: 0.05, targetX: 0.15, targetY: 0.49, targetZ: 0 },
+        systems: ['skeletal', 'joints'],
+        image: '/images/atlas/hip_joint_anatomy.svg',
+        scoutLabel: 'Knee Axial Skyline',
+        desc: 'Mặt phẳng cắt ngang qua diện khớp bánh chè - lồi cầu đùi: đánh giá độ nghiêng, trật khớp bánh chè và thoái hóa sụn khớp bánh chè đùi.'
+      }
+    ]
+  },
+  {
+    id: 'cs_group_hip_radiology',
+    titleVi: 'Khớp Háng (Cắt Lớp Đối Chiếu CT/X-Quang)',
+    plane: 'coronal',
+    cards: [
+      {
+        id: 'cs_hip_coronal_ap',
+        titleVi: '1. Khớp Háng (Cắt Đứng Ngang Khung Chậu Coronal)',
+        title: '1. Hip (Coronal AP)',
+        subtitle: 'Lát cắt đứng ngang bộc lộ chỏm xương đùi, ổ cối và sụn viền khớp háng',
+        badge: 'Cắt đứng ngang',
+        plane: 'coronal',
+        offset: 0.00,
+        camera: { x: 0.18, y: 0.86, z: 0.52, targetX: 0.15, targetY: 0.86, targetZ: 0 },
+        systems: ['skeletal', 'joints'],
+        image: '/images/atlas/hip_joint_anatomy.svg',
+        scoutLabel: 'Hip Pelvis Coronal',
+        desc: 'Mặt phẳng đối chiếu X-quang khung chậu thẳng (Pelvis AP): đánh giá góc cổ thân xương đùi (CCD), độ che phủ ổ cối và khe khớp háng.'
+      },
+      {
+        id: 'cs_hip_axial_acetabulum',
+        titleVi: '2. Khớp Háng (Cắt Ngang Ổ Cối & Chỏm Đùi Axial CT)',
+        title: '2. Hip (Axial CT)',
+        subtitle: 'Lát cắt ngang qua trung tâm ổ cối, chỏm xương đùi và bao khớp háng',
+        badge: 'Cắt ngang',
+        plane: 'axial',
+        offset: 0.84,
+        camera: { x: 0.15, y: 1.15, z: 0.05, targetX: 0.15, targetY: 0.84, targetZ: 0 },
+        systems: ['skeletal', 'joints'],
+        image: '/images/atlas/hip_joint_anatomy.svg',
+        scoutLabel: 'Hip Axial CT',
+        desc: 'Mặt phẳng cắt lớp vi tính (CT) qua ổ cối: đánh giá vỡ thành trước/thành sau ổ cối và hoại tử vô mạch chỏm xương đùi.'
+      }
+    ]
   }
 ];
 

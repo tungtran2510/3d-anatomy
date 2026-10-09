@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="hipBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#081420" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <!-- Bone Ivory Gradient -->
+    <linearGradient id="boneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="50%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+
+    <!-- Cartilage Cyan Opalescence -->
+    <linearGradient id="hipCartilageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.6" />
+    </linearGradient>
+
+    <!-- Ligament Pearlescent White/Gold -->
+    <linearGradient id="ligamentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7" />
+      <stop offset="100%" stop-color="#fde68a" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#hipBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="250" height="26" rx="6" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1" />
+    <text x="12" y="17" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">KHỚP CHỎM CẦU CHỊU LỰC LỚN NHẤT</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Giải Phẫu Khớp Háng (Articulatio Coxae)</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Mặt cắt trán khớp háng: Ổ cối, Sụn viền, Chỏm xương đùi &amp; Dây chằng chậu đùi</text>
+
+  <!-- Central Anatomy Graphic -->
+  <g transform="translate(300, 220)">
+    <!-- 1. Pelvis / Acetabular bone (Khối xương chậu & trần ổ cối) -->
+    <path d="M-90,-120 C-40,-130 50,-120 100,-95 C120,-80 130,-45 110,-20 C90,-35 45,-45 15,-40 C-30,-35 -65,-10 -75,20 C-95,15 -115,-30 -115,-70 Z" 
+          fill="url(#boneGrad)" stroke="#64748b" stroke-width="1.8"/>
+
+    <!-- Acetabulum Cup (Lòng ổ cối hình chén sâu) -->
+    <path d="M-65,5 C-45,-45 45,-45 65,5 C40,40 -40,40 -65,5 Z" 
+          fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Acetabular Labrum (Sụn viền ổ cối tăng độ sâu bao khớp) -->
+    <ellipse cx="-65" cy="5" rx="8" ry="14" fill="url(#hipCartilageGrad)" stroke="#0284c7" stroke-width="1.5"/>
+    <ellipse cx="65" cy="5" rx="8" ry="14" fill="url(#hipCartilageGrad)" stroke="#0284c7" stroke-width="1.5"/>
+
+    <!-- 2. Femoral Head (Chỏm xương đùi hình 2/3 khối cầu) -->
+    <circle cx="0" cy="5" r="48" fill="url(#boneGrad)" stroke="#475569" stroke-width="1.5"/>
+    <!-- Articular Cartilage on Head (Sụn khớp bao bọc chỏm) -->
+    <path d="M-42,-18 C-30,-45 30,-45 42,-18" fill="none" stroke="url(#hipCartilageGrad)" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Fovea capitis & Ligamentum teres (Hõm chỏm đùi & Dây chằng tròn) -->
+    <circle cx="0" cy="-5" r="5" fill="#f59e0b" />
+    <path d="M0,-5 L0,-35" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 2"/>
+
+    <!-- 3. Femoral Neck (Cổ xương đùi) -->
+    <path d="M-35,35 L-55,80 L-15,100 L15,80 L35,35" fill="url(#boneGrad)" stroke="#64748b" stroke-width="1.5"/>
+
+    <!-- Greater Trochanter (Mấu chuyển lớn) & Lesser Trochanter (Mấu chuyển bé) -->
+    <path d="M-55,80 C-85,90 -95,120 -80,145 L-40,150 L-30,110 Z" fill="url(#boneGrad)" stroke="#64748b" stroke-width="1.5"/>
+    <path d="M15,80 C35,95 45,115 35,135 L5,145 Z" fill="url(#boneGrad)" stroke="#64748b" stroke-width="1.5"/>
+
+    <!-- Femoral Shaft (Thân xương đùi kéo dài xuống dưới) -->
+    <path d="M-40,150 L-35,210 L5,210 L5,145 Z" fill="url(#boneGrad)" stroke="#64748b" stroke-width="1.5"/>
+
+    <!-- 4. Iliofemoral Ligament (Dây chằng chậu đùi Bigelow hình chữ Y - Dây chằng khỏe nhất cơ thể) -->
+    <path d="M-70,-20 C-85,25 -80,60 -60,85 L-50,85 C-65,55 -70,25 -55,-10 Z" 
+          fill="url(#ligamentGrad)" stroke="#d97706" stroke-width="1.2" opacity="0.85"/>
+    <path d="M50,-20 C70,25 65,60 25,85 L18,85 C55,55 55,25 40,-10 Z" 
+          fill="url(#ligamentGrad)" stroke="#d97706" stroke-width="1.2" opacity="0.85"/>
+
+    <!-- Capsule envelope outline -->
+    <path d="M-72,-15 C-105,45 -85,95 -60,105" fill="none" stroke="#fef08a" stroke-width="1.5" stroke-dasharray="4 2"/>
+    <path d="M72,-15 C95,45 65,95 30,105" fill="none" stroke="#fef08a" stroke-width="1.5" stroke-dasharray="4 2"/>
+  </g>
+
+  <!-- Left Callouts (Ổ cối & Dây chằng) -->
+  <g transform="translate(30, 140)">
+    <text x="0" y="0" fill="#cbd5e1" font-size="11" font-weight="700">Ổ Cối Xương Chậu (Acetabulum)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Hõm khớp sâu bao trọn chỏm xương đùi</text>
+    <path d="M140,20 L180,20 L230,10" fill="none" stroke="#cbd5e1" stroke-width="1" />
+    <circle cx="230" cy="10" r="2.5" fill="#cbd5e1" />
+  </g>
+
+  <g transform="translate(30, 230)">
+    <text x="0" y="0" fill="#38bdf8" font-size="11" font-weight="700">Sụn Viền Ổ Cối (Labrum)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Vành sụn sợi làm sâu hõm khớp &amp; mút kín</text>
+    <path d="M130,20 L170,20 L225,-5" fill="none" stroke="#38bdf8" stroke-width="1" />
+    <circle cx="225" cy="-5" r="2.5" fill="#38bdf8" />
+  </g>
+
+  <!-- Right Callouts (Chỏm đùi & Dây chằng chậu đùi) -->
+  <g transform="translate(420, 140)">
+    <text x="0" y="0" fill="#cbd5e1" font-size="11" font-weight="700">Chỏm Xương Đùi (Caput Femoris)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Hình 2/3 khối cầu bọc sụn trong nhẵn bóng</text>
+    <path d="M-5,10 L-40,10 L-75,45" fill="none" stroke="#cbd5e1" stroke-width="1" />
+    <circle cx="-75" cy="45" r="2.5" fill="#cbd5e1" />
+  </g>
+
+  <g transform="translate(420, 220)">
+    <text x="0" y="0" fill="#fde68a" font-size="11" font-weight="700">Dây Chằng Chậu Đùi (Bigelow)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Chịu lực kéo &gt;350kg, ngăn ngửa khớp quá mức</text>
+    <path d="M-5,10 L-35,10 L-85,30" fill="none" stroke="#fde68a" stroke-width="1" />
+    <circle cx="-85" cy="30" r="2.5" fill="#fde68a" />
+  </g>
+
+  <g transform="translate(420, 300)">
+    <text x="0" y="0" fill="#f59e0b" font-size="11" font-weight="700">Mấu Chuyển Lớn (Trochanter)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Điểm bám của khối cơ mông nhỡ và mông bé</text>
+    <path d="M-5,10 L-45,10 L-100,-20" fill="none" stroke="#f59e0b" stroke-width="1" />
+    <circle cx="-100" cy="-20" r="2.5" fill="#f59e0b" />
+  </g>
+</svg>

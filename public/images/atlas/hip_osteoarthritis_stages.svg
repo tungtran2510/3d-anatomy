@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="hipOaBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09141f" />
+      <stop offset="100%" stop-color="#18181b" />
+    </linearGradient>
+
+    <!-- Stage Gradients -->
+    <linearGradient id="oaStage0" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="oaStage1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#854d0e" />
+      <stop offset="100%" stop-color="#422006" />
+    </linearGradient>
+    <linearGradient id="oaStage2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9a3412" />
+      <stop offset="100%" stop-color="#431407" />
+    </linearGradient>
+    <linearGradient id="oaStage3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#4c0519" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#hipOaBg)" stroke="#27272a" stroke-width="1.5" />
+
+  <!-- Badge Header -->
+  <g transform="translate(24, 24)">
+    <rect width="250" height="26" rx="6" fill="#0284c7" fill-opacity="0.3" stroke="#38bdf8" stroke-width="1" />
+    <text x="12" y="17" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">TIẾN TRIỂN THOÁI HÓA KHỚP HÁNG</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">4 Giai Đoạn Thoái Hóa Khớp Háng (Kellgren-Lawrence I – IV)</text>
+  <text x="24" y="88" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Bào mòn sụn khớp, hẹp khe khớp, xơ đặc xương dưới sụn đến biến dạng chỏm xương đùi</text>
+
+  <!-- 4 Columns -->
+  <!-- STAGE 0: ĐỘ I (SỚM) -->
+  <g transform="translate(20, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#oaStage0)" stroke="#059669" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#059669" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">ĐỘ I</text>
+    <text x="10" y="48" fill="#34d399" font-size="11" font-weight="700">Nghi Ngờ Thoái Hóa</text>
+
+    <!-- Hip Joint Diagram -->
+    <g transform="translate(65, 95)">
+      <!-- Acetabulum -->
+      <path d="M-22,-20 C-5,-28 15,-28 25,-15" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+      <!-- Sụn khớp bình thường còn dày -->
+      <path d="M-20,-16 C-5,-22 12,-22 22,-12" fill="none" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- Femoral head -->
+      <circle cx="0" cy="8" r="20" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+    </g>
+
+    <text x="10" y="152" fill="#e2e8f0" font-size="9.5" font-weight="600">• Khe khớp còn bảo tồn</text>
+    <text x="10" y="168" fill="#cbd5e1" font-size="9">• Nghi ngờ gai xương nhỏ</text>
+    <text x="10" y="184" fill="#cbd5e1" font-size="9">• Khó chịu thoáng qua</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#065f46" />
+    <text x="32" y="229" fill="#a7f3d0" font-size="9.5" font-weight="700">Giai đoạn nhẹ</text>
+  </g>
+
+  <!-- STAGE 1: ĐỘ II (NHẸ) -->
+  <g transform="translate(162, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#oaStage1)" stroke="#ca8a04" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#ca8a04" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">ĐỘ II</text>
+    <text x="10" y="48" fill="#facc15" font-size="11" font-weight="700">Thoái Hóa Nhẹ</text>
+
+    <!-- Hip Joint Diagram with Small Osteophytes -->
+    <g transform="translate(65, 95)">
+      <!-- Acetabulum with Small spur -->
+      <path d="M-25,-18 C-5,-28 15,-28 28,-12" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+      <polygon points="28,-12 32,-16 29,-10" fill="#fef08a" />
+      <!-- Cartilage slightly thin -->
+      <path d="M-20,-14 C-5,-20 12,-20 22,-10" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+      <!-- Femoral head -->
+      <circle cx="0" cy="8" r="20" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+    </g>
+
+    <text x="10" y="152" fill="#e2e8f0" font-size="9.5" font-weight="600">• Gai xương rõ ở rìa</text>
+    <text x="10" y="168" fill="#cbd5e1" font-size="9">• Khe khớp hẹp nhẹ</text>
+    <text x="10" y="184" fill="#cbd5e1" font-size="9">• Đau nhẹ khi đi bộ xa</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#713f12" />
+    <text x="25" y="229" fill="#fde047" font-size="9.5" font-weight="700">Bảo tồn sụn</text>
+  </g>
+
+  <!-- STAGE 2: ĐỘ III (TRUNG BÌNH) -->
+  <g transform="translate(304, 110)">
+    <rect width="130" height="245" rx="10" fill="url(#oaStage2)" stroke="#ea580c" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#ea580c" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">ĐỘ III</text>
+    <text x="10" y="48" fill="#fb923c" font-size="11" font-weight="700">Thoái Hóa Vừa</text>
+
+    <!-- Hip Joint Diagram with Moderate Narrowing & Sclerosis -->
+    <g transform="translate(65, 95)">
+      <!-- Sclerotic Acetabulum roof -->
+      <path d="M-26,-15 C-5,-24 15,-24 30,-8" fill="none" stroke="#cbd5e1" stroke-width="6"/>
+      <!-- Cartilage very thin / fragmented -->
+      <path d="M-18,-11 C-5,-16 10,-16 18,-8" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <!-- Femoral head close to roof -->
+      <circle cx="0" cy="5" r="20" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+      <ellipse cx="0" cy="-10" rx="8" ry="3" fill="#fdba74" />
+    </g>
+
+    <text x="10" y="152" fill="#e2e8f0" font-size="9.5" font-weight="600">• Hẹp khe khớp &gt;50%</text>
+    <text x="10" y="168" fill="#cbd5e1" font-size="9">• Xơ đặc xương dưới sụn</text>
+    <text x="10" y="184" fill="#cbd5e1" font-size="9">• Đau cản trở leo cầu thang</text>
+    <rect x="8" y="215" width="114" height="20" rx="4" fill="#7c2d12" />
+    <text x="24" y="229" fill="#fdba74" font-size="9.5" font-weight="700">Hẹp khớp rõ rệt</text>
+  </g>
+
+  <!-- STAGE 3: ĐỘ IV (NẶNG) -->
+  <g transform="translate(446, 110)">
+    <rect width="134" height="245" rx="10" fill="url(#oaStage3)" stroke="#e11d48" stroke-width="1.2" />
+    <rect x="8" y="10" width="70" height="20" rx="4" fill="#e11d48" />
+    <text x="14" y="24" fill="#ffffff" font-size="10" font-weight="700">ĐỘ IV</text>
+    <text x="10" y="48" fill="#fda4af" font-size="11" font-weight="700">Thoái Hóa Nặng</text>
+
+    <!-- Hip Joint Bone on Bone Collapse -->
+    <g transform="translate(67, 95)">
+      <!-- Massive osteophytes & direct contact -->
+      <path d="M-30,-12 C-5,-20 15,-20 34,-5" fill="none" stroke="#64748b" stroke-width="7"/>
+      <!-- Sụn mòn hoàn toàn (Bone-on-bone) -->
+      <!-- Deformed flattened femoral head -->
+      <path d="M-22,3 C-15,-6 15,-6 22,3 C24,15 15,24 0,24 C-15,24 -24,15 -22,3 Z" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+      <!-- Large bone spurs -->
+      <polygon points="34,-5 40,-8 36,0" fill="#fca5a5" />
+      <polygon points="-30,-12 -36,-16 -32,-8" fill="#fca5a5" />
+    </g>
+
+    <text x="10" y="152" fill="#e2e8f0" font-size="9.5" font-weight="600">• Mất toàn bộ sụn khớp</text>
+    <text x="10" y="168" fill="#cbd5e1" font-size="9">• Xương cọ xát xương</text>
+    <text x="10" y="184" fill="#cbd5e1" font-size="9">• Biến dạng chỏm, dính khớp</text>
+    <rect x="8" y="215" width="118" height="20" rx="4" fill="#4c0519" />
+    <text x="22" y="229" fill="#fda4af" font-size="9.5" font-weight="700">Chỉ định thay khớp</text>
+  </g>
+</svg>

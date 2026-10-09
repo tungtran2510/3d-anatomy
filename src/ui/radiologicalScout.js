@@ -42,6 +42,9 @@ export function showScoutView(card, plane = 'axial', offset = 1.0) {
   currentPlane = plane || card?.plane || 'axial';
   currentOffset = offset !== undefined ? offset : (card?.offset || 1.0);
 
+  if (!scoutBoxEl) {
+    initRadiologicalScout(typeof window !== 'undefined' ? window.viewer : null);
+  }
   if (!scoutBoxEl) return;
   scoutBoxEl.classList.remove('hidden');
 
@@ -82,7 +85,132 @@ function drawScoutGraphic() {
   ctx.save();
   ctx.translate(w / 2, h / 2);
 
-  if (currentPlane === 'axial') {
+  const cardId = (currentCard?.id || '').toLowerCase();
+  const label = (currentCard?.scoutLabel || currentCard?.title || '').toLowerCase();
+  const isKnee = cardId.includes('knee') || label.includes('knee') || label.includes('gối');
+  const isHip = cardId.includes('hip') || label.includes('hip') || label.includes('háng');
+  const isThorax = cardId.includes('thorax') || cardId.includes('cardiac') || label.includes('thorax') || label.includes('tim') || label.includes('ngực');
+
+  if (isKnee) {
+    // Knee joint radiological scout silhouette (Femur condyles + Tibia plateau + Fibula)
+    ctx.strokeStyle = '#94a3b8';
+    ctx.fillStyle = '#1e293b';
+    ctx.lineWidth = 2.5;
+
+    // Distal Femur condyles
+    ctx.beginPath();
+    ctx.arc(-10, -14, 12, Math.PI, 0);
+    ctx.arc(10, -14, 12, Math.PI, 0);
+    ctx.stroke();
+
+    // Proximal Tibia plateau
+    ctx.beginPath();
+    ctx.moveTo(-22, 10);
+    ctx.lineTo(22, 10);
+    ctx.lineTo(16, 32);
+    ctx.lineTo(-16, 32);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Fibula head lateral
+    ctx.beginPath();
+    ctx.arc(24, 16, 5, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Laser plane indicator
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([4, 2]);
+    ctx.beginPath();
+    if (currentPlane === 'axial') {
+      ctx.moveTo(-w / 2 + 8, 2);
+      ctx.lineTo(w / 2 - 8, 2);
+    } else if (currentPlane === 'sagittal') {
+      ctx.moveTo(0, -h / 2 + 8);
+      ctx.lineTo(0, h / 2 - 8);
+    } else {
+      // Coronal
+      ctx.moveTo(-w / 2 + 8, -4);
+      ctx.lineTo(w / 2 - 8, -4);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  } else if (isHip) {
+    // Hip joint radiological scout silhouette (Acetabulum + Femoral head & neck)
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.fillStyle = '#1e293b';
+    ctx.lineWidth = 2.5;
+
+    // Acetabular roof
+    ctx.beginPath();
+    ctx.arc(0, -6, 18, Math.PI * 0.8, Math.PI * 2.1);
+    ctx.stroke();
+
+    // Femoral head (circle)
+    ctx.beginPath();
+    ctx.arc(2, -4, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Femoral neck & shaft
+    ctx.beginPath();
+    ctx.moveTo(12, 4);
+    ctx.lineTo(26, 22);
+    ctx.lineTo(22, 34);
+    ctx.lineTo(6, 12);
+    ctx.stroke();
+
+    // Laser plane indicator
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([4, 2]);
+    ctx.beginPath();
+    if (currentPlane === 'axial') {
+      ctx.moveTo(-w / 2 + 8, -4);
+      ctx.lineTo(w / 2 - 8, -4);
+    } else {
+      ctx.moveTo(2, -h / 2 + 8);
+      ctx.lineTo(2, h / 2 - 8);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  } else if (isThorax) {
+    // Thorax / Chest radiological scout silhouette
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.fillStyle = '#1e293b';
+    ctx.lineWidth = 2.2;
+
+    // Rib cage contour
+    ctx.beginPath();
+    ctx.ellipse(0, 2, 28, 30, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Cardiac shadow (central-left silhouette)
+    ctx.fillStyle = '#334155';
+    ctx.beginPath();
+    ctx.ellipse(4, 4, 14, 16, Math.PI * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Spine marker
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(-3, -24, 6, 48);
+
+    // Laser plane indicator
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([4, 2]);
+    ctx.beginPath();
+    if (currentPlane === 'axial') {
+      ctx.moveTo(-w / 2 + 8, 4);
+      ctx.lineTo(w / 2 - 8, 4);
+    } else {
+      ctx.moveTo(0, -h / 2 + 8);
+      ctx.lineTo(0, h / 2 - 8);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  } else if (currentPlane === 'axial') {
     // Head / Torso axial cross section (oval with bone cortex & internal soft tissue)
     const radX = w * 0.38;
     const radY = h * 0.32;

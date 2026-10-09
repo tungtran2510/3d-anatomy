@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cardiacBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09131e" />
+      <stop offset="100%" stop-color="#18181b" />
+    </linearGradient>
+
+    <!-- Myocardium Heart -->
+    <linearGradient id="myocardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#4c0519" />
+    </linearGradient>
+
+    <!-- Aorta Scarlet -->
+    <linearGradient id="aortaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+
+    <!-- Pulmonary Blue -->
+    <linearGradient id="pulmonaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="380" rx="16" fill="url(#cardiacBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title Badge -->
+  <g transform="translate(24, 24)">
+    <rect width="260" height="26" rx="6" fill="#be123c" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1" />
+    <text x="12" y="17" fill="#fb7185" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5" font-weight="700" letter-spacing="0.5">TIM MẠCH &amp; ĐIỆN SINH LÝ HỌC</text>
+  </g>
+  <text x="24" y="70" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="16" font-weight="700">Động Mạch Vành Nuôi Tim &amp; Hệ Thống Dẫn Truyền Tự Động</text>
+  <text x="24" y="88" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto" font-size="11.5">Sự phân nhánh của LAD, LCx, RCA và mạng lưới phát xung nhịp SA – AV – Bó His</text>
+
+  <!-- Central Heart Anatomy -->
+  <g transform="translate(300, 225)">
+    <!-- 1. Heart silhouette background -->
+    <path d="M0,110 C-110,60 -150,-20 -90,-80 C-40,-120 0,-70 0,-40 C0,-70 40,-120 90,-80 C150,-20 110,60 0,110 Z" 
+          fill="url(#myocardGrad)" stroke="#be123c" stroke-width="2" />
+
+    <!-- 2. Ascending Aorta & Arch -->
+    <path d="M-15,-60 C-20,-115 15,-130 45,-120 C70,-110 70,-80 50,-50" 
+          fill="none" stroke="url(#aortaGrad)" stroke-width="20" stroke-linecap="round" />
+    <!-- Pulmonary Trunk crossing -->
+    <path d="M-35,-45 C-30,-80 -5,-95 20,-90" 
+          fill="none" stroke="url(#pulmonaryGrad)" stroke-width="16" stroke-linecap="round" />
+
+    <!-- 3. CORONARY ARTERY TREE (Đỏ tươi neon rực rỡ) -->
+    <!-- Left Main (LCA) -> LAD & LCx -->
+    <!-- Left Anterior Descending (LAD) chạy rãnh liên thất trước -->
+    <path d="M20,-48 C28,-25 25,10 10,40 C-2,65 -8,90 -2,105" 
+          fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" />
+    <!-- Diagonal branches off LAD -->
+    <path d="M22,-8 C40,10 55,25 65,45" fill="none" stroke="#f87171" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M12,38 C28,55 45,70 50,85" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Left Circumflex (LCx) vòng qua rãnh nhĩ thất trái -->
+    <path d="M20,-48 C45,-45 75,-30 95,-5 C105,15 105,35 90,55" 
+          fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" />
+    <!-- Obtuse Marginal branch -->
+    <path d="M85,-15 C95,5 98,25 90,45" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Right Coronary Artery (RCA) -->
+    <path d="M-22,-45 C-55,-40 -75,-25 -85,5 C-92,30 -85,55 -55,75 C-35,88 -15,100 0,108" 
+          fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" />
+    <!-- Marginal branch of RCA -->
+    <path d="M-85,15 C-75,35 -65,55 -50,68" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- 4. CARDIAC CONDUCTION SYSTEM (Màu vàng điện quang phát xung) -->
+    <!-- Nút xoang (SA Node) ở thành nhĩ phải -->
+    <circle cx="-65" cy="-70" r="6" fill="#facc15" stroke="#ca8a04" stroke-width="2" />
+    <!-- Xung nhịp tỏa ra từ nút xoang -->
+    <circle cx="-65" cy="-70" r="11" fill="none" stroke="#facc15" stroke-width="1.2" stroke-dasharray="2 2" opacity="0.8"/>
+
+    <!-- Bó liên nút dẫn truyền đến Nút nhĩ thất (AV Node) -->
+    <path d="M-60,-65 C-45,-45 -35,-25 -20,-15" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="3 2"/>
+
+    <!-- Nút nhĩ thất (AV Node) nằm ở vách liên nhĩ thất -->
+    <circle cx="-18" cy="-15" r="5" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
+
+    <!-- Bó His xuyên qua vách ngăn -->
+    <path d="M-15,-10 L-10,10" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Nhánh bó phải & trái (Right & Left Bundle Branches) -->
+    <path d="M-10,10 C-18,35 -20,60 -25,85" fill="none" stroke="#facc15" stroke-width="2.5"/>
+    <path d="M-10,10 C2,35 15,60 20,80" fill="none" stroke="#facc15" stroke-width="2.5"/>
+
+    <!-- Mạng lưới Purkinje kích hoạt cơ tâm thất co bóp -->
+    <path d="M-25,85 C-40,75 -60,65 -75,45" fill="none" stroke="#fef08a" stroke-width="1.5" stroke-dasharray="2 1"/>
+    <path d="M-25,85 C-30,95 -15,102 -5,105" fill="none" stroke="#fef08a" stroke-width="1.5" stroke-dasharray="2 1"/>
+    <path d="M20,80 C40,70 65,55 75,35" fill="none" stroke="#fef08a" stroke-width="1.5" stroke-dasharray="2 1"/>
+  </g>
+
+  <!-- Left Callouts (Mạch vành phải & Nút xoang) -->
+  <g transform="translate(30, 140)">
+    <text x="0" y="0" fill="#facc15" font-size="11" font-weight="700">Nút Xoang (SA Node)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Máy phát nhịp tự nhiên (60–100 ck/phút)</text>
+    <path d="M125,20 L160,20 L200,-5" fill="none" stroke="#facc15" stroke-width="1" />
+    <circle cx="200" cy="-5" r="2.5" fill="#facc15" />
+  </g>
+
+  <g transform="translate(30, 230)">
+    <text x="0" y="0" fill="#ef4444" font-size="11" font-weight="700">ĐM Vành Phải (RCA)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Cấp máu thất phải, nút xoang &amp; nút nhĩ thất</text>
+    <path d="M130,20 L165,20 L210,15" fill="none" stroke="#ef4444" stroke-width="1" />
+    <circle cx="210" cy="15" r="2.5" fill="#ef4444" />
+  </g>
+
+  <g transform="translate(30, 310)">
+    <text x="0" y="0" fill="#facc15" font-size="11" font-weight="700">Mạng Lưới Purkinje</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Dẫn truyền điện siêu tốc kích hoạt tâm thất</text>
+    <path d="M120,20 L180,20 L250,-10" fill="none" stroke="#facc15" stroke-width="1" />
+    <circle cx="250" cy="-10" r="2.5" fill="#facc15" />
+  </g>
+
+  <!-- Right Callouts (Mạch vành trái & Bó His) -->
+  <g transform="translate(420, 140)">
+    <text x="0" y="0" fill="#ef4444" font-size="11" font-weight="700">ĐM Liên Thất Trước (LAD)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">ĐM quan trọng nhất nuôi vách tim &amp; mỏm tim</text>
+    <path d="M-5,10 L-40,10 L-95,65" fill="none" stroke="#ef4444" stroke-width="1" />
+    <circle cx="-95" cy="65" r="2.5" fill="#ef4444" />
+  </g>
+
+  <g transform="translate(420, 220)">
+    <text x="0" y="0" fill="#ef4444" font-size="11" font-weight="700">ĐM Mũ Tim (LCx)</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Vòng ra sau cấp máu thành bên &amp; sau thất trái</text>
+    <path d="M-5,10 L-35,10 L-55,25" fill="none" stroke="#ef4444" stroke-width="1" />
+    <circle cx="-55" cy="25" r="2.5" fill="#ef4444" />
+  </g>
+
+  <g transform="translate(420, 300)">
+    <text x="0" y="0" fill="#facc15" font-size="11" font-weight="700">Nút Nhĩ Thất &amp; Bó His</text>
+    <text x="0" y="14" fill="#94a3b8" font-size="9.5">Trì hoãn xung nhịp 0.1s để nhĩ tống máu</text>
+    <path d="M-5,10 L-50,10 L-130,-75" fill="none" stroke="#facc15" stroke-width="1" />
+    <circle cx="-130" cy="-75" r="2.5" fill="#facc15" />
+  </g>
+</svg>

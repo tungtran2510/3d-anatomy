@@ -41,6 +41,8 @@ export function hasDissectionLayers(partId) {
   if (/superior lobe of (left|right) lung/i.test(partId)) return true;
   if (/pectoralis major/i.test(partId)) return true;
   if (/rectus abdominis/i.test(partId)) return true;
+  if (/patella|knee|khớp gối/i.test(partId)) return true;
+  if (/capsule of hip|hip joint|khớp háng/i.test(partId)) return true;
   return false;
 }
 
@@ -357,7 +359,105 @@ export function dissectMultiLayer(rawPartId, viewer = state.viewer) {
     return { success: true, organ: 'Muscle', layerIndex: 1, isFinal: false };
   }
 
-  // 8. TẤT CẢ CÁC BỘ PHẬN ĐƠN LẺ KHÁC (FALLBACK CHUẨN)
+  // 8. KHỚP GỐI (KNEE & PATELLA) - BÓC XƯƠNG BÁNH CHÈ & HÃM GÂN -> LỘ DÂY CHẰNG CHÉO & SỤN CHÊM
+  if (/patella|knee|khớp gối/i.test(rawPartId)) {
+    const side = rawPartId.toLowerCase().includes('.l') || rawPartId.toLowerCase().includes('left') || rawPartId.toLowerCase().includes('trái') ? '.l' : '.r';
+    const sideVi = side === '.l' ? 'trái' : 'phải';
+    const patellaId = `Patella${side}`;
+    const pVis = getPartVisibility(patellaId);
+
+    if (pVis.visible) {
+      // Lớp 1: Bóc xương bánh chè & hãm bánh chè -> Lộ dây chằng chéo trước/sau & sụn chêm
+      hidePart(patellaId);
+      hidePart(`Lateral patellar retinaculum${side}`);
+      hidePart(`Medial patellar retinaculum${side}`);
+      const deepLigaments = [
+        `Anterior cruciate ligament${side}`,
+        `Posterior cruciate ligament${side}`,
+        `Medial meniscus${side}`,
+        `Lateral meniscus${side}`
+      ];
+      deepLigaments.forEach(id => setStructureVisible(id, true));
+      pushUndo({
+        type: 'dissect_layer',
+        organ: 'Knee',
+        side,
+        layerIndex: 1,
+        peeledId: patellaId,
+        layerNameVi: `Xương bánh chè ${sideVi}`
+      });
+      selectPart(`Anterior cruciate ligament${side}`, targetViewer, true);
+      targetViewer?.render?.();
+      showToast(`🔪 Mở phẫu trường Khớp gối ${sideVi}: Bóc bánh chè, lộ dây chằng chéo ACL/PCL & sụn chêm!`);
+      return { success: true, organ: 'Knee', layerIndex: 1, isFinal: false };
+    } else {
+      // Lớp 2: Bóc tách sụn chêm & dây chằng chéo
+      const aclId = `Anterior cruciate ligament${side}`;
+      hidePart(aclId);
+      hidePart(`Posterior cruciate ligament${side}`);
+      hidePart(`Medial meniscus${side}`);
+      hidePart(`Lateral meniscus${side}`);
+      pushUndo({
+        type: 'dissect_layer',
+        organ: 'Knee',
+        side,
+        layerIndex: 2,
+        peeledId: aclId,
+        layerNameVi: `Dây chằng chéo & sụn chêm ${sideVi}`
+      });
+      deselectPart();
+      targetViewer?.render?.();
+      showToast(`🔪 Bóc tách Lớp 2 (Dây chằng khớp gối ${sideVi}): Lộ mâm chày & lồi cầu đùi!`);
+      return { success: true, organ: 'Knee', layerIndex: 2, isFinal: true };
+    }
+  }
+
+  // 9. KHỚP HÁNG (HIP JOINT & CAPSULE) - BÓC BAO KHỚP -> LỘ CHỎM ĐÙI & DÂY CHẰNG TRÒN
+  if (/capsule of hip|hip joint|khớp háng/i.test(rawPartId)) {
+    const side = rawPartId.toLowerCase().includes('.l') || rawPartId.toLowerCase().includes('left') || rawPartId.toLowerCase().includes('trái') ? '.l' : '.r';
+    const sideVi = side === '.l' ? 'trái' : 'phải';
+    const capsuleId = `Articular capsule of hip joint${side}`;
+    const capVis = getPartVisibility(capsuleId);
+
+    if (capVis.visible) {
+      // Lớp 1: Bóc bao khớp háng -> Lộ chỏm xương đùi, hõm chỏm & sụn viền
+      hidePart(capsuleId);
+      const femurHeadId = `Femur${side}`;
+      const roundLigId = `Ligament of head of femur${side}`;
+      setStructureVisible(femurHeadId, true);
+      setStructureVisible(roundLigId, true);
+      pushUndo({
+        type: 'dissect_layer',
+        organ: 'Hip',
+        side,
+        layerIndex: 1,
+        peeledId: capsuleId,
+        layerNameVi: `Bao khớp háng ${sideVi}`
+      });
+      selectPart(femurHeadId, targetViewer, true);
+      targetViewer?.render?.();
+      showToast(`🔪 Mở phẫu trường Khớp háng ${sideVi}: Bóc bao khớp, lộ chỏm xương đùi & sụn viền ổ cối!`);
+      return { success: true, organ: 'Hip', layerIndex: 1, isFinal: false };
+    } else {
+      // Lớp 2: Bóc tách chỏm xương đùi -> Lộ ổ cối
+      const femurHeadId = `Femur${side}`;
+      hidePart(femurHeadId);
+      pushUndo({
+        type: 'dissect_layer',
+        organ: 'Hip',
+        side,
+        layerIndex: 2,
+        peeledId: femurHeadId,
+        layerNameVi: `Xương đùi ${sideVi}`
+      });
+      deselectPart();
+      targetViewer?.render?.();
+      showToast(`🔪 Bóc tách Lớp 2 (Xương đùi ${sideVi}): Lộ diện khớp ổ cối xương chậu!`);
+      return { success: true, organ: 'Hip', layerIndex: 2, isFinal: true };
+    }
+  }
+
+  // 10. TẤT CẢ CÁC BỘ PHẬN ĐƠN LẺ KHÁC (FALLBACK CHUẨN)
   pushUndo({
     type: 'dissect',
     partId: rawPartId
@@ -425,6 +525,25 @@ export function restoreDissectLayer(action, viewer = state.viewer) {
       setStructureVisible('Skin', true);
       setPartTransparency('Skin', 0.35);
     }
+  } else if (action.organ === 'Knee') {
+    const side = action.side || '.r';
+    if (action.layerIndex === 1) {
+      setStructureVisible(`Patella${side}`, true);
+      setStructureVisible(`Lateral patellar retinaculum${side}`, true);
+      setStructureVisible(`Medial patellar retinaculum${side}`, true);
+    } else {
+      setStructureVisible(`Anterior cruciate ligament${side}`, true);
+      setStructureVisible(`Posterior cruciate ligament${side}`, true);
+      setStructureVisible(`Medial meniscus${side}`, true);
+      setStructureVisible(`Lateral meniscus${side}`, true);
+    }
+  } else if (action.organ === 'Hip') {
+    const side = action.side || '.r';
+    if (action.layerIndex === 1) {
+      setStructureVisible(`Articular capsule of hip joint${side}`, true);
+    } else {
+      setStructureVisible(`Femur${side}`, true);
+    }
   } else {
     showPart(action.peeledId);
   }
@@ -476,6 +595,25 @@ export function redoDissectLayer(action, viewer = state.viewer) {
       setPartTransparency('Skin', 0.35);
     } else {
       hidePart('Skin');
+    }
+  } else if (action.organ === 'Knee') {
+    const side = action.side || '.r';
+    if (action.layerIndex === 1) {
+      hidePart(`Patella${side}`);
+      hidePart(`Lateral patellar retinaculum${side}`);
+      hidePart(`Medial patellar retinaculum${side}`);
+    } else {
+      hidePart(`Anterior cruciate ligament${side}`);
+      hidePart(`Posterior cruciate ligament${side}`);
+      hidePart(`Medial meniscus${side}`);
+      hidePart(`Lateral meniscus${side}`);
+    }
+  } else if (action.organ === 'Hip') {
+    const side = action.side || '.r';
+    if (action.layerIndex === 1) {
+      hidePart(`Articular capsule of hip joint${side}`);
+    } else {
+      hidePart(`Femur${side}`);
     }
   } else {
     hidePart(action.peeledId);
