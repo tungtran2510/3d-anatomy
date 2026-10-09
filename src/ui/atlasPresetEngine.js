@@ -19,6 +19,7 @@ import { openMotionPanel, closeMotionPanel } from './motionPanel.js';
 import { showNeuromuscularHUD, hideNeuromuscularHUD } from './neuromuscularHUD.js';
 import { showMicroanatomyHUD, hideMicroanatomyHUD } from './microanatomyHUD.js';
 import { showSurfaceAnatomyHUD, hideSurfaceAnatomyHUD } from './surfaceAnatomyHUD.js';
+import { showAmpullaHUD, hideAmpullaHUD } from './ampullaHUD.js';
 
 // Precompiled Regexes for Anatomical Structure Filtering
 const REGEX_SKULL_AND_CERVICAL = /frontal|parietal|occipital|temporal|sphenoid|ethmoid|maxilla|mandible|zygomatic|nasal|lacrimal|palatine|vomer|concha|hyoid|auditory|malleus|incus|stapes|tooth|teeth|skull|head|atlas|axis|vertebra_c|c1|c2|c3|c4|c5|c6|c7|disc c|temporomandibular|atlanto/i;
@@ -138,6 +139,13 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
     showSurfaceAnatomyHUD(viewer);
   } else {
     hideSurfaceAnatomyHUD();
+  }
+
+  // 5e. Hepatopancreatoduodenal Confluence & Ampulla of Vater Callout HUD
+  if (card.id === 'dig_19_duodenum_papilla') {
+    showAmpullaHUD(viewer);
+  } else {
+    hideAmpullaHUD();
   }
 
   // 6. Reset System Transparencies to Solid (skip if motionId, which manages its own anatomical isolation)
@@ -368,7 +376,7 @@ function getFineCameraConfig(card) {
     case 'dig_18_enteric_nervous':
       return { pos: { x: 0.22, y: 1.20, z: 0.70 }, target: { x: 0, y: 1.18, z: 0 } };
     case 'dig_19_duodenum_papilla':
-      return { pos: { x: -0.02, y: 1.09, z: 0.12 }, target: { x: -0.054, y: 1.087, z: 0.032 } };
+      return { pos: { x: -0.015, y: 1.11, z: 0.22 }, target: { x: -0.046, y: 1.095, z: 0.030 } };
 
     // Lymphatic Views
     case 'lymph_spleen':
@@ -1445,24 +1453,21 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
               mat.depthWrite = false;
             }
           } else if (sys === 'visceral') {
-            const isAmpullaGroup = /Duodenum_Ampulla_Vater_Lumen|Major_Duodenal_Papilla|Sphincter_of_Oddi|Frenulum_of_Papilla/i.test(name);
+            const isAmpullaGroup = /Duodenum_Ampulla_Vater_Lumen|Ampulla_of_Vater|Major_Duodenal_Papilla/i.test(name);
             const isDuodenum = /duodenum/i.test(name);
             const isPancreas = /pancrea/i.test(name) && !/duct/i.test(name);
             const isBiliaryOrDuct = /gallbladder|bile|pancreatic.*duct/i.test(name);
 
             if (isAmpullaGroup) {
               node.visible = true;
-              if (node.isMesh) {
-                node.renderOrder = 9;
-              }
             } else if (isDuodenum) {
               node.visible = true;
               const mat = prepareMeshMaterial(node);
               mat.clippingPlanes = [];
               mat.transparent = true;
-              mat.opacity = 0.58;
+              mat.opacity = 0.50;
               mat.depthWrite = false;
-              mat.roughness = 0.25;
+              mat.roughness = 0.22;
             } else if (isBiliaryOrDuct) {
               node.visible = true;
               const mat = prepareMeshMaterial(node);
@@ -1470,11 +1475,11 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
               mat.opacity = 1.0;
               mat.depthWrite = true;
             } else if (isPancreas) {
-              // Ghosted translucent pancreas head highlighting internal duct convergence
+              // Ghosted translucent pancreas body revealing internal Wirsung duct branches
               node.visible = true;
               const mat = prepareMeshMaterial(node);
               mat.transparent = true;
-              mat.opacity = 0.28;
+              mat.opacity = 0.20;
               mat.depthWrite = false;
             } else {
               node.visible = false;

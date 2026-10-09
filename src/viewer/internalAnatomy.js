@@ -486,113 +486,74 @@ export function setupDuodenumAnatomy(model, systemId, viewer, nodes, meshRegistr
   const jy = -0.0152;
   const jz = -0.0032;
 
-  // 1. Major Duodenal Papilla (Nhú Tá Lớn / Ampulla of Vater / Papilla duodeni major)
-  // Anatomical mucosal dome projecting into lumen
-  const papillaGeom = new THREE.SphereGeometry(0.0038, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55);
-  papillaGeom.computeVertexNormals();
-  const papillaMat = new THREE.MeshPhysicalMaterial({
-    name: 'PBR_MajorDuodenalPapilla',
-    color: new THREE.Color(0xDC2626), // Rich mucosal arterial red
-    roughness: 0.35,
-    metalness: 0.0,
-    clearcoat: 0.35,
-    clearcoatRoughness: 0.20,
-    sheen: 0.85,
-    sheenColor: new THREE.Color(0xfecdd3)
+  // 1. Clinical Focal Target Reticle (Chỉ báo tiêu điểm giải phẫu y khoa)
+  const targetGroup = new THREE.Group();
+  targetGroup.name = 'Ampulla_of_Vater_Target';
+  targetGroup.position.set(jx + 0.003, jy - 0.001, jz + 0.004);
+  targetGroup.rotation.set(0, 0.40, 0);
+
+  // Outer clinical target ring
+  const outerRingGeom = new THREE.RingGeometry(0.0045, 0.0052, 32);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0xF59E0B, // Medical amber gold
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.88,
+    depthTest: false
   });
-  const papillaMesh = new THREE.Mesh(papillaGeom, papillaMat);
-  papillaMesh.name = 'Major_Duodenal_Papilla';
-  papillaMesh.position.set(jx + 0.003, jy - 0.002, jz + 0.003);
-  papillaMesh.rotation.set(0.3, -0.6, -Math.PI / 2);
-  papillaMesh.renderOrder = 9;
-  papillaMesh.userData = {
-    partId: 'Major_Duodenal_Papilla',
-    za_name: 'Major duodenal papilla (Ampulla of Vater)',
-    system: systemId,
-    baseMaterial: papillaMat
-  };
-  lumenGroup.add(papillaMesh);
+  const outerRingMesh = new THREE.Mesh(outerRingGeom, ringMat);
+  outerRingMesh.renderOrder = 30;
+  targetGroup.add(outerRingMesh);
 
-  // 2. Sphincter of Oddi Orifice (Lỗ Cơ Vòng Oddi / Sphincter ampullae hepatopancreaticae)
-  const sphincterGeom = new THREE.TorusGeometry(0.0016, 0.0006, 16, 24);
-  const sphincterMat = new THREE.MeshStandardMaterial({
-    name: 'PBR_SphincterOddi',
-    color: new THREE.Color(0x7F1D1D), // Deep circular sphincter muscle
-    roughness: 0.45,
-    metalness: 0.02
+  // Inner focal ring
+  const innerRingGeom = new THREE.RingGeometry(0.0022, 0.0028, 32);
+  const innerRingMesh = new THREE.Mesh(innerRingGeom, ringMat);
+  innerRingMesh.renderOrder = 31;
+  targetGroup.add(innerRingMesh);
+
+  // Ruby mucosal central orifice core (Khẩu kính lỗ đổ 2-3 mm)
+  const coreGeom = new THREE.CircleGeometry(0.0014, 20);
+  const coreMat = new THREE.MeshBasicMaterial({
+    color: 0xEF4444, // Focal orifice ruby red
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.95,
+    depthTest: false
   });
-  const sphincterMesh = new THREE.Mesh(sphincterGeom, sphincterMat);
-  sphincterMesh.name = 'Sphincter_of_Oddi';
-  sphincterMesh.position.set(jx + 0.006, jy - 0.002, jz + 0.005);
-  sphincterMesh.rotation.set(0.3, 0.9, 0);
-  sphincterMesh.renderOrder = 10;
-  sphincterMesh.userData = {
-    partId: 'Sphincter_of_Oddi',
-    za_name: 'Sphincter of ampulla (Sphincter of Oddi)',
-    system: systemId,
-    baseMaterial: sphincterMat
-  };
-  lumenGroup.add(sphincterMesh);
+  const coreMesh = new THREE.Mesh(coreGeom, coreMat);
+  coreMesh.renderOrder = 32;
+  targetGroup.add(coreMesh);
 
-  // 3. Longitudinal Fold / Frenulum of Papilla (Nếp hãm nhú tá / Frenulum papillae duodeni)
-  const frenulumGeom = new THREE.CylinderGeometry(0.0008, 0.0004, 0.010, 16);
-  const frenulumMesh = new THREE.Mesh(frenulumGeom, papillaMat);
-  frenulumMesh.name = 'Frenulum_of_Papilla';
-  frenulumMesh.position.set(jx + 0.004, jy - 0.007, jz + 0.004);
-  frenulumMesh.rotation.set(0.2, 0, 0.1);
-  frenulumMesh.renderOrder = 9;
-  frenulumMesh.userData = {
-    partId: 'Frenulum_of_Papilla',
-    za_name: 'Frenulum of major duodenal papilla',
+  targetGroup.userData = {
+    partId: 'Ampulla_of_Vater',
+    za_name: 'Major duodenal papilla (Ampulla of Vater & Sphincter of Oddi)',
     system: systemId,
-    baseMaterial: papillaMat
+    baseMaterial: ringMat
   };
-  lumenGroup.add(frenulumMesh);
 
-  // Attach lumenGroup to duodenumMesh
+  lumenGroup.add(targetGroup);
   duodenumMesh.add(lumenGroup);
 
   // Register in meshRegistry & structures
-  meshRegistry.set('Major_Duodenal_Papilla', papillaMesh);
-  meshRegistry.set('Sphincter_of_Oddi', sphincterMesh);
-  meshRegistry.set('Frenulum_of_Papilla', frenulumMesh);
+  meshRegistry.set('Ampulla_of_Vater', targetGroup);
+  meshRegistry.set('Major_Duodenal_Papilla', targetGroup);
   meshRegistry.set('Duodenum_Ampulla_Vater_Lumen', lumenGroup);
 
-  structures.set('Major_Duodenal_Papilla', {
-    node: papillaMesh,
+  structures.set('Ampulla_of_Vater', {
+    node: targetGroup,
     systemId,
     parentId: 'Duodenum',
     childIds: [],
-    ownMeshes: [papillaMesh]
-  });
-
-  structures.set('Sphincter_of_Oddi', {
-    node: sphincterMesh,
-    systemId,
-    parentId: 'Duodenum',
-    childIds: [],
-    ownMeshes: [sphincterMesh]
-  });
-
-  structures.set('Frenulum_of_Papilla', {
-    node: frenulumMesh,
-    systemId,
-    parentId: 'Duodenum',
-    childIds: [],
-    ownMeshes: [frenulumMesh]
+    ownMeshes: [outerRingMesh, innerRingMesh, coreMesh]
   });
 
   const duodStruct = structures.get('Duodenum');
   if (duodStruct) {
     if (!duodStruct.childIds) duodStruct.childIds = [];
-    duodStruct.childIds.push(
-      'Major_Duodenal_Papilla',
-      'Sphincter_of_Oddi',
-      'Frenulum_of_Papilla'
-    );
+    duodStruct.childIds.push('Ampulla_of_Vater');
   }
 
   if (nodes) {
-    nodes.push(papillaMesh, sphincterMesh, frenulumMesh);
+    nodes.push(targetGroup);
   }
 }
