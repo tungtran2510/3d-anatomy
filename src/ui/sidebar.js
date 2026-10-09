@@ -1566,6 +1566,7 @@ export function initFloatingTools(viewer) {
   const clipResetBtn = document.getElementById('clipResetBtn');
 
   btnClipping?.addEventListener('click', () => {
+    if (!clippingPopover) return;
     const isHidden = clippingPopover.classList.toggle('hidden');
     btnClipping.classList.toggle('active', !isHidden);
     if (!isHidden) {
@@ -1577,7 +1578,7 @@ export function initFloatingTools(viewer) {
   });
 
   clippingClose?.addEventListener('click', () => {
-    clippingPopover.classList.add('hidden');
+    clippingPopover?.classList.add('hidden');
     btnClipping?.classList.remove('active');
   });
 

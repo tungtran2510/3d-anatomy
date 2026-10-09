@@ -422,6 +422,14 @@ export function selectPart(partId, viewer, skipHistory = false, skipCamera = fal
     });
   }
 
+  // Cancel any active speech synthesis and reset speaking button states
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      window.speechSynthesis.cancel();
+    }
+  }
+  document.querySelectorAll('.is-speaking').forEach(el => el.classList.remove('is-speaking'));
+
   // Clear previous selection highlight
   if (lastSelectedMesh) {
     clearHighlight(lastSelectedMesh.userData.partId);
@@ -511,6 +519,14 @@ export function deselectPart(skipHistory = false) {
 
   clearGhost();
   hideCallout();
+
+  // Cancel any active speech synthesis
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      window.speechSynthesis.cancel();
+    }
+  }
+  document.querySelectorAll('.is-speaking').forEach(el => el.classList.remove('is-speaking'));
 
   // Fast O(1) clear selection state
   if (state.selectedPart) {

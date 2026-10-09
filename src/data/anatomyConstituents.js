@@ -33,8 +33,8 @@ export const CONSTITUENTS_DATABASE = {
       { name: 'Tâm nhĩ phải', latin: 'Atrium dextrum', searchQuery: 'Right atrium', icon: '🔵' },
       { name: 'Cung động mạch chủ', latin: 'Arcus aortae', searchQuery: 'Aorta', icon: '🩸' },
       { name: 'Thân động mạch phổi', latin: 'Truncus pulmonalis', searchQuery: 'Pulmonary', icon: '🫁' },
-      { name: 'Van hai lá', latin: 'Valva mitralis', searchQuery: 'Mitral', icon: '🚪' },
-      { name: 'Van ba lá', latin: 'Valva tricuspidalis', searchQuery: 'Tricuspid', icon: '🚪' }
+      { name: 'Van hai lá', latin: 'Valva mitralis', searchQuery: 'left atrioventricular valve', icon: '🚪' },
+      { name: 'Van ba lá', latin: 'Valva tricuspidalis', searchQuery: 'right atrioventricular valve', icon: '🚪' }
     ]
   },
 
@@ -48,10 +48,10 @@ export const CONSTITUENTS_DATABASE = {
       { name: 'Đáy vị', latin: 'Fundus gastricus', searchQuery: 'Stomach', icon: '🫙' },
       { name: 'Thân vị', latin: 'Corpus gastricum', searchQuery: 'Stomach', icon: '🥘' },
       { name: 'Hang môn vị', latin: 'Antrum pyloricum', searchQuery: 'Stomach', icon: '⏳' },
-      { name: 'Cơ thắt môn vị', latin: 'Pylorus', searchQuery: 'Pylorus', icon: '🔒' },
+      { name: 'Cơ thắt môn vị', latin: 'Pylorus', searchQuery: 'duodenum', icon: '🔒' },
       { name: 'Bờ cong nhỏ', latin: 'Curvatura minor', searchQuery: 'Stomach', icon: '↩️' },
       { name: 'Bờ cong lớn', latin: 'Curvatura major', searchQuery: 'Stomach', icon: '↪️' },
-      { name: 'Thành trước dạ dày (Bóc tách)', latin: 'Paries anterior', searchQuery: 'Stomach_AnteriorWall', icon: '🔪' },
+      { name: 'Thành trước dạ dày (Bóc tách)', latin: 'Paries anterior', searchQuery: 'Stomach', icon: '🔪' },
       { name: 'Lòng dạ dày & Niêm mạc', latin: 'Tunica mucosa gastrica', searchQuery: 'Stomach', icon: '🔬' }
     ]
   },
@@ -139,7 +139,7 @@ export const CONSTITUENTS_DATABASE = {
     subparts: [
       { name: 'Bán cầu đại não', latin: 'Hemispherium cerebri', searchQuery: 'Brain', icon: '🧠' },
       { name: 'Tiểu não', latin: 'Cerebellum', searchQuery: 'Cerebellum', icon: '🪸' },
-      { name: 'Thân não (Cầu não, Hành não)', latin: 'Truncus encephali', searchQuery: 'Brainstem', icon: '🌳' },
+      { name: 'Thân não (Cầu não, Hành não)', latin: 'Truncus encephali', searchQuery: 'Pons', icon: '🌳' },
       { name: 'Đồi thị & Vùng dưới đồi', latin: 'Thalamus & Hypothalamus', searchQuery: 'Brain', icon: '🎛️' },
       { name: 'Động mạch cảnh trong', latin: 'A. carotis interna', searchQuery: 'Carotid', icon: '🔴' },
       { name: 'Động mạch thân nền', latin: 'A. basilaris', searchQuery: 'Basilar', icon: '🔴' }
@@ -156,7 +156,7 @@ export const CONSTITUENTS_DATABASE = {
       { name: 'Màng nhĩ', latin: 'Membrana tympani', searchQuery: 'Tympanic', icon: '🥁' },
       { name: 'Chuỗi xương con (Búa, Đe, Bàn đạp)', latin: 'Ossicula auditus', searchQuery: 'Malleus', icon: '🔨' },
       { name: 'Ốc tai', latin: 'Cochlea', searchQuery: 'Cochlea', icon: '🐚' },
-      { name: '3 Ống bán khuyên tiền đình', latin: 'Canales semicirculares', searchQuery: 'Semicircular', icon: '🔄' }
+      { name: '3 Ống bán khuyên tiền đình', latin: 'Canales semicirculares', searchQuery: 'Vestibule', icon: '🔄' }
     ]
   },
 
