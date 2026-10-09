@@ -965,24 +965,28 @@ function enhanceMaterialForOrgan(mesh, systemId) {
 
   if (systemId === 'visceral') {
     if (partName.includes('greater omentum') || partName.includes('lesser omentum') || partName.includes('mạc nối')) {
-      // Greater / Lesser Omentum: Delicate physiological adipose veil (chuẩn Visible Body, matte)
+      // Greater / Lesser Omentum: Delicate physiological adipose veil (chuẩn Visible Body)
       applyCustomProps(mesh, {
         name: 'PBR_Omentum',
-        color: 0xE2D4B7,
-        roughness: 0.82,
+        color: 0xE4D4B7,
+        roughness: 0.78,
         metalness: 0.0,
+        sheen: 0.50,
+        sheenColor: 0xfef08a,
         transparent: true,
-        opacity: 0.28,
+        opacity: 0.30,
         depthWrite: false,
         renderOrder: 10
       });
     } else if (partName.includes('mesocolon') || partName.includes('meso-appendix') || matName.includes('peritoneum')) {
-      // Peritoneum & Mesentery: delicate matte peritoneal fold
+      // Peritoneum & Mesentery: delicate matte peritoneal fold with subtle sheen
       applyCustomProps(mesh, {
         name: 'PBR_Peritoneum',
         color: 0xE0D3B8,
-        roughness: 0.80,
+        roughness: 0.78,
         metalness: 0.0,
+        sheen: 0.40,
+        sheenColor: 0xfef9c3,
         transparent: true,
         opacity: 0.35,
         depthWrite: false,
@@ -1040,17 +1044,17 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Stomach: warm living gastric muscularis & serosa with subtle moist organic sheen (no plastic shine)
       applyCustomProps(mesh, {
         name: 'PBR_Stomach',
-        color: 0xAF5E58,
-        roughness: 0.44,
+        color: 0xB8625A,
+        roughness: 0.42,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.01,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.26,
-        sheen: 0.50,
+        clearcoat: 0.38,
+        clearcoatRoughness: 0.22,
+        sheen: 0.55,
         sheenColor: 0xfca5a5,
         ior: 1.38,
         normalMap: textures?.serosaMap,
-        normalScale: [0.10, 0.10],
+        normalScale: [0.12, 0.12],
         transparent: false,
         opacity: 1.0,
         depthWrite: true,
@@ -1159,15 +1163,15 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Pancreas',
         color: 0xD4A75E,
-        roughness: 0.58,
+        roughness: 0.56,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.02,
-        clearcoat: 0.22,
-        clearcoatRoughness: 0.32,
-        sheen: 0.40,
+        clearcoat: 0.24,
+        clearcoatRoughness: 0.30,
+        sheen: 0.45,
         sheenColor: 0xfef08a,
         normalMap: textures?.serosaMap,
-        normalScale: [0.12, 0.12]
+        normalScale: [0.14, 0.14]
       });
     } else if (partName.includes('esophagus') || partName.includes('oesophagus') || partName.includes('thực quản')) {
       // Esophagus: slender smooth mucosal muscular tube descending anterior to spine
@@ -1736,18 +1740,20 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         renderOrder: 2
       });
     } else if (isCartilage) {
-      // Costal, articular, and nasal cartilage: living pearly opalescent hyaline cartilage, fully opaque
+      // Costal, articular, and nasal cartilage: living pearly opalescent hyaline cartilage with subtle transmission
       applyCustomProps(mesh, {
         name: 'PBR_HyalineCartilage',
-        color: 0xD8E0E5,
-        roughness: 0.40,
+        color: 0xDCE8EE,
+        roughness: 0.32,
         metalness: 0.0,
-        clearcoat: 0.25,
-        clearcoatRoughness: 0.22,
-        sheen: 0.38,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
+        sheen: 0.42,
         sheenColor: 0xCBD5E1,
-        transparent: false,
-        opacity: 1.0,
+        transmission: 0.15,
+        thickness: 0.008,
+        transparent: true,
+        opacity: 0.95,
         depthWrite: true,
         renderOrder: 2
       });
