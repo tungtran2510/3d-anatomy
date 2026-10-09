@@ -26,7 +26,7 @@ import { initSystemsLayerController } from './systemsLayerController.js';
 import { initFloatingAIButton } from './floatingAIButton.js';
 import { initFullscreenController } from './fullscreenController.js';
 import { initAtlasHub, openAtlasHub } from './atlasHubModal.js';
-import { parseVideoUrl } from '../data/atlasMediaManager.js';
+import { parseVideoUrl, isVerifiedVideo } from '../data/atlasMediaManager.js';
 import { initInfoPanel, updateInfoPanelContent, setCompactMode, setSheetSnapTier } from './infoPanel.js';
 import { initViewsQuickNav } from './viewsQuickNav.js';
 import { initRadiologicalScout } from './radiologicalScout.js';
@@ -1152,7 +1152,14 @@ export function openLesson(lessonUrl, lessonTitle) {
 }
 
 export function openVideo(videoIdOrUrl, videoTitle) {
-  if (!videoIdOrUrl) return;
+  if (!videoIdOrUrl) {
+    showToast('Chưa có liên kết video cho nội dung này.');
+    return;
+  }
+  if (!isVerifiedVideo(videoIdOrUrl)) {
+    showToast('Video này hiện chưa sẵn sàng hoặc đang bảo trì.');
+    return;
+  }
   const modal = document.getElementById('videoModal');
   const title = document.getElementById('videoModalTitle');
   const container = document.getElementById('videoFrameContainer');

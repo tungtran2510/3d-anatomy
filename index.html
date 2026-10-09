@@ -489,43 +489,6 @@
           </div>
         </div>
 
-        <!-- BLOCK 0.3: INTERACTIVE 4-STAGE PATHOLOGY SIMULATOR (Mô phỏng diễn tiến bệnh lý 4 giai đoạn) -->
-        <div class="info-section-group pathology-simulator-section hidden" id="cardPathologySection">
-          <div class="pathology-simulator-header">
-            <div class="pathology-header-left">
-              <span class="pathology-header-icon" id="pathologyIcon">⚡</span>
-              <div class="pathology-title-wrap">
-                <span class="pathology-header-title" id="pathologyTitle">Mô phỏng diễn tiến bệnh lý</span>
-                <span class="pathology-category-tag" id="pathologyCategoryTag">Bệnh học lâm sàng</span>
-              </div>
-            </div>
-            <span class="pathology-stage-pill stage-pill-0" id="pathologyStageBadge">Cấp 0: Bình thường</span>
-          </div>
-
-          <!-- Interactive 4-Stage Slider / Stepper -->
-          <div class="pathology-stepper-wrap">
-            <div class="pathology-slider-container">
-              <input type="range" min="0" max="3" value="0" step="1" class="pathology-range-slider" id="pathologyRangeSlider" aria-label="Giai đoạn bệnh lý 0 đến 3" />
-              <div class="pathology-ticks-row">
-                <button type="button" class="stage-tick active" data-step="0">0. Khỏe mạnh</button>
-                <button type="button" class="stage-tick" data-step="1">1. Khởi phát</button>
-                <button type="button" class="stage-tick" data-step="2">2. Tiến triển</button>
-                <button type="button" class="stage-tick text-danger" data-step="3">3. Biến chứng</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stage Details & Clinical Impact Card -->
-          <div class="pathology-stage-card" id="pathologyStageCard">
-            <div class="pathology-stage-name-row">
-              <span class="pathology-stage-level" id="pathologyStageLevel">Giai đoạn 0</span>
-              <span class="pathology-stage-title" id="pathologyStageName">Sinh lý bình thường</span>
-            </div>
-            <div class="pathology-stage-desc" id="pathologyStageDesc">Đang tải mô tả diễn tiến sinh lý bệnh học...</div>
-            <div class="pathology-stage-advice hidden" id="pathologyStageAdvice"></div>
-          </div>
-        </div>
-
         <!-- BLOCK 0.5: DISC ANATOMICAL SUBUNITS (Chuyên biệt cho Đĩa đệm: Vòng sợi & Nhân nhầy) -->
         <div class="info-section-group disc-subunits-section hidden" id="cardDiscSubunitsSection">
           <!-- Dynamically populated for Intervertebral Discs and Nucleus Pulposus -->
@@ -554,6 +517,51 @@
           </div>
           <div class="pathway-flow-container" id="cardPathwayContainer">
             <!-- Dynamic interactive step pills injected here -->
+          </div>
+        </div>
+
+        <!-- BLOCK: INTERACTIVE 4-STAGE PATHOLOGY SIMULATOR (Mô phỏng diễn tiến bệnh lý 4 giai đoạn - Siêu Gọn & Mặc định ẩn mô tả) -->
+        <div class="info-section-group pathology-simulator-section hidden" id="cardPathologySection">
+          <div class="pathology-simulator-header">
+            <div class="pathology-header-left">
+              <span class="pathology-header-icon" id="pathologyIcon">⚡</span>
+              <div class="pathology-title-wrap">
+                <span class="pathology-header-title" id="pathologyTitle">Mô phỏng diễn tiến bệnh lý</span>
+                <span class="pathology-category-tag" id="pathologyCategoryTag">Bệnh học</span>
+              </div>
+            </div>
+            <span class="pathology-stage-pill stage-pill-0" id="pathologyStageBadge">Cấp 0: Bình thường</span>
+          </div>
+
+          <!-- Interactive 4-Stage Slider / Stepper -->
+          <div class="pathology-stepper-wrap">
+            <div class="pathology-slider-container">
+              <input type="range" min="0" max="3" value="0" step="1" class="pathology-range-slider" id="pathologyRangeSlider" aria-label="Giai đoạn bệnh lý 0 đến 3" />
+              <div class="pathology-ticks-row">
+                <button type="button" class="stage-tick active" data-step="0">0. Bình thường</button>
+                <button type="button" class="stage-tick" data-step="1">1. Khởi phát</button>
+                <button type="button" class="stage-tick" data-step="2">2. Tiến triển</button>
+                <button type="button" class="stage-tick text-danger" data-step="3">3. Biến chứng</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage Details & Clinical Impact Card (Mặc định ẩn mô tả, ấn vào để xem / thu gọn) -->
+          <div class="pathology-stage-card level-0" id="pathologyStageCard">
+            <button type="button" class="pathology-stage-toggle-bar" id="btnTogglePathologyDesc" aria-expanded="false" title="Nhấn để xem / ẩn mô tả giai đoạn bệnh lý">
+              <div class="pathology-stage-title-wrap">
+                <span class="pathology-stage-level" id="pathologyStageLevel">Giai đoạn 0</span>
+                <span class="pathology-stage-title" id="pathologyStageName">Sinh lý bình thường</span>
+              </div>
+              <span class="pathology-stage-toggle-btn">
+                <span class="toggle-label" id="pathologyToggleLabel">Xem mô tả</span>
+                <svg class="toggle-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </button>
+            <div class="pathology-stage-body hidden" id="pathologyStageBody">
+              <div class="pathology-stage-desc" id="pathologyStageDesc">Đang tải mô tả diễn tiến sinh lý bệnh học...</div>
+              <div class="pathology-stage-advice hidden" id="pathologyStageAdvice"></div>
+            </div>
           </div>
         </div>
 

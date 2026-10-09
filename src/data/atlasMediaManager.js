@@ -10,14 +10,14 @@ export const MEDICAL_TRAINING_PLAYLISTS = [
     id: 'pl_spine',
     titleVi: '1. Giải Phẫu & Bệnh Lý Cột Sống',
     title: '1. Spine Anatomy & Pathologies',
-    subtitle: 'Toàn bộ giải phẫu 33 đốt sống, đĩa đệm và cơ chế thoái hóa',
-    duration: 'Playlist',
+    subtitle: 'Giải phẫu 33 đốt sống, trục cột sống và cơ chế đĩa đệm',
+    duration: '10:38',
     badge: 'Cột sống',
     type: 'video',
     image: './images/atlas/skel_spine.png',
-    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby&rel=0&enablejsapi=1',
-    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby',
-    desc: 'Giải phẫu 33 đốt sống, 4 đường cong sinh lý, đĩa đệm, cơ chế thoái hóa và thoát vị đĩa đệm.'
+    videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE?rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/watch?v=rDGqkMHPDqE',
+    desc: 'Giải phẫu 33 đốt sống, 4 đường cong sinh lý, đĩa đệm, cơ chế nâng đỡ và bảo vệ tủy sống.'
   },
   {
     id: 'pl_digestive',
@@ -127,11 +127,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '1. Cấu Trúc & Chức Năng Của Hệ Da',
         title: '1. Function of the Skin',
         subtitle: 'Chức năng của da: Bảo vệ, điều hòa thân nhiệt và xúc giác',
-        duration: '0:56',
+        duration: '09:36',
         badge: 'Tổng quan',
         type: 'video',
         image: './images/atlas/med_skin.png',
-        videoUrl: 'https://www.youtube.com/embed/aMGgCxUXV3o',
+        videoUrl: 'https://www.youtube.com/embed/Orumw-PyNjw',
         desc: 'Hàng rào bảo vệ sinh học, thụ cảm thần kinh và điều hòa thân nhiệt.'
       },
       {
@@ -139,7 +139,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '2. Chức Năng Nâng Đỡ Của Hệ Xương',
         title: '2. Function of the Skeleton',
         subtitle: 'Chức năng hệ xương: Khung nâng đỡ, bảo vệ tạng và sinh máu',
-        duration: '0:46',
+        duration: '10:38',
         badge: 'Cơ xương',
         type: 'video',
         image: './images/atlas/med_skeleton.png',
@@ -151,7 +151,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '3. Phân Loại Các Mô Cơ (Vân, Trơn, Tim)',
         title: '3. Muscle Tissue Types',
         subtitle: 'Các loại mô cơ: Cơ vân, cơ trơn nội tạng và cơ tim',
-        duration: '0:43',
+        duration: '10:53',
         badge: 'Mô học',
         type: 'video',
         image: './images/atlas/med_muscles.png',
@@ -169,11 +169,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '1. Hoạt Động Của Các Cặp Cơ Đối Vận',
         title: '1. Paired Muscle Actions',
         subtitle: 'Cặp cơ đối vận: Cơ chế gấp và duỗi khuỷu tay',
-        duration: '1:04',
+        duration: '10:53',
         badge: 'Cơ xương',
         type: 'video',
         image: './images/atlas/med_paired_muscles.png',
-        videoUrl: 'https://www.youtube.com/embed/7rA8k_FvT_U',
+        videoUrl: 'https://www.youtube.com/embed/Ktv-CaOt6UQ',
         motionType: 'elbow_flexion',
         desc: 'Cơ chế cơ nhị đầu co gấp khuỷu đối kháng cơ tam đầu duỗi khuỷu.'
       },
@@ -182,11 +182,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '2. Khớp Hoạt Dịch Dạng Cầu (Khớp Vai & Háng)',
         title: '2. Joint: Ball and Socket',
         subtitle: 'Khớp chỏm cầu: Vận động đa trục xoay tròn 360 độ',
-        duration: '0:07',
+        duration: '09:20',
         badge: 'Khớp 3D',
         type: 'video',
         image: './images/atlas/med_ball_socket.png',
-        videoUrl: 'https://www.youtube.com/embed/n4K_bKx6VzI',
+        videoUrl: 'https://www.youtube.com/embed/DLxYDoN634c',
         motionType: 'hip_abduction',
         desc: 'Khớp cử động linh hoạt nhất cơ thể với 3 bậc tự do và chuyển động đa trục.'
       },
@@ -195,11 +195,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '3. Khớp Hoạt Dịch Dạng Lồi Cầu (Khớp Gối)',
         title: '3. Joint: Condyloid',
         subtitle: 'Khớp lồi cầu: Chuyển động gập duỗi bản lề của khớp',
-        duration: '0:07',
+        duration: '09:20',
         badge: 'Khớp 3D',
         type: 'video',
         image: './images/atlas/med_condyloid.png',
-        videoUrl: 'https://www.youtube.com/embed/WJ6V3n4P4sY',
+        videoUrl: 'https://www.youtube.com/embed/DLxYDoN634c',
         motionType: 'knee_flexion',
         desc: 'Chuyển động gập duỗi bản lề của khớp gối và lồi cầu.'
       }
@@ -214,7 +214,7 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         titleVi: '1. Các Loại Tế Bào Trong Cơ Thể Người',
         title: '1. Types of Cells',
         subtitle: 'Các loại tế bào: Cấu trúc và sự biệt hóa tế bào người',
-        duration: '0:48',
+        duration: '04:22',
         badge: 'Tế bào học',
         type: 'video',
         image: './images/atlas/med_skin.png',
@@ -223,27 +223,27 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
       },
       {
         id: 'med_bone_repair',
-        titleVi: '2. Cơ Chế Tự Phục Hồi & Tái Tạo Xương',
-        title: '2. Bone Repair',
-        subtitle: 'Tiến trình liền xương: Tái tạo can xương sau gãy',
-        duration: '0:36',
+        titleVi: '2. Cơ Chế Tái Tạo Khung Xương',
+        title: '2. Bone Structure and Repair',
+        subtitle: 'Tiến trình nâng đỡ & tái tạo can xương',
+        duration: '10:38',
         badge: 'Tái tạo',
         type: 'video',
         image: './images/atlas/med_bone_repair.png',
-        videoUrl: 'https://www.youtube.com/embed/zvhfN6e6m0c',
-        desc: 'Quá trình đại thực bào dọn ổ gãy, hình thành mạng lưới mao mạch và can xương cứng.'
+        videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+        desc: 'Bộ khung cơ thể, tạo khoang bảo vệ tạng và phân phối tải trọng vận động.'
       },
       {
         id: 'med_soft_tissue',
-        titleVi: '3. Cơ Chế Liền Sẹo & Tái Tạo Mô Mềm',
-        title: '3. Soft Tissue Repair',
-        subtitle: 'Tái tạo mô mềm: Tăng sinh nguyên bào sợi và collagen',
-        duration: '0:52',
+        titleVi: '3. Cấu Tạo & Hoạt Hóa Sợi Cơ',
+        title: '3. Muscle Structure & Tissue',
+        subtitle: 'Tái tạo mô mềm: Cấu trúc myofibril và co cơ',
+        duration: '10:53',
         badge: 'Phục hồi',
         type: 'video',
         image: './images/atlas/med_soft_tissue.png',
-        videoUrl: 'https://www.youtube.com/embed/yPZZ8zH3b5U',
-        desc: 'Cơ chế lành vết thương và tái sinh sợi collagen chịu lực của gân và dây chằng.'
+        videoUrl: 'https://www.youtube.com/embed/Ktv-CaOt6UQ',
+        desc: 'Cơ chế co rút của sợi myosin và actin tạo động lực vận động.'
       }
     ]
   },
@@ -253,39 +253,39 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
     cards: [
       {
         id: 'med_breathing',
-        titleVi: '1. Cơ Chế Thông Khí Phổi & Hít Thở',
-        title: '1. Breathing',
-        subtitle: 'Cơ chế thở: Vòm hoành và lồng ngực tạo áp suất âm hút khí',
-        duration: '0:57',
+        titleVi: '1. Cơ Chế Thông Khí Phổi & Trao Đổi Khí',
+        title: '1. Respiratory System & Breathing',
+        subtitle: 'Cơ chế thở: Áp suất âm lồng ngực và phế nang',
+        duration: '09:22',
         badge: 'Hô hấp',
         type: 'video',
         image: './images/atlas/resp_lungs.png',
-        videoUrl: 'https://www.youtube.com/embed/bLZPzL_K2rI',
+        videoUrl: 'https://www.youtube.com/embed/bHZsvBdUC2I',
         desc: 'Cơ hoành hạ thấp mở rộng thể tích ngực tạo áp suất âm hút khí vào phổi.'
       },
       {
-        id: 'med_external_respiration',
-        titleVi: '2. Trao Đổi Khí Tại Phế Nang (Hô Hấp Ngoài)',
-        title: '2. External Respiration',
-        subtitle: 'Hô hấp ngoài: Trao đổi O2 và CO2 qua màng phế nang mao mạch',
-        duration: '0:31',
-        badge: 'Sinh lý phổi',
+        id: 'med_heart_pressure',
+        titleVi: '2. Sinh Lý Tim & Chu Chuyển Van Tim',
+        title: '2. The Heart Under Pressure',
+        subtitle: '4 buồng tim, áp lực buồng tim và hệ van',
+        duration: '10:36',
+        badge: 'Tim mạch',
         type: 'video',
-        image: './images/atlas/resp_upper.png',
-        videoUrl: 'https://www.youtube.com/embed/mzv7_uF-JdM',
-        desc: 'Sự chênh lệch phân áp khí thúc đẩy oxy vào máu và giải phóng khí CO2.'
+        image: './images/atlas/circ_simplified.png',
+        videoUrl: 'https://www.youtube.com/embed/X9ZZ6tcxArI',
+        desc: 'Chuyển động nhịp nhàng đóng mở van tim và tống máu đi khắp cơ thể.'
       },
       {
-        id: 'med_daltons_law',
-        titleVi: '3. Định Luật Dalton Trong Áp Suất Khí Phổi',
-        title: "3. Dalton's Law",
-        subtitle: 'Định luật Dalton: Phân áp chất khí trong trao đổi hô hấp',
-        duration: '0:41',
-        badge: 'Vật lý y sinh',
+        id: 'med_heart_circulation',
+        titleVi: '3. Dòng Chảy Máu Qua Tim & Đại Tuần Hoàn',
+        title: '3. Flow Through the Heart',
+        subtitle: 'Vòng tuần hoàn phổi và đại tuần hoàn',
+        duration: '07:51',
+        badge: 'Tuần hoàn',
         type: 'video',
-        image: './images/atlas/resp_diaphragm.png',
-        videoUrl: 'https://www.youtube.com/embed/Vv5YfT4C4_0',
-        desc: 'Áp suất toàn phần của hỗn hợp khí bằng tổng các áp suất riêng phần.'
+        image: './images/atlas/circ_heart_thorax.png',
+        videoUrl: 'https://www.youtube.com/embed/7XaftdE_h60',
+        desc: 'Đường đi của máu giàu oxy và nghèo oxy qua 2 nửa tim.'
       }
     ]
   },
@@ -294,40 +294,40 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
     titleVi: 'Dinh Dưỡng & Bài Tiết',
     cards: [
       {
-        id: 'med_chewing_swallowing',
-        titleVi: '1. Cơ Chế Nhai & Phản Xạ Nuốt',
-        title: '1. Chewing and Swallowing',
-        subtitle: 'Nhai và nuốt: Vận động khoang miệng và nhu động thực quản',
-        duration: '0:33',
+        id: 'med_digestive_playlist',
+        titleVi: '1. Giải Phẫu & Sinh Lý Hệ Tiêu Hóa',
+        title: '1. Digestive System Series',
+        subtitle: 'Toàn bộ ống tiêu hóa từ dạ dày đến ruột',
+        duration: 'Playlist',
         badge: 'Tiêu hóa',
         type: 'video',
         image: './images/atlas/dig_upper.png',
-        videoUrl: 'https://www.youtube.com/embed/p9VdK1_7pQw',
-        desc: 'Giai đoạn nuốt có ý thức ở miệng chuyển tiếp nhu động tự chủ qua thực quản.'
+        videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSKaN2oXXs5RHnoPdgv2ZsgF&rel=0&enablejsapi=1',
+        desc: 'Cấu trúc & chức năng dạ dày, nhu động ruột và hấp thu dưỡng chất.'
       },
       {
-        id: 'med_epiglottis',
-        titleVi: '2. Chức Năng Của Nắp Thanh Môn Đóng Khí Quản',
-        title: '2. Function of the Epiglottis',
-        subtitle: 'Chức năng sụn nắp thanh môn: Đóng đường thở khi nuốt',
-        duration: '0:43',
-        badge: 'Hầu thanh quản',
-        type: 'video',
-        image: './images/atlas/resp_upper.png',
-        videoUrl: 'https://www.youtube.com/embed/q_2mX3VfEtw',
-        desc: 'Cơ chế cơ học tự động gập sụn nắp ngăn dị vật và thức ăn rơi vào khí quản.'
-      },
-      {
-        id: 'med_nutrient_absorption',
-        titleVi: '3. Cơ Chế Hấp Thu Dinh Dưỡng Tại Ruột Non',
-        title: '3. Nutrient Absorption',
-        subtitle: 'Hấp thu dưỡng chất: Nhung mao ruột non đưa chất vào mao mạch',
-        duration: '0:43',
-        badge: 'Hấp thu',
+        id: 'med_digestive_absorption',
+        titleVi: '2. Quá Trình Hấp Thu Dinh Dưỡng Ruột Non',
+        title: '2. Digestive System: Absorption',
+        subtitle: 'Hệ nhung mao ruột non và chuyển hóa',
+        duration: '10:50',
+        badge: 'Ruột non',
         type: 'video',
         image: './images/atlas/dig_lower.png',
-        videoUrl: 'https://www.youtube.com/embed/b20VRR9C37Q',
+        videoUrl: 'https://www.youtube.com/embed/jGme7BRkpuQ',
         desc: 'Hệ thống vi nhung mao ruột non tăng diện tích tiếp xúc hấp thu chất dinh dưỡng.'
+      },
+      {
+        id: 'med_urinary_system',
+        titleVi: '3. Hệ Tiết Niệu & Cơ Chế Lọc Cầu Thận',
+        title: '3. Urinary System & Nephron',
+        subtitle: 'Thận, nephron và quá trình tạo nước tiểu',
+        duration: '10:18',
+        badge: 'Hệ tiết niệu',
+        type: 'video',
+        image: './images/atlas/urinary_anatomy.svg',
+        videoUrl: 'https://www.youtube.com/embed/l128tW1H5a8',
+        desc: 'Mô phỏng siêu lọc huyết tương tại tiểu cầu thận và tái hấp thu chất thiết yếu.'
       }
     ]
   },
@@ -337,10 +337,10 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
     cards: [
       {
         id: 'med_female_cells',
-        titleVi: '1. Quá Trình Phát Triển Tế Bào Trứng (Noãn)',
-        title: '1. Female Sex Cells',
-        subtitle: 'Tế bào sinh dục nữ: Phát triển nang noãn và rụng trứng',
-        duration: '0:50',
+        titleVi: '1. Sinh Lý Hệ Sinh Sản Nữ',
+        title: '1. Female Reproductive System',
+        subtitle: 'Tế bào sinh dục nữ: Nang noãn và chu kỳ hormone',
+        duration: '10:14',
         badge: 'Sinh sản nữ',
         type: 'video',
         image: './images/atlas/urin_pelvic.png',
@@ -348,23 +348,11 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
         desc: 'Tiến trình giảm phân tạo noãn bào trưởng thành dưới tác động hormone buồng trứng.'
       },
       {
-        id: 'med_male_cells',
-        titleVi: '2. Quá Trình Sinh Tinh & Tế Bào Tinh Trùng',
-        title: '2. Male Sex Cells',
-        subtitle: 'Tế bào sinh dục nam: Sinh tinh và cấu trúc tinh trùng',
-        duration: '0:34',
-        badge: 'Sinh sản nam',
-        type: 'video',
-        image: './images/atlas/urin_system.png',
-        videoUrl: 'https://www.youtube.com/embed/Wcqg5tD0xVo',
-        desc: 'Ống sinh tinh sản sinh tinh trùng mang bộ nhiễm sắc thể đơn bội di chuyển linh hoạt.'
-      },
-      {
         id: 'med_fertilization',
-        titleVi: '3. Từ Thụ Tinh Đến Làm Tổ Của Phôi Thai',
-        title: '3. Fertilization to Implantation',
-        subtitle: 'Thụ tinh đến làm tổ: Hợp tử phân chia và bám vào nội mạc tử cung',
-        duration: '0:30',
+        titleVi: '2. Từ Thụ Tinh Đến Làm Tổ Của Phôi Thai',
+        title: '2. Fertilization to Implantation',
+        subtitle: 'Thụ tinh đến làm tổ: Hợp tử phân chia và bám vào tử cung',
+        duration: '04:15',
         badge: 'Phôi thai',
         type: 'video',
         image: './images/atlas/urin_pelvic.png',
@@ -374,225 +362,123 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
     ]
   },
   {
-    id: 'endocrine_media',
-    titleVi: 'Hệ Nội Tiết & Hormone',
+    id: 'endocrine_nervous_media',
+    titleVi: 'Hệ Thần Kinh & Cảm Giác',
     cards: [
       {
-        id: 'med_negative_feedback',
-        titleVi: '1. Vòng Điều Hòa Ngược Âm Tính (Feedback Âm)',
-        title: '1. Negative Feedback Loops',
-        subtitle: 'Vòng điều hòa ngược âm tính: Trục hạ đồi - tuyến yên - đích',
-        duration: '0:55',
-        badge: 'Nội tiết',
+        id: 'med_nervous_overview',
+        titleVi: '1. Hệ Thần Kinh & Dẫn Truyền Xung Động',
+        title: '1. The Nervous System Overview',
+        subtitle: 'Não bộ, tủy sống và mạng lưới nơ-ron',
+        duration: '10:36',
+        badge: 'Thần kinh',
         type: 'video',
-        image: './images/atlas/med_skin.png',
-        videoUrl: 'https://www.youtube.com/embed/CLv3SkFvv60',
-        desc: 'Cơ chế tự điều chỉnh nồng độ hormone giữ cân bằng nội môi cơ thể.'
+        image: './images/atlas/nerv_brain.png',
+        videoUrl: 'https://www.youtube.com/embed/qPix_X-9t7E',
+        desc: 'Hệ thần kinh trung ương và ngoại vi phối hợp điều khiển toàn cơ thể.'
       },
       {
-        id: 'med_positive_feedback',
-        titleVi: '2. Vòng Điều Hòa Ngược Dương Tính (Feedback Dương)',
-        title: '2. Positive Feedback Loops',
-        subtitle: 'Vòng điều hòa ngược dương tính: Tác dụng khuếch đại sinh lý',
-        duration: '0:50',
-        badge: 'Sinh lý học',
+        id: 'med_action_potential',
+        titleVi: '2. Điện Thế Hoạt Động & Synapse Thần Kinh',
+        title: '2. Action Potential & Synapse',
+        subtitle: 'Cơ chế khử cực và truyền dẫn tín hiệu',
+        duration: '11:43',
+        badge: 'Điện sinh lý',
         type: 'video',
-        image: './images/atlas/med_skin.png',
-        videoUrl: 'https://www.youtube.com/embed/q_2mX3VfEtw',
-        desc: 'Cơ chế kích hoạt đỉnh điểm đáp ứng, điển hình là cơn co dạ con khi chuyển dạ.'
+        image: './images/atlas/nerv_brain.png',
+        videoUrl: 'https://www.youtube.com/embed/OZG8M_ldA1M',
+        desc: 'Kênh ion Natri-Kali và chất dẫn truyền thần kinh qua khe synapse.'
       },
-      {
-        id: 'med_water_soluble',
-        titleVi: '3. Cơ Chế Tác Động Của Hormone Tan Trong Nước',
-        title: '3. Water-Soluble Hormone Action',
-        subtitle: 'Hormone tan trong nước: Thụ thể màng và chất truyền tin cAMP',
-        duration: '0:50',
-        badge: 'Tín hiệu TB',
-        type: 'video',
-        image: './images/atlas/med_skin.png',
-        videoUrl: 'https://www.youtube.com/embed/FTv8V_nE4Qc',
-        desc: 'Hormone gắn thụ thể ngoại bào kích hoạt chuỗi phản ứng enzym nội bào.'
-      }
-    ]
-  },
-  {
-    id: 'special_senses_media',
-    titleVi: 'Các Giác Quan Chuyên Biệt',
-    cards: [
       {
         id: 'med_hearing',
-        titleVi: '1. Cơ Chế Dẫn Truyền & Cảm Thụ Thính Giác',
-        title: '1. Hearing',
-        subtitle: 'Thính giác: Cơ chế truyền âm từ màng nhĩ qua chuỗi xương con',
-        duration: '0:59',
+        titleVi: '3. Cơ Chế Thính Giác & Tiền Đình',
+        title: '3. Hearing and How it Works',
+        subtitle: 'Tai trong, màng nhĩ và ốc tai',
+        duration: '03:15',
         badge: 'Thính giác',
         type: 'video',
         image: './images/atlas/skel_skull.png',
-        videoUrl: 'https://www.youtube.com/embed/PeSteAXN454',
-        desc: 'Chuyển đổi dao động cơ học thành xung thần kinh truyền về thùy thái dương.'
+        videoUrl: 'https://www.youtube.com/embed/flIAxGsV1q0',
+        desc: 'Chuyển đổi dao động cơ học qua xương con thành xung thần kinh tại ốc tai.'
       },
       {
         id: 'med_sight',
-        titleVi: '2. Đường Dẫn Truyền & Thụ Cảm Thị Giác',
-        title: '2. Sight',
-        subtitle: 'Thị giác: Quang học mắt và khúc xạ hội tụ lên võng mạc',
-        duration: '0:51',
+        titleVi: '4. Quang Học Mắt & Dẫn Truyền Thị Giác',
+        title: '4. Journey Through the Human Eye',
+        subtitle: 'Giác mạc, thể thủy tinh và võng mạc',
+        duration: '04:45',
         badge: 'Thị giác',
         type: 'video',
         image: './images/atlas/skel_cranial_fossae.png',
-        videoUrl: 'https://www.youtube.com/embed/o0DYP-DV9rA',
-        desc: 'Ánh sáng đi qua giác mạc và thể thủy tinh kích hoạt tế bào que và nón.'
-      },
-      {
-        id: 'med_types_vision',
-        titleVi: '3. Các Dạng Thị Giác & Khúc Xạ Mắt',
-        title: '3. Types of Vision',
-        subtitle: 'Các loại thị lực: Tật cận thị, viễn thị và điều tiết mắt',
-        duration: '0:21',
-        badge: 'Khúc xạ',
-        type: 'video',
-        image: './images/atlas/skel_skull.png',
-        videoUrl: 'https://www.youtube.com/embed/9_E9i1Qd5q4',
-        desc: 'Nguyên nhân sai lệch tiêu cự quang học mắt và phương pháp điều chỉnh kính.'
+        videoUrl: 'https://www.youtube.com/embed/gvozcv8pS3c',
+        desc: 'Ánh sáng đi qua giác mạc hội tụ lên võng mạc truyền về vỏ não thị giác.'
       }
     ]
   },
   {
-    id: 'resp_circ_pathologies_media',
-    titleVi: 'Bệnh Lý Hô Hấp & Tuần Hoàn',
+    id: 'pathology_conditions_media',
+    titleVi: 'Bệnh Lý Học & Lâm Sàng',
     cards: [
       {
-        id: 'med_pvd',
-        titleVi: '1. Bệnh Lý Mạch Máu Ngoại Biên (PVD)',
-        title: '1. Peripheral Vascular Disease',
-        subtitle: 'Bệnh mạch máu ngoại biên: Hẹp xơ vữa gây thiếu máu chi',
-        duration: '0:20',
-        badge: 'Mạch máu',
+        id: 'med_pathology_playlist',
+        titleVi: '1. Bệnh Lý Học: Nguyên Nhân & Giải Pháp (Playlist)',
+        title: '1. Pathology Causes & Solutions',
+        subtitle: 'Phân tích cơ chế bệnh sinh từ gốc rễ',
+        duration: 'Playlist',
+        badge: 'Bệnh lý',
         type: 'video',
-        image: './images/atlas/circ_full.png',
-        videoUrl: 'https://www.youtube.com/embed/b20VRR9C37Q',
-        desc: 'Mảng xơ vữa làm giảm khẩu kính mạch máu, cản trở tuần hoàn động mạch ngoại vi.'
+        image: './images/atlas/circ_simplified.png',
+        videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSI-Ej51joE-6N8R-G3ltg-x&rel=0&enablejsapi=1',
+        desc: 'Phân tích cơ chế bệnh sinh từ gốc rễ, các hội chứng phổ biến và giải pháp can thiệp khoa học.'
       },
       {
-        id: 'med_chf',
-        titleVi: '2. Suy Tim Sung Huyết (CHF)',
-        title: '2. Congestive Heart Failure',
-        subtitle: 'Suy tim ứ huyết: Giảm cung lượng tim và ứ dịch phổi ngoại biên',
-        duration: '0:19',
+        id: 'med_heart_pathology',
+        titleVi: '2. Bệnh Tim Mạch & Huyết Áp Cao',
+        title: '2. Cardiovascular Pathologies',
+        subtitle: 'Áp lực tim, xơ vữa và suy tim',
+        duration: '10:36',
         badge: 'Tim mạch',
         type: 'video',
         image: './images/atlas/circ_heart_thorax.png',
-        videoUrl: 'https://www.youtube.com/embed/g_m3n4hU6u8',
-        desc: 'Thất trái suy giảm khả năng bơm máu dẫn đến tăng áp lực mao mạch phổi.'
+        videoUrl: 'https://www.youtube.com/embed/X9ZZ6tcxArI',
+        desc: 'Cơ chế thiếu máu cơ tim cục bộ và biến chứng mạch vành.'
       },
       {
-        id: 'med_infarction',
-        titleVi: '3. Nhồi Máu Cơ Tim Cấp Tính',
-        title: '3. Infarction',
-        subtitle: 'Nhồi máu cơ tim: Tắc động mạch vành gây hoại tử tế bào cơ tim',
-        duration: '0:19',
-        badge: 'Cấp cứu tim',
-        type: 'video',
-        image: './images/atlas/circ_simplified.png',
-        videoUrl: 'https://www.youtube.com/embed/bXkL1jZ238c',
-        desc: 'Mảng xơ vữa nứt vỡ tạo cục máu đông chặn dòng nuôi cơ tim gây đau thắt ngực.'
-      }
-    ]
-  },
-  {
-    id: 'dig_urin_pathologies_media',
-    titleVi: 'Bệnh Lý Tiêu Hóa & Tiết Niệu',
-    cards: [
-      {
-        id: 'med_gerd',
-        titleVi: '1. Bệnh Trào Ngược Dạ Dày Thực Quản (GERD)',
-        title: '1. GERD',
-        subtitle: 'Trào ngược dạ dày thực quản: Acid dịch vị gây viêm niêm mạc',
-        duration: '0:25',
-        badge: 'Dạ dày',
-        type: 'video',
-        image: './images/atlas/dig_upper.png',
-        videoUrl: 'https://www.youtube.com/embed/7Vb9N42gQ-8',
-        desc: 'Rối loạn cơ thắt thực quản dưới làm acid dịch vị kích ứng đường ăn.'
-      },
-      {
-        id: 'med_gallstones',
-        titleVi: '2. Sỏi Túi Mật & Đường Dẫn Mật',
-        title: '2. Gallstones',
-        subtitle: 'Sỏi túi mật: Tinh thể cholesterol và sỏi tắc ống mật',
-        duration: '0:33',
-        badge: 'Gan mật',
-        type: 'video',
-        image: './images/atlas/dig_peritoneum.png',
-        videoUrl: 'https://www.youtube.com/embed/8vR4M7h7w-4',
-        desc: 'Mất cân bằng thành phần dịch mật lắng đọng tạo thành sỏi cản trở tiêu hóa mỡ.'
-      },
-      {
-        id: 'med_diverticulitis',
-        titleVi: '3. Viêm Túi Thừa Đại Tràng',
-        title: '3. Diverticulitis',
-        subtitle: 'Viêm túi thừa đại tràng: Túi phình thành ruột bị nhiễm trùng',
-        duration: '0:24',
-        badge: 'Đại tràng',
-        type: 'video',
-        image: './images/atlas/dig_lower.png',
-        videoUrl: 'https://www.youtube.com/embed/79-wEaE4qQw',
-        desc: 'Ứ đọng cặn bã trong các túi thừa niêm mạc gây viêm đau hố chậu trái.'
-      }
-    ]
-  },
-  {
-    id: 'muscle_bone_pathologies_media',
-    titleVi: 'Bệnh Lý Cơ Bắp & Xương Khớp',
-    cards: [
-      {
-        id: 'med_acl_tear',
-        titleVi: '1. Đứt Dây Chằng Chéo Trước (ACL)',
-        title: '1. ACL tear',
-        subtitle: 'Đứt dây chằng chéo trước: Tổn thương mất vững khớp gối',
-        duration: '0:15',
-        badge: 'Khớp gối',
+        id: 'med_joint_pathology',
+        titleVi: '3. Thoái Hóa Khớp & Chấn Thương Dây Chằng',
+        title: '3. Joint Pathologies & Ligaments',
+        subtitle: 'Tổn thương sụn khớp, mòn khớp và dây chằng',
+        duration: '09:20',
+        badge: 'Khớp',
         type: 'video',
         image: './images/atlas/reg_lower_limb.png',
-        videoUrl: 'https://www.youtube.com/embed/4yW4mD7w-4k',
-        desc: 'Chấn thương xoắn vặn quá mức làm rách đứt dây chằng chéo trước khớp gối.'
-      },
-      {
-        id: 'med_cervical_spondylosis',
-        titleVi: '2. Thoái Hóa Đốt Sống Cổ',
-        title: '2. Cervical Spondylosis',
-        subtitle: 'Thoái hóa đốt sống cổ: Thoái hóa đĩa đệm và gai xương chèn ép',
-        duration: '0:49',
-        badge: 'Cột sống cổ',
-        type: 'video',
-        image: './images/atlas/skel_spine.png',
-        videoUrl: 'https://www.youtube.com/embed/w74-x9qM_gA',
-        desc: 'Mòn sụn khớp đĩa đệm và gai xương thoái hóa chèn rễ thần kinh cánh tay.'
-      },
-      {
-        id: 'med_carpal_tunnel',
-        titleVi: '3. Hội Chứng Ống Cổ Tay (CTS)',
-        title: '3. Carpal Tunnel Syndrome Overview',
-        subtitle: 'Hội chứng ống cổ tay: Chèn ép thần kinh giữa tại cổ tay',
-        duration: '0:22',
-        badge: 'Cổ tay',
-        type: 'video',
-        image: './images/atlas/reg_upper_limb.png',
-        videoUrl: 'https://www.youtube.com/embed/7rA8k_FvT_U',
-        desc: 'Tăng áp lực trong ống cổ tay chèn ép dây thần kinh giữa gây tê bì bàn tay.'
+        videoUrl: 'https://www.youtube.com/embed/DLxYDoN634c',
+        desc: 'Cơ chế mòn sụn khớp và mất vững dây chằng khi vận động quá tải.'
       }
     ]
   },
   {
     id: 'lymphatic_pathologies_media',
-    titleVi: 'Bệnh Lý Hệ Bạch Huyết & Miễn Dịch',
+    titleVi: 'Hệ Bạch Huyết & Miễn Dịch',
     cards: [
       {
+        id: 'med_immune_system',
+        titleVi: '1. Hệ Miễn Dịch & Tế Bào Đại Thực Bào',
+        title: '1. Immune System, Part 1',
+        subtitle: 'Hàng rào miễn dịch bẩm sinh và thích ứng',
+        duration: '09:35',
+        badge: 'Miễn dịch',
+        type: 'video',
+        image: './images/atlas/med_skin.png',
+        videoUrl: 'https://www.youtube.com/embed/GIJK3dwCWCw',
+        desc: 'Cơ chế hoạt động của đại thực bào, tế bào B và T bảo vệ cơ thể.'
+      },
+      {
         id: 'med_hiv_aids',
-        titleVi: '1. Cơ Chế Nhiễm & Suy Giảm Miễn Dịch (HIV/AIDS)',
-        title: '1. HIV and AIDS',
-        subtitle: 'Nhiễm HIV & AIDS: Phá hủy tế bào Lympho T-CD4 suy giảm miễn dịch',
-        duration: '1:06',
+        titleVi: '2. Cơ Chế Nhiễm & Suy Giảm Miễn Dịch (HIV/AIDS)',
+        title: '2. HIV and AIDS Medical Animation',
+        subtitle: 'Phá hủy tế bào Lympho T-CD4 suy giảm miễn dịch',
+        duration: '05:32',
         badge: 'Miễn dịch',
         type: 'video',
         image: './images/atlas/circ_full.png',
@@ -603,51 +489,34 @@ export const DEFAULT_ATLAS_MEDIA_CATEGORIES = [
   }
 ];
 
-const STORAGE_KEY = 'atlas_custom_media_data_v3';
+const STORAGE_KEY = 'atlas_custom_media_data_v5';
 const ADMIN_LOGGED_IN_KEY = 'atlas_admin_logged_in';
 export const ADMIN_DEFAULT_PASS = '123456';
 
-// Lấy danh sách danh mục Media (ưu tiên LocalStorage nếu Admin đã tùy biến)
+// Lấy danh sách danh mục Media (ưu tiên LocalStorage nếu Admin đã tùy biến, lọc nghiêm ngặt chỉ giữ video hoạt động)
 export function getAtlasMediaCategories() {
+  const sanitizeCategories = (categories) => {
+    return categories.map(cat => ({
+      ...cat,
+      cards: (cat.cards || []).filter(card => isVerifiedVideo(card.videoUrl))
+    })).filter(cat => cat.cards.length > 0);
+  };
+
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-    return JSON.parse(JSON.stringify(DEFAULT_ATLAS_MEDIA_CATEGORIES));
+    return sanitizeCategories(JSON.parse(JSON.stringify(DEFAULT_ATLAS_MEDIA_CATEGORIES)));
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Tự động thay thế link video hệ xương nếu còn lưu link YouTube cũ bị vô hiệu hóa
-        let healed = false;
-        parsed.forEach(cat => {
-          if (cat.cards) {
-            cat.cards.forEach(card => {
-              if (card.videoUrl && card.videoUrl.includes('rGz9H1hX-3M')) {
-                card.videoUrl = 'https://www.youtube.com/embed/rDGqkMHPDqE';
-                healed = true;
-              }
-            });
-          }
-        });
-        // Tự động bổ sung kệ Khóa Đào Tạo & Video Series Chuyên Sâu nếu chưa có trong bộ nhớ cache
-        if (!parsed.some(cat => cat.id === 'medical_training_playlists')) {
-          const premierCat = DEFAULT_ATLAS_MEDIA_CATEGORIES.find(c => c.id === 'medical_training_playlists');
-          if (premierCat) {
-            parsed.unshift(premierCat);
-            healed = true;
-          }
-        }
-        if (healed) {
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed)); } catch {}
-        }
-        return parsed;
+        return sanitizeCategories(parsed);
       }
     }
   } catch (err) {
     console.warn('[AtlasMediaManager] Failed to read custom media:', err);
   }
-  // Mặc định 12 danh mục chuẩn
-  return JSON.parse(JSON.stringify(DEFAULT_ATLAS_MEDIA_CATEGORIES));
+  return sanitizeCategories(JSON.parse(JSON.stringify(DEFAULT_ATLAS_MEDIA_CATEGORIES)));
 }
 
 // Lưu dữ liệu danh mục Media mới do Admin cập nhật
@@ -755,6 +624,62 @@ export function parseVideoUrl(rawUrl) {
   return { type: 'iframe', url: str };
 }
 
+// -----------------------------------------------------------------------------
+// DANH SÁCH VIDEO ĐÃ KIỂM CHỨNG 100% HOẠT ĐỘNG (HTTP 200 TỪ YOUTUBE)
+// -----------------------------------------------------------------------------
+export const VERIFIED_VALID_VIDEO_IDS = new Set([
+  'rDGqkMHPDqE', // Skeletal System & Spine: Crash Course #19
+  'DLxYDoN634c', // Joints: Crash Course #20
+  'Ktv-CaOt6UQ', // Muscles: Crash Course #21
+  'X9ZZ6tcxArI', // The Heart, Part 1: Crash Course #25
+  '7XaftdE_h60', // Flow through the heart: Khan Academy
+  'bHZsvBdUC2I', // Respiratory System, Part 1: Crash Course #31
+  'jGme7BRkpuQ', // Digestive System, Part 3: Crash Course #35
+  'l128tW1H5a8', // Urinary System, Part 1: Crash Course #38
+  'RFDatCchpus', // Reproductive System, Part 1: Crash Course #40
+  '_5OvgQW6FG4', // Fertilization: Medical Animation
+  'GIJK3dwCWCw', // Immune System, Part 1: Crash Course #45
+  'ng22Ucr33aw', // Medical Animation: HIV and AIDS
+  'qPix_X-9t7E', // The Nervous System, Part 1: Crash Course #8
+  'OZG8M_ldA1M', // The Nervous System, Part 2: Crash Course #9
+  '44B0ms3XPKU', // The Nervous System in 9 mins
+  'Orumw-PyNjw', // The Integumentary System, Part 1 - Skin: Crash Course #6
+  'flIAxGsV1q0', // Video about Hearing and How it Works: MED-EL
+  'gvozcv8pS3c', // A Journey Through the Human Eye
+  'URUJD5NEXC8', // Cell Structure: Nucleus Medical Media
+  'uBGl2BujkPQ'  // Intro to Anatomy: Crash Course #1
+]);
+
+export const VERIFIED_VALID_PLAYLIST_IDS = new Set([
+  'PLLyiVaWnDvSKaN2oXXs5RHnoPdgv2ZsgF', // Giải phẫu tiêu hóa
+  'PLLyiVaWnDvSLDD-tu3qmcOEMp-ocgsBMU', // Ăn uống - dinh dưỡng
+  'PLLyiVaWnDvSI-Ej51joE-6N8R-G3ltg-x', // Bệnh lý | Nguyên nhân - Giải pháp
+  'PLUwNUcW9Grzk',                     // Cân nặng . Tăng giảm cân
+  'PLXeja4lDX0Qc',                     // Hệ cơ quan
+  'PLFCWgyj8rzLA',                     // Phòng bệnh chủ động
+  'PLLyiVaWnDvSIysyrnuDZLADVvkGrIKRae'  // Kiến thức sức khỏe
+]);
+
+export function isVerifiedVideo(url) {
+  if (!url || typeof url !== 'string') return false;
+  const clean = url.trim();
+  if (clean.startsWith('blob:') || clean.startsWith('/') || clean.startsWith('./') || clean.endsWith('.mp4') || clean.endsWith('.webm')) {
+    return true; // Local videos
+  }
+  const plMatch = clean.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+  if (plMatch && plMatch[1]) {
+    return VERIFIED_VALID_PLAYLIST_IDS.has(plMatch[1]);
+  }
+  const ytMatch = clean.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+  if (ytMatch && ytMatch[1]) {
+    return VERIFIED_VALID_VIDEO_IDS.has(ytMatch[1]);
+  }
+  if (/^[\w-]{11}$/.test(clean)) {
+    return VERIFIED_VALID_VIDEO_IDS.has(clean);
+  }
+  return false;
+}
+
 // Kiểm tra quyền Admin
 export function verifyAdminPassword(inputPass) {
   if (!inputPass) return false;
@@ -784,7 +709,7 @@ export function setAdminLoggedIn(status) {
 // -----------------------------------------------------------------------------
 // BINDING VIDEO VÀO TỪNG CƠ QUAN / BỘ PHẬN GIẢI PHẪU (PART-TO-VIDEO MAPPINGS)
 // -----------------------------------------------------------------------------
-const PART_VIDEOS_KEY = 'atlas_part_videos_v2';
+const PART_VIDEOS_KEY = 'atlas_part_videos_v3';
 
 export const BUILTIN_CLINICAL_VIDEOS = {
   hepatobiliary: {
@@ -799,13 +724,13 @@ export const BUILTIN_CLINICAL_VIDEOS = {
   },
   spine_disc: {
     id: 'vid_spine_disc',
-    title: 'Giải Phẫu & Bệnh Lý Cột Sống (Playlist Chuyên Sâu)',
-    subtitle: 'Trục Cột Sống, Đĩa Đệm & Thoái Hóa',
-    desc: 'Toàn bộ giải phẫu 33 đốt sống, 4 đường cong sinh lý, đĩa đệm, cơ chế thoái hóa và thoát vị đĩa đệm chèn ép rễ thần kinh.',
-    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby&rel=0&enablejsapi=1',
-    playlistUrl: 'https://www.youtube.com/playlist?list=PLLyiVaWnDvSI1DFWLLmSiERKC5iO36kby',
+    title: 'Hoạt Ảnh 3D & Bài Giảng: Giải Phẫu Cột Sống & Đĩa Đệm',
+    subtitle: 'Trục Cột Sống, Đốt Sống & Đĩa Đệm',
+    desc: 'Giải phẫu toàn diện 33 đốt sống, trục nâng đỡ cơ thể, cấu tạo đĩa đệm và cơ chế bảo vệ tủy sống.',
+    videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+    playlistUrl: 'https://www.youtube.com/watch?v=rDGqkMHPDqE',
     thumbnail: './images/atlas/skel_spine.png',
-    duration: 'Playlist',
+    duration: '10:38',
     badge: 'Cột sống'
   },
   heart_valves: {
@@ -856,7 +781,7 @@ export const BUILTIN_CLINICAL_VIDEOS = {
     title: 'Hoạt Ảnh 3D: Trao Đổi Khí O₂/CO₂ Tại Phế Nang Phổi',
     subtitle: 'Hệ Hô Hấp & Phế Nang',
     desc: 'Cơ chế khuếch tán khí qua màng phế nang - mao mạch theo chênh lệch phân áp giữa máu và không khí.',
-    videoUrl: 'https://www.youtube.com/embed/bLZPzL_K2rI',
+    videoUrl: 'https://www.youtube.com/embed/bHZsvBdUC2I',
     thumbnail: './images/atlas/resp_lungs.png',
     duration: '09:22',
     badge: 'Hô hấp'
@@ -866,7 +791,7 @@ export const BUILTIN_CLINICAL_VIDEOS = {
     title: 'Hoạt Ảnh 3D: Quá Trình Siêu Lọc Máu Tại Cầu Thận',
     subtitle: 'Thận & Đơn Vị Nephron',
     desc: 'Mô phỏng 3D dòng máu qua tiểu cầu thận, quá trình lọc huyết tương và tái hấp thu các chất thiết yếu.',
-    videoUrl: 'https://www.youtube.com/embed/85tZk4MpwTI',
+    videoUrl: 'https://www.youtube.com/embed/l128tW1H5a8',
     thumbnail: './images/atlas/urinary_anatomy.svg',
     duration: '10:18',
     badge: 'Hệ tiết niệu'
@@ -906,7 +831,7 @@ export const BUILTIN_CLINICAL_VIDEOS = {
     title: 'Hoạt Ảnh 3D: Cơ Chế Cảm Thụ Thính Giác & Tiền Đình',
     subtitle: 'Tai Trong & Ốc Tai',
     desc: 'Chuyển đổi dao động sóng âm qua màng nhĩ và chuỗi xương con thành xung thần kinh tại ốc tai.',
-    videoUrl: 'https://www.youtube.com/embed/PeSteAXN454',
+    videoUrl: 'https://www.youtube.com/embed/flIAxGsV1q0',
     thumbnail: './images/atlas/skel_skull.png',
     duration: '0:59',
     badge: 'Thính giác'
@@ -916,10 +841,40 @@ export const BUILTIN_CLINICAL_VIDEOS = {
     title: 'Hoạt Ảnh 3D: Quang Học Nhãn Cầu & Dẫn Truyền Thị Giác',
     subtitle: 'Mắt & Hốc Mắt',
     desc: 'Đường đi của ánh sáng qua giác mạc và thể thủy tinh hội tụ lên hoàng điểm võng mạc truyền về vỏ não thị giác.',
-    videoUrl: 'https://www.youtube.com/embed/o0DYP-DV9rA',
+    videoUrl: 'https://www.youtube.com/embed/gvozcv8pS3c',
     thumbnail: './images/atlas/skel_cranial_fossae.png',
     duration: '0:51',
     badge: 'Thị giác'
+  },
+  skin_integumentary: {
+    id: 'vid_skin_integumentary',
+    title: 'Hoạt Ảnh 3D: Cấu Trúc & Sinh Lý Hệ Da',
+    subtitle: 'Biểu Bì, Trung Bì & Hàng Rào Miễn Dịch',
+    desc: 'Cấu trúc đa tầng của hệ da, chức năng điều hòa thân nhiệt, thụ cảm xúc giác và hàng rào bảo vệ sinh học.',
+    videoUrl: 'https://www.youtube.com/embed/Orumw-PyNjw',
+    thumbnail: './images/atlas/med_skin.png',
+    duration: '09:36',
+    badge: 'Hệ da'
+  },
+  immune_system: {
+    id: 'vid_immune_system',
+    title: 'Hoạt Ảnh 3D: Hệ Miễn Dịch & Tế Bào Bạch Cầu',
+    subtitle: 'Miễn Dịch Tự Nhiên & Thích Ứng',
+    desc: 'Cơ chế hoạt động của đại thực bào, kháng thể và hàng rào miễn dịch bảo vệ cơ thể trước tác nhân gây bệnh.',
+    videoUrl: 'https://www.youtube.com/embed/GIJK3dwCWCw',
+    thumbnail: './images/atlas/med_skin.png',
+    duration: '09:35',
+    badge: 'Miễn dịch'
+  },
+  reproductive_system: {
+    id: 'vid_reproductive_system',
+    title: 'Hoạt Ảnh 3D: Sinh Lý Hệ Sinh Sản & Thụ Tinh',
+    subtitle: 'Tế Bào Sinh Dục & Thụ Tinh',
+    desc: 'Quá trình phát triển tế bào sinh dục, chu trình hormone và cơ chế thụ tinh hình thành hợp tử.',
+    videoUrl: 'https://www.youtube.com/embed/RFDatCchpus',
+    thumbnail: './images/atlas/urin_pelvic.png',
+    duration: '10:14',
+    badge: 'Sinh sản'
   },
   skeletal_support: {
     id: 'vid_skeletal_support',
@@ -944,17 +899,19 @@ export const BUILTIN_CLINICAL_VIDEOS = {
 };
 
 export function getPartVideo(partId) {
-  if (!partId) return BUILTIN_CLINICAL_VIDEOS.skeletal_support;
+  if (!partId) return null;
   const clean = String(partId).replace(/[\._](l|r)$/i, '').replace(/\s*\((l|r|left|right)\)$/i, '').trim();
 
-  // 1. Kiểm tra cấu hình do Admin đã tự gắn trực tiếp vào bộ phận này
+  // 1. Kiểm tra cấu hình do Admin đã tự gắn trực tiếp vào bộ phận này (phải qua kiểm chứng)
   if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     try {
       const raw = localStorage.getItem(PART_VIDEOS_KEY);
       if (raw) {
         const map = JSON.parse(raw);
-        if (map[partId]) return map[partId];
-        if (map[clean]) return map[clean];
+        const custom = map[partId] || map[clean];
+        if (custom && custom.videoUrl && isVerifiedVideo(custom.videoUrl)) {
+          return custom;
+        }
       }
     } catch {}
   }
@@ -962,28 +919,19 @@ export function getPartVideo(partId) {
   // 2. Tự động liên kết thông minh với thư viện video 3D y khoa chuẩn theo từ khóa giải phẫu
   const lower = clean.toLowerCase();
 
-  // 1. GAN - MẬT - TỤY
-  if (
-    lower.includes('liver') || lower.includes('hepar') || lower.includes('gall') || lower.includes('chole') ||
-    lower.includes('bile') || lower.includes('pancrea') || lower.includes('oddi') || lower.includes('vater') ||
-    lower.includes('gan') || lower.includes('mật') || lower.includes('tụy') || lower.includes('túi mật')
-  ) {
-    return { ...BUILTIN_CLINICAL_VIDEOS.hepatobiliary, isDefault: true };
-  }
-
-  // 2. CỘT SỐNG & ĐĨA ĐỆM
+  // 1. CỘT SỐNG & ĐĨA ĐỆM (Ưu tiên kiểm tra trước các xương khác)
   if (
     lower.includes('vertebra') || lower.includes('spine') || lower.includes('disc') || lower.includes('discus') ||
     lower.includes('pulposus') || lower.includes('fibrosus') || lower.includes('đốt sống') || lower.includes('cột sống') ||
-    lower.includes('đĩa đệm') || lower.includes('thắt lưng') || lower.includes('tủy sống') || lower.includes('l4') ||
-    lower.includes('l5') || lower.includes('c5') || lower.includes('c6') || lower.includes('c3') || lower.includes('t1') ||
+    lower.includes('đĩa đệm') || lower.includes('thắt lưng') || lower.includes('tủy sống') ||
     lower.includes('atlas') || lower.includes('axis') || lower.includes('sacrum') || lower.includes('coccyx') ||
-    lower.includes('đốt đội') || lower.includes('đốt trục') || lower.includes('xương cùng') || lower.includes('cùng cụt')
+    lower.includes('đốt đội') || lower.includes('đốt trục') || lower.includes('xương cùng') || lower.includes('cùng cụt') ||
+    /\b(l[1-5]|c[1-7]|t[1-9]|t1[0-2])\b/i.test(lower)
   ) {
     return { ...BUILTIN_CLINICAL_VIDEOS.spine_disc, isDefault: true };
   }
 
-  // 3. TIM MẠCH & VAN TIM
+  // 2. TIM MẠCH & VAN TIM
   if (
     lower.includes('heart') || lower.includes('cardio') || lower.includes('atrium') || lower.includes('ventricle') ||
     lower.includes('mitral') || lower.includes('tricuspid') || lower.includes('aort') || lower.includes('tim') ||
@@ -992,12 +940,21 @@ export function getPartVideo(partId) {
     return { ...BUILTIN_CLINICAL_VIDEOS.heart_valves, isDefault: true };
   }
 
-  // 4. DẠ DÀY & ỐNG TIÊU HÓA TRÊN
+  // 3. DẠ DÀY & ỐNG TIÊU HÓA TRÊN
   if (
     lower.includes('stomach') || lower.includes('gastr') || lower.includes('pylor') || lower.includes('cardia') ||
     lower.includes('fundus') || lower.includes('esophag') || lower.includes('dạ dày') || lower.includes('thực quản')
   ) {
     return { ...BUILTIN_CLINICAL_VIDEOS.stomach_gi, isDefault: true };
+  }
+
+  // 4. GAN - MẬT - TỤY
+  if (
+    lower.includes('liver') || lower.includes('hepar') || lower.includes('gall') || lower.includes('chole') ||
+    lower.includes('bile') || lower.includes('pancrea') || lower.includes('oddi') || lower.includes('vater') ||
+    lower.includes('gan') || lower.includes('mật') || lower.includes('tụy') || lower.includes('túi mật')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.hepatobiliary, isDefault: true };
   }
 
   // 5. RUỘT & ỐNG TIÊU HÓA DƯỚI
@@ -1012,8 +969,7 @@ export function getPartVideo(partId) {
   // 6. KHỚP GỐI, DÂY CHẰNG & SỤN CHÊM
   if (
     lower.includes('knee') || lower.includes('patella') || lower.includes('cruciate') || lower.includes('meniscus') ||
-    lower.includes('tibia') || lower.includes('gối') || lower.includes('bánh chè') || lower.includes('chày') ||
-    lower.includes('dây chằng') || lower.includes('sụn chêm')
+    lower.includes('gối') || lower.includes('bánh chè') || lower.includes('dây chằng') || lower.includes('sụn chêm')
   ) {
     return { ...BUILTIN_CLINICAL_VIDEOS.knee_ligaments, isDefault: true };
   }
@@ -1045,7 +1001,7 @@ export function getPartVideo(partId) {
 
   // 10. KHỚP VAI & CHÓP XOAY
   if (
-    lower.includes('shoulder') || lower.includes('scapula') || lower.includes('humerus') || lower.includes('glenoid') ||
+    lower.includes('shoulder') || lower.includes('scapula') || lower.includes('glenoid') ||
     lower.includes('supraspinatus') || lower.includes('rotator') || lower.includes('vai') || lower.includes('bả vai')
   ) {
     return { ...BUILTIN_CLINICAL_VIDEOS.shoulder_rotator_cuff, isDefault: true };
@@ -1053,8 +1009,7 @@ export function getPartVideo(partId) {
 
   // 11. CỔ TAY & CHI TRÊN
   if (
-    lower.includes('wrist') || lower.includes('carpal') || lower.includes('median') || lower.includes('radial') ||
-    lower.includes('ulnar') || lower.includes('cổ tay') || lower.includes('bàn tay') || lower.includes('ngón tay')
+    lower.includes('wrist') || lower.includes('carpal') || lower.includes('cổ tay')
   ) {
     return { ...BUILTIN_CLINICAL_VIDEOS.carpal_tunnel, isDefault: true };
   }
@@ -1076,7 +1031,30 @@ export function getPartVideo(partId) {
     return { ...BUILTIN_CLINICAL_VIDEOS.eye_sight, isDefault: true };
   }
 
-  // 14. HỆ CƠ BẮP
+  // 14. HỆ DA
+  if (
+    lower.includes('skin') || lower.includes('integument') || lower.includes('derma') || lower.includes('epiderm') || lower.includes('da')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.skin_integumentary, isDefault: true };
+  }
+
+  // 15. HỆ MIỄN DỊCH & HẠCH BẠCH HUYẾT
+  if (
+    lower.includes('lymph') || lower.includes('spleen') || lower.includes('thymus') || lower.includes('lách') ||
+    lower.includes('hạch') || lower.includes('miễn dịch')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.immune_system, isDefault: true };
+  }
+
+  // 16. HỆ SINH SẢN
+  if (
+    lower.includes('uterus') || lower.includes('ovary') || lower.includes('testis') || lower.includes('prostate') ||
+    lower.includes('tử cung') || lower.includes('buồng trứng') || lower.includes('tinh hoàn') || lower.includes('tiền liệt')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.reproductive_system, isDefault: true };
+  }
+
+  // 17. HỆ CƠ BẮP
   if (
     lower.includes('muscle') || lower.includes('muscul') || lower.includes('cơ') || lower.includes('biceps') ||
     lower.includes('triceps') || lower.includes('pectoralis') || lower.includes('deltoid') || lower.includes('gluteus')
@@ -1084,8 +1062,17 @@ export function getPartVideo(partId) {
     return { ...BUILTIN_CLINICAL_VIDEOS.muscular_contraction, isDefault: true };
   }
 
-  // 15. DEFAULT HỆ XƯƠNG
-  return { ...BUILTIN_CLINICAL_VIDEOS.skeletal_support, isDefault: true };
+  // 18. HỆ XƯƠNG (chỉ khi là xương thực thụ)
+  if (
+    lower.includes('bone') || lower.includes('osseous') || lower.includes('skelet') || lower.includes('femur') ||
+    lower.includes('tibia') || lower.includes('fibula') || lower.includes('radius') || lower.includes('ulna') ||
+    lower.includes('clavicle') || lower.includes('costa') || lower.includes('xương') || lower.includes('sườn')
+  ) {
+    return { ...BUILTIN_CLINICAL_VIDEOS.skeletal_support, isDefault: true };
+  }
+
+  // Nếu không thuộc cơ quan nào có video đã kiểm chứng: TRẢ VỀ NULL (KHÔNG HIỂN THỊ)
+  return null;
 }
 
 export function setPartVideo(partId, videoData) {

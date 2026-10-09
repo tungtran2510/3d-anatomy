@@ -14380,9 +14380,9 @@ body.theme-dark .neighbor-smart-chip:hover {
 .pathology-simulator-section {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 6px 8px;
-  margin-bottom: 6px;
+  border-radius: 8px;
+  padding: 4px 7px;
+  margin-bottom: 5px;
 }
 [data-theme="dark"] .pathology-simulator-section,
 body.theme-dark .pathology-simulator-section {
@@ -14394,23 +14394,24 @@ body.theme-dark .pathology-simulator-section {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  margin-bottom: 5px;
+  gap: 5px;
+  margin-bottom: 3px;
 }
 .pathology-header-left {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 .pathology-header-icon {
-  font-size: 14px;
+  font-size: 12px;
 }
 .pathology-title-wrap {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  gap: 4px;
 }
 .pathology-header-title {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   color: #0f172a;
 }
@@ -14419,19 +14420,23 @@ body.theme-dark .pathology-header-title {
   color: #f1f5f9;
 }
 .pathology-category-tag {
-  font-size: 9px;
+  font-size: 8.5px;
   color: #64748b;
-  font-weight: 500;
+  font-weight: 600;
+  background: rgba(100, 116, 139, 0.1);
+  padding: 1px 4px;
+  border-radius: 3px;
 }
 [data-theme="dark"] .pathology-category-tag,
 body.theme-dark .pathology-category-tag {
   color: #94a3b8;
+  background: rgba(148, 163, 184, 0.15);
 }
 .pathology-stage-pill {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 5px;
+  padding: 1.5px 6px;
+  border-radius: 4px;
   background: #eff6ff;
   color: #1e40af;
   border: 1px solid #bfdbfe;
@@ -14465,14 +14470,14 @@ body.theme-dark .pathology-category-tag {
 }
 
 .pathology-stepper-wrap {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .pathology-range-slider {
   width: 100%;
   accent-color: #2563eb;
   cursor: pointer;
-  margin: 2px 0;
-  height: 4px;
+  margin: 1px 0 2px 0;
+  height: 3px;
 }
 .pathology-ticks-row {
   display: flex;
@@ -14482,12 +14487,12 @@ body.theme-dark .pathology-category-tag {
 .stage-tick {
   background: transparent;
   border: none;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 600;
   color: #64748b;
   cursor: pointer;
   padding: 1px 3px;
-  border-radius: 4px;
+  border-radius: 3px;
   transition: all 0.15s ease;
 }
 .stage-tick:hover {
@@ -14513,9 +14518,11 @@ body.theme-dark .pathology-category-tag {
 .pathology-stage-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-left: 3.5px solid #2563eb;
-  border-radius: 8px;
-  padding: 7px 10px;
+  border-left: 3px solid #2563eb;
+  border-radius: 6px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 .pathology-stage-card.level-0 {
   border-left-color: #10b981;
@@ -14534,44 +14541,106 @@ body.theme-dark .pathology-category-tag {
   border-color: rgba(51, 65, 85, 0.6);
 }
 
-.pathology-stage-name-row {
+.pathology-stage-toggle-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 7px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
   gap: 6px;
-  margin-bottom: 3px;
+  transition: background 0.15s ease;
+}
+.pathology-stage-toggle-bar:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+[data-theme="dark"] .pathology-stage-toggle-bar:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pathology-stage-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
 }
 .pathology-stage-level {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   color: #64748b;
+  flex-shrink: 0;
 }
 [data-theme="dark"] .pathology-stage-level {
   color: #94a3b8;
 }
 .pathology-stage-title {
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 700;
   color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 [data-theme="dark"] .pathology-stage-title {
   color: #f1f5f9;
 }
+
+.pathology-stage-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+  padding: 1.5px 5px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.pathology-stage-toggle-bar:hover .pathology-stage-toggle-btn {
+  background: rgba(37, 99, 235, 0.15);
+}
+[data-theme="dark"] .pathology-stage-toggle-btn {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.15);
+}
+.toggle-arrow {
+  transition: transform 0.2s ease;
+}
+.pathology-stage-toggle-bar.expanded .toggle-arrow {
+  transform: rotate(180deg);
+}
+
+.pathology-stage-body {
+  padding: 5px 8px 6px 8px;
+  border-top: 1px dashed rgba(226, 232, 240, 0.8);
+}
+[data-theme="dark"] .pathology-stage-body {
+  border-top-color: rgba(51, 65, 85, 0.6);
+}
+
 .pathology-stage-desc {
-  font-size: 11.5px;
-  line-height: 1.45;
+  font-size: 10.5px;
+  line-height: 1.4;
   color: #334155;
 }
 [data-theme="dark"] .pathology-stage-desc {
   color: #cbd5e1;
 }
+
 .pathology-stage-advice {
-  margin-top: 5px;
-  padding: 5px 8px;
+  margin-top: 4px;
+  padding: 4px 7px;
   background: #fef2f2;
-  border-left: 2.5px solid #ef4444;
-  border-radius: 4px;
-  font-size: 10.5px;
+  border-left: 2px solid #ef4444;
+  border-radius: 3px;
+  font-size: 9.5px;
   color: #991b1b;
   line-height: 1.35;
 }

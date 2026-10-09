@@ -56,9 +56,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cơ Chế Thoát Vị Đĩa Đệm',
-      url: 'https://www.youtube.com/embed/3ZfVjV7VqJ8',
-      duration: '0:45'
+      title: 'Bài Giảng 3D: Cột Sống, Đốt Sống & Thoát Vị Đĩa Đệm',
+      url: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+      duration: '10:38'
     }
   },
 
@@ -116,9 +116,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Dòng Chảy & Đột Quỵ Đa Giác Willis',
-      url: 'https://www.youtube.com/embed/Pj1eXvWd7fI',
-      duration: '0:50'
+      title: 'Bài Giảng 3D: Hệ Thần Kinh, Não Bộ & Mạch Máu Não',
+      url: 'https://www.youtube.com/embed/qPix_X-9t7E',
+      duration: '10:36'
     }
   },
 
@@ -175,9 +175,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cơ Chế Sỏi Mật & Viêm Tụy Cấp',
-      url: 'https://www.youtube.com/embed/8vK5eOqY7Qc',
-      duration: '0:55'
+      title: 'Bài Giảng 3D: Hệ Tiêu Hóa, Gan Mật & Tuyến Tụy',
+      url: 'https://www.youtube.com/embed/jGme7BRkpuQ',
+      duration: '10:50'
     }
   },
 
@@ -236,9 +236,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cơ Chế Đứt Dây Chằng ACL & Rách Sụn Chêm',
-      url: 'https://www.youtube.com/embed/36y0wHn04_s',
-      duration: '0:52'
+      title: 'Bài Giảng 3D: Khớp Gối, Dây Chằng & Động Học Khớp',
+      url: 'https://www.youtube.com/embed/DLxYDoN634c',
+      duration: '09:20'
     }
   },
 
@@ -295,9 +295,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cấu Tạo Dạ Dày & Cơ Chế Loét Dạ Dày Tá Tràng',
-      url: 'https://www.youtube.com/embed/z13P_zZvZ4U',
-      duration: '0:58'
+      title: 'Bài Giảng 3D: Cấu Tạo Dạ Dày & Hệ Tiêu Hóa',
+      url: 'https://www.youtube.com/embed/jGme7BRkpuQ',
+      duration: '10:50'
     }
   },
   {
@@ -472,9 +472,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cấu Tạo Thận & Cơ Chế Hoạt Động Của Nephron',
-      url: 'https://www.youtube.com/embed/fWzXn3v_W9A',
-      duration: '1:08'
+      title: 'Bài Giảng 3D: Cấu Tạo Thận & Cơ Chế Hoạt Động Của Nephron',
+      url: 'https://www.youtube.com/embed/l128tW1H5a8',
+      duration: '10:18'
     }
   },
   {
@@ -532,9 +532,9 @@ export const ANATOMY_CONCEPTS = [
       ]
     },
     video: {
-      title: 'Mô phỏng 3D: Cấu Tạo Đám Rối Cánh Tay & Hội Chứng Ống Cổ Tay',
-      url: 'https://www.youtube.com/embed/rP6eX1Y7e8o',
-      duration: '1:12'
+      title: 'Bài Giảng 3D: Khớp & Dây Thần Kinh Chi Trên',
+      url: 'https://www.youtube.com/embed/DLxYDoN634c',
+      duration: '09:20'
     }
   },
   {

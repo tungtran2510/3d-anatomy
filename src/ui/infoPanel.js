@@ -12,7 +12,7 @@ import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostAct
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview, resolveAnatomicalAlias } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
-import { getPartVideo, removePartVideo, isAdminLoggedIn } from '../data/atlasMediaManager.js';
+import { getPartVideo, removePartVideo, isAdminLoggedIn, isVerifiedVideo } from '../data/atlasMediaManager.js';
 import { getLocalVideoBlobUrl } from '../data/videoStore.js';
 import { openQuickVideoModal } from './quickVideoModal.js';
 import { openVideoModal } from './sidebar.js';
@@ -1382,11 +1382,46 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
   const descEl = document.getElementById('pathologyStageDesc');
   const adviceEl = document.getElementById('pathologyStageAdvice');
   const stageCard = document.getElementById('pathologyStageCard');
+  const stageBody = document.getElementById('pathologyStageBody');
+  const toggleBtn = document.getElementById('btnTogglePathologyDesc');
+  const toggleLabel = document.getElementById('pathologyToggleLabel');
   const ticks = section.querySelectorAll('.stage-tick');
 
   if (titleEl) titleEl.textContent = pathology.title || 'Mô phỏng diễn tiến bệnh lý';
-  if (catEl) catEl.textContent = pathology.category || 'Bệnh học lâm sàng';
+  if (catEl) catEl.textContent = pathology.category || 'Bệnh học';
   if (iconEl) iconEl.textContent = pathology.icon || '⚡';
+
+  // Mặc định luôn ẩn mô tả chi tiết để siêu gọn
+  if (stageBody) {
+    stageBody.classList.add('hidden');
+  }
+  if (toggleBtn) {
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    toggleBtn.classList.remove('expanded');
+  }
+  if (toggleLabel) {
+    toggleLabel.textContent = 'Xem mô tả ↓';
+  }
+
+  // Xử lý nút bật/tắt xem mô tả giai đoạn
+  if (toggleBtn) {
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (!stageBody) return;
+      const isCurrentlyHidden = stageBody.classList.contains('hidden');
+      if (isCurrentlyHidden) {
+        stageBody.classList.remove('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        toggleBtn.classList.add('expanded');
+        if (toggleLabel) toggleLabel.textContent = 'Thu gọn ↑';
+      } else {
+        stageBody.classList.add('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.classList.remove('expanded');
+        if (toggleLabel) toggleLabel.textContent = 'Xem mô tả ↓';
+      }
+    };
+  }
 
   function applyStage(idx) {
     const stage = pathology.stages[idx] || pathology.stages[0];
@@ -1397,10 +1432,10 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
       badge.className = `pathology-stage-pill stage-pill-${idx}`;
     }
 
-    if (levelEl) levelEl.textContent = `Giai đoạn ${idx}`;
+    if (levelEl) levelEl.textContent = `GĐ ${idx}`;
     if (nameEl) nameEl.textContent = stage.name.replace(/^Cấp\s*\d+:\s*/i, '');
     if (descEl) {
-      setupCollapsibleClamp(descEl, stage.desc, 100, 'Mở rộng ↓', 'Thu gọn ↑');
+      descEl.textContent = stage.desc;
     }
 
     if (stageCard) {
@@ -1413,7 +1448,7 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
 
     if (adviceEl) {
       if (idx >= 2 && pathology.advice) {
-        setupCollapsibleClamp(adviceEl, pathology.advice, 100, 'Mở rộng ↓', 'Thu gọn ↑');
+        adviceEl.textContent = pathology.advice;
         adviceEl.classList.remove('hidden');
       } else {
         adviceEl.classList.add('hidden');
@@ -1682,7 +1717,7 @@ function renderPartVideoSection(part, clinical, mainName, viewer) {
   if (!section) return;
 
   const video = getPartVideo(part.id);
-  if (!video) {
+  if (!video || !video.videoUrl || !isVerifiedVideo(video.videoUrl)) {
     section.classList.add('hidden');
     section.innerHTML = '';
     return;
