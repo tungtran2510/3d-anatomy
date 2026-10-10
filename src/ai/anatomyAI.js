@@ -437,12 +437,23 @@ export const ANATOMICAL_SYNONYMS = {
   // Joints & Ligaments
   'khớp gối': { id: 'Patellar ligament', base: 'Patellar ligament', system: 'joints', nameVi: 'Khớp gối (Dây chằng bánh chè)' },
   'khop goi': { id: 'Patellar ligament', base: 'Patellar ligament', system: 'joints', nameVi: 'Khớp gối' },
+  'dây chằng chéo': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước (ACL)' },
+  'day chang cheo': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước' },
+  'acl': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước (ACL)' },
+  'pcl': { id: 'Posterior cruciate ligament.l', base: 'Posterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo sau (PCL)' },
   'dây chằng chéo trước': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước (ACL)' },
   'day chang cheo truoc': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước' },
   'dây chằng chéo sau': { id: 'Posterior cruciate ligament.l', base: 'Posterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo sau (PCL)' },
   'day chang cheo sau': { id: 'Posterior cruciate ligament.l', base: 'Posterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo sau' },
   'sụn chêm': { id: 'Lateral meniscus.l', base: 'Lateral meniscus', system: 'joints', nameVi: 'Sụn chêm ngoài khớp gối' },
+  'sụn chêm ngoài': { id: 'Lateral meniscus.l', base: 'Lateral meniscus', system: 'joints', nameVi: 'Sụn chêm ngoài khớp gối' },
+  'sụn chêm trong': { id: 'Medial meniscus.l', base: 'Medial meniscus', system: 'joints', nameVi: 'Sụn chêm trong khớp gối' },
   'sun chem': { id: 'Lateral meniscus.l', base: 'Lateral meniscus', system: 'joints', nameVi: 'Sụn chêm' },
+  'sun chem ngoai': { id: 'Lateral meniscus.l', base: 'Lateral meniscus', system: 'joints', nameVi: 'Sụn chêm ngoài' },
+  'sun chem trong': { id: 'Medial meniscus.l', base: 'Medial meniscus', system: 'joints', nameVi: 'Sụn chêm trong' },
+  'dây chằng bánh chè': { id: 'Patellar ligament', base: 'Patellar ligament', system: 'joints', nameVi: 'Dây chằng bánh chè' },
+  'khớp háng': { id: 'Femur.l', base: 'Femur', system: 'skeletal', nameVi: 'Khớp háng & Xương đùi' },
+  'khop hang': { id: 'Femur.l', base: 'Femur', system: 'skeletal', nameVi: 'Khớp háng' },
 
   // Nervous System & Brain
   'não': { id: 'Telencephalon', base: 'Telencephalon', system: 'nervous', nameVi: 'Đại não (Bộ não)' },
@@ -820,7 +831,7 @@ export function cleanSearchQuery(text) {
   let str = text.toLowerCase().trim();
 
   // Strip prefixes in a loop until none match (handles compound phrases like "tôi hỏi tìm giúp")
-  const prefixRegex = /^(cho\s+tôi\s+hỏi\s+về|cho\s+hỏi\s+về|cho\s+tôi\s+hỏi|tôi\s+muốn\s+hỏi\s+về|tôi\s+muốn\s+tìm\s+kiếm|tôi\s+hỏi\s+tìm\s+kiếm|tôi\s+muốn\s+tìm|tôi\s+hỏi\s+tìm|tôi\s+muốn\s+hỏi|tôi\s+cần\s+tìm|tìm\s+kiếm|tìm\s+giúp\s+tôi|tìm\s+giúp|tìm\s+hộ|hãy\s+tìm\s+giúp|hãy\s+tìm|hãy\s+chỉ\s+ra|hãy\s+chỉ|chỉ\s+giúp\s+tôi|chỉ\s+giúp|chỉ\s+hộ|chỉ\s+ra|chỉ\s+vào|cho\s+tôi\s+xem|hãy\s+cho\s+xem|cho\s+xem|vị\s+trí\s+của|thông\s+tin\s+về|giải\s+thích\s+về|tôi\s+hỏi\s+về|cho\s+hỏi|tôi\s+hỏi|tôi\s+tìm|hỏi\s+về|định\s+vị|vị\s+trí|focus|tìm|chỉ|xem)\s+/i;
+  const prefixRegex = /^(cho\s+tôi\s+hỏi\s+về|cho\s+hỏi\s+về|cho\s+tôi\s+hỏi|tôi\s+muốn\s+hỏi\s+về|tôi\s+muốn\s+tìm\s+kiếm|tôi\s+hỏi\s+tìm\s+kiếm|tôi\s+muốn\s+tìm|tôi\s+hỏi\s+tìm|tôi\s+muốn\s+hỏi|tôi\s+cần\s+tìm|cho\s+tôi\s+biết\s+về|cho\s+biết\s+về|cho\s+tôi\s+biết|tìm\s+kiếm|tìm\s+giúp\s+tôi|tìm\s+giúp|tìm\s+hộ|tìm\s+chỗ|hãy\s+tìm\s+giúp|hãy\s+tìm|hãy\s+chỉ\s+ra|hãy\s+chỉ|chỉ\s+giúp\s+tôi|chỉ\s+giúp|chỉ\s+hộ|chỉ\s+chỗ|chỉ\s+ra|chỉ\s+vào|cho\s+tôi\s+xem|hãy\s+cho\s+xem|cho\s+xem|ở\s+đâu\s+có|vị\s+trí\s+của|thông\s+tin\s+về|giải\s+thích\s+về|tôi\s+hỏi\s+về|bộ\s+phận|cơ\s+quan|cấu\s+trúc|cho\s+hỏi|tôi\s+hỏi|tôi\s+tìm|hỏi\s+về|định\s+vị|vị\s+trí|focus|tìm|chỉ|xem)\s+/i;
 
   let prev = '';
   while (prev !== str) {
@@ -829,7 +840,7 @@ export function cleanSearchQuery(text) {
   }
 
   // Strip suffixes
-  const suffixRegex = /\s+(?:nằm\s+ở\s+đâu|ở\s+đâu\s+vậy|ở\s+vị\s+trí\s+nào|nằm\s+ở\s+chỗ\s+nào|nằm\s+ở\s+đâu|ở\s+chỗ\s+nào|ở\s+đâu\s+nhỉ|ở\s+đâu|là\s+gì\s+vậy|là\s+gì|như\s+thế\s+nào|ra\s+sao|là\s+cái\s+gì)$/i;
+  const suffixRegex = /\s+(?:nằm\s+ở\s+đâu|ở\s+đâu\s+vậy|ở\s+vị\s+trí\s+nào|nằm\s+ở\s+chỗ\s+nào|nằm\s+ở\s+đâu|ở\s+chỗ\s+nào|ở\s+đâu\s+nhỉ|nằm\s+đâu|ở\s+đâu|là\s+gì\s+vậy|là\s+gì|như\s+thế\s+nào|ra\s+sao|là\s+cái\s+gì)$/i;
   str = str.replace(suffixRegex, '').trim();
 
   // Strip punctuation

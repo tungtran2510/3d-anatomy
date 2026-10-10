@@ -3448,17 +3448,11 @@ body.theme-dark .mini-title {
 }
 
 .mini-title .name-sub-wrap {
-  font-weight: 500 !important;
-  font-size: 0.9em !important;
-  opacity: 0.85 !important;
-  color: inherit !important;
-  white-space: nowrap !important;
-  margin-left: 3px !important;
+  display: none !important;
 }
 
 .mini-title .name-sub-paren {
-  font-weight: 500 !important;
-  white-space: nowrap !important;
+  display: none !important;
 }
 
 .mini-crumb-badge {
@@ -3472,14 +3466,20 @@ body.theme-dark .mini-title {
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  max-width: 130px !important;
+  max-width: 140px !important;
   flex-shrink: 2 !important;
   line-height: 1.2 !important;
 }
 
-@media (max-width: 420px) {
+@media (max-width: 640px) {
   .mini-latin {
     display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mini-latin {
+    max-width: 340px !important;
   }
 }
 
