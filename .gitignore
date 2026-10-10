@@ -38,3 +38,4 @@ CLAUDE.md
 *.sln
 *.sw?
 .vercel
+.playwright-cli/

@@ -5,6 +5,7 @@ import { interpretAIQuery, executeAICommand, cleanSearchQuery } from '../ai/anat
 import { selectPartById } from '../viewer/selection.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { selectStructureAnywhere } from './sidebar.js';
+import { speakVietnamese } from '../utils/speechVoice.js';
 
 let aiBarEl = null;
 let aiToastEl = null;
@@ -319,13 +320,8 @@ export async function handleCompactAISubmit(text, viewer) {
     showAIToast(badgeText, true);
 
     // Speak response if voice synthesis is supported
-    if (result.speechText && 'speechSynthesis' in window) {
-      try {
-        const u = new SpeechSynthesisUtterance(result.speechText);
-        u.lang = 'vi-VN';
-        u.rate = 1.05;
-        window.speechSynthesis.speak(u);
-      } catch {}
+    if (result.speechText) {
+      speakVietnamese(result.speechText, { rate: 1.0 });
     }
   } catch (err) {
     console.warn('[AI Command Execution Error]:', err);

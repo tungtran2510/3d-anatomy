@@ -1,8 +1,12 @@
 // Visibility Management - Hide, isolate, transparency, restore
 import * as THREE from 'three';
-import { state, setHiddenParts, setTransparentParts, setIsolatedPart, getPartState, setPartState, batchPartStates, notify } from '../state/store.js';
-import { getMeshRegistry, getMeshesBySystem, ownMeshesOf, withDescendants } from './loadModel.js';
+import { state, setHiddenParts, setTransparentParts, setIsolatedPart, getPartState, setPartState, batchPartStates, notify, setSelectedPart } from '../state/store.js';
+import { getMeshRegistry, getMeshesBySystem, ownMeshesOf, withDescendants, loadModel } from './loadModel.js';
 import { updateBodyEnvelopeAuto } from './bodyEnvelope.js';
+import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
+import { focusOnSystem } from './camera.js';
+import { hideCallout } from '../ui/callout.js';
+import { speakVietnamese } from '../utils/speechVoice.js';
 
 // --- Material ownership ------------------------------------------------------
 // Meshes share the 65 materials that came out of the GLB. A mesh only gets
@@ -49,9 +53,9 @@ function releaseMaterial(mesh, partId) {
 
 // Ghosting touches nearly every mesh at once, so it uses one shared faded
 // variant per source material — 65 of them, not one per mesh.
-// Dynamic theme-aware opacity: Dark mode ~0.045 (crystal glass), Light mode ~0.08 (crisp crystal silhouette without milky fog)
-const GHOST_OPACITY_DARK = 0.045;
-const GHOST_OPACITY_LIGHT = 0.08;
+// Dynamic theme-aware opacity: Dark mode ~0.18 (soft translucent crystal), Light mode ~0.22 (crisp crystal silhouette without milky fog)
+const GHOST_OPACITY_DARK = 0.18;
+const GHOST_OPACITY_LIGHT = 0.22;
 const ghostVariants = new WeakMap();
 const activeGhostMaterials = new Set();
 
@@ -257,6 +261,34 @@ export function isolatePart(partId) {
     });
   }
 
+  // Apply context opacity for Stomach (Liver in front softens to 25% opacity so stomach is unobscured)
+  const isStomach = partId === 'Stomach' || (typeof partId === 'string' && partId.toLowerCase().includes('dạ dày'));
+  if (isStomach) {
+    withDescendants('Liver').forEach(descId => {
+      ownMeshesOf(descId).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          mat.transparent = true;
+          mat.opacity = 0.25;
+          mat.depthWrite = false;
+          mat.needsUpdate = true;
+        });
+      });
+    });
+  }
+
+  // Apply context opacity for Pancreas (Stomach in front softens to 20% opacity)
+  const isPancreas = partId === 'Pancreas' || (typeof partId === 'string' && partId.toLowerCase().includes('tụy'));
+  if (isPancreas) {
+    ownMeshesOf('Stomach').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = true;
+        mat.opacity = 0.20;
+        mat.depthWrite = false;
+        mat.needsUpdate = true;
+      });
+    });
+  }
+
   // Intervertebral disc & Nucleus Pulposus: ensure both maintain their distinct PBR materials and opacities
   const isDisc = /^intervertebral[ _]disc/i.test(partId) || /^nucleus[ _]pulposus/i.test(partId);
   if (isDisc) {
@@ -446,7 +478,24 @@ export function getAnatomicalCompanions(partId) {
     return ['Gallbladder', 'Liver', 'Duodenum', 'Pancreas', 'Pancreatic duct', 'Proper hepatic artery', 'Hepatic portal vein'];
   }
   if (lower === 'pancreas' || lower.includes('tụy')) {
-    return ['Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Bile duct', 'Gallbladder', 'Spleen', 'Splenic artery', 'Splenic vein', 'Inferior pancreaticoduodenal artery'];
+    return ['Pancreatic duct', 'Accessory pancreatic duct', 'Duodenum', 'Bile duct', 'Gallbladder', 'Spleen', 'Splenic artery', 'Splenic vein', 'Inferior pancreaticoduodenal artery', 'Stomach'];
+  }
+  if (lower === 'stomach' || lower.includes('dạ dày') || lower.includes('gaster') || lower.includes('gastric')) {
+    return ['Duodenum', 'Esophagus', 'Spleen', 'Pancreas', 'Liver'];
+  }
+  if (
+    lower === 'brain' || lower.includes('não') || lower.includes('encephalon') || lower.includes('cerebrum') ||
+    lower.includes('gyrus') || lower.includes('sulcus') || lower.includes('frontal') || lower.includes('parietal') ||
+    lower.includes('temporal') || lower.includes('occipital') || lower.includes('cerebell') || lower.includes('midbrain')
+  ) {
+    return [
+      'Superior frontal gyrus.l', 'Superior frontal gyrus.r',
+      'Middle frontal gyrus.l', 'Middle frontal gyrus.r',
+      'Inferior temporal gyrus.l', 'Inferior temporal gyrus.r',
+      'Lateral occipital gyrus (Middle occipital gyrus*).l', 'Lateral occipital gyrus (Middle occipital gyrus*).r',
+      'Falx cerebri', 'Lingula of cerebellum', 'Midbrain.l', 'Midbrain.r',
+      'White matter of spinal cord'
+    ];
   }
   if (lower.startsWith('kidney') || lower.includes('thận') || lower.includes('ren ') || lower.includes('suprarenal') || lower.includes('thượng thận') || lower.includes('ureter')) {
     const isLeft = lower.includes('.l') || lower.includes('left') || lower.includes('trái');
@@ -693,6 +742,60 @@ export function ghostAllExcept(partId) {
     });
   }
 
+  // When Stomach is selected, ensure Liver right in-front fades to 25% so stomach is completely visible
+  const isStomach = partId === 'Stomach' || (typeof partId === 'string' && partId.toLowerCase().includes('dạ dày'));
+  if (isStomach) {
+    ownMeshesOf('Stomach').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
+        mat.needsUpdate = true;
+      });
+    });
+    withDescendants('Liver').forEach(descId => {
+      ownMeshesOf(descId).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          mat.transparent = true;
+          mat.opacity = 0.25;
+          mat.depthWrite = false;
+          mat.needsUpdate = true;
+        });
+      });
+    });
+    ['Duodenum', 'Esophagus', 'Spleen', 'Pancreas'].forEach(cid => {
+      ownMeshesOf(cid).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          mat.transparent = false;
+          mat.opacity = 0.95;
+          mat.depthWrite = true;
+          mat.needsUpdate = true;
+        });
+      });
+    });
+  }
+
+  // When Pancreas is selected, ensure Stomach in front softens to 20%
+  const isPancreas = partId === 'Pancreas' || (typeof partId === 'string' && partId.toLowerCase().includes('tụy'));
+  if (isPancreas) {
+    ownMeshesOf('Pancreas').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = false;
+        mat.opacity = 1.0;
+        mat.depthWrite = true;
+        mat.needsUpdate = true;
+      });
+    });
+    ownMeshesOf('Stomach').forEach(mesh => {
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = true;
+        mat.opacity = 0.20;
+        mat.depthWrite = false;
+        mat.needsUpdate = true;
+      });
+    });
+  }
+
   // Intervertebral disc & Nucleus Pulposus: ensure both maintain their distinct PBR materials and opacities
   const isDisc = /^intervertebral[ _]disc/i.test(partId) || /^nucleus[ _]pulposus/i.test(partId);
   if (isDisc) {
@@ -745,8 +848,8 @@ export function isGhostActive() {
 }
 
 // Highlighting only touches `emissive`, so it can be undone without disturbing
-// a transparency the user set. Uses refined clinical cyan accent to preserve 100% PBR fidelity.
-export function highlightMesh(partId, color = 0x38bdf8, intensity = 0.28) {
+// a transparency the user set. Uses vivid clinical cyan accent to illuminate target structure brightly.
+export function highlightMesh(partId, color = 0x38bdf8, intensity = 0.55) {
   if (!partId) return;
 
   let resolvedPartId = partId;
@@ -891,4 +994,226 @@ export function toggleStomachDissection(forceOpen = null) {
 export function isStomachDissected() {
   const patchMesh = getMeshRegistry().get('Stomach_AnteriorWall');
   return patchMesh ? !patchMesh.visible : false;
+}
+
+/**
+ * Whole System Showcase:
+ * Automatically loads the whole organ system, frames it in camera with perspective,
+ * keeps target system meshes 100% solid & vibrant PBR colored,
+ * smoothly ghosts surrounding skeletal framework as 3D crystal reference context,
+ * reads 15-second zero-fluff summary, and triggers interactive system overview card.
+ */
+export async function showcaseWholeSystem(systemId, viewer, options = {}) {
+  const activeViewer = viewer || state.viewer || window.viewer;
+  const profile = SYSTEM_PROFILES[systemId] || matchSystemProfile(systemId);
+  if (!profile) return false;
+
+  const targetSystemId = profile.id;
+  const baseSystem = profile.baseSystem || targetSystemId;
+  const subType = profile.subType;
+  const requiredSystems = profile.requiredSystems || [baseSystem];
+
+  // Close any active clinical axis HUD or mechanism sheet so selection card can display
+  if (typeof window !== 'undefined') {
+    if (window.closeClinicalAxesModal) {
+      window.closeClinicalAxesModal(activeViewer);
+    } else {
+      const hud = document.getElementById('clinicalAxisHud');
+      if (hud) hud.classList.add('hidden');
+    }
+  }
+
+  // 1. Ensure all required base systems are loaded
+  for (const sys of requiredSystems) {
+    if (!state.loadedSystems.includes(sys)) {
+      try {
+        await loadModel(sys, activeViewer);
+      } catch (e) {
+        console.warn('Failed to load system model:', sys, e);
+      }
+    }
+    showSystem(sys);
+  }
+
+  // 2. Ensure skeletal is loaded as anatomical crystal reference
+  if (!requiredSystems.includes('skeletal') && !state.loadedSystems.includes('skeletal')) {
+    try {
+      await loadModel('skeletal', activeViewer);
+    } catch (e) {
+      console.warn('Failed to load skeletal reference model:', e);
+    }
+  }
+
+  // 4. Hide all unrelated loaded systems
+  const allowedSystems = new Set([...requiredSystems, 'skeletal']);
+  if (targetSystemId === 'spine') allowedSystems.add('joints');
+
+  state.loadedSystems.forEach(sys => {
+    if (!allowedSystems.has(sys)) {
+      hideSystem(sys);
+    }
+  });
+
+  // 5. Structure filtering & Material styling
+  const subTypeFilter = (name, partSys) => {
+    const lower = (name || '').toLowerCase().replace(/_/g, ' ');
+    if (subType === 'gut_brain') {
+      const isBrainVagus = lower.includes('hypothalamus') || lower.includes('medulla oblongata') ||
+                           lower.includes('pons') || lower.includes('midbrain') ||
+                           lower.includes('vagus') || lower.includes('superior frontal gyrus') ||
+                           lower.includes('posterior nucleus of vagus');
+      const isDigestiveTract = lower.includes('stomach') || lower.includes('esophagus') ||
+                               lower.includes('oesophagus') || lower.includes('duodenum') ||
+                               lower.includes('jejunum') || lower.includes('ileum') ||
+                               lower.includes('transverse colon') || lower.includes('ascending colon') ||
+                               lower.includes('descending colon') || lower.includes('sigmoid colon') ||
+                               lower.includes('omentum') || lower.includes('meso');
+      return isBrainVagus || isDigestiveTract;
+    }
+    if (subType === 'spinal_cord') {
+      return lower.includes('spinal cord') || lower.includes('horn of spinal cord') ||
+             lower.includes('white matter of spinal cord') || lower.includes('cauda equina') ||
+             lower.includes('root of spinal nerve') || lower.includes('spinal nerve') ||
+             lower.includes('spinal dura');
+    }
+    if (subType === 'cns') {
+      return lower.includes('brain') || lower.includes('cerebr') || lower.includes('cerebell') ||
+             lower.includes('gyrus') || lower.includes('sulcus') || lower.includes('pons') ||
+             lower.includes('medulla oblongata') || lower.includes('midbrain') ||
+             lower.includes('thalamus') || lower.includes('hypothalamus') || lower.includes('ventricle') ||
+             lower.includes('spinal cord') || lower.includes('cauda equina');
+    }
+    if (subType === 'lymphatic') {
+      return partSys === 'lymphatic';
+    }
+    if (subType === 'urinary') {
+      return lower.includes('kidney') || lower.includes('ureter') || lower.includes('urinary bladder') || lower.includes('urethra') || lower.includes('renal');
+    }
+    if (subType === 'csf_axis') {
+      return lower.includes('ventricle') || lower.includes('choroid plexus') || lower.includes('aqueduct') || lower.includes('spinal dura');
+    }
+    if (subType === 'hepatobiliary') {
+      return lower.includes('liver') || lower.includes('gallbladder') || lower.includes('pancrea') || lower.includes('bile') || lower.includes('duodenum');
+    }
+    if (subType === 'respiratory') {
+      return lower.includes('bronchus') || lower.includes('lung') || lower.includes('trachea') || lower.includes('pleura') || lower.includes('nasal') || lower.includes('pharynx') || lower.includes('epiglottis');
+    }
+    if (subType === 'digestive') {
+      return lower.includes('colon') || lower.includes('liver') || lower.includes('pancrea') || lower.includes('stomach') || lower.includes('duodenum') || lower.includes('jejunum') || lower.includes('appendix') || lower.includes('bile') || lower.includes('gallbladder') || lower.includes('esophagus') || lower.includes('oesophagus') || lower.includes('parotid') || lower.includes('sublingual') || lower.includes('submandibular') || lower.includes('gingiva') || lower.includes('tongue') || lower.includes('palate') || lower.includes('omentum') || lower.includes('taenia') || lower.includes('meso');
+    }
+    if (subType === 'urinary_genital') {
+      return lower.includes('kidney') || lower.includes('bladder') || lower.includes('ureter') || lower.includes('urethra') || lower.includes('renal') || lower.includes('penis') || lower.includes('prostate') || lower.includes('testis') || lower.includes('seminal') || lower.includes('deferens') || lower.includes('epididymis') || lower.includes('ejaculatory');
+    }
+    if (subType === 'endocrine') {
+      return lower.includes('thyroid') || lower.includes('suprarenal') || lower.includes('hypophysis') || lower.includes('pineal');
+    }
+    if (subType === 'spine') {
+      return lower.includes('vertebra') || lower.includes('sacrum') || lower.includes('coccyx') || lower.includes('intervertebral disc') || lower.includes('nucleus pulposus');
+    }
+    return true;
+  };
+
+  const keepParts = new Set();
+  const ghostParts = new Set();
+
+  getMeshRegistry().forEach((node, id) => {
+    const partSys = node.userData?.system;
+    const isTargetSystem = subType ? subTypeFilter(id, partSys) : (partSys === targetSystemId || partSys === baseSystem);
+
+    if (isTargetSystem) {
+      keepParts.add(id);
+      setStructureVisible(id, true);
+      restoreMaterial(id);
+    } else if (allowedSystems.has(partSys) && (partSys === 'visceral' || partSys === 'nervous')) {
+      setStructureVisible(id, false);
+    } else if (partSys === 'skeletal' || partSys === 'joints') {
+      setStructureVisible(id, true);
+      ghostParts.add(id);
+    } else {
+      setStructureVisible(id, false);
+    }
+  });
+
+  // Apply Ghosting to reference skeleton
+  ghostedIds = ghostParts;
+  ghostParts.forEach(id => {
+    ownMeshesOf(id).forEach(mesh => {
+      releaseMaterial(mesh, id);
+      ownMaterials(mesh).forEach(mat => {
+        mat.transparent = true;
+        mat.opacity = 0.22;
+        mat.depthWrite = false;
+        mat.needsUpdate = true;
+      });
+    });
+  });
+
+  // Restore vibrant solid materials on target organ system
+  keepParts.forEach(id => {
+    restoreMaterial(id);
+    if (targetSystemId === 'spinal_cord') {
+      ownMeshesOf(id).forEach(mesh => {
+        ownMaterials(mesh).forEach(mat => {
+          mat.transparent = false;
+          mat.opacity = 1.0;
+          mat.depthWrite = true;
+          mat.emissive = new THREE.Color(0xa855f7);
+          mat.emissiveIntensity = 0.75;
+          mat.needsUpdate = true;
+        });
+      });
+    }
+  });
+
+  // 6. Camera Focus & Frame the entire system
+  if (activeViewer) {
+    await focusOnSystem(targetSystemId, activeViewer, true);
+    activeViewer.render();
+  }
+
+  // 7. Hide single-part callout pin
+  hideCallout();
+
+  // 8. Update UI Selection Card with System Showcase Mode
+  const synthesizedSystemPart = {
+    id: `system_${targetSystemId}`,
+    meshName: profile.nameVi,
+    displayName: profile.nameVi,
+    isSystem: true,
+    system: targetSystemId,
+    systemProfile: profile,
+    info: {
+      name: { vi: profile.nameVi, en: profile.nameEn },
+      latinName: profile.nameLatin,
+      system: targetSystemId,
+      description: profile.summary,
+      function: profile.speech15s,
+      keyOrgans: profile.keyOrgans
+    }
+  };
+  setSelectedPart(synthesizedSystemPart);
+
+  // Directly update info panel content and trigger UI expansion
+  if (typeof window !== 'undefined') {
+    const card = document.getElementById('selectionCard');
+    if (card) {
+      card.classList.remove('hidden');
+      if (window.setSheetSnapTier) window.setSheetSnapTier('compact');
+    }
+    import('../ui/infoPanel.js').then(({ updateInfoPanelContent }) => {
+      updateInfoPanelContent(synthesizedSystemPart, activeViewer);
+    }).catch(() => {});
+    window.dispatchEvent(new CustomEvent('system-showcase-active', { detail: profile }));
+  }
+
+  // 9. Speak 15s zero-fluff summary
+  if (options.autoSpeak !== false) {
+    speakVietnamese(profile.speech15s);
+  }
+
+  return true;
+}
+
+if (typeof window !== 'undefined') {
+  window.showcaseWholeSystem = showcaseWholeSystem;
 }

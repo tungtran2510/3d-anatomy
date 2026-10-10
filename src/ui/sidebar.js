@@ -2,7 +2,8 @@
 import { state, setSelectedPart, subscribe, getSystemParts, getStructureInfo, setLanguage, translate, pushUndo } from '../state/store.js';
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
-import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState } from '../viewer/visibility.js';
+import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState, ghostAllExcept, clearGhost, showcaseWholeSystem } from '../viewer/visibility.js';
+import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
 import { selectPartById, resolveAnatomicalAlias, deselectPart, undoLastDissect, executeUndo, executeRedo } from '../viewer/selection.js';
 import { hideCallout } from './callout.js';
 import { loadAllData, searchStructures, cleanSearchLabel } from '../utils/dataLoader.js';
@@ -39,8 +40,8 @@ import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
 import { dissectMultiLayer } from '../viewer/dissection.js';
 import { openSettingsModal } from './settingsModal.js';
-import { isVoiceMuted, setVoiceMuted, stopAllSpeech, speakVietnamese } from '../utils/speechVoice.js';
-import { initDepthSlider, applyDepth } from './depthSlider.js';
+import { isVoiceMuted, setVoiceMuted, stopAllSpeech, speakVietnamese, speakStructure15sSummary } from '../utils/speechVoice.js';
+import { initDepthSlider, applyDepth, resetDepthSlider } from './depthSlider.js';
 
 if (typeof window !== 'undefined') {
   window.openClinicalAxesModal = openClinicalAxesModal;
@@ -391,18 +392,26 @@ export function initSystemsSidebar() {
 // Selecting a structure from search must work even when its system has never
 // been downloaded: 2550 of the 2827 structures are in that state on a fresh
 // page, and every one of them used to be a dead click.
-export async function selectStructureAnywhere(partId) {
+export async function selectStructureAnywhere(partId, autoSpeak = true) {
   if (!partId) return false;
+
+  // Whole System Showcase check: if targeting an entire system
+  const cleanSysQuery = String(partId).replace(/^system_/, '').trim();
+  const sysProfile = matchSystemProfile(cleanSysQuery);
+  if (sysProfile && (partId.startsWith('system_') || cleanSysQuery.includes('hệ') || cleanSysQuery.includes('he') || cleanSysQuery === sysProfile.id)) {
+    return await showcaseWholeSystem(sysProfile.id, state.viewer || window.viewer, { autoSpeak });
+  }
+
   const resolvedTargetId = resolveAnatomicalAlias(partId) || partId;
   const info = getStructureInfo(resolvedTargetId) || getStructureInfo(partId);
   let systemId = info?.system;
   if (!systemId) {
-    if (/intervertebral|disc|meniscus|ligament|joint/i.test(resolvedTargetId)) systemId = 'joints';
-    else if (/vertebra|sternum|rib|bone|femur|tibia|fibula|humerus|scapula|clavicle|patella|radius|ulna|pelvis|hip/i.test(resolvedTargetId)) systemId = 'skeletal';
-    else if (/muscle|gluteus|trapezius|deltoid|biceps|triceps/i.test(resolvedTargetId)) systemId = 'muscular';
-    else if (/stomach|liver|kidney|pancreas|colon|jejunum|ileum|duodenum|spleen|bladder|lung|esophagus|trachea/i.test(resolvedTargetId)) systemId = 'visceral';
-    else if (/artery|vein|ventricle|atrium|aorta/i.test(resolvedTargetId)) systemId = 'cardiovascular';
-    else if (/nerve|brain|spinal cord/i.test(resolvedTargetId)) systemId = 'nervous';
+    if (/intervertebral|disc|meniscus|ligament|joint|cruciate/i.test(resolvedTargetId)) systemId = 'joints';
+    else if (/vertebra|sternum|rib|bone|femur|tibia|fibula|humerus|scapula|clavicle|patella|radius|ulna|pelvis|hip|cranium|mandible|maxilla/i.test(resolvedTargetId)) systemId = 'skeletal';
+    else if (/muscle|gluteus|trapezius|deltoid|biceps|triceps|tendon|calcaneal|tract|aponeurosis|fascia|retinaculum/i.test(resolvedTargetId)) systemId = 'muscular';
+    else if (/stomach|liver|kidney|pancreas|colon|jejunum|ileum|duodenum|spleen|bladder|lung|esophagus|trachea|appendix|gallbladder|bile|rectum|parotid|salivary|pharynx|larynx|epiglottis|thyroid|thymus|tonsil/i.test(resolvedTargetId)) systemId = 'visceral';
+    else if (/arter|vein|venous|ventricle|atrium|aorta|aortic|heart|cardiac|coronary|cava|pulmonary/i.test(resolvedTargetId)) systemId = 'cardiovascular';
+    else if (/nerve|brain|spinal|cord|sciatic|gyrus|sulcus|cerebr|cerebell|midbrain|pons|medulla|tract|ganglion|cauda/i.test(resolvedTargetId)) systemId = 'nervous';
   }
 
   if (systemId) {
@@ -437,7 +446,20 @@ export async function selectStructureAnywhere(partId) {
     }
   }
 
+  // Ensure skeletal reference context is present when targeting joints, nervous, muscular or visceral structures
+  // so the surrounding skeleton can provide clear translucent (ghosting) landmarks
+  if (['joints', 'nervous', 'muscular', 'visceral'].includes(systemId) && !state.loadedSystems.includes('skeletal')) {
+    const skelGroup = document.querySelector('.system-group[data-system="skeletal"]');
+    await ensureSystemLoaded('skeletal', skelGroup);
+    showSystem('skeletal');
+  }
+
   const ok = selectPartById(resolvedTargetId, state.viewer) || selectPartById(partId, state.viewer);
+  if (ok && state.viewer) {
+    // Smart Contextual Pinpoint: Softly ghost surrounding anatomy so target shines through brightly
+    ghostAllExcept(resolvedTargetId);
+    state.viewer.render();
+  }
   if (!ok) {
     hideCallout(); // Hide old callout so it never stays stuck on previous bone
     const clinical = getClinicalData(resolvedTargetId) || getClinicalData(partId);
@@ -455,6 +477,10 @@ export async function selectStructureAnywhere(partId) {
       }
     };
     setSelectedPart(synthesizedPart);
+  }
+
+  if (autoSpeak) {
+    speakStructure15sSummary(resolvedTargetId, info?.baseName);
   }
   return ok;
 }
@@ -2033,14 +2059,26 @@ export function initSearch() {
       return;
     }
 
+    const matchedSystem = matchSystemProfile(query);
     const matchedAxis = findClinicalAxis(query);
     const concept = findAnatomyConcept(query);
     const matches = searchStructures(query);
 
-    if (matchedAxis || concept || matches.length > 0) {
+    if (matchedSystem || matchedAxis || concept || matches.length > 0) {
       const lang = state.language || 'it';
 
       let html = '';
+
+      if (matchedSystem) {
+        html += `
+          <div class="search-system-card compact-1-line" data-system="${escapeHtml(matchedSystem.id)}" title="${escapeHtml(matchedSystem.nameVi)}: ${escapeHtml(matchedSystem.summary)}" style="border-left: 3px solid ${matchedSystem.badgeColor || '#0ea5e9'};">
+            <span class="system-compact-badge" style="background: ${matchedSystem.badgeColor || '#0ea5e9'}22; color: ${matchedSystem.badgeColor || '#0ea5e9'};">🌐 Toàn Hệ</span>
+            <span class="system-compact-title">${matchedSystem.icon} ${escapeHtml(matchedSystem.nameVi)} (${matchedSystem.count} cấu trúc)</span>
+            <span class="system-compact-action">Xem cả hệ 3D →</span>
+          </div>
+        `;
+      }
+
       if (matches.length > 0) {
         html += matches.map((row, index) => {
           // Paired structures are one row with a side chip each (T/P on Vietnamese, L/R on English)
@@ -2110,6 +2148,25 @@ export function initSearch() {
         });
       });
 
+      results.querySelectorAll('.search-system-card').forEach(card => {
+        card.addEventListener('click', async (clickEvent) => {
+          clickEvent.stopPropagation();
+          const sysId = card.dataset.system;
+          input.value = '';
+          results.innerHTML = '';
+          results.classList.remove('show');
+          document.querySelector('.header')?.classList.remove('search-open');
+          document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+          input.blur();
+          await showcaseWholeSystem(sysId, state.viewer || window.viewer);
+          const c = document.getElementById('selectionCard');
+          if (c) {
+            c.classList.remove('hidden');
+            setSheetSnapTier('compact');
+          }
+        });
+      });
+
       results.querySelectorAll('.search-concept-card, .concept-card-top, .concept-chip').forEach(el => {
         el.addEventListener('click', (clickEvent) => {
           clickEvent.stopPropagation();
@@ -2155,7 +2212,7 @@ export function initSearch() {
   let activeIndex = -1;
 
   function options() {
-    return [...results.querySelectorAll('.search-result-item:not(.is-empty)')];
+    return [...results.querySelectorAll('.search-system-card, .search-axis-card, .search-concept-card, .search-result-item:not(.is-empty)')];
   }
 
   function setActive(index) {
@@ -2172,7 +2229,7 @@ export function initSearch() {
       active.classList.add('is-active');
       active.setAttribute('aria-selected', 'true');
       active.scrollIntoView({ block: 'nearest' });
-      input.setAttribute('aria-activedescendant', active.id);
+      input.setAttribute('aria-activedescendant', active.id || 'search-active-item');
     } else {
       input.removeAttribute('aria-activedescendant');
     }
@@ -2192,10 +2249,80 @@ export function initSearch() {
   });
   observer.observe(results, { childList: true });
 
-  input.addEventListener('keydown', (e) => {
+  input.addEventListener('keydown', async (e) => {
     if (e.key === 'Escape') {
       closeResults();
       input.blur();
+      return;
+    }
+
+    if (e.key === 'Enter') {
+      const list = options();
+      const target = list[activeIndex];
+      if (target) {
+        e.preventDefault();
+        target.click();
+        return;
+      }
+
+      // If user pressed Enter directly on input without waiting for dropdown:
+      const query = input.value.trim();
+      if (query) {
+        e.preventDefault();
+        const sysMatch = matchSystemProfile(query);
+        if (sysMatch) {
+          input.value = '';
+          closeResults();
+          document.querySelector('.header')?.classList.remove('search-open');
+          document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+          input.blur();
+          await showcaseWholeSystem(sysMatch.id, state.viewer || window.viewer);
+          const card = document.getElementById('selectionCard');
+          if (card) {
+            card.classList.remove('hidden');
+            setSheetSnapTier('compact');
+          }
+          return;
+        }
+
+        const axisMatch = findClinicalAxis(query);
+        if (axisMatch) {
+          input.value = '';
+          closeResults();
+          document.querySelector('.header')?.classList.remove('search-open');
+          document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+          input.blur();
+          openClinicalAxesModal(axisMatch.id);
+          return;
+        }
+
+        if (list.length > 0) {
+          list[0].click();
+          return;
+        }
+
+        const aliasTarget = resolveAnatomicalAlias(query);
+        let targetId = aliasTarget;
+        if (!targetId || targetId.toLowerCase() === query.toLowerCase()) {
+          const matches = searchStructures(query);
+          if (matches && matches.length > 0) {
+            targetId = matches[0].sides?.none || matches[0].sides?.left || matches[0].sides?.right || matches[0].base;
+          }
+        }
+        if (targetId) {
+          input.value = '';
+          closeResults();
+          document.querySelector('.header')?.classList.remove('search-open');
+          document.getElementById('searchOpen')?.setAttribute('aria-expanded', 'false');
+          input.blur();
+          await selectStructureAnywhere(targetId, true);
+          const card = document.getElementById('selectionCard');
+          if (card) {
+            card.classList.remove('hidden');
+            setSheetSnapTier('compact');
+          }
+        }
+      }
       return;
     }
 
@@ -2207,13 +2334,6 @@ export function initSearch() {
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setActive(activeIndex - 1);
-    } else if (e.key === 'Enter') {
-      const list = options();
-      const target = list[activeIndex] || list[0];
-      if (target) {
-        e.preventDefault();
-        target.click();
-      }
     }
   });
 }
@@ -2491,7 +2611,7 @@ export function initQuickVoiceMuteController() {
       const cleanName = (rawName || '').replace(/\s*\([^)]*\)/g, '').trim() || rawName;
 
       btn.classList.add('is-speaking');
-      speakVietnamese(cleanName, {
+      speakStructure15sSummary(part.id, part.meshName, {
         onEnd: () => btn.classList.remove('is-speaking'),
         onError: () => btn.classList.remove('is-speaking')
       });

@@ -16,8 +16,9 @@ export const CLINICAL_AXES = [
     primarySystems: ['nervous', 'visceral', 'cardiovascular', 'skeletal'],
     defaultPartId: 'Stomach',
     keywords: [
-      'trục não ruột', 'truc nao ruot', 'chục lão chuột', 'chuc lao chuot', 'chụp não ruột', 'chup nao ruot',
+      'trục não ruột', 'truc nao ruot', 'trực não ruột', 'chục lão chuột', 'chuc lao chuot', 'chụp não ruột', 'chup nao ruot',
       'chục não ruột', 'chuc nao ruot', 'chục lão ruột', 'chuc lao ruot', 'chục não', 'chuc nao',
+      'trực não', 'trực ruột', 'não ruột', 'nao ruot', 'ruột não', 'ruot nao',
       'trục ruột não', 'truc ruot nao', 'trục não', 'truc nao', 'gut brain', 'gut-brain', 'vagus',
       'dây thần kinh x', 'than kinh 10', 'dây x', 'dạ dày ruột', 'lo âu đau bụng', 'ruột kích thích',
       'ibs', 'trầm cảm tiêu hóa'
@@ -525,8 +526,8 @@ export const CLINICAL_AXES = [
     primarySystems: ['cardiovascular', 'visceral', 'skeletal'],
     defaultPartId: 'Right ventricle',
     keywords: [
-      'tim phổi', 'tim phoi', 'tuần hoàn', 'tuan hoan', 'động mạch phổi', 'khó thở suy tim',
-      'phế nang', 'trao đổi khí', 'huyết áp', 'nhồi máu cơ tim'
+      'tim phổi', 'tim phoi', 'trục tim phổi', 'truc tim phoi', 'vòng tuần hoàn kép', 'tuần hoàn tim phổi',
+      'động mạch phổi', 'khó thở suy tim', 'phế nang', 'trao đổi khí', 'nhồi máu cơ tim'
     ],
     chainSteps: [
       {

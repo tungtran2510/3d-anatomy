@@ -72,4 +72,25 @@ describe('AI Query Interpretation & Target Resolution', () => {
     expect(res.intent).toBe('FOCUS_STRUCTURE');
     expect(res.target.id).toBe('Femur.l');
   });
+
+  it('routes "tìm thần kinh tọa" to Sciatic nerve in nervous system', () => {
+    const res = interpretAIQuery('tìm thần kinh tọa', activeSternum);
+    expect(res.intent).toBe('FOCUS_STRUCTURE');
+    expect(res.target.id).toBe('Sciatic nerve.l');
+    expect(res.target.system).toBe('nervous');
+  });
+
+  it('routes "ruột thừa ở đâu" to Vermiform appendix in visceral system', () => {
+    const res = interpretAIQuery('ruột thừa ở đâu', activeSternum);
+    expect(res.intent).toBe('FOCUS_STRUCTURE');
+    expect(res.target.id).toBe('Vermiform appendix');
+    expect(res.target.system).toBe('visceral');
+  });
+
+  it('routes "cho xem cơ delta" to deltoid muscle in muscular system', () => {
+    const res = interpretAIQuery('cho xem cơ delta', activeSternum);
+    expect(res.intent).toBe('FOCUS_STRUCTURE');
+    expect(res.target.id).toBe('Acromial part of deltoid muscle.l');
+    expect(res.target.system).toBe('muscular');
+  });
 });

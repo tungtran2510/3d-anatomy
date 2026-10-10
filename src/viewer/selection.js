@@ -374,13 +374,8 @@ function createCalloutActions(viewer) {
       const targetId = id || state.selectedPart?.id;
       if (!targetId) return;
       const part = state.selectedPart || { id: targetId };
-      const clinical = getClinicalData(targetId);
-      const name = clinical.nameVi || part.displayName || targetId;
-      const desc = clinical.description || clinical.function || '';
-      const firstSentence = desc.split(/[\.\!\?]\s+/)[0] || desc;
-      const textToSpeak = `${name}. ${firstSentence}`;
-      import('../utils/speechVoice.js').then(({ speakVietnamese }) => {
-        speakVietnamese(textToSpeak);
+      import('../utils/speechVoice.js').then(({ speakStructure15sSummary }) => {
+        speakStructure15sSummary(targetId, part.meshName);
       });
     },
     isolate: id => {
@@ -914,7 +909,109 @@ export const ANATOMICAL_ALIAS_MAP = {
   'lá lách': 'Spleen',
   'la lach': 'Spleen',
   'bàng quang': 'Urinary bladder',
-  'bang quang': 'Urinary bladder'
+  'bang quang': 'Urinary bladder',
+  // High-yield nervous system aliases
+  'não': 'Superior frontal gyrus.l',
+  'nao': 'Superior frontal gyrus.l',
+  'bộ não': 'Superior frontal gyrus.l',
+  'bo nao': 'Superior frontal gyrus.l',
+  'đại não': 'Superior frontal gyrus.l',
+  'dai nao': 'Superior frontal gyrus.l',
+  'vỏ não': 'Superior frontal gyrus.l',
+  'vo nao': 'Superior frontal gyrus.l',
+  'óc': 'Superior frontal gyrus.l',
+  'oc': 'Superior frontal gyrus.l',
+  'bán cầu đại não': 'Superior frontal gyrus.l',
+  'ban cau dai nao': 'Superior frontal gyrus.l',
+  'brain': 'Superior frontal gyrus.l',
+  'cerebrum': 'Superior frontal gyrus.l',
+  'tiểu não': 'Lingula of cerebellum',
+  'tieu nao': 'Lingula of cerebellum',
+  'cerebellum': 'Lingula of cerebellum',
+  'thân não': 'Midbrain.l',
+  'than nao': 'Midbrain.l',
+  'brainstem': 'Midbrain.l',
+  'tủy': 'White matter of spinal cord',
+  'tuy': 'White matter of spinal cord',
+  'tuỷ': 'White matter of spinal cord',
+  'tủy sống': 'White matter of spinal cord',
+  'tuy song': 'White matter of spinal cord',
+  'tuỷ sống': 'White matter of spinal cord',
+  'tủy gai': 'White matter of spinal cord',
+  'tuy gai': 'White matter of spinal cord',
+  'nón tủy': 'White matter of spinal cord',
+  'non tuy': 'White matter of spinal cord',
+  'chất trắng tủy sống': 'White matter of spinal cord',
+  'sừng trước': 'Anterior horn of spinal cord',
+  'sung truoc': 'Anterior horn of spinal cord',
+  'sừng trước tủy sống': 'Anterior horn of spinal cord',
+  'sừng sau': 'Posterior horn of spinal cord',
+  'sung sau': 'Posterior horn of spinal cord',
+  'sừng sau tủy sống': 'Posterior horn of spinal cord',
+  'rễ thần kinh': 'Anterior root of spinal nerve',
+  're than kinh': 'Anterior root of spinal nerve',
+  'rễ thần kinh gai sống': 'Anterior root of spinal nerve',
+  'màng cứng tủy sống': 'Spinal dura',
+  'màng cứng': 'Spinal dura',
+  'spinal cord': 'White matter of spinal cord',
+  'medulla spinalis': 'White matter of spinal cord',
+  'chùm đuôi ngựa': 'Cauda equina',
+  'chum duoi ngua': 'Cauda equina',
+  'đuôi ngựa': 'Cauda equina',
+  'duoi ngua': 'Cauda equina',
+  'cauda equina': 'Cauda equina',
+  'thần kinh giữa': 'Median nerve.l',
+  'than kinh giua': 'Median nerve.l',
+  'median nerve': 'Median nerve.l',
+  'thần kinh trụ': 'Ulnar nerve.l',
+  'than kinh tru': 'Ulnar nerve.l',
+  'ulnar nerve': 'Ulnar nerve.l',
+  'thần kinh quay': 'Radial nerve.l',
+  'than kinh quay': 'Radial nerve.l',
+  'radial nerve': 'Radial nerve.l',
+  'thần kinh tọa': 'Sciatic nerve.l',
+  'than kinh toa': 'Sciatic nerve.l',
+  'thần kinh ngồi': 'Sciatic nerve.l',
+  'than kinh ngoi': 'Sciatic nerve.l',
+  'dây thần kinh tọa': 'Sciatic nerve.l',
+  'day than kinh toa': 'Sciatic nerve.l',
+  'sciatic nerve': 'Sciatic nerve.l',
+  'sciatic': 'Sciatic nerve.l',
+  'thần kinh tọa trái': 'Sciatic nerve.l',
+  'thần kinh tọa phải': 'Sciatic nerve.r',
+  // High-yield digestive aliases
+  'ruột thừa': 'Vermiform appendix',
+  'ruot thua': 'Vermiform appendix',
+  'appendix': 'Vermiform appendix',
+  'vermiform appendix': 'Vermiform appendix',
+  'ruột tịt': 'Vermiform appendix',
+  'ruot tit': 'Vermiform appendix',
+  'viêm ruột thừa': 'Vermiform appendix',
+  // High-yield muscular aliases
+  'cơ delta': 'Acromial part of deltoid muscle.l',
+  'co delta': 'Acromial part of deltoid muscle.l',
+  'deltoid': 'Acromial part of deltoid muscle.l',
+  'deltoid muscle': 'Acromial part of deltoid muscle.l',
+  'cơ delta trái': 'Acromial part of deltoid muscle.l',
+  'cơ delta phải': 'Acromial part of deltoid muscle.r',
+  // High-yield tendons & ligaments aliases
+  'dây chằng bánh chè': 'Patellar ligament',
+  'day chang banh che': 'Patellar ligament',
+  'gân bánh chè': 'Patellar ligament',
+  'gan banh che': 'Patellar ligament',
+  'patellar ligament': 'Patellar ligament',
+  'patellar tendon': 'Patellar ligament',
+  'gân gót': 'Calcaneal tendon.l',
+  'gan got': 'Calcaneal tendon.l',
+  'gân achilles': 'Calcaneal tendon.l',
+  'gan achilles': 'Calcaneal tendon.l',
+  'gân gót achilles': 'Calcaneal tendon.l',
+  'achilles tendon': 'Calcaneal tendon.l',
+  'calcaneal tendon': 'Calcaneal tendon.l',
+  'dải chậu chày': 'Iliotibial tract.l',
+  'dai chau chay': 'Iliotibial tract.l',
+  'iliotibial tract': 'Iliotibial tract.l',
+  'it band': 'Iliotibial tract.l'
 };
 
 export function resolveAnatomicalAlias(name) {

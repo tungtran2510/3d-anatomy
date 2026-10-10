@@ -8,7 +8,8 @@ import { PATIENT_CASES } from './patientConsultationModal.js';
 import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getTableVisibility } from '../viewer/orientationManager.js';
 import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
-import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost } from '../viewer/visibility.js';
+import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost, showcaseWholeSystem } from '../viewer/visibility.js';
+import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview, resolveAnatomicalAlias } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
 import { addCustomTag, clearCustomTags } from '../viewer/labels.js';
@@ -268,17 +269,41 @@ export function updateInfoPanelContent(part, viewer) {
     cardBody.scrollLeft = 0;
   }
 
-  const clinical = getClinicalData(part.id);
+  let clinical = getClinicalData(part.id);
   const lang = state.language || 'vi';
+  const isWholeSystem = Boolean(part.isSystem || part.systemProfile || (typeof part.id === 'string' && part.id.startsWith('system_')));
+  if (isWholeSystem && (part.systemProfile || part.info)) {
+    const prof = part.systemProfile || {
+      nameVi: part.info?.name?.vi || part.displayName,
+      nameEn: part.info?.name?.en || '',
+      nameLatin: part.info?.latinName || '',
+      structureCount: part.info?.structureCount || 46,
+      summary: part.info?.description || '',
+      speech15s: part.info?.function || '',
+      keyOrgans: part.info?.keyOrgans || []
+    };
+    clinical = {
+      ...clinical,
+      nameVi: prof.nameVi,
+      nameEn: prof.nameEn,
+      nameLatin: prof.nameLatin,
+      systemVi: `Toàn Bộ Hệ Cơ Quan`,
+      regionVi: 'Toàn thân',
+      description: prof.summary || clinical.description,
+      function: prof.speech15s || clinical.function,
+      clinical: `Hệ thống tích hợp ${prof.structureCount || 40} thành phần giải phẫu phối hợp đồng bộ để duy trì chức năng sống.`,
+      keyOrgans: prof.keyOrgans || []
+    };
+  }
 
   // 1. Title & Subtitle (Visible Body Prominent Anatomy Teal Header)
   const cardTitle = document.getElementById('cardTitle');
   const cardSubtitle = document.getElementById('cardSubtitle');
   const cardCompactLabel = document.getElementById('cardCompactLabel');
 
-  const mainName = clinical.nameVi || part.info?.name?.[lang] || part.displayName || part.id;
-  const latinName = clinical.nameLatin || part.info?.latinName || '';
-  const systemName = clinical.systemVi || part.system || '';
+  const mainName = isWholeSystem && part.systemProfile ? part.systemProfile.nameVi : (clinical.nameVi || part.info?.name?.[lang] || part.displayName || part.id);
+  const latinName = isWholeSystem && part.systemProfile ? part.systemProfile.nameLatin : (clinical.nameLatin || part.info?.latinName || '');
+  const systemName = isWholeSystem && part.systemProfile ? `Toàn Bộ Hệ Cơ Quan (${part.systemProfile.structureCount} cấu trúc)` : (clinical.systemVi || part.system || '');
 
   if (cardTitle) cardTitle.innerHTML = formatNameWithSubtitles(mainName);
   if (cardCompactLabel) cardCompactLabel.textContent = 'Thông tin';
@@ -371,39 +396,57 @@ export function updateInfoPanelContent(part, viewer) {
   // 3. Render Interactive Anatomical Hierarchy Tree (Gọn gàng, tinh tế)
   const hierarchyBox = document.getElementById('cardHierarchyBox');
   if (hierarchyBox) {
-    const systemDisplayName = clinical.systemVi || 'Hệ Giải Phẫu';
-    const regionName = clinical.regionVi || 'Vùng Cơ Thể';
-
-    hierarchyBox.innerHTML = `
-      <div class="anatomical-hierarchy-tree">
-        <div class="tree-node tree-root" data-action="select-system" title="Xem toàn bộ ${systemDisplayName}">
-          <span class="tree-icon">🏛️</span>
-          <span class="tree-label">${systemDisplayName}</span>
-        </div>
-        <div class="tree-branch">
-          <div class="tree-node tree-region" data-action="select-region" title="Xem phân vùng ${regionName}">
-            <span class="tree-connector">├─</span>
-            <span class="tree-icon">📍</span>
-            <span class="tree-label">${regionName}</span>
+    if (isWholeSystem && part.systemProfile) {
+      hierarchyBox.innerHTML = `
+        <div class="anatomical-hierarchy-tree">
+          <div class="tree-node tree-root active" title="Toàn bộ ${part.systemProfile.nameVi}">
+            <span class="tree-icon">🏛️</span>
+            <span class="tree-label highlight-teal">${part.systemProfile.nameVi} (${part.systemProfile.nameLatin})</span>
           </div>
-          <div class="tree-node tree-current active" title="Cấu trúc hiện tại">
-            <span class="tree-connector">└─</span>
-            <span class="tree-icon">🎯</span>
-            <span class="tree-label highlight-teal">${mainName}</span>
+          <div class="tree-branch">
+            <div class="tree-node tree-current" title="${part.systemProfile.structureCount} cấu trúc giải phẫu">
+              <span class="tree-connector">└─</span>
+              <span class="tree-icon">✨</span>
+              <span class="tree-label">Toàn bộ ${part.systemProfile.structureCount} cấu trúc giải phẫu • Nhấn cơ quan bên dưới để phóng to</span>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
+    } else {
+      const systemDisplayName = clinical.systemVi || 'Hệ Giải Phẫu';
+      const regionName = clinical.regionVi || 'Vùng Cơ Thể';
 
-    // Bind hierarchy navigation
-    hierarchyBox.querySelector('[data-action="select-system"]')?.addEventListener('click', () => {
-      showToast(`🏛️ Đang chọn hệ: ${systemDisplayName}`);
-      document.getElementById('systemsOpen')?.click();
-    });
+      hierarchyBox.innerHTML = `
+        <div class="anatomical-hierarchy-tree">
+          <div class="tree-node tree-root" data-action="select-system" title="Xem toàn bộ ${systemDisplayName}">
+            <span class="tree-icon">🏛️</span>
+            <span class="tree-label">${systemDisplayName}</span>
+          </div>
+          <div class="tree-branch">
+            <div class="tree-node tree-region" data-action="select-region" title="Xem phân vùng ${regionName}">
+              <span class="tree-connector">├─</span>
+              <span class="tree-icon">📍</span>
+              <span class="tree-label">${regionName}</span>
+            </div>
+            <div class="tree-node tree-current active" title="Cấu trúc hiện tại">
+              <span class="tree-connector">└─</span>
+              <span class="tree-icon">🎯</span>
+              <span class="tree-label highlight-teal">${mainName}</span>
+            </div>
+          </div>
+        </div>
+      `;
 
-    hierarchyBox.querySelector('[data-action="select-region"]')?.addEventListener('click', () => {
-      showToast(`📍 Khu trú phân vùng: ${regionName}`);
-    });
+      // Bind hierarchy navigation
+      hierarchyBox.querySelector('[data-action="select-system"]')?.addEventListener('click', () => {
+        showToast(`🏛️ Đang chọn hệ: ${systemDisplayName}`);
+        document.getElementById('systemsOpen')?.click();
+      });
+
+      hierarchyBox.querySelector('[data-action="select-region"]')?.addEventListener('click', () => {
+        showToast(`📍 Khu trú phân vùng: ${regionName}`);
+      });
+    }
   }
 
   // 4. Render Cấu tạo chi tiết & Các bộ phận trực quan (Interactive Subparts Chips)
@@ -1135,15 +1178,34 @@ function renderBreadcrumbTrail(part, clinical, mainName, viewer) {
   const container = document.getElementById('selectionBreadcrumbTrail');
   if (!container) return;
 
+  if (part.isSystem && part.systemProfile) {
+    const prof = part.systemProfile;
+    container.innerHTML = `
+      <div class="crumb-chip crumb-system" title="Hệ cơ quan: ${prof.nameVi}">
+        <span class="crumb-icon">${prof.icon}</span>
+        <span class="crumb-text">${prof.nameVi}</span>
+      </div>
+      <span class="crumb-separator">›</span>
+      <div class="crumb-chip crumb-current" title="Toàn hệ 3D">
+        <span class="crumb-icon">🌐</span>
+        <span class="crumb-text">Toàn Bộ Hệ Cơ Quan (${prof.count} cấu trúc)</span>
+      </div>
+    `;
+    container.classList.remove('hidden');
+    return;
+  }
+
   const rawSystemName = clinical.systemVi || part.system || 'Hệ Giải Phẫu';
   const systemName = rawSystemName.replace(/\s*\([^)]*\)/g, '').trim();
   const systemIcon = getSystemIcon(systemName);
   const parentInfo = getParentOrganInfo(part.id, mainName, clinical);
+  const sysProfile = matchSystemProfile(part.system) || matchSystemProfile(systemName);
 
   let html = `
-    <button type="button" class="crumb-chip crumb-system" data-action="system" title="Hệ: ${systemName}">
+    <button type="button" class="crumb-chip crumb-system" data-action="system" title="Hệ: ${systemName} (Chạm để xem cả hệ)">
       <span class="crumb-icon">${systemIcon}</span>
       <span class="crumb-text">${systemName}</span>
+      ${sysProfile ? '<span class="crumb-system-tag" style="opacity:0.85;font-size:9.5px;margin-left:4px;background:rgba(255,255,255,0.18);padding:1px 5px;border-radius:4px;">🌐 Xem cả hệ</span>' : ''}
     </button>
   `;
 
@@ -1169,11 +1231,16 @@ function renderBreadcrumbTrail(part, clinical, mainName, viewer) {
   container.classList.remove('hidden');
 
   // Bind clicks
-  container.querySelector('.crumb-system')?.addEventListener('click', (e) => {
+  container.querySelector('.crumb-system')?.addEventListener('click', async (e) => {
     e.stopPropagation();
-    showToast(`🏛️ Đang chọn hệ: ${systemName}`);
-    const sysBtn = document.getElementById('systemsToggle');
-    if (sysBtn) sysBtn.click();
+    if (sysProfile) {
+      showToast(`🌐 Đang mở Toàn Bộ: ${sysProfile.nameVi}`);
+      await showcaseWholeSystem(sysProfile.id, viewer || state.viewer || window.viewer);
+    } else {
+      showToast(`🏛️ Đang chọn hệ: ${systemName}`);
+      const sysBtn = document.getElementById('systemsToggle');
+      if (sysBtn) sysBtn.click();
+    }
   });
 
   container.querySelector('.crumb-parent')?.addEventListener('click', async (e) => {
@@ -1224,6 +1291,41 @@ function renderNeighborSmartChips(part, clinical, mainName, viewer) {
   const section = document.getElementById('cardNeighborSmartSection');
   const scrollWrap = document.getElementById('cardNeighborChipsScroll');
   if (!section || !scrollWrap) return;
+
+  // 1. If currently viewing a Whole System Showcase, display its key organs!
+  if (part.isSystem && part.systemProfile?.keyOrgans) {
+    section.classList.remove('hidden');
+    const label = section.querySelector('.neighbor-label') || section.querySelector('h4');
+    if (label) label.textContent = '🎯 CÁC CƠ QUAN TRỌNG ĐIỂM (Chạm để phóng to xem chi tiết)';
+
+    scrollWrap.innerHTML = part.systemProfile.keyOrgans.map(org => `
+      <button type="button" class="neighbor-smart-chip" data-search="${org.partId}" data-name="${org.nameVi}" title="Phóng to: ${org.nameVi}">
+        <span class="neighbor-chip-icon">📍</span>
+        <span class="neighbor-chip-name">${org.nameVi}</span>
+        ${org.latin ? `<span class="neighbor-chip-latin" style="opacity:0.65;font-size:9.5px;font-style:italic;">(${org.latin})</span>` : ''}
+      </button>
+    `).join('');
+
+    scrollWrap.querySelectorAll('.neighbor-smart-chip').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const targetQuery = btn.dataset.search;
+        const targetName = btn.dataset.name;
+        showToast(`🎯 Phóng to cơ quan: ${targetName}`);
+        try {
+          await selectStructureAnywhere(targetQuery);
+          const card = document.getElementById('selectionCard');
+          if (card) {
+            card.classList.remove('hidden');
+            setSheetSnapTier('compact');
+          }
+        } catch (err) {
+          console.warn('Organ zoom failed:', err);
+        }
+      });
+    });
+    return;
+  }
 
   const neighbors = getNeighborList(part.id, mainName, clinical);
   if (!neighbors || neighbors.length === 0) {

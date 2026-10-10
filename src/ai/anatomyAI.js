@@ -5,13 +5,15 @@ import { getClinicalData } from '../data/clinicalInfo.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { selectPartById } from '../viewer/selection.js';
 import { loadModel } from '../viewer/loadModel.js';
-import { showSystem, hideSystem } from '../viewer/visibility.js';
+import { showSystem, hideSystem, ghostAllExcept, showcaseWholeSystem } from '../viewer/visibility.js';
 import { highlightMesh } from '../viewer/visibility.js';
 import { setClippingPlane } from '../viewer/clipping.js';
 import { toggleMeasurementMode } from '../viewer/measurement.js';
 import { getWeakStructures, getRoadmapProgress } from '../state/learningRoadmap.js';
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
 import { hideCallout } from '../ui/callout.js';
+import { getStructure15sSpeechText } from '../utils/speechVoice.js';
+import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
 
 // Pre-mapped high-frequency Vietnamese clinical anatomical aliases
 export const ANATOMICAL_SYNONYMS = {
@@ -98,7 +100,20 @@ export const ANATOMICAL_SYNONYMS = {
   'thần kinh tọa': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa (Dây thần kinh ngồi)' },
   'thần kinh hông to': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa' },
   'thần kinh đùi': { id: 'Femoral nerve.l', base: 'Femoral nerve', system: 'nervous', nameVi: 'Dây thần kinh đùi' },
-  'tủy sống': { id: 'Spinal cord', base: 'Spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'tủy': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống (Medulla spinalis)' },
+  'tuy': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống (Medulla spinalis)' },
+  'tuỷ': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống (Medulla spinalis)' },
+  'tủy sống': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'tuy song': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'tuỷ sống': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'tủy gai': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Tủy sống (Tủy gai)' },
+  'nón tủy': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Nón tủy (Conus medullaris)' },
+  'chất trắng tủy sống': { id: 'White matter of spinal cord', base: 'White matter of spinal cord', system: 'nervous', nameVi: 'Chất trắng tủy sống' },
+  'sừng trước': { id: 'Anterior horn of spinal cord', base: 'Anterior horn of spinal cord', system: 'nervous', nameVi: 'Sừng trước tủy sống (Vận động)' },
+  'sừng sau': { id: 'Posterior horn of spinal cord', base: 'Posterior horn of spinal cord', system: 'nervous', nameVi: 'Sừng sau tủy sống (Cảm giác)' },
+  'chùm đuôi ngựa': { id: 'Cauda equina', base: 'Cauda equina', system: 'nervous', nameVi: 'Chùm đuôi ngựa (Cauda equina)' },
+  'cauda equina': { id: 'Cauda equina', base: 'Cauda equina', system: 'nervous', nameVi: 'Chùm đuôi ngựa (Cauda equina)' },
+  'rễ thần kinh': { id: 'Anterior root of spinal nerve', base: 'Anterior root of spinal nerve', system: 'nervous', nameVi: 'Rễ thần kinh gai sống' },
   'dịch não tủy': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất & Dịch não tủy (CSF)' },
   'dich nao tuy': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Hệ thống Não thất & Dịch não tủy (CSF)' },
   'nước não tủy': { id: 'Lateral ventricle.l', base: 'Lateral ventricle', system: 'nervous', nameVi: 'Dịch não tủy (CSF)' },
@@ -487,7 +502,15 @@ export function matchKeywordInText(text, keyword) {
  * Parses user input to extract semantic intent, target entities, and 3D action
  */
 export function interpretAIQuery(query, activePart = null) {
-  const q = query.toLowerCase().trim();
+  let q = query.toLowerCase().trim();
+
+  // Normalize common phonetic / typing / voice-to-text variations
+  if (q.includes('trực não ruột') || q.includes('chục não ruột') || q.includes('chục lão chuột') || q.includes('chụp não ruột')) {
+    q = q.replace(/trực não ruột|chục não ruột|chục lão chuột|chụp não ruột/g, 'trục não ruột');
+  }
+  if (q === 'tuỷ' || q === 'tuy' || q === 'tuỷ sống' || q === 'tuy song' || q === 'tủy') {
+    q = 'tủy sống';
+  }
 
   // -1. Intent: Muscle Overview & Classification ("các loại cơ", "các nhóm cơ", "hệ cơ", "cơ bắp", "có những loại cơ nào")
   const isMuscleOverview = (
@@ -521,25 +544,6 @@ export function interpretAIQuery(query, activePart = null) {
     };
   }
 
-  // -0.5 Direct Muscle Structure Priority:
-  // If the query directly targets a specific muscle (e.g. "cơ thang", "cơ dọc sống lưng", "cơ delta"),
-  // route directly to structure focus/Q&A so it never gets intercepted by clinical axes.
-  const isExplicitAxisQuery = q.includes('trục') || q.includes('truc') || q.includes('chục') || q.includes('chuc') ||
-                              q.includes('bộ ba') || q.includes('bo ba') || q.includes('bộ 3') || q.includes('bo 3') ||
-                              q.includes('chuỗi') || q.includes('vòng tuần hoàn');
-
-  const directStructure = findTargetStructure(q, activePart);
-  const isMuscleTarget = directStructure && directStructure.system === 'muscular';
-
-  if (isMuscleTarget && !isExplicitAxisQuery) {
-    const isQuestion = q.includes('là gì') || q.includes('thế nào') || q.includes('chức năng') || q.includes('bệnh') || q.includes('triệu chứng') || q.includes('tại sao');
-    return {
-      intent: isQuestion ? 'CLINICAL_QNA' : 'FOCUS_STRUCTURE',
-      target: directStructure,
-      rawQuery: query
-    };
-  }
-
   // 0. Intent: Clinical Functional Axes (Trục lâm sàng / Bộ ba chức năng / Tuyến tiêu hóa / Dịch não tủy / Trục não ruột / Chục lão chuột)
   let targetAxis = null;
   if (
@@ -551,6 +555,11 @@ export function interpretAIQuery(query, activePart = null) {
     q.includes('chuc nao ruot') ||
     q.includes('chục não') ||
     q.includes('trục não ruột') ||
+    q.includes('trực não ruột') ||
+    q.includes('trực não') ||
+    q.includes('trực ruột') ||
+    q.includes('não ruột') ||
+    q.includes('ruột não') ||
     q.includes('trục ruột não')
   ) {
     targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_gut_brain');
@@ -583,7 +592,9 @@ export function interpretAIQuery(query, activePart = null) {
     q.includes('nước não tủy') ||
     q.includes('tuần hoàn dịch não tủy') ||
     q.includes('hệ thống não thất') ||
-    q.includes('não úng thủy')
+    q.includes('não úng thủy') ||
+    q.includes('não thất') ||
+    q.includes('nao that')
   ) {
     targetAxis = CLINICAL_AXES.find(a => a.id === 'axis_csf_ventricles');
   } else if (
@@ -626,6 +637,51 @@ export function interpretAIQuery(query, activePart = null) {
       intent: 'CLINICAL_AXIS',
       axis: targetAxis,
       axisId: targetAxis.id,
+      rawQuery: query
+    };
+  }
+
+  // -0.5 Direct Muscle Structure Priority:
+  // If the query directly targets a specific muscle (e.g. "cơ thang", "cơ dọc sống lưng", "cơ delta"),
+  // route directly to structure focus/Q&A so it never gets intercepted by whole system showcase.
+  const isExplicitAxisQuery = q.includes('trục') || q.includes('truc') || q.includes('chục') || q.includes('chuc') ||
+                              q.includes('bộ ba') || q.includes('bo ba') || q.includes('bộ 3') || q.includes('bo 3') ||
+                              q.includes('chuỗi') || q.includes('vòng tuần hoàn');
+
+  const directStructure = findTargetStructure(q, activePart);
+  const isMuscleTarget = directStructure && directStructure.system === 'muscular';
+
+  if (isMuscleTarget && !isExplicitAxisQuery) {
+    const isQuestion = q.includes('là gì') || q.includes('thế nào') || q.includes('chức năng') || q.includes('bệnh') || q.includes('triệu chứng') || q.includes('tại sao');
+    return {
+      intent: isQuestion ? 'CLINICAL_QNA' : 'FOCUS_STRUCTURE',
+      target: directStructure,
+      rawQuery: query
+    };
+  }
+
+  // -2. Intent: Whole Organ System Showcase ("hệ tiêu hóa", "hệ tuần hoàn", "hệ thần kinh", "cột sống", "tủy sống", "hệ bạch huyết", "cns", "hệ tiết niệu")
+  const matchedSystemProfile = matchSystemProfile(q);
+  const specificSubPart = findTargetStructure(q, activePart);
+  const isDedicatedSystem = matchedSystemProfile && [
+    'spine', 'spinal_cord', 'cns', 'lymphatic', 'urinary'
+  ].includes(matchedSystemProfile.id);
+
+  const isExplicitSystemQuery = matchedSystemProfile && (
+    q.includes('hệ ') || q.includes('he ') ||
+    q.includes('bộ máy') || q.includes('bo may') ||
+    q.includes('toàn bộ') || q.includes('toan bo') ||
+    q.includes('khung') ||
+    isDedicatedSystem ||
+    !specificSubPart ||
+    matchedSystemProfile.keywords.some(k => q === k || q === `xem ${k}` || q === `tìm ${k}` || q === `mở ${k}` || q === `cho xem ${k}` || q === `chỉ ${k}`)
+  );
+
+  if (matchedSystemProfile && isExplicitSystemQuery) {
+    return {
+      intent: 'SHOWCASE_SYSTEM',
+      systemId: matchedSystemProfile.id,
+      profile: matchedSystemProfile,
       rawQuery: query
     };
   }
@@ -986,6 +1042,42 @@ ${insightsFormatted}
     };
   }
 
+  // -0.1 WHOLE ORGAN SYSTEM SHOWCASE
+  if (intent === 'SHOWCASE_SYSTEM') {
+    const sysId = systemId || (profile && profile.id);
+    const sysProfile = profile || SYSTEM_PROFILES[sysId] || matchSystemProfile(sysId);
+
+    if (activeViewer && sysProfile) {
+      await showcaseWholeSystem(sysProfile.id, activeViewer, { autoSpeak: false });
+    }
+
+    const card = document.getElementById('selectionCard');
+    if (card) {
+      card.classList.remove('hidden');
+      window.dispatchEvent(new CustomEvent('expand-selection-card'));
+    }
+
+    return {
+      action: 'SHOWCASE_SYSTEM',
+      actionBadge: `🌐 AI đã hiển thị Toàn Bộ: ${sysProfile.nameVi}`,
+      speechText: sysProfile.speech15s,
+      message: `
+### ${sysProfile.icon} ${sysProfile.nameVi.toUpperCase()}
+*${sysProfile.nameLatin} • ${sysProfile.count} cấu trúc giải phẫu*
+
+---
+
+${sysProfile.summary}
+
+#### 🎯 CÁC CƠ QUAN TRỌNG ĐIỂM TRONG HỆ:
+${sysProfile.keyOrgans.map(o => `- **${o.nameVi}** *(Latin: ${o.latin})*`).join('\n')}
+
+💡 *Gợi ý:* Chạm vào bất kỳ cơ quan nào trong danh sách trên để phóng to định vị chi tiết bộ phận đó!
+      `.trim(),
+      systemProfile: sysProfile
+    };
+  }
+
   // 0.1 MUSCLE OVERVIEW (Tổng quan hệ cơ & các nhóm cơ trên 3D)
   if (intent === 'MUSCLE_OVERVIEW') {
     if (activeViewer) {
@@ -1059,7 +1151,9 @@ ${insightsFormatted}
                    selectPartById(target.base + '.l', activeViewer) ||
                    selectPartById(target.base + '.r', activeViewer);
       }
-      if (!selected) {
+      if (selected) {
+        ghostAllExcept(target.id);
+      } else {
         hideCallout();
       }
       activeViewer.render();
@@ -1094,12 +1188,12 @@ ${insightsFormatted}
     return {
       action: 'FOCUS',
       actionBadge: `🎯 AI đã định vị & làm nổi bật: ${displayName}`,
-      speechText: `Đã tìm thấy ${displayName}.`,
+      speechText: getStructure15sSpeechText(target.id, target.base) || `${displayName}.`,
       message: `
         **${displayName}** *(Latin: ${clinical?.nameLatin || ''})*
-        - **Hệ cơ quan:** ${clinical?.systemVi || target.system || 'Hệ giải phẫu'}
-        - **Chức năng chính:** ${clinical?.function || 'Tham gia cấu tạo, vận động hoặc nâng đỡ sinh lý liên quan.'}
-        - **Liên quan lâm sàng:** ${clinical?.clinical || 'Cần chú ý thăm khám và bảo vệ tránh tổn thương cơ học.'}
+        - **Vị trí:** ${clinical?.description || 'Nằm ở khu vực giải phẫu tương ứng.'}
+        - **Chức năng:** ${clinical?.function || 'Tham gia cấu tạo, vận động hoặc nâng đỡ sinh lý liên quan.'}
+        - **Lâm sàng:** ${clinical?.clinical || 'Cần chú ý thăm khám và bảo vệ tránh tổn thương cơ học.'}
       `.trim(),
       data: clinical,
       partId: target.id

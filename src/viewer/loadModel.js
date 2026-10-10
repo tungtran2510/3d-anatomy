@@ -1089,20 +1089,33 @@ export function getOrganicTextures() {
     skinMap.wrapT = THREE.RepeatWrapping;
     skinMap.repeat.set(24, 24);
 
-    // 5. Cortical Bone Micro-Porosity Mineral Normal Map (128x128)
+    // 5. Cortical Bone Micro-Porosity & Osteon Haversian Normal Map (256x256)
     const boneCanvas = document.createElement('canvas');
-    boneCanvas.width = 128;
-    boneCanvas.height = 128;
+    boneCanvas.width = 256;
+    boneCanvas.height = 256;
     const bCtx = boneCanvas.getContext('2d');
     if (bCtx) {
-      const bImg = bCtx.createImageData(128, 128);
-      for (let y = 0; y < 128; y++) {
-        for (let x = 0; x < 128; x++) {
-          const idx = (y * 128 + x) * 4;
-          const pore = ((x * 17 + y * 23) % 15) - 7;
-          bImg.data[idx] = Math.floor(Math.max(0, Math.min(255, 128 + pore)));
-          bImg.data[idx + 1] = Math.floor(Math.max(0, Math.min(255, 128 + pore)));
-          bImg.data[idx + 2] = 252;
+      const bImg = bCtx.createImageData(256, 256);
+      for (let y = 0; y < 256; y++) {
+        const ny = y / 256;
+        for (let x = 0; x < 256; x++) {
+          const nx = x / 256;
+          const idx = (y * 256 + x) * 4;
+          // Longitudinal osteon canalicular striation with natural organic divergence
+          const osteonFibers = Math.sin(nx * Math.PI * 32 + Math.cos(ny * Math.PI * 4) * 0.6) * 16;
+          // Micro-porosity of Volkmann / Haversian vascular canals
+          const isCanal = ((x * 31 + y * 47) % 37) < 3;
+          const canalDepth = isCanal ? -28 : 0;
+          // Sub-millimeter mineral grain of hydroxyapatite
+          const mineralGrain = (((x * 19 + y * 29) % 23) - 11) * 1.8;
+
+          const nX = Math.floor(Math.max(0, Math.min(255, 128 + osteonFibers + canalDepth + mineralGrain)));
+          const nY = Math.floor(Math.max(0, Math.min(255, 128 + Math.sin(ny * Math.PI * 48) * 8 + canalDepth * 0.6)));
+          const nZ = 232;
+
+          bImg.data[idx] = nX;
+          bImg.data[idx + 1] = nY;
+          bImg.data[idx + 2] = nZ;
           bImg.data[idx + 3] = 255;
         }
       }
@@ -1111,7 +1124,7 @@ export function getOrganicTextures() {
     const boneMap = new THREE.CanvasTexture(boneCanvas);
     boneMap.wrapS = THREE.RepeatWrapping;
     boneMap.wrapT = THREE.RepeatWrapping;
-    boneMap.repeat.set(12, 12);
+    boneMap.repeat.set(16, 24);
 
     // 6. Spongy Alveolar Parenchyma Micro-Porosity Normal Map (128x128)
     const lungCanvas = document.createElement('canvas');
@@ -1137,20 +1150,21 @@ export function getOrganicTextures() {
     lungMap.wrapT = THREE.RepeatWrapping;
     lungMap.repeat.set(16, 16);
 
-    // 7. Procedural Organic Micro-Roughness / Cavity Variation Map (128x128)
+    // 7. Procedural Organic Micro-Roughness / Cavity Variation Map (256x256)
     const cavityCanvas = document.createElement('canvas');
-    cavityCanvas.width = 128;
-    cavityCanvas.height = 128;
+    cavityCanvas.width = 256;
+    cavityCanvas.height = 256;
     const cCtx = cavityCanvas.getContext('2d');
     if (cCtx) {
-      const cImg = cCtx.createImageData(128, 128);
-      for (let y = 0; y < 128; y++) {
-        for (let x = 0; x < 128; x++) {
-          const idx = (y * 128 + x) * 4;
-          // Micro-cellular organic grain with crevice variation
-          const cellNoise = Math.sin(x * 0.45) * Math.cos(y * 0.45) * 40;
-          const highFreq = (((x * 23 + y * 41) % 19) - 9) * 2.5;
-          const roughVal = Math.floor(Math.max(70, Math.min(240, 135 + cellNoise + highFreq)));
+      const cImg = cCtx.createImageData(256, 256);
+      for (let y = 0; y < 256; y++) {
+        for (let x = 0; x < 256; x++) {
+          const idx = (y * 256 + x) * 4;
+          // Multi-frequency micro-cellular noise for natural organic roughness
+          const cellNoise = Math.sin(x * 0.35) * Math.cos(y * 0.35) * 35;
+          const fineNoise = Math.sin(x * 0.85 + y * 0.65) * 15;
+          const highFreq = (((x * 29 + y * 43) % 23) - 11) * 2.0;
+          const roughVal = Math.floor(Math.max(80, Math.min(235, 140 + cellNoise + fineNoise + highFreq)));
           cImg.data[idx] = roughVal;
           cImg.data[idx + 1] = roughVal;
           cImg.data[idx + 2] = roughVal;
@@ -1162,7 +1176,7 @@ export function getOrganicTextures() {
     const cavityRoughnessMap = new THREE.CanvasTexture(cavityCanvas);
     cavityRoughnessMap.wrapS = THREE.RepeatWrapping;
     cavityRoughnessMap.wrapT = THREE.RepeatWrapping;
-    cavityRoughnessMap.repeat.set(12, 12);
+    cavityRoughnessMap.repeat.set(16, 16);
 
     organicTexturesCache = { serosaMap, muscleMap, muscleCavityMap, collagenMap, skinMap, boneMap, lungMap, cavityRoughnessMap };
     return organicTexturesCache;
@@ -1213,29 +1227,29 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Liver',
         color: 0x76241E,
-        roughness: 0.42,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.38,
-        clearcoatRoughness: 0.24,
-        sheen: 0.50,
+        metalness: 0.0,
+        clearcoat: 0.26,
+        clearcoatRoughness: 0.40,
+        sheen: 0.65,
         sheenColor: 0x991b1b,
         ior: 1.38,
         normalMap: textures?.serosaMap,
-        normalScale: [0.08, 0.08]
+        normalScale: [0.10, 0.10]
       });
     } else if (partName.includes('gallbladder') || partName.includes('túi mật')) {
-      // Gallbladder: deep olive-emerald cystic organ with smooth moist peritoneal surface
+      // Gallbladder: authentic physiological bile-stained deep olive green with gentle serosal lubrication
       applyCustomProps(mesh, {
         name: 'PBR_Gallbladder',
-        color: 0x1E824C,
-        roughness: 0.32,
+        color: 0x2A5E32,
+        roughness: 0.38,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.02,
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.20,
-        sheen: 0.55,
-        sheenColor: 0x34d399,
+        metalness: 0.01,
+        clearcoat: 0.32,
+        clearcoatRoughness: 0.36,
+        sheen: 0.65,
+        sheenColor: 0x6ee7b7,
         ior: 1.36,
         normalMap: textures?.serosaMap,
         normalScale: [0.08, 0.08]
@@ -1245,11 +1259,12 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_BileDuct',
         color: 0x2A8C74,
-        roughness: 0.38,
+        roughness: 0.34,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.02,
-        clearcoat: 0.35,
-        sheen: 0.35,
+        clearcoat: 0.40,
+        clearcoatRoughness: 0.30,
+        sheen: 0.45,
         sheenColor: 0x6ee7b7,
         ior: 1.37,
         transparent: true,
@@ -1260,13 +1275,13 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Stomach: warm living gastric muscularis & serosa with subtle moist organic sheen (no plastic shine)
       applyCustomProps(mesh, {
         name: 'PBR_Stomach',
-        color: 0xB8625A,
-        roughness: 0.42,
+        color: 0xB45E56,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.38,
-        clearcoatRoughness: 0.22,
-        sheen: 0.55,
+        metalness: 0.0,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.42,
+        sheen: 0.75,
         sheenColor: 0xfca5a5,
         ior: 1.38,
         normalMap: textures?.serosaMap,
@@ -1280,13 +1295,13 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Duodenum: C-loop wrapping around pancreas head with living mucosal depth
       applyCustomProps(mesh, {
         name: 'PBR_Duodenum',
-        color: 0xD0766B,
-        roughness: 0.40,
+        color: 0xCE7469,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.02,
-        clearcoat: 0.38,
-        clearcoatRoughness: 0.22,
-        sheen: 0.48,
+        metalness: 0.0,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.40,
+        sheen: 0.70,
         sheenColor: 0xfecdd3,
         ior: 1.38,
         normalMap: textures?.serosaMap,
@@ -1299,14 +1314,14 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Small intestine: living delicate warm coral-pink peristaltic loops with moist serous sheen
       applyCustomProps(mesh, {
         name: 'PBR_SmallIntestine',
-        color: 0xD96B5B,
-        roughness: 0.38,
+        color: 0xD86A5A,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.02,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.20,
-        sheen: 0.52,
-        sheenRoughness: 0.32,
+        metalness: 0.0,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.40,
+        sheen: 0.75,
+        sheenRoughness: 0.30,
         sheenColor: 0xfecdd3,
         ior: 1.38,
         normalMap: textures?.serosaMap,
@@ -1320,48 +1335,59 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_TaeniaColi',
         color: 0xEDE8D0,
-        roughness: 0.40,
+        roughness: 0.36,
         metalness: 0.01,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.22,
-        sheen: 0.75,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
+        sheen: 0.85,
         sheenColor: 0xFFFDF5,
         normalMap: textures?.collagenMap,
         normalScale: [0.14, 0.14]
       });
     } else if (partName.includes('appendix') || partName.includes('ruột thừa')) {
-      // Vermiform appendix: tapered vascular mucosal appendage hanging from cecum
+      // Vermiform appendix: tapered vascular mucosal appendage hanging from cecum with living serous sheen
       applyCustomProps(mesh, {
         name: 'PBR_Appendix',
         color: 0xAB5E55,
-        roughness: 0.44,
+        roughness: 0.38,
+        roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.02,
-        clearcoat: 0.30,
-        sheen: 0.35
+        clearcoat: 0.60,
+        clearcoatRoughness: 0.15,
+        sheen: 0.55,
+        sheenColor: 0xfca5a5,
+        ior: 1.38,
+        normalMap: textures?.serosaMap,
+        normalScale: [0.08, 0.08],
+        transparent: false,
+        opacity: 1.0,
+        depthWrite: true
       });
     } else if (partName.includes('rectum') || partName.includes('anal') || partName.includes('trực tràng') || partName.includes('hậu môn')) {
       // Rectum & anal canal: deeper muscular tone with longitudinal striations
       applyCustomProps(mesh, {
         name: 'PBR_Rectum',
         color: 0xA65850,
-        roughness: 0.48,
-        metalness: 0.02
+        roughness: 0.42,
+        metalness: 0.02,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.20
       });
-    } else if (partName.includes('colon') || partName.includes('caecum') || partName.includes('cecum') || partName.includes('đại tràng') || partName.includes('manh tràng')) {
+    } else if (partName.includes('colon') || partName.includes('caecum') || partName.includes('cecec') || partName.includes('đại tràng') || partName.includes('manh tràng')) {
       // Large intestine / Colon haustra: segmented mucosal muscular sacs with living moist sheen
       applyCustomProps(mesh, {
         name: 'PBR_Colon',
         color: 0x98443A,
-        roughness: 0.44,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.02,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.25,
-        sheen: 0.40,
+        metalness: 0.0,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.40,
+        sheen: 0.70,
         sheenColor: 0xfca5a5,
         ior: 1.38,
         normalMap: textures?.serosaMap,
-        normalScale: [0.08, 0.08],
+        normalScale: [0.10, 0.10],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
@@ -1406,65 +1432,81 @@ function enhanceMaterialForOrgan(mesh, systemId) {
           metalness: 0.0
         });
       } else {
-        // Salivary glands: lobular salmon-tan gland (matte)
+        // Salivary glands: lobular salmon-tan gland with soft acinar texture
         applyCustomProps(mesh, {
           name: 'PBR_SalivaryGland',
           color: 0xB87E6C,
-          roughness: 0.85,
-          metalness: 0.0
+          roughness: 0.52,
+          metalness: 0.0,
+          clearcoat: 0.22,
+          clearcoatRoughness: 0.35,
+          sheen: 0.45,
+          sheenColor: 0xfcb97d
         });
       }
     } else if (partName.includes('tongue') || partName.includes('lưỡi')) {
-      // Tongue: muscular mucosal tongue (matte)
+      // Tongue: living muscular mucosal tongue with salivary lubrication
       applyCustomProps(mesh, {
         name: 'PBR_Tongue',
         color: 0xC26672,
-        roughness: 0.82,
-        metalness: 0.0
+        roughness: 0.44,
+        metalness: 0.0,
+        clearcoat: 0.38,
+        clearcoatRoughness: 0.25,
+        sheen: 0.60,
+        sheenColor: 0xf43f5e
       });
     } else if (partName.includes('gingiva') || partName.includes('nướu') || partName.includes('palate') || partName.includes('khẩu cái')) {
-      // Oral mucosa, gums & palate
+      // Oral mucosa, gums & palate: moist non-keratinized epithelium
       applyCustomProps(mesh, {
         name: 'PBR_OralMucosa',
         color: 0xBD6D78,
-        roughness: 0.80,
-        metalness: 0.0
+        roughness: 0.44,
+        metalness: 0.0,
+        clearcoat: 0.38,
+        clearcoatRoughness: 0.25,
+        sheen: 0.60,
+        sheenColor: 0xf43f5e
       });
     } else if (partName.includes('pharynx') || partName.includes('hầu')) {
-      // Pharynx: muscular mucosal funnel
+      // Pharynx: muscular mucosal conduit with moist lining
       applyCustomProps(mesh, {
         name: 'PBR_Pharynx',
         color: 0xA8666C,
-        roughness: 0.80,
-        metalness: 0.0
+        roughness: 0.46,
+        metalness: 0.0,
+        clearcoat: 0.32,
+        clearcoatRoughness: 0.30,
+        sheen: 0.55,
+        sheenColor: 0xf43f5e
       });
     } else if (partName.includes('kidney') || partName.includes('thận')) {
       // Kidneys: rich reddish-brown vascular renal parenchyma with smooth fibrous capsule sheen
       applyCustomProps(mesh, {
         name: 'PBR_Kidney',
-        color: 0x7A2626,
-        roughness: 0.36,
+        color: 0x762222,
+        roughness: 0.46,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.02,
-        clearcoat: 0.44,
-        clearcoatRoughness: 0.20,
-        sheen: 0.48,
-        sheenColor: 0xdc2626,
+        metalness: 0.0,
+        clearcoat: 0.28,
+        clearcoatRoughness: 0.38,
+        sheen: 0.65,
+        sheenColor: 0xef4444,
         ior: 1.38,
         normalMap: textures?.serosaMap,
-        normalScale: [0.06, 0.06]
+        normalScale: [0.08, 0.08]
       });
     } else if (partName.includes('bladder') || partName.includes('ureter') || partName.includes('bàng quang')) {
       // Bladder & ureter: smooth muscular urinary reservoir with living serous sheen
       applyCustomProps(mesh, {
         name: 'PBR_Bladder',
         color: 0xB87068,
-        roughness: 0.44,
+        roughness: 0.38,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.01,
-        clearcoat: 0.32,
-        clearcoatRoughness: 0.25,
-        sheen: 0.42,
+        clearcoat: 0.60,
+        clearcoatRoughness: 0.16,
+        sheen: 0.50,
         sheenColor: 0xfca5a5
       });
     } else if (partName.includes('renal pelvis') || partName.includes('bể thận')) {
@@ -1472,46 +1514,49 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_RenalPelvis',
         color: 0xDCD5C6,
-        roughness: 0.50,
+        roughness: 0.44,
         metalness: 0.02,
-        clearcoat: 0.25,
-        sheen: 0.30
+        clearcoat: 0.45,
+        sheen: 0.40
       });
     } else if (partName.includes('penis') || partName.includes('cavernosum') || partName.includes('spongiosum')) {
       // Penis erectile tissue
       applyCustomProps(mesh, {
         name: 'PBR_Penis',
         color: partName.includes('glans') ? 0xC87B82 : 0x7E323E,
-        roughness: 0.60,
-        metalness: 0.01
+        roughness: 0.52,
+        metalness: 0.01,
+        clearcoat: 0.30
       });
     } else if (partName.includes('testis') || partName.includes('tinh hoàn')) {
       // Testis: smooth pale lilac-grey parenchymal oval
       applyCustomProps(mesh, {
         name: 'PBR_Testis',
         color: 0x9E9BB0,
-        roughness: 0.52,
-        metalness: 0.02
+        roughness: 0.44,
+        metalness: 0.02,
+        clearcoat: 0.40
       });
     } else if (partName.includes('epididymis') || partName.includes('deferens') || partName.includes('prostate') || partName.includes('seminal')) {
       // Epididymis, ductus deferens & prostate: smooth ivory-amber cords
       applyCustomProps(mesh, {
         name: 'PBR_GenitalDucts',
         color: 0xD6C6B2,
-        roughness: 0.54,
-        metalness: 0.02
+        roughness: 0.48,
+        metalness: 0.02,
+        clearcoat: 0.35
       });
     } else if (partName.includes('spleen') || partName.includes('lá lách')) {
       // Spleen: vascular lymphoid purplish-crimson with glistening serosal capsule
       applyCustomProps(mesh, {
         name: 'PBR_Spleen',
         color: 0x541824,
-        roughness: 0.34,
+        roughness: 0.30,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.02,
-        clearcoat: 0.50,
-        clearcoatRoughness: 0.18,
-        sheen: 0.52,
+        clearcoat: 0.70,
+        clearcoatRoughness: 0.13,
+        sheen: 0.60,
         sheenColor: 0x881337,
         ior: 1.38,
         normalMap: textures?.serosaMap,
@@ -1522,9 +1567,9 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Pleura',
         color: 0xBAC3D2,
-        roughness: 0.35,
+        roughness: 0.32,
         metalness: 0.01,
-        clearcoat: 0.40,
+        clearcoat: 0.55,
         transparent: true,
         opacity: 0.22,
         depthWrite: false,
@@ -1534,27 +1579,27 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Lungs: living alveolar spongy roseate-peach parenchyma with aerated texture & subtle serous sheen
       applyCustomProps(mesh, {
         name: 'PBR_Lung',
-        color: 0xC67D88,
-        roughness: 0.58,
+        color: 0xC47B84,
+        roughness: 0.56,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.0,
-        clearcoat: 0.25,
-        clearcoatRoughness: 0.28,
-        sheen: 0.52,
+        clearcoat: 0.16,
+        clearcoatRoughness: 0.45,
+        sheen: 0.55,
         sheenColor: 0xfecdd3,
         normalMap: textures?.lungMap,
-        normalScale: [0.08, 0.08]
+        normalScale: [0.14, 0.14]
       });
     } else if (partName.includes('trachea') || partName.includes('bronch') || matName.includes('bronchi')) {
       // Trachea & Bronchi: pearly bluish-ivory cartilaginous rings with living hyaline transmission
       applyCustomProps(mesh, {
         name: 'PBR_Trachea',
-        color: 0xDCE4E9,
-        roughness: 0.36,
+        color: 0xD8E2E8,
+        roughness: 0.32,
         metalness: 0.01,
-        clearcoat: 0.30,
-        clearcoatRoughness: 0.22,
-        transmission: 0.08,
+        clearcoat: 0.42,
+        clearcoatRoughness: 0.20,
+        transmission: 0.18,
         thickness: 0.008,
         attenuationColor: 0x93c5fd,
         attenuationDistance: 0.015,
@@ -1611,6 +1656,69 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         clearcoat: 0.38,
         sheen: 0.48,
         sheenColor: 0xfda4af
+      });
+    } else if (partName.includes('epiglottis') || partName.includes('nắp thanh')) {
+      // Epiglottis: elastic fibrocartilage covered with moist mucous membrane
+      applyCustomProps(mesh, {
+        name: 'PBR_Epiglottis',
+        color: 0xCFA394,
+        roughness: 0.44,
+        metalness: 0.0,
+        clearcoat: 0.30,
+        clearcoatRoughness: 0.35,
+        sheen: 0.60,
+        sheenColor: 0xfecdd3,
+        transmission: 0.12,
+        thickness: 0.004,
+        attenuationColor: 0xf43f5e
+      });
+    } else if (partName.includes('nasal') || partName.includes('mũi') || partName.includes('mucosa')) {
+      // Nasal cavity mucosa & respiratory epithelium: moist vascular mucosal lining
+      applyCustomProps(mesh, {
+        name: 'PBR_NasalMucosa',
+        color: 0xC46E78,
+        roughness: 0.42,
+        metalness: 0.0,
+        clearcoat: 0.34,
+        clearcoatRoughness: 0.30,
+        sheen: 0.58,
+        sheenColor: 0xf43f5e
+      });
+    } else if (partName.includes('urethra') || partName.includes('niệu đạo')) {
+      // Urethra: delicate smooth muscular & transitional mucosal conduit
+      applyCustomProps(mesh, {
+        name: 'PBR_Urethra',
+        color: 0xB87068,
+        roughness: 0.44,
+        metalness: 0.0,
+        clearcoat: 0.28,
+        clearcoatRoughness: 0.36,
+        sheen: 0.50,
+        sheenColor: 0xfca5a5
+      });
+    } else if (partName.includes('ejaculat') || partName.includes('deferens')) {
+      // Ejaculatory & genital ducts: smooth fibrous conduits
+      applyCustomProps(mesh, {
+        name: 'PBR_GenitalDucts',
+        color: 0xD6C6B2,
+        roughness: 0.48,
+        metalness: 0.02,
+        clearcoat: 0.35
+      });
+    } else {
+      // Visceral parenchymal fallback: organic soft tissue with natural moist serosal sheen
+      applyCustomProps(mesh, {
+        name: 'PBR_VisceralOrgan',
+        color: 0xA65B54,
+        roughness: 0.48,
+        roughnessMap: textures?.cavityRoughnessMap,
+        metalness: 0.0,
+        clearcoat: 0.24,
+        clearcoatRoughness: 0.40,
+        sheen: 0.60,
+        sheenColor: 0xfca5a5,
+        normalMap: textures?.serosaMap,
+        normalScale: [0.10, 0.10]
       });
     }
   } else if (systemId === 'lymphatic') {
@@ -1676,7 +1784,7 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       });
     }
   } else if (systemId === 'muscular') {
-    const isTendon = partName.includes('tendon') || matName.includes('tendon') || partName.includes('gân') || partName.includes('calcaneal') || partName.includes('achille');
+    const isTendon = partName.includes('tendon') || matName.includes('tendon') || partName.includes('gân') || partName.includes('calcaneal') || partName.includes('achille') || partName.includes('patellar') || partName.includes('quadriceps');
     const isAponeurosis = partName.includes('aponeuros') || matName.includes('aponeuros') || partName.includes('cân') || partName.includes('linea alba') || partName.includes('linea_alba') || partName.includes('epicranial') || partName.includes('galea') || partName.includes('raphe') || partName.includes('ligament') || partName.includes('arch') || partName.includes('chorda');
     const isFasciaRetinaculum = partName.includes('fascia') || partName.includes('retinaculum') || partName.includes('sheath') || partName.includes('septum') || matName.includes('fascia') || partName.includes('membrane');
 
@@ -1684,16 +1792,16 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Tendons (Achilles/Calcaneal, Patellar, Biceps, Digastric, etc.): silky pearlescent Type-I collagen fibrous bands
       applyCustomProps(mesh, {
         name: 'PBR_Tendon',
-        color: 0xEFEAD8,
-        roughness: 0.30,
-        metalness: 0.01,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.20,
-        sheen: 0.88,
-        sheenColor: 0xFFFDF5,
-        sheenRoughness: 0.20,
+        color: 0xF3EFE6,
+        roughness: 0.24,
+        metalness: 0.02,
+        clearcoat: 0.52,
+        clearcoatRoughness: 0.16,
+        sheen: 0.95,
+        sheenColor: 0xFFFDF8,
+        sheenRoughness: 0.16,
         normalMap: textures?.collagenMap,
-        normalScale: [0.20, 0.20],
+        normalScale: [0.22, 0.22],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
@@ -1703,11 +1811,11 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Bursa',
         color: 0xE2ECE8,
-        roughness: 0.28,
+        roughness: 0.26,
         metalness: 0.01,
-        clearcoat: 0.58,
-        clearcoatRoughness: 0.18,
-        sheen: 0.70,
+        clearcoat: 0.62,
+        clearcoatRoughness: 0.16,
+        sheen: 0.75,
         sheenColor: 0xd1fae5,
         transparent: true,
         opacity: 0.72,
@@ -1724,17 +1832,17 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Fascia_Iridescent',
         color: 0xF4EFE6,
-        roughness: 0.32,
+        roughness: 0.30,
         metalness: 0.01,
-        clearcoat: 0.48,
+        clearcoat: 0.45,
         clearcoatRoughness: 0.20,
-        sheen: 0.90,
+        sheen: 0.85,
         sheenColor: 0xFFFFFF,
-        sheenRoughness: 0.18,
+        sheenRoughness: 0.20,
         normalMap: textures?.collagenMap,
         normalScale: [0.18, 0.18],
         transparent: true,
-        opacity: 0.68,
+        opacity: 0.42,
         depthWrite: false,
         renderOrder: 5
       });
@@ -1742,33 +1850,34 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Broad tendinous sheets, Linea Alba, Galea Aponeurotica, Inguinal Ligament, Raphes: pearlescent ivory collagen
       applyCustomProps(mesh, {
         name: 'PBR_Aponeurosis',
-        color: 0xF0ECE1,
-        roughness: 0.34,
+        color: 0xF2EEE4,
+        roughness: 0.30,
         metalness: 0.01,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.22,
-        sheen: 0.85,
-        sheenColor: 0xFFFDF5,
-        sheenRoughness: 0.20,
+        clearcoat: 0.48,
+        clearcoatRoughness: 0.18,
+        sheen: 0.90,
+        sheenColor: 0xFFFDF8,
+        sheenRoughness: 0.18,
         normalMap: textures?.collagenMap,
-        normalScale: [0.18, 0.18],
+        normalScale: [0.20, 0.20],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
       });
     } else if (isFasciaRetinaculum) {
-      // Fascia, retinacula, tendon sheaths & intermuscular septa: ultra-delicate glistening collagenous sheath
+      // Fascia, retinacula, tendon sheaths & intermuscular septa: ultra-delicate sheer gossamer veil (opacity 0.16)
+      // Eliminates milky plastic haze so underlying rich muscle bellies (PBR_Muscle) shine through vividly
       applyCustomProps(mesh, {
         name: 'PBR_Fascia',
-        color: 0xF2EFE8,
-        roughness: 0.36,
+        color: 0xF5F2EC,
+        roughness: 0.42,
         metalness: 0.0,
-        clearcoat: 0.38,
-        clearcoatRoughness: 0.25,
-        sheen: 0.75,
+        clearcoat: 0.28,
+        clearcoatRoughness: 0.30,
+        sheen: 0.60,
         sheenColor: 0xffffff,
         transparent: true,
-        opacity: 0.55,
+        opacity: 0.16,
         depthWrite: false,
         renderOrder: 5
       });
@@ -1785,22 +1894,22 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       partName.includes('corrugator') ||
       partName.includes('risorius')
     ) {
-      // Facial mimic muscles: delicate, highly vascular myoglobin tone with capillary sheen
+      // Facial mimic muscles: delicate vascular myoglobin tone, harmonized with body musculature
       applyCustomProps(mesh, {
         name: 'PBR_FacialMimic',
-        color: 0x8C262E,
-        roughness: 0.48,
+        color: 0x852028,
+        roughness: 0.46,
         roughnessMap: textures?.muscleCavityMap || textures?.cavityRoughnessMap,
         metalness: 0.0,
         clearcoat: 0.20,
-        clearcoatRoughness: 0.35,
+        clearcoatRoughness: 0.32,
         specularIntensity: 0.20,
         sheen: 0.72,
         sheenColor: 0xfca5a5,
-        sheenRoughness: 0.35,
+        sheenRoughness: 0.32,
         transmission: 0.0,
         normalMap: textures?.muscleMap,
-        normalScale: [0.06, 0.06],
+        normalScale: [0.08, 0.08],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
@@ -1815,19 +1924,19 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Powerful masticatory & functional neck muscles: deep striated myoglobin
       applyCustomProps(mesh, {
         name: 'PBR_Masticatory_Neck',
-        color: 0x7E1D22,
-        roughness: 0.52,
+        color: 0x801E24,
+        roughness: 0.48,
         roughnessMap: textures?.muscleCavityMap || textures?.cavityRoughnessMap,
         metalness: 0.0,
-        clearcoat: 0.18,
-        clearcoatRoughness: 0.32,
-        specularIntensity: 0.18,
-        sheen: 0.88,
-        sheenColor: 0x881337,
-        sheenRoughness: 0.40,
+        clearcoat: 0.20,
+        clearcoatRoughness: 0.30,
+        specularIntensity: 0.20,
+        sheen: 0.80,
+        sheenColor: 0x991b1b,
+        sheenRoughness: 0.35,
         transmission: 0.0,
         normalMap: textures?.muscleMap,
-        normalScale: [0.07, 0.07],
+        normalScale: [0.09, 0.09],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
@@ -1839,18 +1948,18 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_Muscle',
         color: 0x821E26,
-        roughness: 0.46,
+        roughness: 0.44,
         roughnessMap: textures?.muscleCavityMap || textures?.cavityRoughnessMap,
         metalness: 0.0,
-        clearcoat: 0.22,
-        clearcoatRoughness: 0.32,
-        specularIntensity: 0.20,
-        sheen: 0.75,
-        sheenColor: 0xb91c1c,
-        sheenRoughness: 0.35,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.28,
+        specularIntensity: 0.22,
+        sheen: 0.85,
+        sheenColor: 0x991b1b,
+        sheenRoughness: 0.30,
         transmission: 0.0,
         normalMap: textures?.muscleMap,
-        normalScale: [0.08, 0.08],
+        normalScale: [0.22, 0.22],
         transparent: false,
         opacity: 1.0,
         depthWrite: true
@@ -1878,15 +1987,17 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Joint articular cartilage & meniscus: opalescent pearly hyaline cartilage with delicate transmission
       applyCustomProps(mesh, {
         name: 'PBR_JointCartilage',
-        color: 0xDCE8EE,
-        roughness: 0.32,
+        color: 0xD0E4F0,
+        roughness: 0.22,
         metalness: 0.0,
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.18,
-        sheen: 0.42,
-        sheenColor: 0xCBD5E1,
-        transmission: 0.18,
-        thickness: 0.008,
+        clearcoat: 0.72,
+        clearcoatRoughness: 0.08,
+        sheen: 0.52,
+        sheenColor: 0xBAE6FD,
+        transmission: 0.28,
+        thickness: 0.009,
+        attenuationColor: 0x93c5fd,
+        attenuationDistance: 0.015,
         transparent: true,
         opacity: 0.95,
         depthWrite: true,
@@ -1896,15 +2007,15 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Joints & Ligaments (dây chằng, bao khớp, màng gian cốt): warm ivory-ochre dense collagen with pearlescent tensile sheen
       applyCustomProps(mesh, {
         name: 'PBR_Ligament',
-        color: 0xEAE5D4,
-        roughness: 0.38,
-        metalness: 0.0,
-        clearcoat: 0.28,
-        clearcoatRoughness: 0.22,
-        sheen: 0.75,
-        sheenColor: 0xFFFDF5,
+        color: 0xF2EFE4,
+        roughness: 0.30,
+        metalness: 0.01,
+        clearcoat: 0.52,
+        clearcoatRoughness: 0.15,
+        sheen: 0.92,
+        sheenColor: 0xFFFDF8,
         normalMap: textures?.collagenMap || textures?.serosaMap,
-        normalScale: [0.15, 0.15],
+        normalScale: [0.26, 0.26],
         transparent: false,
         opacity: 1.0,
         depthWrite: true,
@@ -1956,20 +2067,22 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         renderOrder: 2
       });
     } else if (isCartilage) {
-      // Costal, articular, and nasal cartilage: living pearly opalescent hyaline cartilage with subtle transmission
+      // Costal, articular, and nasal cartilage: living pearly opalescent hyaline cartilage with authentic biological transmission
       applyCustomProps(mesh, {
         name: 'PBR_HyalineCartilage',
-        color: 0xDCE8EE,
-        roughness: 0.32,
+        color: 0xC6DDEB,
+        roughness: 0.18,
         metalness: 0.0,
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.18,
-        sheen: 0.42,
-        sheenColor: 0xCBD5E1,
-        transmission: 0.15,
-        thickness: 0.008,
+        clearcoat: 0.76,
+        clearcoatRoughness: 0.08,
+        sheen: 0.55,
+        sheenColor: 0x93C5FD,
+        transmission: 0.32,
+        thickness: 0.010,
+        attenuationColor: 0x60a5fa,
+        attenuationDistance: 0.018,
         transparent: true,
-        opacity: 0.95,
+        opacity: 0.94,
         depthWrite: true,
         renderOrder: 2
       });
@@ -2024,49 +2137,52 @@ function enhanceMaterialForOrgan(mesh, systemId) {
         name: 'PBR_CranialBone',
         color: 0xE2D9C8,
         roughness: 0.52,
+        roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.01,
-        clearcoat: 0.18,
-        clearcoatRoughness: 0.35,
-        sheen: 0.30,
+        clearcoat: 0.08,
+        clearcoatRoughness: 0.40,
+        sheen: 0.36,
         sheenColor: 0xfef9e7,
         normalMap: textures?.boneMap,
-        normalScale: [0.06, 0.06]
+        normalScale: [0.24, 0.24]
       });
     } else {
-      // Warm authentic natural aged-ivory cortical bone tone (matte organic bone texture, no plastic shine)
+      // Warm authentic natural aged-ivory cortical bone tone (matte organic bone texture, sharp crevice depth)
       applyCustomProps(mesh, {
         name: 'PBR_Bone',
-        color: 0xDDD6C8,
-        roughness: 0.62,
+        color: 0xDCD4C5,
+        roughness: 0.52,
+        roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.0,
         clearcoat: 0.08,
-        clearcoatRoughness: 0.45,
-        sheen: 0.20,
+        clearcoatRoughness: 0.40,
+        sheen: 0.38,
         sheenColor: 0xfaf5eb,
         normalMap: textures?.boneMap,
-        normalScale: [0.08, 0.08]
+        normalScale: [0.30, 0.30]
       });
     }
   } else if (systemId === 'cardiovascular') {
     const mName = (mesh.material?.name || '').toLowerCase();
     const isValve = partName.includes('valve') || partName.includes('leaflet') || partName.includes('cusp') || partName.includes('chorda') || partName.includes('van tim') || partName.includes('semilunar');
     const isPapillaryMuscle = partName.includes('papillary') || partName.includes('cơ nhú');
-    const isCoronaryArtery = partName.includes('coronary artery') || partName.includes('interventricular artery') || partName.includes('circumflex artery');
-    const isArtery = mName.includes('artery') || partName.includes('artery') || partName.includes('aorta') || partName.includes('động mạch') || partName.includes('dong mach') || partName.includes('pulmonary trunk');
-    const isVein = mName.includes('vein') || partName.includes('vein') || partName.includes('tĩnh mạch') || partName.includes('tinh mach') || partName.includes('cava') || partName.includes('sinus');
+    const isCoronaryArtery = partName.includes('coronary') || partName.includes('interventricular artery') || partName.includes('circumflex artery');
+    const isHeart = mName.includes('trapezius') || partName.includes('heart') || partName.includes('myocard') || partName.includes('tim') || partName.includes('ventric') || partName.includes('atrium');
+    const isVein = mName.includes('vein') || partName.includes('vein') || partName.includes('venous') || partName.includes('venule') || partName.includes('tĩnh mạch') || partName.includes('tinh mach') || partName.includes('cava') || partName.includes('sinus') || partName.includes('portal vein');
+    const isArtery = mName.includes('arter') || partName.includes('arter') || partName.includes('aort') || partName.includes('động mạch') || partName.includes('dong mach') || partName.includes('trunk') || partName.includes('carotid') || partName.includes('anastomosis') || partName.includes('plexus') || partName.includes('arch') || partName.includes('branch');
 
     if (isValve) {
       // Heart valves & semilunar leaflets: pearly fibrous endocardial leaflets with transmission
       applyCustomProps(mesh, {
         name: 'PBR_HeartValve',
         color: 0xE2DDD2,
-        roughness: 0.32,
+        roughness: 0.30,
         metalness: 0.0,
-        clearcoat: 0.38,
-        clearcoatRoughness: 0.18,
-        sheen: 0.65,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.16,
+        sheen: 0.70,
         sheenColor: 0xFFFDF5,
-        transmission: 0.36,
+        transmission: 0.38,
         thickness: 0.003,
         attenuationColor: 0xfef3c7,
         transparent: true,
@@ -2079,83 +2195,83 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_PapillaryMuscle',
         color: 0x82201C,
-        roughness: 0.44,
+        roughness: 0.42,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.01,
-        clearcoat: 0.28,
-        clearcoatRoughness: 0.25,
-        sheen: 0.65,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.22,
+        sheen: 0.68,
         sheenColor: 0xb91c1c
+      });
+    } else if (isHeart) {
+      // Myocardium / Heart: Dense muscular cardiac parenchyma with natural biological texture & epicardial moist sheen
+      applyCustomProps(mesh, {
+        name: 'PBR_Heart',
+        color: 0x7A1E1E,
+        roughness: 0.48,
+        roughnessMap: textures?.cavityRoughnessMap,
+        metalness: 0.0,
+        clearcoat: 0.22,
+        clearcoatRoughness: 0.42,
+        sheen: 0.85,
+        sheenColor: 0x991b1b,
+        ior: 1.38,
+        normalMap: textures?.muscleMap || textures?.serosaMap,
+        normalScale: [0.18, 0.18],
+        thickness: 0.025,
+        attenuationColor: 0x991b1b,
+        attenuationDistance: 0.030
       });
     } else if (isCoronaryArtery) {
       // Coronary arterial tree: bright oxygenated crimson tracing the cardiac sulci
       applyCustomProps(mesh, {
         name: 'PBR_CoronaryArtery',
-        color: 0xA82020,
-        roughness: 0.40,
+        color: 0x9E1D1D,
+        roughness: 0.46,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.22,
-        sheen: 0.70,
+        metalness: 0.0,
+        clearcoat: 0.16,
+        clearcoatRoughness: 0.45,
+        sheen: 0.80,
         sheenColor: 0xfca5a5,
-        transmission: 0.06,
+        transmission: 0.08,
         thickness: 0.006,
         attenuationColor: 0xdc2626,
         attenuationDistance: 0.008
-      });
-    } else if (isArtery) {
-      // Arteries: Living arterial blood crimson with soft fibrous adventitia diffusion (not plastic wire)
-      applyCustomProps(mesh, {
-        name: 'PBR_Artery',
-        color: 0x941D1D,
-        roughness: 0.44,
-        roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.30,
-        clearcoatRoughness: 0.22,
-        sheen: 0.68,
-        sheenColor: 0xfca5a5,
-        transmission: 0.05,
-        thickness: 0.008,
-        attenuationColor: 0xdc2626,
-        attenuationDistance: 0.010
       });
     } else if (isVein) {
       // Veins: Physiological deoxygenated venous blood deep slate navy (eliminates plastic blue wire look)
       applyCustomProps(mesh, {
         name: 'PBR_Vein',
-        color: 0x1A3554,
-        roughness: 0.46,
+        color: 0x1E3A5F,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.28,
-        clearcoatRoughness: 0.24,
-        sheen: 0.50,
+        metalness: 0.0,
+        clearcoat: 0.14,
+        clearcoatRoughness: 0.48,
+        sheen: 0.80,
         sheenColor: 0x60a5fa,
-        transmission: 0.08,
+        transmission: 0.10,
         thickness: 0.006,
         attenuationColor: 0x1e40af,
         attenuationDistance: 0.012
       });
-    } else if (mName.includes('trapezius') || partName.includes('heart') || partName.includes('myocard') || partName.includes('tim') || partName.includes('ventric') || partName.includes('atrium')) {
-      // Myocardium / Heart: Dense muscular cardiac parenchyma with natural biological texture & epicardial moist sheen
+    } else {
+      // Arteries (all branches, trunks, arches, anastomoses & vascular fallback): Living arterial blood crimson with soft fibrous adventitia diffusion
       applyCustomProps(mesh, {
-        name: 'PBR_Heart',
-        color: 0x76201C,
-        roughness: 0.44,
+        name: 'PBR_Artery',
+        color: 0x961E1E,
+        roughness: 0.48,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.34,
-        clearcoatRoughness: 0.24,
-        sheen: 0.62,
-        sheenColor: 0xb91c1c,
-        ior: 1.38,
-        normalMap: textures?.muscleMap || textures?.serosaMap,
-        normalScale: [0.10, 0.10],
-        thickness: 0.025,
-        attenuationColor: 0x991b1b,
-        attenuationDistance: 0.030
+        metalness: 0.0,
+        clearcoat: 0.14,
+        clearcoatRoughness: 0.48,
+        sheen: 0.85,
+        sheenColor: 0xfca5a5,
+        transmission: 0.08,
+        thickness: 0.008,
+        attenuationColor: 0xdc2626,
+        attenuationDistance: 0.010
       });
     }
   } else if (systemId === 'nervous') {
@@ -2269,21 +2385,21 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       // Living cerebral cortex & gyri: rich warm physiological grey matter with moist leptomeningeal sheen & micro-normals
       applyCustomProps(mesh, {
         name: 'PBR_BrainTissue',
-        color: 0xD8A28E,
-        roughness: 0.38,
+        color: 0xD69D8B,
+        roughness: 0.46,
         roughnessMap: textures?.cavityRoughnessMap,
-        metalness: 0.01,
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.18,
-        sheen: 0.68,
-        sheenRoughness: 0.28,
+        metalness: 0.0,
+        clearcoat: 0.28,
+        clearcoatRoughness: 0.36,
+        sheen: 0.75,
+        sheenRoughness: 0.30,
         sheenColor: 0xfca5a5,
         ior: 1.37,
         thickness: 0.020,
         attenuationColor: 0xf43f5e,
         attenuationDistance: 0.025,
         normalMap: textures?.serosaMap,
-        normalScale: [0.08, 0.08]
+        normalScale: [0.12, 0.12]
       });
     } else if (
       partName.includes('spinal cord') || partName.includes('tủy sống') || partName.includes('tuy song') ||
@@ -2293,40 +2409,40 @@ function enhanceMaterialForOrgan(mesh, systemId) {
       applyCustomProps(mesh, {
         name: 'PBR_SpinalCord',
         color: 0xEDE2C8,
-        roughness: 0.36,
+        roughness: 0.42,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.0,
-        clearcoat: 0.42,
-        clearcoatRoughness: 0.16,
-        sheen: 0.72,
-        sheenRoughness: 0.24,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.35,
+        sheen: 0.75,
+        sheenRoughness: 0.26,
         sheenColor: 0xfef3c7,
         transmission: 0.05,
         thickness: 0.010,
         attenuationColor: 0xfef08a,
         attenuationDistance: 0.018,
         normalMap: textures?.collagenMap,
-        normalScale: [0.08, 0.08]
+        normalScale: [0.12, 0.12]
       });
     } else {
       // Peripheral nerves & innervation plexuses: authentic living warm-straw ivory with lubricated epineural sheath & longitudinal collagen fascicles
       applyCustomProps(mesh, {
         name: 'PBR_Nerve',
-        color: 0xE4D49E,
-        roughness: 0.36,
+        color: 0xE6D8A2,
+        roughness: 0.42,
         roughnessMap: textures?.cavityRoughnessMap,
         metalness: 0.0,
-        clearcoat: 0.38,
-        clearcoatRoughness: 0.18,
-        sheen: 0.72,
-        sheenRoughness: 0.24,
+        clearcoat: 0.22,
+        clearcoatRoughness: 0.38,
+        sheen: 0.80,
+        sheenRoughness: 0.26,
         sheenColor: 0xfef9c3,
         transmission: 0.05,
         thickness: 0.006,
         attenuationColor: 0xfde047,
         attenuationDistance: 0.012,
         normalMap: textures?.collagenMap,
-        normalScale: [0.12, 0.12]
+        normalScale: [0.16, 0.16]
       });
     }
   } else if (systemId === 'integumentary') {

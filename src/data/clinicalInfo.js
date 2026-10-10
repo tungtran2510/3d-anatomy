@@ -520,6 +520,335 @@ export const CLINICAL_DATABASE = {
     videoId: 'yU8C5r4N8w0'
   },
 
+  // === DÂY THẦN KINH TỌA (SCIATIC NERVE) ===
+  'Sciatic nerve': {
+    nameVi: 'Dây thần kinh tọa (Thần kinh ngồi)',
+    nameLatin: 'Nervus ischiadicus (TA2: 4945)',
+    nameEn: 'Sciatic nerve',
+    regionVi: 'Mông - Đùi sau - Cẳng chân',
+    systemVi: 'Hệ Thần Kinh',
+    description: 'Dây thần kinh lớn nhất và dài nhất trong cơ thể người, xuất phát từ đám rối cùng (L4-S3), thoát ra khỏi chậu hông qua khuyết ngồi lớn ở dưới bờ cơ hình lê, chạy dọc mặt sau đùi rồi chia thành thần kinh chày và thần kinh mác chung.',
+    function: 'Chi phối vận động cho toàn bộ nhóm cơ đùi sau (gấp gối), tất cả các cơ cẳng chân và bàn chân; đảm nhận cảm giác cho mặt sau - ngoài cẳng chân và toàn bộ bàn chân.',
+    relationsText: 'Chạy sâu dưới cơ mông lớn, bắt chéo qua các cơ xoay ngoài sâu (cơ sinh đôi trên, cơ bịt trong, cơ sinh đôi dưới, cơ vuông đùi), nằm giữa cơ nhị đầu đùi và cơ bán màng.',
+    clinical: 'Hội chứng đau thần kinh tọa (Sciatica) do thoát vị đĩa đệm L4-L5, L5-S1 hoặc hội chứng cơ hình lê (Piriformis syndrome) chèn ép; gây đau nhức buốt dữ dội lan từ thắt lưng qua mông dọc xuống gót chân, tê bì và giảm phản xạ gân gót.',
+    relations: {
+      muscles: 'Cơ hình lê (Piriformis), cơ mông lớn (Gluteus maximus), cơ nhị đầu đùi (Biceps femoris), cơ bán gân, cơ bán màng.',
+      bones: 'Xương chậu (khuyết ngồi lớn, ụ ngồi), mặt sau xương đùi.',
+      nerves: 'Xuất phát từ rễ L4, L5, S1, S2, S3 của đám rối cùng; chia thành thần kinh chày (Tibial nerve) và thần kinh mác chung (Common fibular nerve).',
+      vessels: 'Động mạch mông dưới (Inferior gluteal artery) và các nhánh xuyên của động mạch đùi sâu.'
+    },
+    lessonLink: '/than-kinh/than-kinh-toa',
+    lessonTitle: 'Dây Thần Kinh Tọa: Đường Đi, Cơ Sinh Học & Hội Chứng Chèn Ép',
+    videoId: '3ZfVjV7VqJ8'
+  },
+  'Sciatic nerve.l': {
+    nameVi: 'Dây thần kinh tọa trái',
+    nameLatin: 'Nervus ischiadicus sinister (TA2: 4945)',
+    nameEn: 'Left sciatic nerve',
+    regionVi: 'Mông - Đùi sau - Cẳng chân',
+    systemVi: 'Hệ Thần Kinh',
+    description: 'Dây thần kinh lớn nhất bên trái cơ thể, xuất phát từ đám rối cùng (L4-S3), chui dưới cơ hình lê xuống đùi sau.',
+    function: 'Vận động nhóm cơ đùi sau, cẳng bàn chân trái; cảm giác mặt ngoài cẳng chân và bàn chân trái.',
+    clinical: 'Thường gặp trong đau thần kinh tọa một bên do thoát vị đĩa đệm thắt lưng lệch trái.',
+    relations: {
+      muscles: 'Cơ hình lê trái, cơ mông lớn trái, cơ nhị đầu đùi trái.',
+      bones: 'Khuyết ngồi lớn trái, xương đùi trái.',
+      nerves: 'Rễ L4-S3 đám rối cùng bên trái.',
+      vessels: 'Động mạch mông dưới trái.'
+    }
+  },
+  'Sciatic nerve.r': {
+    nameVi: 'Dây thần kinh tọa phải',
+    nameLatin: 'Nervus ischiadicus dexter (TA2: 4945)',
+    nameEn: 'Right sciatic nerve',
+    regionVi: 'Mông - Đùi sau - Cẳng chân',
+    systemVi: 'Hệ Thần Kinh',
+    description: 'Dây thần kinh lớn nhất bên phải cơ thể, xuất phát từ đám rối cùng (L4-S3), chui dưới cơ hình lê xuống đùi sau.',
+    function: 'Vận động nhóm cơ đùi sau, cẳng bàn chân phải; cảm giác mặt ngoài cẳng chân và bàn chân phải.',
+    clinical: 'Thường gặp trong đau thần kinh tọa một bên do thoát vị đĩa đệm thắt lưng lệch phải.',
+    relations: {
+      muscles: 'Cơ hình lê phải, cơ mông lớn phải, cơ nhị đầu đùi phải.',
+      bones: 'Khuyết ngồi lớn phải, xương đùi phải.',
+      nerves: 'Rễ L4-S3 đám rối cùng bên phải.',
+      vessels: 'Động mạch mông dưới phải.'
+    }
+  },
+
+  // === DÂY CHẰNG CHÉO TRƯỚC (ACL) ===
+  'Anterior cruciate ligament': {
+    nameVi: 'Dây chằng chéo trước (ACL)',
+    nameLatin: 'Ligamentum cruciatum anterius (TA2: 1530)',
+    nameEn: 'Anterior cruciate ligament (ACL)',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Dải mô sợi collagen dày, chắc nằm trong bao khớp gối nhưng ngoài bao hoạt dịch, bám từ diện gian lồi cầu trước mâm chày chạy chếch lên trên, ra sau và ra ngoài để bám vào mặt trong lồi cầu ngoài xương đùi.',
+    function: 'Chống mâm chày trượt ra trước so với xương đùi (đảm nhận 85% lực cản trượt trước); kiểm soát góc xoay trong của cẳng chân và chống ưỡn quá mức của khớp gối.',
+    relationsText: 'Nằm trong hố gian lồi cầu khớp gối, bắt chéo chữ X ở phía trước dây chằng chéo sau (PCL); tiếp giáp sừng trước sụn chêm trong và ngoài.',
+    clinical: 'Đứt dây chằng chéo trước (ACL tear) là chấn thương thể thao khớp gối nghiêm trọng và phổ biến nhất (thường do tiếp đất vẹo gối hoặc vặn xoắn đột ngột); nghiệm pháp ngăn kéo trước (Anterior drawer) và Lachman dương tính; thường cần phẫu thuật nội soi tái tạo dây chằng.',
+    relations: {
+      muscles: 'Cơ tứ đầu đùi (Quadriceps femoris) kéo căng ACL khi duỗi gối; nhóm cơ Hamstring hỗ trợ giảm tải cho ACL.',
+      bones: 'Mâm chày (Tibia), lồi cầu ngoài xương đùi (Femur), xương bánh chè (Patella).',
+      nerves: 'Các nhánh cảm thụ bản thể xuất phát từ thần kinh chày (Tibial nerve).',
+      vessels: 'Động mạch gối giữa (Middle genicular artery) cấp máu nuôi dưỡng chính.'
+    },
+    lessonLink: '/khop-goi/day-chang-cheo-truoc',
+    lessonTitle: 'Dây Chằng Chéo Trước (ACL): Cơ Sinh Học & Chấn Thương Đứt Dây Chằng',
+    videoId: '3ZfVjV7VqJ8'
+  },
+  'Anterior cruciate ligament.l': {
+    nameVi: 'Dây chằng chéo trước trái (ACL)',
+    nameLatin: 'Ligamentum cruciatum anterius sinistrum (TA2: 1530)',
+    nameEn: 'Left anterior cruciate ligament (ACL)',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Dây chằng chéo trước trong khớp gối trái, bám từ diện gian lồi cầu trước xương chày đến lồi cầu ngoài xương đùi trái.',
+    function: 'Chống mâm chày trái trượt ra trước và giữ vững trục xoay khớp gối trái.',
+    clinical: 'Chấn thương đứt ACL gối trái, lỏng khớp gối, tràn dịch gối cấp tính sau chấn thương.',
+    relations: {
+      muscles: 'Cơ tứ đầu đùi trái, nhóm cơ đùi sau trái.',
+      bones: 'Xương đùi trái, xương chày trái.',
+      nerves: 'Nhánh thần kinh chày trái.',
+      vessels: 'Động mạch gối giữa trái.'
+    }
+  },
+
+  // === DÂY CHẰNG CHÉO SAU (PCL) ===
+  'Posterior cruciate ligament': {
+    nameVi: 'Dây chằng chéo sau (PCL)',
+    nameLatin: 'Ligamentum cruciatum posterius (TA2: 1531)',
+    nameEn: 'Posterior cruciate ligament (PCL)',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Dây chằng khỏe và dày hơn ACL, bám từ diện gian lồi cầu sau mâm chày chạy chếch lên trên, ra trước và vào trong để bám vào mặt ngoài lồi cầu trong xương đùi.',
+    function: 'Chống mâm chày trượt ra sau so với xương đùi (chịu 95% lực cản trượt sau); đóng vai trò trục xoay chính của khớp gối khi gấp.',
+    relationsText: 'Bắt chéo phía sau dây chằng chéo trước trong hố gian lồi cầu xương đùi.',
+    clinical: 'Đứt dây chằng chéo sau thường do chấn thương va đập mạnh trực tiếp vào mặt trước cẳng chân khi gối đang gấp (chấn thương táp-lô ô tô Dashboard injury); nghiệm pháp ngăn kéo sau (Posterior drawer) dương tính.',
+    relations: {
+      muscles: 'Cơ khoeo (Popliteus) hỗ trợ giữ mâm chày không trượt ra sau.',
+      bones: 'Xương đùi, xương chày.',
+      nerves: 'Nhánh thần kinh chày.',
+      vessels: 'Động mạch gối giữa.'
+    }
+  },
+  'Posterior cruciate ligament.l': {
+    nameVi: 'Dây chằng chéo sau trái (PCL)',
+    nameLatin: 'Ligamentum cruciatum posterius sinistrum (TA2: 1531)',
+    nameEn: 'Left posterior cruciate ligament (PCL)',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Dây chằng chéo sau trong khớp gối trái, bám từ diện gian lồi cầu sau xương chày đến lồi cầu trong xương đùi trái.',
+    function: 'Chống mâm chày trái trượt ra sau, ổn định khớp gối trái.',
+    clinical: 'Chấn thương đứt PCL gối trái do va đập mặt trước cẳng chân.',
+    relations: {
+      muscles: 'Cơ khoeo trái, cơ tứ đầu đùi trái.',
+      bones: 'Xương đùi trái, xương chày trái.',
+      nerves: 'Nhánh thần kinh chày trái.',
+      vessels: 'Động mạch gối giữa trái.'
+    }
+  },
+
+  // === RUỘT THỪA (VERMIFORM APPENDIX) ===
+  'Vermiform appendix': {
+    nameVi: 'Ruột thừa (Ruột tịt)',
+    nameLatin: 'Appendix vermiformis (TA2: 2950)',
+    nameEn: 'Vermiform appendix',
+    regionVi: 'Bụng & Hố chậu phải',
+    systemVi: 'Hệ Tiêu Hóa & Gan Mật',
+    description: 'Đoạn ruột hình ống giun nhỏ bịt kín một đầu, dài 6-9 cm, xuất phát từ mặt sau-trong của manh tràng, nơi hội tụ của 3 dải cơ dọc (Taenia coli), nằm tự do trong khoang phúc mạc hố chậu phải.',
+    function: 'Chứa mô bạch huyết dồi dào tham gia đáp ứng miễn dịch niêm mạc; hoạt động như một "kho dự trữ an toàn" (Safe house) nuôi dưỡng vi khuẩn có lợi để tái lập hệ vi sinh đường ruột sau các đợt tiêu chảy.',
+    relationsText: 'Gốc ruột thừa nằm ở điểm McBurney (điểm nối 1/3 ngoài và 2/3 trong đường nối rốn với gai chậu trước trên phải); treo vào mạc treo hồi tràng bởi mạc treo ruột thừa (Mesoappendix).',
+    clinical: 'Viêm ruột thừa cấp (Acute appendicitis) là cấp cứu ngoại khoa bụng thường gặp nhất; triệu chứng khởi đầu đau âm ỉ quanh rốn sau đó khu trú về hố chậu phải, kèm sốt nhẹ, buồn nôn; điểm McBurney ấn đau chói; nguy cơ vỡ mủ gây viêm phúc mạc toàn thể đe dọa tính mạng.',
+    relations: {
+      muscles: 'Nằm trên cơ thắt lưng chậu phải (Psoas major) và cơ chậu phải; dấu hiệu Psoas sign dương tính khi viêm sau manh tràng.',
+      bones: 'Gai chậu trước trên phải, mào chậu phải.',
+      nerves: 'Sợi thần kinh giao cảm (T10) gây đau quy chiếu quanh rốn trước khi viêm chạm vào phúc mạc thành.',
+      vessels: 'Động mạch ruột thừa (Appendicular artery) - động mạch tận đi trong bờ tự do của mạc treo ruột thừa, dễ tắc gây hoại tử.'
+    },
+    lessonLink: '/tieu-hoa/ruot-thua',
+    lessonTitle: 'Ruột Thừa: Giải Phẫu Học, Vị Trí Điểm McBurney & Viêm Cấp Cứu',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  // === CƠ DELTA (DELTOID MUSCLE) ===
+  'Deltoid muscle': {
+    nameVi: 'Cơ delta',
+    nameLatin: 'Musculus deltoideus (TA2: 2170)',
+    nameEn: 'Deltoid muscle',
+    regionVi: 'Khớp vai & Cánh tay',
+    systemVi: 'Hệ Cơ bắp',
+    description: 'Khối cơ dày hình tam giác lớn phủ bọc toàn bộ chỏm vai, gồm 3 bó: bó trước (bám 1/3 ngoài xương đòn), bó giữa (bám mỏm cùng vai) và bó sau (bám gai vai); cả 3 bó hội tụ bám tận vào lồi củ delta trên xương cánh tay.',
+    function: 'Bó giữa là cơ chính thực hiện dạng cánh tay từ 15° đến 90°; bó trước gấp và xoay trong cánh tay; bó sau duỗi và xoay ngoài cánh tay; giữ vững khớp ổ chảo - cánh tay.',
+    relationsText: 'Phủ ngoài khớp vai và các cơ chóp xoay (Rotator cuff); ngăn cách với chỏm xương cánh tay bởi túi hoạt dịch dưới mỏm cùng - dưới delta (Subacromial bursa).',
+    clinical: 'Teo cơ delta làm vai vuông (mất độ tròn đầy) gặp trong tổn thương dây thần kinh nách (Axillary nerve) do trật khớp vai hoặc gãy cổ phẫu thuật xương cánh tay; là vị trí tiêm bắp cánh tay thông dụng nhất trên lâm sàng.',
+    relations: {
+      muscles: 'Phủ lên các cơ chóp xoay gồm cơ trên gai, cơ dưới gai, cơ tròn bé và cơ dưới vai.',
+      bones: 'Xương đòn (Clavicle), mỏm cùng vai và gai vai (Scapula), lồi củ delta xương cánh tay (Humerus).',
+      nerves: 'Dây thần kinh nách (Axillary nerve, C5-C6) chui qua lỗ tứ giác đi vào mặt sâu cơ delta.',
+      vessels: 'Động mạch mũ cánh tay sau (Posterior circumflex humeral artery) và nhánh delta của động mạch ngực cùng vai.'
+    },
+    lessonLink: '/co-vai/co-delta',
+    lessonTitle: 'Cơ Delta: Cơ Sinh Học Khớp Vai, 3 Bó Vận Động & Vị Trí Tiêm An Toàn',
+    videoId: '3ZfVjV7VqJ8'
+  },
+  'Acromial part of deltoid muscle': {
+    nameVi: 'Cơ delta (Bó giữa / Bó mỏm cùng vai)',
+    nameLatin: 'Pars acromialis musculi deltoidei (TA2: 2170)',
+    nameEn: 'Acromial part of deltoid muscle',
+    regionVi: 'Khớp vai & Cánh tay',
+    systemVi: 'Hệ Cơ bắp',
+    description: 'Bó giữa của cơ delta, cấu tạo dạng đa lông (multipennate) chịu lực kéo lớn nhất, bám từ bờ ngoài mỏm cùng vai đến lồi củ delta.',
+    function: 'Dạng cánh tay mạnh mẽ từ 15° đến 90° (sau khi cơ trên gai khởi động 15° đầu tiên).',
+    clinical: 'Vị trí tiêm bắp tiêu chuẩn (cách mỏm cùng vai 2-3 khoát ngón tay); viêm túi hoạt dịch dưới delta.',
+    relations: {
+      muscles: 'Cơ trên gai, cơ dưới gai.',
+      bones: 'Mỏm cùng vai, lồi củ delta xương cánh tay.',
+      nerves: 'Dây thần kinh nách (C5-C6).',
+      vessels: 'Động mạch mũ cánh tay sau.'
+    }
+  },
+  'Acromial part of deltoid muscle.l': {
+    nameVi: 'Cơ delta trái (Bó giữa)',
+    nameLatin: 'Pars acromialis musculi deltoidei sinistri (TA2: 2170)',
+    nameEn: 'Left acromial part of deltoid muscle',
+    regionVi: 'Khớp vai & Cánh tay',
+    systemVi: 'Hệ Cơ bắp',
+    description: 'Bó giữa cơ delta bên vai trái, bám từ mỏm cùng vai trái đến lồi củ delta xương cánh tay trái.',
+    function: 'Dạng cánh tay trái từ 15° đến 90°.',
+    clinical: 'Vị trí tiêm vắc-xin bắp tay trái thông dụng.',
+    relations: {
+      muscles: 'Cơ trên gai trái, cơ dưới gai trái.',
+      bones: 'Xương bả vai trái, xương cánh tay trái.',
+      nerves: 'Dây thần kinh nách trái.',
+      vessels: 'Động mạch mũ cánh tay sau trái.'
+    }
+  },
+
+  // === DÂY CHẰNG BÁNH CHÈ (PATELLAR LIGAMENT) ===
+  'Patellar ligament': {
+    nameVi: 'Dây chằng bánh chè (Gân bánh chè)',
+    nameLatin: 'Ligamentum patellae (TA2: 1515)',
+    nameEn: 'Patellar ligament (Patellar tendon)',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Dải mô xơ collagen dày, cực kỳ chắc dài khoảng 5-8 cm, là phần tiếp nối của gân cơ tứ đầu đùi bám từ đỉnh và bờ dưới xương bánh chè xuống bám tận vào lồi củ trước xương chày.',
+    function: 'Truyền toàn bộ lực co cực đại của cơ tứ đầu đùi qua xương bánh chè để thực hiện động tác duỗi cẳng chân tại khớp gối; giữ ổn định mặt trước khớp gối.',
+    relationsText: 'Phía sau ngăn cách với bao hoạt dịch khớp gối bởi khối mỡ dưới bánh chè (Hoffa fat pad); phía trước phủ bởi da và túi hoạt dịch trước bánh chè.',
+    clinical: 'Viêm gân bánh chè (Jumper’s knee) phổ biến ở vận động viên bóng chuyền, bóng rổ; bệnh Osgood-Schlatter (viêm lồi củ chày ở thanh thiếu niên đang dậy thì); gõ búa phản xạ gân xương bánh chè để đánh giá cung phản xạ tủy gai L3-L4.',
+    relations: {
+      muscles: 'Cơ tứ đầu đùi (Quadriceps femoris) liên tục trực tiếp với dây chằng bánh chè.',
+      bones: 'Xương bánh chè (Patella), lồi củ chày (Tibial tuberosity).',
+      nerves: 'Nhánh trước thần kinh đùi (Femoral nerve, rễ L3-L4).',
+      vessels: 'Mạng mạch quanh xương bánh chè tạo bởi các nhánh động mạch gối.'
+    },
+    lessonLink: '/khop-goi/gan-banh-che',
+    lessonTitle: 'Dây Chằng Bánh Chè: Truyền Lực Cơ Sinh Học & Bệnh Lý Viêm Gân',
+    videoId: '3ZfVjV7VqJ8'
+  },
+
+  // === GÂN GÓT ACHILLES (CALCANEAL TENDON) ===
+  'Calcaneal tendon': {
+    nameVi: 'Gân gót Achilles (Gân gót chân)',
+    nameLatin: 'Tendo calcaneus (TA2: 2475)',
+    nameEn: 'Calcaneal tendon (Achilles tendon)',
+    regionVi: 'Cẳng chân sau & Cổ chân',
+    systemVi: 'Hệ Cơ bắp',
+    description: 'Gân lớn nhất và khỏe nhất trong cơ thể người, hợp nhất từ gân của cơ bụng chân (Gastrocnemius) và cơ dép (Soleus) tạo thành cơ tam đầu cẳng chân, bám tận vào củ xương gót.',
+    function: 'Thực hiện động tác gập lòng bàn chân (Plantarflexion) với lực đẩy cực mạnh, là động lực chính cho các hoạt động đi, chạy, nhảy và kiễng chân.',
+    relationsText: 'Nằm nông ngay dưới da ở 1/3 dưới cẳng chân sau; ngăn cách với xương gót bởi túi hoạt dịch gân gót (Retrocalcaneal bursa).',
+    clinical: 'Đứt gân gót Achilles do tăng tốc đột ngột trong thể thao (tiếng "bốp" như bị đá vào gót); dấu hiệu Thompson test dương tính (bóp bắp chân bàn chân không gập lòng); viêm gân gót do quá tải; gõ phản xạ gân gót kiểm tra rễ thần kinh S1.',
+    relations: {
+      muscles: 'Cơ bụng chân (Gastrocnemius), cơ dép (Soleus), cơ gan chân (Plantaris).',
+      bones: 'Củ xương gót (Calcaneus).',
+      nerves: 'Dây thần kinh chày (Tibial nerve, rễ S1-S2).',
+      vessels: 'Động mạch chày sau và động mạch mác.'
+    },
+    lessonLink: '/co-chan/gan-achilles',
+    lessonTitle: 'Gân Gót Achilles: Cơ Sinh Học Chịu Tải & Dấu Hiệu Đứt Gân',
+    videoId: '3ZfVjV7VqJ8'
+  },
+  'Calcaneal tendon.l': {
+    nameVi: 'Gân gót Achilles trái',
+    nameLatin: 'Tendo calcaneus sinister (TA2: 2475)',
+    nameEn: 'Left calcaneal tendon (Achilles)',
+    regionVi: 'Cẳng chân sau & Cổ chân',
+    systemVi: 'Hệ Cơ bắp',
+    description: 'Gân gót lớn nhất bên cẳng chân trái, bám tận vào củ xương gót chân trái.',
+    function: 'Gập lòng bàn chân trái, tạo lực đẩy bước đi và bật nhảy.',
+    clinical: 'Viêm hoặc đứt gân gót chân trái, dấu hiệu Thompson bên trái dương tính.',
+    relations: {
+      muscles: 'Cơ bụng chân trái, cơ dép trái.',
+      bones: 'Xương gót trái.',
+      nerves: 'Dây thần kinh chày trái (S1).',
+      vessels: 'Động mạch chày sau trái.'
+    }
+  },
+
+  // === SỤN CHÊM NGOÀI & TRONG (MENISCI) ===
+  'Lateral meniscus': {
+    nameVi: 'Sụn chêm ngoài khớp gối',
+    nameLatin: 'Meniscus lateralis (TA2: 1533)',
+    nameEn: 'Lateral meniscus',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Tấm đệm sụn sợi hình gần như tròn (chữ O khép kín) nằm giữa lồi cầu ngoài xương đùi và mâm chày ngoài, có độ di động cao hơn sụn chêm trong.',
+    function: 'Phân tán 70% tải trọng nén lên khoang ngoài khớp gối, bôi trơn và hấp thu xung chấn cơ học khi đi chạy nhảy.',
+    clinical: 'Rách sụn chêm ngoài (rách quai vali, rách chéo), nang sụn chêm ngoài; gây đau khe khớp ngoài và kẹt khớp gối khi vận động.',
+    relations: {
+      muscles: 'Gân cơ khoeo (Popliteus tendon) chạy qua rãnh sụn chêm ngoài.',
+      bones: 'Lồi cầu ngoài xương đùi, mâm chày ngoài.',
+      nerves: 'Nhánh cảm thụ bản thể thần kinh chày.',
+      vessels: 'Động mạch gối dưới ngoài.'
+    }
+  },
+  'Lateral meniscus.l': {
+    nameVi: 'Sụn chêm ngoài gối trái',
+    nameLatin: 'Meniscus lateralis sinister (TA2: 1533)',
+    nameEn: 'Left lateral meniscus',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Sụn sợi hình gần tròn nằm ở mâm chày ngoài gối trái.',
+    function: 'Giảm chấn và phân tán áp lực khoang ngoài gối trái.',
+    clinical: 'Rách sụn chêm ngoài gối trái, kẹt khớp gối trái.',
+    relations: {
+      muscles: 'Cơ khoeo trái.',
+      bones: 'Xương đùi trái, mâm chày trái.',
+      nerves: 'Nhánh thần kinh chày trái.',
+      vessels: 'Động mạch gối dưới ngoài trái.'
+    }
+  },
+  'Medial meniscus': {
+    nameVi: 'Sụn chêm trong khớp gối',
+    nameLatin: 'Meniscus medialis (TA2: 1532)',
+    nameEn: 'Medial meniscus',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Tấm đệm sụn sợi hình chữ C rộng, dính chặt vào bao khớp và dây chằng bên chày (MCL), ít di động hơn sụn chêm ngoài.',
+    function: 'Phân tán 50% tải trọng khoang trong gối, làm sâu ổ khớp cho lồi cầu trong xương đùi.',
+    clinical: 'Rách sụn chêm trong thường gặp hơn sụn chêm ngoài (do dính chặt kém di động); thường tổn thương phối hợp với đứt ACL và MCL tạo thành "tam chứng bất hạnh" O’Donoghue.',
+    relations: {
+      muscles: 'Gân cơ bán màng (Semimembranosus) bám vào bờ sau.',
+      bones: 'Lồi cầu trong xương đùi, mâm chày trong.',
+      nerves: 'Nhánh thần kinh hiển và thần kinh chày.',
+      vessels: 'Động mạch gối dưới trong.'
+    }
+  },
+  'Medial meniscus.l': {
+    nameVi: 'Sụn chêm trong gối trái',
+    nameLatin: 'Meniscus medialis sinister (TA2: 1532)',
+    nameEn: 'Left medial meniscus',
+    regionVi: 'Khớp gối & Chi dưới',
+    systemVi: 'Khớp & Dây chằng',
+    description: 'Tấm sụn chữ C gắn chặt ở khoang trong khớp gối trái.',
+    function: 'Phân tán tải trọng và hấp thu lực nén khớp gối trái.',
+    clinical: 'Rách sụn chêm trong gối trái do vặn xoắn gối.',
+    relations: {
+      muscles: 'Cơ bán màng trái.',
+      bones: 'Xương đùi trái, xương chày trái.',
+      nerves: 'Nhánh thần kinh chày trái.',
+      vessels: 'Động mạch gối dưới trong trái.'
+    }
+  },
+
   // === HỆ CƠ LƯNG & CỘT SỐNG (BACK & SPINE MUSCLES - CLINICAL TA2) ===
   'Descending part of trapezius muscle': {
     nameVi: 'Cơ thang - Phần trên (Cơ cổ vai gáy)',

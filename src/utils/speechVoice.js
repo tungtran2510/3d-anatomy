@@ -1,7 +1,6 @@
-/**
- * Vietnamese Web Speech API Voice Preloader & Normalizer
- * Resolves asynchronous voice list population race conditions in WebKit/Blink.
- */
+import { getClinicalData } from '../data/clinicalInfo.js';
+import { getStructureInfo } from '../state/store.js';
+
 let cachedVoices = [];
 
 function refreshVoices() {
@@ -110,3 +109,48 @@ export function speakVietnamese(text, options = {}) {
   window.speechSynthesis.speak(utterance);
   return utterance;
 }
+
+/**
+ * Returns a concise, zero-fluff 15-second Vietnamese functional summary of any anatomical structure.
+ * Strips all greeting phrases and filler, going directly to [Name] + [Core Function].
+ */
+export function getStructure15sSpeechText(partId, baseName = null) {
+  if (!partId) return '';
+  const clinical = getClinicalData(partId, baseName);
+  const info = getStructureInfo(partId) || (baseName ? getStructureInfo(baseName) : null);
+  const rawName = clinical?.nameVi || info?.name?.vi || info?.name?.en || partId;
+  const cleanName = (rawName || '').replace(/\s*\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim() || rawName;
+
+  let funcText = clinical?.function || clinical?.description || '';
+  // If child part function is very short, supplement with parent base clinical function
+  if (funcText.length < 45 && baseName && baseName !== partId) {
+    const parentClinical = getClinicalData(baseName);
+    if (parentClinical?.function) {
+      funcText = parentClinical.function;
+    }
+  }
+
+  // Clean parenthetical text, quotes, and markdown
+  funcText = funcText.replace(/\s*\([^)]*\)/g, ' ').replace(/[*_`"']/g, ' ').replace(/\s+/g, ' ').trim();
+  // Strictly strip any possible greeting fluff
+  funcText = funcText.replace(/^(chào bạn|xin chào|tôi là[^.]+?\.|rất vui[^.]+?\.)\s*/gi, '');
+
+  // Extract first 1-2 core sentences (~15 seconds reading)
+  const sentences = funcText.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const coreSummary = sentences.slice(0, 2).join(' ') || funcText;
+
+  if (coreSummary) {
+    return `${cleanName}. ${coreSummary}`;
+  }
+  return cleanName;
+}
+
+/**
+ * Speaks the accurate Vietnamese name and 15-second core function summary without greetings.
+ */
+export function speakStructure15sSummary(partId, baseName = null, options = {}) {
+  const text = getStructure15sSpeechText(partId, baseName);
+  if (!text) return null;
+  return speakVietnamese(text, options);
+}
+

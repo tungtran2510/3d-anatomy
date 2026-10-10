@@ -112,10 +112,21 @@ function showVoiceToast(text, duration = 2000) {
 
 function executeVoiceCommand(text, viewer) {
   // Normalize text
-  const clean = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // unaccented for flexible matching
+  const clean = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
-  // 1. CHUYỂN ĐỘNG TIM / TUẦN HOÀN
-  if (text.includes('tim') || clean.includes('tim') || text.includes('tam thu') || text.includes('tam truong')) {
+  // 0. ANATOMICAL SEARCH / PINPOINT PRIORITY
+  // If the command is a query, question, or references anatomical structures/diseases,
+  // execute 3D search & pinpointing directly without getting intercepted by animation triggers.
+  const hasSearchIntent = /^(tìm|hãy tìm|chỉ|hãy chỉ|xem|cho xem|vị trí|ở đâu|đâu|khám phá|mở|bật)\b/i.test(text) ||
+                          /\b(hệ|he|tiêu hóa|tuan hoan|tuần hoàn|thần kinh|hô hấp|tiết niệu|đĩa đệm|dây chằng|ruột thừa|cơ delta|thoát vị|khớp|xương|động mạch|tĩnh mạch|não|phổi|gan|thận|dạ dày|tim mạch|bàng quang|cột sống|sụn chêm|tủy sống)\b/i.test(text);
+
+  if (hasSearchIntent) {
+    handleCompactAISubmit(text, viewer);
+    return;
+  }
+
+  // 1. CHUYỂN ĐỘNG TIM / TUẦN HOÀN (Chỉ khi nói rõ chuyển động nhịp tim)
+  if (/\b(nhịp tim|nhip tim|co bóp tim|đập tim|tâm thu|tâm trương|mô phỏng tim)\b/i.test(text) || clean === 'tim' || clean === 'trai tim') {
     dynamicAnatomy.setMotion(MOTIONS.CARDIAC);
     openMotionPanel(viewer, MOTIONS.CARDIAC);
     // Auto minimize to reveal full 3D heartbeat
@@ -124,8 +135,8 @@ function executeVoiceCommand(text, viewer) {
     return;
   }
 
-  // 2. CHUYỂN ĐỘNG HÔ HẤP / PHỔI / LỒNG NGỰC
-  if (text.includes('tho') || clean.includes('tho') || text.includes('ho hap') || text.includes('phoi') || clean.includes('phoi')) {
+  // 2. CHUYỂN ĐỘNG HÔ HẤP / LỒNG NGỰC (Chỉ khi nói rõ cử động thở/hô hấp)
+  if (/\b(hô hấp|ho hap|hít thở|hit tho|cử động thở|cu dong tho|nhịp thở|nhip tho)\b/i.test(text) || clean === 'tho' || clean === 'hit tho') {
     dynamicAnatomy.setMotion(MOTIONS.RESPIRATORY);
     openMotionPanel(viewer, MOTIONS.RESPIRATORY);
     setTimeout(() => minimizeMotionPanel(), 200);
@@ -134,7 +145,7 @@ function executeVoiceCommand(text, viewer) {
   }
 
   // 3. CHUYỂN ĐỘNG NHAI / HÀM
-  if (text.includes('nhai') || clean.includes('nhai') || text.includes('ham') || clean.includes('ham')) {
+  if (/\b(cử động nhai|cu dong nhai|nhai thức ăn|khớp cắn)\b/i.test(text) || clean === 'nhai') {
     dynamicAnatomy.setMotion(MOTIONS.MASTICATION);
     openMotionPanel(viewer, MOTIONS.MASTICATION);
     setTimeout(() => minimizeMotionPanel(), 200);
@@ -142,8 +153,8 @@ function executeVoiceCommand(text, viewer) {
     return;
   }
 
-  // 4. CHUYỂN ĐỘNG GỐI
-  if (text.includes('goi') || clean.includes('goi') || text.includes('chan') || clean.includes('chan')) {
+  // 4. CHUYỂN ĐỘNG CO DUỠI GỐI
+  if (/\b(co duỗi gối|co duoi goi|chuyển động gối|chuyen dong goi|uốn gối)\b/i.test(text) || clean === 'co duoi goi') {
     dynamicAnatomy.setMotion(MOTIONS.KNEE_FLEXION);
     openMotionPanel(viewer, MOTIONS.KNEE_FLEXION);
     setTimeout(() => minimizeMotionPanel(), 200);
@@ -152,51 +163,51 @@ function executeVoiceCommand(text, viewer) {
   }
 
   // 5. ĐIỀU KHIỂN PLAY / PAUSE / DỪNG
-  if (text.includes('dung') || text.includes('tam dung') || clean.includes('dung') || clean.includes('pause')) {
+  if (/\b(tạm dừng|tam dung|dừng lại|dung lai|pause)\b/i.test(text) || clean === 'dung' || clean === 'stop') {
     dynamicAnatomy.pause();
     showVoiceToast('⏸️ "Đã tạm dừng chuyển động"', 1800);
     return;
   }
 
-  if (text.includes('chay') || text.includes('tiep tuc') || clean.includes('chay') || clean.includes('play')) {
+  if (/\b(tiếp tục|tiep tuc|chạy tiếp|chay tiep|phát tiếp|play)\b/i.test(text) || clean === 'chay' || clean === 'play') {
     dynamicAnatomy.play();
     minimizeMotionPanel();
     showVoiceToast('▶️ "Đang tiếp tục chuyển động"', 1800);
     return;
   }
 
-  if (text.includes('tat') || clean.includes('tat') || text.includes('dong') || clean.includes('dong')) {
+  if (/\b(tắt chuyển động|tat chuyen dong|đóng chuyển động|dong chuyen dong)\b/i.test(text) || clean === 'tat') {
     closeMotionPanel();
     showVoiceToast('✕ "Đã tắt chuyển động"', 1800);
     return;
   }
 
   // 6. GÓC NHÌN CAMERA
-  if (text.includes('truoc') || clean.includes('truoc')) {
+  if (/\b(nhìn trước|phía trước|mat truoc|nhin truoc)\b/i.test(text) || clean === 'truoc') {
     document.getElementById('frontViewBtn')?.click();
     showVoiceToast('👁️ "Góc nhìn phía trước"', 1800);
     return;
   }
 
-  if (text.includes('sau') || clean.includes('sau')) {
+  if (/\b(nhìn sau|phía sau|mat sau|nhin sau)\b/i.test(text) || clean === 'sau') {
     document.getElementById('backViewBtn')?.click();
     showVoiceToast('🔄 "Góc nhìn phía sau"', 1800);
     return;
   }
 
-  if (text.includes('nghieng') || clean.includes('nghieng') || text.includes('ben')) {
+  if (/\b(nhìn nghiêng|nhìn bên|goc nghieng)\b/i.test(text) || clean === 'nghieng') {
     document.getElementById('sideViewBtn')?.click();
     showVoiceToast('📐 "Góc nhìn nghiêng"', 1800);
     return;
   }
 
-  if (text.includes('tren') || clean.includes('tren')) {
+  if (/\b(nhìn trên|từ trên xuống|nhin tren)\b/i.test(text) || clean === 'tren') {
     document.getElementById('topViewBtn')?.click();
     showVoiceToast('⬇️ "Góc nhìn từ trên"', 1800);
     return;
   }
 
-  if (text.includes('dat lai') || text.includes('khoi phuc') || clean.includes('dat lai') || clean.includes('reset')) {
+  if (/\b(đặt lại|khoi phuc|dat lai|reset)\b/i.test(text)) {
     document.getElementById('resetBtn')?.click();
     showVoiceToast('↺ "Đã đặt lại góc nhìn"', 1800);
     return;

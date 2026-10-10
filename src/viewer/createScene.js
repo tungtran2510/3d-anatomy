@@ -10,7 +10,7 @@ export function createScene() {
   // Scene
   const scene = new THREE.Scene();
   const isDark = typeof localStorage !== 'undefined' && localStorage.getItem('giao_dien') === 'dark';
-  scene.background = new THREE.Color(isDark ? 0x0d1117 : 0xf8fafc);
+  scene.background = new THREE.Color(isDark ? 0x0d1117 : 0xf0f3f6);
 
   // Renderer
   const canvas = document.getElementById('threeCanvas');
@@ -45,7 +45,7 @@ export function createScene() {
   renderer.setSize(Math.max(initialSize.width, 1), Math.max(initialSize.height, 1), false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.06;
+  renderer.toneMappingExposure = 1.04;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
 
@@ -55,7 +55,7 @@ export function createScene() {
   const roomEnv = new RoomEnvironment();
   const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture;
   scene.environment = envTexture;
-  scene.environmentIntensity = 0.20;
+  scene.environmentIntensity = 0.28;
 
   // Camera
   // The Z-Anatomy models are built to real scale: a body is roughly 1.7 units
@@ -328,11 +328,11 @@ function createLights(scene) {
   lights.contactShadow = createContactShadowPlane(scene);
 
   // Medical Studio Ambient Light - subtle fill so deep anatomical crevices retain natural shadow depth
-  lights.ambient = new THREE.AmbientLight(0xffffff, 0.16);
+  lights.ambient = new THREE.AmbientLight(0xffffff, 0.24);
   scene.add(lights.ambient);
 
   // Key directional light - clinical examination light (4500K warm ivory) from upper front-right
-  lights.key = new THREE.DirectionalLight(0xfffbf2, 1.08);
+  lights.key = new THREE.DirectionalLight(0xfffbf2, 0.92);
   lights.key.position.set(2.2, 3.4, 2.8);
   lights.key.target.position.set(0, 0.85, 0);
   scene.add(lights.key.target);
@@ -345,13 +345,13 @@ function createLights(scene) {
   lights.key.shadow.camera.right = 1.2;
   lights.key.shadow.camera.top = 1.4;
   lights.key.shadow.camera.bottom = -1.4;
-  lights.key.shadow.bias = -0.00025;
+  lights.key.shadow.bias = -0.00015;
   lights.key.shadow.normalBias = 0.02;
-  lights.key.shadow.radius = 1.8;
+  lights.key.shadow.radius = 2.4;
   scene.add(lights.key);
 
   // Fill light - soft cool-neutral fill (7000K daylight cyan tint) from lower front-left to soften harsh shadows
-  lights.fill = new THREE.DirectionalLight(0xe8f0fe, 0.32);
+  lights.fill = new THREE.DirectionalLight(0xe8f0fe, 0.42);
   lights.fill.position.set(-2.6, 1.4, 2.2);
   lights.fill.target.position.set(0, 0.85, 0);
   scene.add(lights.fill.target);
@@ -359,14 +359,14 @@ function createLights(scene) {
 
   // Dual Studio Rim Lights - sharp silhouette separation creating deep 3D sculptural volume
   // Rim Left: Crisp cool rim kicker from behind-left
-  lights.rimLeft = new THREE.DirectionalLight(0x7dd3fc, 0.78);
+  lights.rimLeft = new THREE.DirectionalLight(0x7dd3fc, 0.65);
   lights.rimLeft.position.set(-2.4, 2.0, -2.6);
   lights.rimLeft.target.position.set(0, 0.85, 0);
   scene.add(lights.rimLeft.target);
   scene.add(lights.rimLeft);
 
   // Rim Right: Warm golden rim kicker from behind-right
-  lights.rimRight = new THREE.DirectionalLight(0xfef08a, 0.50);
+  lights.rimRight = new THREE.DirectionalLight(0xfef08a, 0.42);
   lights.rimRight.position.set(2.4, 1.8, -2.6);
   lights.rimRight.target.position.set(0, 0.85, 0);
   scene.add(lights.rimRight.target);
@@ -395,16 +395,16 @@ function createLights(scene) {
 }
 
 export function updateLightsForSystem(lights, system) {
-  // Cinema-grade medical studio lighting balanced across all systems
+  // Cinema-grade medical studio lighting balanced across all systems with soft diffuse illumination
   const configs = {
-    muscular: { key: 1.05, fill: 0.30, ambient: 0.15, rimLeft: 0.78, rimRight: 0.48 },
-    skeletal: { key: 1.02, fill: 0.32, ambient: 0.15, rimLeft: 0.75, rimRight: 0.45 },
-    nervous: { key: 1.10, fill: 0.30, ambient: 0.14, rimLeft: 0.82, rimRight: 0.50 },
-    visceral: { key: 1.12, fill: 0.28, ambient: 0.14, rimLeft: 0.80, rimRight: 0.48 },
-    cardiovascular: { key: 1.15, fill: 0.28, ambient: 0.14, rimLeft: 0.82, rimRight: 0.50 },
-    lymphatic: { key: 1.08, fill: 0.30, ambient: 0.15, rimLeft: 0.78, rimRight: 0.48 },
-    integumentary: { key: 1.04, fill: 0.32, ambient: 0.15, rimLeft: 0.75, rimRight: 0.45 },
-    default: { key: 1.05, fill: 0.30, ambient: 0.15, rimLeft: 0.78, rimRight: 0.48 }
+    muscular: { key: 0.92, fill: 0.40, ambient: 0.24, rimLeft: 0.65, rimRight: 0.40 },
+    skeletal: { key: 0.92, fill: 0.42, ambient: 0.24, rimLeft: 0.65, rimRight: 0.40 },
+    nervous: { key: 0.94, fill: 0.40, ambient: 0.24, rimLeft: 0.68, rimRight: 0.42 },
+    visceral: { key: 0.90, fill: 0.42, ambient: 0.26, rimLeft: 0.62, rimRight: 0.38 },
+    cardiovascular: { key: 0.90, fill: 0.42, ambient: 0.26, rimLeft: 0.62, rimRight: 0.38 },
+    lymphatic: { key: 0.92, fill: 0.40, ambient: 0.24, rimLeft: 0.65, rimRight: 0.40 },
+    integumentary: { key: 0.90, fill: 0.42, ambient: 0.25, rimLeft: 0.60, rimRight: 0.38 },
+    default: { key: 0.92, fill: 0.40, ambient: 0.24, rimLeft: 0.65, rimRight: 0.40 }
   };
 
   const config = configs[system] || configs.default;
