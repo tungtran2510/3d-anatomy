@@ -511,9 +511,18 @@ const INTERMEDIATE_PATTERNS = [
 
 let muscleLayersCache = null;
 
+export function invalidateMuscleLayersCache() {
+  muscleLayersCache = null;
+}
+
 export function getMuscleLayers() {
-  if (muscleLayersCache) return muscleLayersCache;
+  if (muscleLayersCache && (muscleLayersCache.superficial.length > 0 || muscleLayersCache.intermediate.length > 0)) {
+    return muscleLayersCache;
+  }
   const nodes = getMeshesBySystem('muscular') || [];
+  if (nodes.length === 0) {
+    return { superficial: [], intermediate: [], deep: [] };
+  }
   const superficial = new Set();
   const intermediate = new Set();
   const deep = new Set();

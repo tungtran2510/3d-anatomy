@@ -46,22 +46,10 @@ function disposeMaterial(mat) {
 export function triggerMemoryCleanup(viewer) {
   if (!viewer) return { freed: true };
 
-  const { renderer } = viewer;
-
-  // 1. Dispose internal Three.js render lists
-  if (renderer?.renderLists) {
-    renderer.renderLists.dispose();
-  }
-
-  // 2. Dispose unused WebGL programs & compiled shaders
-  if (renderer?.properties) {
-    // Force cleanup where available
-  }
-
-  // 3. Request a clean render pass
+  // Request a clean, stable render pass without discarding GPU buffer caches
   viewer.render?.();
 
-  console.warn('[MemoryManager] GPU RenderLists and unused shaders purged.');
+  console.warn('[MemoryManager] GPU cache inspected and refreshed.');
   return { freed: true, timestamp: Date.now() };
 }
 

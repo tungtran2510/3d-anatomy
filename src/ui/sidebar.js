@@ -1038,18 +1038,15 @@ export function initFooterActions(viewer) {
   const dissectHud = document.getElementById('dissectionLayerHud');
 
   btnDissect?.addEventListener('click', () => {
-    // Nếu đang chọn một bộ phận: Bấm nút bóc tách ở dưới sẽ bóc tách trực tiếp bộ phận đó theo từng lớp!
-    if (state.selectedPart) {
-      dissectMultiLayer(state.selectedPart.id, viewer);
-      return;
-    }
-
     state.dissectMode = !state.dissectMode;
     btnDissect.classList.toggle('dissect-active', state.dissectMode);
     if (state.dissectMode) {
       dissectHud?.classList.remove('hidden');
       document.body.classList.add('dissect-hud-active');
-      showToast('Dao mổ BẬT: Chọn tầng bóc tách hoặc chạm bộ phận để bóc lớp');
+      showToast('🔪 Bóc tách Đa Tầng BẬT: Chọn tầng bóc tách (Nông / Giữa / Sâu / Xương)');
+      if (!state.loadedSystems?.includes('muscular')) {
+        loadModel('muscular', viewer).catch(() => {});
+      }
     } else {
       dissectHud?.classList.add('hidden');
       document.body.classList.remove('dissect-hud-active');

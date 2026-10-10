@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { state, setHiddenParts, setTransparentParts, setIsolatedPart, getPartState, setPartState, batchPartStates, notify } from '../state/store.js';
 import { getMeshRegistry, getMeshesBySystem, ownMeshesOf, withDescendants } from './loadModel.js';
 import { updateBodyEnvelopeAuto } from './bodyEnvelope.js';
-import { triggerMemoryCleanup } from './memoryManager.js';
 
 // --- Material ownership ------------------------------------------------------
 // Meshes share the 65 materials that came out of the GLB. A mesh only gets
@@ -312,9 +311,6 @@ export function restoreAllParts() {
 
   notify('allPartsRestored', true);
   updateBodyEnvelopeAuto(state.viewer);
-  if (state.viewer) {
-    triggerMemoryCleanup(state.viewer);
-  }
 }
 
 export function hideSystem(systemId) {
@@ -327,9 +323,6 @@ export function hideSystem(systemId) {
 
   notify('systemHidden', systemId);
   updateBodyEnvelopeAuto(state.viewer);
-  if (state.viewer) {
-    triggerMemoryCleanup(state.viewer);
-  }
 }
 
 export function showSystem(systemId) {
