@@ -146,20 +146,29 @@ class EngineManager {
       renderer.toneMappingExposure = this.getExposure();
     }
 
-    // Track user camera interaction for Dynamic Resolution Scaling
+    // Track user camera interaction for Dynamic Resolution Scaling & GPU Shadow optimization
     if (controls) {
       controls.addEventListener('start', () => {
         this.drs.isMoving = true;
+        // Mobile 60 FPS Optimization: Suspend expensive real-time shadow recalculations during active touch/orbit
+        if (renderer?.shadowMap && this.gpuInfo.tier !== 'high') {
+          renderer.shadowMap.autoUpdate = false;
+        }
       });
 
       controls.addEventListener('end', () => {
         this.drs.isMoving = false;
+        // Resume shadow updates and render crisp pass upon settling
+        if (renderer?.shadowMap) {
+          renderer.shadowMap.needsUpdate = true;
+          renderer.shadowMap.autoUpdate = true;
+        }
         // Instant Crisp Resolve: return to full native pixel ratio upon settling
         if (renderer && renderer.getPixelRatio() !== this.drs.nativeRatio) {
           renderer.setPixelRatio(this.drs.nativeRatio);
           this.drs.currentRatio = this.drs.nativeRatio;
-          viewer.render?.();
         }
+        viewer.render?.();
       });
     }
 

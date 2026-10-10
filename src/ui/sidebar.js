@@ -40,7 +40,7 @@ import { openAtlasAdmin } from './atlasAdminModal.js';
 import { dissectMultiLayer } from '../viewer/dissection.js';
 import { openSettingsModal } from './settingsModal.js';
 import { isVoiceMuted, setVoiceMuted, stopAllSpeech, speakVietnamese } from '../utils/speechVoice.js';
-import { initDepthSlider } from './depthSlider.js';
+import { initDepthSlider, applyDepth } from './depthSlider.js';
 
 if (typeof window !== 'undefined') {
   window.openClinicalAxesModal = openClinicalAxesModal;
@@ -1035,6 +1035,8 @@ export function initFooterActions(viewer) {
   });
 
   const btnDissect = document.getElementById('btnNavDissect');
+  const dissectHud = document.getElementById('dissectionLayerHud');
+
   btnDissect?.addEventListener('click', () => {
     // Nếu đang chọn một bộ phận: Bấm nút bóc tách ở dưới sẽ bóc tách trực tiếp bộ phận đó theo từng lớp!
     if (state.selectedPart) {
@@ -1045,10 +1047,32 @@ export function initFooterActions(viewer) {
     state.dissectMode = !state.dissectMode;
     btnDissect.classList.toggle('dissect-active', state.dissectMode);
     if (state.dissectMode) {
-      showToast('Dao mổ BẬT: Chạm vào bất kỳ bộ phận nào để bóc tách từng lớp');
+      dissectHud?.classList.remove('hidden');
+      document.body.classList.add('dissect-hud-active');
+      showToast('Dao mổ BẬT: Chọn tầng bóc tách hoặc chạm bộ phận để bóc lớp');
     } else {
+      dissectHud?.classList.add('hidden');
+      document.body.classList.remove('dissect-hud-active');
       showToast('Chế độ bóc tách: TẮT');
     }
+  });
+
+  document.getElementById('btnDissectHudClose')?.addEventListener('click', () => {
+    dissectHud?.classList.add('hidden');
+    document.body.classList.remove('dissect-hud-active');
+    state.dissectMode = false;
+    btnDissect?.classList.remove('dissect-active');
+  });
+
+  const dissectPillBtns = dissectHud?.querySelectorAll('.dissect-pill-btn') || [];
+  dissectPillBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const stage = parseInt(btn.dataset.stage, 10);
+      dissectPillBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyDepth(stage, true);
+    });
   });
 
   // Mobile Bottom Bar AI Assistant button
@@ -1139,6 +1163,12 @@ export function initFooterActions(viewer) {
       state.dissectMode = false;
       document.getElementById('btnNavDissect')?.classList.remove('dissect-active');
     }
+    const dissectHud = document.getElementById('dissectionLayerHud');
+    dissectHud?.classList.add('hidden');
+    document.body.classList.remove('dissect-hud-active');
+    dissectHud?.querySelectorAll('.dissect-pill-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.stage === '0');
+    });
 
     // Reset camera to default full front view
     if (viewer) {

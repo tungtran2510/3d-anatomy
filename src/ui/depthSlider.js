@@ -37,6 +37,16 @@ export function applyDepth(stage, notifyToast = false) {
   }
   currentStage = stage;
 
+  // Synchronize Dissection HUD pills if present
+  if (typeof document !== 'undefined') {
+    const hud = document.getElementById('dissectionLayerHud');
+    if (hud) {
+      hud.querySelectorAll('.dissect-pill-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.stage, 10) === stage);
+      });
+    }
+  }
+
   // Ensure skeletal system is loaded as core foundation
   if (!state.loadedSystems?.includes('skeletal')) {
     loadModel('skeletal', state.viewer).then(() => {
