@@ -3,7 +3,8 @@ import { state, setSelectedPart, subscribe, getSystemParts, getStructureInfo, se
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
 import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState } from '../viewer/visibility.js';
-import { selectPartById, deselectPart, undoLastDissect, executeUndo, executeRedo } from '../viewer/selection.js';
+import { selectPartById, resolveAnatomicalAlias, deselectPart, undoLastDissect, executeUndo, executeRedo } from '../viewer/selection.js';
+import { hideCallout } from './callout.js';
 import { loadAllData, searchStructures, cleanSearchLabel } from '../utils/dataLoader.js';
 import { PRESETS, applyPreset } from '../data/presets.js';
 import { setInert, focusFirst, trapFocus, rovingList } from './focus.js';
@@ -38,7 +39,7 @@ import { openClinicalAxesModal } from './clinicalAxesModal.js';
 import { openAtlasAdmin } from './atlasAdminModal.js';
 import { dissectMultiLayer } from '../viewer/dissection.js';
 import { openSettingsModal } from './settingsModal.js';
-import { isVoiceMuted, setVoiceMuted, stopAllSpeech } from '../utils/speechVoice.js';
+import { isVoiceMuted, setVoiceMuted, stopAllSpeech, speakVietnamese } from '../utils/speechVoice.js';
 import { initDepthSlider } from './depthSlider.js';
 
 if (typeof window !== 'undefined') {
@@ -391,8 +392,18 @@ export function initSystemsSidebar() {
 // been downloaded: 2550 of the 2827 structures are in that state on a fresh
 // page, and every one of them used to be a dead click.
 export async function selectStructureAnywhere(partId) {
-  const info = getStructureInfo(partId);
-  const systemId = info?.system;
+  if (!partId) return false;
+  const resolvedTargetId = resolveAnatomicalAlias(partId) || partId;
+  const info = getStructureInfo(resolvedTargetId) || getStructureInfo(partId);
+  let systemId = info?.system;
+  if (!systemId) {
+    if (/intervertebral|disc|meniscus|ligament|joint/i.test(resolvedTargetId)) systemId = 'joints';
+    else if (/vertebra|sternum|rib|bone|femur|tibia|fibula|humerus|scapula|clavicle|patella|radius|ulna|pelvis|hip/i.test(resolvedTargetId)) systemId = 'skeletal';
+    else if (/muscle|gluteus|trapezius|deltoid|biceps|triceps/i.test(resolvedTargetId)) systemId = 'muscular';
+    else if (/stomach|liver|kidney|pancreas|colon|jejunum|ileum|duodenum|spleen|bladder|lung|esophagus|trachea/i.test(resolvedTargetId)) systemId = 'visceral';
+    else if (/artery|vein|ventricle|atrium|aorta/i.test(resolvedTargetId)) systemId = 'cardiovascular';
+    else if (/nerve|brain|spinal cord/i.test(resolvedTargetId)) systemId = 'nervous';
+  }
 
   if (systemId) {
     // Switching a system off leaves it in loadedSystems with an unload timer
@@ -426,24 +437,26 @@ export async function selectStructureAnywhere(partId) {
     }
   }
 
-  const ok = selectPartById(partId, state.viewer);
+  const ok = selectPartById(resolvedTargetId, state.viewer) || selectPartById(partId, state.viewer);
   if (!ok) {
-    const clinical = getClinicalData(partId);
-    const displayName = clinical?.nameVi || info?.name?.[state.language] || info?.name?.vi || info?.name?.en || partId;
+    hideCallout(); // Hide old callout so it never stays stuck on previous bone
+    const clinical = getClinicalData(resolvedTargetId) || getClinicalData(partId);
+    const displayName = clinical?.nameVi || info?.name?.[state.language] || info?.name?.vi || info?.name?.en || resolvedTargetId;
     const synthesizedPart = {
-      id: partId,
-      meshName: info?.baseName || partId,
+      id: resolvedTargetId,
+      meshName: info?.baseName || resolvedTargetId,
       displayName: displayName,
       system: systemId || 'unknown',
       region: info?.region || 'unknown',
       info: info || {
-        name: { vi: displayName, en: partId },
-        latinName: clinical?.nameLatin || partId,
+        name: { vi: displayName, en: resolvedTargetId },
+        latinName: clinical?.nameLatin || resolvedTargetId,
         system: systemId || 'unknown'
       }
     };
     setSelectedPart(synthesizedPart);
   }
+  return ok;
 }
 
 if (typeof window !== 'undefined') {
@@ -2407,7 +2420,7 @@ export async function initUI(viewer) {
 }
 
 /**
- * Controller cho nút loa nhỏ xíu tắt/bật âm lượng AI đọc trên góc màn hình
+ * Controller cho nút loa trên đỉnh trên cùng phát âm thanh đọc tên tiêu đề cơ quan (ví dụ: Xương mác, Xương cánh tay)
  */
 export function initQuickVoiceMuteController() {
   const btn = document.getElementById('btnQuickMuteAI');
@@ -2424,7 +2437,6 @@ export function initQuickVoiceMuteController() {
       iconSpeaker.classList.toggle('hidden', muted);
       iconMuted.classList.toggle('hidden', !muted);
     }
-    btn.title = muted ? 'Bật âm lượng giọng đọc AI' : 'Tắt âm lượng giọng đọc AI';
   };
 
   btn.addEventListener('click', (e) => {
@@ -2434,19 +2446,52 @@ export function initQuickVoiceMuteController() {
     if (isSpeaking) {
       stopAllSpeech();
       btn.classList.remove('is-speaking');
-      showToast('Đã dừng đọc giọng nói AI');
-    } else {
-      const nextMuted = !isVoiceMuted();
-      setVoiceMuted(nextMuted);
+      showToast('⏹️ Đã dừng đọc phát âm');
+      return;
+    }
+
+    // Đảm bảo không bị mute khi người dùng chủ động bấm nghe
+    if (isVoiceMuted()) {
+      setVoiceMuted(false);
       updateUI();
-      showToast(nextMuted ? 'Đã tắt âm lượng giọng đọc AI' : 'Đã bật âm lượng giọng đọc AI');
+    }
+
+    const part = state.selectedPart;
+    if (part) {
+      const clinical = getClinicalData(part.id);
+      const rawName = part.displayName || clinical?.nameVi || part.id;
+      // Lọc bỏ ngoặc đơn giải thích phụ (e.g. "Xương mác (Fibula)" -> "Xương mác", "Xương cánh tay (Humerus)" -> "Xương cánh tay")
+      const cleanName = (rawName || '').replace(/\s*\([^)]*\)/g, '').trim() || rawName;
+
+      btn.classList.add('is-speaking');
+      speakVietnamese(cleanName, {
+        onEnd: () => btn.classList.remove('is-speaking'),
+        onError: () => btn.classList.remove('is-speaking')
+      });
+      showToast(`🔊 ${cleanName}`);
+    } else {
+      showToast('💡 Chạm chọn một cơ quan để nghe đọc tên (Ví dụ: Xương mác, Xương cánh tay)');
+    }
+  });
+
+  // Cập nhật tooltip và aria-label khi người dùng chọn cơ quan
+  subscribe('selectedPart', (part) => {
+    if (part) {
+      const clinical = getClinicalData(part.id);
+      const rawName = part.displayName || clinical?.nameVi || part.id;
+      const cleanName = (rawName || '').replace(/\s*\([^)]*\)/g, '').trim() || rawName;
+      btn.title = `Đọc tên: ${cleanName} (Bấm để nghe phát âm)`;
+      btn.setAttribute('aria-label', `Đọc phát âm: ${cleanName}`);
+    } else {
+      btn.title = 'Đọc phát âm tên cơ quan (Chạm vào một cơ quan để nghe)';
+      btn.setAttribute('aria-label', 'Đọc phát âm tên cơ quan');
     }
   });
 
   // Theo dõi trạng thái giọng đọc AI để kích hoạt hiệu ứng sóng âm thanh
   setInterval(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
-      const speaking = window.speechSynthesis.speaking && !isVoiceMuted();
+      const speaking = window.speechSynthesis.speaking;
       btn.classList.toggle('is-speaking', !!speaking);
     }
   }, 250);

@@ -10449,43 +10449,41 @@ body:not(.theme-dark) .name-sub-paren {
 }
 
 /* ==========================================================================
-   FLOATING QUICK VOICE MUTE / SPEAKER BUTTON (TOP-RIGHT CORNER)
+   HEADER TOP SPEAKER / PRONUNCIATION BUTTON (.btn-header-speaker)
+   Nút loa trên đỉnh thanh tiêu đề phát âm thanh đọc tên cơ quan (Ví dụ: Xương mác, Xương cánh tay)
    ========================================================================== */
-.btn-quick-voice-mute {
-  position: absolute;
-  top: var(--ctrl-col-top) !important;
-  right: 50px !important;
-  width: 34px !important;
-  height: 34px !important;
-  border-radius: 50% !important;
-  background: rgba(241, 245, 249, 0.88) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(203, 213, 225, 0.7) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  color: #475569 !important;
-  display: flex;
+.btn-header-speaker {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--fg-primary);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 85;
-  transition: all 0.18s ease;
+  transition: all var(--transition-fast);
   padding: 0;
+  flex-shrink: 0;
 }
-.btn-quick-voice-mute svg {
-  width: 16px;
-  height: 16px;
+.btn-header-speaker svg {
+  width: 18px;
+  height: 18px;
   stroke: currentColor;
   stroke-width: 2px;
   display: block;
 }
-.btn-quick-voice-mute:hover {
-  background: rgba(226, 232, 240, 0.95) !important;
-  border-color: rgba(148, 163, 184, 0.8) !important;
-  color: #1e293b !important;
-  transform: scale(1.05);
+.btn-header-speaker:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+  color: var(--fg-primary);
+  transform: scale(1.04);
 }
-.btn-quick-voice-mute.is-speaking {
+.btn-header-speaker.is-speaking {
   color: #0284c7 !important;
   border-color: #38bdf8 !important;
   background: rgba(224, 242, 254, 0.95) !important;
@@ -10497,34 +10495,46 @@ body:not(.theme-dark) .name-sub-paren {
   50% { transform: scale(1.06); box-shadow: 0 0 0 5px rgba(14, 165, 233, 0); }
   100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
 }
-.btn-quick-voice-mute.is-muted {
+.btn-header-speaker.is-muted {
   color: #ef4444 !important;
   border-color: rgba(239, 68, 68, 0.45) !important;
   background: rgba(254, 242, 242, 0.95) !important;
 }
-[data-theme="dark"] .btn-quick-voice-mute,
-body.theme-dark .btn-quick-voice-mute {
-  background: rgba(30, 41, 59, 0.88) !important;
-  border-color: rgba(71, 85, 105, 0.6) !important;
-  color: #cbd5e1 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+[data-theme="dark"] .btn-header-speaker,
+body.theme-dark .btn-header-speaker {
+  background: var(--bg-tertiary);
+  border-color: var(--border);
+  color: var(--fg-primary);
 }
-[data-theme="dark"] .btn-quick-voice-mute:hover,
-body.theme-dark .btn-quick-voice-mute:hover {
-  background: rgba(51, 65, 85, 0.95) !important;
+[data-theme="dark"] .btn-header-speaker:hover,
+body.theme-dark .btn-header-speaker:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
   color: #ffffff !important;
 }
-[data-theme="dark"] .btn-quick-voice-mute.is-speaking,
-body.theme-dark .btn-quick-voice-mute.is-speaking {
+[data-theme="dark"] .btn-header-speaker.is-speaking,
+body.theme-dark .btn-header-speaker.is-speaking {
   background: rgba(12, 74, 110, 0.9) !important;
   border-color: #38bdf8 !important;
   color: #38bdf8 !important;
 }
-[data-theme="dark"] .btn-quick-voice-mute.is-muted,
-body.theme-dark .btn-quick-voice-mute.is-muted {
+[data-theme="dark"] .btn-header-speaker.is-muted,
+body.theme-dark .btn-header-speaker.is-muted {
   background: rgba(69, 10, 10, 0.85) !important;
   border-color: rgba(239, 68, 68, 0.5) !important;
   color: #f87171 !important;
+}
+
+@media (max-width: 768px) {
+  .btn-header-speaker {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 6px !important;
+  }
+  .btn-header-speaker svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
 }
 
 /* ==========================================================================
@@ -10608,13 +10618,6 @@ body.is-fullscreen .viewer-controls {
 :-webkit-full-screen .btn-fullscreen-toggle,
 body.is-fullscreen .btn-fullscreen-toggle {
   top: var(--ctrl-col-top) !important;
-}
-
-:fullscreen .btn-quick-voice-mute,
-:-webkit-full-screen .btn-quick-voice-mute,
-body.is-fullscreen .btn-quick-voice-mute {
-  top: var(--ctrl-col-top) !important;
-  right: 50px !important;
 }
 
 :fullscreen .floating-top-view-btn,
@@ -15640,10 +15643,6 @@ body.theme-dark .pathway-clinical-note {
   .btn-fullscreen-toggle {
     top: var(--ctrl-col-top) !important;
     right: 10px !important;
-  }
-  .btn-quick-voice-mute {
-    top: var(--ctrl-col-top) !important;
-    right: 50px !important;
   }
 
   .floating-top-view-btn {

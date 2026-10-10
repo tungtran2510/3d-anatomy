@@ -1478,8 +1478,8 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
 }
 
 function generate15SecVoiceSummary(part, clinical, pathology) {
-  const name = part.displayName || clinical.nameVi || part.id;
-  const system = clinical.systemVi || 'cơ thể';
+  const rawName = part.displayName || clinical.nameVi || part.id;
+  const cleanName = (rawName || '').replace(/\s*\([^)]*\)/g, '').trim() || rawName;
 
   let funcText = clinical.function || clinical.description || '';
   funcText = funcText.split(/[\.\!\?]\s+/)[0] || funcText;
@@ -1503,7 +1503,8 @@ function generate15SecVoiceSummary(part, clinical, pathology) {
     adviceText = `Hãy giữ lối sống lành mạnh và thăm khám khi có biểu hiện bất thường.`;
   }
 
-  return `Chào bạn! ${name} thuộc ${system}, có vai trò chính là ${funcText}. ${pathoText} ${adviceText}`;
+  // Bỏ chữ chào bạn hay giới thiệu, vào luôn vấn đề cốt lõi
+  return `${cleanName}: ${funcText}. ${pathoText} ${adviceText}`;
 }
 
 function play15SecVoiceSummary(btnEl) {

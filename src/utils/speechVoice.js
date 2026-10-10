@@ -81,3 +81,32 @@ export function stopAllSpeech() {
     } catch {}
   }
 }
+
+/**
+ * Speaks given Vietnamese text with high quality voice and natural cadence
+ */
+export function speakVietnamese(text, options = {}) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window) || !text) return null;
+  if (isVoiceMuted()) return null;
+
+  try {
+    window.speechSynthesis.cancel();
+  } catch {}
+
+  const clean = text.replace(/\s*\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!clean) return null;
+
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.lang = 'vi-VN';
+  utterance.rate = options.rate || 0.95;
+  utterance.pitch = options.pitch || 1.0;
+
+  const viVoice = getVietnameseVoice();
+  if (viVoice) utterance.voice = viVoice;
+
+  if (options.onEnd) utterance.onend = options.onEnd;
+  if (options.onError) utterance.onerror = options.onError;
+
+  window.speechSynthesis.speak(utterance);
+  return utterance;
+}

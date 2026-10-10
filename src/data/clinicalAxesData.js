@@ -452,7 +452,7 @@ export const CLINICAL_AXES = [
     primarySystems: ['nervous', 'joints', 'skeletal'],
     defaultPartId: 'Intervertebral disc L4-L5',
     keywords: [
-      'trục não tủy', 'não tủy', 'tủy sống', 'thoát vị đĩa đệm', 'thần kinh tọa',
+      'trục não tủy', 'não tủy', 'trục thần kinh tọa',
       'đau thắt lưng', 'l4-l5', 'sciatic', 'spinal cord', 'liệt nửa người', 'đau rễ'
     ],
     chainSteps: [

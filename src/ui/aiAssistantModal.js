@@ -1,7 +1,7 @@
 // Compact Transparent AI Bar & Voice/Text Co-pilot
 // Designed for zero obstruction: 1-line transparent glass bar & 1-2 line transparent HUD response
 import { state } from '../state/store.js';
-import { interpretAIQuery, executeAICommand } from '../ai/anatomyAI.js';
+import { interpretAIQuery, executeAICommand, cleanSearchQuery } from '../ai/anatomyAI.js';
 import { selectPartById } from '../viewer/selection.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { selectStructureAnywhere } from './sidebar.js';
@@ -290,7 +290,11 @@ export async function handleCompactAISubmit(text, viewer) {
 
   // If interpreted has no target and no axis, perform an immediate direct search fallback
   if (!interpreted.target && !interpreted.axis && interpreted.intent !== 'SYSTEM_CONTROL' && interpreted.intent !== 'MUSCLE_OVERVIEW') {
-    const matches = searchStructures(text);
+    const cleanQ = cleanSearchQuery(text);
+    let matches = searchStructures(cleanQ);
+    if (matches.length === 0 && cleanQ !== text.toLowerCase().trim()) {
+      matches = searchStructures(text);
+    }
     if (matches.length > 0) {
       const top = matches[0];
       const targetPartId = top.sides?.none || top.sides?.left || top.sides?.right || (top.partIds && top.partIds[0]) || top.base;
@@ -326,7 +330,11 @@ export async function handleCompactAISubmit(text, viewer) {
   } catch (err) {
     console.warn('[AI Command Execution Error]:', err);
     // Secondary fallback: if executeAICommand somehow failed, attempt selectStructureAnywhere directly
-    const directMatches = searchStructures(text);
+    const cleanQ = cleanSearchQuery(text);
+    let directMatches = searchStructures(cleanQ);
+    if (directMatches.length === 0 && cleanQ !== text.toLowerCase().trim()) {
+      directMatches = searchStructures(text);
+    }
     if (directMatches.length > 0) {
       const top = directMatches[0];
       const targetPartId = top.sides?.none || top.sides?.left || top.sides?.right || (top.partIds && top.partIds[0]) || top.base;

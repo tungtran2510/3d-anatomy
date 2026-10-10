@@ -11,6 +11,7 @@ import { setClippingPlane } from '../viewer/clipping.js';
 import { toggleMeasurementMode } from '../viewer/measurement.js';
 import { getWeakStructures, getRoadmapProgress } from '../state/learningRoadmap.js';
 import { CLINICAL_AXES } from '../data/clinicalAxesData.js';
+import { hideCallout } from '../ui/callout.js';
 
 // Pre-mapped high-frequency Vietnamese clinical anatomical aliases
 export const ANATOMICAL_SYNONYMS = {
@@ -183,14 +184,38 @@ export const ANATOMICAL_SYNONYMS = {
 
   // Spine & Thoracic & Lumbar
   'cột sống': { id: 'Lumbar vertebra I', base: 'Vertebra', system: 'skeletal', nameVi: 'Cột sống' },
+  'cot song': { id: 'Lumbar vertebra I', base: 'Vertebra', system: 'skeletal', nameVi: 'Cột sống' },
   'đốt sống thắt lưng': { id: 'Lumbar vertebra I', base: 'Lumbar vertebra', system: 'skeletal', nameVi: 'Đốt sống thắt lưng' },
+  'dot song that lung': { id: 'Lumbar vertebra I', base: 'Lumbar vertebra', system: 'skeletal', nameVi: 'Đốt sống thắt lưng' },
+  'thắt lưng': { id: 'Lumbar vertebra I', base: 'Lumbar vertebra', system: 'skeletal', nameVi: 'Cột sống thắt lưng' },
+  'that lung': { id: 'Lumbar vertebra I', base: 'Lumbar vertebra', system: 'skeletal', nameVi: 'Cột sống thắt lưng' },
   'l1': { id: 'Vertebra L1', base: 'Vertebra L1', system: 'skeletal', nameVi: 'Đốt sống thắt lưng L1' },
   'l2': { id: 'Vertebra L2', base: 'Vertebra L2', system: 'skeletal', nameVi: 'Đốt sống thắt lưng L2' },
   'l3': { id: 'Vertebra L3', base: 'Vertebra L3', system: 'skeletal', nameVi: 'Đốt sống thắt lưng L3' },
   'l4': { id: 'Vertebra L4', base: 'Vertebra L4', system: 'skeletal', nameVi: 'Đốt sống thắt lưng L4' },
   'l5': { id: 'Vertebra L5', base: 'Vertebra L5', system: 'skeletal', nameVi: 'Đốt sống thắt lưng L5' },
   'xương cùng': { id: 'Sacrum', base: 'Sacrum', system: 'skeletal', nameVi: 'Xương cùng (Sacrum)' },
+  'xuong cung': { id: 'Sacrum', base: 'Sacrum', system: 'skeletal', nameVi: 'Xương cùng' },
   'xương cụt': { id: 'Coccyx', base: 'Coccyx', system: 'skeletal', nameVi: 'Xương cụt (Coccyx)' },
+  'xuong cut': { id: 'Coccyx', base: 'Coccyx', system: 'skeletal', nameVi: 'Xương cụt' },
+
+  // Intervertebral Discs & Spinal Joints (Đĩa đệm cột sống & Thoát vị đĩa đệm)
+  'đĩa đệm': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống L4-L5' },
+  'dia dem': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống L4-L5' },
+  'thoát vị đĩa đệm': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống (Thoát vị L4-L5)' },
+  'thoat vi dia dem': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống (Thoát vị L4-L5)' },
+  'đĩa đệm gian đốt sống': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống' },
+  'dia dem gian dot song': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống' },
+  'đĩa đệm cột sống': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm cột sống' },
+  'dia dem cot song': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm cột sống' },
+  'đĩa đệm gian đốt': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt' },
+  'dia dem gian dot': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt' },
+  'nhân nhầy': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Nhân nhầy đĩa đệm (Nucleus pulposus)' },
+  'nhan nhay': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Nhân nhầy đĩa đệm' },
+  'vòng sợi': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Vòng sợi đĩa đệm (Anulus fibrosus)' },
+  'vong soi': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Vòng sợi đĩa đệm' },
+  'intervertebral disc': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống' },
+  'disc': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm gian đốt sống' },
 
   // Other Bones
   'xương đùi': { id: 'Femur.l', base: 'Femur', system: 'skeletal', nameVi: 'Xương đùi' },
@@ -209,7 +234,12 @@ export const ANATOMICAL_SYNONYMS = {
   'hộp sọ': { id: 'Frontal bone', base: 'Frontal bone', system: 'skeletal', nameVi: 'Hộp sọ' },
   'xương trán': { id: 'Frontal bone', base: 'Frontal bone', system: 'skeletal', nameVi: 'Xương trán' },
   'xương hàm dưới': { id: 'Mandible', base: 'Mandible', system: 'skeletal', nameVi: 'Xương hàm dưới' },
+  'thân xương ức': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Thân xương ức' },
+  'than xuong uc': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Thân xương ức' },
   'xương ức': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Xương ức' },
+  'xuong uc': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Xương ức' },
+  'cán ức': { id: 'Manubrium of sternum', base: 'Manubrium of sternum', system: 'skeletal', nameVi: 'Cán xương ức' },
+  'mũi kiếm': { id: 'Xiphoid process', base: 'Xiphoid process', system: 'skeletal', nameVi: 'Mũi kiếm xương ức' },
   'xương sườn': { id: 'First rib.l', base: 'First rib', system: 'skeletal', nameVi: 'Xương sườn' },
 
   // Visceral, Lymphatic & Cardiovascular
@@ -341,7 +371,91 @@ export const ANATOMICAL_SYNONYMS = {
   'ruột non': { id: 'Jejunum', base: 'Jejunum', system: 'visceral', nameVi: 'Ruột non' },
   'ruot non': { id: 'Jejunum', base: 'Jejunum', system: 'visceral', nameVi: 'Ruột non' },
   'ruột thừa': { id: 'Vermiform appendix', base: 'Vermiform appendix', system: 'visceral', nameVi: 'Ruột thừa' },
-  'ruot thua': { id: 'Vermiform appendix', base: 'Vermiform appendix', system: 'visceral', nameVi: 'Ruột thừa' }
+  'ruot thua': { id: 'Vermiform appendix', base: 'Vermiform appendix', system: 'visceral', nameVi: 'Ruột thừa' },
+
+  // Discs & Spine (Đĩa đệm & Cột sống)
+  'đĩa đệm gian đốt sống': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5 (Đĩa đệm gian đốt sống)' },
+  'dia dem gian dot song': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5' },
+  'thoát vị đĩa đệm': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5 (Vị trí thoát vị đĩa đệm phổ biến)' },
+  'thoat vi dia dem': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5' },
+  'đĩa đệm cột sống': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm cột sống L4-L5' },
+  'dia dem cot song': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm cột sống L4-L5' },
+  'đĩa đệm gian đốt': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5' },
+  'đĩa đệm thắt lưng': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm cột sống thắt lưng L4-L5' },
+  'đĩa đệm cổ': { id: 'Intervertebral disc C5-C6', base: 'Intervertebral disc C5-C6', system: 'joints', nameVi: 'Đĩa đệm cột sống cổ C5-C6' },
+  'đĩa đệm': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5 (Đĩa đệm gian đốt sống)' },
+  'dia dem': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5' },
+  'nhân nhầy đĩa đệm': { id: 'Nucleus pulposus L4-L5', base: 'Nucleus pulposus L4-L5', system: 'joints', nameVi: 'Nhân nhầy đĩa đệm L4-L5' },
+  'nhân nhầy': { id: 'Nucleus pulposus L4-L5', base: 'Nucleus pulposus L4-L5', system: 'joints', nameVi: 'Nhân nhầy đĩa đệm L4-L5' },
+  'nhan nhay': { id: 'Nucleus pulposus L4-L5', base: 'Nucleus pulposus L4-L5', system: 'joints', nameVi: 'Nhân nhầy đĩa đệm' },
+  'vòng sợi đĩa đệm': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Vòng sợi đĩa đệm L4-L5' },
+  'vòng sợi': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Vòng sợi đĩa đệm L4-L5' },
+  'intervertebral disc': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5' },
+  'intervertebral discs': { id: 'Intervertebral disc L4-L5', base: 'Intervertebral disc L4-L5', system: 'joints', nameVi: 'Đĩa đệm L4-L5' },
+  'cột sống': { id: 'Vertebra L3', base: 'Vertebra L3', system: 'skeletal', nameVi: 'Cột sống (Đốt sống thắt lưng L3)' },
+  'cot song': { id: 'Vertebra L3', base: 'Vertebra L3', system: 'skeletal', nameVi: 'Cột sống' },
+  'xương sống': { id: 'Vertebra L3', base: 'Vertebra L3', system: 'skeletal', nameVi: 'Cột sống' },
+  'xuong song': { id: 'Vertebra L3', base: 'Vertebra L3', system: 'skeletal', nameVi: 'Cột sống' },
+  'xương cùng': { id: 'Sacrum', base: 'Sacrum', system: 'skeletal', nameVi: 'Xương cùng' },
+  'xuong cung': { id: 'Sacrum', base: 'Sacrum', system: 'skeletal', nameVi: 'Xương cùng' },
+  'xương cụt': { id: 'Coccyx', base: 'Coccyx', system: 'skeletal', nameVi: 'Xương cụt' },
+  'xuong cut': { id: 'Coccyx', base: 'Coccyx', system: 'skeletal', nameVi: 'Xương cụt' },
+
+  // Bones & Thorax
+  'thân xương ức': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Thân xương ức' },
+  'than xuong uc': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Thân xương ức' },
+  'xương ức': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Thân xương ức' },
+  'xuong uc': { id: 'Body of sternum', base: 'Body of sternum', system: 'skeletal', nameVi: 'Xương ức' },
+  'xương sườn': { id: 'Fifth rib.l', base: 'Fifth rib', system: 'skeletal', nameVi: 'Xương sườn' },
+  'xuong suon': { id: 'Fifth rib.l', base: 'Fifth rib', system: 'skeletal', nameVi: 'Xương sườn' },
+  'xương đòn': { id: 'Clavicle.l', base: 'Clavicle', system: 'skeletal', nameVi: 'Xương đòn (Xương quai xanh)' },
+  'xuong don': { id: 'Clavicle.l', base: 'Clavicle', system: 'skeletal', nameVi: 'Xương đòn' },
+  'xương quai xanh': { id: 'Clavicle.l', base: 'Clavicle', system: 'skeletal', nameVi: 'Xương đòn (Xương quai xanh)' },
+  'xương bả vai': { id: 'Scapula.l', base: 'Scapula', system: 'skeletal', nameVi: 'Xương bả vai' },
+  'xuong ba vai': { id: 'Scapula.l', base: 'Scapula', system: 'skeletal', nameVi: 'Xương bả vai' },
+  'xương cánh tay': { id: 'Humerus.l', base: 'Humerus', system: 'skeletal', nameVi: 'Xương cánh tay' },
+  'xuong canh tay': { id: 'Humerus.l', base: 'Humerus', system: 'skeletal', nameVi: 'Xương cánh tay' },
+  'xương quay': { id: 'Radius.l', base: 'Radius', system: 'skeletal', nameVi: 'Xương quay cẳng tay' },
+  'xuong quay': { id: 'Radius.l', base: 'Radius', system: 'skeletal', nameVi: 'Xương quay' },
+  'xương trụ': { id: 'Ulna.l', base: 'Ulna', system: 'skeletal', nameVi: 'Xương trụ cẳng tay' },
+  'xuong tru': { id: 'Ulna.l', base: 'Ulna', system: 'skeletal', nameVi: 'Xương trụ' },
+  'xương đùi': { id: 'Femur.l', base: 'Femur', system: 'skeletal', nameVi: 'Xương đùi' },
+  'xuong dui': { id: 'Femur.l', base: 'Femur', system: 'skeletal', nameVi: 'Xương đùi' },
+  'xương chày': { id: 'Tibia.l', base: 'Tibia', system: 'skeletal', nameVi: 'Xương chày' },
+  'xuong chay': { id: 'Tibia.l', base: 'Tibia', system: 'skeletal', nameVi: 'Xương chày' },
+  'xương mác': { id: 'Fibula.l', base: 'Fibula', system: 'skeletal', nameVi: 'Xương mác' },
+  'xuong mac': { id: 'Fibula.l', base: 'Fibula', system: 'skeletal', nameVi: 'Xương mác' },
+  'xương bánh chè': { id: 'Patella.l', base: 'Patella', system: 'skeletal', nameVi: 'Xương bánh chè' },
+  'xuong banh che': { id: 'Patella.l', base: 'Patella', system: 'skeletal', nameVi: 'Xương bánh chè' },
+  'bánh chè': { id: 'Patella.l', base: 'Patella', system: 'skeletal', nameVi: 'Xương bánh chè' },
+  'xương gót': { id: 'Calcaneus.l', base: 'Calcaneus', system: 'skeletal', nameVi: 'Xương gót chân' },
+  'hộp sọ': { id: 'Frontal bone', base: 'Frontal bone', system: 'skeletal', nameVi: 'Xương trán (Hộp sọ)' },
+  'hop so': { id: 'Frontal bone', base: 'Frontal bone', system: 'skeletal', nameVi: 'Hộp sọ' },
+  'xương hàm dưới': { id: 'Mandible', base: 'Mandible', system: 'skeletal', nameVi: 'Xương hàm dưới' },
+  'xuong ham duoi': { id: 'Mandible', base: 'Mandible', system: 'skeletal', nameVi: 'Xương hàm dưới' },
+
+  // Joints & Ligaments
+  'khớp gối': { id: 'Patellar ligament', base: 'Patellar ligament', system: 'joints', nameVi: 'Khớp gối (Dây chằng bánh chè)' },
+  'khop goi': { id: 'Patellar ligament', base: 'Patellar ligament', system: 'joints', nameVi: 'Khớp gối' },
+  'dây chằng chéo trước': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước (ACL)' },
+  'day chang cheo truoc': { id: 'Anterior cruciate ligament.l', base: 'Anterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo trước' },
+  'dây chằng chéo sau': { id: 'Posterior cruciate ligament.l', base: 'Posterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo sau (PCL)' },
+  'day chang cheo sau': { id: 'Posterior cruciate ligament.l', base: 'Posterior cruciate ligament', system: 'joints', nameVi: 'Dây chằng chéo sau' },
+  'sụn chêm': { id: 'Lateral meniscus.l', base: 'Lateral meniscus', system: 'joints', nameVi: 'Sụn chêm ngoài khớp gối' },
+  'sun chem': { id: 'Lateral meniscus.l', base: 'Lateral meniscus', system: 'joints', nameVi: 'Sụn chêm' },
+
+  // Nervous System & Brain
+  'não': { id: 'Telencephalon', base: 'Telencephalon', system: 'nervous', nameVi: 'Đại não (Bộ não)' },
+  'nao': { id: 'Telencephalon', base: 'Telencephalon', system: 'nervous', nameVi: 'Đại não (Bộ não)' },
+  'bộ não': { id: 'Telencephalon', base: 'Telencephalon', system: 'nervous', nameVi: 'Đại não (Bộ não)' },
+  'bo nao': { id: 'Telencephalon', base: 'Telencephalon', system: 'nervous', nameVi: 'Đại não' },
+  'đại não': { id: 'Telencephalon', base: 'Telencephalon', system: 'nervous', nameVi: 'Đại não' },
+  'tiểu não': { id: 'Cerebellum', base: 'Cerebellum', system: 'nervous', nameVi: 'Tiểu não' },
+  'thân não': { id: 'Brainstem', base: 'Brainstem', system: 'nervous', nameVi: 'Thân não' },
+  'tủy sống': { id: 'Spinal cord', base: 'Spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'tuy song': { id: 'Spinal cord', base: 'Spinal cord', system: 'nervous', nameVi: 'Tủy sống' },
+  'thần kinh tọa': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa (Thần kinh ngồi)' },
+  'than kinh toa': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa' }
 };
 
 /**
@@ -495,7 +609,8 @@ export function interpretAIQuery(query, activePart = null) {
     });
   }
 
-  if (targetAxis) {
+  const hasExplicitSearchVerb = /^(tìm|chỉ|xem|định vị|focus|vị trí của|hỏi tìm)\s+/i.test(q);
+  if (targetAxis && (!hasExplicitSearchVerb || !findTargetStructure(q, activePart))) {
     return {
       intent: 'CLINICAL_AXIS',
       axis: targetAxis,
@@ -558,13 +673,15 @@ export function interpretAIQuery(query, activePart = null) {
     };
   }
 
-  // Intent: Focus / Locate structure (e.g. "tìm khung chậu", "chỉ cơ delta", or simply "khung chậu", "xương đùi")
+  // Intent: Focus / Locate structure (e.g. "tìm đĩa đệm", "tôi hỏi tìm đĩa đệm", "chỉ cơ delta", "khung chậu", "xương đùi")
   const matchedDirect = findTargetStructure(q, activePart);
   const isQuestion = q.includes('là gì') || q.includes('thế nào') || q.includes('chức năng') || q.includes('bệnh') || q.includes('triệu chứng') || q.includes('tại sao');
+  const hasSearchIntent = /\b(tìm|chỉ|xem|ở đâu|vị trí|định vị|cho xem|focus|kiếm|hỏi tìm)\b/i.test(q) || cleanSearchQuery(q) !== q;
 
   if (
     matchedDirect && (
       !isQuestion ||
+      hasSearchIntent ||
       q.startsWith('chỉ ') ||
       q.startsWith('tìm ') ||
       q.startsWith('xem ') ||
@@ -685,9 +802,12 @@ export function interpretAIQuery(query, activePart = null) {
 
   // Fallback: Clinical Q&A about current or matched structure
   const matched = findTargetStructure(q, activePart);
+  const isReferential = /\b(nó|này|đang chọn|đây|vừa chọn|cấu trúc này|xương này|bộ phận này|cơ này)\b/i.test(q);
+  const finalTarget = matched || (isReferential ? activePart : null);
+
   return {
-    intent: 'CLINICAL_QNA',
-    target: matched || activePart,
+    intent: finalTarget ? (hasSearchIntent ? 'FOCUS_STRUCTURE' : 'CLINICAL_QNA') : 'ASSISTANT_REPLY',
+    target: finalTarget,
     rawQuery: query
   };
 }
@@ -695,13 +815,27 @@ export function interpretAIQuery(query, activePart = null) {
 /**
  * Strips common Vietnamese command prefixes and cleans query
  */
-function cleanSearchQuery(text) {
-  return text
-    .toLowerCase()
-    .replace(/^(tìm|hãy tìm|chỉ|cho xem|cho tôi xem|hãy cho xem|xem|focus|định vị|vị trí của|vị trí|chỉ ra|hãy chỉ|hỏi về|thông tin về)\s+/i, '')
-    .replace(/\s+(?:ở đâu|ở vị trí nào|nằm ở đâu|nằm ở chỗ nào|ở chỗ nào|là gì|như thế nào|ra sao|là cái gì)$/i, '')
-    .replace(/[?!.,;:()]/g, ' ')
-    .trim();
+export function cleanSearchQuery(text) {
+  if (!text) return '';
+  let str = text.toLowerCase().trim();
+
+  // Strip prefixes in a loop until none match (handles compound phrases like "tôi hỏi tìm giúp")
+  const prefixRegex = /^(cho\s+tôi\s+hỏi\s+về|cho\s+hỏi\s+về|cho\s+tôi\s+hỏi|tôi\s+muốn\s+hỏi\s+về|tôi\s+muốn\s+tìm\s+kiếm|tôi\s+hỏi\s+tìm\s+kiếm|tôi\s+muốn\s+tìm|tôi\s+hỏi\s+tìm|tôi\s+muốn\s+hỏi|tôi\s+cần\s+tìm|tìm\s+kiếm|tìm\s+giúp\s+tôi|tìm\s+giúp|tìm\s+hộ|hãy\s+tìm\s+giúp|hãy\s+tìm|hãy\s+chỉ\s+ra|hãy\s+chỉ|chỉ\s+giúp\s+tôi|chỉ\s+giúp|chỉ\s+hộ|chỉ\s+ra|chỉ\s+vào|cho\s+tôi\s+xem|hãy\s+cho\s+xem|cho\s+xem|vị\s+trí\s+của|thông\s+tin\s+về|giải\s+thích\s+về|tôi\s+hỏi\s+về|cho\s+hỏi|tôi\s+hỏi|tôi\s+tìm|hỏi\s+về|định\s+vị|vị\s+trí|focus|tìm|chỉ|xem)\s+/i;
+
+  let prev = '';
+  while (prev !== str) {
+    prev = str;
+    str = str.replace(prefixRegex, '').trim();
+  }
+
+  // Strip suffixes
+  const suffixRegex = /\s+(?:nằm\s+ở\s+đâu|ở\s+đâu\s+vậy|ở\s+vị\s+trí\s+nào|nằm\s+ở\s+chỗ\s+nào|nằm\s+ở\s+đâu|ở\s+chỗ\s+nào|ở\s+đâu\s+nhỉ|ở\s+đâu|là\s+gì\s+vậy|là\s+gì|như\s+thế\s+nào|ra\s+sao|là\s+cái\s+gì)$/i;
+  str = str.replace(suffixRegex, '').trim();
+
+  // Strip punctuation
+  str = str.replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
+
+  return str;
 }
 
 /**
@@ -901,7 +1035,11 @@ ${insightsFormatted}
     if (activeViewer) {
       const sys = target.system;
       if (sys && !state.loadedSystems.includes(sys)) {
-        loadModel(sys, activeViewer).catch(err => console.warn('Failed background load of', sys, err));
+        try {
+          await loadModel(sys, activeViewer);
+        } catch (err) {
+          console.warn('Failed load of', sys, err);
+        }
       }
       if (sys) showSystem(sys);
       let selected = selectPartById(target.id, activeViewer);
@@ -909,6 +1047,9 @@ ${insightsFormatted}
         selected = selectPartById(target.base, activeViewer) ||
                    selectPartById(target.base + '.l', activeViewer) ||
                    selectPartById(target.base + '.r', activeViewer);
+      }
+      if (!selected) {
+        hideCallout();
       }
       activeViewer.render();
     }
@@ -1130,9 +1271,53 @@ ${insightsFormatted}
 
   // 10. CLINICAL Q&A (Grounded Medical Knowledge)
   if (target) {
+    if (activeViewer) {
+      const sys = target.system;
+      if (sys && !state.loadedSystems.includes(sys)) {
+        try {
+          await loadModel(sys, activeViewer);
+        } catch (err) {
+          console.warn('Failed load of', sys, err);
+        }
+      }
+      if (sys) showSystem(sys);
+      let selected = selectPartById(target.id, activeViewer);
+      if (!selected && target.base) {
+        selected = selectPartById(target.base, activeViewer) ||
+                   selectPartById(target.base + '.l', activeViewer) ||
+                   selectPartById(target.base + '.r', activeViewer);
+      }
+      if (!selected) {
+        hideCallout();
+      }
+      activeViewer.render();
+    }
+
     const clinical = getClinicalData(target.id, target.base);
     const rel = clinical?.relations || {};
     const displayName = clinical?.nameVi || target.nameVi || target.base || 'Cấu trúc giải phẫu';
+
+    const info = getStructureInfo(target.id) || getStructureInfo(target.base);
+    const synthesizedPart = {
+      id: target.id,
+      meshName: target.base || target.id,
+      displayName: displayName,
+      system: target.system || info?.system || 'joints',
+      region: info?.region || 'unknown',
+      info: {
+        ...(info || {}),
+        name: { vi: displayName, en: target.base || target.id },
+        latinName: clinical?.nameLatin || target.base || target.id,
+        system: target.system || info?.system || 'joints'
+      }
+    };
+    setSelectedPart(synthesizedPart);
+
+    const card = document.getElementById('selectionCard');
+    if (card) {
+      card.classList.remove('hidden');
+      window.dispatchEvent(new CustomEvent('expand-selection-card'));
+    }
 
     let answerContent = '';
     const qLower = rawQuery.toLowerCase();
@@ -1177,8 +1362,11 @@ ${clinical?.clinical || 'Cần chú ý tránh va chạm hoặc tổn thương c�
       `.trim();
     }
 
+    const cleanSpeech = (clinical?.function || clinical?.clinical || displayName).replace(/[*#]/g, '').slice(0, 150);
     return {
       action: 'CLINICAL_ANSWER',
+      actionBadge: `📘 ${displayName}: Đã giải đáp y khoa`,
+      speechText: `${displayName}. ${cleanSpeech}`,
       message: answerContent,
       data: clinical,
       partId: target.id
