@@ -35,20 +35,22 @@ async function run() {
     await mobilePage.addInitScript(() => {
       localStorage.setItem('pwa_installed', '1');
       localStorage.setItem('pwa_install_dismissed', '1');
+      localStorage.setItem('offline_prompt_dismissed', '1');
+      localStorage.setItem('offline_all_cached', '1');
     });
     mobilePage.on('console', msg => console.log('[Điện thoại]:', msg.type(), msg.text()));
 
     await mobilePage.goto('http://localhost:4181', { waitUntil: 'domcontentloaded', timeout: 30000 });
-    await mobilePage.addStyleTag({ content: '#pwaInstallPrompt, .pwa-install-prompt { display: none !important; }' });
+    await mobilePage.addStyleTag({ content: '#pwaInstallPrompt, .pwa-install-prompt, #offlinePromptBanner, .offline-prompt-banner { display: none !important; }' });
     await mobilePage.waitForSelector('#threeCanvas', { timeout: 15000 });
     await mobilePage.waitForTimeout(4000);
 
-    // 1A. Thao tác 1-chạm: Cô lập (Isolate) Quả tim & Mạch vành
-    console.log('Thao tác 1A: Cô lập (Isolate) Quả tim & Mạch vành trên Điện thoại...');
+    // 1A. Thao tác 1-chạm: Cô lập (Isolate) Quả tim & Đại động mạch
+    console.log('Thao tác 1A: Cô lập (Isolate) Quả tim trên Điện thoại...');
     await mobilePage.evaluate(async () => {
       await window.showcasePathology('coronary_artery_disease', window.viewer, { autoSpeak: false });
     });
-    await mobilePage.waitForTimeout(2000);
+    await mobilePage.waitForTimeout(3000);
 
     // Bấm nút "Cô lập" (#btnMiniIsolate) 1-chạm
     await mobilePage.evaluate(() => {
@@ -64,10 +66,13 @@ async function run() {
     console.log('Thao tác 1B: Cô lập (Isolate) Khớp gối trên Điện thoại...');
     await mobilePage.evaluate(async () => {
       const { restoreAllParts } = await import('./src/viewer/visibility.js');
+      const { loadModel } = await import('./src/viewer/loadModel.js');
+      const { selectPartById } = await import('./src/viewer/selection.js');
       restoreAllParts();
-      await window.showcasePathology('knee_acl', window.viewer, { autoSpeak: false });
+      await loadModel('joints', window.viewer);
+      await selectPartById('Patella.r', window.viewer);
     });
-    await mobilePage.waitForTimeout(2000);
+    await mobilePage.waitForTimeout(2500);
 
     await mobilePage.evaluate(() => {
       document.getElementById('btnMiniIsolate')?.click();
@@ -85,9 +90,9 @@ async function run() {
       restoreAllParts();
       await window.showcasePathology('coronary_artery_disease', window.viewer, { autoSpeak: false });
     });
-    await mobilePage.waitForTimeout(2000);
+    await mobilePage.waitForTimeout(3000);
 
-    // Bấm nút "Ẩn đi" (#btnMiniHide) để bóc tách vật cản phía trước
+    // Bấm nút "Ẩn vật cản" (#btnMiniHide) để bóc tách vật cản phía trước
     await mobilePage.evaluate(() => {
       document.getElementById('btnMiniHide')?.click();
     });
@@ -102,19 +107,22 @@ async function run() {
     await mobilePage.evaluate(async () => {
       const { restoreAllParts } = await import('./src/viewer/visibility.js');
       const { deselectPart } = await import('./src/viewer/selection.js');
+      const { loadModel } = await import('./src/viewer/loadModel.js');
       restoreAllParts();
       deselectPart();
+      document.getElementById('isolationFloatingBadge')?.classList.add('hidden');
+      await loadModel('muscular', window.viewer);
       // Bật chế độ bóc tách
       document.getElementById('btnNavDissect')?.click();
     });
-    await mobilePage.waitForTimeout(1500);
+    await mobilePage.waitForTimeout(2000);
 
     // Chọn tầng "Sâu" (data-stage="3") trên HUD
     await mobilePage.evaluate(() => {
       const btn = document.querySelector('#dissectionLayerHud button[data-stage="3"]');
       btn?.click();
     });
-    await mobilePage.waitForTimeout(3000);
+    await mobilePage.waitForTimeout(3500);
 
     const mobileDissectPath = path.join(ARTIFACTS_DIR, 'minh_chung_dien_thoai_buoc4_boc_tach_tang.png');
     await mobilePage.screenshot({ path: mobileDissectPath, fullPage: false });
@@ -134,20 +142,23 @@ async function run() {
     await desktopPage.addInitScript(() => {
       localStorage.setItem('pwa_installed', '1');
       localStorage.setItem('pwa_install_dismissed', '1');
+      localStorage.setItem('offline_prompt_dismissed', '1');
+      localStorage.setItem('offline_all_cached', '1');
     });
     desktopPage.on('console', msg => console.log('[Máy tính]:', msg.type(), msg.text()));
 
     await desktopPage.goto('http://localhost:4181', { waitUntil: 'domcontentloaded', timeout: 30000 });
-    await desktopPage.addStyleTag({ content: '#pwaInstallPrompt, .pwa-install-prompt { display: none !important; }' });
+    await desktopPage.addStyleTag({ content: '#pwaInstallPrompt, .pwa-install-prompt, #offlinePromptBanner, .offline-prompt-banner { display: none !important; }' });
     await desktopPage.waitForSelector('#threeCanvas', { timeout: 15000 });
     await desktopPage.waitForTimeout(4000);
 
     // 2A. Cô lập Đốt sống L4 (FSU Functional Spinal Unit) kèm Đĩa đệm L4-L5
     console.log('Thao tác 2A: Cô lập FSU Đốt sống L4 & Đĩa đệm trên Máy tính...');
     await desktopPage.evaluate(async () => {
-      await window.showcasePathology('disc_herniation', window.viewer, { autoSpeak: false });
+      const { selectPartById } = await import('./src/viewer/selection.js');
+      await selectPartById('Lumbar vertebra L4', window.viewer);
     });
-    await desktopPage.waitForTimeout(2000);
+    await desktopPage.waitForTimeout(2500);
 
     await desktopPage.evaluate(() => {
       document.getElementById('btnMiniIsolate')?.click();
@@ -163,12 +174,18 @@ async function run() {
     await desktopPage.evaluate(async () => {
       const { restoreAllParts } = await import('./src/viewer/visibility.js');
       const { deselectPart } = await import('./src/viewer/selection.js');
+      const { loadModel } = await import('./src/viewer/loadModel.js');
       const { applyDepth } = await import('./src/ui/depthSlider.js');
       restoreAllParts();
       deselectPart();
+      document.getElementById('isolationFloatingBadge')?.classList.add('hidden');
+      await loadModel('muscular', window.viewer);
+      await loadModel('cardiovascular', window.viewer);
+      await loadModel('nervous', window.viewer);
+      await loadModel('visceral', window.viewer);
       applyDepth(3, true);
     });
-    await desktopPage.waitForTimeout(3500);
+    await desktopPage.waitForTimeout(4000);
 
     const desktopDeepPath = path.join(ARTIFACTS_DIR, 'minh_chung_may_tinh_buoc4_boc_tach_tang_sau.png');
     await desktopPage.screenshot({ path: desktopDeepPath, fullPage: false });

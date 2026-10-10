@@ -352,6 +352,7 @@ export function restoreAllParts() {
   setIsolatedPart(null);
   setHiddenParts([]);
   setTransparentParts([]);
+  try { stopPathologyPulse(); } catch {}
 
   notify('allPartsRestored', true);
   updateBodyEnvelopeAuto(state.viewer);
@@ -413,6 +414,24 @@ export function peelAnteriorObstacles(targetPartId, viewer) {
     obstaclesToHide.add(`Patella${side}`);
     obstaclesToHide.add(`Patellar ligament${side}`);
     obstaclesToHide.add(`Quadriceps femoris${side}`);
+  }
+  // 4b. Patella itself -> Peels Patella to expose cruciate ligaments and menisci behind
+  else if (lower.includes('patella') || lower.includes('bánh chè')) {
+    const isLeft = lower.includes('.l') || lower.includes('left');
+    const side = isLeft ? '.l' : '.r';
+    obstaclesToHide.add(`Patella${side}`);
+    obstaclesToHide.add(`Patellar ligament${side}`);
+    obstaclesToHide.add('Patella.l');
+    obstaclesToHide.add('Patella.r');
+  }
+  // 5. Spine, Vertebrae, Discs & Spinal Cord -> Peels anterior ribs & sternum or superficial muscles
+  else if (lower.includes('vertebra') || lower.includes('spine') || lower.includes('cột sống') || lower.includes('đốt sống') || lower.includes('đĩa đệm') || lower.includes('disc') || lower.includes('tủy sống') || lower.includes('spinal cord')) {
+    getMeshRegistry().forEach((node, id) => {
+      const idLow = id.toLowerCase();
+      if (idLow.includes('sternum') || (idLow.includes('rib') && !idLow.includes('t11') && !idLow.includes('t12')) || idLow.includes('trapezius') || idLow.includes('latissimus dorsi')) {
+        obstaclesToHide.add(id);
+      }
+    });
   }
 
   if (obstaclesToHide.size === 0) {
@@ -787,6 +806,8 @@ export function getAnatomicalCompanions(partId) {
   return [];
 }
 
+export const ghostOthers = (partId) => ghostAllExcept(partId);
+
 export function ghostAllExcept(partId) {
   const keep = new Set(withDescendants(partId));
   const companions = getAnatomicalCompanions(partId);
@@ -956,6 +977,9 @@ export function clearGhost() {
 export function isGhostActive() {
   return ghostedIds !== null && ghostedIds.size > 0;
 }
+
+export const unghost = clearGhost;
+export const isGhosted = isGhostActive;
 
 // Highlighting only touches `emissive`, so it can be undone without disturbing
 // a transparency the user set. Uses vivid clinical cyan accent to illuminate target structure brightly.

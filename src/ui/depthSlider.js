@@ -142,6 +142,13 @@ export function applyDepth(stage, notifyToast = false) {
   // Update state stage
   currentStage = stage;
 
+  // If no specific part is selected, frame whole torso/body overview so layer changes are clearly visible
+  if (!state.selectedPart?.id && state.viewer) {
+    import('../viewer/camera.js').then(({ setView }) => {
+      setView('front', state.viewer, true);
+    }).catch(() => {});
+  }
+
   // Re-render viewer smoothly
   if (state.viewer) {
     state.viewer.render();

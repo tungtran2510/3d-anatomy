@@ -5,7 +5,10 @@ import {
   restoreAllParts,
   getAnatomicalCompanions,
   peelAnteriorObstacles,
-  setStructureVisible
+  setStructureVisible,
+  ghostOthers,
+  unghost,
+  isGhosted
 } from '../src/viewer/visibility.js';
 import { getMeshRegistry } from '../src/viewer/loadModel.js';
 import { DISSECTION_STAGES } from '../src/ui/depthSlider.js';
@@ -193,6 +196,16 @@ describe('Step 4: 1-Touch Mobile Pragmatic Interactions (Thao tác 1-chạm th�
       // Stage 5: Xương (Core skeleton framework)
       expect(DISSECTION_STAGES[5].level).toBe(5);
       expect(DISSECTION_STAGES[5].title).toContain('Khung xương cốt lõi');
+    });
+  });
+
+  describe('5. Mobile 1-Touch Ghosting / X-Ray (ghostOthers & unghost)', () => {
+    it('ghosts surrounding structures while keeping target organ solid', () => {
+      ghostOthers('Heart');
+      expect(isGhosted()).toBe(true);
+
+      unghost();
+      expect(isGhosted()).toBe(false);
     });
   });
 });

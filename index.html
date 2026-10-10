@@ -274,6 +274,16 @@
           <div class="explode-popover motion-popover hidden" id="motionPopover"></div>
 
 
+          <!-- Floating Isolation Mode Indicator Chip (Visible Body Standard: Top-Center) -->
+          <div class="isolation-floating-badge hidden" id="isolationFloatingBadge" role="status" aria-live="polite">
+            <span class="iso-badge-icon">⚡</span>
+            <span class="iso-badge-text" id="isoBadgeText">Đang xem riêng</span>
+            <button type="button" class="btn-iso-restore" id="btnIsoRestore" title="Khôi phục toàn bộ giải phẫu (Hiện tất cả)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <span>Khôi phục</span>
+            </button>
+          </div>
+
           <!-- Floating Half-Body Controls Pill -->
           <div class="halfbody-floating-pill hidden" id="halfBodyPill">
             <span class="pill-indicator">
@@ -350,39 +360,43 @@
 
     <!-- Full Information Panel (Visible Body & Medical Atlas Standard) -->
     <div class="selection-card compact-mode hidden" id="selectionCard">
-      <!-- 1. COMPACT MINI-BAR (Chuẩn 1 dòng tiêu đề + 1 dòng giải thích siêu nhỏ) -->
+      <!-- 1. COMPACT MINI-BAR (Thao tác 1-chạm Thực dụng: Tiêu đề rõ ràng + Dock 4 nút chuẩn) -->
       <div class="selection-mini-bar" id="selectionMiniBar">
-        <div class="mini-bar-content-col" id="miniBarExpandTrigger" title="Chạm để mở rộng chi tiết">
-          <div class="mini-bar-title-row">
+        <!-- Hàng 1: Tiêu đề cơ quan (Không bị co hẹp hay cắt chữ) + Chi tiết + Nút Đóng -->
+        <div class="mini-bar-header-row">
+          <div class="mini-bar-title-wrap" id="miniBarExpandTrigger" title="Chạm để mở rộng toàn bộ giải phẫu">
             <span class="mini-pin">📍</span>
             <span class="mini-title" id="miniCardTitle">Chọn cấu trúc</span>
             <span class="mini-crumb-badge" id="miniCardCrumb" style="display:none;"></span>
             <span class="mini-latin" id="miniCardLatin"></span>
           </div>
-          <div class="mini-bar-desc-row">
-            <span class="mini-desc" id="miniCardDesc">Chạm để mở rộng toàn bộ giải phẫu</span>
+          <div class="mini-bar-top-actions">
+            <button type="button" class="mini-top-btn mini-btn-sheet" id="btnMiniExpand" title="Mở rộng chi tiết giải phẫu" aria-label="Chi tiết">
+              <span>Chi tiết</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            </button>
+            <button type="button" class="mini-top-btn mini-btn-close" id="btnMiniClose" title="Ẩn thanh" aria-label="Đóng">&times;</button>
           </div>
         </div>
-        <div class="mini-bar-actions">
-          <button type="button" class="mini-btn-quick-action mini-btn-isolate" id="btnMiniIsolate" title="Cô lập: Bấm 1-chạm giấu hết xung quanh, chỉ xem riêng bộ phận này" aria-label="Cô lập">
-            <span class="mini-btn-icon">⚡</span>
-            <span class="mini-btn-label">Cô lập</span>
+
+        <!-- Hàng 2: Dock 4 Thao tác 1-chạm Thực dụng trên Điện thoại & Máy tính -->
+        <div class="mini-bar-dock-row" role="toolbar" aria-label="Thao tác 1-chạm thực dụng">
+          <button type="button" class="mini-dock-btn mini-btn-isolate" id="btnMiniIsolate" title="Cô lập: Bấm 1 chạm giấu hết xung quanh, chỉ xem riêng bộ phận này" aria-label="Cô lập">
+            <span class="dock-btn-icon">⚡</span>
+            <span class="dock-btn-label">Cô lập</span>
           </button>
-          <button type="button" class="mini-btn-quick-action mini-btn-hide" id="btnMiniHide" title="Ẩn vật cản: Bấm gỡ nhanh xương/cơ chắn phía trước để soi cấu trúc phía sau" aria-label="Ẩn đi">
-            <span class="mini-btn-icon">👁️</span>
-            <span class="mini-btn-label">Ẩn đi</span>
+          <button type="button" class="mini-dock-btn mini-btn-peel" id="btnMiniHide" title="Ẩn vật cản: Bấm gỡ nhanh xương/cơ chắn phía trước để soi cấu trúc phía sau" aria-label="Ẩn vật cản">
+            <span class="dock-btn-icon">👁️</span>
+            <span class="dock-btn-label">Ẩn vật cản</span>
           </button>
-          <button type="button" class="mini-btn-speaker" id="btnMiniAIVoice" title="Nghe tóm tắt giọng nói 15s" aria-label="Nghe giải thích 15 giây">
-            <svg class="mini-speaker-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-            </svg>
+          <button type="button" class="mini-dock-btn mini-btn-ghost" id="btnMiniGhost" title="Xuyên thấu: Mờ thấu quang toàn bộ xung quanh (Ghosting/X-Ray) để định vị cấu trúc trong cơ thể" aria-label="Xuyên thấu">
+            <span class="dock-btn-icon">👻</span>
+            <span class="dock-btn-label">Xuyên thấu</span>
           </button>
-          <button type="button" class="mini-btn-expand-chevron" id="btnMiniExpand" title="Mở rộng thông tin" aria-label="Mở rộng">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          <button type="button" class="mini-dock-btn mini-btn-restore" id="btnMiniRestore" title="Khôi phục: Hiện lại tất cả cấu trúc ban đầu" aria-label="Khôi phục">
+            <span class="dock-btn-icon">↺</span>
+            <span class="dock-btn-label">Khôi phục</span>
           </button>
-          <button type="button" class="mini-btn-close" id="btnMiniClose" title="Ẩn thanh" aria-label="Đóng thanh">&times;</button>
         </div>
       </div>
 

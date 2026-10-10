@@ -1,14 +1,14 @@
 // Advanced Anatomy Information Panel Controller (Visible Body & Atlas 2027 Standard)
 // Manages: History Navigation (< >), Full/Compact Mode, Model Orientation (Đứng/Nằm ngửa/Nằm sấp/Bàn mổ),
 // Audio Pronunciation, Anatomical Hierarchy Tree, 3D Structure Tagging, Learn More & Histology Thumbnails
-import { state, getStructureInfo, pushUndo } from '../state/store.js';
+import { state, getStructureInfo, pushUndo, subscribe } from '../state/store.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
 import { PATIENT_CASES } from './patientConsultationModal.js';
 import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getTableVisibility } from '../viewer/orientationManager.js';
 import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
-import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost, showcaseWholeSystem, peelAnteriorObstacles } from '../viewer/visibility.js';
+import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost, showcaseWholeSystem, peelAnteriorObstacles, ghostOthers, unghost, isGhosted } from '../viewer/visibility.js';
 import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview, resolveAnatomicalAlias } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
@@ -156,15 +156,131 @@ export function initInfoPanel(viewer) {
     showToast('Đã thu gọn thanh (Cấu trúc vẫn đang được chỉ điểm 📍)');
   });
 
-  // 3a.1 1-Touch Ergonomic Actions: Cô lập (Isolate) & Ẩn vật cản (Hide Anterior Obstacles)
+  // 3a.1 1-Touch Ergonomic Actions: Cô lập (Isolate), Bóc lớp trước (Peel), Xuyên thấu (Ghost), Khôi phục (Restore)
   const miniIsolateBtn = document.getElementById('btnMiniIsolate');
   const miniHideBtn = document.getElementById('btnMiniHide');
+  const miniGhostBtn = document.getElementById('btnMiniGhost');
+  const miniRestoreBtn = document.getElementById('btnMiniRestore');
+  const isoFloatingBadge = document.getElementById('isolationFloatingBadge');
+  const isoBadgeText = document.getElementById('isoBadgeText');
+  const btnIsoRestore = document.getElementById('btnIsoRestore');
+
+  function updateFloatingIsolationBadge(part) {
+    if (!isoFloatingBadge) return;
+    if (state.isolatedPart) {
+      const partObj = part || state.selectedPart;
+      const info = state.isolatedPart ? getStructureInfo(state.isolatedPart) : null;
+      let name = partObj?.displayName || partObj?.nameVi;
+      if (!name && info?.name) {
+        name = info.name[state.language] || info.name.vi || info.name.en;
+      }
+      if (!name) name = state.isolatedPart;
+      const parenIdx = name.indexOf('(');
+      const shortName = parenIdx > 0 ? name.slice(0, parenIdx).trim() : name;
+      if (isoBadgeText) isoBadgeText.textContent = `Đang xem riêng: ${shortName}`;
+      isoFloatingBadge.classList.remove('hidden');
+    } else {
+      isoFloatingBadge.classList.add('hidden');
+    }
+  }
+
+  // Subscribe to isolation state to keep badge and buttons perfectly in sync
+  subscribe('isolatedPart', (iso) => {
+    if (!iso) {
+      if (isoFloatingBadge) isoFloatingBadge.classList.add('hidden');
+      if (miniIsolateBtn) {
+        miniIsolateBtn.classList.remove('active');
+        const l = miniIsolateBtn.querySelector('.dock-btn-label') || miniIsolateBtn.querySelector('.mini-btn-label');
+        const i = miniIsolateBtn.querySelector('.dock-btn-icon') || miniIsolateBtn.querySelector('.mini-btn-icon');
+        if (l) l.textContent = 'Cô lập';
+        if (i) i.textContent = '⚡';
+      }
+      const cardIsoBtn = document.getElementById('cardIsolateBtn');
+      if (cardIsoBtn) cardIsoBtn.classList.remove('active');
+    } else {
+      updateFloatingIsolationBadge(state.selectedPart);
+    }
+  });
+
+  subscribe('selectedPart', (part) => {
+    if (!part && !state.isolatedPart) {
+      if (isoFloatingBadge) isoFloatingBadge.classList.add('hidden');
+    }
+  });
+
+  function handleFullRestore() {
+    restoreAllParts();
+    unghost();
+    if (miniIsolateBtn) {
+      miniIsolateBtn.classList.remove('active');
+      const l = miniIsolateBtn.querySelector('.dock-btn-label') || miniIsolateBtn.querySelector('.mini-btn-label');
+      const i = miniIsolateBtn.querySelector('.dock-btn-icon') || miniIsolateBtn.querySelector('.mini-btn-icon');
+      if (l) l.textContent = 'Cô lập';
+      if (i) i.textContent = '⚡';
+    }
+    if (miniHideBtn) {
+      miniHideBtn.classList.remove('active');
+      const l = miniHideBtn.querySelector('.dock-btn-label') || miniHideBtn.querySelector('.mini-btn-label');
+      const i = miniHideBtn.querySelector('.dock-btn-icon') || miniHideBtn.querySelector('.mini-btn-icon');
+      if (l) l.textContent = 'Ẩn vật cản';
+      if (i) i.textContent = '👁️';
+    }
+    if (miniGhostBtn) {
+      miniGhostBtn.classList.remove('active');
+      const l = miniGhostBtn.querySelector('.dock-btn-label');
+      const i = miniGhostBtn.querySelector('.dock-btn-icon');
+      if (l) l.textContent = 'Xuyên thấu';
+      if (i) i.textContent = '👻';
+    }
+    const cardIsoBtn = document.getElementById('cardIsolateBtn');
+    if (cardIsoBtn) cardIsoBtn.classList.remove('active');
+    if (isoFloatingBadge) isoFloatingBadge.classList.add('hidden');
+    viewer?.render();
+  }
+
+  btnIsoRestore?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    handleFullRestore();
+    showToast('↺ Đã khôi phục toàn bộ giải phẫu');
+  });
+
+  miniRestoreBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    handleFullRestore();
+    showToast('↺ Đã khôi phục toàn bộ giải phẫu');
+  });
+
+  miniGhostBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!state.selectedPart) return;
+    const isGhostNow = isGhosted();
+    const l = miniGhostBtn.querySelector('.dock-btn-label');
+    const i = miniGhostBtn.querySelector('.dock-btn-icon');
+
+    if (isGhostNow) {
+      unghost();
+      miniGhostBtn.classList.remove('active');
+      if (l) l.textContent = 'Xuyên thấu';
+      if (i) i.textContent = '👻';
+      viewer?.render();
+      showToast('Đã tắt nhìn xuyên thấu');
+    } else {
+      ghostOthers(state.selectedPart.id);
+      miniGhostBtn.classList.add('active');
+      if (l) l.textContent = 'Xuyên thấu';
+      if (i) i.textContent = '✓';
+      viewer?.render();
+      showToast('👻 Đã bật nhìn xuyên thấu (Ghosting/X-Ray)');
+    }
+  });
 
   miniIsolateBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     if (!state.selectedPart) return;
     const isCurrentlyIsolated = miniIsolateBtn.classList.contains('active') || state.isolatedPart === state.selectedPart.id;
     const cardIsoBtn = document.getElementById('cardIsolateBtn');
+    const l = miniIsolateBtn.querySelector('.dock-btn-label') || miniIsolateBtn.querySelector('.mini-btn-label');
+    const i = miniIsolateBtn.querySelector('.dock-btn-icon') || miniIsolateBtn.querySelector('.mini-btn-icon');
 
     if (isCurrentlyIsolated) {
       pushUndo({
@@ -172,14 +288,7 @@ export function initInfoPanel(viewer) {
         partId: state.selectedPart.id,
         prevIsolated: state.isolatedPart
       });
-      restoreAllParts();
-      miniIsolateBtn.classList.remove('active');
-      const l = miniIsolateBtn.querySelector('.mini-btn-label');
-      const i = miniIsolateBtn.querySelector('.mini-btn-icon');
-      if (l) l.textContent = 'Cô lập';
-      if (i) i.textContent = '⚡';
-      if (cardIsoBtn) cardIsoBtn.classList.remove('active');
-      viewer?.render();
+      handleFullRestore();
       showToast('Đã tắt cô lập - Khôi phục toàn bộ giải phẫu');
     } else {
       pushUndo({
@@ -189,13 +298,13 @@ export function initInfoPanel(viewer) {
       });
       isolatePart(state.selectedPart.id, viewer);
       miniIsolateBtn.classList.add('active');
-      const l = miniIsolateBtn.querySelector('.mini-btn-label');
-      const i = miniIsolateBtn.querySelector('.mini-btn-icon');
-      if (l) l.textContent = 'Bỏ cô lập';
+      if (l) l.textContent = 'Đang cô lập';
       if (i) i.textContent = '✓';
       if (cardIsoBtn) cardIsoBtn.classList.add('active');
+      updateFloatingIsolationBadge(state.selectedPart);
       viewer?.render();
-      showToast(`⚡ Đã cô lập ${state.selectedPart.nameVi || state.selectedPart.name || 'bộ phận'}`);
+      const name = state.selectedPart.displayName || state.selectedPart.nameVi || state.selectedPart.name || 'bộ phận';
+      showToast(`⚡ Đã cô lập ${name}`);
     }
   });
 
@@ -203,14 +312,27 @@ export function initInfoPanel(viewer) {
     e.stopPropagation();
     if (!state.selectedPart) return;
     const part = state.selectedPart;
-    const peeled = peelAnteriorObstacles(part.id, viewer);
-    if (peeled) {
-      showToast(`👁️ Đã bóc cấu trúc che chắn phía trước`);
+    const isPeeled = miniHideBtn.classList.contains('active');
+    const l = miniHideBtn.querySelector('.dock-btn-label') || miniHideBtn.querySelector('.mini-btn-label');
+    const i = miniHideBtn.querySelector('.dock-btn-icon') || miniHideBtn.querySelector('.mini-btn-icon');
+    const displayName = part.displayName || part.nameVi || part.name || 'bộ phận';
+
+    if (isPeeled) {
+      handleFullRestore();
+      showToast('Đã khôi phục các cấu trúc che chắn');
     } else {
-      hidePart(part.id);
-      showToast(`👁️ Đã ẩn ${part.nameVi || part.name || 'bộ phận'}`);
+      const peeled = peelAnteriorObstacles(part.id, viewer);
+      if (peeled) {
+        miniHideBtn.classList.add('active');
+        if (l) l.textContent = 'Đã ẩn cản';
+        if (i) i.textContent = '✓';
+        showToast(`👁️ Đã gỡ bỏ xương & cơ chắn phía trước để soi rõ ${displayName}`);
+      } else {
+        hidePart(part.id);
+        showToast(`👁️ Đã ẩn ${displayName}`);
+      }
+      viewer?.render();
     }
-    viewer?.render();
   });
 
   window.addEventListener('expand-selection-card', () => {
@@ -409,10 +531,42 @@ export function updateInfoPanelContent(part, viewer) {
   if (miniIso) {
     const isIso = !!(part && state.isolatedPart === part.id);
     miniIso.classList.toggle('active', isIso);
-    const l = miniIso.querySelector('.mini-btn-label');
-    const i = miniIso.querySelector('.mini-btn-icon');
-    if (l) l.textContent = isIso ? 'Bỏ cô lập' : 'Cô lập';
+    const l = miniIso.querySelector('.dock-btn-label') || miniIso.querySelector('.mini-btn-label');
+    const i = miniIso.querySelector('.dock-btn-icon') || miniIso.querySelector('.mini-btn-icon');
+    if (l) l.textContent = isIso ? 'Đang cô lập' : 'Cô lập';
     if (i) i.textContent = isIso ? '✓' : '⚡';
+  }
+
+  const miniHide = document.getElementById('btnMiniHide');
+  if (miniHide) {
+    const isPeeled = miniHide.classList.contains('active');
+    const l = miniHide.querySelector('.dock-btn-label') || miniHide.querySelector('.mini-btn-label');
+    const i = miniHide.querySelector('.dock-btn-icon') || miniHide.querySelector('.mini-btn-icon');
+    if (l) l.textContent = isPeeled ? 'Đã ẩn cản' : 'Ẩn vật cản';
+    if (i) i.textContent = isPeeled ? '✓' : '👁️';
+  }
+
+  const miniGhost = document.getElementById('btnMiniGhost');
+  if (miniGhost) {
+    const isGhostNow = isGhosted();
+    miniGhost.classList.toggle('active', isGhostNow);
+    const l = miniGhost.querySelector('.dock-btn-label');
+    const i = miniGhost.querySelector('.dock-btn-icon');
+    if (l) l.textContent = 'Xuyên thấu';
+    if (i) i.textContent = isGhostNow ? '✓' : '👻';
+  }
+
+  const isoBadge = document.getElementById('isolationFloatingBadge');
+  const isoText = document.getElementById('isoBadgeText');
+  if (isoBadge) {
+    if (state.isolatedPart && part) {
+      const parenIdx = mainName.indexOf('(');
+      const shortName = parenIdx > 0 ? mainName.slice(0, parenIdx).trim() : mainName;
+      if (isoText) isoText.textContent = `Đang xem riêng: ${shortName}`;
+      isoBadge.classList.remove('hidden');
+    } else {
+      isoBadge.classList.add('hidden');
+    }
   }
 
   // Phase 2: Render Visual Anatomical Breadcrumbs (Hệ Cơ Quan › Cơ Quan Cha › Cấu Trúc Hiện Tại)
