@@ -20,6 +20,14 @@ import { showNeuromuscularHUD, hideNeuromuscularHUD } from './neuromuscularHUD.j
 import { showMicroanatomyHUD, hideMicroanatomyHUD } from './microanatomyHUD.js';
 import { showSurfaceAnatomyHUD, hideSurfaceAnatomyHUD } from './surfaceAnatomyHUD.js';
 import { showAmpullaHUD, hideAmpullaHUD } from './ampullaHUD.js';
+import {
+  ATLAS_SYSTEMS_CATEGORIES,
+  ATLAS_REGIONS_CATEGORIES,
+  ATLAS_LAB_CATEGORIES,
+  ATLAS_CROSS_SECTIONS_CATEGORIES,
+  ATLAS_MICROANATOMY_CATEGORIES,
+  ATLAS_MUSCLE_ACTIONS_CATEGORIES
+} from '../data/atlasViewsData.js';
 
 // Precompiled Regexes for Anatomical Structure Filtering
 const REGEX_SKULL_AND_CERVICAL = /frontal|parietal|occipital|temporal|sphenoid|ethmoid|maxilla|mandible|zygomatic|nasal|lacrimal|palatine|vomer|concha|hyoid|auditory|malleus|incus|stapes|tooth|teeth|skull|head|atlas|axis|vertebra_c|c1|c2|c3|c4|c5|c6|c7|disc c|temporomandibular|atlanto/i;
@@ -51,6 +59,27 @@ const REGEX_URINARY_ORGANS = /kidney|renal|ureter|urinary bladder|suprarenal/i;
  */
 export async function applyAtlasPreset(card, viewer = state.viewer || window.viewer) {
   if (!viewer) return;
+
+  // Resolve card object if a string ID was passed
+  if (typeof card === 'string') {
+    const cardId = card;
+    const allCategories = [
+      ...ATLAS_SYSTEMS_CATEGORIES,
+      ...ATLAS_REGIONS_CATEGORIES,
+      ...ATLAS_LAB_CATEGORIES,
+      ...ATLAS_CROSS_SECTIONS_CATEGORIES,
+      ...ATLAS_MICROANATOMY_CATEGORIES,
+      ...ATLAS_MUSCLE_ACTIONS_CATEGORIES
+    ];
+    let found = null;
+    for (const cat of allCategories) {
+      if (cat.cards) {
+        found = cat.cards.find(c => c.id === cardId);
+        if (found) break;
+      }
+    }
+    card = found || { id: cardId, systems: ['visceral', 'skeletal'] };
+  }
 
   // 1. Clean State & Deselect
   deselectPart(true);
@@ -161,7 +190,7 @@ export async function applyAtlasPreset(card, viewer = state.viewer || window.vie
   // 8. Animate Camera to Precise View Position
   const cameraConfig = getFineCameraConfig(card);
   if (cameraConfig) {
-    animateCameraTo(viewer.camera, viewer.controls, cameraConfig.pos, cameraConfig.target);
+    await animateCameraTo(viewer.camera, viewer.controls, cameraConfig.pos, cameraConfig.target);
   }
 
   // 9. Highlight primary structure if designated in card
@@ -442,6 +471,7 @@ function getFineCameraConfig(card) {
  * Surgical Anatomical Mesh Filtering & Layer Translucency
  */
 function applySpecificViewRules(viewId, allowedSystems, viewer) {
+  if (!viewId || typeof viewId !== 'string') return;
   function prepareMeshMaterial(node) {
     if (!node.userData.__origMaterial) {
       node.userData.__origMaterial = node.material;
@@ -460,6 +490,23 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
   if (duodenumLumenGroup) {
     duodenumLumenGroup.visible = (viewId === 'dig_19_duodenum_papilla');
   }
+
+  const stomachLayersGroup = viewer.scene?.getObjectByName('Stomach_Internal_Layers_Group');
+  const isStomachDissection = (viewId === 'dig_4_stomach_layers' || viewId === 'lab_stomach_dissection' || viewId === 'micro_stomach_wall');
+  if (stomachLayersGroup) {
+    stomachLayersGroup.visible = isStomachDissection;
+  }
+
+  // Toggle stomach mesh between watertight sealed mode and surgical fenestration mode
+  viewer.scene?.traverse(m => {
+    if (m.isMesh && /stomach/i.test(m.name) && m.userData?.sealedGeom) {
+      if (isStomachDissection && m.userData.fenestratedGeom) {
+        m.geometry = m.userData.fenestratedGeom;
+      } else if (m.userData.sealedGeom) {
+        m.geometry = m.userData.sealedGeom;
+      }
+    }
+  });
 
   // Pre-filter meshes by allowed systems and specific preset views
   viewer.scene.traverse(node => {
@@ -1133,14 +1180,20 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
         case 'lab_stomach_dissection':
         case 'micro_stomach_wall': {
           if (sys === 'visceral') {
-            const isStomach = /stomach|duodenum|oesophagus/i.test(name);
+            const isStomach = /stomach|gastric|duodenum|oesophagus/i.test(name);
             node.visible = isStomach;
             if (isStomach) {
-              node.renderOrder = 6;
-              const mat = prepareMeshMaterial(node);
-              mat.transparent = false;
-              mat.opacity = 1.0;
-              mat.depthWrite = true;
+              node.renderOrder = 8;
+              const isLayer = /Gastric_Serosa|Gastric_Longitudinal|Gastric_Circular|Gastric_Oblique|Gastric_Rugae/i.test(name);
+              if (isLayer) {
+                // Keep authentic custom medical PBR material created during dissection setup
+                node.visible = true;
+              } else {
+                const mat = prepareMeshMaterial(node);
+                mat.transparent = false;
+                mat.opacity = 1.0;
+                mat.depthWrite = true;
+              }
             }
           } else {
             node.visible = false;
@@ -1765,28 +1818,32 @@ function applySpecificViewRules(viewId, allowedSystems, viewer) {
  * Smooth Camera Animation
  */
 function animateCameraTo(camera, controls, pos, lookAt, duration = 650) {
-  const startPos = camera.position.clone();
-  const startTarget = controls.target.clone();
-  const startTime = performance.now();
+  return new Promise((resolve) => {
+    const startPos = camera.position.clone();
+    const startTarget = controls.target.clone();
+    const startTime = performance.now();
 
-  function step(now) {
-    const elapsed = now - startTime;
-    const t = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - t, 3);
+    function step(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
 
-    camera.position.x = startPos.x + (pos.x - startPos.x) * ease;
-    camera.position.y = startPos.y + (pos.y - startPos.y) * ease;
-    camera.position.z = startPos.z + (pos.z - startPos.z) * ease;
+      camera.position.x = startPos.x + (pos.x - startPos.x) * ease;
+      camera.position.y = startPos.y + (pos.y - startPos.y) * ease;
+      camera.position.z = startPos.z + (pos.z - startPos.z) * ease;
 
-    controls.target.x = startTarget.x + (lookAt.x - startTarget.x) * ease;
-    controls.target.y = startTarget.y + (lookAt.y - startTarget.y) * ease;
-    controls.target.z = startTarget.z + (lookAt.z - startTarget.z) * ease;
-    controls.update();
+      controls.target.x = startTarget.x + (lookAt.x - startTarget.x) * ease;
+      controls.target.y = startTarget.y + (lookAt.y - startTarget.y) * ease;
+      controls.target.z = startTarget.z + (lookAt.z - startTarget.z) * ease;
+      controls.update();
 
-    if (t < 1) {
-      requestAnimationFrame(step);
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        resolve();
+      }
     }
-  }
 
-  requestAnimationFrame(step);
+    requestAnimationFrame(step);
+  });
 }

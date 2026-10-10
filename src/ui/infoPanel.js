@@ -2028,26 +2028,6 @@ const JOINT_KINEMATICS_MAP = [
     note: 'Gấp cẳng tay từ 0° đến 145° chạm vai'
   },
   {
-    match: ['cervical', 'atlas', 'axis', 'đốt sống cổ', 'cột sống cổ', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
-    motionId: MOTIONS.SPINE_FLEXION,
-    title: '🏃 ĐỘNG HỌC CỘT SỐNG CỔ',
-    actionName: 'Cúi gập cổ',
-    minAngle: 0,
-    maxAngle: 60,
-    agonist: 'Cơ ức đòn chũm & Nhóm cơ dài cổ (Longus colli)',
-    note: 'Cúi cổ 0-50°, ngửa cổ 0-60°, xoay ngang 0-80°'
-  },
-  {
-    match: ['spine', 'lumbar', 'thoracic', 'thắt lưng', 'ngực', 'cột sống', 'đốt sống thắt lưng', 'l1', 'l2', 'l3', 'l4', 'l5'],
-    motionId: MOTIONS.SPINE_FLEXION,
-    title: '🏃 ĐỘNG HỌC CỘT SỐNG THẮT LƯNG',
-    actionName: 'Cúi gập thân',
-    minAngle: 0,
-    maxAngle: 80,
-    agonist: 'Cơ thẳng bụng & Cơ chéo bụng (Abdominals)',
-    note: 'Cúi gập thân mình ra trước từ 0° đến 80°'
-  },
-  {
     match: ['ankle', 'talus', 'calcaneus', 'cổ chân', 'xương sên', 'xương gót', 'mắt cá'],
     motionId: MOTIONS.KNEE_FLEXION,
     title: '🏃 ĐỘNG HỌC KHỚP CỔ CHÂN',

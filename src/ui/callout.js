@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { state, translate } from '../state/store.js';
 import { getStructure, ownMeshesOf, getMeshRegistry } from '../viewer/loadModel.js';
-import { formatNameWithSubtitles } from '../utils/textFormatters.js';
+import { escapeHTML } from '../utils/textFormatters.js';
 
 const OFFSET_X = 96;
 const OFFSET_Y = -64;
@@ -42,20 +42,6 @@ function build(container) {
         <span class="callout-name"></span>
       </div>
       <div class="callout-controls-row">
-        <button type="button" class="callout-btn-action callout-btn-speaker" data-callout="speak" title="Nghe đọc tiếng Việt / Dừng đọc" aria-label="Nghe đọc">
-          <svg class="icon-speaker" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-          </svg>
-        </button>
-        <button type="button" class="callout-btn-action callout-btn-expand" data-callout="expand" title="Mở rộng bảng chi tiết" aria-label="Mở rộng chi tiết">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 3 21 3 21 9"/>
-            <polyline points="9 21 3 21 3 15"/>
-            <line x1="21" y1="3" x2="14" y2="10"/>
-            <line x1="3" y1="21" x2="10" y2="14"/>
-          </svg>
-        </button>
         <button type="button" class="callout-btn-action callout-btn-close" data-callout="close" title="Tắt nhãn chữ (giữ nguyên mô hình 3D)" aria-label="Đóng nhãn">✕</button>
       </div>
     </div>
@@ -64,17 +50,6 @@ function build(container) {
 
   label = root.querySelector('.callout');
   line = root.querySelector('.callout-leader-line') || root.querySelector('.callout-line line');
-
-  // Monitor voice state to pulse speaker button on callout
-  const speakerBtn = root.querySelector('.callout-btn-speaker');
-  if (speakerBtn) {
-    setInterval(() => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        const speaking = window.speechSynthesis.speaking;
-        speakerBtn.classList.toggle('is-speaking', !!speaking);
-      }
-    }, 250);
-  }
 
   root.addEventListener('click', event => {
     const action = event.target.closest('[data-callout]')?.dataset.callout;
@@ -244,11 +219,9 @@ export function showCallout(partId, displayName, actions = {}) {
 
   const info = state.partsData?.[partId];
   const nameEl = root.querySelector('.callout-name');
-  nameEl.innerHTML = formatNameWithSubtitles(displayName);
-  const isolateBtn = root.querySelector('[data-callout="isolate"]');
-  if (isolateBtn) isolateBtn.textContent = translate('isolate');
-  const hideBtn = root.querySelector('[data-callout="hide"]');
-  if (hideBtn) hideBtn.textContent = translate('hide');
+  // Bỏ () giải thích phụ cho gọn ở phần chỉ các cơ quan bộ phận (callout pin)
+  const cleanName = (displayName || '').replace(/\s*\([^)]*\)/g, '').trim() || (displayName || '');
+  nameEl.innerHTML = `<span class="name-primary">${escapeHTML(cleanName)}</span>`;
 
   computeAnchor(partId);
   root.classList.remove('is-hidden');

@@ -9411,10 +9411,9 @@ body.theme-dark .tab-vertical-text {
   top: 52px;
   left: 0 !important;
   right: auto !important;
-  bottom: auto !important;
-  height: 448px !important;
-  max-height: 448px !important;
-  min-height: 448px !important;
+  height: calc(100vh - 120px) !important;
+  max-height: 580px !important;
+  min-height: 380px !important;
   width: 126px;
   max-width: 42vw;
   z-index: 1200;
@@ -9846,9 +9845,9 @@ body.theme-dark .btn-region-more:hover {
 /* 4. Bottom Footer Tools (Pelvis & Gender) */
 .stepper-drawer-footer {
   display: flex;
+  flex-direction: column;
   flex-shrink: 0;
-  align-items: center;
-  justify-content: space-between;
+  align-items: stretch;
   gap: 5px;
   margin-top: auto;
   padding-top: 6px;
@@ -9881,6 +9880,53 @@ body.theme-dark .btn-region-more:hover {
   width: 18px;
   height: 18px;
   display: block;
+}
+
+.envelope-opacity-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 5px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  margin-top: 3px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.envelope-opacity-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+.envelope-opacity-slider {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  accent-color: #0284c7;
+  height: 4px;
+}
+.envelope-opacity-value {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #0369a1;
+  font-variant-numeric: tabular-nums;
+  min-width: 22px;
+  text-align: right;
+}
+[data-theme="dark"] .envelope-opacity-control,
+body.theme-dark .envelope-opacity-control {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(71, 85, 105, 0.6);
+}
+[data-theme="dark"] .envelope-opacity-label,
+body.theme-dark .envelope-opacity-label {
+  color: #94a3b8;
+}
+[data-theme="dark"] .envelope-opacity-value,
+body.theme-dark .envelope-opacity-value {
+  color: #38bdf8;
 }
 
 /* ==========================================================================

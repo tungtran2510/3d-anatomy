@@ -82,6 +82,16 @@ export const ANATOMICAL_SYNONYMS = {
   'co uc don chum': { id: 'Sternocleidomastoid muscle.l', base: 'Sternocleidomastoid muscle', system: 'muscular', nameVi: 'Cơ ức đòn chũm' },
   'cơ bắp chân': { id: 'Medial head of gastrocnemius.l', base: 'Medial head of gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân (Bắp chân)' },
   'co bap chan': { id: 'Medial head of gastrocnemius.l', base: 'Medial head of gastrocnemius', system: 'muscular', nameVi: 'Cơ bụng chân' },
+  'cơ may': { id: 'Sartorius muscle.l', base: 'Sartorius muscle', system: 'muscular', nameVi: 'Cơ may (Sartorius)' },
+  'co may': { id: 'Sartorius muscle.l', base: 'Sartorius muscle', system: 'muscular', nameVi: 'Cơ may' },
+  'sartorius': { id: 'Sartorius muscle.l', base: 'Sartorius muscle', system: 'muscular', nameVi: 'Cơ may (Sartorius)' },
+  'cơ hình lê': { id: 'Piriformis muscle.l', base: 'Piriformis muscle', system: 'muscular', nameVi: 'Cơ hình lê (Piriformis)' },
+  'co hinh le': { id: 'Piriformis muscle.l', base: 'Piriformis muscle', system: 'muscular', nameVi: 'Cơ hình lê' },
+  'cơ tháp chậu': { id: 'Piriformis muscle.l', base: 'Piriformis muscle', system: 'muscular', nameVi: 'Cơ hình lê (Piriformis)' },
+  'co thap chau': { id: 'Piriformis muscle.l', base: 'Piriformis muscle', system: 'muscular', nameVi: 'Cơ hình lê' },
+  'piriformis': { id: 'Piriformis muscle.l', base: 'Piriformis muscle', system: 'muscular', nameVi: 'Cơ hình lê (Piriformis)' },
+  'cơ lưng': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng rộng & Khối cơ cạnh sống' },
+  'co lung': { id: 'Latissimus dorsi muscle.l', base: 'Latissimus dorsi muscle', system: 'muscular', nameVi: 'Cơ lưng' },
 
   // Nerves & Ventricular System / CSF
   'thần kinh tọa': { id: 'Sciatic nerve.l', base: 'Sciatic nerve', system: 'nervous', nameVi: 'Dây thần kinh tọa (Dây thần kinh ngồi)' },

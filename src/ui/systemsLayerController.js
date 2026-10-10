@@ -12,7 +12,7 @@ import { getSubSystemParts } from './sidebar.js';
 import { getMeshesBySystem } from '../viewer/loadModel.js';
 import { ICONS } from './icons.js';
 import { suggestOfflineForSystem } from './offlinePrompt.js';
-import { toggleBodyEnvelope, isBodyEnvelopeVisible, setBodyEnvelopeVisible, updateBodyEnvelopeAuto } from '../viewer/bodyEnvelope.js';
+import { toggleBodyEnvelope, isBodyEnvelopeVisible, setBodyEnvelopeVisible, updateBodyEnvelopeAuto, setBodyEnvelopeOpacity, getBodyEnvelopeOpacity } from '../viewer/bodyEnvelope.js';
 import { triggerHaptic } from '../viewer/engineManager.js';
 
 export const SYSTEM_CONFIGS = [
@@ -780,15 +780,23 @@ export function initSystemsLayerController(viewer) {
 
     <!-- Bottom Tools: Pelvis, Silhouette Envelope & Sex Switcher -->
     <div class="stepper-drawer-footer">
-      <button type="button" class="btn-drawer-tool" id="btnFocusPelvis" title="Tập trung vùng chậu">
-        <span class="drawer-tool-icon">${ICONS.pelvisBox}</span>
-      </button>
-      <button type="button" class="btn-drawer-tool active" id="btnToggleEnvelope" title="Lớp mờ bao quanh cơ thể - Bật/Tắt">
-        <span class="drawer-tool-icon">${ICONS.humanAnatomyWithPlus}</span>
-      </button>
-      <button type="button" class="btn-drawer-tool" id="btnToggleGender" title="Mô hình: Nam Y khoa chuẩn (Dữ liệu Nữ đang cập nhật)">
-        <span class="drawer-tool-icon">${ICONS.genderToggle}</span>
-      </button>
+      <div class="stepper-drawer-tools-row" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <button type="button" class="btn-drawer-tool" id="btnFocusPelvis" title="Tập trung vùng chậu">
+          <span class="drawer-tool-icon">${ICONS.pelvisBox}</span>
+        </button>
+        <button type="button" class="btn-drawer-tool active" id="btnToggleEnvelope" title="Lớp mờ bao quanh cơ thể - Bật/Tắt">
+          <span class="drawer-tool-icon">${ICONS.humanAnatomyWithPlus}</span>
+        </button>
+        <button type="button" class="btn-drawer-tool" id="btnToggleGender" title="Mô hình: Nam Y khoa chuẩn (Dữ liệu Nữ đang cập nhật)">
+          <span class="drawer-tool-icon">${ICONS.genderToggle}</span>
+        </button>
+      </div>
+      <!-- Continuous Skin / Body Envelope Opacity Slider (0% - 100%) -->
+      <div class="envelope-opacity-control">
+        <span class="envelope-opacity-label">Độ mờ da:</span>
+        <input type="range" id="rngSkinEnvelopeOpacity" class="envelope-opacity-slider" min="0" max="100" value="18" step="1" title="Điều chỉnh độ mờ lớp da bao quanh cơ thể (0% - 100%)">
+        <span id="txtSkinEnvelopeOpacityVal" class="envelope-opacity-value">18%</span>
+      </div>
     </div>
   `;
   container.appendChild(drawerEl);
@@ -954,10 +962,40 @@ function setupEvents(viewer) {
   drawerEl?.querySelector('#btnToggleEnvelope')?.addEventListener('click', () => {
     toggleBodyEnvelope(viewer);
     const envBtn = drawerEl?.querySelector('#btnToggleEnvelope');
+    const isVis = isBodyEnvelopeVisible(viewer);
     if (envBtn) {
-      envBtn.classList.toggle('active', isBodyEnvelopeVisible());
+      envBtn.classList.toggle('active', isVis);
+    }
+    const skinSlider = drawerEl?.querySelector('#rngSkinEnvelopeOpacity');
+    const skinValText = drawerEl?.querySelector('#txtSkinEnvelopeOpacityVal');
+    if (skinSlider) {
+      const curOp = Math.round((getBodyEnvelopeOpacity() || 0.18) * 100);
+      skinSlider.value = isVis ? curOp : 0;
+      if (skinValText) skinValText.textContent = `${skinSlider.value}%`;
     }
   });
+
+  // Continuous Skin / Envelope Opacity Slider Event (0% - 100%)
+  const skinSlider = drawerEl?.querySelector('#rngSkinEnvelopeOpacity');
+  const skinValText = drawerEl?.querySelector('#txtSkinEnvelopeOpacityVal');
+  if (skinSlider) {
+    skinSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10) || 0;
+      if (skinValText) skinValText.textContent = `${val}%`;
+      const envBtn = drawerEl?.querySelector('#btnToggleEnvelope');
+      if (val > 0) {
+        setBodyEnvelopeVisible(true, viewer);
+        envBtn?.classList.add('active');
+      } else {
+        setBodyEnvelopeVisible(false, viewer);
+        envBtn?.classList.remove('active');
+      }
+      setBodyEnvelopeOpacity(val / 100, viewer);
+      viewer?.invalidate?.(3);
+      if (typeof viewer?.render === 'function') viewer.render();
+    });
+  }
+
   drawerEl?.querySelector('#btnToggleGender')?.addEventListener('click', () => {
     if (window.showAtlasToast) {
       window.showAtlasToast('Hiện tại hệ thống sử dụng bộ dữ liệu 3D Nam chuẩn Y khoa (Z-Anatomy). Dữ liệu giải phẫu Nữ đang được cập nhật.');

@@ -361,7 +361,7 @@ function setupIntervertebralDiscs(model, systemId, viewer, nodes) {
   });
 }
 
-function setupStomachAnatomy(model, systemId, viewer, nodes) {
+function setupStomachAnatomy(model, systemId, viewer, nodes, meshRegistry, structures) {
   let stomachMesh = null;
   model.traverse((child) => {
     if (child.isMesh && child.name && /stomach/i.test(child.name)) {
@@ -376,6 +376,10 @@ function setupStomachAnatomy(model, systemId, viewer, nodes) {
   const norm = geom.attributes.normal;
   const index = geom.index;
   if (!pos || !index) return;
+
+  // Preserve original authentic fenestrated geometry for surgical dissection mode
+  const fenestratedGeom = geom.clone();
+  stomachMesh.userData.fenestratedGeom = fenestratedGeom;
 
   // Extract boundary edges to find the anterior wall window
   const idxArr = index.array;
@@ -453,19 +457,20 @@ function setupStomachAnatomy(model, systemId, viewer, nodes) {
   // Natural anatomical dome bulge calculated from boundary sagitta
   const bulge = 0.004;
 
-  // Clone existing position, normal, and index arrays
+  // 1. BUILD WATERTIGHT SEALED GEOMETRY (Default viewing mode: Zero holes)
   const newPositions = Array.from(pos.array);
   const newNormals = Array.from(norm.array);
   const newIndices = Array.from(index.array);
 
-  // Concentric rings (Ring 0 reuses holeLoop indices directly, eliminating any boundary duplicate vertices or seams!)
   const ringVertIndices = [holeLoop];
+  const ringPointsArray = [bPts];
   const fractions = [0.80, 0.60, 0.40, 0.20];
 
   for (let rIdx = 0; rIdx < fractions.length; rIdx++) {
     const f = fractions[rIdx];
     const ringBulge = bulge * Math.cos(f * Math.PI * 0.5);
     const ringIdxs = [];
+    const pts = [];
     for (let i = 0; i < N; i++) {
       const bp = bPts[i];
       const rx = cx + (bp.x - cx) * f + cnx * ringBulge;
@@ -475,21 +480,30 @@ function setupStomachAnatomy(model, systemId, viewer, nodes) {
       let rny = bp.ny * Math.sin(f * Math.PI * 0.5) + cny * Math.cos(f * Math.PI * 0.5);
       let rnz = bp.nz * Math.sin(f * Math.PI * 0.5) + cnz * Math.cos(f * Math.PI * 0.5);
       const rlen = Math.hypot(rnx, rny, rnz) || 1;
+      rnx /= rlen; rny /= rlen; rnz /= rlen;
 
       const newIdx = newPositions.length / 3;
       newPositions.push(rx, ry, rz);
-      newNormals.push(rnx / rlen, rny / rlen, rnz / rlen);
+      newNormals.push(rnx, rny, rnz);
       ringIdxs.push(newIdx);
+      pts.push({ x: rx, y: ry, z: rz, nx: rnx, ny: rny, nz: rnz });
     }
     ringVertIndices.push(ringIdxs);
+    ringPointsArray.push(pts);
   }
 
-  // Center vertex
   const centerIdx = newPositions.length / 3;
-  newPositions.push(cx + cnx * bulge, cy + cny * bulge, cz + cnz * bulge);
+  const centerPt = {
+    x: cx + cnx * bulge,
+    y: cy + cny * bulge,
+    z: cz + cnz * bulge,
+    nx: cnx,
+    ny: cny,
+    nz: cnz
+  };
+  newPositions.push(centerPt.x, centerPt.y, centerPt.z);
   newNormals.push(cnx, cny, cnz);
 
-  // Triangles with consistent outward counter-clockwise winding matching Three.js normal convention
   for (let r = 0; r < ringVertIndices.length - 1; r++) {
     const rCurr = ringVertIndices[r];
     const rNext = ringVertIndices[r + 1];
@@ -505,39 +519,241 @@ function setupStomachAnatomy(model, systemId, viewer, nodes) {
     newIndices.push(rLast[i], rLast[nextI], centerIdx);
   }
 
-  // Create unified watertight geometry for stomach
   const sealedGeom = new THREE.BufferGeometry();
   sealedGeom.setAttribute('position', new THREE.Float32BufferAttribute(newPositions, 3));
   sealedGeom.setAttribute('normal', new THREE.Float32BufferAttribute(newNormals, 3));
   sealedGeom.setIndex(newIndices);
   sealedGeom.computeVertexNormals();
+  if (sealedGeom.computeBoundsTree) sealedGeom.computeBoundsTree();
 
-  if (sealedGeom.computeBoundsTree) {
-    sealedGeom.computeBoundsTree();
+  stomachMesh.geometry = sealedGeom;
+  stomachMesh.userData.sealedGeom = sealedGeom;
+
+  // 2. BUILD AUTHENTIC 5-TIER STEPPED GASTRIC WALL DISSECTION LAYERS
+  function createBandGeometry(ringA, ringB, outwardDistA = 0, outwardDistB = 0) {
+    const pArr = [];
+    const nArr = [];
+    const iArr = [];
+    const count = ringA.length;
+
+    for (let i = 0; i < count; i++) {
+      const p = ringA[i];
+      pArr.push(p.x + p.nx * outwardDistA, p.y + p.ny * outwardDistA, p.z + p.nz * outwardDistA);
+      nArr.push(p.nx, p.ny, p.nz);
+    }
+    for (let i = 0; i < count; i++) {
+      const p = ringB[i];
+      pArr.push(p.x + p.nx * outwardDistB, p.y + p.ny * outwardDistB, p.z + p.nz * outwardDistB);
+      nArr.push(p.nx, p.ny, p.nz);
+    }
+
+    for (let i = 0; i < count; i++) {
+      const nextI = (i + 1) % count;
+      const a0 = i;
+      const a1 = nextI;
+      const b0 = count + i;
+      const b1 = count + nextI;
+      iArr.push(a0, a1, b0);
+      iArr.push(b0, a1, b1);
+    }
+
+    // Stepped vertical bevel lip dropping down to next layer
+    const lipBase = pArr.length / 3;
+    for (let i = 0; i < count; i++) {
+      const p = ringB[i];
+      pArr.push(p.x + p.nx * (outwardDistB - 0.0006), p.y + p.ny * (outwardDistB - 0.0006), p.z + p.nz * (outwardDistB - 0.0006));
+      nArr.push(-p.nx, -p.ny, -p.nz);
+    }
+    for (let i = 0; i < count; i++) {
+      const nextI = (i + 1) % count;
+      const b0 = count + i;
+      const b1 = count + nextI;
+      const d0 = lipBase + i;
+      const d1 = lipBase + nextI;
+      iArr.push(b0, b1, d0);
+      iArr.push(d0, b1, d1);
+    }
+
+    const bGeom = new THREE.BufferGeometry();
+    bGeom.setAttribute('position', new THREE.Float32BufferAttribute(pArr, 3));
+    bGeom.setAttribute('normal', new THREE.Float32BufferAttribute(nArr, 3));
+    bGeom.setIndex(iArr);
+    bGeom.computeVertexNormals();
+    return bGeom;
   }
 
-  stomachMesh.geometry.dispose();
-  stomachMesh.geometry = sealedGeom;
+  function createRugaeMucosaGeometry(ringOuter, cPt) {
+    const pArr = [];
+    const nArr = [];
+    const iArr = [];
+    const count = ringOuter.length;
 
-  // Register Stomach aliases
-  meshRegistry.set('Stomach', stomachMesh);
-  meshRegistry.set('Stomach_AnteriorWall', stomachMesh);
-
-  structures.set('Stomach_AnteriorWall', {
-    node: stomachMesh,
-    systemId,
-    parentId: 'Stomach',
-    childIds: [],
-    ownMeshes: [stomachMesh]
-  });
-
-  const stomachStruct = structures.get('Stomach');
-  if (stomachStruct) {
-    if (!stomachStruct.childIds) stomachStruct.childIds = [];
-    if (!stomachStruct.childIds.includes('Stomach_AnteriorWall')) {
-      stomachStruct.childIds.push('Stomach_AnteriorWall');
+    for (let i = 0; i < count; i++) {
+      pArr.push(ringOuter[i].x, ringOuter[i].y, ringOuter[i].z);
+      nArr.push(ringOuter[i].nx, ringOuter[i].ny, ringOuter[i].nz);
     }
-    stomachStruct.ownMeshes = [stomachMesh];
+
+    // Mid sinusoidal rugae ridge ring (f = 0.5)
+    const midBase = pArr.length / 3;
+    for (let i = 0; i < count; i++) {
+      const bp = ringOuter[i];
+      const wave = Math.sin(i * 0.45) * 0.0018 + Math.cos(i * 0.9) * 0.0012;
+      pArr.push(cPt.x + (bp.x - cPt.x) * 0.5 + cPt.nx * wave, cPt.y + (bp.y - cPt.y) * 0.5 + cPt.ny * wave, cPt.z + (bp.z - cPt.z) * 0.5 + cPt.nz * wave);
+      nArr.push(cPt.nx, cPt.ny, cPt.nz);
+    }
+
+    // Inner undulating rugae ring (f = 0.25)
+    const inBase = pArr.length / 3;
+    for (let i = 0; i < count; i++) {
+      const bp = ringOuter[i];
+      const wave = Math.cos(i * 0.6) * 0.0020 + Math.sin(i * 1.2) * 0.0014;
+      pArr.push(cPt.x + (bp.x - cPt.x) * 0.25 + cPt.nx * wave, cPt.y + (bp.y - cPt.y) * 0.25 + cPt.ny * wave, cPt.z + (bp.z - cPt.z) * 0.25 + cPt.nz * wave);
+      nArr.push(cPt.nx, cPt.ny, cPt.nz);
+    }
+
+    const cIndex = pArr.length / 3;
+    pArr.push(cPt.x, cPt.y, cPt.z);
+    nArr.push(cPt.nx, cPt.ny, cPt.nz);
+
+    for (let i = 0; i < count; i++) {
+      const nextI = (i + 1) % count;
+      iArr.push(i, nextI, midBase + i);
+      iArr.push(midBase + i, nextI, midBase + nextI);
+    }
+    for (let i = 0; i < count; i++) {
+      const nextI = (i + 1) % count;
+      iArr.push(midBase + i, midBase + nextI, inBase + i);
+      iArr.push(inBase + i, midBase + nextI, inBase + nextI);
+    }
+    for (let i = 0; i < count; i++) {
+      const nextI = (i + 1) % count;
+      iArr.push(inBase + i, inBase + nextI, cIndex);
+    }
+
+    const rGeom = new THREE.BufferGeometry();
+    rGeom.setAttribute('position', new THREE.Float32BufferAttribute(pArr, 3));
+    rGeom.setAttribute('normal', new THREE.Float32BufferAttribute(nArr, 3));
+    rGeom.setIndex(iArr);
+    rGeom.computeVertexNormals();
+    return rGeom;
+  }
+
+  const layersGroup = new THREE.Group();
+  layersGroup.name = 'Stomach_Internal_Layers_Group';
+  layersGroup.visible = false;
+
+  // Layer 1: Thanh Mạc Dạ Dày (Tunica serosa gastrica)
+  const serosaMat = new THREE.MeshPhysicalMaterial({
+    name: 'PBR_Gastric_Serosa',
+    color: 0xBA6B65,
+    roughness: 0.28,
+    metalness: 0.0,
+    clearcoat: 0.75,
+    clearcoatRoughness: 0.15,
+    sheen: 0.50,
+    sheenColor: 0xfca5a5,
+    side: THREE.DoubleSide
+  });
+  const serosaMesh = new THREE.Mesh(createBandGeometry(ringPointsArray[0], ringPointsArray[1], 0.0016, 0.0014), serosaMat);
+  serosaMesh.name = 'Gastric_Serosa';
+  serosaMesh.userData = { partId: 'Gastric_Serosa', za_name: 'Gastric serosa (Tunica serosa gastrica)', system: systemId, baseMaterial: serosaMat };
+  layersGroup.add(serosaMesh);
+
+  // Layer 2: Lớp Cơ Dọc Ngoài (Stratum longitudinale)
+  const longMat = new THREE.MeshStandardMaterial({
+    name: 'PBR_Gastric_Longitudinal',
+    color: 0x993530,
+    roughness: 0.55,
+    metalness: 0.0,
+    side: THREE.DoubleSide
+  });
+  const longMesh = new THREE.Mesh(createBandGeometry(ringPointsArray[1], ringPointsArray[2], 0.0012, 0.0010), longMat);
+  longMesh.name = 'Gastric_Longitudinal_Muscle';
+  longMesh.userData = { partId: 'Gastric_Longitudinal_Muscle', za_name: 'Longitudinal layer of gastric muscularis (Stratum longitudinale)', system: systemId, baseMaterial: longMat };
+  layersGroup.add(longMesh);
+
+  // Layer 3: Lớp Cơ Vòng Giữa (Stratum circulare)
+  const circMat = new THREE.MeshStandardMaterial({
+    name: 'PBR_Gastric_Circular',
+    color: 0x852420,
+    roughness: 0.52,
+    metalness: 0.0,
+    side: THREE.DoubleSide
+  });
+  const circMesh = new THREE.Mesh(createBandGeometry(ringPointsArray[2], ringPointsArray[3], 0.0008, 0.0006), circMat);
+  circMesh.name = 'Gastric_Circular_Muscle';
+  circMesh.userData = { partId: 'Gastric_Circular_Muscle', za_name: 'Circular layer of gastric muscularis (Stratum circulare)', system: systemId, baseMaterial: circMat };
+  layersGroup.add(circMesh);
+
+  // Layer 4: Lớp Cơ Chéo Trong (Fibrae obliquae)
+  const obliqMat = new THREE.MeshStandardMaterial({
+    name: 'PBR_Gastric_Oblique',
+    color: 0x6E1714,
+    roughness: 0.50,
+    metalness: 0.0,
+    side: THREE.DoubleSide
+  });
+  const obliqMesh = new THREE.Mesh(createBandGeometry(ringPointsArray[3], ringPointsArray[4], 0.0004, 0.0002), obliqMat);
+  obliqMesh.name = 'Gastric_Oblique_Muscle';
+  obliqMesh.userData = { partId: 'Gastric_Oblique_Muscle', za_name: 'Oblique fibers of gastric muscularis (Fibrae obliquae)', system: systemId, baseMaterial: obliqMat };
+  layersGroup.add(obliqMesh);
+
+  // Layer 5: Lớp Niêm Mạc & Nếp Gấp Rugae (Tunica mucosa & Plicae gastricae)
+  const rugaeMat = new THREE.MeshPhysicalMaterial({
+    name: 'PBR_Gastric_Rugae',
+    color: 0xD97768,
+    roughness: 0.32,
+    metalness: 0.0,
+    clearcoat: 0.65,
+    clearcoatRoughness: 0.20,
+    sheen: 0.60,
+    sheenColor: 0xfecdd3,
+    side: THREE.DoubleSide
+  });
+  const rugaeMesh = new THREE.Mesh(createRugaeMucosaGeometry(ringPointsArray[4], centerPt), rugaeMat);
+  rugaeMesh.name = 'Gastric_Rugae_Mucosa';
+  rugaeMesh.userData = { partId: 'Gastric_Rugae_Mucosa', za_name: 'Gastric mucosa & Rugae folds (Tunica mucosa & Plicae gastricae)', system: systemId, baseMaterial: rugaeMat };
+  layersGroup.add(rugaeMesh);
+
+  stomachMesh.add(layersGroup);
+
+  // Register in meshRegistry & structures
+  if (meshRegistry) {
+    meshRegistry.set('Stomach', stomachMesh);
+    meshRegistry.set('Stomach_AnteriorWall', stomachMesh);
+    meshRegistry.set('Stomach_Internal_Layers_Group', layersGroup);
+    meshRegistry.set('Gastric_Serosa', serosaMesh);
+    meshRegistry.set('Gastric_Longitudinal_Muscle', longMesh);
+    meshRegistry.set('Gastric_Circular_Muscle', circMesh);
+    meshRegistry.set('Gastric_Oblique_Muscle', obliqMesh);
+    meshRegistry.set('Gastric_Rugae_Mucosa', rugaeMesh);
+  }
+
+  if (structures) {
+    const stomachStruct = structures.get('Stomach');
+    if (stomachStruct) {
+      if (!stomachStruct.childIds) stomachStruct.childIds = [];
+      stomachStruct.childIds.push(
+        'Stomach_Internal_Layers_Group',
+        'Gastric_Serosa',
+        'Gastric_Longitudinal_Muscle',
+        'Gastric_Circular_Muscle',
+        'Gastric_Oblique_Muscle',
+        'Gastric_Rugae_Mucosa'
+      );
+      stomachStruct.ownMeshes = [stomachMesh];
+    }
+
+    structures.set('Stomach_Internal_Layers_Group', { node: layersGroup, systemId, parentId: 'Stomach', childIds: ['Gastric_Serosa', 'Gastric_Longitudinal_Muscle', 'Gastric_Circular_Muscle', 'Gastric_Oblique_Muscle', 'Gastric_Rugae_Mucosa'], ownMeshes: [] });
+    structures.set('Gastric_Serosa', { node: serosaMesh, systemId, parentId: 'Stomach', childIds: [], ownMeshes: [serosaMesh] });
+    structures.set('Gastric_Longitudinal_Muscle', { node: longMesh, systemId, parentId: 'Stomach', childIds: [], ownMeshes: [longMesh] });
+    structures.set('Gastric_Circular_Muscle', { node: circMesh, systemId, parentId: 'Stomach', childIds: [], ownMeshes: [circMesh] });
+    structures.set('Gastric_Oblique_Muscle', { node: obliqMesh, systemId, parentId: 'Stomach', childIds: [], ownMeshes: [obliqMesh] });
+    structures.set('Gastric_Rugae_Mucosa', { node: rugaeMesh, systemId, parentId: 'Stomach', childIds: [], ownMeshes: [rugaeMesh] });
+  }
+
+  if (nodes) {
+    nodes.push(serosaMesh, longMesh, circMesh, obliqMesh, rugaeMesh);
   }
 }
 
@@ -618,7 +834,7 @@ function processModel(model, systemId, viewer) {
   if (systemId === 'joints') {
     setupIntervertebralDiscs(model, systemId, viewer, nodes);
   } else if (systemId === 'visceral') {
-    setupStomachAnatomy(model, systemId, viewer, nodes);
+    setupStomachAnatomy(model, systemId, viewer, nodes, meshRegistry, structures);
     setupKidneyInternalAnatomy(model, systemId, viewer, nodes, meshRegistry, structures);
     setupDuodenumAnatomy(model, systemId, viewer, nodes, meshRegistry, structures);
   }
@@ -2145,7 +2361,7 @@ function setupMesh(mesh, systemId, viewer) {
   if (mesh.userData.baseMaterial) return;
 
   if (systemId === 'integumentary' || mesh.name === 'Skin') {
-    mesh.position.set(0, 0.002, 0.0095);
+    mesh.position.set(0, 0, 0);
     realignIntegumentaryGeometry(mesh);
   }
 

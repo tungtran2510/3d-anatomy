@@ -78,9 +78,10 @@ export function initLabels(viewer) {
     const badge = document.createElement('div');
     badge.className = 'landmark-pin';
     badge.dataset.landmarkId = item.id;
+    const cleanVi = (item.nameVi || '').replace(/\s*\([^)]*\)/g, '').trim() || item.nameVi;
     badge.innerHTML = `
       <span class="pin-dot"></span>
-      <span class="pin-text">${item.nameVi}</span>
+      <span class="pin-text">${cleanVi}</span>
     `;
 
     badge.addEventListener('click', (e) => {

@@ -63,12 +63,12 @@ export const MEDICAL_TRAINING_PLAYLISTS = [
     titleVi: '5. Quản Lý Cân Nặng: Tăng Giảm Cân & Chuyển Hóa',
     title: '5. Weight Management & Metabolism',
     subtitle: 'Khoa học tăng cơ giảm mỡ, chuyển hóa và vóc dáng chuẩn',
-    duration: 'Playlist',
+    duration: '10:53',
     badge: 'Cân nặng',
     type: 'video',
     image: './images/atlas/med_paired_muscles.png',
-    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLUwNUcW9Grzk&rel=0&enablejsapi=1',
-    playlistUrl: 'https://www.youtube.com/playlist?list=PLUwNUcW9Grzk',
+    videoUrl: 'https://www.youtube.com/embed/Ktv-CaOt6UQ?rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/watch?v=Ktv-CaOt6UQ',
     desc: 'Khoa học tăng cơ giảm mỡ, cân bằng năng lượng nạp vào - tiêu hao và tối ưu hóa chuyển hóa cơ thể.'
   },
   {
@@ -76,12 +76,12 @@ export const MEDICAL_TRAINING_PLAYLISTS = [
     titleVi: '6. Tổng Quan Toàn Diện Các Hệ Cơ Quan',
     title: '6. Comprehensive Organ Systems',
     subtitle: 'Giải phẫu đại cương 12 hệ cơ quan trong cơ thể người',
-    duration: 'Playlist',
+    duration: '10:38',
     badge: 'Hệ cơ quan',
     type: 'video',
     image: './images/atlas/skel_full.png',
-    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLXeja4lDX0Qc&rel=0&enablejsapi=1',
-    playlistUrl: 'https://www.youtube.com/playlist?list=PLXeja4lDX0Qc',
+    videoUrl: 'https://www.youtube.com/embed/rDGqkMHPDqE?rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/watch?v=rDGqkMHPDqE',
     desc: 'Hệ xương, hệ cơ bắp, hệ tuần hoàn, hệ hô hấp, hệ tiêu hóa, hệ thần kinh và sự phối hợp đồng bộ.'
   },
   {
@@ -89,12 +89,12 @@ export const MEDICAL_TRAINING_PLAYLISTS = [
     titleVi: '7. Y Học Dự Phòng: Phòng Bệnh Chủ Động',
     title: '7. Preventive Medicine & Wellness',
     subtitle: 'Chiến lược bảo vệ miễn dịch, thải độc và phòng ngừa sớm',
-    duration: 'Playlist',
+    duration: '09:36',
     badge: 'Phòng bệnh',
     type: 'video',
     image: './images/atlas/med_skin.png',
-    videoUrl: 'https://www.youtube.com/embed/videoseries?list=PLFCWgyj8rzLA&rel=0&enablejsapi=1',
-    playlistUrl: 'https://www.youtube.com/playlist?list=PLFCWgyj8rzLA',
+    videoUrl: 'https://www.youtube.com/embed/Orumw-PyNjw?rel=0&enablejsapi=1',
+    playlistUrl: 'https://www.youtube.com/watch?v=Orumw-PyNjw',
     desc: 'Nguyên lý bảo vệ sức khỏe sớm, tăng cường hệ miễn dịch, loại bỏ độc tố và duy trì lối sống lành mạnh.'
   },
   {
