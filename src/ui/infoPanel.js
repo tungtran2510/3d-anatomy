@@ -1,14 +1,14 @@
 // Advanced Anatomy Information Panel Controller (Visible Body & Atlas 2027 Standard)
 // Manages: History Navigation (< >), Full/Compact Mode, Model Orientation (Đứng/Nằm ngửa/Nằm sấp/Bàn mổ),
 // Audio Pronunciation, Anatomical Hierarchy Tree, 3D Structure Tagging, Learn More & Histology Thumbnails
-import { state, getStructureInfo } from '../state/store.js';
+import { state, getStructureInfo, pushUndo } from '../state/store.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { getClinicalData } from '../data/clinicalInfo.js';
 import { PATIENT_CASES } from './patientConsultationModal.js';
 import { setModelOrientation, toggleDissectionTable, getCurrentOrientation, getTableVisibility } from '../viewer/orientationManager.js';
 import { openLesson, showToast, selectStructureAnywhere } from './sidebar.js';
 import { openAIAssistant } from './aiAssistantModal.js';
-import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost, showcaseWholeSystem } from '../viewer/visibility.js';
+import { hidePart, isolatePart, setPartTransparency, restoreAllParts, isGhostActive, ghostAllExcept, clearGhost, showcaseWholeSystem, peelAnteriorObstacles } from '../viewer/visibility.js';
 import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
 import { canGoBackSelection, canGoForwardSelection, navigateSelectionHistory, notifySelectionHistoryChanged, selectPartById, zoomIntoCurrentSelection, zoomOutSelectionOverview, resolveAnatomicalAlias } from '../viewer/selection.js';
 import { setView, getCurrentView } from '../viewer/camera.js';
@@ -154,6 +154,63 @@ export function initInfoPanel(viewer) {
     e.stopPropagation();
     card.classList.add('hidden');
     showToast('Đã thu gọn thanh (Cấu trúc vẫn đang được chỉ điểm 📍)');
+  });
+
+  // 3a.1 1-Touch Ergonomic Actions: Cô lập (Isolate) & Ẩn vật cản (Hide Anterior Obstacles)
+  const miniIsolateBtn = document.getElementById('btnMiniIsolate');
+  const miniHideBtn = document.getElementById('btnMiniHide');
+
+  miniIsolateBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!state.selectedPart) return;
+    const isCurrentlyIsolated = miniIsolateBtn.classList.contains('active') || state.isolatedPart === state.selectedPart.id;
+    const cardIsoBtn = document.getElementById('cardIsolateBtn');
+
+    if (isCurrentlyIsolated) {
+      pushUndo({
+        type: 'isolate',
+        partId: state.selectedPart.id,
+        prevIsolated: state.isolatedPart
+      });
+      restoreAllParts();
+      miniIsolateBtn.classList.remove('active');
+      const l = miniIsolateBtn.querySelector('.mini-btn-label');
+      const i = miniIsolateBtn.querySelector('.mini-btn-icon');
+      if (l) l.textContent = 'Cô lập';
+      if (i) i.textContent = '⚡';
+      if (cardIsoBtn) cardIsoBtn.classList.remove('active');
+      viewer?.render();
+      showToast('Đã tắt cô lập - Khôi phục toàn bộ giải phẫu');
+    } else {
+      pushUndo({
+        type: 'isolate',
+        partId: state.selectedPart.id,
+        prevIsolated: state.isolatedPart || null
+      });
+      isolatePart(state.selectedPart.id, viewer);
+      miniIsolateBtn.classList.add('active');
+      const l = miniIsolateBtn.querySelector('.mini-btn-label');
+      const i = miniIsolateBtn.querySelector('.mini-btn-icon');
+      if (l) l.textContent = 'Bỏ cô lập';
+      if (i) i.textContent = '✓';
+      if (cardIsoBtn) cardIsoBtn.classList.add('active');
+      viewer?.render();
+      showToast(`⚡ Đã cô lập ${state.selectedPart.nameVi || state.selectedPart.name || 'bộ phận'}`);
+    }
+  });
+
+  miniHideBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!state.selectedPart) return;
+    const part = state.selectedPart;
+    const peeled = peelAnteriorObstacles(part.id, viewer);
+    if (peeled) {
+      showToast(`👁️ Đã bóc cấu trúc che chắn phía trước`);
+    } else {
+      hidePart(part.id);
+      showToast(`👁️ Đã ẩn ${part.nameVi || part.name || 'bộ phận'}`);
+    }
+    viewer?.render();
   });
 
   window.addEventListener('expand-selection-card', () => {
@@ -345,6 +402,17 @@ export function updateInfoPanelContent(part, viewer) {
     firstSentence = firstSentence.replace(/[\.\!\?]$/, '').trim();
     miniDesc.textContent = firstSentence ? `${firstSentence}.` : 'Chạm để mở rộng toàn bộ giải phẫu.';
     miniDesc.title = rawDesc || firstSentence;
+  }
+
+  // Sync Mini 1-tap quick action buttons
+  const miniIso = document.getElementById('btnMiniIsolate');
+  if (miniIso) {
+    const isIso = !!(part && state.isolatedPart === part.id);
+    miniIso.classList.toggle('active', isIso);
+    const l = miniIso.querySelector('.mini-btn-label');
+    const i = miniIso.querySelector('.mini-btn-icon');
+    if (l) l.textContent = isIso ? 'Bỏ cô lập' : 'Cô lập';
+    if (i) i.textContent = isIso ? '✓' : '⚡';
   }
 
   // Phase 2: Render Visual Anatomical Breadcrumbs (Hệ Cơ Quan › Cơ Quan Cha › Cấu Trúc Hiện Tại)

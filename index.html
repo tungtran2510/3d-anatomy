@@ -364,6 +364,14 @@
           </div>
         </div>
         <div class="mini-bar-actions">
+          <button type="button" class="mini-btn-quick-action mini-btn-isolate" id="btnMiniIsolate" title="Cô lập: Bấm 1-chạm giấu hết xung quanh, chỉ xem riêng bộ phận này" aria-label="Cô lập">
+            <span class="mini-btn-icon">⚡</span>
+            <span class="mini-btn-label">Cô lập</span>
+          </button>
+          <button type="button" class="mini-btn-quick-action mini-btn-hide" id="btnMiniHide" title="Ẩn vật cản: Bấm gỡ nhanh xương/cơ chắn phía trước để soi cấu trúc phía sau" aria-label="Ẩn đi">
+            <span class="mini-btn-icon">👁️</span>
+            <span class="mini-btn-label">Ẩn đi</span>
+          </button>
           <button type="button" class="mini-btn-speaker" id="btnMiniAIVoice" title="Nghe tóm tắt giọng nói 15s" aria-label="Nghe giải thích 15 giây">
             <svg class="mini-speaker-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -651,10 +659,9 @@
         <button type="button" class="btn-dissect-hud-close" id="btnDissectHudClose" aria-label="Đóng thanh bóc tách">✕</button>
       </div>
       <div class="dissect-hud-pills">
-        <button type="button" class="dissect-pill-btn active" data-stage="0" id="btnDissectStage0">Đầy đủ</button>
-        <button type="button" class="dissect-pill-btn" data-stage="1" id="btnDissectStage1">Lớp nông</button>
-        <button type="button" class="dissect-pill-btn" data-stage="2" id="btnDissectStage2">Lớp giữa</button>
-        <button type="button" class="dissect-pill-btn" data-stage="3" id="btnDissectStage3">Lớp sâu</button>
+        <button type="button" class="dissect-pill-btn active" data-stage="0" id="btnDissectStage0">Nông</button>
+        <button type="button" class="dissect-pill-btn" data-stage="1" id="btnDissectStage1">Giữa</button>
+        <button type="button" class="dissect-pill-btn" data-stage="3" id="btnDissectStage3">Sâu</button>
         <button type="button" class="dissect-pill-btn" data-stage="5" id="btnDissectStage5">Xương</button>
       </div>
     </div>

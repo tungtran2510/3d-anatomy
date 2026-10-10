@@ -93,11 +93,12 @@ export function ownMeshesOf(partId) {
 
 // A structure plus everything nested inside it, in document order.
 export function withDescendants(partId) {
+  if (!partId) return [];
   const out = [];
   const walk = id => {
-    const entry = structures.get(id);
-    if (!entry) return;
     out.push(id);
+    const entry = structures.get(id);
+    if (!entry || !entry.childIds) return;
     entry.childIds.forEach(walk);
   };
   walk(partId);

@@ -2,7 +2,7 @@
 import { state, setSelectedPart, subscribe, getSystemParts, getStructureInfo, setLanguage, translate, pushUndo } from '../state/store.js';
 import { getMeshRegistry, loadModel, unloadSystem } from '../viewer/loadModel.js';
 import { SYSTEM_IDS } from '../data/anatomy.js';
-import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState, ghostAllExcept, clearGhost, showcaseWholeSystem } from '../viewer/visibility.js';
+import { hideSystem, showSystem, hidePart, showPart, isolatePart, setPartTransparency, restoreAllParts, getSystemVisibilityState, ghostAllExcept, clearGhost, showcaseWholeSystem, peelAnteriorObstacles } from '../viewer/visibility.js';
 import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
 import { selectPartById, resolveAnatomicalAlias, deselectPart, undoLastDissect, executeUndo, executeRedo } from '../viewer/selection.js';
 import { hideCallout } from './callout.js';
@@ -944,6 +944,14 @@ export function initFooterActions(viewer) {
       // Toggle OFF: un-isolate and restore
       restoreAllParts();
       btn?.classList.remove('active');
+      const miniIso = document.getElementById('btnMiniIsolate');
+      if (miniIso) {
+        miniIso.classList.remove('active');
+        const l = miniIso.querySelector('.mini-btn-label');
+        const i = miniIso.querySelector('.mini-btn-icon');
+        if (l) l.textContent = 'Cô lập';
+        if (i) i.textContent = '⚡';
+      }
       viewer?.render();
       showToast('Đã tắt cô lập - Khôi phục toàn bộ giải phẫu');
     } else {
@@ -955,6 +963,14 @@ export function initFooterActions(viewer) {
         });
         isolateSelected();
         btn?.classList.add('active');
+        const miniIso = document.getElementById('btnMiniIsolate');
+        if (miniIso) {
+          miniIso.classList.add('active');
+          const l = miniIso.querySelector('.mini-btn-label');
+          const i = miniIso.querySelector('.mini-btn-icon');
+          if (l) l.textContent = 'Bỏ cô lập';
+          if (i) i.textContent = '✓';
+        }
         viewer?.render();
         showToast('Đã cô lập bộ phận này (Nhấn lại để tắt cô lập)');
       }
@@ -2380,9 +2396,26 @@ function onSelectionChange(part) {
 
     updateBookmarkButton(part.id);
     updateFooterButtons(part);
-    document.getElementById('cardIsolateBtn')?.classList.toggle('active', !!(part && state.isolatedPart === part.id));
+    const isIso = !!(part && state.isolatedPart === part.id);
+    document.getElementById('cardIsolateBtn')?.classList.toggle('active', isIso);
+    const miniIso = document.getElementById('btnMiniIsolate');
+    if (miniIso) {
+      miniIso.classList.toggle('active', isIso);
+      const l = miniIso.querySelector('.mini-btn-label');
+      const i = miniIso.querySelector('.mini-btn-icon');
+      if (l) l.textContent = isIso ? 'Bỏ cô lập' : 'Cô lập';
+      if (i) i.textContent = isIso ? '✓' : '⚡';
+    }
   } else {
     document.getElementById('cardIsolateBtn')?.classList.remove('active');
+    const miniIso = document.getElementById('btnMiniIsolate');
+    if (miniIso) {
+      miniIso.classList.remove('active');
+      const l = miniIso.querySelector('.mini-btn-label');
+      const i = miniIso.querySelector('.mini-btn-icon');
+      if (l) l.textContent = 'Cô lập';
+      if (i) i.textContent = '⚡';
+    }
     if (card) card.classList.add('hidden');
     document.getElementById('footerBar')?.style.setProperty('display', 'none');
   }
@@ -2427,6 +2460,7 @@ export function syncSidebarPartStates(partStates = state.partStates) {
 }
 
 function onPartStatesChange(partStates) {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   // CRITICAL MOBILE PERFORMANCE OPTIMIZATION:
   // If sidebar is off-screen (drawer closed on mobile/tablet or hidden), DO NOT run
   // thousands of DOM queries! Just mark dirty and sync when opened.

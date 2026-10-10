@@ -3523,6 +3523,99 @@ body.theme-dark .mini-desc {
   display: none !important;
 }
 
+/* 1-Tap Mobile Ergonomic Actions (Step 4 standard) */
+.mini-btn-quick-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  height: 24px !important;
+  padding: 0 7px !important;
+  border-radius: 12px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease !important;
+  line-height: 1 !important;
+}
+
+.mini-btn-quick-action .mini-btn-icon {
+  font-size: 11px !important;
+  line-height: 1 !important;
+}
+
+.mini-btn-quick-action .mini-btn-label {
+  font-size: 10.5px !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Cô lập (Isolate) Button */
+.mini-btn-isolate {
+  background: rgba(14, 165, 233, 0.12) !important;
+  color: #0284c7 !important;
+  border: 1px solid rgba(14, 165, 233, 0.3) !important;
+}
+
+.mini-btn-isolate:hover {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+}
+
+.mini-btn-isolate.active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  box-shadow: 0 0 8px rgba(5, 150, 105, 0.35) !important;
+}
+
+[data-theme="dark"] .mini-btn-isolate,
+body.theme-dark .mini-btn-isolate {
+  background: rgba(14, 165, 233, 0.18) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(14, 165, 233, 0.35) !important;
+}
+
+[data-theme="dark"] .mini-btn-isolate:hover,
+body.theme-dark .mini-btn-isolate:hover {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .mini-btn-isolate.active,
+body.theme-dark .mini-btn-isolate.active {
+  background: #10b981 !important;
+  color: #0f172a !important;
+  border-color: #10b981 !important;
+}
+
+/* Ẩn vật cản (Hide) Button */
+.mini-btn-hide {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(239, 68, 68, 0.28) !important;
+}
+
+.mini-btn-hide:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+  border-color: #dc2626 !important;
+}
+
+[data-theme="dark"] .mini-btn-hide,
+body.theme-dark .mini-btn-hide {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.32) !important;
+}
+
+[data-theme="dark"] .mini-btn-hide:hover,
+body.theme-dark .mini-btn-hide:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
 .mini-btn-speaker {
   display: flex !important;
   align-items: center !important;

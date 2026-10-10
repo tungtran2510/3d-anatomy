@@ -1,6 +1,6 @@
 // Visibility Management - Hide, isolate, transparency, restore
 import * as THREE from 'three';
-import { state, setHiddenParts, setTransparentParts, setIsolatedPart, getPartState, setPartState, batchPartStates, notify, setSelectedPart } from '../state/store.js';
+import { state, setHiddenParts, setTransparentParts, setIsolatedPart, getPartState, setPartState, batchPartStates, notify, setSelectedPart, pushUndo } from '../state/store.js';
 import { getMeshRegistry, getMeshesBySystem, ownMeshesOf, withDescendants, loadModel } from './loadModel.js';
 import { updateBodyEnvelopeAuto } from './bodyEnvelope.js';
 import { SYSTEM_PROFILES, matchSystemProfile } from '../data/systemProfiles.js';
@@ -209,7 +209,7 @@ export function setPartTransparency(partId, opacity) {
   notify('partTransparencyChanged', { partId, opacity });
 }
 
-export function isolatePart(partId) {
+export function isolatePart(partId, viewer = null) {
   if (!getMeshRegistry().has(partId)) return;
 
   const keep = new Set(withDescendants(partId));
@@ -320,6 +320,18 @@ export function isolatePart(partId) {
 
   setIsolatedPart(partId);
   notify('partIsolated', partId);
+
+  // Focus & Frame camera smoothly on the isolated unit
+  const activeViewer = viewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
+  if (activeViewer) {
+    import('./camera.js').then(({ focusOnMesh }) => {
+      const meshes = ownMeshesOf(partId);
+      if (meshes.length > 0) {
+        focusOnMesh(meshes[0], activeViewer, true, 2.2);
+        activeViewer.render();
+      }
+    }).catch(() => {});
+  }
 }
 
 export function restoreAllParts() {
@@ -343,6 +355,87 @@ export function restoreAllParts() {
 
   notify('allPartsRestored', true);
   updateBodyEnvelopeAuto(state.viewer);
+}
+
+/**
+ * Automatically peels / hides anterior obscuring structures (ribs, sternum, pectoralis, abdominal wall)
+ * in front of a deep selected structure (Heart, Lungs, Stomach, Liver, Sciatic nerve...)
+ * to provide an unobstructed 1-touch view on mobile.
+ */
+export function peelAnteriorObstacles(targetPartId, viewer) {
+  const activeViewer = viewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
+  const partId = targetPartId || (state.selectedPart ? state.selectedPart.id : null);
+  if (!partId) return false;
+
+  const lower = String(partId).toLowerCase();
+  const obstaclesToHide = new Set();
+
+  // 1. Thoracic & Cardiac organs (Heart, Lungs, Great vessels) -> Peels Sternum, Costal cartilages, Anterior ribs, Pectoralis muscles
+  if (
+    lower.includes('heart') || lower.includes('tim') || lower.includes('ventricle') || lower.includes('atrium') ||
+    lower.includes('coronary') || lower.includes('lung') || lower.includes('phổi') || lower.includes('trachea') ||
+    lower.includes('aorta') || lower.includes('pulmonary') || lower.includes('esophagus')
+  ) {
+    ['Body of sternum', 'Manubrium of sternum', 'Xiphoid process', 'First rib.l', 'First rib.r'].forEach(id => obstaclesToHide.add(id));
+    getMeshRegistry().forEach((node, id) => {
+      const idLow = id.toLowerCase();
+      if ((idLow.includes('rib') && !idLow.includes('t11') && !idLow.includes('t12')) || idLow.includes('costal cartilage') || idLow.includes('sternum') || idLow.includes('pectoralis')) {
+        obstaclesToHide.add(id);
+      }
+    });
+  }
+  // 2. Abdominal organs (Stomach, Liver, Gallbladder, Pancreas, Intestines) -> Peels Rectus abdominis & anterior rib margin
+  else if (
+    lower.includes('stomach') || lower.includes('dạ dày') || lower.includes('liver') || lower.includes('gan') ||
+    lower.includes('gallbladder') || lower.includes('túi mật') || lower.includes('pancreas') || lower.includes('tụy') ||
+    lower.includes('duodenum') || lower.includes('colon') || lower.includes('ruột') || lower.includes('appendix')
+  ) {
+    getMeshRegistry().forEach((node, id) => {
+      const idLow = id.toLowerCase();
+      if (idLow.includes('rectus abdominis') || idLow.includes('external oblique') || idLow.includes('internal oblique') || idLow.includes('transversus abdominis') || idLow.includes('pyramidalis') || idLow.includes('rectus sheath')) {
+        obstaclesToHide.add(id);
+      }
+    });
+  }
+  // 3. Posterior Pelvis & Sciatic nerve -> Peels Gluteus maximus & medius
+  else if (lower.includes('sciatic') || lower.includes('tọa') || lower.includes('piriformis')) {
+    getMeshRegistry().forEach((node, id) => {
+      const idLow = id.toLowerCase();
+      if (idLow.includes('gluteus maximus') || idLow.includes('gluteus medius')) {
+        obstaclesToHide.add(id);
+      }
+    });
+  }
+  // 4. Knee joint (ACL, PCL, Meniscus) -> Peels Patella & Patellar ligament & Quadriceps tendon
+  else if (lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('sụn chêm') || lower.includes('dây chằng chéo')) {
+    const isLeft = lower.includes('.l') || lower.includes('left');
+    const side = isLeft ? '.l' : '.r';
+    obstaclesToHide.add(`Patella${side}`);
+    obstaclesToHide.add(`Patellar ligament${side}`);
+    obstaclesToHide.add(`Quadriceps femoris${side}`);
+  }
+
+  if (obstaclesToHide.size === 0) {
+    return false;
+  }
+
+  batchPartStates(() => {
+    obstaclesToHide.forEach(id => {
+      setStructureVisible(id, false);
+    });
+  });
+
+  pushUndo({
+    type: 'peel_obstacles',
+    targetPartId: partId,
+    peeledIds: Array.from(obstaclesToHide)
+  });
+
+  if (activeViewer && typeof activeViewer.render === 'function') {
+    activeViewer.render();
+  }
+
+  return true;
 }
 
 export function hideSystem(systemId) {
@@ -471,6 +564,18 @@ export function getAnatomicalCompanions(partId) {
     const level = partId.replace(/^nucleus[ _]pulposus[ _]/i, '');
     return [`Intervertebral disc ${level}`, `Intervertebral_disc_${level}`];
   }
+  // Vertebra & Functional Spinal Unit (Đốt sống & Đĩa đệm liền kề)
+  if (/^vertebra\s+[lcst]\d+/i.test(partId) || /^lumbar vertebra/i.test(partId) || /^cervical vertebra/i.test(partId) || /^thoracic vertebra/i.test(partId)) {
+    if (partId.includes('L4') || partId.includes('IV')) {
+      return ['Intervertebral disc L4-L5', 'Intervertebral_disc_L4-L5', 'Nucleus pulposus L4-L5', 'Intervertebral disc L3-L4', 'Vertebra L5', 'Lumbar vertebra L5', 'Vertebra L3', 'Lumbar vertebra L3'];
+    }
+    if (partId.includes('L5') || partId.includes('V')) {
+      return ['Intervertebral disc L5-S1', 'Intervertebral_disc_L5-S1', 'Nucleus pulposus L5-S1', 'Intervertebral disc L4-L5', 'Sacrum', 'Vertebra L4', 'Lumbar vertebra L4'];
+    }
+    if (partId.includes('L3') || partId.includes('III')) {
+      return ['Intervertebral disc L3-L4', 'Intervertebral disc L2-L3', 'Vertebra L4', 'Lumbar vertebra L4', 'Vertebra L2', 'Lumbar vertebra L2'];
+    }
+  }
   // Biliary system: Gallbladder is intimately bound to the biliary tree, liver fossa, and duodenum
   if (lower === 'gallbladder' || lower.includes('túi mật') || lower.includes('vesica biliaris')) {
     return ['Bile duct', 'Liver', 'Duodenum', 'Pancreas', 'Pancreatic duct', 'Proper hepatic artery', 'Common hepatic artery', 'Hepatic portal vein'];
@@ -523,6 +628,7 @@ export function getAnatomicalCompanions(partId) {
       'Left atrium',
       'Right atrium',
       'Ascending aorta',
+      'Aortic arch',
       'Thoracic aorta',
       'Pulmonary trunk',
       'Left pulmonary artery',
@@ -606,8 +712,8 @@ export function getAnatomicalCompanions(partId) {
       'Femur.r'
     ];
   }
-  // Knee complex: ACL, PCL, Meniscus must bring along opposing cruciate, menisci, and articular bone ends
-  if (lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('patellar ligament') || lower.includes('khớp gối')) {
+  // Knee complex: ACL, PCL, Meniscus, Patella & Patellar ligament
+  if (lower.includes('cruciate') || lower.includes('meniscus') || lower.includes('patellar') || lower.includes('patella') || lower.includes('khớp gối')) {
     const isLeft = lower.includes('.l') || lower.includes('left');
     const side = isLeft ? '.l' : '.r';
     return [
@@ -618,10 +724,12 @@ export function getAnatomicalCompanions(partId) {
       `Femur${side}`,
       `Tibia${side}`,
       `Patella${side}`,
+      `Patellar ligament${side}`,
       'Anterior cruciate ligament',
       'Posterior cruciate ligament',
       'Medial meniscus',
-      'Lateral meniscus'
+      'Lateral meniscus',
+      'Patella.l', 'Patella.r'
     ];
   }
   // Gastrointestinal tract: Stomach brings Duodenum, Oesophagus, Lesser Omentum, Liver, Pancreas and Gastric Vessels
@@ -1722,4 +1830,6 @@ if (typeof window !== 'undefined') {
   window.updatePathologyStageVisuals = updatePathologyStageVisuals;
   window.startPathologyPulse = startPathologyPulse;
   window.stopPathologyPulse = stopPathologyPulse;
+  window.isolatePart = isolatePart;
+  window.peelAnteriorObstacles = peelAnteriorObstacles;
 }

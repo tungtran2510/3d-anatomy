@@ -1111,6 +1111,16 @@ export function executeUndo(viewer = state.viewer) {
     return `Đã hoàn tác: Khôi phục ${name}`;
   }
 
+  // 2b. Handle peel anterior obstacles action
+  if (action.type === 'peel_obstacles') {
+    (action.peeledIds || []).forEach(id => {
+      showPart(id);
+    });
+    pushRedo(action);
+    targetViewer?.render();
+    return `Đã hoàn tác: Khôi phục ${action.peeledIds?.length || 0} cấu trúc che chắn`;
+  }
+
   // 3. Handle isolate action
   if (action.type === 'isolate') {
     pushRedo({
@@ -1125,6 +1135,15 @@ export function executeUndo(viewer = state.viewer) {
     const isolateBtn = document.getElementById('cardIsolateBtn');
     if (isolateBtn) {
       isolateBtn.classList.toggle('active', !!action.prevIsolated);
+    }
+    const miniIso = document.getElementById('btnMiniIsolate');
+    if (miniIso) {
+      const isIso = !!action.prevIsolated;
+      miniIso.classList.toggle('active', isIso);
+      const l = miniIso.querySelector('.mini-btn-label');
+      const i = miniIso.querySelector('.mini-btn-icon');
+      if (l) l.textContent = isIso ? 'Bỏ cô lập' : 'Cô lập';
+      if (i) i.textContent = isIso ? '✓' : '⚡';
     }
     targetViewer?.render();
     return 'Đã hoàn tác: Khôi phục giải phẫu';
@@ -1191,6 +1210,16 @@ export function executeRedo(viewer = state.viewer) {
     return `Đã làm lại: Ẩn ${name}`;
   }
 
+  // 1b. Redo peel anterior obstacles
+  if (action.type === 'peel_obstacles') {
+    (action.peeledIds || []).forEach(id => {
+      hidePart(id);
+    });
+    pushUndo(action, true);
+    targetViewer?.render();
+    return 'Đã làm lại: Bóc cấu trúc che chắn';
+  }
+
   // 2. Redo isolate
   if (action.type === 'isolate') {
     pushUndo({
@@ -1202,6 +1231,14 @@ export function executeRedo(viewer = state.viewer) {
       isolatePart(action.partId);
       const isolateBtn = document.getElementById('cardIsolateBtn');
       if (isolateBtn) isolateBtn.classList.add('active');
+      const miniIso = document.getElementById('btnMiniIsolate');
+      if (miniIso) {
+        miniIso.classList.add('active');
+        const l = miniIso.querySelector('.mini-btn-label');
+        const i = miniIso.querySelector('.mini-btn-icon');
+        if (l) l.textContent = 'Bỏ cô lập';
+        if (i) i.textContent = '✓';
+      }
     }
     targetViewer?.render();
     return 'Đã làm lại: Cô lập bộ phận';
