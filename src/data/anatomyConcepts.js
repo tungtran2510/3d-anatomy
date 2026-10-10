@@ -801,6 +801,167 @@ export const ANATOMY_CONCEPTS = [
       url: 'https://www.youtube.com/embed/DLxYDoN634c',
       duration: '09:20'
     }
+  },
+
+  {
+    id: 'concept_rotator_cuff',
+    keywords: [
+      'chóp xoay', 'chop xoay', 'rách chóp xoay', 'rach chop xoay', 'rotator cuff',
+      'cơ trên gai', 'supraspinatus', 'viêm quanh khớp vai', 'dong cung vai', 'đông cứng vai',
+      'khớp vai', 'khop vai', 'đau khớp vai', 'dau khop vai'
+    ],
+    titleVi: 'Chóp Xoay Khớp Vai',
+    latin: 'Musculi rotatores humeri (TA2: 2130)',
+    subtitle: 'Bộ tứ gân cơ giữ vững và xoay linh hoạt khớp vai',
+    thumbnail: '/images/atlas/willis_anatomy.svg',
+    system: 'muscular',
+    primaryPartId: 'Supraspinatus muscle.r',
+    subunits: [
+      { label: '🔴 Gân cơ trên gai', partId: 'Supraspinatus muscle.r', note: 'Gân then chốt chịu lực dạng 0-15° và nâng tay' },
+      { label: '🔵 Gân cơ dưới gai', partId: 'Infraspinatus muscle.r', note: 'Xoay ngoài khớp vai dẻo dai' },
+      { label: '🟢 Gân cơ dưới vai', partId: 'Subscapularis muscle.r', note: 'Xoay trong và ép chỏm cánh tay vào ổ chảo' },
+      { label: '⚡ Gân cơ tròn bé', partId: 'Teres minor muscle.r', note: 'Trợ thủ đắc lực xoay ngoài và hạ chỏm cánh tay' }
+    ],
+    slides: [
+      {
+        id: 'rotator_cuff_anatomy',
+        title: 'Bộ Tứ Cơ',
+        badge: 'Cấu tạo giải phẫu',
+        image: '/images/atlas/willis_anatomy.svg',
+        caption: 'Cơ trên gai, dưới gai, dưới vai và tròn bé bọc quanh chỏm cánh tay.'
+      },
+      {
+        id: 'rotator_cuff_impingement',
+        title: 'Chèn Ép',
+        badge: 'Xung đột dưới mỏm cùng',
+        image: '/images/atlas/willis_anatomy.svg',
+        caption: 'Gân cơ trên gai bị cọ xát vào vòm mỏm cùng vai khi nâng tay.'
+      },
+      {
+        id: 'rotator_cuff_stages',
+        title: '4 Cấp Độ Rách',
+        badge: 'Tiến triển bệnh lý',
+        image: '/images/atlas/willis_anatomy.svg',
+        caption: 'Từ viêm gân mạn tính đến rách đứt hoàn toàn gây rơi thõng cánh tay.'
+      }
+    ],
+    simulator: {
+      title: '⚡ RÁCH CHÓP XOAY KHỚP VAI:',
+      ticks: ['Bình thường', 'Viêm gân', 'Rách bán phần', 'Rách đứt toác'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Bốn gân chóp xoay dày dặn, nâng tay mượt mà 180°.' },
+        { level: 'Cấp 1: Viêm gân cọ xát', desc: 'Sưng nề gân trên gai, đau buốt cung dạng cánh tay 60°-120°.' },
+        { level: 'Cấp 2: Rách bán phần', desc: 'Rách một phần bề mặt gân, đau nhức về đêm khi nằm tì đè lên vai.' },
+        { level: 'Cấp 3: Rách toác toàn phần', desc: 'Đứt toác gân hoàn toàn, rơi cánh tay tự do (Drop arm test +), teo lõm cơ trên gai.' }
+      ]
+    },
+    video: {
+      title: 'Bài Giảng 3D: Giải Phẫu Khớp Vai & Rách Chóp Xoay',
+      url: 'https://www.youtube.com/embed/P6bO6g8vL3E',
+      duration: '11:15'
+    }
+  },
+
+  {
+    id: 'concept_appendicitis',
+    keywords: [
+      'ruột thừa', 'ruot thua', 'viêm ruột thừa', 'viem ruot thua', 'appendix', 'appendicitis',
+      'đau ruột thừa', 'dau ruot thua', 'hố chậu phải', 'ho chau phai', 'mcburney'
+    ],
+    titleVi: 'Ruột Thừa & Viêm Ruột Thừa Cấp',
+    latin: 'Appendix vermiformis (TA2: 2980)',
+    subtitle: 'Túi cùng miễn dịch và biến chứng ngoại khoa cấp tính',
+    thumbnail: '/images/atlas/willis_anatomy.svg',
+    system: 'visceral',
+    primaryPartId: 'Vermiform appendix',
+    subunits: [
+      { label: '🔴 Gốc ruột thừa', partId: 'Vermiform appendix', note: 'Cắm vào đáy manh tràng nơi hội tụ 3 dải cơ dọc' },
+      { label: '⚠️ Điểm McBurney', partId: 'Vermiform appendix', note: '1/3 ngoài đường nối rốn và gai chậu trước trên' },
+      { label: '⚡ Động mạch ruột thừa', partId: 'Vermiform appendix', note: 'Nhánh tận của ĐM hồi đại tràng trong mạc treo ruột thừa' },
+      { label: '🛡️ Mô lympho niêm mạc', partId: 'Vermiform appendix', note: 'Kho dự trữ vi khuẩn có ích đường ruột' }
+    ],
+    slides: [
+      {
+        id: 'appendix_anatomy',
+        title: 'Vị Trí',
+        badge: 'Gốc manh tràng',
+        image: '/images/atlas/willis_anatomy.svg',
+        caption: 'Ruột thừa hình giun dài 6-9cm nằm tại hố chậu phải.'
+      },
+      {
+        id: 'appendicitis_pathology',
+        title: 'Cơ Chế Viêm',
+        badge: 'Tắc lòng ruột thừa',
+        image: '/images/atlas/willis_anatomy.svg',
+        caption: 'Sỏi phân bít tắc lòng ruột dẫn đến ứ mủ, thiếu máu hoại tử và vỡ.'
+      }
+    ],
+    simulator: {
+      title: '⚡ VIÊM RUỘT THỪA CẤP:',
+      ticks: ['Bình thường', 'Xung huyết', 'Mưng mủ', 'Vỡ thủng'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Lòng ruột thừa thông thoáng, mô bạch huyết miễn dịch khỏe mạnh.' },
+        { level: 'Cấp 1: Viêm xung huyết', desc: 'Tắc sỏi phân, đau âm ỉ quanh rốn chuyển dần xuống hố chậu phải.' },
+        { level: 'Cấp 2: Viêm mủ cấp', desc: 'Sưng to đỏ rực ứ mủ, đau chói điểm McBurney, sốt 38°C.' },
+        { level: 'Cấp 3: Hoại tử vỡ mủ', desc: 'Vỡ toác mủ vào phúc mạc, bụng cứng như gỗ, cấp cứu ngoại khoa khẩn.' }
+      ]
+    },
+    video: {
+      title: 'Hoạt Ảnh 3D: Cơ Chế Viêm Ruột Thừa Cấp & Phẫu Thuật Nội Soi',
+      url: 'https://www.youtube.com/embed/5kLw3p9X1Ys',
+      duration: '07:45'
+    }
+  },
+
+  {
+    id: 'concept_spinal_spondylosis',
+    keywords: [
+      'gai cột sống', 'gai cot song', 'thoái hóa cột sống', 'thoai hoa cot song', 'spondylosis',
+      'osteophyte', 'hẹp ống sống', 'hep ong song', 'hẹp lỗ liên hợp', 'l4-l5'
+    ],
+    titleVi: 'Gai Cột Sống & Thoái Hóa Đốt Sống',
+    latin: 'Spondylosis deformans (TA2: 1045)',
+    subtitle: 'Thoái hóa sụn khớp tạo chồi xương hẹp lỗ thần kinh',
+    thumbnail: '/images/atlas/disc_cross_section.svg',
+    system: 'skeletal',
+    primaryPartId: 'Vertebra L4',
+    subunits: [
+      { label: '🦴 Thân đốt sống', partId: 'Vertebra L4', note: 'Xẹp lún vi thể và xơ hóa màng xương' },
+      { label: '⚡ Gai xương rìa khớp', partId: 'Vertebra L4', note: 'Chồi xương mọc nhô ra mép thân đốt sống' },
+      { label: '⭕ Lỗ liên hợp hẹp', partId: 'Vertebra L4', note: 'Lỗ cho rễ thần kinh tủy sống chui ra bị bóp nghẽn' },
+      { label: '💧 Đĩa đệm mất nước', partId: 'Intervertebral disc L4-L5', note: 'Mất chiều cao đĩa đệm khiến các gai cọ xát' }
+    ],
+    slides: [
+      {
+        id: 'spondylosis_macro',
+        title: 'Cơ Chế Gai',
+        badge: 'Phản ứng chịu lực',
+        image: '/images/atlas/disc_cross_section.svg',
+        caption: 'Màng xương tăng sinh tạo mào xương để mở rộng diện tích chịu tải.'
+      },
+      {
+        id: 'spondylosis_stenosis',
+        title: 'Hẹp Lỗ Thần Kinh',
+        badge: 'Chèn ép rễ tủy',
+        image: '/images/atlas/disc_cross_section.svg',
+        caption: 'Gai xương mọc hướng vào trong lòng ống sống đè nghẽn rễ thần kinh.'
+      }
+    ],
+    simulator: {
+      title: '⚡ GAI CỘT SỐNG THOÁI HÓA:',
+      ticks: ['Bình thường', 'Thoái hóa nhẹ', 'Mọc gai xương', 'Hẹp lỗ thần kinh'],
+      stages: [
+        { level: 'Cấp 0: Bình thường', desc: 'Thân đốt sống nhẵn bóng, sụn khớp dày dặn đàn hồi tốt.' },
+        { level: 'Cấp 1: Thoái hóa nhẹ', desc: 'Đĩa đệm mất nước nhẹ, mỏi lưng khi ngồi làm việc lâu.' },
+        { level: 'Cấp 2: Mọc gai xương rõ', desc: 'Chồi xương mọc ở mép thân đốt, đau cứng lưng buổi sáng khi thức dậy.' },
+        { level: 'Cấp 3: Gai lớn chèn rễ', desc: 'Gai xương chèn ép rễ thần kinh tủy sống, biến dạng cột sống, đau buốt chi.' }
+      ]
+    },
+    video: {
+      title: 'Bài Giảng 3D: Thoái Hóa Cột Sống & Gai Xương',
+      url: 'https://www.youtube.com/embed/rDGqkMHPDqE',
+      duration: '08:50'
+    }
   }
 ];
 
@@ -1036,6 +1197,44 @@ export function getVisualDeckForPart(partId) {
     lower.includes('khớp háng')
   ) {
     return ANATOMY_CONCEPTS.find(c => c.id === 'concept_hip_osteoarthritis');
+  }
+
+  // 15. Rotator Cuff & Shoulder Impingement
+  if (
+    lower.includes('supraspinatus') ||
+    lower.includes('infraspinatus') ||
+    lower.includes('subscapularis') ||
+    lower.includes('teres minor') ||
+    lower.includes('rotator') ||
+    lower.includes('chóp xoay') ||
+    lower.includes('chop xoay') ||
+    lower.includes('cơ trên gai') ||
+    lower.includes('subacromial')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_rotator_cuff');
+  }
+
+  // 16. Vermiform Appendix & Appendicitis
+  if (
+    lower.includes('appendix') ||
+    lower.includes('vermiform') ||
+    lower.includes('ruột thừa') ||
+    lower.includes('ruot thua') ||
+    lower.includes('appendicit') ||
+    lower.includes('mcburney')
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_appendicitis');
+  }
+
+  // 17. Spinal Spondylosis & Osteophytes
+  if (
+    lower.includes('spondylosis') ||
+    lower.includes('gai cột sống') ||
+    lower.includes('gai cot song') ||
+    lower.includes('osteophyte') ||
+    (lower.includes('thoái hóa') && lower.includes('cột sống'))
+  ) {
+    return ANATOMY_CONCEPTS.find(c => c.id === 'concept_spinal_spondylosis');
   }
 
   return null;

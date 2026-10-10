@@ -1379,12 +1379,20 @@ function getPathologyForPart(partId, mainName, clinical) {
   if (Array.isArray(PATIENT_CASES)) {
     for (const c of PATIENT_CASES) {
       if (c.partId && str.includes(c.partId.toLowerCase())) return c;
+      if (c.id === 'acute_appendicitis' && /appendix|ruột thừa|ruot thua|hố chậu phải|mcburney/.test(str)) return c;
+      if (c.id === 'rotator_cuff_tear' && /supraspinatus|infraspinatus|subscapularis|teres minor|rotator|chóp xoay|chop xoay|cơ trên gai/.test(str)) return c;
+      if (c.id === 'frozen_shoulder' && /glenohumeral|capsule of shoulder|đông cứng vai|dong cung vai|viêm quanh khớp vai/.test(str)) return c;
+      if (c.id === 'knee_meniscus_tear' && /meniscus|sụn chêm|sun chem/.test(str)) return c;
+      if (c.id === 'knee_effusion' && /effusion|tràn dịch|tran dich|synovit/.test(str)) return c;
+      if (c.id === 'sciatica_nerve' && /sciatic|thần kinh tọa|than kinh toa|thần kinh ngồi|piriformis|cơ hình lê/.test(str)) return c;
+      if (c.id === 'coronary_artery_disease' && /coronary|động mạch vành|dong mach vanh|mạch vành|nhồi máu cơ tim/.test(str)) return c;
+      if (c.id === 'spinal_spondylosis' && /spondylosis|gai cột sống|gai cot song|thoái hóa đốt sống|osteophyte/.test(str)) return c;
       if (c.id === 'cervical_spondylosis' && /cervical|c1|c2|c3|c4|c5|c6|c7|đốt sống cổ|cột sống cổ|atlas|axis/.test(str)) return c;
-      if (c.id === 'gastric_ulcer' && /stomach|gaster|dạ dày|môn vị|tâm vị/.test(str)) return c;
+      if (c.id === 'gastric_ulcer' && /stomach|gaster|dạ dày|môn vị|tâm vị|tá tràng|duodenum/.test(str)) return c;
       if (c.id === 'cardiac_valve' && /ventricle|atrium|valve|aorta|pulmonar|tim|thất|nhĩ|van/.test(str)) return c;
       if (c.id === 'biliary_stones' && /gallbladder|liver|hepar|pancreas|túi mật|gan|tụy|ống mật/.test(str)) return c;
       if (c.id === 'disc_herniation' && (/lumbar|l1|l2|l3|l4|l5|thắt lưng|tọa/.test(str) || (/vertebra|disc|cột sống|đốt sống|đĩa đệm/.test(str) && !/cervical|c1|c2|c3|c4|c5|c6|c7|cổ|thoracic|t1|t2|t3|t4|t5|t6|t7|t8|t9|t10|t11|t12|ngực/.test(str)))) return c;
-      if (c.id === 'knee_acl' && /knee|cruciate|meniscus|patella|gối|chày|sụn chêm|chéo/.test(str)) return c;
+      if (c.id === 'knee_acl' && /knee|cruciate|patella|gối|chày|chéo/.test(str)) return c;
       if (c.id === 'kidney_stones' && /kidney|ren|ureter|thận|niệu quản/.test(str)) return c;
       if (c.id === 'willis_stroke' && /brain|cerebr|artery.*cerebr|willis|não|thần kinh sọ/.test(str)) return c;
       if (c.id === 'respiratory_copd' && /lung|pulmo|bronch|trachea|alveol|phổi|phế quản|khí quản/.test(str)) return c;
@@ -1556,6 +1564,10 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
         adviceEl.classList.add('hidden');
       }
     }
+
+    if (typeof window !== 'undefined' && typeof window.updatePathologyStageVisuals === 'function') {
+      window.updatePathologyStageVisuals(idx, part.id, viewer);
+    }
   }
 
   applyStage(0);
@@ -1577,6 +1589,30 @@ function renderPathologyProgressionSection(part, clinical, mainName, viewer) {
       showToast(`⚡ Bệnh lý Giai đoạn ${step}: ${pathology.stages[step]?.name || ''}`);
     };
   });
+
+  // Append-only 1-click Quick Action for 3D Pathology Showcase
+  const titleWrap = section.querySelector('.pathology-title-wrap');
+  let btn3DFocus = section.querySelector('#btnPathology3DFocus');
+  if (!btn3DFocus && titleWrap) {
+    btn3DFocus = document.createElement('button');
+    btn3DFocus.type = 'button';
+    btn3DFocus.id = 'btnPathology3DFocus';
+    btn3DFocus.className = 'pathology-3d-quick-btn';
+    btn3DFocus.title = 'Kích hoạt mô phỏng 3D tiêu điểm ca bệnh này';
+    btn3DFocus.innerHTML = '<span>⚡ Xem 3D</span>';
+    btn3DFocus.style.cssText = 'display:inline-flex;align-items:center;gap:4px;padding:3px 8px;font-size:11px;font-weight:600;color:#0ea5e9;background:rgba(14,165,233,0.12);border:1px solid rgba(14,165,233,0.3);border-radius:12px;cursor:pointer;margin-top:4px;transition:all 0.2s ease;';
+    btn3DFocus.onmouseover = () => { btn3DFocus.style.background = 'rgba(14,165,233,0.22)'; };
+    btn3DFocus.onmouseout = () => { btn3DFocus.style.background = 'rgba(14,165,233,0.12)'; };
+    titleWrap.appendChild(btn3DFocus);
+  }
+  if (btn3DFocus) {
+    btn3DFocus.onclick = (e) => {
+      e.stopPropagation();
+      if (typeof window !== 'undefined' && typeof window.showcasePathology === 'function') {
+        window.showcasePathology(pathology.id, viewer);
+      }
+    };
+  }
 }
 
 function generate15SecVoiceSummary(part, clinical, pathology) {

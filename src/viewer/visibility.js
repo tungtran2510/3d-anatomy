@@ -450,6 +450,7 @@ export function getSystemVisibilityState(systemId) {
 // Restoring is now "point back at the shared material" rather than copying a
 // dozen properties back one by one.
 export function restoreMaterial(partId) {
+  stopPathologyPulse();
   ghostedIds?.delete(partId);
   ownMeshesOf(partId).forEach(mesh => releaseMaterial(mesh, partId));
 }
@@ -827,6 +828,7 @@ export function ghostAllExcept(partId) {
 }
 
 export function clearGhost() {
+  stopPathologyPulse();
   if (!ghostedIds) return;
 
   const wasGhosted = [...ghostedIds];
@@ -1216,4 +1218,508 @@ export async function showcaseWholeSystem(systemId, viewer, options = {}) {
 
 if (typeof window !== 'undefined') {
   window.showcaseWholeSystem = showcaseWholeSystem;
+}
+
+// =========================================================================
+// HIGH-YIELD CLINICAL PATHOLOGY SHOWCASE ENGINE (STEP 3)
+// =========================================================================
+
+export const PATHOLOGY_PROFILES = {
+  'disc_herniation': {
+    id: 'disc_herniation',
+    title: 'Thoát vị đĩa đệm cột sống L4-L5',
+    category: 'Cột sống & Đĩa đệm',
+    partId: 'Intervertebral disc L4-L5',
+    targetMesh: 'Intervertebral disc L4-L5',
+    requiredSystems: ['skeletal', 'joints', 'nervous'],
+    emissiveColor: 0xef4444, // Fire Red
+    emissiveIntensity: 0.95,
+    speech15s: 'Thoát vị đĩa đệm L4-L5: Nhân nhầy thoát vị chèn ép rễ thần kinh tọa L5 gây đau buốt dọc từ thắt lưng xuống chân.',
+    keywords: [
+      'thoát vị đĩa đệm', 'thoat vi dia dem', 'thoát vị l4 l5', 'thoat vi l4 l5',
+      'thoát vị l5 s1', 'thoat vi l5 s1', 'thoát vị cột sống', 'thoat vi cot song',
+      'thoát vị', 'thoat vi', 'chèn rễ l5', 'l4-l5'
+    ]
+  },
+  'spinal_spondylosis': {
+    id: 'spinal_spondylosis',
+    title: 'Gai cột sống & Thoái hóa đốt sống',
+    category: 'Cột sống & Đĩa đệm',
+    partId: 'Vertebra L4',
+    targetMesh: 'Vertebra L4',
+    requiredSystems: ['skeletal', 'joints'],
+    emissiveColor: 0xf59e0b, // Degenerative Gold
+    emissiveIntensity: 0.90,
+    speech15s: 'Gai cột sống hình thành do đĩa đệm xẹp thoái hóa, cơ thể tăng sinh màng xương tạo mấu gai rìa thân đốt sống, có thể chèn ép rễ thần kinh.',
+    keywords: [
+      'gai cột sống', 'gai cot song', 'thoái hóa cột sống', 'thoai hoa cot song',
+      'thoái hóa đốt sống', 'thoai hoa dot song', 'gai xương', 'gai xuong',
+      'chồi xương', 'choi xuong', 'spondylosis'
+    ]
+  },
+  'knee_acl': {
+    id: 'knee_acl',
+    title: 'Đứt dây chằng chéo trước (ACL)',
+    category: 'Khớp gối & Vận động',
+    partId: 'Anterior cruciate ligament.r',
+    targetMesh: 'Anterior cruciate ligament.r',
+    requiredSystems: ['skeletal', 'joints'],
+    emissiveColor: 0xef4444, // Acute Tear Red
+    emissiveIntensity: 0.95,
+    speech15s: 'Đứt dây chằng chéo trước ACL làm mất điểm tựa giữ mâm chày, khiến khớp gối bị lỏng lẻo khi đi cầu thang và dễ tổn thương sụn chêm.',
+    keywords: [
+      'đứt dây chằng chéo trước', 'dut day chang cheo truoc', 'đứt dây chằng chéo',
+      'dut day chang cheo', 'đứt acl', 'dut acl', 'giãn dây chằng chéo',
+      'gian day chang cheo', 'chấn thương acl', 'đứt dây chằng gối'
+    ]
+  },
+  'knee_meniscus_tear': {
+    id: 'knee_meniscus_tear',
+    title: 'Rách sụn chêm khớp gối (Meniscus Tear)',
+    category: 'Khớp gối & Vận động',
+    partId: 'Lateral meniscus.r',
+    targetMesh: 'Lateral meniscus.r',
+    requiredSystems: ['skeletal', 'joints'],
+    emissiveColor: 0xf97316, // Vivid Orange Tear
+    emissiveIntensity: 0.95,
+    speech15s: 'Rách sụn chêm khớp gối xảy ra khi gối chịu lực xoắn vặn đột ngột, mảnh sụn rách kẹt vào khe khớp gây hiện tượng kẹt khớp và sưng đau.',
+    keywords: [
+      'rách sụn chêm', 'rach sun chem', 'sụn chêm rách', 'sun chem rach',
+      'rách sụn chêm ngoài', 'rách sụn chêm trong', 'kẹt khớp gối', 'ket khop goi', 'meniscus tear'
+    ]
+  },
+  'knee_effusion': {
+    id: 'knee_effusion',
+    title: 'Tràn dịch khớp gối & Viêm bao hoạt dịch',
+    category: 'Khớp gối & Vận động',
+    partId: 'Patella.r',
+    targetMesh: 'Patella.r',
+    requiredSystems: ['skeletal', 'joints'],
+    emissiveColor: 0x06b6d4, // Cyan Hydration / Effusion
+    emissiveIntensity: 0.85,
+    opacity: 0.65,
+    speech15s: 'Tràn dịch khớp gối do màng hoạt dịch bị viêm kích thích tăng tiết lượng lớn dịch nhờn vào ổ khớp, làm đầu gối sưng phù bập bềnh xương bánh chè.',
+    keywords: [
+      'tràn dịch khớp gối', 'tran dich khop goi', 'tràn dịch gối', 'tran dich goi',
+      'sưng khớp gối', 'sung khop goi', 'viêm bao hoạt dịch', 'viem bao hoat dich',
+      'bập bềnh bánh chè', 'dịch khớp gối'
+    ]
+  },
+  'rotator_cuff_tear': {
+    id: 'rotator_cuff_tear',
+    title: 'Rách gân chóp xoay vai (Rotator Cuff Tear)',
+    category: 'Khớp vai',
+    partId: 'Supraspinatus muscle.r',
+    targetMesh: 'Supraspinatus muscle.r',
+    requiredSystems: ['skeletal', 'muscular'],
+    emissiveColor: 0xef4444, // Red Tear
+    emissiveIntensity: 0.95,
+    speech15s: 'Rách gân chóp xoay vai thường gặp ở gân cơ trên gai bị cọ xát dưới mỏm cùng vai, gây đau buốt dữ dội khi nhấc tay qua đầu và yếu lực dạng vai.',
+    keywords: [
+      'rách chóp xoay', 'rach chop xoay', 'rách gân chóp xoay', 'chóp xoay vai',
+      'chop xoay vai', 'đứt gân chóp xoay', 'rách gân cơ trên gai', 'cơ trên gai',
+      'viêm gân chóp xoay', 'rotator cuff tear', 'rotator cuff'
+    ]
+  },
+  'frozen_shoulder': {
+    id: 'frozen_shoulder',
+    title: 'Viêm quanh khớp vai (Đông cứng khớp vai)',
+    category: 'Khớp vai',
+    partId: 'Articular capsule of glenohumeral joint.r',
+    targetMesh: 'Articular capsule of glenohumeral joint.r',
+    requiredSystems: ['skeletal', 'joints', 'muscular'],
+    emissiveColor: 0x38bdf8, // Ice Sky Blue
+    emissiveIntensity: 0.90,
+    speech15s: 'Viêm quanh khớp vai thể đông cứng khiến bao khớp vai bị viêm dày dính co rút, làm mất hoàn toàn biên độ vận động quay và nâng của khớp vai.',
+    keywords: [
+      'viêm quanh khớp vai', 'viem quanh khop vai', 'đông cứng vai', 'dong cung vai',
+      'đông cứng khớp vai', 'dong cung khop vai', 'vai đông cứng', 'bao khớp vai',
+      'dính bao khớp vai', 'frozen shoulder'
+    ]
+  },
+  'sciatica_nerve': {
+    id: 'sciatica_nerve',
+    title: 'Chèn ép dây thần kinh tọa (Sciatica)',
+    category: 'Thần kinh',
+    partId: 'Sciatic nerve.r',
+    targetMesh: 'Sciatic nerve.r',
+    requiredSystems: ['skeletal', 'nervous', 'muscular'],
+    emissiveColor: 0xf59e0b, // Electric Amber
+    emissiveIntensity: 0.95,
+    speech15s: 'Chèn ép dây thần kinh tọa do thoát vị đĩa đệm hoặc co thắt cơ hình lê ở mông, gây cơn đau nhói như điện giật phóng dọc từ mông xuống gót chân.',
+    keywords: [
+      'chèn ép thần kinh tọa', 'chen ep than kinh toa', 'đau thần kinh tọa',
+      'dau than kinh toa', 'đau dây thần kinh tọa', 'hội chứng cơ hình lê',
+      'chèn ép rễ tọa', 'sciatica'
+    ]
+  },
+  'carpal_tunnel': {
+    id: 'carpal_tunnel',
+    title: 'Hội chứng ống cổ tay (CTS)',
+    category: 'Thần kinh',
+    partId: 'Median nerve.r',
+    targetMesh: 'Median nerve.r',
+    requiredSystems: ['skeletal', 'nervous'],
+    emissiveColor: 0xf59e0b, // Electric Amber
+    emissiveIntensity: 0.95,
+    speech15s: 'Hội chứng ống cổ tay xảy ra khi dây thần kinh giữa bị chèn ép trong đường hầm cổ tay hẹp, gây tê buốt các ngón cái, trỏ, giữa và teo hõm cơ mô cái.',
+    keywords: [
+      'hội chứng ống cổ tay', 'hoi chung ong co tay', 'tê tay ống cổ tay',
+      'chèn ép thần kinh giữa', 'hẹp ống cổ tay', 'cts', 'carpal tunnel'
+    ]
+  },
+  'coronary_artery_disease': {
+    id: 'coronary_artery_disease',
+    title: 'Hẹp xơ vữa động mạch vành & Thiếu máu cơ tim',
+    category: 'Tim mạch & Tiêu hóa',
+    partId: 'Left coronary artery',
+    targetMesh: 'Left coronary artery',
+    requiredSystems: ['skeletal', 'cardiovascular'],
+    emissiveColor: 0xef4444, // Stenosis Red
+    emissiveIntensity: 0.95,
+    speech15s: 'Hẹp xơ vữa động mạch vành làm giảm lưu lượng máu nuôi cơ tim, gây cơn đau thắt ngực đè nặng khi gắng sức và nguy cơ nhồi máu cơ tim cấp tử vong.',
+    keywords: [
+      'hẹp động mạch vành', 'hep dong mach vanh', 'tắc động mạch vành',
+      'xơ vữa động mạch vành', 'nhồi máu cơ tim', 'nhoi mau co tim',
+      'thiếu máu cơ tim', 'đau thắt ngực', 'mạch vành tắc hẹp'
+    ]
+  },
+  'acute_appendicitis': {
+    id: 'acute_appendicitis',
+    title: 'Viêm ruột thừa cấp & Biến chứng vỡ mủ',
+    category: 'Tim mạch & Tiêu hóa',
+    partId: 'Vermiform appendix',
+    targetMesh: 'Vermiform appendix',
+    requiredSystems: ['skeletal', 'visceral'],
+    emissiveColor: 0xef4444, // Acute Inflamed Red
+    emissiveIntensity: 0.95,
+    speech15s: 'Viêm ruột thừa cấp xuất phát từ tắc nghẽn lòng ruột thừa do sỏi phân, vi khuẩn sinh sôi gây sưng to ứ mủ và đau nhói dữ dội tại hố chậu phải điểm McBurney.',
+    keywords: [
+      'viêm ruột thừa', 'viem ruot thua', 'viêm ruột thừa cấp', 'viem ruot thua cap',
+      'ruột thừa cấp', 'ruot thua cap', 'đau ruột thừa', 'dau ruot thua', 'mcburney'
+    ]
+  },
+  'gastric_ulcer': {
+    id: 'gastric_ulcer',
+    title: 'Viêm loét dạ dày - tá tràng & Vi khuẩn HP',
+    category: 'Tim mạch & Tiêu hóa',
+    partId: 'Stomach',
+    targetMesh: 'Stomach',
+    requiredSystems: ['skeletal', 'visceral'],
+    emissiveColor: 0xf43f5e, // Gastric Mucosa Rose Red
+    emissiveIntensity: 0.85,
+    speech15s: 'Viêm loét dạ dày tá tràng do mất cân bằng giữa axit dịch vị và lớp nhầy bảo vệ niêm mạc, vi khuẩn HP ăn mòn thành dạ dày gây đau rát cồn cào thượng vị.',
+    keywords: [
+      'viêm loét dạ dày', 'viem loet da day', 'loét dạ dày', 'loet da day',
+      'loét dạ dày tá tràng', 'loet da day ta trang', 'dạ dày tá tràng',
+      'thủng dạ dày', 'vi khuẩn hp', 'h.pylori'
+    ]
+  },
+  'gerd_reflux': {
+    id: 'gerd_reflux',
+    title: 'Trào ngược dạ dày thực quản (GERD) & Bỏng rát niêm mạc',
+    category: 'Tim mạch & Tiêu hóa',
+    partId: 'Esophagus',
+    targetMesh: 'Esophagus',
+    requiredSystems: ['skeletal', 'visceral'],
+    emissiveColor: 0xf97316, // Acid Burn Orange
+    emissiveIntensity: 0.95,
+    speech15s: 'Trào ngược dạ dày thực quản xảy ra khi cơ thắt thực quản dưới đóng không kín, axit dịch vị trào ngược gây bỏng rát sau xương ức, ợ chua và viêm loét niêm mạc thực quản.',
+    keywords: [
+      'trào ngược dạ dày', 'trao nguoc da day', 'gerd', 'trào ngược thực quản',
+      'ợ chua', 'viêm thực quản trào ngược', 'trao nguoc thuc quan'
+    ]
+  },
+  'kidney_stones': {
+    id: 'kidney_stones',
+    title: 'Sỏi thận - niệu quản & Cơn đau quặn thận',
+    category: 'Tiết niệu & Tiêu hóa',
+    partId: 'Kidney.r',
+    targetMesh: 'Kidney.r',
+    requiredSystems: ['skeletal', 'visceral'],
+    emissiveColor: 0xf59e0b, // Colic Amber
+    emissiveIntensity: 0.95,
+    speech15s: 'Sỏi thận kết tinh từ lắng đọng khoáng chất, khi sỏi di chuyển kẹt tại đoạn hẹp niệu quản gây ứ nước bể thận và bùng phát cơn đau quặn thận dữ dội lan xuống bẹn.',
+    keywords: [
+      'sỏi thận', 'soi than', 'sỏi niệu quản', 'soi nieu quan',
+      'cơn đau quặn thận', 'đau sỏi thận', 'ứ nước thận'
+    ]
+  },
+  'patellar_tendinitis': {
+    id: 'patellar_tendinitis',
+    title: 'Viêm gân bánh chè (Jumper’s Knee) & Khớp gối',
+    category: 'Khớp gối & Vận động',
+    partId: 'Patella.r',
+    targetMesh: 'Patella.r',
+    requiredSystems: ['skeletal', 'muscular'],
+    emissiveColor: 0xef4444, // Tendon Inflammation Red
+    emissiveIntensity: 0.95,
+    speech15s: 'Viêm gân bánh chè do quá tải lặp đi lặp lại từ các động tác nhảy hoặc chạy dốc, làm rách vi thể sợi collagen gân bánh chè, gây sưng đau nhói ngay dưới xương bánh chè.',
+    keywords: [
+      'viêm gân bánh chè', 'viem gan banh che', 'gân bánh chè',
+      'jumper knee', 'đau gân bánh chè'
+    ]
+  }
+};
+
+/**
+ * Match a user query or caseId against the high-yield clinical pathology profiles
+ */
+export function matchPathologyProfile(query) {
+  if (!query) return null;
+  const q = String(query).toLowerCase().trim();
+
+  // 1. Direct ID match
+  if (PATHOLOGY_PROFILES[q]) return PATHOLOGY_PROFILES[q];
+
+  // 2. Keyword exact / inclusion match (longest keywords first)
+  const profiles = Object.values(PATHOLOGY_PROFILES);
+  for (const p of profiles) {
+    const sortedKeywords = [...p.keywords].sort((a, b) => b.length - a.length);
+    for (const kw of sortedKeywords) {
+      if (q === kw || q.includes(kw)) {
+        return p;
+      }
+    }
+  }
+
+  // 3. Match by partId
+  for (const p of profiles) {
+    if (p.partId.toLowerCase() === q || q.includes(p.partId.toLowerCase())) {
+      return p;
+    }
+  }
+
+  return null;
+}
+
+// Dynamic 3D Pathology Lesion Pulse Engine (60fps smooth breathing glow)
+let activePathologyPulseId = null;
+
+export function stopPathologyPulse() {
+  if (activePathologyPulseId) {
+    cancelAnimationFrame(activePathologyPulseId);
+    activePathologyPulseId = null;
+  }
+}
+
+export function startPathologyPulse(targetMeshes, baseColorHex, baseIntensity = 1.0, activeViewer = null) {
+  stopPathologyPulse();
+  if (!targetMeshes || targetMeshes.length === 0) return;
+  const v = activeViewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
+  const color = new THREE.Color(baseColorHex);
+  const startTime = performance.now();
+
+  function pulseFrame(now) {
+    const elapsedSec = (now - startTime) / 1000;
+    // Breathing frequency 1.25Hz: wave from 0.70 to 1.35
+    const wave = 0.70 + 0.65 * (0.5 + 0.5 * Math.sin(elapsedSec * Math.PI * 2.5));
+    const currentIntensity = baseIntensity * wave;
+
+    targetMeshes.forEach(mesh => {
+      if (!mesh || !mesh.visible) return;
+      ownMaterials(mesh).forEach(mat => {
+        if (mat.emissive) {
+          mat.emissive.copy(color);
+          mat.emissiveIntensity = currentIntensity;
+        }
+      });
+    });
+
+    if (v && typeof v.render === 'function') {
+      v.render();
+    }
+    activePathologyPulseId = requestAnimationFrame(pulseFrame);
+  }
+
+  activePathologyPulseId = requestAnimationFrame(pulseFrame);
+}
+
+/**
+ * Dynamically synchronizes the 4 pathology stages (0 to 3) into the 3D anatomical model:
+ * - Stage 0: Healthy physiology / normal state (calm tissue, mild emissive 0.15)
+ * - Stage 1: Mild / Early reaction (amber-gold glow #f59e0b, 0.65 intensity)
+ * - Stage 2: Acute lesion / Partial tear / Clear compression (vibrant orange-red #f97316, 1.05 intensity, pulsing)
+ * - Stage 3: Severe complication / Full tear / Chronic degeneration (intense crimson #ef4444, 1.45 intensity, rapid pulsing)
+ */
+export function updatePathologyStageVisuals(stageIndex, partId, viewer) {
+  const activeViewer = viewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
+  const targetId = partId || (state.selectedPart ? state.selectedPart.id : null);
+  if (!targetId) return;
+
+  const targetMeshes = ownMeshesOf(targetId);
+  if (targetMeshes.length === 0) return;
+
+  const stage = Math.max(0, Math.min(3, parseInt(stageIndex, 10) || 0));
+
+  stopPathologyPulse();
+
+  let colorHex = 0x38bdf8;
+  let intensity = 0.5;
+  let shouldPulse = false;
+
+  switch (stage) {
+    case 0:
+      colorHex = 0x22c55e; // Green / calm physiological
+      intensity = 0.15;
+      break;
+    case 1:
+      colorHex = 0xf59e0b; // Amber-gold
+      intensity = 0.65;
+      break;
+    case 2:
+      colorHex = 0xf97316; // Fiery orange
+      intensity = 1.05;
+      shouldPulse = true;
+      break;
+    case 3:
+      colorHex = 0xef4444; // Acute crimson red
+      intensity = 1.45;
+      shouldPulse = true;
+      break;
+  }
+
+  const c = new THREE.Color(colorHex);
+  targetMeshes.forEach(mesh => {
+    mesh.visible = true;
+    ownMaterials(mesh).forEach(mat => {
+      if (mat.emissive) {
+        mat.emissive.copy(c);
+        mat.emissiveIntensity = intensity;
+        mat.needsUpdate = true;
+      }
+    });
+  });
+
+  if (shouldPulse) {
+    startPathologyPulse(targetMeshes, colorHex, intensity, activeViewer);
+  } else if (activeViewer && typeof activeViewer.render === 'function') {
+    activeViewer.render();
+  }
+}
+
+/**
+ * Seamlessly showcases a clinical pathology case in 3D:
+ * 1. Loads and activates required systems (keeps skeletal reference intact).
+ * 2. Emissive highlight on target lesion with dynamic 60fps breathing pulse.
+ * 3. Ghosting surrounding anatomical reference structures with crisp translucent crystal opacity.
+ * 4. Smooth medical camera framing directly onto the lesion with optimal line-of-sight.
+ * 5. Expands selection card / bottom sheet and activates 4-stage pathology simulator.
+ * 6. Speaks 15s clinical zero-fluff audio explanation.
+ */
+export async function showcasePathology(caseIdOrQuery, viewer, options = {}) {
+  const activeViewer = viewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
+  const profile = matchPathologyProfile(caseIdOrQuery);
+  if (!profile) {
+    console.warn('Unknown pathology profile:', caseIdOrQuery);
+    return false;
+  }
+
+  // 1. Load and show all required systems
+  if (activeViewer) {
+    for (const sys of profile.requiredSystems) {
+      if (!state.loadedSystems.includes(sys)) {
+        try {
+          await loadModel(sys, activeViewer);
+        } catch (err) {
+          console.warn('Failed background load of system:', sys, err);
+        }
+      }
+      showSystem(sys);
+    }
+  }
+
+  // 2. Select target structure
+  const { selectPartById } = await import('./selection.js');
+  const { focusOnMesh } = await import('./camera.js');
+  const { updateInfoPanelContent } = await import('../ui/infoPanel.js');
+  const { getClinicalData } = await import('../data/clinicalInfo.js');
+
+  let selected = selectPartById(profile.partId, activeViewer, true, true);
+  if (!selected && profile.targetMesh) {
+    selected = selectPartById(profile.targetMesh, activeViewer, true, true);
+  }
+
+  // 3. Ghost surrounding reference structures (skeletal, adjacent organs)
+  ghostAllExcept(profile.partId);
+
+  // 4. Apply vibrant pathology emissive glow to the lesion & start breathing pulse
+  const targetMeshes = ownMeshesOf(profile.partId);
+  targetMeshes.forEach(mesh => {
+    mesh.visible = true;
+    ownMaterials(mesh).forEach(mat => {
+      mat.emissive = new THREE.Color(profile.emissiveColor);
+      mat.emissiveIntensity = profile.emissiveIntensity || 0.95;
+      if (profile.opacity) {
+        mat.transparent = true;
+        mat.opacity = profile.opacity;
+        mat.depthWrite = false;
+      }
+      mat.needsUpdate = true;
+    });
+  });
+
+  // Start alive breathing pulse on lesion
+  startPathologyPulse(targetMeshes, profile.emissiveColor, profile.emissiveIntensity || 1.05, activeViewer);
+
+  // 5. Camera framing: focus directly on the target lesion
+  if (targetMeshes.length > 0 && activeViewer) {
+    await focusOnMesh(targetMeshes[0], activeViewer, true, 2.2);
+    activeViewer.render();
+  }
+
+  // 6. Update Selection Card / Bottom Sheet UI
+  const clinical = getClinicalData(profile.partId);
+  const synthesizedPart = {
+    id: profile.partId,
+    meshName: profile.targetMesh || profile.partId,
+    displayName: profile.title,
+    pathologyProfile: profile,
+    system: profile.requiredSystems[profile.requiredSystems.length - 1],
+    info: {
+      name: { vi: profile.title, en: profile.partId },
+      latinName: clinical?.nameLatin || profile.partId,
+      system: profile.requiredSystems[profile.requiredSystems.length - 1],
+      description: profile.speech15s,
+      function: clinical?.function || '',
+      clinical: clinical?.clinical || ''
+    }
+  };
+  setSelectedPart(synthesizedPart);
+
+  if (typeof window !== 'undefined') {
+    const card = document.getElementById('selectionCard');
+    if (card) {
+      card.classList.remove('hidden');
+      if (window.setSheetSnapTier) window.setSheetSnapTier('compact');
+    }
+    updateInfoPanelContent(synthesizedPart, activeViewer);
+    window.dispatchEvent(new CustomEvent('expand-selection-card'));
+    window.dispatchEvent(new CustomEvent('pathology-showcase-active', { detail: profile }));
+
+    // Set interactive 4-stage slider to active lesion level (Stage 1 or 2)
+    setTimeout(() => {
+      const slider = document.getElementById('pathologyRangeSlider');
+      if (slider) {
+        slider.value = 1;
+        slider.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, 200);
+  }
+
+  // 7. 15s zero-fluff clinical explanation
+  if (options.autoSpeak !== false) {
+    speakVietnamese(profile.speech15s);
+  }
+
+  return { success: true, profile, partId: profile.partId };
+}
+
+if (typeof window !== 'undefined') {
+  window.showcaseWholeSystem = showcaseWholeSystem;
+  window.showcasePathology = showcasePathology;
+  window.matchPathologyProfile = matchPathologyProfile;
+  window.updatePathologyStageVisuals = updatePathologyStageVisuals;
+  window.startPathologyPulse = startPathologyPulse;
+  window.stopPathologyPulse = stopPathologyPulse;
 }

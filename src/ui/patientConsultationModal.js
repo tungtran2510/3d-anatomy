@@ -221,6 +221,158 @@ export const PATIENT_CASES = [
       { name: 'Cấp 3: Suy hô hấp mạn tính', desc: 'Môi tím tái, lồng ngực hình thùng, phải thở Oxy hỗ trợ liên tục tại nhà.' }
     ],
     advice: '✓ CAI THUỐC LÁ NGAY LẬP TỨC (điều quan trọng nhất cứu vãn chức năng phổi còn lại).\n✓ Xịt thuốc dãn phế quản đúng kỹ thuật và tiêm phòng vắc-xin cúm/phế cầu hàng năm.'
+  },
+  {
+    id: 'rotator_cuff_tear',
+    conceptId: 'concept_rotator_cuff',
+    title: 'Rách gân chóp xoay vai (Rotator Cuff Tear)',
+    category: 'Khớp vai & Thể thao',
+    icon: '💪',
+    partId: 'Supraspinatus muscle.r',
+    idealPlane: 'coronal',
+    clipOffset: 0.1,
+    patientQuestion: 'Tại sao tôi nhấc tay lên ngang vai hoặc chải đầu lại đau buốt buông thõng tay?',
+    doctorExplanation: 'Chóp xoay gồm 4 gân cơ ôm giữ chỏm xương cánh tay vào ổ chảo bả vai, trong đó gân cơ trên gai (Supraspinatus) chạy qua khe hẹp dưới mỏm cùng vai. Khi thoái hóa hoặc vận động tay quá đầu lặp đi lặp lại, gân bị cọ xát bào mòn dẫn tới rách bán phần hoặc đứt toác hoàn toàn, làm cánh tay mất lực dạng và đau nhói dữ dội.',
+    stages: [
+      { name: 'Cấp 0: Khỏe mạnh', desc: 'Bốn gân chóp xoay bám chắc, nâng và xoay khớp vai mượt mà 180°.' },
+      { name: 'Cấp 1: Viêm gân & Cọ xát', desc: 'Lắng đọng Canxi, sưng nề gân trên gai, đau buốt cung dạng 60°-120°.' },
+      { name: 'Cấp 2: Rách bán phần', desc: 'Rách một phần bề mặt gân, đau nhức về đêm khi nằm nghiêng đè lên vai.' },
+      { name: 'Cấp 3: Rách toàn phần & Teo cơ', desc: 'Đứt toác gân hoàn toàn, rơi cánh tay tự do (Drop arm test +), teo hõm cơ trên gai.' }
+    ],
+    advice: '✓ Tránh các động tác với tay qua đầu hoặc khiêng vác nặng bằng tay đau.\n✓ Tập vật lý trị liệu tăng cường cơ dưới vai, cơ tròn bé bù trừ; phẫu thuật nội soi khâu gân chóp xoay khi rách lớn.'
+  },
+  {
+    id: 'frozen_shoulder',
+    conceptId: 'concept_rotator_cuff',
+    title: 'Viêm quanh khớp vai (Đông cứng khớp vai)',
+    category: 'Khớp vai & Vận động',
+    icon: '🧊',
+    partId: 'Articular capsule of glenohumeral joint.r',
+    idealPlane: 'coronal',
+    clipOffset: 0.1,
+    patientQuestion: 'Khớp vai của tôi bị đông cứng, không thể vòng tay ra sau lưng gãi hay cài áo ngực?',
+    doctorExplanation: 'Bao khớp vai bình thường rất rộng rãi để cánh tay xoay tự do. Trong viêm quanh khớp vai thể đông cứng (Adhesive capsulitis), toàn bộ bao khớp bị viêm dày dính, co rút ngắn lại như một chiếc bao thít chặt lấy chỏm xương cánh tay, làm mất gần như toàn bộ biên độ vận động cả chủ động lẫn thụ động.',
+    stages: [
+      { name: 'Cấp 0: Bình thường', desc: 'Bao khớp đàn hồi tốt, tầm vận động vai đạt trọn vẹn mọi hướng.' },
+      { name: 'Cấp 1: Giai đoạn đóng băng (Đau)', desc: 'Viêm xung huyết bao khớp, đau nhức tăng dần nhất là ban đêm, khớp vai bắt đầu cứng.' },
+      { name: 'Cấp 2: Giai đoạn đông cứng (Cứng)', desc: 'Bao khớp co rút dày cộp xơ hóa, đau giảm bớt nhưng vai đông cứng hoàn toàn.' },
+      { name: 'Cấp 3: Giai đoạn tan băng (Hồi phục)', desc: 'Bao khớp giãn dần, tầm vận động phục hồi chậm chạp trong 12-24 tháng.' }
+    ],
+    advice: '✓ Kiên trì tập các bài tập con lắc Codman, bò tường tăng dần biên độ mỗi ngày.\n✓ Chườm ấm trước khi tập, tiêm thuốc kháng viêm bao khớp hoặc thủy châm nong bao khớp khi cứng nặng.'
+  },
+  {
+    id: 'knee_meniscus_tear',
+    conceptId: 'concept_knee_joint_ligaments',
+    title: 'Rách sụn chêm khớp gối (Meniscus Tear)',
+    category: 'Khớp gối & Vận động',
+    icon: '🦵',
+    partId: 'Lateral meniscus.r',
+    idealPlane: 'sagittal',
+    clipOffset: 0.1,
+    patientQuestion: 'Đầu gối tôi thỉnh thoảng bị kẹt cứng ngắc không duỗi thẳng ra được là sao?',
+    doctorExplanation: 'Sụn chêm hình chữ C nằm giữa xương đùi và xương chày đóng vai trò đệm hấp thu 50% xung lực. Khi gối chịu tải kèm vặn xoắn đột ngột, sụn chêm bị rách vỡ (dạng quai vali, nan hoa hay phức hợp). Mảnh sụn rách bị kẹt vào giữa hai đầu xương gây hiện tượng "kẹt khớp", đau nhói buốt khe khớp và tràn dịch tái diễn.',
+    stages: [
+      { name: 'Cấp 0: Sụn chêm dẻo dai', desc: 'Cấu trúc sụn sợi trơn láng ngậm nước phân tán đều 100% tải trọng.' },
+      { name: 'Cấp 1: Thoái hóa sụn độ 1-2', desc: 'Biến đổi tín hiệu dạng chấm/vệt trong lòng sụn chêm, chưa thông ra bề mặt.' },
+      { name: 'Cấp 2: Rách sụn chêm thực thụ', desc: 'Đường rách thông ra bề mặt sụn, đau nhói khe khớp khi ngồi xổm hoặc xoay người.' },
+      { name: 'Cấp 3: Rách quai vali kẹt khớp', desc: 'Mảnh sụn lật kẹt vào hố liên lồi cầu gây kẹt gối cơ học, bào mòn thủng sụn khớp đùi chày.' }
+    ],
+    advice: '✓ Tránh ngồi xổm, leo cầu thang dốc và xoay vặn gối mạnh.\n✓ Phẫu thuật nội soi khâu bảo tồn sụn chêm hoặc gọt mép sụn rách để ngăn thoái hóa khớp gối sớm.'
+  },
+  {
+    id: 'knee_effusion',
+    conceptId: 'concept_knee_joint_ligaments',
+    title: 'Tràn dịch khớp gối & Viêm bao hoạt dịch',
+    category: 'Khớp gối & Ổ viêm',
+    icon: '💧',
+    partId: 'Patella.r',
+    idealPlane: 'sagittal',
+    clipOffset: 0.1,
+    patientQuestion: 'Tại sao một bên đầu gối của tôi lại sưng to căng mọng như bọng nước, ấn vào thấy bồng bềnh?',
+    doctorExplanation: 'Ổ khớp gối được lót bởi màng hoạt dịch tiết khoảng vài mililit dịch nhờn bôi trơn. Khi khớp gối bị chấn thương (rách sụn, đứt dây chằng) hoặc thoái hóa, bao hoạt dịch bị kích thích phản ứng viêm rầm rộ, tăng tiết hàng chục đến hàng trăm mililit dịch viêm làm căng phù toàn bộ khớp gối, gây đau tức và hạn chế gập duỗi.',
+    stages: [
+      { name: 'Cấp 0: Dịch khớp sinh lý', desc: 'Chỉ 2-3ml dịch vàng trong sánh bôi trơn sụn khớp hoàn hảo.' },
+      { name: 'Cấp 1: Phản ứng viêm tăng tiết', desc: 'Lượng dịch 10-20ml, gối sưng nhẹ, mất các hõm tự nhiên quanh xương bánh chè.' },
+      { name: 'Cấp 2: Tràn dịch mức độ vừa', desc: 'Dịch 30-50ml, bập bềnh xương bánh chè dương tính rõ, căng tức không gập hết chân.' },
+      { name: 'Cấp 3: Tràn dịch lượng nhiều / Mủ', desc: 'Dịch >60ml, gối căng bóng nóng đỏ, nguy cơ viêm mủ dính khớp nếu do vi khuẩn.' }
+    ],
+    advice: '✓ Băng chun gối nhẹ nhàng, nâng cao chân khi nằm nghỉ ngơi.\n✓ Chọc hút dịch khớp giải áp và xét nghiệm tìm nguyên nhân khi dịch quá nhiều hoặc nghi ngờ nhiễm trùng.'
+  },
+  {
+    id: 'sciatica_nerve',
+    conceptId: 'concept_intervertebral_disc',
+    title: 'Chèn ép dây thần kinh tọa (Sciatica)',
+    category: 'Thần kinh & Cột sống',
+    icon: '⚡',
+    partId: 'Sciatic nerve.r',
+    idealPlane: 'sagittal',
+    clipOffset: 0.2,
+    patientQuestion: 'Cơn đau buốt như điện giật từ mông bắn dọc xuống gót chân của tôi là bệnh gì?',
+    doctorExplanation: 'Thần kinh tọa là dây thần kinh to và dài nhất cơ thể (bằng ngón tay cái), hợp thành từ các rễ L4 đến S3, chui qua mông xuống chân. Khi đĩa đệm thoát vị, gai xương hoặc cơ hình lê ở mông co thắt chèn ép dây thần kinh, xung điện thần kinh bị kích thích dữ dội bắn dọc theo đường đi của dây gây đau buốt, tê rần như kim châm và yếu bắp chân.',
+    stages: [
+      { name: 'Cấp 0: Khỏe mạnh', desc: 'Dây thần kinh tọa trơn tru dẫn truyền cảm giác và vận động hoàn hảo toàn bộ chi dưới.' },
+      { name: 'Cấp 1: Đau lưng mỏi mông', desc: 'Co cứng cơ cạnh sống và cơ mông, đau tức âm ỉ khi ngồi ghế cứng lâu.' },
+      { name: 'Cấp 2: Đau thần kinh tọa điển hình', desc: 'Cơn đau nhói điện giật phóng từ mông qua mặt sau đùi xuống bắp chân, nghiệm pháp Lasegue (+).' },
+      { name: 'Cấp 3: Teo cơ & Rơi bàn chân', desc: 'Liệt cơ cẳng chân, đi dép rơi không hay, teo bắp chân một bên rõ rệt.' }
+    ],
+    advice: '✓ Tránh ngồi xổm, không mang ví dày ở túi quần sau đè lên cơ hình lê.\n✓ Kéo giãn cột sống, tập bài tập căng cơ hình lê và dùng thuốc giảm đau thần kinh (Gabapentin/Pregabalin).'
+  },
+  {
+    id: 'coronary_artery_disease',
+    conceptId: 'concept_coronary_atherosclerosis',
+    title: 'Hẹp xơ vữa động mạch vành & Thiếu máu cơ tim',
+    category: 'Tim mạch & Cấp cứu',
+    icon: '🫀',
+    partId: 'Left coronary artery',
+    idealPlane: 'coronal',
+    clipOffset: 0.05,
+    patientQuestion: 'Tại sao tôi cứ leo dốc hoặc xúc động là ngực trái bị đè ép nghẹt thở như đá tảng đè?',
+    doctorExplanation: 'Động mạch vành là hệ thống mạch máu bao bọc nuôi dưỡng toàn bộ trái tim. Khi mỡ máu xấu (LDL) tích tụ thành mảng xơ vữa gây chít hẹp lòng mạch trên 70%, lượng máu nuôi cơ tim không đủ đáp ứng khi gắng sức, gây cơn đau thắt ngực. Nếu mảng xơ vữa nứt vỡ hình thành cục máu đông bít tắc 100%, cơ tim bị hoại tử cấp tính gây nhồi máu cơ tim nguy hiểm tính mạng.',
+    stages: [
+      { name: 'Cấp 0: Mạch vành thông suốt', desc: 'Thành mạch đàn hồi, tưới máu dồi dào nuôi cơ tim bơm máu khỏe mạnh.' },
+      { name: 'Cấp 1: Xơ vữa mạch vành sớm', desc: 'Mảng lipid dày thành mạch, hẹp <50%, chưa gây triệu chứng thiếu máu cơ tim.' },
+      { name: 'Cấp 2: Cơn đau thắt ngực ổn định', desc: 'Hẹp 70-80%, đau thắt ngực đè nặng sau xương ức khi leo dốc, nghỉ ngơi 5 phút thì đỡ.' },
+      { name: 'Cấp 3: Nhồi máu cơ tim cấp (STEMI)', desc: 'Tắc nghẽn 100%, đau ngực dữ dội >20 phút toát mồ hôi lạnh, hoại tử cơ tim cấp cứu.' }
+    ],
+    advice: '✓ Uống thuốc kiểm soát mỡ máu Statin và thuốc chống đông máu đều đặn suốt đời.\n✓ Can thiệp đặt Stent mạch vành nong rộng lòng mạch trong giờ vàng khi có chỉ định.'
+  },
+  {
+    id: 'acute_appendicitis',
+    conceptId: 'concept_gastrointestinal_tract',
+    title: 'Viêm ruột thừa cấp & Biến chứng vỡ mủ',
+    category: 'Tiêu hóa & Ngoại khoa',
+    icon: '⚠️',
+    partId: 'Vermiform appendix',
+    idealPlane: 'coronal',
+    clipOffset: 0.05,
+    patientQuestion: 'Ban đầu tôi chỉ đau âm ỉ quanh rốn, tại sao sau đó lại đau quặn dữ dội xuống hố chậu phải?',
+    doctorExplanation: 'Ruột thừa là một đoạn ruột tịt nhỏ hình con giun dài 6-9cm ở gốc manh tràng hố chậu phải. Khi lòng ruột thừa bị tắc do sỏi phân hoặc phì đại nang bạch huyết, vi khuẩn kẹt bên trong sinh sôi dữ dội làm ruột thừa sưng to, ứ mủ và thiếu máu hoại tử. Cơn đau dịch chuyển kinh điển từ quanh rốn về điểm McBurney hố chậu phải.',
+    stages: [
+      { name: 'Cấp 0: Ruột thừa bình thường', desc: 'Lòng ruột thừa thông thoáng, mô bạch huyết miễn dịch khỏe mạnh.' },
+      { name: 'Cấp 1: Viêm ruột thừa xung huyết', desc: 'Tắc sỏi phân, đau âm ỉ vùng thượng vị hoặc quanh rốn, buồn nôn, chán ăn.' },
+      { name: 'Cấp 2: Viêm ruột thừa mưng mủ', desc: 'Ruột thừa sưng to đỏ rực ứ mủ, đau khu trú dữ dội điểm McBurney, sốt 38°C.' },
+      { name: 'Cấp 3: Hoại tử vỡ & Viêm phúc mạc', desc: 'Ruột thừa vỡ toác mủ vào ổ bụng, đau khắp bụng, bụng cứng như gỗ cấp cứu ngoại khoa.' }
+    ],
+    advice: '✓ Tuyệt đối KHÔNG tự ý uống thuốc giảm đau hoặc kháng sinh khi chưa có chẩn đoán bác sĩ.\n✓ Phẫu thuật nội soi cắt ruột thừa cấp cứu là phương pháp điều trị triệt căn an toàn nhất.'
+  },
+  {
+    id: 'spinal_spondylosis',
+    conceptId: 'concept_intervertebral_disc',
+    title: 'Gai cột sống & Thoái hóa đốt sống',
+    category: 'Cột sống & Cơ sinh học',
+    icon: '🦴',
+    partId: 'Vertebra L4',
+    idealPlane: 'sagittal',
+    clipOffset: 0.1,
+    patientQuestion: 'Tại sao chụp X-quang bác sĩ lại bảo tôi có nhiều gai xương ở đốt sống lưng?',
+    doctorExplanation: 'Cột sống mang tải trọng cơ thể suốt nhiều năm. Khi đĩa đệm bị mất nước xẹp xuống, áp lực đè nặng trực tiếp lên rìa đốt sống và diện khớp. Cơ thể phản ứng bằng cách tăng sinh xương màng xương để mở rộng diện tích chịu lực, tạo thành các chồi xương gọi là "gai cột sống". Khi gai xương mọc lớn hướng vào ống sống hoặc lỗ liên hợp, nó sẽ cọ xát dây chằng và chèn ép rễ thần kinh.',
+    stages: [
+      { name: 'Cấp 0: Đốt sống vững chắc', desc: 'Thân đốt sống nhẵn bóng, sụn khớp dày dặn nâng đỡ hoàn hảo.' },
+      { name: 'Cấp 1: Mòn sụn & Hẹp khe khớp', desc: 'Mỏi lưng sau giờ làm việc, đĩa đệm giảm độ dày nhẹ.' },
+      { name: 'Cấp 2: Hình thành gai xương rõ', desc: 'Gai xương nhô ra ở mép thân đốt sống, đau cứng lưng buổi sáng khi thức dậy.' },
+      { name: 'Cấp 3: Gai lớn hẹp lỗ liên hợp', desc: 'Gai xương chèn ép rễ thần kinh tủy sống, biến dạng cột sống, hạn chế cúi ngửa trầm trọng.' }
+    ],
+    advice: '✓ Giữ cân nặng hợp lý, tránh đứng lâu ngồi nhiều một tư thế.\n✓ Bổ sung canxi, vitamin D3, glucosamine và tập thể dục nhẹ nhàng như bơi lội, yoga cột sống.'
   }
 ];
 
@@ -414,7 +566,11 @@ function renderConsultationUI() {
         stopCurrentSpeech();
         currentActiveCase = found;
         renderConsultationUI();
-        selectStructureAnywhere(found.partId);
+        if (typeof window.showcasePathology === 'function') {
+          window.showcasePathology(found.id, null, { autoSpeak: false });
+        } else {
+          selectStructureAnywhere(found.partId);
+        }
       }
     });
   });
@@ -451,7 +607,11 @@ function renderConsultationUI() {
   // 3D Focus button
   consultationModalEl.querySelector('#btnConsultFocus3D')?.addEventListener('click', () => {
     closePatientConsultationModal();
-    selectStructureAnywhere(c.partId);
+    if (typeof window.showcasePathology === 'function') {
+      window.showcasePathology(c.id);
+    } else {
+      selectStructureAnywhere(c.partId);
+    }
   });
 }
 

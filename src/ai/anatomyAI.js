@@ -5,7 +5,7 @@ import { getClinicalData } from '../data/clinicalInfo.js';
 import { searchStructures } from '../utils/dataLoader.js';
 import { selectPartById } from '../viewer/selection.js';
 import { loadModel } from '../viewer/loadModel.js';
-import { showSystem, hideSystem, ghostAllExcept, showcaseWholeSystem } from '../viewer/visibility.js';
+import { showSystem, hideSystem, ghostAllExcept, showcaseWholeSystem, PATHOLOGY_PROFILES, matchPathologyProfile, showcasePathology } from '../viewer/visibility.js';
 import { highlightMesh } from '../viewer/visibility.js';
 import { setClippingPlane } from '../viewer/clipping.js';
 import { toggleMeasurementMode } from '../viewer/measurement.js';
@@ -544,6 +544,23 @@ export function interpretAIQuery(query, activePart = null) {
     };
   }
 
+  // -0.9 Intent: High-Yield Clinical Pathologies (Bệnh lý lâm sàng: Thoát vị đĩa đệm, Đứt ACL, Rách chóp xoay, Viêm ruột thừa, Gai cột sống, Tràn dịch gối...)
+  const matchedPathology = matchPathologyProfile(q);
+  if (matchedPathology) {
+    return {
+      intent: 'CLINICAL_PATHOLOGY',
+      pathologyId: matchedPathology.id,
+      profile: matchedPathology,
+      target: {
+        id: matchedPathology.partId,
+        base: matchedPathology.targetMesh || matchedPathology.partId,
+        system: matchedPathology.requiredSystems[matchedPathology.requiredSystems.length - 1],
+        nameVi: matchedPathology.title
+      },
+      rawQuery: query
+    };
+  }
+
   // 0. Intent: Clinical Functional Axes (Trục lâm sàng / Bộ ba chức năng / Tuyến tiêu hóa / Dịch não tủy / Trục não ruột / Chục lão chuột)
   let targetAxis = null;
   if (
@@ -991,7 +1008,7 @@ function findTargetStructure(query, activePart) {
  * Executes AI 3D actions and builds an authoritative, grounded response
  */
 export async function executeAICommand(interpreted, viewer) {
-  const { intent, target, rawQuery, hideSystems, showSystems, plane, axis } = interpreted;
+  const { intent, target, rawQuery, hideSystems, showSystems, plane, axis, pathologyId, profile, systemId } = interpreted;
   const activeViewer = viewer || state.viewer || (typeof window !== 'undefined' ? window.viewer : null);
 
   // 0. CLINICAL AXIS (Trục lâm sàng / Bộ ba chức năng / Tuyến tiêu hóa / Dịch não tủy / Trục não ruột)
@@ -1039,6 +1056,44 @@ ${insightsFormatted}
 💡 *Chạm vào từng chip trên thanh điều khiển nổi bên dưới để phóng to & chiếu sáng từng cơ quan!*
       `.trim(),
       data: axis
+    };
+  }
+
+  // -0.05 CLINICAL PATHOLOGY SHOWCASE (Thoát vị đĩa đệm, Đứt ACL, Rách chóp xoay, Viêm ruột thừa...)
+  if (intent === 'CLINICAL_PATHOLOGY') {
+    const pId = pathologyId || (profile && profile.id);
+    const pathoProfile = profile || PATHOLOGY_PROFILES[pId] || matchPathologyProfile(pId);
+
+    if (activeViewer && pathoProfile) {
+      await showcasePathology(pathoProfile.id, activeViewer, { autoSpeak: false });
+    }
+
+    const card = document.getElementById('selectionCard');
+    if (card) {
+      card.classList.remove('hidden');
+      window.dispatchEvent(new CustomEvent('expand-selection-card'));
+    }
+
+    return {
+      action: 'CLINICAL_PATHOLOGY',
+      pathologyId: pathoProfile?.id || pId,
+      actionBadge: `🩺 AI Lâm Sàng: ${pathoProfile?.title || 'Bệnh Lý'}`,
+      speechText: pathoProfile?.speech15s || '',
+      message: `
+### 🩺 ${pathoProfile?.title ? pathoProfile.title.toUpperCase() : 'BỆNH LÝ LÂM SÀNG'}
+*Chuyên khoa:* **${pathoProfile?.category || 'Y học lâm sàng'}** • *Cấu trúc tổn thương:* **${pathoProfile?.partId || ''}**
+
+---
+
+📖 **Cơ chế bệnh sinh & Dấu hiệu nhận biết:**
+${pathoProfile?.speech15s || ''}
+
+⚡ **Mô phỏng 4 cấp độ diễn tiến bệnh học:**
+Mô hình 3D đã khu trú vào vùng tổn thương và kích hoạt mô phỏng bệnh học bên dưới bảng thông tin. Bạn có thể kéo thanh trượt từ Cấp 0 đến Cấp 3 để quan sát các giai đoạn bệnh!
+
+💡 *Lời khuyên:* Giữ tư thế chuẩn, tránh các động tác quá tải và tham vấn bác sĩ chuyên khoa sớm khi xuất hiện triệu chứng bất thường.
+      `.trim(),
+      pathologyProfile: pathoProfile
     };
   }
 
